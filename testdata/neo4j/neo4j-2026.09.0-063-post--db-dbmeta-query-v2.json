@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $1 AS a, $2 AS b\",\"parameters\":{\"1\":\"one\",\"2\":2}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "228"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\",\"b\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"one\"},{\"$type\":\"Integer\",\"_value\":\"2\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":11,\"resultConsumedAfter\":12,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCZpA=\"]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"CALL dbms.components() YIELD name, versions, edition RETURN name, versions, edition\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "248"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:50 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"name\",\"versions\",\"edition\"],\"values\":[[\"Neo4j Kernel\",[\"2026.09.0\"],\"enterprise\"],[\"Cypher\",[\"5\",\"25\"],\"\"]]},\"queryType\":\"s\",\"resultAvailableAfter\":30,\"resultConsumedAfter\":32,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCaJA=\"]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND range(1, 4) AS i CALL (i) { CREATE (:Dbimp {k: 'cit', i: i}) } IN TRANSACTIONS OF 2 ROWS\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:14 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "153"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[],\"values\":[]},\"queryType\":\"w\",\"resultAvailableAfter\":29,\"resultConsumedAfter\":29,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCq5A=\"]}"
+  }
+}

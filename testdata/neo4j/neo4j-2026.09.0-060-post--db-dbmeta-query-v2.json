@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $nothing AS x\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "109"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Statement.ParameterMissing\",\"message\":\"Expected parameter(s): nothing\"}]}"
+  }
+}

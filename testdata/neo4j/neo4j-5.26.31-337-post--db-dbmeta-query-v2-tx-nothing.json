@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2/tx/nothing",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN 1 AS a\"}"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:28 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "228"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Transaction with Id: \\\"nothing\\\" was not found. It may have timed out and therefore rolled back or the routing header 'neo4j-cluster-affinity' was not provided.\"}]}"
+  }
+}

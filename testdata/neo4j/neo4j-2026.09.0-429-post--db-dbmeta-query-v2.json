@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"PROFILE MATCH (n:DbimpG) RETURN n.k AS k ORDER BY k\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "5256"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"k\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"1\"}],[{\"$type\":\"Integer\",\"_value\":\"2\"}],[{\"$type\":\"Integer\",\"_value\":\"3\"}]]},\"profiledQueryPlan\":{\"operatorType\":\"ProduceResults@dbmeta\",\"arguments\":{\"Order\":{\"$type\":\"String\",\"_value\":\"k ASC\"},\"GlobalMemory\":{\"$type\":\"Integer\",\"_value\":\"764\"},\"planner-impl\":{\"$type\":\"String\",\"_value\":\"IDP\"},\"Memory\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"string-representation\":{\"$type\":\"String\",\"_value\":\"Cypher 25\\n\\nPlanner COST\\n\\nRuntime PIPELINED\\n\\nRuntime version 2026.09.0\\n\\nBatch size 128\\n\\n+------------------+----+----------+----------------+------+---------+----------------+------------------------+-----------+------------+---------------------+\\n| Operator         | Id | Details  | Estimated Rows | Rows | DB Hits | Memory (Bytes) | Page Cache Hits/Misses | Time (ms) | Ordered by | Pipeline            |\\n+------------------+----+----------+----------------+------+---------+----------------+------------------------+-----------+------------+---------------------+\\n| +ProduceResults  |  0 | k        |             10 |    3 |       0 |              0 |                    0/0 |     0.020 |            |                     |\\n| |                +----+----------+----------------+------+---------+----------------+------------------------+-----------+            |                     |\\n| +Sort            |  1 | k ASC    |             10 |    3 |       0 |            444 |                    0/0 |     0.104 | k ASC      | In Pipeline 1       |\\n| |                +----+----------+----------------+------+---------+----------------+------------------------+-----------+------------+---------------------+\\n| +Projection      |  2 | n.k AS k |             10 |    3 |       3 |                |                        |           |            |                     |\\n| |                +----+----------+----------------+------+---------+----------------+                        |           +------------+                     |\\n| +NodeByLabelScan |  3 | n:DbimpG |             10 |    3 |       4 |            376 |                    2/0 |     0.139 |            | Fused in Pipeline 0 |\\n+------------------+----+----------+----------------+------+---------+----------------+------------------------+-----------+------------+---------------------+\\n\\nTotal database accesses: 7, total allocated memory: 764\\n\"},\"runtime\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"Time\":{\"$type\":\"Integer\",\"_value\":\"20110\"},\"runtime-impl\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"version\":{\"$type\":\"String\",\"_value\":\"25\"},\"DbHits\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"batch-size\":{\"$type\":\"Integer\",\"_value\":\"128\"},\"Details\":{\"$type\":\"String\",\"_value\":\"k\"},\"planner-version\":{\"$type\":\"String\",\"_value\":\"2026.09.0\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"In Pipeline 1\"},\"runtime-version\":{\"$type\":\"String\",\"_value\":\"2026.09.0\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"10.0\"},\"planner\":{\"$type\":\"String\",\"_value\":\"COST\"},\"PageCacheMisses\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"Rows\":{\"$type\":\"Integer\",\"_value\":\"3\"},\"PageCacheHits\":{\"$type\":\"Integer\",\"_value\":\"0\"}},\"identifiers\":[\"n\",\"k\"],\"dbHits\":0,\"records\":3,\"pageCacheHits\":0,\"pageCacheMisses\":0,\"pageCacheHitRatio\":0.0,\"hasPageCacheStats\":false,\"time\":20110,\"children\":[{\"operatorType\":\"Sort@dbmeta\",\"arguments\":{\"Order\":{\"$type\":\"String\",\"_value\":\"k ASC\"},\"Details\":{\"$type\":\"String\",\"_value\":\"k ASC\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"In Pipeline 1\"},\"Memory\":{\"$type\":\"Integer\",\"_value\":\"444\"},\"Time\":{\"$type\":\"Integer\",\"_value\":\"104301\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"1\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"10.0\"},\"PageCacheMisses\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"DbHits\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"Rows\":{\"$type\":\"Integer\",\"_value\":\"3\"},\"PageCacheHits\":{\"$type\":\"Integer\",\"_value\":\"0\"}},\"identifiers\":[\"n\",\"k\"],\"dbHits\":0,\"records\":3,\"pageCacheHits\":0,\"pageCacheMisses\":0,\"pageCacheHitRatio\":0.0,\"hasPageCacheStats\":false,\"time\":104301,\"children\":[{\"operatorType\":\"Projection@dbmeta\",\"arguments\":{\"Id\":{\"$type\":\"Integer\",\"_value\":\"2\"},\"Details\":{\"$type\":\"String\",\"_value\":\"n.k AS k\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"10.0\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"},\"DbHits\":{\"$type\":\"Integer\",\"_value\":\"3\"},\"Rows\":{\"$type\":\"Integer\",\"_value\":\"3\"}},\"identifiers\":[\"n\",\"k\"],\"dbHits\":3,\"records\":3,\"hasPageCacheStats\":false,\"children\":[{\"operatorType\":\"NodeByLabelScan@dbmeta\",\"arguments\":{\"Details\":{\"$type\":\"String\",\"_value\":\"n:DbimpG\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"},\"Memory\":{\"$type\":\"Integer\",\"_value\":\"376\"},\"Time\":{\"$type\":\"Integer\",\"_value\":\"138840\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"3\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"10.0\"},\"PageCacheMisses\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"DbHits\":{\"$type\":\"Integer\",\"_value\":\"4\"},\"Rows\":{\"$type\":\"Integer\",\"_value\":\"3\"},\"PageCacheHits\":{\"$type\":\"Integer\",\"_value\":\"2\"}},\"identifiers\":[\"n\"],\"dbHits\":4,\"records\":3,\"pageCacheHits\":2,\"pageCacheMisses\":0,\"pageCacheHitRatio\":1.0,\"hasPageCacheStats\":true,\"time\":138840,\"children\":[]}]}]}]},\"queryType\":\"r\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":4,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCr5A=\"]}"
+  }
+}

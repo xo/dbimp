@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MERGE (n:Dbimp {k: 'm1'}) ON CREATE SET n.c = 1 ON MATCH SET n.c = n.c + 1 RETURN n.c AS c\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "189"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:50 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"c\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"2\"}]]},\"queryType\":\"rw\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":6,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCcpA=\"]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN vector([1.0, 2.0, 3.0], 3, FLOAT32) AS v\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "169"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"v\"],\"values\":[[[1.0,2.0,3.0]]]},\"queryType\":\"r\",\"resultAvailableAfter\":9,\"resultConsumedAfter\":9,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCY5A=\"]}"
+  }
+}

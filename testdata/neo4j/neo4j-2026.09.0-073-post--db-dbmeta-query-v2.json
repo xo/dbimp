@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN dbimp.nothing() AS x\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "181"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Statement.SyntaxError\",\"message\":\"Unknown function 'dbimp.nothing' (line 1, column 8 (offset: 7))\\n\\\"RETURN dbimp.nothing() AS x\\\"\\n        ^\"}]}"
+  }
+}

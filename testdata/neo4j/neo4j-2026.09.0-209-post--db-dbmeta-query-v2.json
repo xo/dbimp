@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"EXPLAIN MATCH (n:DbimpG) RETURN n\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "1868"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"n\"],\"values\":[]},\"queryPlan\":{\"operatorType\":\"ProduceResults@dbmeta\",\"arguments\":{\"planner-impl\":{\"$type\":\"String\",\"_value\":\"IDP\"},\"string-representation\":{\"$type\":\"String\",\"_value\":\"Cypher 25\\n\\nPlanner COST\\n\\nRuntime PIPELINED\\n\\nRuntime version 2026.09.0\\n\\nBatch size 128\\n\\n+------------------+----+----------+----------------+---------------------+\\n| Operator         | Id | Details  | Estimated Rows | Pipeline            |\\n+------------------+----+----------+----------------+---------------------+\\n| +ProduceResults  |  0 | n        |             10 |                     |\\n| |                +----+----------+----------------+                     |\\n| +NodeByLabelScan |  1 | n:DbimpG |             10 | Fused in Pipeline 0 |\\n+------------------+----+----------+----------------+---------------------+\\n\\nTotal database accesses: ?\\n\"},\"runtime\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"runtime-impl\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"version\":{\"$type\":\"String\",\"_value\":\"25\"},\"batch-size\":{\"$type\":\"Integer\",\"_value\":\"128\"},\"Details\":{\"$type\":\"String\",\"_value\":\"n\"},\"planner-version\":{\"$type\":\"String\",\"_value\":\"2026.09.0\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"},\"runtime-version\":{\"$type\":\"String\",\"_value\":\"2026.09.0\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"10.0\"},\"planner\":{\"$type\":\"String\",\"_value\":\"COST\"}},\"identifiers\":[\"n\"],\"children\":[{\"operatorType\":\"NodeByLabelScan@dbmeta\",\"arguments\":{\"Details\":{\"$type\":\"String\",\"_value\":\"n:DbimpG\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"1\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"10.0\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"}},\"identifiers\":[\"n\"],\"children\":[]}]},\"queryType\":\"r\",\"resultAvailableAfter\":9,\"resultConsumedAfter\":9,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCkZA=\"]}"
+  }
+}

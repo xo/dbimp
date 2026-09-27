@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE p = (a:Dbimp {k: 'n1'})-[r:DBIMP_R {w: 2}]->(b:Dbimp {k: 'n2'}) RETURN a, r, p\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "885"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:34:39 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\",\"r\",\"p\"],\"values\":[[{\"elementId\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:60\",\"labels\":[\"Dbimp\"],\"properties\":{\"k\":\"n1\"}},{\"elementId\":\"5:486e1f63-c40c-4f84-8bb8-729ab6bc3132:1152922604118474812\",\"startNodeElementId\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:60\",\"endNodeElementId\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:13\",\"type\":\"DBIMP_R\",\"properties\":{\"w\":2}},[{\"elementId\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:60\",\"labels\":[\"Dbimp\"],\"properties\":{\"k\":\"n1\"}},{\"elementId\":\"5:486e1f63-c40c-4f84-8bb8-729ab6bc3132:1152922604118474812\",\"startNodeElementId\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:60\",\"endNodeElementId\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:13\",\"type\":\"DBIMP_R\",\"properties\":{\"w\":2}},{\"elementId\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:13\",\"labels\":[\"Dbimp\"],\"properties\":{\"k\":\"n2\"}}]]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCVJA=\"]}"
+  }
+}

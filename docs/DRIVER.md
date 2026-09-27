@@ -4,7 +4,7 @@ Every step needed to add a driver to `dbimp`, in the order to do them. A
 coding agent follows this file from the first step to the last. A person can
 follow it too.
 
-The rules live in `CLAUDE.md`, and the reasons live in [PLAN.md](PLAN.md).
+The rules live in `AGENTS.md`, and the reasons live in [decisions/](decisions/README.md).
 This file is the checklist, and it points at both. It follows the shape of
 `dbmeta/docs/DIALECT.md`. It takes the lessons that the `dbmeta`, `cql` and
 `n1ql` sessions reported, and the review by Gemini and DeepSeek, all on
@@ -88,7 +88,7 @@ import them (D29):
    `usql/drivers/<name>/`. Read its `Version` field, which is the statement
    that `usql` runs for the version (step 16).
 3. Every fault that is known in that driver. `dbmeta` records them in its
-   `docs/PLAN.md`, and a fork such as `xo/n1ql` records them in its own.
+   decisions, and a fork such as `xo/n1ql` records them in its own.
 4. What `dbmeta` measured for the product, if it has a model or a container
    entry.
 5. Whether other products speak the same interface. If they do, read
@@ -272,7 +272,7 @@ Gate: each lead, and what the server answered for it, is in the draft of
 ### 8. Write the document for the product
 
 Complete `docs/<PRODUCT>.md` from the template at the end of this file. Add
-it to the tables in `CLAUDE.md` and `README.md`. Mark each fact "measured",
+it to the tables in `AGENTS.md` and `README.md`. Mark each fact "measured",
 with the release and the date, or "not measured", with its source. Write
 facts only. A choice goes in a decision in step 9.
 
@@ -286,9 +286,9 @@ marked, and the tests for the documents pass.
 
 ### 9. Write the decisions
 
-A choice goes in [PLAN.md](PLAN.md) as a decision, with the next number and
-the status `Proposed`. A fact stays in `docs/<PRODUCT>.md`. Each driver
-decides these:
+A choice goes in [decisions/](decisions/README.md) as a decision: a file
+with the next number and the status `Proposed`, and a row in the index. A
+fact stays in `docs/<PRODUCT>.md`. Each driver decides these:
 
 1. The name of the package, which is the name of the database (D26).
 2. The one name that it registers with `database/sql`, which is the name of
@@ -311,8 +311,8 @@ decides these:
 11. The flavors that the driver serves, and how it tells them apart.
 12. Any binary encoding, which needs Ken's approval for this database (D13).
 
-Gate: each item has a decision in [PLAN.md](PLAN.md) that names this driver,
-and Ken accepted each one in the conversation. Change a status to `Decided`
+Gate: each item has a decision in [decisions/](decisions/README.md) that
+names this driver, and Ken accepted each one in the conversation. Change a status to `Decided`
 only after he said so.
 
 ### 10. Write the type table and the interface table
@@ -645,7 +645,7 @@ A target cannot be a driver when one of these is true:
 - The only interface needs a package that Ken refused (D13).
 
 Record the evidence in `docs/<PRODUCT>.md`. Write a decision in
-[PLAN.md](PLAN.md) that says why, and move the target to P3 in
+[decisions/](decisions/README.md) that says why, and move the target to P3 in
 [TARGETS.md](TARGETS.md). A later reader will ask why the target is missing.
 
 ## Flavors
@@ -725,9 +725,12 @@ gate finds nothing.
 | `TestEveryDriverTestsItsDSN` | a driver has no fuzz test, or no round trip test, for its DSN (step 13) |
 | `TestEveryDriverHasItsFeatures` | the survey asked fewer than two models or no other driver, lacks a statement of CRUD, leaves an entry not measured, marks one `no` with no recorded refusal, names a test that does not exist, has a type whose test does not call `RoundTrip`, or disagrees with the type table (steps 5a, 6, 10 and 14a) |
 | `TestTheWorkflowNamesNoRelease` | a workflow names a release, or runs the integration tests without reading the releases from `dbrun` (step 15) |
-| `TestEveryDocumentIsInTheTable` | a document in `docs/` is missing from `CLAUDE.md` or `README.md` |
+| `TestEveryDocumentIsInTheTable` | a document in `docs/` is missing from `AGENTS.md` or `README.md` |
 | `TestEveryDecisionReferenceExists` | a document points at a decision that does not exist |
-| `TestTheDecisionIndexIsComplete` | a decision is written and not indexed |
+| `TestTheDecisionIndexIsComplete` | a decision has no row in `docs/decisions/README.md`, or its row differs from its file |
+| `TestAnAmendmentPointsBothWays` | a decision amends another, and the two do not name each other in their status |
+| `TestTheRootHoldsFourDocuments` | a Markdown file other than `README.md`, `AGENTS.md`, `CLAUDE.md` and `CONTRIBUTING.md` is in the root |
+| `TestClaudeImportsAgents` | `CLAUDE.md` is a link, or holds anything but `@AGENTS.md` |
 | `TestEveryTestNameInTheDocsExists` | a document names a test that does not exist |
 | `TestEveryLinkResolves` | a link points at a file that does not exist |
 

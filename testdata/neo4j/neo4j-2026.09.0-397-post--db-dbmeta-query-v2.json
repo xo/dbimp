@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE VECTOR INDEX dbimp_v IF NOT EXISTS FOR (n:DbimpS) ON (n.v) OPTIONS {indexConfig: {`vector.dimensions`: 2, `vector.similarity_function`: 'euclidean'}}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "193"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Security.Forbidden\",\"message\":\"Schema operation 'create_index' on database 'dbmeta' is not allowed for user 'dbmeta_user' with roles [PUBLIC, publisher].\"}]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN 9223372036854775807 AS imax, -9223372036854775808 AS imin, 0.1 AS f, 1.5e300 AS fbig, 'h\\u00e9llo' AS s, true AS b, null AS n, [1, 'a', null] AS l, {k: 1, a: [2]} AS m, date('2026-09-27') AS d, localtime('12:50:35.556123456') AS lt, time('12:50:35.556+01:00') AS zt, localdatetime('2026-09-27T10:00:00.123456789') AS ldt, datetime('2026-09-27T10:00:00.123456789+02:00') AS odt, datetime('2026-09-27T10:00:00[Europe/Oslo]') AS zdt, duration('P1Y2M3DT4H5M6.007S') AS dur, point({x: 1.5, y: 2.5}) AS p2, point({longitude: 10.7, latitude: 59.9, height: 3}) AS p3\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "585"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"imax\",\"imin\",\"f\",\"fbig\",\"s\",\"b\",\"n\",\"l\",\"m\",\"d\",\"lt\",\"zt\",\"ldt\",\"odt\",\"zdt\",\"dur\",\"p2\",\"p3\"],\"values\":[[9223372036854775807,-9223372036854775808,0.1,1.5E300,\"héllo\",true,null,[1,\"a\",null],{\"a\":[2],\"k\":1},\"2026-09-27\",\"12:50:35.556123456\",\"12:50:35.556+01:00\",\"2026-09-27T10:00:00.123456789\",\"2026-09-27T10:00:00.123456789+02:00\",\"2026-09-27T10:00:00+02:00\",\"P1Y2M3DT4H5M6.007S\",\"SRID=7203;POINT (1.5 2.5)\",\"SRID=4979;POINT Z (10.7 59.9 3.0)\"]]},\"queryType\":\"r\",\"resultAvailableAfter\":17,\"resultConsumedAfter\":19,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kClpA=\"]}"
+  }
+}

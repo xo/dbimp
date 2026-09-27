@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2/tx/54646c",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:Dbimp {k: 'tx1'}) RETURN count(n) AS n\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "201"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:14 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"n\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"2\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":27,\"resultConsumedAfter\":30,\"transaction\":{\"id\":\"54646c\",\"expires\":\"2026-09-27T14:37:14Z\"}}"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query.v1.0+jsonl"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND range(1, 5) AS x RETURN x\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.0+jsonl"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"$event\":\"Header\",\"_body\":{\"fields\":[\"x\"]}}\n {\"$event\":\"Record\",\"_body\":[{\"$type\":\"Integer\",\"_value\":\"1\"}]}\n {\"$event\":\"Record\",\"_body\":[{\"$type\":\"Integer\",\"_value\":\"2\"}]}\n {\"$event\":\"Record\",\"_body\":[{\"$type\":\"Integer\",\"_value\":\"3\"}]}\n {\"$event\":\"Record\",\"_body\":[{\"$type\":\"Integer\",\"_value\":\"4\"}]}\n {\"$event\":\"Record\",\"_body\":[{\"$type\":\"Integer\",\"_value\":\"5\"}]}\n {\"$event\":\"Summary\",\"_body\":{\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCZpA=\"],\"queryType\":\"r\",\"resultAvailableAfter\":0,\"resultConsumedAfter\":1}}\n"
+  }
+}

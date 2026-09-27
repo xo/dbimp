@@ -19,7 +19,7 @@ that heading. It does not disappear. A heading with no status is open. The
 statuses in use are `Done`, `Dropped` and `Superseded by Wn`.
 
 Decisions are a separate series, `D1`, `D2` and so on, in
-[PLAN.md](PLAN.md). Do not mix the two series in one commit message.
+[decisions/](decisions/README.md). Do not mix the two series in one commit message.
 
 ## Where the items came from
 
@@ -32,7 +32,8 @@ the `dbmeta` session on `docs/DRIVER.md`. W7 came from Ken on 2026-09-27,
 who asked that every driver test CRUD, the features of its database and
 every native type, after it asks two models what they are. W8 came from Ken
 on 2026-09-27, who named SurrealDB as the second target, and W9 from Ken the
-same day, who named Neo4j as the third.
+same day, who named Neo4j as the third. W10 came from the `dbmeta` session on
+2026-09-27, which found two faults of the SurrealDB driver through `usql`.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -58,10 +59,10 @@ a driver has the name of its product (D30). Ken committed them on
 as both principals:
 https://github.com/xo/dbimp/actions/runs/36309539254.
 
-`dbmeta` committed D101 and D102 on 2026-09-27, as `eb35c7c`. The pin moved
-to that commit, staged for Ken to review. From D102, `dbrun list --json` and
-`dbrun dsn --json` have a field `principals`, with the administrator first
-and then the ordinary user, each with its own `url`. The workflow reads the
+`dbmeta` committed dbmeta D101 and dbmeta D102 on 2026-09-27, as `eb35c7c`.
+The pin moved to that commit, staged for Ken to review. From dbmeta D102,
+`dbrun list --json` and `dbrun dsn --json` have a field `principals`, with
+the administrator first and then the ordinary user, each with its own `url`. The workflow reads the
 `url` of the principal with the role `user`, and no longer builds that DSN
 itself. A product that has no such principal gets an empty DSN, so its tests
 for the ordinary user skip. From dbmeta D101, the `dsn` field of Couchbase is
@@ -324,7 +325,10 @@ release that holds the driver, and each names that tag:
 Ken committed steps 1 to 17 on 2026-09-27 as `bd0f165`, and the workflow
 passed on it, with 2.7.0 and 3.3.0 as both principals:
 https://github.com/xo/dbimp/actions/runs/36316196918. That is the gate of
-step 18. Steps 19 and 20 wait for Ken.
+step 18. At Ken's request, `v0.2.0` was tagged on `82c1902` the same day. It holds the
+driver, and `dburl` released the scheme `surrealdb` in `v0.34.0`, checked
+against `v0.2.0` (dburl D26). The release notes of step 19 and the requests
+of step 20 wait for Ken.
 
 ## W9. Write the Neo4j driver
 
@@ -333,8 +337,8 @@ Ken named Neo4j as the third target on 2026-09-27 (Q1 in
 Enterprise Edition under the evaluation agreement (D59). Follow
 [DRIVER.md](DRIVER.md).
 
-`dburl` has no scheme for Neo4j, and `usql` has no driver for it. The
-`dbmeta` session was asked for the entry of step 4 on 2026-09-27, with the
+`dburl` has no scheme for Neo4j yet, and Ken chose its aliases `nj`, `neo`
+and `n4j`. `usql` has no driver for it. The `dbmeta` session was asked for the entry of step 4 on 2026-09-27, with the
 facts below, which this session read and did not measure:
 
 - The image is `docker.io/library/neo4j`, and each release has a tag with
@@ -352,3 +356,92 @@ facts below, which this session read and did not measure:
   on 2026-09-27). `publisher` reads, writes, and makes new labels, property
   keys and types of relationship, and cannot make an index or a constraint,
   so it is the proposal for the ordinary user.
+
+Steps 3 and 5a went in on 2026-09-27, staged for Ken to review:
+[NEO4J.md](NEO4J.md) is the draft of step 3, and
+`testdata/neo4j/features.json` is the survey, with every entry not measured.
+The Query API of 5.19 and later, `POST /db/<database>/query/v2`, is the
+interface to measure. It names the columns before the rows, and it has
+explicit transactions from 5.26.
+
+Steps 4 to 9 went in on 2026-09-27, staged for Ken to review:
+
+- Step 4: dbmeta commit `1335428` on `main` holds the entry, from
+  dbmeta D106, with `neo4j-5.26.31` and `neo4j-2026.09.0` in the Tested tier.
+- Step 6: `testdata/neo4j/` holds the recordings of every request of
+  `requests.json` on both releases, as both principals, and
+  `manifest.json`. Every entry of `features.json` is settled against
+  2026.09.0: APOC and decimal are `no`, and every other entry is `yes`.
+- Step 7: the leads of Gemini and DeepSeek, and what the servers answered,
+  are in the Second opinions of [NEO4J.md](NEO4J.md).
+- Step 8: [NEO4J.md](NEO4J.md) is complete, apart from the type table and
+  the interface table of step 10.
+- Step 9: D60 to D69 in [decisions/](decisions/README.md). Ken chose the path, the
+  positional arguments, the three ways to cancel, the temporal types and the
+  context of a transaction, and accepted the ten decisions, on 2026-09-27.
+
+Steps 10 to 17 went in on 2026-09-27, staged for Ken to review:
+
+- Step 10: `neo4j/tables_test.go` writes the type table and the interface
+  table into [NEO4J.md](NEO4J.md).
+- Steps 11 to 13: the package `neo4j/`, with its replay tests of the
+  recordings, the contract, the tests of the cancel of D67 against a fake
+  server with recorded answers, and the tests of the DSN. The fuzz tests of
+  the DSN, of a duration and of a date ran for 60 seconds each and found
+  nothing.
+- Steps 14 and 14a: `neo4j/integration_test.go` passed on 5.26.31 and
+  2026.09.0 as both principals. Every entry of the survey names its test.
+- Step 15: the workflow needs no new job, because its matrix comes from the
+  folders under `testdata/`. `DBMETA_COMMIT` moves to `19a8a9a`, which names
+  the URL of Neo4j (dbmeta D109).
+- Step 17: the row of [TARGETS.md](TARGETS.md) names the package.
+
+The work found a fault in the root package: `dbimp.ArrayRows` took a row
+with fewer values than columns, and kept the values of the row before in
+the gap. It now returns `ErrColumnCount`, as [DESIGN.md](DESIGN.md) says.
+
+Step 16 wrote these requests. Step 20 sends them after Ken approves the
+release that holds the driver, and each names that tag:
+
+1. `dburl`: add a scheme whose `Driver` and `Dialect` are `neo4j` (D60),
+   with the aliases `nj`, `neo` and `n4j` that Ken chose, the `GoPackage`
+   `github.com/xo/dbimp/neo4j` and `RequiresCGO` false. Its generator writes
+   `neo4j://user:pass@host:port/<database>`, with the default port 7474, or
+   7473 with `tls=true`, and passes the keys `tls` and `cancel` through
+   (D61 and D67). A path that is empty means the database `neo4j`. The tools
+   of Neo4j write `neo4j://host:7687` for Bolt, which this driver does not
+   speak.
+2. `usql`: add `drivers/neo4j`, which imports the driver. Its `Version` runs
+   `CALL dbms.components() YIELD name, versions WHERE name = 'Neo4j Kernel'
+   RETURN versions[0]`, which the ordinary user can run (recorded). A
+   statement with no `RETURN`, such as `CREATE (:A)`, gives a result set with
+   no columns, which `tblfmt` refuses, as Q12 says for SurrealDB.
+3. `dbmeta`: nothing to change now. `dbrun` names the URL of Neo4j from
+   dbmeta D109. A model for Neo4j is a question for Ken.
+
+## W10. Fix the faults that usql found in the SurrealDB driver
+
+The `dbmeta` session ran `usql` at commit `54c12a4`, which pins `v0.2.0` of
+the SurrealDB driver, against 3.3.0 on 2026-09-27. It found two faults:
+
+1. A statement that returns no rows gives a result set with no columns, and
+   `tblfmt` refuses it with "result set has no columns". The statement still
+   runs. Q12 in [PLAN.md](PLAN.md) holds the options. It waits for Ken,
+   because two of them change `tblfmt` or `usql`, and the third replaces
+   D52.
+2. A record id inside an array prints as the fields of `RecordID`, such as
+   `[{"Table": "book", "ID": "earthsea"}]`. D70 proposes `MarshalText`, and
+   `TestRecordIDText` holds it. That change is staged.
+
+The session also reported that a `usql` user who writes `$1` gets a parse
+error from the server, and that `\bind` passes positional arguments, which
+the driver refuses by D50. `usql` has no way to pass `sql.Named`. D50 does
+not change.
+
+On 2026-09-27 every SurrealDB server of `dbrun` belonged to the owner
+`dbimp-w8`, so this item measured nothing on a server. The facts come from
+the recordings of 3.3.0, from the source of `usql` and of `tblfmt` v0.16.0,
+and from `tblfmt` run on a result set with no rows.
+
+A fix reaches `usql` only in a new release of `dbimp`, by steps 18 to 20 of
+[DRIVER.md](DRIVER.md).

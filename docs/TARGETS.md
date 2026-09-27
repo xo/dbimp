@@ -38,7 +38,7 @@ Couchbase is first (D23). Ken will arrange the rest after the first driver is
 complete (Q1 in [PLAN.md](PLAN.md)).
 
 1. Couchbase, with N1QL. It is the first driver, and it replaces `xo/n1ql`
-   (D23 in [PLAN.md](PLAN.md)).
+   (D23 in [decisions/](decisions/README.md)).
 2. SurrealDB, with SurrealQL.
 3. Neo4j, with Cypher.
 4. ArangoDB.
@@ -111,7 +111,7 @@ cloud service fails R for good, unless an emulator exists. Every target that
 | Apache Druid | The quickstart runs in one container, but it can exceed the 4 GB limit of `dbmeta`. Measure that before R counts. |
 | Elasticsearch and OpenSearch | Only through `_sql`, which pages with a cursor. The Query DSL and ES\|QL fail S. |
 | SurrealDB | The second target (W8). The driver is `github.com/xo/dbimp/surrealdb`. R: yes, `dbrun` starts 2.7.0, 3.1.6, 3.2.4 and 3.3.0 (dbmeta D103). H: yes, `POST /rpc` on port 8000. S: yes, SurrealQL. P1. Returns objects and no column list, with the keys sorted by name. See [SURREALDB.md](SURREALDB.md). |
-| Neo4j | The third target (W9). R: not yet, because `dbrun` has no entry. The `dbmeta` session was asked for one on 2026-09-27. H: yes, `POST /db/{database}/tx/commit` on port 7474 (not measured). S: yes, Cypher, by D58. P1. `dbrun` runs the Enterprise Edition under the evaluation agreement (D59). |
+| Neo4j | The third target (W9). The driver is `github.com/xo/dbimp/neo4j`. R: yes, `dbrun` starts 5.26.31 and 2026.09.0 (dbmeta D106). H: yes, the Query API, `POST /db/{database}/query/v2` on port 7474. S: yes, Cypher, by D58. P1. `dbrun` runs the Enterprise Edition under the evaluation agreement (D59). Returns the columns before the rows, in the order of the statement, with typed JSON (D62). See [NEO4J.md](NEO4J.md). |
 | Amazon DynamoDB | PartiQL, on `amazon/dynamodb-local`, which supports `ExecuteStatement` (not measured). Needs SigV4. An item is a map with no column order, and a number can have 38 digits. `usql` already has a driver, so it is likely P2 (D24). |
 | Databend | New. SQL on `/v1/query`. `usql` has a driver, and dbmeta D66 names it. |
 | GreptimeDB | New. SQL on `/v1/sql`. |
@@ -215,7 +215,7 @@ documentation of its HTTP interface.
 | [ScyllaDB Alternator](https://docs.scylladb.com/manual/stable/alternator/alternator.html) | Key-Value / Document | PartiQL (SQL-like) / DynamoDB JSON | `POST /` | application/x-amz-json-1.0 | application/x-amz-json-1.0 |
 | [CrateDB](https://cratedb.com/docs/crate/reference/en/latest/interfaces/http.html) | Distributed SQL / Document | SQL | `POST /_sql` | application/json | application/json |
 | [QuestDB](https://questdb.com/docs/reference/api/rest/) | Time-series | SQL | `GET /exec, POST /exec` | text/plain, application/x-www-form-urlencoded, multipart/form-data | application/json, text/csv |
-| [Neo4j](https://neo4j.com/docs/http-api/current/) | Graph | Cypher | `POST /db/{database}/tx/commit` | application/json | application/json |
+| [Neo4j](https://neo4j.com/docs/query-api/current/) | Graph | Cypher | `POST /db/{database}/query/v2` | application/json, application/vnd.neo4j.query | application/json, application/vnd.neo4j.query |
 | [Dgraph](https://dgraph.io/docs/query-language/dql-fundamentals/) | Graph | DQL / GraphQL | `POST /query, POST /graphql` | application/dql, application/graphql, application/json | application/json |
 | [InfluxDB](https://docs.influxdata.com/influxdb3/core/query-data/execute-queries/http-api/) | Time-series | SQL (v3) / InfluxQL (v1) | `POST /api/v3/query, POST /query` | application/json, application/sql | application/json, text/csv, application/vnd.apache.arrow.stream |
 | [rqlite](https://rqlite.io/docs/api/http-api/) | Distributed Relational (SQLite) | SQL | `POST /db/query, POST /db/execute` | application/json | application/json |

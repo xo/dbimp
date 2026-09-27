@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"// a comment with $x\\nRETURN 1 AS a /* ; RETURN 2 */, '$x // ;' AS s\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:14 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "230"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\",\"s\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"1\"},{\"$type\":\"String\",\"_value\":\"$x // ;\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":2,\"resultConsumedAfter\":3,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCm5A=\"]}"
+  }
+}

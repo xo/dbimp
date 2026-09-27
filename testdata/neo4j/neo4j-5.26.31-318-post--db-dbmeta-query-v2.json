@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN 1 AS a; RETURN 2 AS b\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "194"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:28 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Statement.SyntaxError\",\"message\":\"Expected exactly one statement per query but got: 2 (line 0, column 0 (offset: 0))\\n\\\"RETURN 1 AS a; RETURN 2 AS b\\\"\\n ^\"}]}"
+  }
+}

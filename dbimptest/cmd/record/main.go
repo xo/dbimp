@@ -89,7 +89,7 @@ type Request struct {
 	Phase string `json:"phase,omitzero"`
 	// Capture names values of the response to keep, by a path such as
 	// "results.0.txid". A later request of the same principal writes a kept
-	// value into its body as {{name}}.
+	// value into its body or its path as {{name}}.
 	Capture map[string]string `json:"capture,omitzero"`
 }
 
@@ -168,6 +168,7 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 				continue
 			}
 			r.Body = expand(r.Body, kept)
+			r.Path = expandText(r.Path, kept)
 			r.Header = withHeader(r.Header, script.Header[p])
 			if r.Background {
 				wg.Go(func() {
@@ -294,6 +295,14 @@ func jsonToCBOR(e *dbimp.CBOREncoder, dec *jsontext.Decoder) error {
 		e.Float(f)
 	}
 	return nil
+}
+
+// expandText writes each kept value into s where {{name}} stands.
+func expandText(s string, kept map[string]string) string {
+	for name, v := range kept {
+		s = strings.ReplaceAll(s, "{{"+name+"}}", v)
+	}
+	return s
 }
 
 // expand writes each kept value into body where {{name}} stands.

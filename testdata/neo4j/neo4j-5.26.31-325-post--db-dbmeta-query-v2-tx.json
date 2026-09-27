@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2/tx",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE (n:Dbimp {k: 'tx1'}) RETURN n.k AS k\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "135"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:28 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"k\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"tx1\"}]]},\"transaction\":{\"id\":\"b772dd\",\"expires\":\"2026-09-27T14:36:28Z\"}}"
+  }
+}

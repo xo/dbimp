@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"SHOW TRANSACTIONS YIELD transactionId AS id, metaData WHERE metaData.dbimp = $t RETURN coalesce(head(collect(id)), 'none') AS id\",\"parameters\":{\"t\":\"c2\"}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:34 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "212"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"id\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"dbmeta-transaction-2612\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":82,\"resultConsumedAfter\":86,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCZpA=\"]}"
+  }
+}

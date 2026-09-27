@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:DbimpNoSuchLabel) RETURN n\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "556"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"n\"],\"values\":[]},\"notifications\":[{\"code\":\"Neo.ClientNotification.Statement.UnknownLabelWarning\",\"description\":\"One of the labels in your query is not available in the database, make sure you didn't misspell it or that the label is available when you run this statement in your application (the missing label name is: DbimpNoSuchLabel)\",\"severity\":\"WARNING\",\"title\":\"The provided label is not in the database.\",\"position\":{\"offset\":9,\"line\":1,\"column\":10},\"category\":\"UNRECOGNIZED\"}],\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCoZA=\"]}"
+  }
+}

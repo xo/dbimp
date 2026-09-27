@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"DROP CONSTRAINT dbimp_ty IF EXISTS\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "406"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[],\"values\":[]},\"notifications\":[{\"code\":\"Neo.ClientNotification.Schema.IndexOrConstraintDoesNotExist\",\"description\":\"`dbimp_ty` does not exist.\",\"severity\":\"INFORMATION\",\"title\":\"`DROP CONSTRAINT dbimp_ty IF EXISTS` has no effect.\",\"position\":null,\"category\":\"SCHEMA\"}],\"queryType\":\"s\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":2,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCrpA=\"]}"
+  }
+}

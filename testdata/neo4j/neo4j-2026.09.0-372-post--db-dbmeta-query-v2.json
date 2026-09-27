@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND [{k: 'u1'}, {k: 'u2'}] AS row CREATE (n:Dbimp) SET n = row RETURN n.k AS k\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "170"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:14 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"k\"],\"values\":[[\"u1\"],[\"u2\"]]},\"queryType\":\"rw\",\"resultAvailableAfter\":24,\"resultConsumedAfter\":31,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCppA=\"]}"
+  }
+}

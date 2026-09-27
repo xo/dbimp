@@ -6,7 +6,7 @@
 //
 // Only a test imports this package. It imports testing and
 // net/http/httptest, which a driver must not pull into the build of a
-// consumer, so it is not in the root package (D37 in docs/PLAN.md).
+// consumer, so it is not in the root package (D37 in docs/decisions/).
 package dbimptest
 
 import (

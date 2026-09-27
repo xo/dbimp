@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/jsonl"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND range(1, 5) AS x RETURN x\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/jsonl"
+      ]
+    },
+    "body": "{\"$event\":\"Header\",\"_body\":{\"fields\":[\"x\"]}}\n {\"$event\":\"Record\",\"_body\":[1]}\n {\"$event\":\"Record\",\"_body\":[2]}\n {\"$event\":\"Record\",\"_body\":[3]}\n {\"$event\":\"Record\",\"_body\":[4]}\n {\"$event\":\"Record\",\"_body\":[5]}\n {\"$event\":\"Summary\",\"_body\":{\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCm5A=\"],\"queryType\":\"r\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":1}}\n"
+  }
+}

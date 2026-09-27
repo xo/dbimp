@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2/tx/49da64",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN 1 / 0 AS x\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "123"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:03 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"x\"],\"values\":[]},\"errors\":[{\"code\":\"Neo.ClientError.Statement.ArithmeticError\",\"message\":\"/ by zero\"}]}"
+  }
+}

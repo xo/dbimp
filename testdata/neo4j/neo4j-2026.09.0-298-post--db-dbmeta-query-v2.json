@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SHOW TRANSACTIONS YIELD currentQuery, status WHERE currentQuery STARTS WITH $tag RETURN status\",\"parameters\":{\"tag\":\"/* dbimp:c1 */ \"}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:57 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "159"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"status\"],\"values\":[]},\"queryType\":\"r\",\"resultAvailableAfter\":8,\"resultConsumedAfter\":9,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCm5A=\"]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN randomUUID() AS u, valueType(randomUUID()) AS t\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "216"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"u\",\"t\"],\"values\":[[\"cc264c85-71b1-495c-ae40-d89134186f64\",\"STRING NOT NULL\"]]},\"queryType\":\"r\",\"resultAvailableAfter\":5,\"resultConsumedAfter\":6,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCY5A=\"]}"
+  }
+}

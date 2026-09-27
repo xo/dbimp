@@ -2,7 +2,7 @@
 
 This file holds what is known about the Couchbase query service, for the
 first driver, `github.com/xo/dbimp/couchbase` (D23 and D26 in
-[PLAN.md](PLAN.md)). W5 in [BACKLOG.md](BACKLOG.md) is the work, and it
+[decisions/](decisions/README.md)). W5 in [BACKLOG.md](BACKLOG.md) is the work, and it
 follows [DRIVER.md](DRIVER.md). The headings are the template of that file.
 
 Each fact says how it was measured. "Recorded" means that an exchange under
@@ -527,5 +527,5 @@ The survey of step 5a asked the same two models four more questions on
 ## Open questions
 
 Ken decided the questions of step 9 on 2026-09-27, in D38 to D42 of
-[PLAN.md](PLAN.md). The durability of a transaction is D43: a key of the DSN and
+[decisions/](decisions/README.md). The durability of a transaction is D43: a key of the DSN and
 an option for one transaction, which the tests set to `none`.

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (a:DbimpG {k: 1}) ((x)-[:N]->(y)){1,2} (b) RETURN b.k AS k ORDER BY k\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "158"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"k\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"2\"}],[{\"$type\":\"Integer\",\"_value\":\"3\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCn5A=\"]}"
+  }
+}

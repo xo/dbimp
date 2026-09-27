@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query.v1.1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN vector([1.0, 2.0, 3.0], 3, FLOAT32) AS v\"}"
+  },
+  "response": {
+    "status": 406,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:34:39 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cache-Control": [
+        "must-revalidate,no-cache,no-store"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "82"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Not Acceptable\"}]}"
+  }
+}

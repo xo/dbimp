@@ -8,7 +8,8 @@ The drivers use the Go standard library, with
 [apd](https://github.com/cockroachdb/apd) for decimals, and need no cgo.
 
 The repository is new. It holds two drivers: `couchbase`, which was first
-released in `v0.1.0`, and `surrealdb`, which is not yet released.
+released in `v0.1.0`, and `surrealdb`, which was first released in
+`v0.2.0`. A driver for Neo4j is in progress.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support.
 
 ## Use
@@ -36,11 +37,14 @@ URL that the driver reads, so every alias works in `usql`.
 | Document | Holds |
 | --- | --- |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to change this repository |
-| [CLAUDE.md](CLAUDE.md) | The rules, written for a coding agent. They apply to a person too |
-| [docs/PLAN.md](docs/PLAN.md) | Every decision, and the open questions |
+| [AGENTS.md](AGENTS.md) | The rules, written for a coding agent. They apply to a person too |
+| [CLAUDE.md](CLAUDE.md) | One line that imports `AGENTS.md` for Claude Code |
+| [docs/PLAN.md](docs/PLAN.md) | The purpose of the project, and the open questions |
+| [docs/decisions/README.md](docs/decisions/README.md) | Every decision, one file each, and their index |
 | [docs/TARGETS.md](docs/TARGETS.md) | Every target database, its priority, and the review of the list |
 | [docs/DRIVER.md](docs/DRIVER.md) | Every step to add a driver, in order |
 | [docs/DESIGN.md](docs/DESIGN.md) | The design of the code that every driver shares |
 | [docs/COUCHBASE.md](docs/COUCHBASE.md) | What is measured about the Couchbase query service |
 | [docs/SURREALDB.md](docs/SURREALDB.md) | What is known about the HTTP interface of SurrealDB |
+| [docs/NEO4J.md](docs/NEO4J.md) | What is known about the HTTP interface of Neo4j |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |

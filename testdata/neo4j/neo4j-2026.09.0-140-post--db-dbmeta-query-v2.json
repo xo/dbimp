@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE (n:Dbimp {k: 'c1', name: 'Ada'}) RETURN n.name AS name\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "193"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:50 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"name\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"Ada\"}]]},\"queryType\":\"rw\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":6,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCbJA=\"]}"
+  }
+}

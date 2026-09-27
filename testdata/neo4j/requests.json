@@ -1,0 +1,4042 @@
+{
+ "driver": "neo4j",
+ "requests": [
+  {
+   "item": 1,
+   "name": "clear the database",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n) DETACH DELETE n"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "clear the database again",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n) DETACH DELETE n"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "a query (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a query (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "the discovery document",
+   "method": "GET",
+   "path": "/"
+  },
+  {
+   "item": 1,
+   "name": "the deprecated HTTP API",
+   "method": "POST",
+   "path": "/db/dbmeta/tx/commit",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statements": [
+     {
+      "statement": "RETURN 1 AS a"
+     }
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "the default database",
+   "method": "POST",
+   "path": "/db/neo4j/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a database that does not exist",
+   "method": "POST",
+   "path": "/db/dbimp_nothing/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "the media type application/vnd.neo4j.query.v1.0",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.0"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "the media type application/vnd.neo4j.query.v1.1",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.1"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "the media type application/vnd.neo4j.query.v1.2",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.2"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 2,
+   "name": "the order of the columns (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS b, 2 AS a, 3 AS c"
+   }
+  },
+  {
+   "item": 2,
+   "name": "the order of the columns (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS b, 2 AS a, 3 AS c"
+   }
+  },
+  {
+   "item": 2,
+   "name": "the keys of a map (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN {b: 1, a: 2, c: 3} AS m"
+   }
+  },
+  {
+   "item": 2,
+   "name": "the keys of a map (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN {b: 1, a: 2, c: 3} AS m"
+   }
+  },
+  {
+   "item": 2,
+   "name": "no rows (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [] AS x RETURN x"
+   }
+  },
+  {
+   "item": 2,
+   "name": "no rows (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [] AS x RETURN x"
+   }
+  },
+  {
+   "item": 2,
+   "name": "no columns (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (:Dbimp {k: 'nocol'})"
+   }
+  },
+  {
+   "item": 2,
+   "name": "no columns (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (:Dbimp {k: 'nocol'})"
+   }
+  },
+  {
+   "item": 3,
+   "name": "each type (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 9223372036854775807 AS imax, -9223372036854775808 AS imin, 0.1 AS f, 1.5e300 AS fbig, 'h\u00e9llo' AS s, true AS b, null AS n, [1, 'a', null] AS l, {k: 1, a: [2]} AS m, date('2026-09-27') AS d, localtime('12:50:35.556123456') AS lt, time('12:50:35.556+01:00') AS zt, localdatetime('2026-09-27T10:00:00.123456789') AS ldt, datetime('2026-09-27T10:00:00.123456789+02:00') AS odt, datetime('2026-09-27T10:00:00[Europe/Oslo]') AS zdt, duration('P1Y2M3DT4H5M6.007S') AS dur, point({x: 1.5, y: 2.5}) AS p2, point({longitude: 10.7, latitude: 59.9, height: 3}) AS p3"
+   }
+  },
+  {
+   "item": 3,
+   "name": "each type (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 9223372036854775807 AS imax, -9223372036854775808 AS imin, 0.1 AS f, 1.5e300 AS fbig, 'h\u00e9llo' AS s, true AS b, null AS n, [1, 'a', null] AS l, {k: 1, a: [2]} AS m, date('2026-09-27') AS d, localtime('12:50:35.556123456') AS lt, time('12:50:35.556+01:00') AS zt, localdatetime('2026-09-27T10:00:00.123456789') AS ldt, datetime('2026-09-27T10:00:00.123456789+02:00') AS odt, datetime('2026-09-27T10:00:00[Europe/Oslo]') AS zdt, duration('P1Y2M3DT4H5M6.007S') AS dur, point({x: 1.5, y: 2.5}) AS p2, point({longitude: 10.7, latitude: 59.9, height: 3}) AS p3"
+   }
+  },
+  {
+   "item": 3,
+   "name": "dates at their limits (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN date('+999999999-12-31') AS dmax, date('-999999999-01-01') AS dmin, datetime('1600-01-01T00:00:00Z') AS old"
+   }
+  },
+  {
+   "item": 3,
+   "name": "dates at their limits (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN date('+999999999-12-31') AS dmax, date('-999999999-01-01') AS dmin, datetime('1600-01-01T00:00:00Z') AS old"
+   }
+  },
+  {
+   "item": 3,
+   "name": "an integer too large (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 9223372036854775808 AS x"
+   }
+  },
+  {
+   "item": 3,
+   "name": "an integer too large (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 9223372036854775808 AS x"
+   }
+  },
+  {
+   "item": 3,
+   "name": "special floats (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 0.0 / 0.0 AS nan, 1.0 / 0.0 AS inf, -0.0 AS nz"
+   }
+  },
+  {
+   "item": 3,
+   "name": "special floats (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 0.0 / 0.0 AS nan, 1.0 / 0.0 AS inf, -0.0 AS nz"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a byte array from a parameter",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/vnd.neo4j.query"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $b AS b",
+    "parameters": {
+     "b": {
+      "$type": "Base64",
+      "_value": "3q2+7w=="
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a node, a relationship and a path (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE p = (a:Dbimp {k: 'n1'})-[r:DBIMP_R {w: 2}]->(b:Dbimp {k: 'n2'}) RETURN a, r, p"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a node, a relationship and a path (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE p = (a:Dbimp {k: 'n1'})-[r:DBIMP_R {w: 2}]->(b:Dbimp {k: 'n2'}) RETURN a, r, p"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a vector (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN vector([1.0, 2.0, 3.0], 3, FLOAT32) AS v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a vector (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN vector([1.0, 2.0, 3.0], 3, FLOAT32) AS v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a vector in typed JSON 1.1",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.1"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN vector([1.0, 2.0, 3.0], 3, FLOAT32) AS v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a uuid as a typed parameter",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.2"
+    ],
+    "Content-Type": [
+     "application/vnd.neo4j.query.v1.2"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $u AS u, valueType($u) AS t",
+    "parameters": {
+     "u": {
+      "$type": "UUID",
+      "_value": "550e8400-e29b-41d4-a716-446655440000"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a random uuid (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN randomUUID() AS u, valueType(randomUUID()) AS t"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a random uuid (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN randomUUID() AS u, valueType(randomUUID()) AS t"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a list of media types",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.2, application/vnd.neo4j.query.v1.1;q=0.9, application/vnd.neo4j.query;q=0.8"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a decimal (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1.23456789012345678901234567890 AS d"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a decimal (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1.23456789012345678901234567890 AS d"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a missing property (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'mp'}) RETURN n.k AS k, n.nothing AS missing"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a missing property (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'mp'}) RETURN n.k AS k, n.nothing AS missing"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a list of mixed types as a property (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'ml', v: [1, 'a']}) RETURN n.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a list of mixed types as a property (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'ml', v: [1, 'a']}) RETURN n.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a map as a property (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'mm', v: {a: 1}}) RETURN n.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a map as a property (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'mm', v: {a: 1}}) RETURN n.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a round trip of typed parameters",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/vnd.neo4j.query"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: $k, i: $i, f: $f, d: $d, dt: $dt, dur: $dur, p: $p}) RETURN n",
+    "parameters": {
+     "k": {
+      "$type": "String",
+      "_value": "rt"
+     },
+     "i": {
+      "$type": "Integer",
+      "_value": "9223372036854775807"
+     },
+     "f": {
+      "$type": "Float",
+      "_value": "0.1"
+     },
+     "d": {
+      "$type": "Date",
+      "_value": "2026-09-27"
+     },
+     "dt": {
+      "$type": "ZonedDateTime",
+      "_value": "2026-09-27T10:00:00+02:00[Europe/Oslo]"
+     },
+     "dur": {
+      "$type": "Duration",
+      "_value": "P1Y2M3DT4H5M6.007S"
+     },
+     "p": {
+      "$type": "Point",
+      "_value": "SRID=7203;POINT (1.5 2.5)"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a vector of each type",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.1"
+    ],
+    "Content-Type": [
+     "application/vnd.neo4j.query.v1.1"
+    ]
+   },
+   "body": {
+    "statement": "RETURN vector([1, 2], 2, INT8) AS i8, vector([1, 2], 2, INT16) AS i16, vector([1, 2], 2, INT32) AS i32, vector([1, 2], 2, INT64) AS i64, vector([1.5, 2.5], 2, FLOAT32) AS f32, vector([1.5, 2.5], 2, FLOAT64) AS f64"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a vector as a typed parameter",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.1"
+    ],
+    "Content-Type": [
+     "application/vnd.neo4j.query.v1.1"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $v AS v, valueType($v) AS t",
+    "parameters": {
+     "v": {
+      "$type": "Vector",
+      "_value": {
+       "coordinatesType": "INT8",
+       "coordinates": [
+        "1",
+        "-2"
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "the edge forms of temporal values",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN localtime('12:00') AS a, time('12:00Z') AS b, time('12:00:00.5-05:30') AS c, datetime('2026-01-01T00:00Z') AS d, localdatetime('2026-01-01T00:00') AS e, duration('PT0S') AS f, duration({months: -14, days: -3, seconds: -5, nanoseconds: -7}) AS g, duration('PT-0.5S') AS h, date('0001-01-01') AS i, date('-0001-06-01') AS j, date('+10000-01-01') AS k, point({x: 1, y: 2, z: 3}) AS l, point({longitude: 1.5, latitude: 2.5}) AS m, datetime('2026-07-01T00:00[America/New_York]') AS n, datetime({year: 2026, month: 1, day: 1, timezone: '+01:30:15'}) AS o, time({hour: 1, timezone: 'Europe/Oslo'}) AS p, duration({seconds: 1, nanoseconds: -1}) AS q, point({x: 0.1, y: 1e300}) AS r, duration('P3D') AS s, duration('PT-3700S') AS u"
+   }
+  },
+  {
+   "item": 3,
+   "name": "numbers as plain parameters",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN valueType($a) AS a, valueType($b) AS b, valueType($c) AS c, $d AS d, valueType($d) AS dt, $e AS e",
+    "parameters": {
+     "a": 1,
+     "b": 1.0,
+     "c": 1e3,
+     "d": 9007199254740993,
+     "e": 9223372036854775807
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "an integer too large as a plain parameter",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $x AS x",
+    "parameters": {
+     "x": 9223372036854775808
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "typed parameters of each type",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/vnd.neo4j.query"
+    ]
+   },
+   "body": {
+    "statement": "RETURN valueType($d) AS d, valueType($dur) AS dur, valueType($p) AS p, valueType($zdt) AS zdt, valueType($b) AS b, $zdt AS zv",
+    "parameters": {
+     "d": {
+      "$type": "Date",
+      "_value": "2026-09-27"
+     },
+     "dur": {
+      "$type": "Duration",
+      "_value": "P1Y2M3DT4H5M6.007S"
+     },
+     "p": {
+      "$type": "Point",
+      "_value": "SRID=7203;POINT (1.5 2.5)"
+     },
+     "zdt": {
+      "$type": "ZonedDateTime",
+      "_value": "2026-09-27T10:00:00+02:00[Europe/Oslo]"
+     },
+     "b": {
+      "$type": "Base64",
+      "_value": "3q2+7w=="
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a node as a typed parameter",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/vnd.neo4j.query"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $n AS n",
+    "parameters": {
+     "n": {
+      "$type": "Node",
+      "_value": {
+       "_element_id": "4:x:0",
+       "_labels": [
+        "Dbimp"
+       ],
+       "_properties": {}
+      }
+     }
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "named parameters (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $s AS s, $i AS i, $f AS f, $b AS b, $n AS n, $l AS l, $m AS m",
+    "parameters": {
+     "s": "it's",
+     "i": 42,
+     "f": 1.5,
+     "b": true,
+     "n": null,
+     "l": [
+      1,
+      "a"
+     ],
+     "m": {
+      "k": [
+       1
+      ]
+     }
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "named parameters (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $s AS s, $i AS i, $f AS f, $b AS b, $n AS n, $l AS l, $m AS m",
+    "parameters": {
+     "s": "it's",
+     "i": 42,
+     "f": 1.5,
+     "b": true,
+     "n": null,
+     "l": [
+      1,
+      "a"
+     ],
+     "m": {
+      "k": [
+       1
+      ]
+     }
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a large integer as a plain parameter (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $i AS i",
+    "parameters": {
+     "i": 9223372036854775807
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a large integer as a plain parameter (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $i AS i",
+    "parameters": {
+     "i": 9223372036854775807
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter that no statement names (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a",
+    "parameters": {
+     "unused": 1
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter that no statement names (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a",
+    "parameters": {
+     "unused": 1
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a name that no parameter gives (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $nothing AS x"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a name that no parameter gives (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $nothing AS x"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $0 AS x",
+    "parameters": {
+     "0": "zero"
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $0 AS x",
+    "parameters": {
+     "0": "zero"
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "positional parameters as the driver sends them",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN $1 AS a, $2 AS b",
+    "parameters": {
+     "1": "one",
+     "2": 2
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "many rows (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 20000) AS x RETURN x"
+   }
+  },
+  {
+   "item": 5,
+   "name": "many rows (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 20000) AS x RETURN x"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 5,
+   "name": "many rows as JSON lines",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/jsonl"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 5) AS x RETURN x"
+   }
+  },
+  {
+   "item": 5,
+   "name": "many rows as typed JSON lines",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query.v1.0+jsonl"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 5) AS x RETURN x"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a syntax error (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETRUN 1"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a syntax error (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETRUN 1"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error after rows (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [1, 2, 0, 4] AS x RETURN 10 / x AS y"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error after rows (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [1, 2, 0, 4] AS x RETURN 10 / x AS y"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error after rows as JSON lines",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/jsonl"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [1, 2, 0, 4] AS x RETURN 10 / x AS y"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a function that does not exist (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN dbimp.nothing() AS x"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a function that does not exist (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN dbimp.nothing() AS x"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a body that is not JSON",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "text": "{not json"
+  },
+  {
+   "item": 6,
+   "name": "a body with no statement",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {}
+  },
+  {
+   "item": 7,
+   "name": "a query that the client leaves",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "/* dbimp:c1 */ UNWIND range(1, 40000) AS a UNWIND range(1, 40000) AS b WITH a + b AS s WHERE s < 0 RETURN count(s) AS n"
+   },
+   "timeout": "1s"
+  },
+  {
+   "item": 7,
+   "name": "the transactions after the client left",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW TRANSACTIONS YIELD transactionId, currentQuery WHERE currentQuery STARTS WITH $tag RETURN transactionId",
+    "parameters": {
+     "tag": "/* dbimp:c1 */ "
+    }
+   },
+   "wait": "1s",
+   "capture": {
+    "left": "data.values.0.0._value"
+   }
+  },
+  {
+   "item": 7,
+   "name": "terminate the query that the client left",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "TERMINATE TRANSACTION $id",
+    "parameters": {
+     "id": "{{left}}"
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "the transactions after the terminate",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW TRANSACTIONS YIELD currentQuery, status WHERE currentQuery STARTS WITH $tag RETURN status",
+    "parameters": {
+     "tag": "/* dbimp:c1 */ "
+    }
+   },
+   "wait": "1s"
+  },
+  {
+   "item": 7,
+   "name": "a query with metadata that the client leaves",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 40000) AS a UNWIND range(1, 40000) AS b WITH a + b AS s WHERE s < 0 RETURN count(s) AS n",
+    "txMetadata": {
+     "dbimp": "c2"
+    }
+   },
+   "timeout": "1s"
+  },
+  {
+   "item": 7,
+   "name": "the transaction by its metadata",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW TRANSACTIONS YIELD transactionId AS id, metaData WHERE metaData.dbimp = $t RETURN coalesce(head(collect(id)), 'none') AS id",
+    "parameters": {
+     "t": "c2"
+    }
+   },
+   "wait": "1s",
+   "capture": {
+    "meta": "data.values.0.0._value"
+   }
+  },
+  {
+   "item": 7,
+   "name": "terminate the transaction by its metadata",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "TERMINATE TRANSACTION $id",
+    "parameters": {
+     "id": "{{meta}}"
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "begin for a statement that the client leaves",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {},
+   "capture": {
+    "tx6": "transaction.id"
+   }
+  },
+  {
+   "item": 7,
+   "name": "a statement in a transaction that the client leaves",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx6}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "/* dbimp:c3 */ UNWIND range(1, 40000) AS a UNWIND range(1, 40000) AS b WITH a + b AS s WHERE s < 0 RETURN count(s) AS n"
+   },
+   "timeout": "1s"
+  },
+  {
+   "item": 7,
+   "name": "the transaction of the statement that the client left",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW TRANSACTIONS YIELD transactionId AS id, currentQuery WHERE currentQuery STARTS WITH $tag RETURN coalesce(head(collect(id)), 'none') AS id",
+    "parameters": {
+     "tag": "/* dbimp:c3 */ "
+    }
+   },
+   "wait": "1s",
+   "capture": {
+    "left2": "data.values.0.0._value"
+   }
+  },
+  {
+   "item": 7,
+   "name": "terminate the transaction of the statement",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "TERMINATE TRANSACTION $id",
+    "parameters": {
+     "id": "{{left2}}"
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "the transaction after it was terminated",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx6}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   },
+   "wait": "1s"
+  },
+  {
+   "item": 7,
+   "name": "a timeout for the transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 40000) AS a UNWIND range(1, 40000) AS b WITH a + b AS s WHERE s < 0 RETURN count(s) AS n",
+    "maxExecutionTime": 1
+   },
+   "wait": "10s"
+  },
+  {
+   "item": 7,
+   "name": "a tag for the transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a",
+    "txMetadata": {
+     "dbimp": "q-1"
+    }
+   }
+  },
+  {
+   "item": 8,
+   "name": "a wrong password",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   },
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "an index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE INDEX dbimp_ix IF NOT EXISTS FOR (n:Dbimp) ON (n.k)"
+   }
+  },
+  {
+   "item": 8,
+   "name": "drop the index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP INDEX dbimp_ix IF EXISTS"
+   }
+  },
+  {
+   "item": 8,
+   "name": "the users",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW USERS"
+   }
+  },
+  {
+   "item": 8,
+   "name": "a database",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE DATABASE dbimpx IF NOT EXISTS"
+   }
+  },
+  {
+   "item": 8,
+   "name": "drop the database",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP DATABASE dbimpx IF EXISTS"
+   }
+  },
+  {
+   "item": 9,
+   "name": "the version (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CALL dbms.components() YIELD name, versions, edition RETURN name, versions, edition"
+   }
+  },
+  {
+   "item": 9,
+   "name": "the version (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CALL dbms.components() YIELD name, versions, edition RETURN name, versions, edition"
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a; RETURN 2 AS b"
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a; RETURN 2 AS b"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a statement that ends with a semicolon (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a;"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a statement that ends with a semicolon (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a;"
+   }
+  },
+  {
+   "item": 10,
+   "name": "comments (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "// a comment with $x\nRETURN 1 AS a /* ; RETURN 2 */, '$x // ;' AS s"
+   }
+  },
+  {
+   "item": 10,
+   "name": "comments (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "// a comment with $x\nRETURN 1 AS a /* ; RETURN 2 */, '$x // ;' AS s"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a line break in the statement (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a,\n2 AS b"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a line break in the statement (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a,\n2 AS b"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'tx1'}) RETURN n.k AS k"
+   },
+   "capture": {
+    "tx": "transaction.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a read outside the transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'tx1'}) RETURN count(n) AS n"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a statement in the transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'tx1'}) RETURN count(n) AS n"
+   }
+  },
+  {
+   "item": 11,
+   "name": "commit",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx}}/commit",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS last"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a read after the commit",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'tx1'}) RETURN count(n) AS n"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin again",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'tx2'}) RETURN n.k AS k"
+   },
+   "capture": {
+    "tx2": "transaction.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback",
+   "method": "DELETE",
+   "path": "/db/dbmeta/query/v2/tx/{{tx2}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "a read after the rollback",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'tx2'}) RETURN count(n) AS n"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a statement in the transaction that ended",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx2}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin with no statement",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {},
+   "capture": {
+    "tx3": "transaction.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "an error in the transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx3}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 / 0 AS x"
+   }
+  },
+  {
+   "item": 11,
+   "name": "the transaction after the error",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx3}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a transaction that does not exist",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/nothing",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin for CALL IN TRANSACTIONS",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {},
+   "capture": {
+    "tx4": "transaction.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "CALL IN TRANSACTIONS in a transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx4}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 4) AS i CALL (i) { CREATE (:Dbimp {k: 'cit'}) } IN TRANSACTIONS OF 2 ROWS"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback of it",
+   "method": "DELETE",
+   "path": "/db/dbmeta/query/v2/tx/{{tx4}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin for a commit",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {},
+   "capture": {
+    "tx7": "transaction.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a write before the commit",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx7}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'tx7'}) RETURN n.k AS k"
+   }
+  },
+  {
+   "item": 11,
+   "name": "commit with no statement",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx7}}/commit",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {}
+  },
+  {
+   "item": 11,
+   "name": "a read after the commit with no statement",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'tx7'}) RETURN count(n) AS n"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin for a rollback",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {},
+   "capture": {
+    "tx8": "transaction.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a write before the rollback",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx8}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'tx8'}) RETURN n.k AS k"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback after a write",
+   "method": "DELETE",
+   "path": "/db/dbmeta/query/v2/tx/{{tx8}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "a read after the rollback after a write",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'tx8'}) RETURN count(n) AS n"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a write in read access mode",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (:Dbimp {k: 'ro'})",
+    "accessMode": "READ"
+   }
+  },
+  {
+   "item": 11,
+   "name": "an access mode that does not exist",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a",
+    "accessMode": "NOPE"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin in read access mode",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "accessMode": "READ"
+   },
+   "capture": {
+    "tx5": "transaction.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a read in the read only transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx5}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a write in the read only transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2/tx/{{tx5}}",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (:Dbimp {k: 'ro'})"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a comment before CYPHER",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "/* dbimp:t */ CYPHER 5 RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a comment before EXPLAIN",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "/* dbimp:t */ EXPLAIN RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a comment before PROFILE",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "/* dbimp:t */ PROFILE RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a comment before USE",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "/* dbimp:t */ USE dbmeta RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a comment before a system command",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "/* dbimp:t */ SHOW DATABASES YIELD name RETURN count(*) AS n"
+   }
+  },
+  {
+   "item": 12,
+   "name": "compression",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ],
+    "Accept-Encoding": [
+     "gzip"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 2000) AS x RETURN x"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud insert (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'c1', name: 'Ada'}) RETURN n.name AS name"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud insert (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'c1', name: 'Ada'}) RETURN n.name AS name"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud select (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) RETURN n.name AS name"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud select (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) RETURN n.name AS name"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud update (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) SET n.age = 36, n.name = 'Ada L' RETURN n.age AS age, n.name AS name"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud update (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) SET n.age = 36, n.name = 'Ada L' RETURN n.age AS age, n.name AS name"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud remove (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) REMOVE n.age RETURN n.age AS age"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud remove (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) REMOVE n.age RETURN n.age AS age"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud delete (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) DELETE n RETURN count(*) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud delete (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'c1'}) DELETE n RETURN count(*) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud detach delete (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (a:Dbimp {k: 'dd'})-[:DBIMP_R]->(:Dbimp {k: 'dd2'}) WITH a MATCH (n:Dbimp) WHERE n.k STARTS WITH 'dd' DETACH DELETE n RETURN count(*) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud detach delete (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (a:Dbimp {k: 'dd'})-[:DBIMP_R]->(:Dbimp {k: 'dd2'}) WITH a MATCH (n:Dbimp) WHERE n.k STARTS WITH 'dd' DETACH DELETE n RETURN count(*) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud merge (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MERGE (n:Dbimp {k: 'm1'}) ON CREATE SET n.c = 1 ON MATCH SET n.c = n.c + 1 RETURN n.c AS c"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud merge (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MERGE (n:Dbimp {k: 'm1'}) ON CREATE SET n.c = 1 ON MATCH SET n.c = n.c + 1 RETURN n.c AS c"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud unwind batch insert (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [{k: 'u1'}, {k: 'u2'}] AS row CREATE (n:Dbimp) SET n = row RETURN n.k AS k"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud unwind batch insert (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [{k: 'u1'}, {k: 'u2'}] AS row CREATE (n:Dbimp) SET n = row RETURN n.k AS k"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud foreach (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "FOREACH (x IN [1, 2] | CREATE (:Dbimp {k: 'fe', x: x}))"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud foreach (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "FOREACH (x IN [1, 2] | CREATE (:Dbimp {k: 'fe', x: x}))"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud load csv (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "LOAD CSV FROM 'file:///dbimp.csv' AS row RETURN row"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud load csv (typed)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "LOAD CSV FROM 'file:///dbimp.csv' AS row RETURN row"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud call in transactions",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 4) AS i CALL (i) { CREATE (:Dbimp {k: 'cit', i: i}) } IN TRANSACTIONS OF 2 ROWS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud call in transactions (plain)",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND range(1, 4) AS i CALL (i) { CREATE (:Dbimp {k: 'cit', i: i}) } IN TRANSACTIONS OF 2 ROWS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema uniqueness constraint",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE CONSTRAINT dbimp_u IF NOT EXISTS FOR (n:DbimpS) REQUIRE n.u IS UNIQUE"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema a violation of the uniqueness constraint",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (:DbimpS {u: 1}), (:DbimpS {u: 1})"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema uniqueness constraint drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP CONSTRAINT dbimp_u IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema node key constraint",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE CONSTRAINT dbimp_nk IF NOT EXISTS FOR (n:DbimpS) REQUIRE (n.a, n.b) IS NODE KEY"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema node key constraint drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP CONSTRAINT dbimp_nk IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema existence constraint",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE CONSTRAINT dbimp_ex IF NOT EXISTS FOR (n:DbimpS) REQUIRE n.e IS NOT NULL"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema existence constraint drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP CONSTRAINT dbimp_ex IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema property type constraint",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE CONSTRAINT dbimp_ty IF NOT EXISTS FOR (n:DbimpS) REQUIRE n.t IS :: INTEGER"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema property type constraint drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP CONSTRAINT dbimp_ty IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema range index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE RANGE INDEX dbimp_r IF NOT EXISTS FOR (n:DbimpS) ON (n.r)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema range index drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP INDEX dbimp_r IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema text index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE TEXT INDEX dbimp_t IF NOT EXISTS FOR (n:DbimpS) ON (n.s)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema text index drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP INDEX dbimp_t IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema point index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE POINT INDEX dbimp_p IF NOT EXISTS FOR (n:DbimpS) ON (n.p)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema point index drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP INDEX dbimp_p IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema full text index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE FULLTEXT INDEX dbimp_ft IF NOT EXISTS FOR (n:DbimpS) ON EACH [n.s]"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema full text index drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP INDEX dbimp_ft IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema vector index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE VECTOR INDEX dbimp_v IF NOT EXISTS FOR (n:DbimpS) ON (n.v) OPTIONS {indexConfig: {`vector.dimensions`: 2, `vector.similarity_function`: 'euclidean'}}"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema vector index drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP INDEX dbimp_v IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema lookup index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW INDEXES YIELD type WHERE type = 'LOOKUP' RETURN count(*) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema composite index",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE INDEX dbimp_c IF NOT EXISTS FOR (n:DbimpS) ON (n.a, n.b)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema composite index drop",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP INDEX dbimp_c IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema create database",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE DATABASE dbimpy IF NOT EXISTS WAIT"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema database alias",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE ALIAS dbimpy_alias IF NOT EXISTS FOR DATABASE dbimpy"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema a query through the alias",
+   "method": "POST",
+   "path": "/db/dbimpy_alias/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema drop the alias",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP ALIAS dbimpy_alias IF EXISTS FOR DATABASE"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema composite database",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE COMPOSITE DATABASE dbimpz IF NOT EXISTS WAIT"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema drop the composite database",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP COMPOSITE DATABASE dbimpz IF EXISTS"
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema drop the database",
+   "method": "POST",
+   "path": "/db/system/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "DROP DATABASE dbimpy IF EXISTS WAIT"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature cypher 25",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CYPHER 25 RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature variable length path",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (a:DbimpG {k: 1})-[:N]->(:DbimpG {k: 2})-[:N]->(:DbimpG {k: 3}) WITH a MATCH (a)-[:N*1..2]->(b) RETURN b.k AS k ORDER BY k"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature shortest path",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH p = shortestPath((a:DbimpG {k: 1})-[:N*]->(b:DbimpG {k: 3})) RETURN length(p) AS len"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature shortest keyword",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH p = SHORTEST 1 (a:DbimpG {k: 1})-[:N]->+(b:DbimpG {k: 3}) RETURN length(p) AS len"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature quantified path pattern",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (a:DbimpG {k: 1}) ((x)-[:N]->(y)){1,2} (b) RETURN b.k AS k ORDER BY k"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature optional match",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "OPTIONAL MATCH (n:DbimpNothing) RETURN n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature with",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [3, 1, 2] AS x WITH x ORDER BY x LIMIT 2 RETURN collect(x) AS xs"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature union",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS x UNION RETURN 2 AS x"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature call subquery",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CALL () { RETURN 1 AS inner } RETURN inner"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature collect and count subquery",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN COUNT { MATCH (n:DbimpG) } AS c, COLLECT { MATCH (n:DbimpG) RETURN n.k ORDER BY n.k } AS ks"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature exists subquery",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN EXISTS { MATCH (n:DbimpG {k: 1}) } AS e"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature list comprehension",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN [x IN range(1, 6) WHERE x % 2 = 0 | x * 10] AS l"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature pattern comprehension",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (a:DbimpG {k: 1}) RETURN [(a)-[:N]->(b) | b.k] AS l"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature case",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN CASE WHEN 1 > 0 THEN 'yes' ELSE 'no' END AS c"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature apoc",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN apoc.version() AS v"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature show databases",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW DATABASES YIELD name RETURN name ORDER BY name"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature show indexes",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW INDEXES YIELD name RETURN count(name) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature show transactions",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW TRANSACTIONS YIELD transactionId RETURN count(*) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature terminate transaction",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "TERMINATE TRANSACTION 'dbmeta-transaction-999999999'"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature explain and profile",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "EXPLAIN MATCH (n:DbimpG) RETURN n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature profile",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "PROFILE MATCH (n:DbimpG) RETURN n.k AS k ORDER BY k"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature use clause",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "USE dbmeta RETURN 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature gql clauses",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "UNWIND [1, 2, 3] AS x LET y = x * 2 FILTER y > 2 RETURN y"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature dynamic labels",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:$('DbimpG')) RETURN count(n) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature element id",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:DbimpG {k: 1}) RETURN elementId(n) STARTS WITH '4:' AS e"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature the end of the graph",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:DbimpG) DETACH DELETE n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature impersonation",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "SHOW CURRENT USER YIELD user RETURN user",
+    "impersonatedUser": "neo4j"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature query counters",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (:Dbimp {k: 'qc'})",
+    "includeCounters": true
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature notifications",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:DbimpNoSuchLabel) RETURN n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature bookmarks",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "RETURN 1 AS a",
+    "bookmarks": [
+     "FB:nothing"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature a write for a bookmark",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "CREATE (n:Dbimp {k: 'bm'}) RETURN n.k AS k"
+   },
+   "capture": {
+    "bm": "bookmarks.0"
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature a read after the bookmark",
+   "method": "POST",
+   "path": "/db/dbmeta/query/v2",
+   "header": {
+    "Accept": [
+     "application/vnd.neo4j.query"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "statement": "MATCH (n:Dbimp {k: 'bm'}) RETURN count(n) AS n",
+    "bookmarks": [
+     "{{bm}}"
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN {b: 1, a: 2, c: 3} AS m\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "228"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:34:39 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"m\"],\"values\":[[{\"$type\":\"Map\",\"_value\":{\"a\":{\"$type\":\"Integer\",\"_value\":\"2\"},\"b\":{\"$type\":\"Integer\",\"_value\":\"1\"},\"c\":{\"$type\":\"Integer\",\"_value\":\"3\"}}}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCUZA=\"]}"
+  }
+}

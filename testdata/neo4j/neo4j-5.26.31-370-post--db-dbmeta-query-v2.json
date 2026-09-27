@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE (a:Dbimp {k: 'dd'})-[:DBIMP_R]->(:Dbimp {k: 'dd2'}) WITH a MATCH (n:Dbimp) WHERE n.k STARTS WITH 'dd' DETACH DELETE n RETURN count(*) AS n\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:28 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "92"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"n\"],\"values\":[[2]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCk5A=\"]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE CONSTRAINT dbimp_u IF NOT EXISTS FOR (n:DbimpS) REQUIRE n.u IS UNIQUE\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "198"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Security.Forbidden\",\"message\":\"Schema operation 'create_constraint' on database 'dbmeta' is not allowed for user 'dbmeta_user' with roles [PUBLIC, publisher].\"}]}"
+  }
+}

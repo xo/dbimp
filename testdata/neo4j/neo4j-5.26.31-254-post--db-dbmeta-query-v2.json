@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query.v1.2"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.2"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $u AS u, valueType($u) AS t\",\"parameters\":{\"u\":{\"$type\":\"UUID\",\"_value\":\"550e8400-e29b-41d4-a716-446655440000\"}}}"
+  },
+  "response": {
+    "status": 415,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cache-Control": [
+        "must-revalidate,no-cache,no-store"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "90"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Unsupported Media Type\"}]}"
+  }
+}

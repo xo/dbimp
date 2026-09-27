@@ -3,12 +3,14 @@
 `dbimp` holds `database/sql` drivers for databases that have no idiomatic Go
 driver. Read two documents before you change anything:
 
-- [`docs/PLAN.md`](docs/PLAN.md) holds every decision and the open questions.
-  Do not decide an open question yourself. Ask Ken.
+- [`docs/decisions/`](docs/decisions/README.md) holds every decision, one
+  file each, with an index. [`docs/PLAN.md`](docs/PLAN.md) holds the open
+  questions. Do not decide an open question yourself. Ask Ken.
 - [`docs/BACKLOG.md`](docs/BACKLOG.md) holds the planned work, in order.
 
-[`CLAUDE.md`](CLAUDE.md) holds the rules. It is written for a coding agent,
-and everything in it applies to a person.
+[`AGENTS.md`](AGENTS.md) holds the rules. It is written for a coding agent,
+and everything in it applies to a person. [`CLAUDE.md`](CLAUDE.md) holds one
+line that imports it for Claude Code (D71).
 
 ## Before you send a change
 
@@ -36,7 +38,7 @@ go test -race -count=1 -run Integration ./<driver>/...
 Load the `simple-english` skill before you write any text that a user can
 read. That includes `README.md` and every other document, code comments,
 error messages, commit messages and the text of test failures.
-Follow it for that text. See D12 in `docs/PLAN.md`.
+Follow it for that text. See D12 in `docs/decisions/`.
 
 ## Agent skills
 
@@ -61,7 +63,7 @@ Keep `--copy`. Without it, the command writes `.claude/skills/<name>` as a
 symbolic link. A Windows checkout writes a symbolic link as a text file, and
 Claude Code then loads no skill and reports nothing. `TestSkillsAreCopies`
 fails on a link, and it fails when the two folders differ. See D11 in
-`docs/PLAN.md`.
+`docs/decisions/`.
 
 `.claude/settings.local.json` holds the Claude Code permissions of one
 person. The root `.gitignore` ignores it.

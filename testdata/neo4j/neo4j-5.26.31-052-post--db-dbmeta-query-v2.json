@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $n AS n\",\"parameters\":{\"n\":{\"$type\":\"Node\",\"_value\":{\"_element_id\":\"4:x:0\",\"_labels\":[\"Dbimp\"],\"_properties\":{}}}}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:34:39 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "112"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Type Node is not supported as a column value\"}]}"
+  }
+}

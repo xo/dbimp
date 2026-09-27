@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:Dbimp {k: 'c1'}) REMOVE n.age RETURN n.age AS age\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "222"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:14 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"age\"],\"values\":[[{\"$type\":\"Null\",\"_value\":null}],[{\"$type\":\"Null\",\"_value\":null}]]},\"queryType\":\"rw\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":3,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCopA=\"]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE (n:Dbimp {k: $k, i: $i, f: $f, d: $d, dt: $dt, dur: $dur, p: $p}) RETURN n\",\"parameters\":{\"k\":{\"$type\":\"String\",\"_value\":\"rt\"},\"i\":{\"$type\":\"Integer\",\"_value\":\"9223372036854775807\"},\"f\":{\"$type\":\"Float\",\"_value\":\"0.1\"},\"d\":{\"$type\":\"Date\",\"_value\":\"2026-09-27\"},\"dt\":{\"$type\":\"ZonedDateTime\",\"_value\":\"2026-09-27T10:00:00+02:00[Europe/Oslo]\"},\"dur\":{\"$type\":\"Duration\",\"_value\":\"P1Y2M3DT4H5M6.007S\"},\"p\":{\"$type\":\"Point\",\"_value\":\"SRID=7203;POINT (1.5 2.5)\"}}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "581"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"n\"],\"values\":[[{\"$type\":\"Node\",\"_value\":{\"_element_id\":\"4:486e1f63-c40c-4f84-8bb8-729ab6bc3132:57\",\"_labels\":[\"Dbimp\"],\"_properties\":{\"dt\":{\"$type\":\"ZonedDateTime\",\"_value\":\"2026-09-27T10:00:00+02:00[Europe/Oslo]\"},\"dur\":{\"$type\":\"Duration\",\"_value\":\"P1Y2M3DT4H5M6.007S\"},\"p\":{\"$type\":\"Point\",\"_value\":\"SRID=7203;POINT (1.5 2.5)\"},\"d\":{\"$type\":\"Date\",\"_value\":\"2026-09-27\"},\"f\":{\"$type\":\"Float\",\"_value\":\"0.1\"},\"i\":{\"$type\":\"Integer\",\"_value\":\"9223372036854775807\"},\"k\":{\"$type\":\"String\",\"_value\":\"rt\"}}}}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCjJA=\"]}"
+  }
+}

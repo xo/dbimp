@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"DROP CONSTRAINT dbimp_nk IF EXISTS\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "406"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[],\"values\":[]},\"notifications\":[{\"code\":\"Neo.ClientNotification.Schema.IndexOrConstraintDoesNotExist\",\"description\":\"`dbimp_nk` does not exist.\",\"severity\":\"INFORMATION\",\"title\":\"`DROP CONSTRAINT dbimp_nk IF EXISTS` has no effect.\",\"position\":null,\"category\":\"SCHEMA\"}],\"queryType\":\"s\",\"resultAvailableAfter\":2,\"resultConsumedAfter\":3,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCrpA=\"]}"
+  }
+}

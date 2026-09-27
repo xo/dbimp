@@ -2,7 +2,7 @@
 #
 # The unit and lint jobs need no server. The integration job starts each
 # release of each driver with dbrun from a pinned dbmeta commit, and runs the
-# integration tests against it (W3 in docs/BACKLOG.md, D9 in docs/PLAN.md). A
+# integration tests against it (W3 in docs/BACKLOG.md, D9 in docs/decisions/). A
 # push runs the releases that dbmeta calls tested, and the nightly run adds the
 # ones that it calls nightly. The workflow names no release (dbmeta D69).
 name: Test
@@ -25,7 +25,7 @@ env:
   # ec91128 gives each server an owner (dbmeta D98), eb35c7c prints the URL
   # of each principal (dbmeta D102), and 78f1e44 starts SurrealDB with its
   # ordinary user (dbmeta D103).
-  DBMETA_COMMIT: 78f1e44d7857ee107ae0ce779de4df38c2f92c5b
+  DBMETA_COMMIT: 19a8a9a34d7ab5acc8a3b5c64bf7eb1f1a8eaa69
   DBMETA_OWNER: dbimp-ci
   DBMETA_RUNNER: docker
 

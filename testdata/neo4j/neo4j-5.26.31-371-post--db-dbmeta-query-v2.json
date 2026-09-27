@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE (a:Dbimp {k: 'dd'})-[:DBIMP_R]->(:Dbimp {k: 'dd2'}) WITH a MATCH (n:Dbimp) WHERE n.k STARTS WITH 'dd' DETACH DELETE n RETURN count(*) AS n\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "123"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:28 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"n\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"2\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCk5A=\"]}"
+  }
+}

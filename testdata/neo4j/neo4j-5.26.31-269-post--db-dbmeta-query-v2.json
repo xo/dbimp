@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN localtime('12:00') AS a, time('12:00Z') AS b, time('12:00:00.5-05:30') AS c, datetime('2026-01-01T00:00Z') AS d, localdatetime('2026-01-01T00:00') AS e, duration('PT0S') AS f, duration({months: -14, days: -3, seconds: -5, nanoseconds: -7}) AS g, duration('PT-0.5S') AS h, date('0001-01-01') AS i, date('-0001-06-01') AS j, date('+10000-01-01') AS k, point({x: 1, y: 2, z: 3}) AS l, point({longitude: 1.5, latitude: 2.5}) AS m, datetime('2026-07-01T00:00[America/New_York]') AS n, datetime({year: 2026, month: 1, day: 1, timezone: '+01:30:15'}) AS o, time({hour: 1, timezone: 'Europe/Oslo'}) AS p, duration({seconds: 1, nanoseconds: -1}) AS q, point({x: 0.1, y: 1e300}) AS r, duration('P3D') AS s, duration('PT-3700S') AS u\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "1155"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\",\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"u\"],\"values\":[[{\"$type\":\"LocalTime\",\"_value\":\"12:00:00\"},{\"$type\":\"Time\",\"_value\":\"12:00:00Z\"},{\"$type\":\"Time\",\"_value\":\"12:00:00.5-05:30\"},{\"$type\":\"OffsetDateTime\",\"_value\":\"2026-01-01T00:00:00Z\"},{\"$type\":\"LocalDateTime\",\"_value\":\"2026-01-01T00:00:00\"},{\"$type\":\"Duration\",\"_value\":\"PT0S\"},{\"$type\":\"Duration\",\"_value\":\"P-1Y-2M-3DT-5.000000007S\"},{\"$type\":\"Duration\",\"_value\":\"PT-0.5S\"},{\"$type\":\"Date\",\"_value\":\"0001-01-01\"},{\"$type\":\"Date\",\"_value\":\"-0001-06-01\"},{\"$type\":\"Date\",\"_value\":\"+10000-01-01\"},{\"$type\":\"Point\",\"_value\":\"SRID=9157;POINT Z (1.0 2.0 3.0)\"},{\"$type\":\"Point\",\"_value\":\"SRID=4326;POINT (1.5 2.5)\"},{\"$type\":\"ZonedDateTime\",\"_value\":\"2026-07-01T00:00:00-04:00[America/New_York]\"},{\"$type\":\"OffsetDateTime\",\"_value\":\"2026-01-01T00:00:00+01:30:15\"},{\"$type\":\"Time\",\"_value\":\"01:00:00+02:00\"},{\"$type\":\"Duration\",\"_value\":\"PT0.999999999S\"},{\"$type\":\"Point\",\"_value\":\"SRID=7203;POINT (0.1 1.0E300)\"},{\"$type\":\"Duration\",\"_value\":\"P3D\"},{\"$type\":\"Duration\",\"_value\":\"PT-1H-1M-40S\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCjJA=\"]}"
+  }
+}

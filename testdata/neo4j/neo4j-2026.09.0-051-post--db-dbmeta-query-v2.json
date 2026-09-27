@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN valueType($d) AS d, valueType($dur) AS dur, valueType($p) AS p, valueType($zdt) AS zdt, valueType($b) AS b, $zdt AS zv\",\"parameters\":{\"d\":{\"$type\":\"Date\",\"_value\":\"2026-09-27\"},\"dur\":{\"$type\":\"Duration\",\"_value\":\"P1Y2M3DT4H5M6.007S\"},\"p\":{\"$type\":\"Point\",\"_value\":\"SRID=7203;POINT (1.5 2.5)\"},\"zdt\":{\"$type\":\"ZonedDateTime\",\"_value\":\"2026-09-27T10:00:00+02:00[Europe/Oslo]\"},\"b\":{\"$type\":\"Base64\",\"_value\":\"3q2+7w==\"}}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "509"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"d\",\"dur\",\"p\",\"zdt\",\"b\",\"zv\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"DATE NOT NULL\"},{\"$type\":\"String\",\"_value\":\"DURATION NOT NULL\"},{\"$type\":\"String\",\"_value\":\"POINT NOT NULL\"},{\"$type\":\"String\",\"_value\":\"ZONED DATETIME NOT NULL\"},{\"$type\":\"String\",\"_value\":\"LIST<INTEGER NOT NULL> NOT NULL\"},{\"$type\":\"ZonedDateTime\",\"_value\":\"2026-09-27T10:00:00+02:00[Europe/Oslo]\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":7,\"resultConsumedAfter\":8,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCZpA=\"]}"
+  }
+}

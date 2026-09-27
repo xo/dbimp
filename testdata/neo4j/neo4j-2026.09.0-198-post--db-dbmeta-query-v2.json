@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CALL () { RETURN 1 AS inner } RETURN inner\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "194"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"inner\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"1\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":10,\"resultConsumedAfter\":10,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCkZA=\"]}"
+  }
+}

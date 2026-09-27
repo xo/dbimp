@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SHOW DATABASES YIELD name RETURN name ORDER BY name\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "207"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"name\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"dbmeta\"}],[{\"$type\":\"String\",\"_value\":\"neo4j\"}],[{\"$type\":\"String\",\"_value\":\"system\"}]]},\"bookmarks\":[\"FB:kcwQAAAAAAAAAAAAAAAAAAAAAckAuJA=\"]}"
+  }
+}

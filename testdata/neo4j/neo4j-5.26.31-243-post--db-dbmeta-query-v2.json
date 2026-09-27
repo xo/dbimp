@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN date('+999999999-12-31') AS dmax, date('-999999999-01-01') AS dmin, datetime('1600-01-01T00:00:00Z') AS old\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "255"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"dmax\",\"dmin\",\"old\"],\"values\":[[{\"$type\":\"Date\",\"_value\":\"+999999999-12-31\"},{\"$type\":\"Date\",\"_value\":\"-999999999-01-01\"},{\"$type\":\"OffsetDateTime\",\"_value\":\"1600-01-01T00:00:00Z\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCh5A=\"]}"
+  }
+}

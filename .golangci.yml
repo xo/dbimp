@@ -1,4 +1,4 @@
-# Lint configuration. See D10 in docs/PLAN.md.
+# Lint configuration. See D10 in docs/decisions/.
 #
 # The posture is `default: all` with a disable list, as in dburl, dbmeta and
 # cql. A new linter that arrives in a release gets a look rather than
@@ -9,7 +9,7 @@
 # here, with the reason beside it. Only a real defect gets a code change. A
 # change made only to quiet a linter is itself a defect.
 #
-# Two hard rules in CLAUDE.md are held here rather than by review. depguard
+# Two hard rules in AGENTS.md are held here rather than by review. depguard
 # keeps the dependencies to the standard library and apd (D13). forbidigo bans
 # context.Background, context.TODO and the database/sql calls that take no
 # context (D8).
@@ -107,6 +107,7 @@ linters:
         # matters was read, as with the body.
         - (*github.com/xo/dbimp/couchbase.rows).Close
         - (*github.com/xo/dbimp/surrealdb.rows).Close
+        - (*github.com/xo/dbimp/neo4j.rows).Close
         # A deferred close of a connection that a test took from the pool.
         - (*database/sql.Conn).Close
         # A deferred rollback after a commit returns sql.ErrTxDone, and a
@@ -174,15 +175,24 @@ linters:
           - thelper
       # A test builds a statement from the name of the scope or the table that
       # it made, and holds text in other scripts on purpose, and sends SELECT
-      # * as a person does, to test the star signature.
+      # * as a person does, to test the star signature. G701 is the same
+      # finding by taint analysis. A test reads the recordings under
+      # testdata/ by the names that it found there, and copies them into a
+      # folder of its own (G703).
       - path: _test\.go
         linters:
           - gosec
-        text: G202
+        text: G202|G701|G703
       - path: _test\.go
         linters:
           - gosmopolitan
           - unqueryvet
+      # The tags of the Neo4j driver are the names that the Query API sends,
+      # such as _element_id and neo4j_version, which the driver cannot
+      # rename.
+      - path: neo4j/
+        linters:
+          - tagliatelle
       # The contract reads rows in several shapes, and closes each one in a
       # cleanup of the test, where these linters cannot follow it.
       - path: dbimptest/contract\.go

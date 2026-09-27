@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE (a:DbimpG {k: 1})-[:N]->(:DbimpG {k: 2})-[:N]->(:DbimpG {k: 3}) WITH a MATCH (a)-[:N*1..2]->(b) RETURN b.k AS k ORDER BY k\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "224"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"k\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"2\"}],[{\"$type\":\"Integer\",\"_value\":\"3\"}]]},\"queryType\":\"rw\",\"resultAvailableAfter\":0,\"resultConsumedAfter\":8,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCr5A=\"]}"
+  }
+}

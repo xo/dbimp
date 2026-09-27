@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SHOW TRANSACTIONS YIELD transactionId, currentQuery WHERE currentQuery STARTS WITH $tag RETURN transactionId\",\"parameters\":{\"tag\":\"/* dbimp:c1 */ \"}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:07 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "156"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"transactionId\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"dbmeta-transaction-2635\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCjJA=\"]}"
+  }
+}

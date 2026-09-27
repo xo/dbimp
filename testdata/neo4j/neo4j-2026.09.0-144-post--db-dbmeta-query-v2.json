@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:Dbimp {k: 'c1'}) SET n.age = 36, n.name = 'Ada L' RETURN n.age AS age, n.name AS name\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "307"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:50 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"age\",\"name\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"36\"},{\"$type\":\"String\",\"_value\":\"Ada L\"}],[{\"$type\":\"Integer\",\"_value\":\"36\"},{\"$type\":\"String\",\"_value\":\"Ada L\"}]]},\"queryType\":\"rw\",\"resultAvailableAfter\":2,\"resultConsumedAfter\":9,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCbpA=\"]}"
+  }
+}

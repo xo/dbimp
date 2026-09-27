@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN 0.0 / 0.0 AS nan, 1.0 / 0.0 AS inf, -0.0 AS nz\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "208"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"nan\",\"inf\",\"nz\"],\"values\":[[{\"$type\":\"Float\",\"_value\":\"NaN\"},{\"$type\":\"Float\",\"_value\":\"Infinity\"},{\"$type\":\"Float\",\"_value\":\"-0.0\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCh5A=\"]}"
+  }
+}

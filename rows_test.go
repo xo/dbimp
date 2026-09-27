@@ -110,4 +110,17 @@ func TestArrayRowsRefuseTheWrongCount(t *testing.T) {
 	if err := r.Next(make([]jsontext.Value, 2)); !errors.Is(err, dbimp.ErrColumnCount) {
 		t.Errorf("a row with three values gave %v, want ErrColumnCount", err)
 	}
+	// Neo4j sends a row with fewer values than columns before an error, and
+	// the values of the row before must not fill the gap.
+	r, err = dbimp.NewArrayRows(jsontext.NewDecoder(strings.NewReader(`[[1,2],[3]]`)), 2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	vals := make([]jsontext.Value, 2)
+	if err := r.Next(vals); err != nil {
+		t.Fatal(err)
+	}
+	if err := r.Next(vals); !errors.Is(err, dbimp.ErrColumnCount) {
+		t.Errorf("a row with one value of two gave %v, want ErrColumnCount", err)
+	}
 }

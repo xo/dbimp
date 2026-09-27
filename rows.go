@@ -144,7 +144,8 @@ func (r *ArrayRows) Next(vals []jsontext.Value) error {
 	if err := readDelim(r.dec, '['); err != nil {
 		return fmt.Errorf("reading a row: %w", err)
 	}
-	for i := 0; r.dec.PeekKind() != ']'; i++ {
+	i := 0
+	for ; r.dec.PeekKind() != ']'; i++ {
 		if i == r.n {
 			return fmt.Errorf("reading a row: more than %d values: %w", r.n, ErrColumnCount)
 		}
@@ -156,6 +157,9 @@ func (r *ArrayRows) Next(vals []jsontext.Value) error {
 	}
 	if _, err := r.dec.ReadToken(); err != nil {
 		return fmt.Errorf("reading the end of a row: %w", err)
+	}
+	if i < r.n {
+		return fmt.Errorf("reading a row: %d values for %d columns: %w", i, r.n, ErrColumnCount)
 	}
 	return nil
 }

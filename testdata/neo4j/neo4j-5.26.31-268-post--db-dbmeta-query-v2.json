@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query.v1.1"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.1"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $v AS v, valueType($v) AS t\",\"parameters\":{\"v\":{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"INT8\",\"coordinates\":[\"1\",\"-2\"]}}}}"
+  },
+  "response": {
+    "status": 415,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cache-Control": [
+        "must-revalidate,no-cache,no-store"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "90"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Unsupported Media Type\"}]}"
+  }
+}

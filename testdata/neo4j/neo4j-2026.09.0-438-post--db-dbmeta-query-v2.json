@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN 1 AS a\",\"bookmarks\":[\"FB:nothing\"]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "236"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Transaction.InvalidBookmark\",\"message\":\"Parsing of supplied bookmarks failed with message: org.neo4j.packstream.error.reader.UnexpectedTypeException: Unexpected type: Expected BYTES but got STRING\"}]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query.v1.1"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.1"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN vector([1, 2], 2, INT8) AS i8, vector([1, 2], 2, INT16) AS i16, vector([1, 2], 2, INT32) AS i32, vector([1, 2], 2, INT64) AS i64, vector([1.5, 2.5], 2, FLOAT32) AS f32, vector([1.5, 2.5], 2, FLOAT64) AS f64\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.1"
+      ],
+      "Content-Length": [
+        "679"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"i8\",\"i16\",\"i32\",\"i64\",\"f32\",\"f64\"],\"values\":[[{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"INT8\",\"coordinates\":[\"1\",\"2\"]}},{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"INT16\",\"coordinates\":[\"1\",\"2\"]}},{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"INT32\",\"coordinates\":[\"1\",\"2\"]}},{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"INT64\",\"coordinates\":[\"1\",\"2\"]}},{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"FLOAT32\",\"coordinates\":[\"1.5\",\"2.5\"]}},{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"FLOAT64\",\"coordinates\":[\"1.5\",\"2.5\"]}}]]},\"queryType\":\"r\",\"resultAvailableAfter\":12,\"resultConsumedAfter\":13,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCZpA=\"]}"
+  }
+}

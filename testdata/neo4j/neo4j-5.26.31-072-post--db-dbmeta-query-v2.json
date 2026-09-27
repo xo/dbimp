@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/jsonl"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND [1, 2, 0, 4] AS x RETURN 10 / x AS y\"}"
+  },
+  "response": {
+    "status": 406,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "82"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:34:39 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cache-Control": [
+        "must-revalidate,no-cache,no-store"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Not Acceptable\"}]}"
+  }
+}

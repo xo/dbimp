@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-// TestSkillsAreCopies holds D11 in docs/PLAN.md. Each skill in
+// TestSkillsAreCopies holds D11 in docs/decisions/. Each skill in
 // skills-lock.json is an ordinary folder under .agents/skills and under
 // .claude/skills, and the two folders hold the same files.
 //
@@ -79,7 +79,7 @@ func skillFiles(t *testing.T, dir string) map[string]string {
 		return nil
 	case !fi.IsDir():
 		t.Errorf("%s is not a folder. A Windows checkout writes a symbolic link as a text file, "+
-			"so install the skill with --copy. See D11 in docs/PLAN.md", dir)
+			"so install the skill with --copy. See D11 in docs/decisions/", dir)
 		return nil
 	}
 	out := map[string]string{}
@@ -88,7 +88,7 @@ func skillFiles(t *testing.T, dir string) map[string]string {
 		case err != nil:
 			return err
 		case d.Type()&fs.ModeSymlink != 0:
-			t.Errorf("%s is a symbolic link. See D11 in docs/PLAN.md", filepath.Join(dir, path))
+			t.Errorf("%s is a symbolic link. See D11 in docs/decisions/", filepath.Join(dir, path))
 		case d.Type().IsRegular():
 			body, err := fs.ReadFile(os.DirFS(dir), path)
 			if err != nil {

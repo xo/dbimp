@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:Dbimp {k: 'c1'}) RETURN n.name AS name\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "228"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:14 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"name\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"Ada\"}],[{\"$type\":\"String\",\"_value\":\"Ada\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":3,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCn5A=\"]}"
+  }
+}

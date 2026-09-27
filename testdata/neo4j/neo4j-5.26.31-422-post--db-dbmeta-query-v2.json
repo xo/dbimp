@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN [x IN range(1, 6) WHERE x % 2 = 0 | x * 10] AS l\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "220"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"l\"],\"values\":[[{\"$type\":\"List\",\"_value\":[{\"$type\":\"Integer\",\"_value\":\"20\"},{\"$type\":\"Integer\",\"_value\":\"40\"},{\"$type\":\"Integer\",\"_value\":\"60\"}]}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCn5A=\"]}"
+  }
+}

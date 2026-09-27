@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN COUNT { MATCH (n:DbimpG) } AS c, COLLECT { MATCH (n:DbimpG) RETURN n.k ORDER BY n.k } AS ks\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "255"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"c\",\"ks\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"3\"},{\"$type\":\"List\",\"_value\":[{\"$type\":\"Integer\",\"_value\":\"1\"},{\"$type\":\"Integer\",\"_value\":\"2\"},{\"$type\":\"Integer\",\"_value\":\"3\"}]}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCn5A=\"]}"
+  }
+}

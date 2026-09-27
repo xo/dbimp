@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"/* dbimp:t */ EXPLAIN RETURN 1 AS a\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "1837"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:03 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\"],\"values\":[]},\"queryPlan\":{\"operatorType\":\"ProduceResults@dbmeta\",\"arguments\":{\"planner-impl\":{\"$type\":\"String\",\"_value\":\"IDP\"},\"string-representation\":{\"$type\":\"String\",\"_value\":\"Cypher 5\\n\\nPlanner COST\\n\\nRuntime PIPELINED\\n\\nRuntime version 5.26.31\\n\\nBatch size 128\\n\\n+-----------------+----+-----------------+----------------+---------------------+\\n| Operator        | Id | Details         | Estimated Rows | Pipeline            |\\n+-----------------+----+-----------------+----------------+---------------------+\\n| +ProduceResults |  0 | a               |              1 |                     |\\n| |               +----+-----------------+----------------+                     |\\n| +Projection     |  1 | $autoint_0 AS a |              1 | Fused in Pipeline 0 |\\n+-----------------+----+-----------------+----------------+---------------------+\\n\\nTotal database accesses: ?\\n\"},\"runtime\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"runtime-impl\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"version\":{\"$type\":\"String\",\"_value\":\"5\"},\"batch-size\":{\"$type\":\"Integer\",\"_value\":\"128\"},\"Details\":{\"$type\":\"String\",\"_value\":\"a\"},\"planner-version\":{\"$type\":\"String\",\"_value\":\"5.26.31\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"},\"runtime-version\":{\"$type\":\"String\",\"_value\":\"5.26.31\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"1.0\"},\"planner\":{\"$type\":\"String\",\"_value\":\"COST\"}},\"identifiers\":[\"a\"],\"children\":[{\"operatorType\":\"Projection@dbmeta\",\"arguments\":{\"Details\":{\"$type\":\"String\",\"_value\":\"$autoint_0 AS a\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"1\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"1.0\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"}},\"identifiers\":[\"a\"],\"children\":[]}]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCXJA=\"]}"
+  }
+}

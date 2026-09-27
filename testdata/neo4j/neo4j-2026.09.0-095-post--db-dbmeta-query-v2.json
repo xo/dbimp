@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CALL dbms.components() YIELD name, versions, edition RETURN name, versions, edition\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "494"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:50 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"name\",\"versions\",\"edition\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"Neo4j Kernel\"},{\"$type\":\"List\",\"_value\":[{\"$type\":\"String\",\"_value\":\"2026.09.0\"}]},{\"$type\":\"String\",\"_value\":\"enterprise\"}],[{\"$type\":\"String\",\"_value\":\"Cypher\"},{\"$type\":\"List\",\"_value\":[{\"$type\":\"String\",\"_value\":\"5\"},{\"$type\":\"String\",\"_value\":\"25\"}]},{\"$type\":\"String\",\"_value\":\"\"}]]},\"queryType\":\"s\",\"resultAvailableAfter\":2,\"resultConsumedAfter\":3,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCaJA=\"]}"
+  }
+}

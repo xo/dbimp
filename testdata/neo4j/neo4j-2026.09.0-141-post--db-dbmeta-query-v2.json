@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:Dbimp {k: 'c1'}) RETURN n.name AS name\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "174"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:50 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"name\"],\"values\":[[\"Ada\"],[\"Ada\"]]},\"queryType\":\"r\",\"resultAvailableAfter\":20,\"resultConsumedAfter\":22,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCbJA=\"]}"
+  }
+}

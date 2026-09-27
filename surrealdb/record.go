@@ -38,6 +38,13 @@ func (r RecordID) String() string {
 	return ident(r.Table, false) + ":" + key
 }
 
+// MarshalText satisfies encoding.TextMarshaler. It writes the text of String,
+// so that a record id inside an array or an object is person:tobie in JSON,
+// and not the fields of the struct (D70).
+func (r RecordID) MarshalText() ([]byte, error) {
+	return []byte(r.String()), nil
+}
+
 // ident returns name as it stands in SurrealQL: as it is if it holds only
 // letters, digits and underscores, and quoted with backticks otherwise. A key
 // of digits alone is quoted too, when key is true, so that it is not read as

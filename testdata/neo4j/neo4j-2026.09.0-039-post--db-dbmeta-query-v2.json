@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE (n:Dbimp {k: 'mp'}) RETURN n.k AS k, n.nothing AS missing\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "177"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"k\",\"missing\"],\"values\":[[\"mp\",null]]},\"queryType\":\"rw\",\"resultAvailableAfter\":7,\"resultConsumedAfter\":12,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCZJA=\"]}"
+  }
+}

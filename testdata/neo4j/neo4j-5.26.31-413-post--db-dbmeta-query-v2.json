@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH p = shortestPath((a:DbimpG {k: 1})-[:N*]->(b:DbimpG {k: 3})) RETURN length(p) AS len\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "608"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"len\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"2\"}]]},\"notifications\":[{\"code\":\"Neo.ClientNotification.Statement.UnboundedVariableLengthPattern\",\"description\":\"Using shortest path with an unbounded pattern will likely result in long execution times. It is recommended to use an upper limit to the number of node hops in your pattern.\",\"severity\":\"INFORMATION\",\"title\":\"The provided pattern is unbounded, consider adding an upper limit to the number of node hops.\",\"position\":{\"offset\":23,\"line\":1,\"column\":24},\"category\":\"PERFORMANCE\"}],\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCn5A=\"]}"
+  }
+}

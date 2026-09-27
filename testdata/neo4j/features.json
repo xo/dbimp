@@ -1,0 +1,961 @@
+{
+  "driver": "neo4j",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "github.com/neo4j/neo4j-go-driver/v6",
+      "kind": "driver",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "neo4j (PyPI)",
+      "kind": "driver",
+      "date": "2026-09-27"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-140-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-142-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-144-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-148-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "remove",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-146-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/remove"
+    },
+    {
+      "kind": "crud",
+      "name": "detach delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-150-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/detach_delete"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-152-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "crud",
+      "name": "unwind batch insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-154-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/unwind_batch_insert"
+    },
+    {
+      "kind": "crud",
+      "name": "foreach",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-156-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/foreach"
+    },
+    {
+      "kind": "crud",
+      "name": "load csv",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-158-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/load_csv"
+    },
+    {
+      "kind": "crud",
+      "name": "call in transactions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-159-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationCRUD/call_in_transactions"
+    },
+    {
+      "kind": "schema",
+      "name": "uniqueness constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-161-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/uniqueness_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "node key constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-164-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/node_key_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "existence constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-166-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/existence_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "property type constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-168-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/property_type_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "range index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-170-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/range_index"
+    },
+    {
+      "kind": "schema",
+      "name": "text index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-172-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/text_index"
+    },
+    {
+      "kind": "schema",
+      "name": "point index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-174-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/point_index"
+    },
+    {
+      "kind": "schema",
+      "name": "full text index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-176-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/full_text_index"
+    },
+    {
+      "kind": "schema",
+      "name": "vector index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-178-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/vector_index"
+    },
+    {
+      "kind": "schema",
+      "name": "lookup index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-180-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/lookup_index"
+    },
+    {
+      "kind": "schema",
+      "name": "composite index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-181-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationSchema/composite_index"
+    },
+    {
+      "kind": "schema",
+      "name": "create database",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-183-post--db-system-query-v2.json",
+      "test": "TestIntegrationSchema/create_database"
+    },
+    {
+      "kind": "schema",
+      "name": "database alias",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-184-post--db-system-query-v2.json",
+      "test": "TestIntegrationSchema/database_alias"
+    },
+    {
+      "kind": "schema",
+      "name": "composite database",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-187-post--db-system-query-v2.json",
+      "test": "TestIntegrationSchema/composite_database"
+    },
+    {
+      "kind": "feature",
+      "name": "cypher 25",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-190-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/cypher_25"
+    },
+    {
+      "kind": "feature",
+      "name": "variable length path",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-191-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/variable_length_path"
+    },
+    {
+      "kind": "feature",
+      "name": "shortest path",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-192-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/shortest_path"
+    },
+    {
+      "kind": "feature",
+      "name": "quantified path pattern",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-194-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/quantified_path_pattern"
+    },
+    {
+      "kind": "feature",
+      "name": "optional match",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-195-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/optional_match"
+    },
+    {
+      "kind": "feature",
+      "name": "with",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-196-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/with"
+    },
+    {
+      "kind": "feature",
+      "name": "union",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-197-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/union"
+    },
+    {
+      "kind": "feature",
+      "name": "call subquery",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-198-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/call_subquery"
+    },
+    {
+      "kind": "feature",
+      "name": "collect and count subquery",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-199-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/collect_and_count_subquery"
+    },
+    {
+      "kind": "feature",
+      "name": "exists subquery",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-200-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/exists_subquery"
+    },
+    {
+      "kind": "feature",
+      "name": "list comprehension",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-201-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/list_comprehension"
+    },
+    {
+      "kind": "feature",
+      "name": "pattern comprehension",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-202-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/pattern_comprehension"
+    },
+    {
+      "kind": "feature",
+      "name": "case",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-203-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/case"
+    },
+    {
+      "kind": "feature",
+      "name": "apoc",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "neo4j-2026.09.0-204-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/apoc"
+    },
+    {
+      "kind": "feature",
+      "name": "show databases",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-205-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/show_databases"
+    },
+    {
+      "kind": "feature",
+      "name": "show indexes",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-206-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/show_indexes"
+    },
+    {
+      "kind": "feature",
+      "name": "show transactions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-207-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/show_transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "terminate transaction",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-208-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/terminate_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "explain and profile",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-209-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/explain_and_profile"
+    },
+    {
+      "kind": "feature",
+      "name": "use clause",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-211-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/use_clause"
+    },
+    {
+      "kind": "feature",
+      "name": "parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-054-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "gql clauses",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-212-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/gql_clauses"
+    },
+    {
+      "kind": "feature",
+      "name": "dynamic labels",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-213-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/dynamic_labels"
+    },
+    {
+      "kind": "feature",
+      "name": "element id",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-214-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/element_id"
+    },
+    {
+      "kind": "feature",
+      "name": "explicit transaction",
+      "sources": [
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-107-post--db-dbmeta-query-v2-tx-4282ae-commit.json",
+      "test": "TestIntegrationFeatures/explicit_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "streaming",
+      "sources": [
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-067-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/streaming"
+    },
+    {
+      "kind": "feature",
+      "name": "typed json",
+      "sources": [
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/typed_json"
+    },
+    {
+      "kind": "feature",
+      "name": "bookmarks",
+      "sources": [
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-221-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/bookmarks"
+    },
+    {
+      "kind": "feature",
+      "name": "impersonation",
+      "sources": [
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-216-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/impersonation"
+    },
+    {
+      "kind": "feature",
+      "name": "query counters",
+      "sources": [
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-217-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/query_counters"
+    },
+    {
+      "kind": "feature",
+      "name": "notifications",
+      "sources": [
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-218-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationFeatures/notifications"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-040-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/null"
+    },
+    {
+      "kind": "type",
+      "name": "boolean",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/boolean"
+    },
+    {
+      "kind": "type",
+      "name": "integer",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/integer"
+    },
+    {
+      "kind": "type",
+      "name": "float",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/float"
+    },
+    {
+      "kind": "type",
+      "name": "string",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/string"
+    },
+    {
+      "kind": "type",
+      "name": "byte array",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-027-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/byte_array"
+    },
+    {
+      "kind": "type",
+      "name": "list",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/list"
+    },
+    {
+      "kind": "type",
+      "name": "map",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/map"
+    },
+    {
+      "kind": "type",
+      "name": "date",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/date"
+    },
+    {
+      "kind": "type",
+      "name": "local time",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/local_time"
+    },
+    {
+      "kind": "type",
+      "name": "zoned time",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/zoned_time"
+    },
+    {
+      "kind": "type",
+      "name": "local datetime",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/local_datetime"
+    },
+    {
+      "kind": "type",
+      "name": "zoned datetime",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/zoned_datetime"
+    },
+    {
+      "kind": "type",
+      "name": "offset datetime",
+      "sources": [
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/offset_datetime"
+    },
+    {
+      "kind": "type",
+      "name": "duration",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/duration"
+    },
+    {
+      "kind": "type",
+      "name": "point",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-020-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/point"
+    },
+    {
+      "kind": "type",
+      "name": "node",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-029-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/node"
+    },
+    {
+      "kind": "type",
+      "name": "relationship",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-029-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/relationship"
+    },
+    {
+      "kind": "type",
+      "name": "path",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-029-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/path"
+    },
+    {
+      "kind": "type",
+      "name": "vector",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "neo4j (PyPI)",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-032-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/vector"
+    },
+    {
+      "kind": "type",
+      "name": "uuid",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/neo4j/neo4j-go-driver/v6",
+        "Neo4j Query API manual"
+      ],
+      "verdict": "yes",
+      "evidence": "neo4j-2026.09.0-033-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/uuid"
+    },
+    {
+      "kind": "type",
+      "name": "decimal",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "neo4j-2026.09.0-038-post--db-dbmeta-query-v2.json",
+      "test": "TestIntegrationTypes/decimal"
+    }
+  ]
+}

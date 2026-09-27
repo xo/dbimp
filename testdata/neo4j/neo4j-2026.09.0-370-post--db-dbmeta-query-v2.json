@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"MERGE (n:Dbimp {k: 'm1'}) ON CREATE SET n.c = 1 ON MATCH SET n.c = n.c + 1 RETURN n.c AS c\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "160"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:14 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"c\"],\"values\":[[3]]},\"queryType\":\"rw\",\"resultAvailableAfter\":25,\"resultConsumedAfter\":39,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCpJA=\"]}"
+  }
+}

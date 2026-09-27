@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND range(1, 4) AS i CALL (i) { CREATE (:Dbimp {k: 'cit', i: i}) } IN TRANSACTIONS OF 2 ROWS\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "153"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:51 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[],\"values\":[]},\"queryType\":\"w\",\"resultAvailableAfter\":11,\"resultConsumedAfter\":12,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCepA=\"]}"
+  }
+}

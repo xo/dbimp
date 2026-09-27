@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"/* dbimp:t */ PROFILE RETURN 1 AS a\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:03 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "3041"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"1\"}]]},\"profiledQueryPlan\":{\"dbHits\":0,\"records\":1,\"hasPageCacheStats\":false,\"pageCacheHits\":0,\"pageCacheMisses\":0,\"pageCacheHitRatio\":0.0,\"time\":0,\"operatorType\":\"ProduceResults@dbmeta\",\"arguments\":{\"GlobalMemory\":{\"$type\":\"Integer\",\"_value\":\"312\"},\"planner-impl\":{\"$type\":\"String\",\"_value\":\"IDP\"},\"Memory\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"string-representation\":{\"$type\":\"String\",\"_value\":\"Cypher 5\\n\\nPlanner COST\\n\\nRuntime PIPELINED\\n\\nRuntime version 5.26.31\\n\\nBatch size 128\\n\\n+-----------------+----+-----------------+----------------+------+---------+----------------+------------------------+-----------+---------------------+\\n| Operator        | Id | Details         | Estimated Rows | Rows | DB Hits | Memory (Bytes) | Page Cache Hits/Misses | Time (ms) | Pipeline            |\\n+-----------------+----+-----------------+----------------+------+---------+----------------+------------------------+-----------+---------------------+\\n| +ProduceResults |  0 | a               |              1 |    1 |       0 |              0 |                        |           |                     |\\n| |               +----+-----------------+----------------+------+---------+----------------+                        |           |                     |\\n| +Projection     |  1 | $autoint_0 AS a |              1 |    1 |       0 |                |                    0/0 |     0.000 | Fused in Pipeline 0 |\\n+-----------------+----+-----------------+----------------+------+---------+----------------+------------------------+-----------+---------------------+\\n\\nTotal database accesses: 0, total allocated memory: 312\\n\"},\"runtime\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"runtime-impl\":{\"$type\":\"String\",\"_value\":\"PIPELINED\"},\"version\":{\"$type\":\"String\",\"_value\":\"5\"},\"DbHits\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"batch-size\":{\"$type\":\"Integer\",\"_value\":\"128\"},\"Details\":{\"$type\":\"String\",\"_value\":\"a\"},\"planner-version\":{\"$type\":\"String\",\"_value\":\"5.26.31\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"},\"runtime-version\":{\"$type\":\"String\",\"_value\":\"5.26.31\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"1.0\"},\"planner\":{\"$type\":\"String\",\"_value\":\"COST\"},\"Rows\":{\"$type\":\"Integer\",\"_value\":\"1\"}},\"identifiers\":[\"a\"],\"children\":[{\"dbHits\":0,\"records\":1,\"hasPageCacheStats\":false,\"pageCacheHits\":0,\"pageCacheMisses\":0,\"pageCacheHitRatio\":0.0,\"time\":0,\"operatorType\":\"Projection@dbmeta\",\"arguments\":{\"Details\":{\"$type\":\"String\",\"_value\":\"$autoint_0 AS a\"},\"PipelineInfo\":{\"$type\":\"String\",\"_value\":\"Fused in Pipeline 0\"},\"Time\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"Id\":{\"$type\":\"Integer\",\"_value\":\"1\"},\"PageCacheMisses\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"EstimatedRows\":{\"$type\":\"Float\",\"_value\":\"1.0\"},\"DbHits\":{\"$type\":\"Integer\",\"_value\":\"0\"},\"Rows\":{\"$type\":\"Integer\",\"_value\":\"1\"},\"PageCacheHits\":{\"$type\":\"Integer\",\"_value\":\"0\"}},\"identifiers\":[\"a\"],\"children\":[]}]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCXJA=\"]}"
+  }
+}

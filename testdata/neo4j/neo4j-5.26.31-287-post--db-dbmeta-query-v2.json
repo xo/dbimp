@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query.v1.0+jsonl"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND range(1, 5) AS x RETURN x\"}"
+  },
+  "response": {
+    "status": 406,
+    "header": {
+      "Content-Length": [
+        "82"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cache-Control": [
+        "must-revalidate,no-cache,no-store"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Not Acceptable\"}]}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN randomUUID() AS u, valueType(randomUUID()) AS t\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "207"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:34:39 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"u\",\"t\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"4249bcb9-30aa-4fda-867d-f3fdc162641e\"},{\"$type\":\"String\",\"_value\":\"STRING NOT NULL\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCVZA=\"]}"
+  }
+}

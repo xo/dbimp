@@ -213,7 +213,10 @@ sends each request in it as both principals through a `Recorder`, and writes the
 exchanges and the manifest. A request sends its `body` as JSON, or as CBOR
 when its `encoding` is `cbor`, or its `text` as plain text. The script can
 name headers that every request of one principal sends, in `header`, such as
-the headers that say where a SurrealDB user is defined. It replaces the files and the entries that an
+the headers that say where a SurrealDB user is defined. A request keeps a
+value of its response with `capture`, such as the id of a transaction of
+Neo4j, and a later request of the same principal writes it into its body or
+its path as `{{name}}`. It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
 it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
 the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.

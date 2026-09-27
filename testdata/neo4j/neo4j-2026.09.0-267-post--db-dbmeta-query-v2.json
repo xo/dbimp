@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query.v1.1"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.1"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $v AS v, valueType($v) AS t\",\"parameters\":{\"v\":{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"INT8\",\"coordinates\":[\"1\",\"-2\"]}}}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.1"
+      ],
+      "Content-Length": [
+        "307"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"v\",\"t\"],\"values\":[[{\"$type\":\"Vector\",\"_value\":{\"coordinatesType\":\"INT8\",\"coordinates\":[\"1\",\"-2\"]}},{\"$type\":\"String\",\"_value\":\"VECTOR<INTEGER8 NOT NULL>(2) NOT NULL\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":6,\"resultConsumedAfter\":6,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCm5A=\"]}"
+  }
+}

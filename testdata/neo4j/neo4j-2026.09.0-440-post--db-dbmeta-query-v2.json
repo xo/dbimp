@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:Dbimp {k: 'bm'}) RETURN count(n) AS n\",\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCspA=\"]}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "188"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"n\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"2\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":1,\"resultConsumedAfter\":2,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCspA=\"]}"
+  }
+}

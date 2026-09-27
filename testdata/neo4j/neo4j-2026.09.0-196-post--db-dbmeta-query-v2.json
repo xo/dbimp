@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND [3, 1, 2] AS x WITH x ORDER BY x LIMIT 2 RETURN collect(x) AS xs\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "252"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"xs\"],\"values\":[[{\"$type\":\"List\",\"_value\":[{\"$type\":\"Integer\",\"_value\":\"1\"},{\"$type\":\"Integer\",\"_value\":\"2\"}]}]]},\"queryType\":\"r\",\"resultAvailableAfter\":11,\"resultConsumedAfter\":12,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCkZA=\"]}"
+  }
+}

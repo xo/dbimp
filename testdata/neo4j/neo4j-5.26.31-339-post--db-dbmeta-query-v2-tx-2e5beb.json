@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2/tx/2e5beb",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND range(1, 4) AS i CALL (i) { CREATE (:Dbimp {k: 'cit'}) } IN TRANSACTIONS OF 2 ROWS\"}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Length": [
+        "230"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:28 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"errors\":[{\"code\":\"Neo.DatabaseError.Transaction.TransactionStartFailed\",\"message\":\"A query with 'CALL { ... } IN TRANSACTIONS' can only be executed in an implicit transaction, but tried to execute in an explicit transaction.\"}]}"
+  }
+}

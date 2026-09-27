@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN 9223372036854775807 AS imax, -9223372036854775808 AS imin, 0.1 AS f, 1.5e300 AS fbig, 'h\\u00e9llo' AS s, true AS b, null AS n, [1, 'a', null] AS l, {k: 1, a: [2]} AS m, date('2026-09-27') AS d, localtime('12:50:35.556123456') AS lt, time('12:50:35.556+01:00') AS zt, localdatetime('2026-09-27T10:00:00.123456789') AS ldt, datetime('2026-09-27T10:00:00.123456789+02:00') AS odt, datetime('2026-09-27T10:00:00[Europe/Oslo]') AS zdt, duration('P1Y2M3DT4H5M6.007S') AS dur, point({x: 1.5, y: 2.5}) AS p2, point({longitude: 10.7, latitude: 59.9, height: 3}) AS p3\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:05 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "1231"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"imax\",\"imin\",\"f\",\"fbig\",\"s\",\"b\",\"n\",\"l\",\"m\",\"d\",\"lt\",\"zt\",\"ldt\",\"odt\",\"zdt\",\"dur\",\"p2\",\"p3\"],\"values\":[[{\"$type\":\"Integer\",\"_value\":\"9223372036854775807\"},{\"$type\":\"Integer\",\"_value\":\"-9223372036854775808\"},{\"$type\":\"Float\",\"_value\":\"0.1\"},{\"$type\":\"Float\",\"_value\":\"1.5E300\"},{\"$type\":\"String\",\"_value\":\"héllo\"},{\"$type\":\"Boolean\",\"_value\":true},{\"$type\":\"Null\",\"_value\":null},{\"$type\":\"List\",\"_value\":[{\"$type\":\"Integer\",\"_value\":\"1\"},{\"$type\":\"String\",\"_value\":\"a\"},{\"$type\":\"Null\",\"_value\":null}]},{\"$type\":\"Map\",\"_value\":{\"a\":{\"$type\":\"List\",\"_value\":[{\"$type\":\"Integer\",\"_value\":\"2\"}]},\"k\":{\"$type\":\"Integer\",\"_value\":\"1\"}}},{\"$type\":\"Date\",\"_value\":\"2026-09-27\"},{\"$type\":\"LocalTime\",\"_value\":\"12:50:35.556123456\"},{\"$type\":\"Time\",\"_value\":\"12:50:35.556+01:00\"},{\"$type\":\"LocalDateTime\",\"_value\":\"2026-09-27T10:00:00.123456789\"},{\"$type\":\"OffsetDateTime\",\"_value\":\"2026-09-27T10:00:00.123456789+02:00\"},{\"$type\":\"ZonedDateTime\",\"_value\":\"2026-09-27T10:00:00+02:00[Europe/Oslo]\"},{\"$type\":\"Duration\",\"_value\":\"P1Y2M3DT4H5M6.007S\"},{\"$type\":\"Point\",\"_value\":\"SRID=7203;POINT (1.5 2.5)\"},{\"$type\":\"Point\",\"_value\":\"SRID=4979;POINT Z (10.7 59.9 3.0)\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCh5A=\"]}"
+  }
+}

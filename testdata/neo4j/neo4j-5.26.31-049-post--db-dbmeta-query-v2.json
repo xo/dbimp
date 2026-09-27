@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN valueType($a) AS a, valueType($b) AS b, valueType($c) AS c, $d AS d, valueType($d) AS dt, $e AS e\",\"parameters\":{\"a\":1,\"b\":1.0,\"c\":1e3,\"d\":9007199254740993,\"e\":9223372036854775807}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "394"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:34:39 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\",\"b\",\"c\",\"d\",\"dt\",\"e\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"INTEGER NOT NULL\"},{\"$type\":\"String\",\"_value\":\"FLOAT NOT NULL\"},{\"$type\":\"String\",\"_value\":\"FLOAT NOT NULL\"},{\"$type\":\"Integer\",\"_value\":\"9007199254740993\"},{\"$type\":\"String\",\"_value\":\"INTEGER NOT NULL\"},{\"$type\":\"Integer\",\"_value\":\"9223372036854775807\"}]]},\"bookmarks\":[\"FB:kcwQSG4fY8QMT4SLuHKatrwxMskCWJA=\"]}"
+  }
+}

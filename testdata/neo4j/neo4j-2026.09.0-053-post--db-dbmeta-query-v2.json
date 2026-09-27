@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $s AS s, $i AS i, $f AS f, $b AS b, $n AS n, $l AS l, $m AS m\",\"parameters\":{\"s\":\"it's\",\"i\":42,\"f\":1.5,\"b\":true,\"n\":null,\"l\":[1,\"a\"],\"m\":{\"k\":[1]}}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "221"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"s\",\"i\",\"f\",\"b\",\"n\",\"l\",\"m\"],\"values\":[[\"it's\",42,1.5,true,null,[1,\"a\"],{\"k\":[1]}]]},\"queryType\":\"r\",\"resultAvailableAfter\":6,\"resultConsumedAfter\":6,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCZpA=\"]}"
+  }
+}

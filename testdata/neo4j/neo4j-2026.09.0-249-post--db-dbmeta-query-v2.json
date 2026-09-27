@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE p = (a:Dbimp {k: 'n1'})-[r:DBIMP_R {w: 2}]->(b:Dbimp {k: 'n2'}) RETURN a, r, p\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "1305"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"a\",\"r\",\"p\"],\"values\":[[{\"$type\":\"Node\",\"_value\":{\"_element_id\":\"4:bc41be1a-fd35-4887-82b6-c4f496e46967:51\",\"_labels\":[\"Dbimp\"],\"_properties\":{\"k\":{\"$type\":\"String\",\"_value\":\"n1\"}}}},{\"$type\":\"Relationship\",\"_value\":{\"_element_id\":\"5:bc41be1a-fd35-4887-82b6-c4f496e46967:1152922604118474803\",\"_start_node_element_id\":\"4:bc41be1a-fd35-4887-82b6-c4f496e46967:51\",\"_end_node_element_id\":\"4:bc41be1a-fd35-4887-82b6-c4f496e46967:52\",\"_type\":\"DBIMP_R\",\"_properties\":{\"w\":{\"$type\":\"Integer\",\"_value\":\"2\"}}}},{\"$type\":\"Path\",\"_value\":[{\"$type\":\"Node\",\"_value\":{\"_element_id\":\"4:bc41be1a-fd35-4887-82b6-c4f496e46967:51\",\"_labels\":[\"Dbimp\"],\"_properties\":{\"k\":{\"$type\":\"String\",\"_value\":\"n1\"}}}},{\"$type\":\"Relationship\",\"_value\":{\"_element_id\":\"5:bc41be1a-fd35-4887-82b6-c4f496e46967:1152922604118474803\",\"_start_node_element_id\":\"4:bc41be1a-fd35-4887-82b6-c4f496e46967:51\",\"_end_node_element_id\":\"4:bc41be1a-fd35-4887-82b6-c4f496e46967:52\",\"_type\":\"DBIMP_R\",\"_properties\":{\"w\":{\"$type\":\"Integer\",\"_value\":\"2\"}}}},{\"$type\":\"Node\",\"_value\":{\"_element_id\":\"4:bc41be1a-fd35-4887-82b6-c4f496e46967:52\",\"_labels\":[\"Dbimp\"],\"_properties\":{\"k\":{\"$type\":\"String\",\"_value\":\"n2\"}}}}]}]]},\"queryType\":\"rw\",\"resultAvailableAfter\":0,\"resultConsumedAfter\":6,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCmJA=\"]}"
+  }
+}

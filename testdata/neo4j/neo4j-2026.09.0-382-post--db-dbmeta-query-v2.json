@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ]
+    },
+    "body": "{\"statement\":\"DROP CONSTRAINT dbimp_u IF EXISTS\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "404"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:36:15 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[],\"values\":[]},\"notifications\":[{\"code\":\"Neo.ClientNotification.Schema.IndexOrConstraintDoesNotExist\",\"description\":\"`dbimp_u` does not exist.\",\"severity\":\"INFORMATION\",\"title\":\"`DROP CONSTRAINT dbimp_u IF EXISTS` has no effect.\",\"position\":null,\"category\":\"SCHEMA\"}],\"queryType\":\"s\",\"resultAvailableAfter\":2,\"resultConsumedAfter\":4,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCrpA=\"]}"
+  }
+}

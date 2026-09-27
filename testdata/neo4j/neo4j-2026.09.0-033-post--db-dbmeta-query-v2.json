@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query.v1.2"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.2"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN $u AS u, valueType($u) AS t\",\"parameters\":{\"u\":{\"$type\":\"UUID\",\"_value\":\"550e8400-e29b-41d4-a716-446655440000\"}}}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "268"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:29 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query.v1.2"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"u\",\"t\"],\"values\":[[{\"$type\":\"UUID\",\"_value\":\"550e8400-e29b-41d4-a716-446655440000\"},{\"$type\":\"String\",\"_value\":\"UUID NOT NULL\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":5,\"resultConsumedAfter\":6,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCY5A=\"]}"
+  }
+}

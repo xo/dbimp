@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/jsonl"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UNWIND [1, 2, 0, 4] AS x RETURN 10 / x AS y\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:54 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/jsonl"
+      ]
+    },
+    "body": "{\"$event\":\"Header\",\"_body\":{\"fields\":[\"y\"]}}\n {\"$event\":\"Record\",\"_body\":[10]}\n {\"$event\":\"Record\",\"_body\":[5]}\n {\"$event\":\"Error\",\"_body\":[{\"code\":\"Neo.ClientError.Statement.ArithmeticError\",\"message\":\"/ by zero\"}]}\n"
+  }
+}

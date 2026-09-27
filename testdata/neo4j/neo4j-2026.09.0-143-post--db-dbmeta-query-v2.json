@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MATCH (n:Dbimp {k: 'c1'}) SET n.age = 36, n.name = 'Ada L' RETURN n.age AS age, n.name AS name\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "191"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:50 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"age\",\"name\"],\"values\":[[36,\"Ada L\"],[36,\"Ada L\"]]},\"queryType\":\"rw\",\"resultAvailableAfter\":28,\"resultConsumedAfter\":35,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCbZA=\"]}"
+  }
+}

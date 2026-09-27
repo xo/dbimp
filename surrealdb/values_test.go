@@ -2,6 +2,7 @@ package surrealdb //nolint:testpackage // The tests read the codec of the driver
 
 import (
 	"encoding/hex"
+	"encoding/json/v2"
 	"errors"
 	"math"
 	"reflect"
@@ -234,6 +235,30 @@ func TestRecordIDString(t *testing.T) {
 		if got := tt.id.String(); got != tt.want {
 			t.Errorf("%#v is %s, want %s", tt.id, got, tt.want)
 		}
+	}
+}
+
+// A record id inside an array or an object is written by MarshalText, so a
+// caller that writes the value as JSON, as usql does, sees person:tobie and
+// not the fields of the struct (D70).
+func TestRecordIDText(t *testing.T) {
+	t.Parallel()
+	b, err := RecordID{"a", "x`y"}.MarshalText()
+	if err != nil || string(b) != "a:`x\\`y`" {
+		t.Errorf("MarshalText gave %q, %v, want the text of String", b, err)
+	}
+	v := []any{
+		RecordID{"book", "earthsea"},
+		map[string]any{"by": RecordID{"author", int64(1)}},
+		&RecordID{"a", []any{"x", int64(1)}},
+	}
+	b, err = json.Marshal(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	const want = `["book:earthsea",{"by":"author:1"},"a:['x', 1]"]`
+	if string(b) != want {
+		t.Errorf("json.Marshal gave %s, want %s", b, want)
 	}
 }
 

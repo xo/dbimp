@@ -370,4 +370,4 @@ answered each lead:
 ## Open questions
 
 None. Ken decided the questions of step 9 on 2026-09-27, in D47 to D56 of
-[PLAN.md](PLAN.md), and how `usql` reads the version in D57.
+[decisions/](decisions/README.md), and how `usql` reads the version in D57.

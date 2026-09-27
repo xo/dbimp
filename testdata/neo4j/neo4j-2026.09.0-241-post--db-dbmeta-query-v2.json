@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN date('+999999999-12-31') AS dmax, date('-999999999-01-01') AS dmin, datetime('1600-01-01T00:00:00Z') AS old\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Length": [
+        "233"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"dmax\",\"dmin\",\"old\"],\"values\":[[\"+999999999-12-31\",\"-999999999-01-01\",\"1600-01-01T00:00:00Z\"]]},\"queryType\":\"r\",\"resultAvailableAfter\":9,\"resultConsumedAfter\":10,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kClpA=\"]}"
+  }
+}

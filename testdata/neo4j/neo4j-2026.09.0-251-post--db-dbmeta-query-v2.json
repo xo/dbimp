@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"RETURN vector([1.0, 2.0, 3.0], 3, FLOAT32) AS v\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "135"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"v\"],\"values\":[[]]},\"errors\":[{\"code\":\"Neo.ClientError.Request.Invalid\",\"message\":\"Type VECTOR is not supported.\"}]}"
+  }
+}

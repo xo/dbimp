@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/dbmeta/query/v2",
+    "header": {
+      "Accept": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"TERMINATE TRANSACTION 'dbmeta-transaction-999999999'\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/vnd.neo4j.query"
+      ],
+      "Content-Length": [
+        "331"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 14:35:53 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"data\":{\"fields\":[\"transactionId\",\"username\",\"message\"],\"values\":[[{\"$type\":\"String\",\"_value\":\"dbmeta-transaction-999999999\"},{\"$type\":\"Null\",\"_value\":null},{\"$type\":\"String\",\"_value\":\"Transaction not found.\"}]]},\"queryType\":\"r\",\"resultAvailableAfter\":6,\"resultConsumedAfter\":7,\"bookmarks\":[\"FB:kcwQvEG+Gv01SIeCtsT0luRpZ8kCkZA=\"]}"
+  }
+}
