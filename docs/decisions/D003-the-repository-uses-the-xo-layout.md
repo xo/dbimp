@@ -14,7 +14,7 @@ This matches `dbmeta` and `cql`:
   repositories from `usql/CLAUDE.md`.
 - `CONTRIBUTING.md` holds the same material for a person, and it is shorter.
   No repository has an `AGENTS.md`, and this one has none.
-- `docs/PLAN.md` is this file. It holds decisions and open questions only.
+- `docs/PLAN.md` holds decisions and open questions only.
 - `docs/BACKLOG.md` holds work items, in the format that
   `usql/docs/BACKLOG.md` uses.
 - Examples are `Example` tests. Golden files go in `testdata/`.

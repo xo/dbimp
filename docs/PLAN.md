@@ -22,13 +22,14 @@ Do not decide these yourself. Ask Ken.
 
 ### Q1. Which targets come after Couchbase? Answered by D73.
 
-Couchbase is first (D23). Ken will arrange the other targets after the first
-driver is complete. The review in [TARGETS.md](TARGETS.md) names a start:
+Couchbase is first (D23). Ken arranged the other targets after the first
+driver was complete. The review in [TARGETS.md](TARGETS.md) named a start:
 CrateDB, QuestDB, rqlite, libSQL, InfluxDB 3 and TDengine, by D17.
 
 On 2026-09-27, Ken named SurrealDB as the second target. W8 is that work.
 The same day, he named Neo4j as the third. W9 is that work. The same day,
-he set the order after Neo4j, in D73.
+he set the order after Neo4j, in D73, and added Avatica after libSQL, in
+D74. "The order" in [TARGETS.md](TARGETS.md) holds the result.
 
 ### Q2. Which licence? Answered by D22.
 
@@ -50,7 +51,20 @@ he set the order after Neo4j, in D73.
 
 ### Q11. Which short aliases does the Couchbase scheme keep? Answered by D35.
 
-### Q12. What does a result set with no rows give as its columns?
+### Q12. What does a result set with no rows give as its columns? Answered by tblfmt D31.
+
+`tblfmt` settled this on the side of the display, by option 1 below. Its D31,
+in commit `62d9721` and released in `v0.19.1`, makes a result set with no
+columns valid for every encoder, and `EncodeAll` goes on to the next result
+set. The output matches `psql` 18.6. The commit removes
+`ErrResultSetHasNoColumns`, and `usql` requires `tblfmt` `v0.19.1` (read from
+the checkouts of `tblfmt` and `usql` on 2026-09-28, and confirmed by the
+`tblfmt` session). So D52 stands, and no driver of this repository changes
+for it.
+
+The aligned format at border 1 writes `--`, then the count, such as
+`(0 rows)`, and the JSON encoder writes `[]` for no rows and `{}` for each
+row. The question as it stood:
 
 The `dbmeta` session found this through `usql` at commit `54c12a4`, on
 3.3.0. For a statement that returns no rows, such as `DELETE author`, or

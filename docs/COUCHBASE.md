@@ -20,15 +20,18 @@ lead, not a fact.
 
 - The product is Couchbase Server, through its query service and SQL++,
   which Couchbase also calls N1QL.
-- `dbrun` names three releases: `couchbase-7.2.9` and `couchbase-8.0.3` in
-  the Tested tier, and `couchbase-7.6.12` in the Nightly tier (read from
-  `dbrun list --json` at dbmeta commit `2b93710` on 2026-09-27). Each is the
-  Enterprise image `docker.io/library/couchbase`, which is free for
-  development (D31).
+- `dbrun` names three releases in the Tested tier: `couchbase-7.2.9`,
+  `couchbase-7.6.12` and `couchbase-8.0.3`. At dbmeta commit `2b93710`,
+  7.6.12 was in the Nightly tier (read from `dbrun list --json` on
+  2026-09-27). dbmeta D104, in commit `323cd36`, moved it to the Tested tier
+  (read on 2026-09-28). Each is the Enterprise image
+  `docker.io/library/couchbase`, which is free for development (D31).
 - It meets R, H and S, and it is P1 and the first driver (D23).
-- The scheme in `dburl` has the `Driver` name `n1ql`, the alias `couchbase`,
-  and the dialect `n1ql`. At the move of step 16, `couchbase` becomes the
-  `Driver` name and `n1ql` an alias (D30).
+- The scheme in `dburl` had the `Driver` name `n1ql`, the alias `couchbase`,
+  and the dialect `n1ql`. The move of step 16 made `couchbase` the `Driver`
+  name and the dialect, with the aliases `n1ql` and `n1`, and the
+  `GoPackage` `github.com/xo/dbimp/couchbase` (D30). dburl `v0.33.0`
+  releases it.
 - The survey of step 5a is `testdata/couchbase/features.json`. It holds the
   operations, the features and the types, each settled against 8.0.3, and
   each one names the integration test that holds it (step 14a). They were
@@ -36,9 +39,10 @@ lead, not a fact.
   Gemini, DeepSeek, `github.com/couchbase/gocb/v2` v2.12.5 and the Python
   SDK on 2026-09-27. The script `testdata/couchbase/requests.json` records
   each one on the three releases, as both principals.
-- `usql` uses `github.com/couchbase/go_n1ql` at
+- `usql` used `github.com/couchbase/go_n1ql` at
   `v0.0.0-20220303011133-0ed4bf93e31d`, in `usql/drivers/couchbase`. The
-  driver here replaces it (D23).
+  driver here replaces it (D23). usql commit `8407785` made the move, and no
+  release of `usql` holds it yet (read on 2026-09-28).
 
 ## Requests
 
@@ -78,19 +82,24 @@ lead, not a fact.
 - The driver takes a URL whose scheme is `couchbase`, such as
   `couchbase://user:pass@127.0.0.1:8093`, and no other scheme (D35). `dburl`
   turns each alias, such as `n1ql`, into that URL.
-- Whether the driver speaks HTTPS or HTTP is a key of the query, which step 9
-  decides. It is never a second scheme such as `couchbases`, because the
+- The key `tls` says whether the driver speaks HTTPS or HTTP, and it is
+  `false` by default (D38). The default port is 8093, or 18093 with
+  `tls=true`. It is never a second scheme such as `couchbases`, because the
   driver registers one name (D28).
+- The other keys are `query_context`, `scan_consistency` and `timeout`
+  (D38), `durability_level` (D43) and `txtimeout` (D46).
 - `dbrun dsn --json couchbase-<release>` prints two forms: `dsn`, which is
   `http://Administrator:...@127.0.0.1:<port>` for `go_n1ql`, and `url`, which
   is `couchbase://Administrator:...@127.0.0.1:<port>/` (read on 2026-09-27).
-  The `url` field has the form of D35. It prints nothing for the ordinary
-  user.
+  The `url` field has the form of D35. Both fields name the administrator.
+  The URL of the ordinary user is in the field `principals` (see
+  Principals).
 - `go_n1ql` first treats a DSN as the address of a cluster manager, on port
   8091. A cluster in a container answers with addresses inside the
   container, which a client outside it cannot reach (the `n1ql` session).
-  This driver keeps no form of DSN from `go_n1ql` (D27). Whether it
-  discovers the nodes of a cluster is a decision of step 9.
+  This driver keeps no form of DSN from `go_n1ql` (D27). It talks to the
+  host of the URL only, and does not find the other nodes of a cluster
+  (D38).
 
 ## Responses
 
@@ -101,7 +110,8 @@ lead, not a fact.
 - 7.6.12 and 8.0.3 send the signature and every result object in the order
   of the projection. 7.2.9 sends both in the order of the names (recorded).
   Ken accepted the order of the names on 7.2 for `xo/n1ql`, rather than a
-  second request for each query (n1ql D33). This driver decides it in step 9.
+  second request for each query (n1ql D33). This driver keeps the order of
+  the names on 7.2 too (D39).
 - For `SELECT RAW`, the signature is a string such as `"json"`, not an
   object, and each result is a bare value (recorded). The result has one
   column.
@@ -380,8 +390,8 @@ and not a target of its own. By his reading, it is the same as the query
 service. The models describe it as `POST /analytics/service` on port 8095,
 with the same fields in the request and in the response, no transactions,
 and a cancel that takes the `client_context_id`. `dbrun` does not publish
-port 8095, so none of that is measured. Whether it is a flavor of this driver
-is a question for step 9.
+port 8095, so none of that is measured. D42 leaves it to a later work item,
+because `dbrun` does not publish its port.
 
 ## Interfaces
 
@@ -435,10 +445,10 @@ driver must not repeat:
   returns each value as JSON text with its quotes, and a row of one column as
   the whole object, such as `{"v": "8.0.3-..."}`.
 
-The `Version` function of the Couchbase driver in `usql` calls
+The `Version` function of the Couchbase driver in `usql` called
 `strconv.Unquote` on the result of `SELECT RAW ds_version()`. That call
-depends on the JSON text fault, and it goes when `usql` moves to this
-driver.
+depended on the JSON text fault, and usql commit `8407785` removed it when
+`usql` moved to this driver.
 
 The `n1ql` session stopped its rewrite of `xo/n1ql` on 2026-09-27, when Ken
 decided that this driver replaces it. Its `docs/PLAN.md` keeps its decisions
@@ -527,5 +537,7 @@ The survey of step 5a asked the same two models four more questions on
 ## Open questions
 
 Ken decided the questions of step 9 on 2026-09-27, in D38 to D42 of
-[decisions/](decisions/README.md). The durability of a transaction is D43: a key of the DSN and
-an option for one transaction, which the tests set to `none`.
+[decisions/](decisions/README.md). The durability of a transaction is D43: a
+key of the DSN and an option for one transaction, which the tests set to
+`none`. D44 decides how a string scans into a byte slice, D45 that a
+transaction keeps the context of `BeginTx`, and D46 the key `txtimeout`.

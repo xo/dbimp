@@ -7,10 +7,10 @@ use them. The first drivers are for databases that take queries over HTTP.
 The drivers use the Go standard library, with
 [apd](https://github.com/cockroachdb/apd) for decimals, and need no cgo.
 
-The repository is new. It holds two drivers: `couchbase`, which was first
-released in `v0.1.0`, and `surrealdb`, which was first released in
-`v0.2.0`. A driver for Neo4j is in progress.
-[docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support.
+The repository is new. It holds the drivers `couchbase`, which was first
+released in `v0.1.0`, `surrealdb`, which was first released in `v0.2.0`, and
+`neo4j`, which no release holds yet. [docs/TARGETS.md](docs/TARGETS.md)
+names the databases it aims to support, and the order of the work.
 
 ## Use
 
@@ -48,4 +48,12 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/SURREALDB.md](docs/SURREALDB.md) | What is known about the HTTP interface of SurrealDB |
 | [docs/NEO4J.md](docs/NEO4J.md) | What is known about the HTTP interface of Neo4j |
 | [docs/AVATICA.md](docs/AVATICA.md) | What is known about Apache Calcite Avatica and the products that speak it |
+| [docs/INFLUXDB.md](docs/INFLUXDB.md) | What is known about InfluxDB, before a server runs |
+| [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, before a server runs |
+| [docs/ARANGODB.md](docs/ARANGODB.md) | What is known about ArangoDB, before a server runs |
+| [docs/DATABEND.md](docs/DATABEND.md) | What is known about Databend, before a server runs |
+| [docs/TDENGINE.md](docs/TDENGINE.md) | What is known about TDengine, before a server runs |
+| [docs/PINOT.md](docs/PINOT.md) | What is known about Apache Pinot, before a server runs |
+| [docs/RQLITE.md](docs/RQLITE.md) | What is known about rqlite, before a server runs |
+| [docs/LIBSQL.md](docs/LIBSQL.md) | What is known about libSQL and Turso, before a server runs |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |

@@ -19,8 +19,8 @@ replace a driver that `usql` imports now (D24).
 The repository is new. The first driver, in `couchbase/`, is a new
 Couchbase driver that replaces `xo/n1ql` (D23). It was first released in
 `v0.1.0`. The second, in `surrealdb/`, was first released in `v0.2.0`
-(W8). The third, in `neo4j/`, is in progress (W9). The targets are in
-[docs/TARGETS.md](docs/TARGETS.md).
+(W8). The third, in `neo4j/`, is committed, and no release holds it yet
+(W9). The targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
 
@@ -47,7 +47,15 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the SurrealDB driver | [docs/SURREALDB.md](docs/SURREALDB.md), then W8 |
 | writing the Neo4j driver | [docs/NEO4J.md](docs/NEO4J.md), then W9 |
 | writing the Avatica driver | [docs/AVATICA.md](docs/AVATICA.md), then D74 |
-| choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16 and D17 in [docs/decisions/](docs/decisions/README.md) |
+| writing the InfluxDB driver | [docs/INFLUXDB.md](docs/INFLUXDB.md), then W11 and D78 |
+| writing the CrateDB driver | [docs/CRATEDB.md](docs/CRATEDB.md), then D73 and D76 |
+| writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then D73 and D75 |
+| writing the Databend driver | [docs/DATABEND.md](docs/DATABEND.md), then D73 and D76 |
+| writing the TDengine driver | [docs/TDENGINE.md](docs/TDENGINE.md), then D73 |
+| writing the Apache Pinot driver | [docs/PINOT.md](docs/PINOT.md), then D73 |
+| writing the rqlite driver | [docs/RQLITE.md](docs/RQLITE.md), then D73 |
+| writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then D73 and D76 |
+| choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | sharing code between two drivers | [docs/DESIGN.md](docs/DESIGN.md), then D4 in [docs/decisions/](docs/decisions/README.md). Shared code goes in the root package |
 | using or changing the root package or dbimptest | [docs/DESIGN.md](docs/DESIGN.md) |

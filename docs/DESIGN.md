@@ -244,8 +244,8 @@ a reason in `absent` and no file. If the product has no ordinary user,
 
 `RunContract` tests the part of D8 and D18 to D21 that every driver keeps in
 the same way. The driver supplies a function that opens it against a URL,
-and the bodies of four results in the form of its product. Each subtest
-starts a fake server:
+and the bodies of the results that it needs, in the form of its product.
+Each subtest starts a fake server:
 
 1. The columns keep the order in which they arrive.
 2. A NULL scans as nil into a `*any`, as not valid into a
@@ -338,8 +338,9 @@ Each point of W4 is in the code or in a rule:
    in step 12 of [DRIVER.md](DRIVER.md).
 8. Options from the DSN, then the context, then an argument: `Query` reads
    the DSN. The rest is a rule for each driver.
-9. The error of the server before any rows: `CheckStatus`, and subtest 3 of
-   the contract. `Send` never sends a request twice.
+9. The error of the server before any rows: `CheckStatus`, and a rule for
+   each driver, in step 12 of [DRIVER.md](DRIVER.md). `Send` never sends a
+   request twice.
 10. The DSN as a URL: `ParseURL` and `NewQuery`.
 11. Fake servers from recorded responses: `Replay`.
 12. A recording mode: `Recorder`.

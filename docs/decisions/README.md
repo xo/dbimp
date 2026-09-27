@@ -36,7 +36,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D13](D013-the-module-depends-on-the-standard-library-apd.md) | The module depends on the standard library, apd, and approved binary encodings | Decided |
 | [D14](D014-the-first-drivers-speak-http.md) | The first drivers speak HTTP | Decided |
 | [D15](D015-the-targets-are-in-docs-targets-md.md) | The targets are in docs/TARGETS.md | Decided |
-| [D16](D016-an-ideal-target-meets-three-tests.md) | An ideal target meets three tests | Amended by D58 |
+| [D16](D016-an-ideal-target-meets-three-tests.md) | An ideal target meets three tests | Amended by D58 and D75 |
 | [D17](D017-the-priorities-follow-the-three-tests.md) | The priorities follow the three tests | Decided |
 | [D18](D018-a-result-that-is-not-a-table-becomes-rows-by.md) | A result that is not a table becomes rows by three rules | Decided |
 | [D19](D019-a-json-number-is-never-decoded-through-float64.md) | A JSON number is never decoded through float64 | Decided |
@@ -95,3 +95,8 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D72](D072-the-decisions-are-one-file-each.md) | The decisions are one file each | Amends D3 |
 | [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74 |
 | [D74](D074-avatica-and-its-flavors-come-after-libsql.md) | Avatica and its flavors come after libSQL | Amends D73 |
+| [D75](D075-aql-and-flux-meet-s.md) | AQL and Flux meet S | Amends D16 |
+| [D76](D076-the-names-of-the-databend-libsql-and-cratedb.md) | The names of the Databend, libSQL and CrateDB drivers | Decided |
+| [D77](D077-an-influxdb-result-is-an-array-of-objects-read.md) | An InfluxDB result is an array of objects, read by rule 2 of D18 | Decided |
+| [D78](D078-one-influxdb-driver-with-the-dialects-influxdb.md) | One InfluxDB driver, with the dialects influxdb and influxql | Decided |
+| [D79](D079-the-influxdb-releases-that-the-tests-run.md) | The InfluxDB releases that the tests run | Decided |

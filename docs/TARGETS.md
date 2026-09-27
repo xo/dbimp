@@ -9,8 +9,8 @@ hand: SQL, a dialect like SQL, JSON, or another query language (D14).
 The list came from three notes in `xo/websql/notes` on 2026-09-27:
 `drivers.txt`, `targets.csv` and `targets-2.csv`. The row for PostgREST in
 `targets-2.csv` had no links, and the links below are the ones on the
-PostgREST website. Nothing in this file is measured against a server yet.
-Measure a fact before a driver depends on it.
+PostgREST website. Unless a line says otherwise, a fact in this file is not
+measured against a server. Measure a fact before a driver depends on it.
 
 ## Priorities
 
@@ -26,6 +26,9 @@ Ken also named the ideal target (D16). An ideal target meets three tests:
 - H: it takes queries and returns results over HTTP.
 - S: it has a SQL dialect, or a dialect like SQL.
 
+D58 and D75 amend S. A graph query language that a person types meets it,
+and so do AQL and Flux.
+
 The review below measures each target against those three tests. It places
 each one in P1, P2 or P3 by the rule of D17, which Ken accepted. The tables at
 the end keep the split of the two lists that Ken wrote.
@@ -35,14 +38,15 @@ the end keep the split of the two lists that Ken wrote.
 Ken set the order of the work on 2026-09-27 (D73 and D74). After Couchbase,
 SurrealDB and Neo4j, the drivers are these, in order:
 
-1. InfluxDB.
-2. CrateDB.
-3. ArangoDB.
-4. Databend.
-5. TDengine.
-6. Apache Pinot.
-7. rqlite.
-8. libSQL, and Turso.
+1. InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later, in one driver (D78).
+   See [INFLUXDB.md](INFLUXDB.md).
+2. CrateDB. See [CRATEDB.md](CRATEDB.md).
+3. ArangoDB. See [ARANGODB.md](ARANGODB.md).
+4. Databend. See [DATABEND.md](DATABEND.md).
+5. TDengine. See [TDENGINE.md](TDENGINE.md).
+6. Apache Pinot. See [PINOT.md](PINOT.md).
+7. rqlite. See [RQLITE.md](RQLITE.md).
+8. libSQL, and Turso. See [LIBSQL.md](LIBSQL.md).
 9. Apache Calcite Avatica, and the products that speak it: the standalone
    Avatica server, the Apache Phoenix Query Server and Apache Druid (D74).
    See [AVATICA.md](AVATICA.md).
@@ -112,6 +116,13 @@ to run a pod, which is a design change for Ken. A target that is only a
 cloud service fails R for good, unless an emulator exists. Every target that
 `dbrun` starts first needs its entry in `dbmeta/container/`.
 
+dbmeta D112 adds the entries for the targets from InfluxDB to libSQL in the
+order, and dbmeta D113 adds them for Avatica, the Phoenix Query Server
+and Druid. Both are staged in `dbmeta` and not committed. InfluxDB 1 and
+InfluxDB 2 have no entry yet. The `dbmeta` session measured each entry
+through `dbrun`, and each Tested release of dbmeta D112 passed `dbrun test`
+on 2026-09-28. So each of these targets meets R by that measurement.
+
 ### P1: meets R, H and S
 
 | Target | Notes |
@@ -119,28 +130,30 @@ cloud service fails R for good, unless an emulator exists. Every target that
 | ClickHouse | `dbrun` starts it today (measured in `dbmeta`). `usql` already has a driver, so it is likely P2 (D24). 64-bit integers arrive quoted in JSON. |
 | Couchbase | `dbrun` starts it today (measured in `dbmeta`). The first driver (D23). The driver is `github.com/xo/dbimp/couchbase`. Couchbase Analytics is part of this target, and not a target of its own. See "Couchbase Analytics" in [COUCHBASE.md](COUCHBASE.md). |
 | Trino and Presto | `dbrun` starts both today (measured in `dbmeta`). `usql` already has drivers, so they are likely P2 (D24). Results page through `nextUri`, and an error can arrive on a later page. |
-| CrateDB | Returns a column list, type codes and row arrays. Binds arguments. |
+| CrateDB | Second in the order after Neo4j (D73). Its driver is `cratedb` (D76). R: `dbrun` starts 6.3.7 and 6.4.5. Returns a column list, type codes and row arrays. Binds arguments. See [CRATEDB.md](CRATEDB.md). |
+| ArangoDB | Third in the order after Neo4j (D73). R: `dbrun` starts 3.12.12. H: `POST /_api/cursor` on port 8529. S: yes, AQL, by D75. P1. See [ARANGODB.md](ARANGODB.md). |
 | QuestDB | Returns a column list. `/exec` binds no arguments. |
-| InfluxDB 3 | SQL, with an `information_schema`. InfluxDB 1 takes InfluxQL. The JSON output can lack a schema, and the Arrow output has one. |
-| rqlite | SQLite over HTTP. Returns columns and types. The `dbmeta` model for sqlite3 can read it as a flavor. |
-| libSQL | The same as rqlite for `dbmeta`. The local `libsql-server` passes R. Turso is the same protocol in the cloud. |
-| TDengine | Moves up from P2. Its REST interface is `taosAdapter` on port 6041, and it returns column metadata. |
+| InfluxDB | First in the order after Neo4j (D73). One driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later. Its dialect `influxdb` is SQL on InfluxDB 3 and later, and its dialect `influxql` is InfluxQL through `/query` on each release (D78). Flux meets S (D75), and the driver does not speak it. R: `dbrun` starts InfluxDB 3 Core 3.9.13, 3.11.5 and 3.10.6. D79 names the releases that the tests run. SQL has an `information_schema`. A JSON result is an array of objects (D77), and the Arrow output has a schema. See [INFLUXDB.md](INFLUXDB.md). |
+| rqlite | Seventh in the order after Neo4j (D73). SQLite over HTTP. Returns columns and types. The `dbmeta` model for sqlite3 can read it as a flavor. R: `dbrun` starts 9.4.5 and 10.3.6. See [RQLITE.md](RQLITE.md). |
+| libSQL | Eighth in the order after Neo4j (D73). Its driver is `libsql`, and `turso` is an alias in `dburl` (D76). The same as rqlite for `dbmeta`. R: `dbrun` starts the local `libsql-server` 0.24.33. Turso is the same protocol in the cloud, and the cloud service fails R. See [LIBSQL.md](LIBSQL.md). |
+| TDengine | Moves up from P2. Fifth in the order after Neo4j (D73). Its REST interface is `taosAdapter` on port 6041, and it returns column metadata. R: `dbrun` starts 3.3.8.8 and 3.4.2.8. See [TDENGINE.md](TDENGINE.md). |
 | Apache Drill | Moves up from P2. Its REST interface can cap the size of a result. |
-| Apache Pinot | Moves up from P2. The QuickStart image runs every part in one container. A selection with no `LIMIT` returns ten rows. |
+| Apache Pinot | Moves up from P2. Sixth in the order after Neo4j (D73). The QuickStart image runs every part in one container. A selection with no `LIMIT` returns ten rows. R: `dbrun` starts 1.4.0 and 1.5.1. See [PINOT.md](PINOT.md). |
 | Apache Solr | Moves up from P2. Parallel SQL needs SolrCloud mode, which runs in one container. |
-| Apache Druid | The quickstart runs in one container, but it can exceed the 4 GB limit of `dbmeta`. Measure that before R counts. |
+| Apache Druid | R: `dbrun` starts 36.0.0 and 37.0.0 in one container, with 2.7 GB at most, inside the 4 GB limit of `dbmeta` (dbmeta D113). It is also a flavor of Avatica (D74). |
 | Elasticsearch and OpenSearch | Only through `_sql`, which pages with a cursor. The Query DSL and ES\|QL fail S. |
 | SurrealDB | The second target (W8). The driver is `github.com/xo/dbimp/surrealdb`. R: yes, `dbrun` starts 2.7.0, 3.1.6, 3.2.4 and 3.3.0 (dbmeta D103). H: yes, `POST /rpc` on port 8000. S: yes, SurrealQL. P1. Returns objects and no column list, with the keys sorted by name. See [SURREALDB.md](SURREALDB.md). |
 | Neo4j | The third target (W9). The driver is `github.com/xo/dbimp/neo4j`. R: yes, `dbrun` starts 5.26.31 and 2026.09.0 (dbmeta D106). H: yes, the Query API, `POST /db/{database}/query/v2` on port 7474. S: yes, Cypher, by D58. P1. `dbrun` runs the Enterprise Edition under the evaluation agreement (D59). Returns the columns before the rows, in the order of the statement, with typed JSON (D62). See [NEO4J.md](NEO4J.md). |
 | Amazon DynamoDB | PartiQL, on `amazon/dynamodb-local`, which supports `ExecuteStatement` (not measured). Needs SigV4. An item is a map with no column order, and a number can have 38 digits. `usql` already has a driver, so it is likely P2 (D24). |
-| Databend | New. SQL on `/v1/query`. `usql` has a driver, and dbmeta D66 names it. |
+| Databend | New. Fourth in the order after Neo4j (D73). SQL on `/v1/query`. `usql` has a driver, and dbmeta D66 names it. Its driver is `databend`, and it replaces the driver of `usql` (D76). R: `dbrun` starts 1.2.881 and 1.2.948-nightly. See [DATABEND.md](DATABEND.md). |
 | GreptimeDB | New. SQL on `/v1/sql`. |
-| Apache Phoenix Query Server and Apache Calcite Avatica | A reviewer named it, and Ken placed it ninth in the order on 2026-09-27 (D74). It speaks the Avatica protocol, with JSON or protobuf over HTTP, so one driver serves the standalone Avatica server, the Phoenix Query Server and Druid as flavors. R, H and S are not measured. `usql` has a driver for Avatica (D24). See [AVATICA.md](AVATICA.md). |
+| Apache Phoenix Query Server and Apache Calcite Avatica | A reviewer named it, and Ken placed it ninth in the order on 2026-09-27 (D74). It speaks the Avatica protocol, with JSON or protobuf over HTTP, so one driver serves the standalone Avatica server, the Phoenix Query Server and Druid as flavors. R: `dbrun` starts Avatica 1.28.0 and 1.29.0, the Phoenix Query Server 2.0-5.0, and Druid 36.0.0 and 37.0.0 (dbmeta D113). H and S are not measured here. `usql` has a driver for Avatica (D24). See [AVATICA.md](AVATICA.md). |
 | Apache Kylin | New. A reviewer named it. DeepSeek placed it in P1. SQL over HTTP. |
 | OrientDB | New. A reviewer named it. DeepSeek placed it in P1 or P2, and named it among the best additions to P1. It has a dialect like SQL over HTTP. DeepSeek was not sure of the licence. |
 
 Two targets pass only if a query language that matches graph patterns counts
-as S. That is Ken's decision:
+as S. D58 says that such a language meets S when a person types it, and
+step 2 of [DRIVER.md](DRIVER.md) judges each target on its own:
 
 - Apache Jena Fuseki, and the other SPARQL servers. A binding carries a type,
   a datatype and a language, and an unbound variable must be nil. No image
@@ -153,7 +166,6 @@ as S. That is Ken's decision:
 
 Fails S:
 
-- ArangoDB: AQL is `FOR`, `FILTER` and `RETURN`.
 - Dgraph: DQL and GraphQL.
 - CouchDB: Mango is JSON.
 - TerminusDB: WOQL.
@@ -217,11 +229,12 @@ Two tests break a tie inside P1. The first test asks whether the server
 sends column metadata, so that a row keeps the order of the statement. The
 second test asks whether `usql` has no driver yet (D24). Both reviewers named
 the same first targets: CrateDB, QuestDB, rqlite, libSQL, InfluxDB 3 and
-TDengine. Each has a catalog that a `dbmeta` model can read.
+TDengine. Each has a catalog that a `dbmeta` model can read. Ken then set
+the order in D73 and D74, and "The order" above holds it.
 
 ## The first list: targets.csv
 
-The 24 rows of `targets.csv`. The link on each name goes to the
+Every row of `targets.csv`. The link on each name goes to the
 documentation of its HTTP interface.
 
 | Database | Model | Query language | HTTP endpoint | Request type | Response type |
@@ -253,7 +266,7 @@ documentation of its HTTP interface.
 
 ## The second list: targets-2.csv
 
-The 13 rows of `targets-2.csv`.
+Every row of `targets-2.csv`.
 
 | Database | Model | Query language | HTTP endpoint | Request type | Response type |
 | --- | --- | --- | --- | --- | --- |

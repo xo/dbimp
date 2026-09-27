@@ -48,18 +48,20 @@ write that Ken accepted something that he did not say in the conversation:
 
 ### 1. Ask Ken whether this target is next
 
-[TARGETS.md](TARGETS.md) holds the targets and their priorities, and Q1 in
-[PLAN.md](PLAN.md) holds the state of the order. The order changes, so ask
-Ken rather than read it from a list.
+[TARGETS.md](TARGETS.md) holds the targets, their priorities and the order
+of the work, which Ken set in D73 and D74. The order can change, so ask Ken
+whether the next target in it is still next.
 
-Gate: Ken named the target, and his answer is in [PLAN.md](PLAN.md) or
-[BACKLOG.md](BACKLOG.md), with the date.
+Gate: Ken named the target, and his answer is in a decision in
+[decisions/](decisions/README.md) or in [BACKLOG.md](BACKLOG.md), with the
+date. D73 and D74 name each target in the order.
 
 ### 2. Measure the target against R, H and S
 
 D16 holds the three tests. R asks whether `dbrun` can start the product. H
 asks whether it takes queries and returns results over HTTP. S asks whether
-it has a SQL dialect, or a dialect like SQL.
+it has a SQL dialect, or a dialect like SQL. D58 and D75 amend S: a graph
+query language that a person types meets it, and so do AQL and Flux.
 
 A target that needs a second container, such as Kafka for ksqlDB, fails R
 until `dbrun` can start a pod. A target that is only a cloud service fails R
@@ -603,12 +605,13 @@ commit.
 ### 19. Tag and publish the release
 
 When the workflow has passed on the commit, ask Ken for the version and for
-his approval to tag it. The first release of the module is `v0.1.0`. Tag
-that commit, and push the tag:
+his approval to tag it. The first release of the module was `v0.1.0`, and
+`git tag --list 'v*'` names every release. Tag that commit with the version
+that Ken named, and push the tag:
 
 ```bash
-git tag -a v0.1.0 -m "v0.1.0"
-git push origin v0.1.0
+git tag -a <version> -m "<version>"
+git push origin <version>
 ```
 
 Write the release notes from the commits since the last tag, by the
@@ -617,11 +620,11 @@ what a consumer must change, and each fault that it fixes. Show them to Ken.
 When he approves them, publish the release:
 
 ```bash
-gh release create v0.1.0 --title v0.1.0 --notes-file <notes>
+gh release create <version> --title <version> --notes-file <notes>
 ```
 
-Gate: `gh release view v0.1.0` shows the release as public, and its URL is
-in the work item.
+Gate: `gh release view <version>` shows the release as public, and its URL
+is in the work item.
 
 ### 20. Send the requests to the consumers
 
@@ -662,6 +665,9 @@ change:
 - Step 9: the driver tells the flavors apart from what the server says, such
   as the version statement, and never from the DSN alone. The version
   statement runs on each flavor and says which one answered (dbmeta D91).
+  D78 differs for InfluxDB. With `sqlmode` set to `disable` or `allow`, the
+  driver sends no request to learn the release, and the key `version` of
+  the DSN names it.
 - Step 14: a test skips a difference between flavors with the reason, and
   every flavor runs in the matrix.
 - Steps 5a and 14a: `features.json` records a verdict for each flavor, and a

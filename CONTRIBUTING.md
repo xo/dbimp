@@ -1,7 +1,7 @@
 # Contributing to dbimp
 
 `dbimp` holds `database/sql` drivers for databases that have no idiomatic Go
-driver. Read two documents before you change anything:
+driver. Read these documents before you change anything:
 
 - [`docs/decisions/`](docs/decisions/README.md) holds every decision, one
   file each, with an index. [`docs/PLAN.md`](docs/PLAN.md) holds the open
@@ -42,7 +42,7 @@ Follow it for that text. See D12 in `docs/decisions/`.
 
 ## Agent skills
 
-The repository carries two agent skills. A skill is a set of instructions
+The repository carries agent skills. A skill is a set of instructions
 that a coding agent loads for a task. `simple-english` sets how prose is
 written, and `go-pedantry` sets how Go is written.
 

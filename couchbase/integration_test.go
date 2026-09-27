@@ -98,11 +98,19 @@ func run(m *testing.M) (int, error) {
 	if _, err := db.ExecContext(ctx, "DROP SCOPE "+scope); err != nil {
 		return 1, fmt.Errorf("dropping the scope of the tests: %w", err)
 	}
-	// The server drops a scope a moment after DROP SCOPE returns.
+	// The server drops a scope a moment after DROP SCOPE returns. While it
+	// drops it, a read of system:scopes can meet the scope as it goes, and
+	// fail with 12021, "Scope not found" (8.0.3 in CI on 2026-09-27). So that
+	// error means that the drop is still running, and the loop reads again.
 	name := strings.TrimPrefix(scope, "dbmeta.")
 	for range 60 {
 		var n int
-		if err := db.QueryRowContext(ctx, "SELECT RAW COUNT(*) FROM system:scopes WHERE `bucket` = 'dbmeta' AND name = $1", name).Scan(&n); err != nil {
+		err := db.QueryRowContext(ctx, "SELECT RAW COUNT(*) FROM system:scopes WHERE `bucket` = 'dbmeta' AND name = $1", name).Scan(&n)
+		if e, ok := errors.AsType[couchbase.Error](err); ok && e.Code == 12021 {
+			time.Sleep(500 * time.Millisecond)
+			continue
+		}
+		if err != nil {
 			return 1, fmt.Errorf("reading the scopes left: %w", err)
 		}
 		if n == 0 {

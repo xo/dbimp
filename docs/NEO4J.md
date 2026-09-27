@@ -30,12 +30,14 @@ not a fact.
   tier: `neo4j-5.26.31`, the release of long term support, which is the
   floor, and `neo4j-2026.09.0`, the newest monthly release, which is the
   ceiling. Each is the image `docker.io/library/neo4j`. The entry is dbmeta
-  commit `1335428` on `main` (read on 2026-09-27).
+  commit `1335428` on `main` (read on 2026-09-27). dbmeta D109, in commit
+  `19a8a9a`, makes it the dialect `neo4j`, and `dbrun` prints the URL of D61
+  for each principal (read on 2026-09-28).
 - The Community Edition has no roles, so it has no ordinary user. The image
   of 4.4 takes only a commercial licence (dbmeta D106).
-- `dburl` has no scheme for Neo4j yet. Ken chose the aliases `nj`, `neo` and
-  `n4j` for it (the `dburl` session, 2026-09-27). `usql` has no driver for
-  Neo4j.
+- dburl D28 adds the scheme `neo4j`, with the aliases `nj`, `neo` and `n4j`,
+  which Ken chose on 2026-09-27. No release of `dburl` holds it yet (read on
+  2026-09-28). `usql` has no driver for Neo4j.
 - The survey of step 5a is `testdata/neo4j/features.json`. Each entry is
   settled against 2026.09.0 and recorded on both releases, as both
   principals, and each one names the integration test that holds it (step
@@ -99,8 +101,15 @@ not a fact.
 
 - D61 decides the URL `neo4j://user:pass@host:port/<database>`, such as
   `neo4j://neo4j:pw@127.0.0.1:7474/dbmeta`. With no path, the database is
-  `neo4j`. The default port is 7474, and 7473 with `tls=true`. D67 decides
-  the key `cancel`, with `tag`, `metadata` or `none`.
+  `neo4j`. A path of more than one segment is refused.
+- The key `tls` is `false` by default, and `tls=true` makes the driver speak
+  HTTPS. The default port is 7474, and 7473 with `tls=true`. D67 decides the
+  key `cancel`, with `tag`, the default, `metadata` or `none`. Every other
+  key, and a key given twice, is refused (D61).
+- The driver sends the user and the password with basic authentication. A
+  URL with no user and no password sends no authentication.
+- The tools of Neo4j write `neo4j://host:7687` for Bolt with routing. A URL
+  copied from them names the port of Bolt, and the request fails (D60).
 
 ## Responses
 
@@ -343,7 +352,10 @@ otherwise):
   (recorded).
 - It sees and terminates its own transactions (recorded).
 - It reads the version with `CALL dbms.components()`, which gives the name,
-  the versions and the edition (recorded). 2026.09.0 gives two rows.
+  the versions and the edition (recorded). 2026.09.0 gives two rows. The row
+  `Neo4j Kernel` gives the version, such as `5.26.31` or `2026.09.0`, and the
+  edition `enterprise` (recorded). Both principals read that row through this
+  driver (tested, by `TestIntegrationVersion`, which step 16 asks for).
 
 ## Flavors
 

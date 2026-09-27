@@ -37,7 +37,7 @@ var decisionRef = regexp.MustCompile(`\bD([1-9][0-9]{0,2})\b`)
 // otherRepo matches the name of a sibling repository before a decision
 // number, as in "dbmeta D62". Such a reference names a decision of that
 // repository, not of this one.
-var otherRepo = regexp.MustCompile("(?:cql|dbmeta|dburl|n1ql|usql)[^\\s]*`?[ (]*$")
+var otherRepo = regexp.MustCompile("(?:cql|dbmeta|dburl|n1ql|tblfmt|usql)[^\\s]*`?[ (]*$")
 
 func TestTheRootHoldsFourDocuments(t *testing.T) {
 	t.Parallel()

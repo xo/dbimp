@@ -28,8 +28,11 @@ measured" is a lead, not a fact.
   `docker.io/surrealdb/surrealdb`, which the vendor builds. The server stores
   its data in RocksDB.
 - It meets R, H and S, and it is P1 and the second driver (W8).
-- `dburl` has no scheme for SurrealDB yet. The `dburl` session writes it from
-  D47 and D48. `usql` has no driver for SurrealDB.
+- `dburl` has the scheme `surrealdb`, with the aliases `sr`, `sur` and
+  `surreal`, from D47 and D48. dburl `v0.34.0` releases it. `usql` imports
+  this driver in `usql/drivers/surrealdb`, from usql commit `54c12a4`, and
+  requires dbimp `v0.2.0`. No release of `usql` holds it yet (read on
+  2026-09-28).
 - The survey of step 5a is `testdata/surrealdb/features.json`. Each entry is
   settled against 3.3.0 and recorded on the four releases, as both
   principals, and each one names the integration test that holds it (step
@@ -308,7 +311,8 @@ The interface table comes from the code, in step 10.
 
 ## Faults
 
-`usql` has no driver for SurrealDB, so there are no faults to carry over.
+`usql` had no driver for SurrealDB before this one, so there are no faults
+to carry over.
 The Go SDK shows these faults, which this driver must not repeat:
 
 - It reads the whole body with `io.ReadAll`.
@@ -347,7 +351,7 @@ recordings settled where they were wrong:
 - Both said that `VERSION d'...'` exists. The server refused it because
   RocksDB does not keep versions (recorded).
 
-Step 7 asked both models five more questions on 2026-09-27, and the server
+Step 7 asked both models more questions on 2026-09-27, and the server
 answered each lead:
 
 - Both said that no statement and no endpoint stops a running query, which
@@ -369,5 +373,13 @@ answered each lead:
 
 ## Open questions
 
-None. Ken decided the questions of step 9 on 2026-09-27, in D47 to D56 of
+Ken decided the questions of step 9 on 2026-09-27, in D47 to D56 of
 [decisions/](decisions/README.md), and how `usql` reads the version in D57.
+
+D70 amends D53: a `RecordID` writes its SurrealQL form as text, through
+`MarshalText`, so a record id inside an array prints as `book:earthsea`. The
+code holds it, and D70 is Proposed until Ken accepts it.
+
+Q12 in [PLAN.md](PLAN.md) asked what a result set with no columns gives,
+such as the empty array of `DELETE author`. tblfmt D31, in `tblfmt`
+`v0.19.1`, answers it, so D52 stands and the driver does not change.

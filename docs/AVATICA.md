@@ -4,9 +4,10 @@ This file holds what is known about Apache Calcite Avatica, for a driver
 that D74 places after libSQL. Its work item comes when its turn comes
 (D73). The headings are the template of [DRIVER.md](DRIVER.md).
 
-This is the draft of step 3. No server has run yet, because `dbrun` has no
-entry for Avatica, so every fact here is "not measured" and names its
-source. The sources, each read on 2026-09-27, are these:
+This is the draft of step 3. No server has run for this driver yet, so every
+fact here is "not measured" and names its source. R is the exception, because
+`dbrun` measured it (Summary). The sources, each read on 2026-09-27 unless a
+line says otherwise, are these:
 
 - "The JSON reference" is `site/_docs/json_reference.md` in
   `github.com/apache/calcite-avatica`.
@@ -17,6 +18,10 @@ source. The sources, each read on 2026-09-27, are these:
   `docs/configuration/index.md` in `github.com/apache/druid`.
 - "GitHub" and "Docker Hub" are the tags that each one listed.
 - "Gemini" is `gemini-3.8-flash`.
+- "dbmeta D113" is the decision of `dbmeta` for the three entries in
+  `dbrun`, and the entries are `container/avatica.go`, `container/phoenix.go`
+  and `container/druid.go`. Each is staged in `dbmeta`, and not committed.
+  They were read on 2026-09-28.
 
 ## Summary
 
@@ -42,12 +47,18 @@ source. The sources, each read on 2026-09-27, are these:
 - D24 counts a driver that replaces one of `usql` as a way to cut the
   dependencies of `usql`. The Go driver brings protobuf, a Kerberos library
   and a digest library (its `go.mod`).
-- `dbrun` has no entry for any flavor. The `dbmeta` session was asked on
-  2026-09-27 for an entry for each of the three, with the facts under
-  Flavors.
-- R, H and S are not measured. H is likely, because each flavor takes HTTP.
-  S is likely, because the statement is the SQL of the database behind the
-  server. R depends on the image of each flavor, under Flavors.
+- `dbrun` has an entry for each of the three flavors, staged in `dbmeta` for
+  Ken's review and not committed, from dbmeta D113. The `dbmeta` session
+  reported on 2026-09-28 that each Tested release passed `dbrun test`:
+  `avatica-1.28.0` and `avatica-1.29.0` for the standalone server,
+  `phoenix-2.0-5.0` for the Phoenix Query Server, and `druid-36.0.0` and
+  `druid-37.0.0` for Druid. Ken agreed to the three entries, and to the
+  image of `boostport` as an exception to step 2 of the evaluation of
+  `dbmeta`.
+- R passes for each of the three flavors, through `dbrun` (dbmeta D113). H
+  and S are not measured. H is likely, because each flavor takes HTTP. S is
+  likely, because the statement is the SQL of the database behind the
+  server.
 
 ## Requests
 
@@ -185,26 +196,43 @@ timestamp, so a client sets `location` to read it (the Go driver).
 ## Principals
 
 - Each flavor has its own users. The standalone server with HSQLDB and the
-  Phoenix Query Server run with no authentication by default (Gemini). Step 4
-  finds out which flavor can have an ordinary user.
+  Phoenix Query Server run with no authentication by default (Gemini).
+- The standalone server checks no user of its own. It passes the user and
+  the password of each connection to HSQLDB. A user that SA made through the
+  server was not found by a second connection, so its entry has no ordinary
+  user (dbmeta D113).
+- The Phoenix Query Server checks no user without Kerberos, so its entry has
+  no ordinary user (dbmeta D113).
+- The Druid entry has `admin`, and the ordinary user `dbmeta_user`, who can
+  read every datasource. `dbmeta_user` reads through Avatica with basic
+  authentication. A wrong password gets HTTP 401, and the security API
+  refuses `dbmeta_user` with HTTP 403 (dbmeta D113).
 
 ## Flavors
 
 - The standalone server: the image `apache/calcite-avatica-hypersql`, tag
   1.29.0 (Docker Hub), which the Apache Calcite project builds. The Go
   driver tests with it at 1.26.0, with the argument
-  `-u jdbc:hsqldb:mem:public`. It listens on 8765 (the Go driver).
+  `-u jdbc:hsqldb:mem:public`. It listens on 8765 (the Go driver). The
+  `dbrun` entry runs 1.28.0 and 1.29.0. The entrypoint of 1.28.0 runs
+  `/usr/bin/java`, which the image lacks, so the entry names
+  `/opt/java/openjdk/bin/java` itself (dbmeta D113).
 - The Phoenix Query Server: the Go driver tests with
   `ghcr.io/boostport/hbase-phoenix-all-in-one:2.0-5.0`, which runs
   ZooKeeper, HBase and the Query Server in one container, on port 8765. That
   image is not built by the Apache Phoenix project, and its newest tag on
   Docker Hub is from 2023 (Docker Hub). Gemini said that it needs 2 GB to
-  4 GB of memory.
+  4 GB of memory. The `dbrun` entry runs `boostport/hbase-phoenix-all-in-one`
+  at 2.0-5.0, which was last pushed on 2023-03-14. It answered in 20 seconds
+  and used 1.7 GB (dbmeta D113).
 - Druid: the image `apache/druid`, tag 37.0.0 (Docker Hub). The Router, on
   port 8888, keeps a client on one Broker, because Brokers share no state
   of a connection (the Druid documents). `druid.sql.avatica.enable` is true
   by default (the Druid documents). TARGETS.md says that its quickstart can
-  exceed the 4 GB limit of `dbmeta`.
+  exceed the 4 GB limit of `dbmeta`. The `dbrun` entry runs ZooKeeper and
+  every service of 36.0.0 and 37.0.0 in one container, and it used 2.6 GB on
+  37.0.0 and 2.7 GB on 36.0.0. Its Avatica endpoint is on the Router at
+  `/druid/v2/sql/avatica-protobuf/` (dbmeta D113).
 - Step 9 decides how the driver tells the flavors apart from what the server
   says, such as `databaseProperties` (DRIVER.md, "Flavors").
 
@@ -237,8 +265,9 @@ Step 7 fills this section.
 
 ## Open questions
 
-- Which flavors the driver serves, and whether each one passes R, are
-  questions of steps 2 and 4.
+- None about R: each of the three flavors passed `dbrun test`
+  (dbmeta D113). Ken agreed to an entry for each of the three. Which flavors
+  the driver serves is a decision of step 9.
 - JSON or protobuf, and whether protobuf needs Ken's approval as a binary
   encoding for this driver (D13), are decisions of step 9.
 - The URL of the DSN, and how it names the path of a flavor, are decisions

@@ -45,11 +45,13 @@ and the copies of the two agent skills. See D3, D10, D11 and D12.
 
 Ken reviewed it and it went into the first commit on 2026-09-27.
 
-## W2. Add the first driver
+## W2. Add the first driver. Done.
 
 The first driver is Couchbase, and it replaces `xo/n1ql` (D23). W5 is that
 work. Do W4 and W6 first. [DRIVER.md](DRIVER.md) holds every step to add a
 driver, in order, and this item does not repeat them.
+
+W5 wrote the Couchbase driver, and `v0.1.0` released it on 2026-09-27.
 
 ## W3. Run the integration tests in CI. Done.
 
@@ -79,7 +81,7 @@ Couchbase user (dbmeta D96), and `ec91128` gives each server an owner
 (dbmeta D98). The workflow sets `DBMETA_OWNER` to name itself, such as
 `dbimp-ci`. Do not write the list of releases in the workflow.
 
-## W4. Design the root package before the first driver
+## W4. Design the root package before the first driver. Done.
 
 Write `docs/DESIGN.md`, and add it to the tables in `CLAUDE.md` and
 `README.md`. It holds the design of the code that every driver shares in the
@@ -130,7 +132,7 @@ D36 for reading and closing a result. Cover each of these points, which the
 
 [DESIGN.md](DESIGN.md) holds the design, and the last section maps each
 point above to the code. The code is in the root package and in `dbimptest`
-(D37).
+(D37). Ken committed it on 2026-09-27 as `f1dfe6d`.
 
 ## W5. Write the Couchbase driver. Done.
 
@@ -244,7 +246,7 @@ them in its W13:
    (D46).
 3. `dbmeta`: it measures its Couchbase model on this driver (dbmeta D94).
 
-## W6. Write the tests that hold DRIVER.md
+## W6. Write the tests that hold DRIVER.md. Done.
 
 Write the gates that hold the steps of [DRIVER.md](DRIVER.md), before the
 first driver is done. Each one fails with a message that names the step that
@@ -257,9 +259,9 @@ forgot" in [DRIVER.md](DRIVER.md) lists them. The repository has no driver
 yet, so each gate passes with nothing to read. `gates_self_test.go` makes
 sure that each gate passes a complete driver and fails an incomplete one.
 The code and the design of W4 went in with the gates, on 2026-09-27, staged
-for Ken to review.
+for Ken to review. Ken committed them the same day as `f1dfe6d`.
 
-## W7. Add the survey of features and the round trip of types
+## W7. Add the survey of features and the round trip of types. Done.
 
 Steps 5a and 14a of [DRIVER.md](DRIVER.md) needed three things, which went
 in on 2026-09-27, staged for Ken to review. Gemini and DeepSeek proposed the
@@ -275,7 +277,8 @@ parts, and Ken asked for them.
    the gate itself.
 
 [DESIGN.md](DESIGN.md) describes the first two, and the table in
-[DRIVER.md](DRIVER.md) lists the gate.
+[DRIVER.md](DRIVER.md) lists the gate. Ken committed them on 2026-09-27 as
+`c9795a5`.
 
 Two ideas of the models were not taken. A gate on the history of git, which
 makes sure that the survey came before the tests, breaks when a branch is
@@ -291,8 +294,8 @@ Ken named SurrealDB as the second target on 2026-09-27 (Q1 in
 
 `dbrun` starts 2.7.0 and 3.3.0 in the Tested tier, and 3.1.6 and 3.2.4 in
 the Nightly tier, from dbmeta D103 at commit `78f1e44`, with the ordinary
-user `dbmeta_user`. `dburl` has no scheme for SurrealDB, and `usql` has no
-driver for it.
+user `dbmeta_user`. When the work began, `dburl` had no scheme for
+SurrealDB, and `usql` had no driver for it.
 
 Steps 1 to 15 and 17 went in on 2026-09-27, staged for Ken to review. Ken
 decided D47 to D57. The package `surrealdb` holds the driver, with its DSN,
@@ -329,8 +332,10 @@ passed on it, with 2.7.0 and 3.3.0 as both principals:
 https://github.com/xo/dbimp/actions/runs/36316196918. That is the gate of
 step 18. At Ken's request, `v0.2.0` was tagged on `82c1902` the same day. It holds the
 driver, and `dburl` released the scheme `surrealdb` in `v0.34.0`, checked
-against `v0.2.0` (dburl D26). The release notes of step 19 and the requests
-of step 20 wait for Ken.
+against `v0.2.0` (dburl D26). The `usql` session added `drivers/surrealdb` on
+`v0.2.0` before step 20, in its commit `54c12a4` (W10). The release notes
+and the GitHub release of step 19, and the requests of step 20, wait for
+Ken. So this item stays open.
 
 ## W9. Write the Neo4j driver
 
@@ -339,9 +344,10 @@ Ken named Neo4j as the third target on 2026-09-27 (Q1 in
 Enterprise Edition under the evaluation agreement (D59). Follow
 [DRIVER.md](DRIVER.md).
 
-`dburl` has no scheme for Neo4j yet, and Ken chose its aliases `nj`, `neo`
-and `n4j`. `usql` has no driver for it. The `dbmeta` session was asked for the entry of step 4 on 2026-09-27, with the
-facts below, which this session read and did not measure:
+When the work began, `dburl` had no scheme for Neo4j, and `usql` had no
+driver for it. Ken chose the aliases `nj`, `neo` and `n4j`. The `dbmeta`
+session was asked for the entry of step 4 on 2026-09-27, with the facts
+below, which this session read and did not measure:
 
 - The image is `docker.io/library/neo4j`, and each release has a tag with
   `-enterprise`. On 2026-09-27 three lines were rebuilt that month: 4.4
@@ -376,7 +382,7 @@ Steps 4 to 9 went in on 2026-09-27, staged for Ken to review:
   2026.09.0: APOC and decimal are `no`, and every other entry is `yes`.
 - Step 7: the leads of Gemini and DeepSeek, and what the servers answered,
   are in the Second opinions of [NEO4J.md](NEO4J.md).
-- Step 8: [NEO4J.md](NEO4J.md) is complete, apart from the type table and
+- Step 8: [NEO4J.md](NEO4J.md) was complete, apart from the type table and
   the interface table of step 10.
 - Step 9: D60 to D69 in [decisions/](decisions/README.md). Ken chose the path, the
   positional arguments, the three ways to cancel, the temporal types and the
@@ -394,7 +400,7 @@ Steps 10 to 17 went in on 2026-09-27, staged for Ken to review:
 - Steps 14 and 14a: `neo4j/integration_test.go` passed on 5.26.31 and
   2026.09.0 as both principals. Every entry of the survey names its test.
 - Step 15: the workflow needs no new job, because its matrix comes from the
-  folders under `testdata/`. `DBMETA_COMMIT` moves to `19a8a9a`, which names
+  folders under `testdata/`. `DBMETA_COMMIT` moved to `19a8a9a`, which names
   the URL of Neo4j (dbmeta D109).
 - Step 17: the row of [TARGETS.md](TARGETS.md) names the package.
 
@@ -417,9 +423,18 @@ release that holds the driver, and each names that tag:
    `CALL dbms.components() YIELD name, versions WHERE name = 'Neo4j Kernel'
    RETURN versions[0]`, which the ordinary user can run (recorded). A
    statement with no `RETURN`, such as `CREATE (:A)`, gives a result set with
-   no columns, which `tblfmt` refuses, as Q12 says for SurrealDB.
+   no columns, which `tblfmt` writes as `psql` does from `v0.19.1` (tblfmt
+   D31).
 3. `dbmeta`: nothing to change now. `dbrun` names the URL of Neo4j from
    dbmeta D109. A model for Neo4j is a question for Ken.
+
+Ken committed steps 1 to 17 on 2026-09-27 as `b475894`, and the workflow
+passed on it, on 5.26.31 and 2026.09.0:
+https://github.com/xo/dbimp/actions/runs/36330535630. That is the gate of
+step 18. No tag holds the driver yet. The tag, the release notes and the
+GitHub release of step 19, and the requests of step 20, wait for Ken. So
+this item stays open. On 2026-09-28, dburl D28 added the scheme `neo4j`,
+and no release of `dburl` held it yet.
 
 ## W10. Fix the faults that usql found in the SurrealDB driver
 
@@ -427,13 +442,14 @@ The `dbmeta` session ran `usql` at commit `54c12a4`, which pins `v0.2.0` of
 the SurrealDB driver, against 3.3.0 on 2026-09-27. It found two faults:
 
 1. A statement that returns no rows gives a result set with no columns, and
-   `tblfmt` refuses it with "result set has no columns". The statement still
-   runs. Q12 in [PLAN.md](PLAN.md) holds the options. It waits for Ken,
-   because two of them change `tblfmt` or `usql`, and the third replaces
-   D52.
+   `tblfmt` `v0.16.0` refused it with "result set has no columns". The
+   statement still ran. `tblfmt` settled it on its side in its D31, released
+   in `v0.19.1`, which `usql` requires. So D52 stands, and the driver does
+   not change (Q12 in [PLAN.md](PLAN.md)).
 2. A record id inside an array prints as the fields of `RecordID`, such as
    `[{"Table": "book", "ID": "earthsea"}]`. D70 proposes `MarshalText`, and
-   `TestRecordIDText` holds it. That change is staged.
+   `TestRecordIDText` holds it. That change is committed in `b475894`, and D70
+   waits for Ken.
 
 The session also reported that a `usql` user who writes `$1` gets a parse
 error from the server, and that `\bind` passes positional arguments, which
@@ -446,13 +462,48 @@ the recordings of 3.3.0, from the source of `usql` and of `tblfmt` v0.16.0,
 and from `tblfmt` run on a result set with no rows.
 
 A fix reaches `usql` only in a new release of `dbimp`, by steps 18 to 20 of
-[DRIVER.md](DRIVER.md).
+[DRIVER.md](DRIVER.md). The first fault needs nothing more, so only D70
+keeps this item open.
 
 ## W11. Write the InfluxDB driver
 
 InfluxDB is the next target, by D73. Follow [DRIVER.md](DRIVER.md) from step
-2. InfluxDB 3 speaks SQL and InfluxQL over HTTP, InfluxDB 1 speaks InfluxQL,
-and InfluxDB 2 speaks Flux (not measured). Step 9 decides which releases and
-which languages the driver serves. After InfluxDB come CrateDB, ArangoDB,
-Databend, TDengine, Apache Pinot, rqlite and libSQL, each a work item of its
-own when its turn comes.
+2. After InfluxDB come CrateDB, ArangoDB, Databend, TDengine, Apache Pinot,
+rqlite, libSQL and then Avatica (D73 and D74). Each one gets a work item of
+its own when its turn comes.
+
+Step 3 went in on 2026-09-28 for each target that D73 names, staged for Ken
+to review: [INFLUXDB.md](INFLUXDB.md), [CRATEDB.md](CRATEDB.md),
+[ARANGODB.md](ARANGODB.md), [DATABEND.md](DATABEND.md),
+[TDENGINE.md](TDENGINE.md), [PINOT.md](PINOT.md), [RQLITE.md](RQLITE.md) and
+[LIBSQL.md](LIBSQL.md). Each is a draft, with every fact not measured, and
+each lists its open questions for Ken at its end. D76 names the Databend,
+libSQL and CrateDB drivers ahead of their turn.
+
+Ken decided these on 2026-09-28, and they are staged for his review:
+
+- D75: Flux meets S, so Flux does not rule out InfluxDB 2.
+- D77: a JSON result that is an array of objects becomes rows by rule 2 of
+  D18. Step 6 measures the three facts that D77 names.
+- D78: one driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3
+  and later, as flavors. The dialect `influxdb` is SQL, on InfluxDB 3 and
+  later only. The dialect `influxql` is InfluxQL, on every release. The
+  driver does not speak Flux. The key `sqlmode` chooses the language when
+  the driver connects.
+- D79: the tests run 1.13.1, 2.9.1, 3.9.13 and 3.11.5 in the Tested tier, and
+  1.11.8, 2.8.0 and 3.10.6 in the Nightly tier.
+
+The URL of the DSN, the forms of authentication on each release, and the
+rest of step 9 are still open (D78).
+
+On 2026-09-28, dburl D29 added the schemes `influxdb` and `influxql` of
+D78, committed on the `main` of `dburl` as `a2f1a3a` and not tagged.
+
+On 2026-09-28, dbmeta D112 added a `dbrun` entry for each target that D73
+names, and dbmeta D113 added three Avatica flavors, staged and not
+committed. Each Tested release passed `dbrun test` that day. The
+entry for InfluxDB is InfluxDB 3 Core, with 3.9.13 and 3.11.5 in the Tested
+tier and 3.10.6 in the Nightly tier. The entries for InfluxDB 1 and InfluxDB
+2 were requested from the `dbmeta` session and do not exist yet. Step 4 is
+not done until they exist, because D79 names their releases. The entry for
+InfluxDB 2 also makes the DBRP mapping of D78.

@@ -2,7 +2,7 @@
 
 Status: Decided.
 
-The conventions in "Go conventions" in `dbmeta/CLAUDE.md` apply here:
+The conventions in "Go conventions" in `dbmeta/AGENTS.md` apply here:
 
 - Errors are wrapped with `%w`. A message is lower case, starts with a
   gerund, and names what failed.
