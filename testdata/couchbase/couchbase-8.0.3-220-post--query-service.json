@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"INSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\\\"p1\\\", {\\\"name\\\": \\\"again\\\"})\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ],
+      "Content-Length": [
+        "557"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"401b7b5b-2d43-43ca-b4ff-4005d6f51880\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"code\":12009,\"msg\":\"DML Error, possible causes include concurrent modification. Failed to perform INSERT on key p1 - cause: Duplicate Key: p1\",\"reason\":{\"_level\":\"exception\",\"caller\":\"couchbase:2912\",\"code\":17012,\"key\":\"dml.statement.duplicatekey\",\"message\":\"Duplicate Key: p1\"},\"retry\":false}],\n\"status\": \"errors\",\n\"metrics\": {\"elapsedTime\": \"321.581µs\",\"executionTime\": \"311.631µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

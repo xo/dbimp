@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Content-Length": [
+        "470"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"2060e72b-141b-4ca8-8ac9-66ffbebd2551\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to run queries accessing user information. Add role admin to allow the statement to run.\",\"reason\":{\"missing_role\":\"admin\",\"path\":\"#system:user_info\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"477.242µs\",\"executionTime\": \"458.692µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

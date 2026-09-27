@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE OR REPLACE FUNCTION dbimp_js(a) LANGUAGE JAVASCRIPT AS \\\"function dbimp_js(a) { return a * 2; }\\\"\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ],
+      "Content-Length": [
+        "277"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"744c50a5-b1e5-4ae1-ab9b-cdf415d56b9d\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - at end of input\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"152.78µs\",\"executionTime\": \"144.05µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

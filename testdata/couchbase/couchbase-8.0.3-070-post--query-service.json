@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE INDEX dbimp_arr ON dbmeta.dbimp.people(DISTINCT ARRAY t FOR t IN tags END) WHERE age > 0\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:18 GMT"
+      ],
+      "Content-Length": [
+        "301"
+      ]
+    },
+    "body": "{\n\"requestID\": \"b8bad79d-449e-490b-a114-43bc6956cb9b\",\n\"signature\": null,\n\"results\": [\n{\"id\":\"544f20fa30dfef11\",\"name\":\"dbimp_arr\",\"state\":\"online\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"3.321814781s\",\"executionTime\": \"3.321803021s\",\"resultCount\": 1,\"resultSize\": 61,\"serviceLoad\": 0}\n}\n"
+  }
+}

@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
+    "body": "{\"statement\":\"SELECT META(p).id AS id, p.* FROM dbmeta.dbimp.people AS p ORDER BY META(p).id\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
-    "status": 401,
+    "status": 200,
     "header": {
       "Content-Length": [
-        "470"
+        "339"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:51 GMT"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"cf918af8-de09-40eb-b185-9b906c9f9ed2\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to Local User Admin. Add role user_admin_local to allow the statement to run.\",\"reason\":{\"missing_role\":\"user_admin_local\",\"path\":\"#system:user_info\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"237.702µs\",\"executionTime\": \"212.641µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"647f3f39-4a9a-43b1-82e0-2afc6dc64793\",\n\"signature\": {\"id\":\"json\",\"*\":\"*\"},\n\"results\": [\n{\"id\":\"p1\",\"age\":40,\"name\":\"Ada\"},\n{\"id\":\"p2\",\"name\":\"Bo\"},\n{\"id\":\"p3\",\"name\":\"Cyd\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"10.324417ms\",\"executionTime\": \"10.309057ms\",\"resultCount\": 3,\"resultSize\": 80,\"serviceLoad\": 0}\n}\n"
   }
 }

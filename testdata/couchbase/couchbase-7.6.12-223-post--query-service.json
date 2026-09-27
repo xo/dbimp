@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE UNIQUE INDEX dbimp_u ON dbmeta.dbimp.people(name)\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "342"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"2a45bc2f-c897-4466-88b3-f3d7441c433f\",\n\"errors\": [{\"code\":3000,\"column\":8,\"line\":1,\"msg\":\"syntax error - line 1, column 8, near 'CREATE ', at: UNIQUE (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"65.121µs\",\"executionTime\": \"58.401µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

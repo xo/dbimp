@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"timeout\":\"50ms\"}"
+    "body": "{\"statement\":\"SELECT d.x, d.y, d.z FROM dbmeta AS d USE KEYS \\\"dbimp::probe\\\"\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:05 GMT"
+      ],
       "Content-Length": [
-        "330"
+        "282"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
-      ],
-      "Date": [
-        "Sun, 27 Sep 2026 07:15:43 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"65296935-0a85-411e-9eb4-5064cb7f0927\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":1080,\"msg\":\"Timeout 50ms exceeded\",\"retry\":true}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"50.275548ms\",\"executionTime\": \"50.265278ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"b308a8e0-737f-47d6-a54b-66389cb453f0\",\n\"signature\": {\"x\":\"json\",\"y\":\"json\",\"z\":\"json\"},\n\"results\": [\n{\"x\":1,\"y\":null}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"460.182µs\",\"executionTime\": \"440.342µs\",\"resultCount\": 1,\"resultSize\": 16,\"serviceLoad\": 0}\n}\n"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE TABLE dbimp_t (id INT PRIMARY KEY, other INT REFERENCES dbimp_o(id))\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "322"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"6609fe83-6110-43f6-942e-7f957457b955\",\n\"errors\": [{\"code\":3000,\"column\":8,\"line\":1,\"msg\":\"syntax error - line 1, column 8, near 'CREATE ', at: TABLE\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"86.72µs\",\"executionTime\": \"72.1µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

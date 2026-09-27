@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT a, ROW_NUMBER() OVER (ORDER BY a DESC) AS rn FROM ARRAY_RANGE(0, 3) AS a ORDER BY a\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "319"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:51 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"ee39d45b-9cac-4ec3-b7e6-4e0d0d409c16\",\n\"signature\": {\"a\":\"json\",\"rn\":\"number\"},\n\"results\": [\n{\"a\":0,\"rn\":3},\n{\"a\":1,\"rn\":2},\n{\"a\":2,\"rn\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"460.201µs\",\"executionTime\": \"448.671µs\",\"resultCount\": 3,\"resultSize\": 42,\"serviceLoad\": 0,\"sortCount\": 3}\n}\n"
+  }
+}

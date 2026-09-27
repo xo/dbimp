@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"client_context_id\":\"dbimp-cancel\"}"
+    "body": "{\"statement\":\"UPDATE dbmeta.dbimp.people AS p USE KEYS \\\"p3\\\" SET p.name = \\\"Cyd\\\" RETURNING META(p).expiration\",\"preserve_expiry\":true}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Length": [
-        "283"
-      ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:51 GMT"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
+      ],
+      "Content-Length": [
+        "288"
       ]
     },
-    "body": "{\n\"requestID\": \"71110de1-36a4-4db1-9b52-b7fd75323145\",\n\"clientContextID\": \"dbimp-cancel\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"status\": \"stopped\",\n\"metrics\": {\"elapsedTime\": \"1.006086992s\",\"executionTime\": \"1.005992072s\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"d0a4741b-6808-4935-9533-2243f2563532\",\n\"signature\": {\"expiration\":\"json\"},\n\"results\": [\n{\"expiration\":0}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"294.641µs\",\"executionTime\": \"281.531µs\",\"resultCount\": 1,\"resultSize\": 16,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

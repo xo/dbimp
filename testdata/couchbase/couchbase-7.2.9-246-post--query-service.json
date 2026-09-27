@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT * FROM [{\\\"k\\\": \\\"a\\\", \\\"v\\\": 1}] AS t PIVOT (SUM(v) FOR k IN (\\\"a\\\"))\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ],
+      "Content-Length": [
+        "325"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"6bce2062-31c6-4802-ba66-c10e5ec1a32f\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - line 1, column 41, near ': \\\"a\\\", \\\"v\\\": 1}] AS t', at: PIVOT\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"148.601µs\",\"executionTime\": \"140.911µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

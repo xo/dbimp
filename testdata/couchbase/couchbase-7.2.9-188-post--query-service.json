@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"timeout\":\"50ms\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:06 GMT"
+      ],
+      "Content-Length": [
+        "330"
+      ]
+    },
+    "body": "{\n\"requestID\": \"76328210-2e9f-48b9-bb24-8ad2378bd66d\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":1080,\"msg\":\"Timeout 50ms exceeded\",\"retry\":true}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"50.382745ms\",\"executionTime\": \"50.362585ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

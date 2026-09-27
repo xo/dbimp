@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"DELETE FROM dbmeta USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"CREATE INDEX dbimp_arr ON dbmeta.dbimp.people(DISTINCT ARRAY t FOR t IN tags END) WHERE age > 0\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "253"
+        "301"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:26 GMT"
+        "Sun, 27 Sep 2026 08:05:50 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"86fa2b6b-73a9-4f30-8e7b-f899dc2bd487\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"391.842µs\",\"executionTime\": \"382.552µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"82917d19-080d-4469-97b4-11332be84b72\",\n\"signature\": null,\n\"results\": [\n{\"id\":\"54f0f4efdfcb2872\",\"name\":\"dbimp_arr\",\"state\":\"online\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"2.317181766s\",\"executionTime\": \"2.317170556s\",\"resultCount\": 1,\"resultSize\": 61,\"serviceLoad\": 0}\n}\n"
   }
 }

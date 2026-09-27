@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT t.* FROM [{\\\"ts_start\\\": 0, \\\"ts_end\\\": 10, \\\"ts_interval\\\": 5, \\\"ts_data\\\": [1, 2]}] AS d UNNEST _TIMESERIES(d, {\\\"ts_ranges\\\": [0, 10]}) AS t\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "275"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"635554e9-0553-4894-92b4-ee4018ef4365\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n{\"_t\":0,\"_v0\":1},\n{\"_t\":5,\"_v0\":2}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"558.912µs\",\"executionTime\": \"542.032µs\",\"resultCount\": 2,\"resultSize\": 32,\"serviceLoad\": 0}\n}\n"
+  }
+}

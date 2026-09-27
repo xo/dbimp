@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE VIEW dbimp_v AS SELECT 1\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ],
+      "Content-Length": [
+        "338"
+      ]
+    },
+    "body": "{\n\"requestID\": \"bd1983f9-ae6f-4aef-baa4-67a8bb6838ad\",\n\"errors\": [{\"code\":3000,\"column\":8,\"line\":1,\"msg\":\"syntax error - line 1, column 8, near 'CREATE ', at: VIEW (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"81.89µs\",\"executionTime\": \"76.75µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

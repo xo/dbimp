@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"BEGIN WORK\"}"
+    "body": "{\"statement\":\"CREATE TABLE dbimp_t (id INT PRIMARY KEY, other INT REFERENCES dbimp_o(id))\"}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:08 GMT"
-      ],
       "Content-Length": [
-        "364"
+        "302"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:01 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"3a11557c-39b0-4944-9575-0860d39b98c2\",\n\"signature\": \"json\",\n\"results\": [\n{\"txid\":\"28c4e59b-9251-461c-bef6-f196704965a1\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"82.141µs\",\"executionTime\": \"75.231µs\",\"resultCount\": 1,\"resultSize\": 47,\"serviceLoad\": 0,\"transactionElapsedTime\": \"6.941µs\",\"transactionRemainingTime\": \"14.999990999s\"}\n}\n"
+    "body": "{\n\"requestID\": \"c642e780-2385-4f4b-8a4f-a0d92e3ff2af\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - line 1, column 8, near 'CREATE', at: TABLE\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"61.46µs\",\"executionTime\": \"55.84µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

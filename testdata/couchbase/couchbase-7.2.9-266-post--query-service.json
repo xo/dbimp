@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"COMMIT WORK\",\"txid\":\"95883c18-4f8a-4232-8669-d3124ad9daf1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "917"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"ead3022e-dc4d-4f2c-ac4a-f93698608d36\",\n\"signature\": \"json\",\n\"results\": [\n],\n\"errors\": [{\"cause\":{\"cause\":{\"bucket\":\"dbmeta\",\"collection\":\"_default\",\"document_key\":\"_txn:atr-390-#348\",\"error_description\":\"Durability requirements are impossible to achieve\",\"error_name\":\"DurabilityImpossible\",\"last_connection_id\":\"ee11ce9d4c1d7ed4/316646ab6be219b2\",\"last_dispatched_from\":\"127.0.0.1:59948\",\"last_dispatched_to\":\"127.0.0.1:11210\",\"msg\":\"durability impossible\",\"opaque\":12,\"scope\":\"_default\",\"status_code\":161},\"raise\":\"failed\",\"retry\":false,\"rollback\":false},\"code\":17007,\"msg\":\"Commit Transaction statement error\"},{\"code\":17008,\"msg\":\"Rollback Transaction statement error: transaction is not started\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"195.921µs\",\"executionTime\": \"189.351µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"transactionElapsedTime\": \"756.453µs\",\"errorCount\": 2}\n}\n"
+  }
+}

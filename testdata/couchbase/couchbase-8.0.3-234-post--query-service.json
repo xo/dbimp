@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"DELETE FROM dbmeta.dbimp.orders AS o WHERE o.person IN [\\\"p1\\\", \\\"p2\\\"] RETURNING META(o).id\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "292"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"1d8b9dcd-454e-4395-b577-0d6086fcfeee\",\n\"signature\": {\"id\":\"json\"},\n\"results\": [\n{\"id\":\"o-p1\"},\n{\"id\":\"o-p2\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"968.003µs\",\"executionTime\": \"951.493µs\",\"resultCount\": 2,\"resultSize\": 26,\"serviceLoad\": 0,\"mutationCount\": 2}\n}\n"
+  }
+}

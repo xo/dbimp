@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::readonly\\\", {})\",\"readonly\":true}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:06 GMT"
+      ],
+      "Content-Length": [
+        "323"
+      ]
+    },
+    "body": "{\n\"requestID\": \"47001653-1078-4917-ab0d-c6157b235902\",\n\"errors\": [{\"code\":1000,\"msg\":\"The server or request is read-only and cannot accept this write statement.\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"154.941µs\",\"executionTime\": \"145.391µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW META(p).id FROM dbmeta.dbimp.people AS p WHERE p.v IS VALUED ORDER BY APPROX_VECTOR_DISTANCE(p.v, [1, 2], \\\"L2\\\") LIMIT 2\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "252"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:14 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"d1b4ed1f-3c55-4b71-9c04-64b05688b745\",\n\"signature\": \"json\",\n\"results\": [\n\"vec1\",\n\"vec0\"\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"2.438938ms\",\"executionTime\": \"2.400648ms\",\"resultCount\": 2,\"resultSize\": 12,\"serviceLoad\": 0}\n}\n"
+  }
+}

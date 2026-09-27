@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"ADVISE SELECT * FROM dbmeta WHERE x = 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "682"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:18 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"59370d7c-622b-45aa-bf89-ccaab5a7010f\",\n\"signature\": \"json\",\n\"results\": [\n{\"#operator\":\"Advise\",\"advice\":{\"#operator\":\"IndexAdvice\",\"adviseinfo\":{\"current_indexes\":[{\"index_statement\":\"CREATE PRIMARY INDEX #primary ON `dbmeta`\",\"keyspace_alias\":\"dbmeta\"}],\"recommended_indexes\":{\"indexes\":[{\"index_statement\":\"CREATE INDEX adv_x ON `dbmeta`(`x`)\",\"keyspace_alias\":\"dbmeta\",\"recommending_rule\":\"Index keys follow order of predicate types: 2. equality/null/missing.\"}]}}},\"query\":\"SELECT * FROM dbmeta WHERE x = 1\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"191.169891ms\",\"executionTime\": \"191.152741ms\",\"resultCount\": 1,\"resultSize\": 439,\"serviceLoad\": 0}\n}\n"
+  }
+}

@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT $name AS a, $obj AS b\",\"$name\":\"x\",\"$obj\":{\"k\":[1,null]}}"
+    "body": "{\"statement\":\"SELECT 1 AS a\",\"metrics\":false}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Content-Length": [
+        "130"
+      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:17 GMT"
-      ],
-      "Content-Length": [
-        "283"
+        "Sun, 27 Sep 2026 08:05:44 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"b7c1abc8-a55a-4d03-97ca-2817e4f0b983\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n{\"a\":\"x\",\"b\":{\"k\":[1,null]}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"159.621µs\",\"executionTime\": \"141.771µs\",\"resultCount\": 1,\"resultSize\": 28,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"50be0ef1-2b30-4fff-b868-78fb2869b1f4\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\"\n}\n"
   }
 }

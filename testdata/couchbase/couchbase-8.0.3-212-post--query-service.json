@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT 1 AS a /* a ? comment */ -- and $1 another\\n\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "250"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"0bcfc6e5-bcef-4dc5-94ba-9ad982222084\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"129.45µs\",\"executionTime\": \"119.93µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
+  }
+}

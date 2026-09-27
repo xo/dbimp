@@ -10,21 +10,21 @@
         "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a\"}"
+    "body": "{\"statement\":\"MERGE INTO dbmeta.dbimp.people AS p USING [{\\\"id\\\": \\\"p1\\\", \\\"age\\\": 40}] AS s ON META(p).id = s.id WHEN MATCHED THEN UPDATE SET p.age = s.age WHEN NOT MATCHED THEN INSERT (KEY s.id, VALUE {\\\"age\\\": s.age}) RETURNING p.age\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
-    "status": 401,
+    "status": 200,
     "header": {
       "Content-Length": [
-        "315"
+        "275"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:26 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"bbdb8987-d668-4624-bca9-84ccd430c969\",\n\"errors\": [{\"code\":2120,\"msg\":\"Error authorizing against cluster cause: Failure to authenticate user\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"2.064012ms\",\"executionTime\": \"13.6µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"a99e158b-0677-4139-a183-653225c6c621\",\n\"signature\": {\"age\":\"json\"},\n\"results\": [\n{\"age\":40}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"930.623µs\",\"executionTime\": \"918.623µs\",\"resultCount\": 1,\"resultSize\": 10,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

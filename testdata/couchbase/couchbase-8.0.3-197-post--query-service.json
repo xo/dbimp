@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT $name AS a, $obj AS b\",\"$name\":\"x\",\"$obj\":{\"k\":[1,null]}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:20 GMT"
+      ],
+      "Content-Length": [
+        "281"
+      ]
+    },
+    "body": "{\n\"requestID\": \"9df5c7b7-6ec4-4b6f-8dab-af495778355f\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n{\"a\":\"x\",\"b\":{\"k\":[1,null]}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"133.57µs\",\"executionTime\": \"115.48µs\",\"resultCount\": 1,\"resultSize\": 28,\"serviceLoad\": 0}\n}\n"
+  }
+}

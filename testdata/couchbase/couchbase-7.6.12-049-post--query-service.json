@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELEKT 1\"}"
+    "body": "{\"statement\":\"SELECT p.name, o.total FROM dbmeta.dbimp.people AS p JOIN dbmeta.dbimp.orders AS o ON o.person = META(p).id ORDER BY p.name\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
-    "status": 400,
+    "status": 200,
     "header": {
       "Content-Length": [
-        "321"
+        "328"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"368e48c6-b07d-4bfb-97db-f92eab0c9dea\",\n\"errors\": [{\"code\":3000,\"column\":8,\"line\":1,\"msg\":\"syntax error - line 1, column 8, near 'SELEKT ', at: 1\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"128.321µs\",\"executionTime\": \"103.1µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"81ab3892-9950-4b36-93e2-25be8a66940f\",\n\"signature\": {\"name\":\"json\",\"total\":\"json\"},\n\"results\": [\n{\"name\":\"Ada\",\"total\":10},\n{\"name\":\"Bo\",\"total\":10}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"2.929931ms\",\"executionTime\": \"2.914801ms\",\"resultCount\": 2,\"resultSize\": 49,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT META(t).id AS id, t.v, TYPE(t.v) AS type, BASE64_DECODE(t.v) = BASE64_DECODE(\\\"3q2+7w==\\\") AS same FROM dbmeta.dbimp.types AS t USE KEYS [\\\"tbs\\\", \\\"tbsa\\\"]\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "403"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:20 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"4c170f3d-c3f3-4c7f-a0d7-546e25675f97\",\n\"signature\": {\"id\":\"json\",\"v\":\"json\",\"type\":\"string\",\"same\":\"boolean\"},\n\"results\": [\n{\"id\":\"tbs\",\"v\":\"3q2+7w==\",\"type\":\"string\",\"same\":true},\n{\"id\":\"tbsa\",\"v\":\"3q2+7w==\",\"type\":\"string\",\"same\":true}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"604.203µs\",\"executionTime\": \"585.773µs\",\"resultCount\": 2,\"resultSize\": 111,\"serviceLoad\": 0}\n}\n"
+  }
+}

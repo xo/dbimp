@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW dbimp_js(21)\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "352"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"557bbd96-9237-433d-9430-c824704178ce\",\n\"errors\": [{\"code\":3000,\"column\":12,\"line\":1,\"msg\":\"Invalid function dbimp_js (resolving to default:dbimp_js) (near line 1, column 12)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"396.492µs\",\"executionTime\": \"383.452µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

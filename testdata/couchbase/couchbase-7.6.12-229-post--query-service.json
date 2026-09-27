@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"DROP SEQUENCE dbmeta.dbimp.dbimp_seq\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Content-Length": [
+        "500"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"647575c0-8cc4-469d-809b-d77222121f13\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to manage sequences. Add role query_manage_sequences on default:dbmeta.dbimp to allow the statement to run.\",\"reason\":{\"missing_role\":\"query_manage_sequences\",\"path\":\"default:dbmeta.dbimp\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"90.93µs\",\"executionTime\": \"80.53µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

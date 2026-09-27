@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT * FROM dbmeta USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"SELECT 1 AS a\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Content-Length": [
+        "250"
+      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:17 GMT"
-      ],
-      "Content-Length": [
-        "268"
+        "Sun, 27 Sep 2026 08:05:44 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"134663fa-e0c9-4d72-86c4-676ab7f5bca6\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n{\"dbmeta\":{\"x\":1,\"y\":null}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.038706ms\",\"executionTime\": \"1.032876ms\",\"resultCount\": 1,\"resultSize\": 27,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"08837cf7-0275-4c01-9904-48c33fa74df2\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"244.51µs\",\"executionTime\": \"210.33µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
   }
 }

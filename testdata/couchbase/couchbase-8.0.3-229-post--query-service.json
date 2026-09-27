@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"UPDATE dbmeta.dbimp.people AS p USE KEYS \\\"p2\\\" UNSET p.age RETURNING p\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "282"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"c688dd3c-b313-46cf-b070-729baa3cd499\",\n\"signature\": {\"p\":\"json\"},\n\"results\": [\n{\"p\":{\"name\":\"Bo\"}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"310.591µs\",\"executionTime\": \"294.991µs\",\"resultCount\": 1,\"resultSize\": 19,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+  }
+}

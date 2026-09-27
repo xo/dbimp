@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"UPSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\\\"tbd\\\", BASE64_DECODE(\\\"3q2+7w==\\\"))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "376"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:20 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"031404cc-9a66-4bc9-9d00-2ab363e3d663\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"code\":12030,\"msg\":\"UPSERT of binary document is not supported: tbd\",\"reason\":{\"key\":\"tbd\",\"operation\":\"UPSERT\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"272.661µs\",\"executionTime\": \"254.061µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

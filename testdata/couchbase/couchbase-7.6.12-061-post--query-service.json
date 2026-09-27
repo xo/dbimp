@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"BEGIN WORK\"}"
+    "body": "{\"statement\":\"CREATE TABLE dbimp_t (id INT PRIMARY KEY, other INT REFERENCES dbimp_o(id))\"}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
       "Content-Length": [
-        "414"
+        "323"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:26 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"ca8a69b7-91e9-4221-986b-10c8d571cb64\",\n\"signature\": \"json\",\n\"results\": [\n{\"nodeUUID\":\"7e7429ec6ad2b8286ad0952cef854346\",\"txid\":\"4bab0c86-72b0-4cd9-9db0-dcb578d8a646\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"2.372105ms\",\"executionTime\": \"2.362075ms\",\"resultCount\": 1,\"resultSize\": 93,\"serviceLoad\": 0,\"transactionElapsedTime\": \"2.309424ms\",\"transactionRemainingTime\": \"14.997689126s\"}\n}\n"
+    "body": "{\n\"requestID\": \"f74e243f-04ae-4460-a012-172608890fc6\",\n\"errors\": [{\"code\":3000,\"column\":8,\"line\":1,\"msg\":\"syntax error - line 1, column 8, near 'CREATE ', at: TABLE\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"94.78µs\",\"executionTime\": \"82.51µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

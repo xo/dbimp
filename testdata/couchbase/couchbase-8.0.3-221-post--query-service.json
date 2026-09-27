@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"INSERT INTO dbmeta.dbimp.orders (KEY \\\"o-\\\" || META(p).id, VALUE {\\\"person\\\": META(p).id, \\\"total\\\": 10}) SELECT p FROM dbmeta.dbimp.people AS p WHERE META(p).id IN [\\\"p1\\\", \\\"p2\\\"]\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "253"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"e51b19ea-de0d-490c-a3a3-3ef2c338ce80\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"9.968555ms\",\"executionTime\": \"9.944105ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 2}\n}\n"
+  }
+}

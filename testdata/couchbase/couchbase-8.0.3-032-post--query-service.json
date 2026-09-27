@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"DELETE FROM dbmeta USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"SELECT 1 AS a\"}"
   },
   "response": {
-    "status": 200,
+    "status": 401,
     "header": {
-      "Content-Length": [
-        "253"
-      ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:47 GMT"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
+      ],
+      "Content-Length": [
+        "316"
       ]
     },
-    "body": "{\n\"requestID\": \"bd9aedf0-f6fd-4242-ae5d-90b5b663538b\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"296.462µs\",\"executionTime\": \"284.592µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"79260437-6110-44d5-ada0-5dd88d06aaf9\",\n\"errors\": [{\"code\":2120,\"msg\":\"Error authorizing against cluster cause: Failure to authenticate user\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"567.592µs\",\"executionTime\": \"10.59µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

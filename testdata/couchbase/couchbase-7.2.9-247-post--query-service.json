@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"EXPLAIN SELECT RAW 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "741"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"a2c7fa6d-9277-447f-bfb7-b16b5c859f08\",\n\"signature\": \"json\",\n\"results\": [\n{\"cardinality\":1,\"cost\":0.001,\"plan\":{\"#operator\":\"Sequence\",\"~children\":[{\"#operator\":\"DummyScan\",\"optimizer_estimates\":{\"cardinality\":1,\"cost\":1.0842021724855044e-19,\"fr_cost\":1.0842021724855044e-19,\"size\":1}},{\"#operator\":\"Parallel\",\"maxParallelism\":1,\"~child\":{\"#operator\":\"Sequence\",\"~children\":[{\"#operator\":\"InitialProject\",\"discard_original\":true,\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.001,\"fr_cost\":0.001,\"size\":1},\"raw\":true,\"result_terms\":[{\"expr\":\"1\"}]}]}}]},\"text\":\"SELECT RAW 1\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"126.261µs\",\"executionTime\": \"118.151µs\",\"resultCount\": 1,\"resultSize\": 502,\"serviceLoad\": 0}\n}\n"
+  }
+}

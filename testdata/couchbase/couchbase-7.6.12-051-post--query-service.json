@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"timeout\":\"50ms\"}"
+    "body": "{\"statement\":\"SELECT META(p).id, META(p).cas, META(p).expiration FROM dbmeta.dbimp.people AS p USE KEYS \\\"p3\\\"\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:48 GMT"
+      ],
       "Content-Length": [
-        "330"
+        "339"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
-      ],
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"2f7577c0-ee15-44e6-bad8-02f00ab38e53\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":1080,\"msg\":\"Timeout 50ms exceeded\",\"retry\":true}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"50.340495ms\",\"executionTime\": \"50.326745ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"13a047cd-5e8f-4045-b60d-6722a67bd197\",\n\"signature\": {\"id\":\"json\",\"cas\":\"json\",\"expiration\":\"json\"},\n\"results\": [\n{\"id\":\"p3\",\"cas\":1790496348545810432,\"expiration\":1790499948}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"483.022µs\",\"executionTime\": \"456.081µs\",\"resultCount\": 1,\"resultSize\": 61,\"serviceLoad\": 0}\n}\n"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW 1\",\"use_replica\":\"on\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "289"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"ca42b674-b66b-4028-b986-949a56e4e747\",\n\"errors\": [{\"code\":1065,\"msg\":\"Unrecognized parameter in request: use_replica\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"11.33µs\",\"executionTime\": \"4.7µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

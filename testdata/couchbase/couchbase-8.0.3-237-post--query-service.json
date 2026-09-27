@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UPSERT INTO dbmeta.dbimp.people (KEY k, VALUE v) SELECT \\\"vec\\\" || TOSTRING(a) AS k, {\\\"v\\\": [a, a + 1]} AS v FROM ARRAY_RANGE(0, 16) AS a\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ],
+      "Content-Length": [
+        "254"
+      ]
+    },
+    "body": "{\n\"requestID\": \"11e447ca-6749-4f49-924e-f2a6d3c69be1\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"915.423µs\",\"executionTime\": \"898.053µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 16}\n}\n"
+  }
+}

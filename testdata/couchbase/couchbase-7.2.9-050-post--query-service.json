@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\\\"boom\\\") END FROM ARRAY_RANGE(0, 5) AS a\"}"
+    "body": "{\"statement\":\"SELECT p.name, ARRAY_LENGTH(os) AS n FROM dbmeta.dbimp.people AS p NEST dbmeta.dbimp.orders AS os ON os.person = META(p).id ORDER BY p.name\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:01 GMT"
+      ],
       "Content-Length": [
-        "320"
+        "316"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
-      ],
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"3761a03c-50d9-4872-9e6c-5a37af57abb3\",\n\"signature\": \"json\",\n\"results\": [\n0,\n1,\n2\n],\n\"errors\": [{\"code\":5011,\"msg\":\"Abort: boom. - cause: boom\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"374.692µs\",\"executionTime\": \"362.732µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"e09cd2d6-7a6f-4493-81ce-0c4ce257cfa0\",\n\"signature\": {\"n\":\"number\",\"name\":\"json\"},\n\"results\": [\n{\"n\":1,\"name\":\"Ada\"},\n{\"n\":1,\"name\":\"Bo\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"2.549019ms\",\"executionTime\": \"2.541549ms\",\"resultCount\": 2,\"resultSize\": 39,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
   }
 }

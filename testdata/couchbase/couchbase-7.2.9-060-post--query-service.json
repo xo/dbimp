@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a /* a ? comment */ -- and $1 another\\n\"}"
+    "body": "{\"statement\":\"SELECT RAW COUNT(*) FROM dbmeta.dbimp.people\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "250"
+        "240"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:08 GMT"
+        "Sun, 27 Sep 2026 08:05:01 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"ef0453ed-06aa-4dc6-b072-e76695f16684\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"83.631µs\",\"executionTime\": \"78.941µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"b03ffb05-dda0-4f1c-ad7e-4d95a771e70b\",\n\"signature\": \"number\",\n\"results\": [\n3\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"309.781µs\",\"executionTime\": \"303.121µs\",\"resultCount\": 1,\"resultSize\": 1,\"serviceLoad\": 0}\n}\n"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT p.name, p.age FROM dbmeta.dbimp.people AS p USE KEYS \\\"p1\\\"\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ],
+      "Content-Length": [
+        "283"
+      ]
+    },
+    "body": "{\n\"requestID\": \"c80e6742-24b2-4040-b739-5c49eb88e625\",\n\"signature\": {\"age\":\"json\",\"name\":\"json\"},\n\"results\": [\n{\"age\":36,\"name\":\"Ada\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"249.681µs\",\"executionTime\": \"241.271µs\",\"resultCount\": 1,\"resultSize\": 23,\"serviceLoad\": 0}\n}\n"
+  }
+}

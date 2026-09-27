@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\\\"boom\\\") END FROM ARRAY_RANGE(0, 5) AS a\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "320"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:53 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"6796d847-c3db-4898-8f32-187cd13ba9b6\",\n\"signature\": \"json\",\n\"results\": [\n0,\n1,\n2\n],\n\"errors\": [{\"code\":5011,\"msg\":\"Abort: boom. - cause: boom\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"501.942µs\",\"executionTime\": \"488.382µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

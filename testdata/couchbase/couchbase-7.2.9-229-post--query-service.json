@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"DROP SEQUENCE dbmeta.dbimp.dbimp_seq\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ],
+      "Content-Length": [
+        "303"
+      ]
+    },
+    "body": "{\n\"requestID\": \"670e7f96-92d2-4dd7-abbe-3c08abd7725f\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - line 1, column 6, near 'DROP', at: SEQUENCE\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"34.93µs\",\"executionTime\": \"31.27µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW ds_version()\"}"
+    "body": "{\"statement\":\"DELETE FROM dbmeta.dbimp.orders AS o WHERE o.person IN [\\\"p1\\\", \\\"p2\\\"] RETURNING META(o).id\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "263"
+        "292"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:51 GMT"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"0d23462a-4f47-4b70-b76c-fc71d6d35a45\",\n\"signature\": \"string\",\n\"results\": [\n\"8.0.3-5933-enterprise\"\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"163.561µs\",\"executionTime\": \"149.471µs\",\"resultCount\": 1,\"resultSize\": 23,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"e3d63d9a-8fcc-4dc7-b420-940c6add197d\",\n\"signature\": {\"id\":\"json\"},\n\"results\": [\n{\"id\":\"o-p1\"},\n{\"id\":\"o-p2\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.083314ms\",\"executionTime\": \"1.052714ms\",\"resultCount\": 2,\"resultSize\": 26,\"serviceLoad\": 0,\"mutationCount\": 2}\n}\n"
   }
 }

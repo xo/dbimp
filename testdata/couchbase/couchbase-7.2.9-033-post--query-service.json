@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a\"}"
+    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Length": [
-        "252"
-      ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
+        "Sun, 27 Sep 2026 08:05:01 GMT"
+      ],
+      "Content-Length": [
+        "1033"
       ]
     },
-    "body": "{\n\"requestID\": \"106a7ca0-eb2f-4cda-86d6-16e0f896ef51\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"207.211µs\",\"executionTime\": \"199.371µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"b9e14f5d-ed1e-4e47-adbb-6f5b20b61316\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n{\"user_info\":{\"domain\":\"local\",\"external_groups\":[],\"groups\":[],\"id\":\"dbmeta_user\",\"password_change_date\":\"2026-09-27T06:23:19.000Z\",\"roles\":[{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"update\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"select\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"insert\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"delete\",\"scope_name\":\"*\"},{\"origins\":[{\"type\":\"user\"}],\"role\":\"query_system_catalog\"}],\"uuid\":\"8be4a57d-c41e-4223-aa67-7308fee54b36\"}},\n{\"user_info\":{\"domain\":\"ns_server\",\"id\":\"Administrator\",\"name\":\"Administrator\",\"roles\":[{\"role\":\"admin\"}]}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.450416ms\",\"executionTime\": \"1.439716ms\",\"resultCount\": 2,\"resultSize\": 789,\"serviceLoad\": 0}\n}\n"
   }
 }

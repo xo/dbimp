@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE SEQUENCE dbmeta.dbimp.dbimp_seq\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "305"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"93db24c1-ec1a-4403-b770-6c53de6507e3\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - line 1, column 8, near 'CREATE', at: SEQUENCE\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"64.34µs\",\"executionTime\": \"56.35µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

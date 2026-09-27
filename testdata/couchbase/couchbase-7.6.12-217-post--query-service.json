@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"MERGE INTO dbmeta.dbimp.people AS p USING [{\\\"id\\\": \\\"p1\\\", \\\"age\\\": 40}] AS s ON META(p).id = s.id WHEN MATCHED THEN UPDATE SET p.age = s.age WHEN NOT MATCHED THEN INSERT (KEY s.id, VALUE {\\\"age\\\": s.age}) RETURNING p.age\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ],
+      "Content-Length": [
+        "275"
+      ]
+    },
+    "body": "{\n\"requestID\": \"d489d208-0fb0-4f39-9c44-ae9b2dfe1fa0\",\n\"signature\": {\"age\":\"json\"},\n\"results\": [\n{\"age\":40}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"849.753µs\",\"executionTime\": \"840.033µs\",\"resultCount\": 1,\"resultSize\": 10,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+  }
+}

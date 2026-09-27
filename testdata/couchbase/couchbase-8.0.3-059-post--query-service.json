@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
+    "body": "{\"statement\":\"DELETE FROM dbmeta.dbimp.people USE KEYS [\\\"p1\\\", \\\"p2\\\", \\\"p3\\\"] RETURNING META().id\"}"
   },
   "response": {
-    "status": 400,
+    "status": 200,
     "header": {
       "Content-Length": [
-        "354"
+        "301"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:51 GMT"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"8434ecb8-41ba-4fe2-a9a7-58c2047cd36d\",\n\"errors\": [{\"code\":3000,\"column\":16,\"line\":1,\"msg\":\"syntax error - line 1, column 16, near 'SELECT 1 AS a; ', at: SELECT (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"154.081µs\",\"executionTime\": \"141.741µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"bcb2fc53-2915-4829-872f-64b46f3c55ab\",\n\"signature\": {\"id\":\"json\"},\n\"results\": [\n{\"id\":\"p1\"},\n{\"id\":\"p2\"},\n{\"id\":\"p3\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"591.572µs\",\"executionTime\": \"577.122µs\",\"resultCount\": 3,\"resultSize\": 33,\"serviceLoad\": 0,\"mutationCount\": 3}\n}\n"
   }
 }

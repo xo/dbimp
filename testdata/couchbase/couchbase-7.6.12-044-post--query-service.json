@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT $1 AS a, ? AS b, $2 AS c\",\"args\":[1,\"it's \\\"quoted\\\"\"]}"
+    "body": "{\"statement\":\"INSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\\\"p1\\\", {\\\"name\\\": \\\"again\\\"})\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
-      ],
-      "Content-Length": [
-        "301"
-      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:48 GMT"
+      ],
+      "Content-Length": [
+        "557"
       ]
     },
-    "body": "{\n\"requestID\": \"1edab2c2-0d43-4f78-9cbd-7279693b25e6\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\",\"c\":\"json\"},\n\"results\": [\n{\"a\":1,\"b\":1,\"c\":\"it's \\\"quoted\\\"\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"177.541µs\",\"executionTime\": \"164.221µs\",\"resultCount\": 1,\"resultSize\": 35,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"491082a4-6320-4966-a841-6a77b317a37a\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"code\":12009,\"msg\":\"DML Error, possible causes include concurrent modification. Failed to perform INSERT on key p1 - cause: Duplicate Key: p1\",\"reason\":{\"_level\":\"exception\",\"caller\":\"couchbase:2602\",\"code\":17012,\"key\":\"dml.statement.duplicatekey\",\"message\":\"Duplicate Key: p1\"},\"retry\":false}],\n\"status\": \"errors\",\n\"metrics\": {\"elapsedTime\": \"271.031µs\",\"executionTime\": \"258.421µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"WITH RECURSIVE r AS (SELECT 1 AS n UNION SELECT r.n + 1 AS n FROM r WHERE r.n < 3) SELECT RAW n FROM r\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:04 GMT"
+      ],
+      "Content-Length": [
+        "307"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"b3df78c9-6264-4a40-8acb-adbb59e5d8da\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - line 1, column 16, near 'WITH RECURSIVE', at: r\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"87.16µs\",\"executionTime\": \"80.27µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT t.v, TYPE(t.v) AS type, t.v IS MISSING AS is_missing FROM dbmeta.dbimp.types AS t USE KEYS \\\"tm\\\"\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:20 GMT"
+      ],
+      "Content-Length": [
+        "319"
+      ]
+    },
+    "body": "{\n\"requestID\": \"5b8c5f55-9cfc-493c-a9aa-028040dceed2\",\n\"signature\": {\"v\":\"json\",\"type\":\"string\",\"is_missing\":\"boolean\"},\n\"results\": [\n{\"type\":\"missing\",\"is_missing\":true}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"427.102µs\",\"executionTime\": \"409.972µs\",\"resultCount\": 1,\"resultSize\": 36,\"serviceLoad\": 0}\n}\n"
+  }
+}

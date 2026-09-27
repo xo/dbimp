@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW 1\",\"profile\":\"timings\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1737"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:25 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"74cf9c2a-0b28-471d-8bc3-aee1ed353691\",\n\"signature\": \"number\",\n\"results\": [\n1\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"119.09µs\",\"executionTime\": \"99.04µs\",\"resultCount\": 1,\"resultSize\": 1,\"serviceLoad\": 0},\n\"profile\": {\"phaseTimes\": {\"authorize\":\"830ns\",\"instantiate\":\"4.47µs\",\"parse\":\"63.83µs\",\"plan\":\"10.63µs\",\"project\":\"1.95µs\",\"queued\":\"300ns\",\"run\":\"16.15µs\",\"setup\":\"14.37µs\",\"stream\":\"2.79µs\"},\"phaseOperators\": {\"authorize\":1,\"project\":1,\"stream\":1},\"requestTime\": \"2026-09-27T08:21:25.062Z\",\"servicingHost\": \"127.0.0.1:8091\",\"cpuTime\": \"7.47µs\",\"ioTime\": \"270ns\",\"waitTime\": \"3.64µs\",\"executionTimings\": {\"#operator\":\"Authorize\",\"#planPreparedTime\":\"2026-09-27T08:21:25.062Z\",\"#stats\":{\"#phaseSwitches\":4,\"execTime\":\"560ns\",\"servTime\":\"270ns\"},\"privileges\":{\"List\":[]},\"~child\":{\"#operator\":\"Sequence\",\"#stats\":{\"#phaseSwitches\":2,\"execTime\":\"820ns\"},\"~children\":[{\"#operator\":\"DummyScan\",\"#stats\":{\"#itemsOut\":1,\"#phaseSwitches\":3,\"execTime\":\"1.35µs\",\"kernTime\":\"250ns\"},\"optimizer_estimates\":{\"cardinality\":1,\"cost\":1.0842021724855044e-19,\"fr_cost\":1.0842021724855044e-19,\"size\":1}},{\"#operator\":\"InitialProject\",\"#stats\":{\"#itemsIn\":1,\"#itemsOut\":1,\"#phaseSwitches\":7,\"execTime\":\"1.95µs\",\"kernTime\":\"3.39µs\"},\"discard_original\":true,\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.001,\"fr_cost\":0.001,\"size\":1},\"preserve_order\":true,\"raw\":true,\"result_terms\":[{\"expr\":\"1\"}]},{\"#operator\":\"Stream\",\"#stats\":{\"#itemsIn\":1,\"#itemsOut\":1,\"#phaseSwitches\":2,\"execTime\":\"2.79µs\"},\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.001,\"fr_cost\":0.001,\"size\":1},\"serializable\":true}]},\"~versions\":[\"8.0.3-N1QL\",\"8.0.3-5933-enterprise\"]},\"optimizerEstimates\": {\"cardinality\":1,\"cost\":0.001}}\n}\n"
+  }
+}

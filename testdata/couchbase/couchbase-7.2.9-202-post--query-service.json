@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"INSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\\\"p1\\\", {\\\"name\\\": \\\"Ada\\\", \\\"age\\\": 36}) RETURNING META().id AS id, age\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "297"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"d581b4c7-dded-4bd7-b66f-ea14925795c9\",\n\"signature\": {\"age\":\"json\",\"id\":\"json\"},\n\"results\": [\n{\"age\":36,\"id\":\"p1\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"717.942µs\",\"executionTime\": \"707.992µs\",\"resultCount\": 1,\"resultSize\": 20,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+  }
+}

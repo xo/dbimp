@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT d.x, d.y, d.z FROM dbmeta AS d USE KEYS \\\"dbimp::probe\\\"\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "282"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:53 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"967bd139-2236-4ef0-853d-f41b928e9b46\",\n\"signature\": {\"x\":\"json\",\"y\":\"json\",\"z\":\"json\"},\n\"results\": [\n{\"x\":1,\"y\":null}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"382.832µs\",\"executionTime\": \"370.462µs\",\"resultCount\": 1,\"resultSize\": 16,\"serviceLoad\": 0}\n}\n"
+  }
+}

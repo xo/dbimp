@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
+    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"timeout\":\"50ms\"}"
   },
   "response": {
-    "status": 400,
+    "status": 200,
     "header": {
-      "Content-Length": [
-        "354"
-      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:44 GMT"
+      ],
+      "Content-Length": [
+        "330"
       ]
     },
-    "body": "{\n\"requestID\": \"cce46c76-92a1-4f54-b097-032d6d247887\",\n\"errors\": [{\"code\":3000,\"column\":16,\"line\":1,\"msg\":\"syntax error - line 1, column 16, near 'SELECT 1 AS a; ', at: SELECT (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"170.192µs\",\"executionTime\": \"158.841µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"81a2118a-f8f0-4051-afff-fc84a92e4045\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":1080,\"msg\":\"Timeout 50ms exceeded\",\"retry\":true}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"50.455206ms\",\"executionTime\": \"50.425145ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

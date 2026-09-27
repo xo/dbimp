@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::readonly\\\", {})\",\"readonly\":true}"
+    "body": "{\"statement\":\"SELECT 1 AS a /* a ? comment */ -- and $1 another\\n\"}"
   },
   "response": {
-    "status": 403,
+    "status": 200,
     "header": {
       "Content-Length": [
-        "323"
+        "252"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"52908b54-a396-4202-8520-52b56e209402\",\n\"errors\": [{\"code\":1000,\"msg\":\"The server or request is read-only and cannot accept this write statement.\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"141.091µs\",\"executionTime\": \"134.071µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"8bcade19-6e94-4653-bb1f-1a88baed110f\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"135.761µs\",\"executionTime\": \"125.821µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
   }
 }

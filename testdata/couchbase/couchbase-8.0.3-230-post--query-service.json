@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UPDATE dbmeta.dbimp.people AS p USE KEYS \\\"p3\\\" SET p.name = \\\"Cyd\\\" RETURNING META(p).expiration\",\"preserve_expiry\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ],
+      "Content-Length": [
+        "288"
+      ]
+    },
+    "body": "{\n\"requestID\": \"47494523-7701-497b-b7c6-9577de822abc\",\n\"signature\": {\"expiration\":\"json\"},\n\"results\": [\n{\"expiration\":0}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"335.402µs\",\"executionTime\": \"316.812µs\",\"resultCount\": 1,\"resultSize\": 16,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+  }
+}

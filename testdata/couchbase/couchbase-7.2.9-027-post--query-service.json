@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
+    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"timeout\":\"50ms\"}"
   },
   "response": {
-    "status": 400,
+    "status": 200,
     "header": {
-      "Content-Length": [
-        "332"
-      ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
+        "Sun, 27 Sep 2026 08:04:57 GMT"
+      ],
+      "Content-Length": [
+        "330"
       ]
     },
-    "body": "{\n\"requestID\": \"6471c71c-724f-4151-a0a6-3d6392f5659b\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - line 1, column 16, near 'SELECT 1 AS a;', at: SELECT (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"135.941µs\",\"executionTime\": \"127.891µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"9fca7c0b-ae55-4638-a106-5c7ddcfe1d6a\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":1080,\"msg\":\"Timeout 50ms exceeded\",\"retry\":true}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"50.435725ms\",\"executionTime\": \"50.420105ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

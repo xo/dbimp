@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::readonly\\\", {})\",\"readonly\":true}"
+    "body": "{\"statement\":\"CREATE COLLECTION dbmeta.dbimp.types\"}"
   },
   "response": {
-    "status": 403,
+    "status": 200,
     "header": {
       "Content-Length": [
-        "323"
+        "236"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:17 GMT"
+        "Sun, 27 Sep 2026 08:05:26 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"e07c86dc-00d5-4975-8316-f85f0579b0ba\",\n\"errors\": [{\"code\":1000,\"msg\":\"The server or request is read-only and cannot accept this write statement.\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"228.332µs\",\"executionTime\": \"211.992µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"9b9b8d1f-0752-49b5-a410-deb25f7a8839\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"71.576929ms\",\"executionTime\": \"71.536649ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0}\n}\n"
   }
 }

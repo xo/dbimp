@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"DELETE FROM dbmeta.dbimp.people AS p WHERE META(p).id LIKE \\\"vec%\\\" RETURNING RAW META(p).id\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "392"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:14 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"5295c134-c11c-4600-9bad-a2f44a319a33\",\n\"signature\": \"json\",\n\"results\": [\n\"vec0\",\n\"vec1\",\n\"vec10\",\n\"vec11\",\n\"vec12\",\n\"vec13\",\n\"vec14\",\n\"vec15\",\n\"vec2\",\n\"vec3\",\n\"vec4\",\n\"vec5\",\n\"vec6\",\n\"vec7\",\n\"vec8\",\n\"vec9\"\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.279264ms\",\"executionTime\": \"1.250014ms\",\"resultCount\": 16,\"resultSize\": 102,\"serviceLoad\": 0,\"mutationCount\": 16}\n}\n"
+  }
+}

@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT $1 AS a, ? AS b, $2 AS c\",\"args\":[1,\"it's \\\"quoted\\\"\"]}"
+    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::readonly\\\", {})\",\"readonly\":true}"
   },
   "response": {
-    "status": 200,
+    "status": 403,
     "header": {
       "Content-Length": [
-        "301"
+        "323"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:43 GMT"
+        "Sun, 27 Sep 2026 08:21:05 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"e1788cdc-5391-43a9-93d5-3829aac0673c\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\",\"c\":\"json\"},\n\"results\": [\n{\"a\":1,\"b\":1,\"c\":\"it's \\\"quoted\\\"\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"164.351µs\",\"executionTime\": \"154.211µs\",\"resultCount\": 1,\"resultSize\": 35,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"fefe2148-20b8-4b66-8bf9-77f8343781b6\",\n\"errors\": [{\"code\":1000,\"msg\":\"The server or request is read-only and cannot accept this write statement.\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"242.531µs\",\"executionTime\": \"212.971µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

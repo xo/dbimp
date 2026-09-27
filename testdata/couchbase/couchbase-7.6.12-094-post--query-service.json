@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW 1\",\"profile\":\"timings\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1670"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:51 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"5fb29861-2667-467b-87c6-9c960a89cc58\",\n\"signature\": \"number\",\n\"results\": [\n1\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"179.731µs\",\"executionTime\": \"158.961µs\",\"resultCount\": 1,\"resultSize\": 1,\"serviceLoad\": 0},\n\"profile\": {\"phaseTimes\": {\"authorize\":\"1.48µs\",\"instantiate\":\"8.88µs\",\"parse\":\"93.67µs\",\"plan\":\"25.16µs\",\"project\":\"2.81µs\",\"run\":\"22.7µs\",\"stream\":\"3.93µs\"},\"phaseOperators\": {\"authorize\":1,\"project\":1,\"stream\":1},\"cpuTime\": \"10.49µs\",\"requestTime\": \"2026-09-27T08:05:51.062Z\",\"servicingHost\": \"127.0.0.1:8091\",\"executionTimings\": {\"#operator\":\"Authorize\",\"#planPreparedTime\":\"2026-09-27T08:05:51.062Z\",\"#stats\":{\"#phaseSwitches\":4,\"execTime\":\"990ns\",\"servTime\":\"490ns\"},\"privileges\":{\"List\":[]},\"~child\":{\"#operator\":\"Sequence\",\"#stats\":{\"#phaseSwitches\":2,\"execTime\":\"1.03µs\"},\"~children\":[{\"#operator\":\"DummyScan\",\"#stats\":{\"#itemsOut\":1,\"#phaseSwitches\":3,\"execTime\":\"1.73µs\",\"kernTime\":\"420ns\"},\"optimizer_estimates\":{\"cardinality\":1,\"cost\":1.0842021724855044e-19,\"fr_cost\":1.0842021724855044e-19,\"size\":1}},{\"#operator\":\"InitialProject\",\"#stats\":{\"#itemsIn\":1,\"#itemsOut\":1,\"#phaseSwitches\":7,\"execTime\":\"2.81µs\",\"kernTime\":\"4.79µs\"},\"discard_original\":true,\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.001,\"fr_cost\":0.001,\"size\":1},\"preserve_order\":true,\"raw\":true,\"result_terms\":[{\"expr\":\"1\"}]},{\"#operator\":\"Stream\",\"#stats\":{\"#itemsIn\":1,\"#itemsOut\":1,\"#phaseSwitches\":2,\"execTime\":\"3.93µs\"},\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.001,\"fr_cost\":0.001,\"size\":1},\"serializable\":true}]},\"~versions\":[\"7.6.12-N1QL\",\"7.6.12-8946-enterprise\"]},\"optimizerEstimates\": {\"cardinality\":1,\"cost\":0.001}}\n}\n"
+  }
+}

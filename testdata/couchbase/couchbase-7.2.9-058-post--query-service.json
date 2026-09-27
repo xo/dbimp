@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW ds_version()\"}"
+    "body": "{\"statement\":\"DELETE FROM dbmeta.dbimp.orders AS o WHERE o.person IN [\\\"p1\\\", \\\"p2\\\"] RETURNING META(o).id\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "262"
+        "292"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:08 GMT"
+        "Sun, 27 Sep 2026 08:05:01 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"cf59d525-68fb-4521-b246-bfdb7f0547b1\",\n\"signature\": \"string\",\n\"results\": [\n\"7.2.9-9230-enterprise\"\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"104.841µs\",\"executionTime\": \"94.221µs\",\"resultCount\": 1,\"resultSize\": 23,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"e8fcad08-a853-4a47-9ff8-3a86998690b0\",\n\"signature\": {\"id\":\"json\"},\n\"results\": [\n{\"id\":\"o-p1\"},\n{\"id\":\"o-p2\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.029474ms\",\"executionTime\": \"1.013484ms\",\"resultCount\": 2,\"resultSize\": 26,\"serviceLoad\": 0,\"mutationCount\": 2}\n}\n"
   }
 }

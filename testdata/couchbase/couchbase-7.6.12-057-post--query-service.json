@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
+    "body": "{\"statement\":\"SELECT META(p).id AS id, p.* FROM dbmeta.dbimp.people AS p ORDER BY META(p).id\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
-    "status": 401,
+    "status": 200,
     "header": {
       "Content-Length": [
-        "470"
+        "337"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:26 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"8442f4e5-5625-476d-9a8b-e01e815dd467\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to run queries accessing user information. Add role admin to allow the statement to run.\",\"reason\":{\"missing_role\":\"admin\",\"path\":\"#system:user_info\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"437.173µs\",\"executionTime\": \"421.833µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"cf5065bc-d6e0-4fd4-b34f-1559493c9ce2\",\n\"signature\": {\"id\":\"json\",\"*\":\"*\"},\n\"results\": [\n{\"id\":\"p1\",\"age\":40,\"name\":\"Ada\"},\n{\"id\":\"p2\",\"name\":\"Bo\"},\n{\"id\":\"p3\",\"name\":\"Cyd\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"9.560424ms\",\"executionTime\": \"9.547344ms\",\"resultCount\": 3,\"resultSize\": 80,\"serviceLoad\": 0}\n}\n"
   }
 }

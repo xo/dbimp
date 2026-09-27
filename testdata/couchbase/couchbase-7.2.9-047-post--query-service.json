@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT $1 AS a, $name AS b\"}"
+    "body": "{\"statement\":\"SELECT p.name, p.age FROM dbmeta.dbimp.people AS p USE KEYS \\\"p1\\\"\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:01 GMT"
+      ],
       "Content-Length": [
-        "400"
+        "281"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
-      ],
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"27095978-2777-4f81-967e-5f6fd26ff76d\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n],\n\"errors\": [{\"code\":5010,\"msg\":\"Error evaluating projection - cause: No value for positional parameter $1 (near line 1, column 7).\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"100.471µs\",\"executionTime\": \"93.941µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"d0c170d4-a483-45e6-bea7-4bce8021bc58\",\n\"signature\": {\"age\":\"json\",\"name\":\"json\"},\n\"results\": [\n{\"age\":36,\"name\":\"Ada\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"262.41µs\",\"executionTime\": \"254.28µs\",\"resultCount\": 1,\"resultSize\": 23,\"serviceLoad\": 0}\n}\n"
   }
 }

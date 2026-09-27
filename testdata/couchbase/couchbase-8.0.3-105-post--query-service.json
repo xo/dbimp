@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW 1\",\"scan_consistency\":\"at_plus\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "264"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:18 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"96cb05db-c0d5-4a94-b9cc-05a94622bfba\",\n\"errors\": [{\"code\":1050,\"msg\":\"No scan_vector value\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"23.44µs\",\"executionTime\": \"7.33µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

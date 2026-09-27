@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::probe\\\", {\\\"x\\\": 1, \\\"y\\\": null})\"}"
+    "body": "{\"statement\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
-      "Content-Type": [
-        "application/json; version=7.2.9-N1QL"
-      ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
+        "Sun, 27 Sep 2026 08:05:01 GMT"
       ],
       "Content-Length": [
-        "253"
+        "330"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
       ]
     },
-    "body": "{\n\"requestID\": \"db478bc6-8e78-4112-ab6d-06c8ad0d74ac\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"525.023µs\",\"executionTime\": \"520.263µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"776b222f-79bc-49b2-9a1a-40bf9988e6c4\",\n\"errors\": [{\"code\":3000,\"msg\":\"syntax error - line 1, column 16, near 'SELECT 1 AS a;', at: SELECT (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"134.95µs\",\"executionTime\": \"126.62µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

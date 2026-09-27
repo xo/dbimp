@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT g, n FROM ARRAY_RANGE(0, 4) AS a GROUP BY a % 2 AS g LETTING n = COUNT(*) ORDER BY g\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "298"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"370723ad-4f28-41ef-b917-8e0100c11d98\",\n\"signature\": {\"g\":\"json\",\"n\":\"json\"},\n\"results\": [\n{\"g\":0,\"n\":2},\n{\"g\":1,\"n\":2}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"422.231µs\",\"executionTime\": \"411.671µs\",\"resultCount\": 2,\"resultSize\": 26,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
+  }
+}

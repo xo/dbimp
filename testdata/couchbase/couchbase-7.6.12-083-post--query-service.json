@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"WITH RECURSIVE r AS (SELECT 1 AS n UNION SELECT r.n + 1 AS n FROM r WHERE r.n < 3) SELECT RAW n FROM r\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "244"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:51 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"e7b503cc-fe9b-440e-9b17-950fc03c903f\",\n\"signature\": \"json\",\n\"results\": [\n1,\n2,\n3\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"584.432µs\",\"executionTime\": \"569.782µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0}\n}\n"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE OR REPLACE FUNCTION dbimp_add(a, b) { a + b }\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ],
+      "Content-Length": [
+        "413"
+      ]
+    },
+    "body": "{\n\"requestID\": \"f1616023-099e-4716-b7a7-d4c42ab1e21d\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to run manage global functions. Add role query_manage_global_functions to allow the query to run.\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"542.482µs\",\"executionTime\": \"538.922µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

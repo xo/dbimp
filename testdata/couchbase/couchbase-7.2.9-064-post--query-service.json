@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"DELETE FROM dbmeta USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"CREATE INDEX dbimp_arr ON dbmeta.dbimp.people(DISTINCT ARRAY t FOR t IN tags END) WHERE age > 0\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "253"
+        "238"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:08 GMT"
+        "Sun, 27 Sep 2026 08:05:04 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"4941581d-f5ba-4c23-959c-7240dccb1b4e\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"353.212µs\",\"executionTime\": \"349.112µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"ab5bb26b-a04c-4bdf-9f19-426946ff94d2\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"2.319756642s\",\"executionTime\": \"2.319749092s\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0}\n}\n"
   }
 }

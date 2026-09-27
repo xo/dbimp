@@ -27,6 +27,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -72,6 +73,15 @@ type Request struct {
 	// Principals limits the request to these principals. It is empty for
 	// both.
 	Principals []string `json:"principals,omitzero"`
+	// Phase is "setup" for a request that runs once, as the administrator,
+	// before the requests of both principals, "teardown" for one that runs
+	// once, as the administrator, after them, or "" for a request that each
+	// principal sends.
+	Phase string `json:"phase,omitzero"`
+	// Capture names values of the response to keep, by a path such as
+	// "results.0.txid". A later request of the same principal writes a kept
+	// value into its body as {{name}}.
+	Capture map[string]string `json:"capture,omitzero"`
 }
 
 // Absent is an item of step 6 that does not apply to the product.
@@ -131,18 +141,27 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 		mu   sync.Mutex
 		errs []error
 	)
+	admin, err := url.Parse(principals[dbimptest.Administrator])
+	if err != nil {
+		return fmt.Errorf("parsing the URL of the administrator: %w", err)
+	}
+	if err := runPhase(ctx, client, admin, script, "setup"); err != nil {
+		return err
+	}
 	for _, p := range []string{dbimptest.Administrator, dbimptest.Ordinary} {
 		base, err := url.Parse(principals[p])
 		if err != nil {
 			return fmt.Errorf("parsing the URL of the %s user: %w", p, err)
 		}
+		kept := map[string]string{}
 		for _, r := range script.Requests {
-			if len(r.Principals) > 0 && !slices.Contains(r.Principals, p) {
+			if r.Phase != "" || len(r.Principals) > 0 && !slices.Contains(r.Principals, p) {
 				continue
 			}
+			r.Body = expand(r.Body, kept)
 			if r.Background {
 				wg.Go(func() {
-					if err := send(ctx, client, base, p, r); err != nil {
+					if err := send(ctx, client, base, p, r, nil); err != nil {
 						mu.Lock()
 						errs = append(errs, fmt.Errorf("item %d, %s, as the %s user: %w", r.Item, r.Name, p, err))
 						mu.Unlock()
@@ -150,11 +169,14 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 				})
 				continue
 			}
-			if err := send(ctx, client, base, p, r); err != nil {
+			if err := send(ctx, client, base, p, r, kept); err != nil {
 				return fmt.Errorf("item %d, %s, as the %s user: %w", r.Item, r.Name, p, err)
 			}
 		}
 		wg.Wait()
+	}
+	if err := runPhase(ctx, client, admin, script, "teardown"); err != nil {
+		return err
 	}
 	if err := errors.Join(errs...); err != nil {
 		return err
@@ -166,7 +188,63 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 }
 
 // send sends one request. A request with a timeout is expected to fail.
-func send(ctx context.Context, client *http.Client, base *url.URL, p string, r Request) error {
+// runPhase sends the requests of a phase once, as the administrator.
+func runPhase(ctx context.Context, client *http.Client, admin *url.URL, script Script, phase string) error {
+	for _, r := range script.Requests {
+		if r.Phase != phase {
+			continue
+		}
+		if err := send(ctx, client, admin, dbimptest.Administrator, r, nil); err != nil {
+			return fmt.Errorf("the %s, item %d, %s: %w", phase, r.Item, r.Name, err)
+		}
+	}
+	return nil
+}
+
+// expand writes each kept value into body where {{name}} stands.
+func expand(body jsontext.Value, kept map[string]string) jsontext.Value {
+	if len(body) == 0 || len(kept) == 0 {
+		return body
+	}
+	s := string(body)
+	for name, v := range kept {
+		s = strings.ReplaceAll(s, "{{"+name+"}}", v)
+	}
+	return jsontext.Value(s)
+}
+
+// capture keeps the values of body that the request names.
+func capture(body []byte, paths map[string]string, kept map[string]string) error {
+	var v any
+	if err := json.Unmarshal(body, &v); err != nil {
+		return fmt.Errorf("reading the response to capture: %w", err)
+	}
+	for name, path := range paths {
+		cur := v
+		for part := range strings.SplitSeq(path, ".") {
+			switch c := cur.(type) {
+			case map[string]any:
+				cur = c[part]
+			case []any:
+				i, err := strconv.Atoi(part)
+				if err != nil || i >= len(c) {
+					return fmt.Errorf("capturing %s: no element %s", name, part)
+				}
+				cur = c[i]
+			default:
+				return fmt.Errorf("capturing %s: nothing at %s", name, part)
+			}
+		}
+		s, ok := cur.(string)
+		if !ok {
+			return fmt.Errorf("capturing %s: %s is not a string", name, path)
+		}
+		kept[name] = s
+	}
+	return nil
+}
+
+func send(ctx context.Context, client *http.Client, base *url.URL, p string, r Request, kept map[string]string) error {
 	if r.Wait != "" {
 		d, err := time.ParseDuration(r.Wait)
 		if err != nil {
@@ -221,8 +299,14 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		return err
 	}
 	defer res.Body.Close()
-	if _, err := io.Copy(io.Discard, res.Body); err != nil {
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
 		return err
+	}
+	if len(r.Capture) > 0 && kept != nil {
+		if err := capture(resBody, r.Capture, kept); err != nil {
+			return err
+		}
 	}
 	fmt.Printf("item %d, %s: %s\n", r.Item, r.Name, res.Status)
 	return nil

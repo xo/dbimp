@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"DELETE FROM dbmeta USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"SELECT 1 AS a\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
-      ],
       "Content-Length": [
-        "253"
+        "252"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:01 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"0420afff-83c0-4f23-a1e4-1b67bf93a4a1\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"411.643µs\",\"executionTime\": \"405.553µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"9fa04ccc-00c5-40cd-9a44-833d76b3aaa7\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"409.711µs\",\"executionTime\": \"396.291µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
   }
 }

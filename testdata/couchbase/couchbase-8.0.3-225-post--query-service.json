@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT p.name, o.total FROM dbmeta.dbimp.people AS p JOIN dbmeta.dbimp.orders AS o ON o.person = META(p).id ORDER BY p.name\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "328"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"1ea50067-c8ed-42b3-9fc3-c386269720df\",\n\"signature\": {\"name\":\"json\",\"total\":\"json\"},\n\"results\": [\n{\"name\":\"Ada\",\"total\":10},\n{\"name\":\"Bo\",\"total\":10}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.961137ms\",\"executionTime\": \"1.939197ms\",\"resultCount\": 2,\"resultSize\": 49,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
+  }
+}

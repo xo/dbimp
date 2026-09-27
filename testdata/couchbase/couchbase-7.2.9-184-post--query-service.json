@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT $1 AS a, $name AS b\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "401"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:06 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"9b07b340-0499-4036-8eed-2eadaf8c6b35\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n],\n\"errors\": [{\"code\":5010,\"msg\":\"Error evaluating projection - cause: No value for positional parameter $1 (near line 1, column 7).\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"156.971µs\",\"executionTime\": \"147.461µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

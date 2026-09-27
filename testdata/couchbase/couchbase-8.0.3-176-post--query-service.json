@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT t.v, TYPE(t.v) AS type, BASE64_ENCODE(t.v) AS b64 FROM dbmeta.dbimp.types AS t USE KEYS \\\"tb\\\"\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "346"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:20 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"1f60b07d-45a3-42d6-8d59-c856c6ab9032\",\n\"signature\": {\"v\":\"json\",\"type\":\"string\",\"b64\":\"string\"},\n\"results\": [\n{\"v\":\"<binary (4 b)>\",\"type\":\"string\",\"b64\":\"IjxiaW5hcnkgKDQgYik+Ig==\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"447.292µs\",\"executionTime\": \"429.871µs\",\"resultCount\": 1,\"resultSize\": 71,\"serviceLoad\": 0}\n}\n"
+  }
+}

@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT d.x, d.y, d.z FROM dbmeta AS d USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::probe\\\", {\\\"x\\\": 1, \\\"y\\\": null})\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "282"
+        "253"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:00 GMT"
+        "Sun, 27 Sep 2026 08:04:57 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"11e7ee8c-8ead-45a6-baa2-7e03c3d6bb91\",\n\"signature\": {\"x\":\"json\",\"y\":\"json\",\"z\":\"json\"},\n\"results\": [\n{\"x\":1,\"y\":null}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"211.181µs\",\"executionTime\": \"204.651µs\",\"resultCount\": 1,\"resultSize\": 16,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"81b338fa-f319-46f2-a776-1cbac8caf473\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.045773ms\",\"executionTime\": \"1.037353ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

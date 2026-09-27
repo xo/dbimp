@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT $1 AS a, ? AS b, $2 AS c\",\"args\":[1,\"it's \\\"quoted\\\"\"]}"
+    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::readonly\\\", {})\",\"readonly\":true}"
   },
   "response": {
-    "status": 200,
+    "status": 403,
     "header": {
+      "Content-Length": [
+        "321"
+      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:17 GMT"
-      ],
-      "Content-Length": [
-        "301"
+        "Sun, 27 Sep 2026 08:05:44 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"e65a5ec7-784c-4d4e-8547-3fffa4478c7b\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\",\"c\":\"json\"},\n\"results\": [\n{\"a\":1,\"b\":1,\"c\":\"it's \\\"quoted\\\"\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"163.351µs\",\"executionTime\": \"149.981µs\",\"resultCount\": 1,\"resultSize\": 35,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"c41407e9-3095-4645-adf5-179ba6768ffc\",\n\"errors\": [{\"code\":1000,\"msg\":\"The server or request is read-only and cannot accept this write statement.\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"252.15µs\",\"executionTime\": \"229.41µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

@@ -122,9 +122,11 @@ Ken decided the questions of step 9 in D38 to D42. The driver has
 transactions from its first release (D41), so step 6 also records
 `COMMIT WORK`, a `txid` that expired, and a `txid` sent after the end.
 
-The recordings of step 6 were made before step 5a existed. Do the survey of
-step 5a for Couchbase, record a request for each entry that step 6 did not
-cover, and settle every verdict, before step 11.
+The survey of step 5a is done, on 2026-09-27, in
+`testdata/couchbase/features.json`, and each of its 71 entries is settled
+against 8.0.3 and recorded on the three releases. `COMMIT WORK` works only
+with `durability_level: "none"` on a node alone, so the driver takes the key
+`durability_level` (D43).
 
 [COUCHBASE.md](COUCHBASE.md) does not follow the template of
 [DRIVER.md](DRIVER.md) yet. Give it the headings of the template in step 8,

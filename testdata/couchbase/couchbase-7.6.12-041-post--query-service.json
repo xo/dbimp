@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT * FROM dbmeta USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"INSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\\\"p1\\\", {\\\"name\\\": \\\"Ada\\\", \\\"age\\\": 36}) RETURNING META().id AS id, age\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "268"
+        "297"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"acab162e-dc2b-4df3-ad1b-91be58fa00ce\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n{\"dbmeta\":{\"x\":1,\"y\":null}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"408.252µs\",\"executionTime\": \"396.462µs\",\"resultCount\": 1,\"resultSize\": 27,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"dc37aefa-3373-447d-b5f0-4f2e542e6c57\",\n\"signature\": {\"id\":\"json\",\"age\":\"json\"},\n\"results\": [\n{\"id\":\"p1\",\"age\":36}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"649.552µs\",\"executionTime\": \"637.482µs\",\"resultCount\": 1,\"resultSize\": 20,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

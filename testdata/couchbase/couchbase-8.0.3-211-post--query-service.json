@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ],
+      "Content-Length": [
+        "352"
+      ]
+    },
+    "body": "{\n\"requestID\": \"716524b1-aaf2-49f2-9501-d491d9e13afb\",\n\"errors\": [{\"code\":3000,\"column\":16,\"line\":1,\"msg\":\"syntax error - line 1, column 16, near 'SELECT 1 AS a; ', at: SELECT (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"146.32µs\",\"executionTime\": \"130.07µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a\",\"args\":[1,2],\"$unused\":3}"
+    "body": "{\"statement\":\"INFER dbmeta.dbimp.people\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Content-Length": [
+        "663"
+      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
-      ],
-      "Content-Length": [
-        "251"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"7aa50918-a511-465c-a20a-de737b891502\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"110.571µs\",\"executionTime\": \"97.231µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"4ceed19a-4f0d-4e9e-8436-46daf60bc47e\",\n\"signature\": null,\n\"results\": [\n[{\"#docs\":1,\"$schema\":\"http://json-schema.org/draft-06/schema\",\"Flavor\":\"`name` = \\\"Cy\\\"\",\"properties\":{\"name\":{\"#docs\":1,\"%docs\":100,\"samples\":[\"Cy\"],\"type\":\"string\"}},\"type\":\"object\"},{\"#docs\":2,\"$schema\":\"http://json-schema.org/draft-06/schema\",\"Flavor\":\"\",\"properties\":{\"age\":{\"#docs\":2,\"%docs\":100,\"samples\":[20,36],\"type\":\"number\"},\"name\":{\"#docs\":2,\"%docs\":100,\"samples\":[\"Ada\",\"Bo\"],\"type\":\"string\"}},\"type\":\"object\"}]\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"37.58908ms\",\"executionTime\": \"37.57939ms\",\"resultCount\": 1,\"resultSize\": 426,\"serviceLoad\": 0}\n}\n"
   }
 }

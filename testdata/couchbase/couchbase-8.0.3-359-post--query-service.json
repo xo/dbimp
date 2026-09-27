@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT TYPE(1.5) AS t, TYPE(1) AS i, 0.1 + 0.2 AS sum\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "327"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:27 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"35e3b4dd-957d-4678-813c-a24bd3b564cf\",\n\"signature\": {\"t\":\"string\",\"i\":\"string\",\"sum\":\"number\"},\n\"results\": [\n{\"t\":\"number\",\"i\":\"number\",\"sum\":0.30000000000000004}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"318.761µs\",\"executionTime\": \"302.471µs\",\"resultCount\": 1,\"resultSize\": 53,\"serviceLoad\": 0}\n}\n"
+  }
+}

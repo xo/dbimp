@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"CREATE INDEX dbimp_arr ON dbmeta.dbimp.people(DISTINCT ARRAY t FOR t IN tags END) WHERE age > 0\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ],
+      "Content-Length": [
+        "426"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"e18f2a50-b498-4443-b4b9-a95bd2ea3ea6\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to run index operations. Add role query_manage_index on default:dbmeta.dbimp.people to allow the query to run.\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"871.503µs\",\"executionTime\": \"862.633µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

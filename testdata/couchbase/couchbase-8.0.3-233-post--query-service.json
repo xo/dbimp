@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT META(p).id AS id, p.* FROM dbmeta.dbimp.people AS p ORDER BY META(p).id\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "337"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"4818b352-701a-443f-abc5-f06de5b11484\",\n\"signature\": {\"id\":\"json\",\"*\":\"*\"},\n\"results\": [\n{\"id\":\"p1\",\"age\":40,\"name\":\"Ada\"},\n{\"id\":\"p2\",\"name\":\"Bo\"},\n{\"id\":\"p3\",\"name\":\"Cyd\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"7.401626ms\",\"executionTime\": \"7.386896ms\",\"resultCount\": 3,\"resultSize\": 80,\"serviceLoad\": 0}\n}\n"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW META(p).id FROM dbmeta.dbimp.people AS p WHERE SEARCH(p, \\\"vec1\\\")\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:14 GMT"
+      ],
+      "Content-Length": [
+        "236"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"4745cb6c-1468-44ab-bb7a-dec0a42ab64b\",\n\"signature\": \"json\",\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.822556ms\",\"executionTime\": \"1.784156ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0}\n}\n"
+  }
+}

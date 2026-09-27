@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\\\"t3a\\\", \\\"t3l\\\"]\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "372"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:06 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"5110be6b-e4ab-45d9-9f80-74ea0bdd956f\",\n\"signature\": {\"id\":\"json\",\"type\":\"string\",\"v\":\"json\"},\n\"results\": [\n{\"id\":\"t3a\",\"type\":\"string\",\"v\":\"héllo, 世界\"},\n{\"id\":\"t3l\",\"type\":\"string\",\"v\":\"héllo, 世界\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"566.802µs\",\"executionTime\": \"559.622µs\",\"resultCount\": 2,\"resultSize\": 98,\"serviceLoad\": 0}\n}\n"
+  }
+}

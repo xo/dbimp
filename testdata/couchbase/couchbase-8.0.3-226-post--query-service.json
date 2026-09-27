@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT p.name, ARRAY_LENGTH(os) AS n FROM dbmeta.dbimp.people AS p NEST dbmeta.dbimp.orders AS os ON os.person = META(p).id ORDER BY p.name\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "316"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"ff9cc8a5-fd3c-40e7-92a6-8e011a5a95af\",\n\"signature\": {\"name\":\"json\",\"n\":\"number\"},\n\"results\": [\n{\"name\":\"Ada\",\"n\":1},\n{\"name\":\"Bo\",\"n\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.350305ms\",\"executionTime\": \"1.326695ms\",\"resultCount\": 2,\"resultSize\": 39,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
+  }
+}

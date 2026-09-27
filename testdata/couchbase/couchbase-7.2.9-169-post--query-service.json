@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT NOW_STR() AS s, NOW_MILLIS() AS ms, STR_TO_MILLIS(\\\"2026-09-27T07:06:47.658123+09:00\\\") AS parsed, MILLIS_TO_STR(0) AS epoch\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "401"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:06 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"bce8e6c1-89e8-4ced-89f6-20395f1e6ab5\",\n\"signature\": {\"epoch\":\"string\",\"ms\":\"number\",\"parsed\":\"number\",\"s\":\"string\"},\n\"results\": [\n{\"epoch\":\"1970-01-01T00:00:00Z\",\"ms\":1790496306316,\"parsed\":1790460407658,\"s\":\"2026-09-27T08:05:06.316Z\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"399.941µs\",\"executionTime\": \"390.151µs\",\"resultCount\": 1,\"resultSize\": 105,\"serviceLoad\": 0}\n}\n"
+  }
+}

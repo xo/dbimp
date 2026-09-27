@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW t FROM [{\\\"a\\\": [1, 2]}] AS d UNNEST d.a AS t\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "241"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:18 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"6cdf94d4-dd01-474c-bef5-d1a682677eca\",\n\"signature\": \"json\",\n\"results\": [\n1,\n2\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"458.571µs\",\"executionTime\": \"436.501µs\",\"resultCount\": 2,\"resultSize\": 2,\"serviceLoad\": 0}\n}\n"
+  }
+}

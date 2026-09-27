@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW META(p).expiration FROM dbmeta.dbimp.people AS p USE KEYS \\\"p3\\\"\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "248"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"d55a0988-cc95-4e08-b51e-4fe11ee466e7\",\n\"signature\": \"json\",\n\"results\": [\n1790499957\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"285.261µs\",\"executionTime\": \"274.671µs\",\"resultCount\": 1,\"resultSize\": 10,\"serviceLoad\": 0}\n}\n"
+  }
+}

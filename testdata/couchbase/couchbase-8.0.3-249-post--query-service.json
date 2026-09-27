@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT NEXTVAL FOR dbmeta.dbimp.dbimp_seq AS n\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Content-Length": [
+        "525"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"8024a1ab-25f9-41c9-83c1-e32e993acb47\",\n\"signature\": {\"n\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to use sequences. Add role query_use_sequences on default:dbmeta.dbimp.dbimp_seq to allow the statement to run.\",\"reason\":{\"missing_role\":\"query_use_sequences\",\"path\":\"default:dbmeta.dbimp.dbimp_seq\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"307.471µs\",\"executionTime\": \"298.451µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

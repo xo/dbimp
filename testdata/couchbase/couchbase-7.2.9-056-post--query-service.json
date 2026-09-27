@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a\"}"
+    "body": "{\"statement\":\"MERGE INTO dbmeta.dbimp.people AS p USING [{\\\"id\\\": \\\"p1\\\", \\\"age\\\": 40}] AS s ON META(p).id = s.id WHEN MATCHED THEN UPDATE SET p.age = s.age WHEN NOT MATCHED THEN INSERT (KEY s.id, VALUE {\\\"age\\\": s.age}) RETURNING p.age\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:08 GMT"
-      ],
-      "Content-Length": [
-        "252"
-      ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:01 GMT"
+      ],
+      "Content-Length": [
+        "275"
       ]
     },
-    "body": "{\n\"requestID\": \"46770df7-586e-4897-b5f2-c5c55b3bef00\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.949762ms\",\"executionTime\": \"1.935342ms\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"4d884c33-2ff5-496a-a434-88d531ff7ade\",\n\"signature\": {\"age\":\"json\"},\n\"results\": [\n{\"age\":40}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"699.892µs\",\"executionTime\": \"691.542µs\",\"resultCount\": 1,\"resultSize\": 10,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

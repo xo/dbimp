@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"DROP INDEX dbimp_arr ON dbmeta.dbimp.people\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Content-Length": [
+        "514"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"edbc680b-8548-47e6-a861-cd569165a7b7\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to run index operations. Add role query_manage_index on default:dbmeta.dbimp.people to allow the statement to run.\",\"reason\":{\"missing_role\":\"query_manage_index\",\"path\":\"default:dbmeta.dbimp.people\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"268.381µs\",\"executionTime\": \"257.831µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

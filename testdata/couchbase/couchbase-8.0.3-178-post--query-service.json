@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UPSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\\\"tbs\\\", {\\\"v\\\": \\\"3q2+7w==\\\"}) RETURNING TYPE(v) AS type, v\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:20 GMT"
+      ],
+      "Content-Length": [
+        "311"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"29becaa1-e96c-45e7-8dd5-a120f28ef14f\",\n\"signature\": {\"type\":\"string\",\"v\":\"json\"},\n\"results\": [\n{\"type\":\"string\",\"v\":\"3q2+7w==\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"504.852µs\",\"executionTime\": \"486.202µs\",\"resultCount\": 1,\"resultSize\": 32,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+  }
+}

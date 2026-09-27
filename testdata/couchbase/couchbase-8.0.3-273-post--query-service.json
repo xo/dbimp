@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT CURL(\\\"http://127.0.0.1:8091/pools\\\")\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Content-Length": [
+        "480"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:25 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"2a4d1365-6866-4ddd-8651-37cda28b9f45\",\n\"signature\": {\"$1\":\"object\"},\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to run queries using the CURL() function. Add role query_external_access to allow the statement to run.\",\"reason\":{\"missing_role\":\"query_external_access\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"505.492µs\",\"executionTime\": \"496.362µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

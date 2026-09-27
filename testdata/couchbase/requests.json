@@ -1,113 +1,2702 @@
 {
   "driver": "couchbase",
   "requests": [
-    {"item": 1, "name": "a statement in a JSON body", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 1 AS a"}},
-    {"item": 1, "name": "a statement in the query of a GET", "method": "GET", "path": "/query/service?statement=SELECT%201%20AS%20a"},
-    {"item": 1, "name": "a DML statement", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "UPSERT INTO dbmeta (KEY, VALUE) VALUES (\"dbimp::probe\", {\"x\": 1, \"y\": null})"}},
-
-    {"item": 1, "name": "a write refused by readonly", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "UPSERT INTO dbmeta (KEY, VALUE) VALUES (\"dbimp::readonly\", {})", "readonly": true}},
-    {"item": 1, "name": "a response with no metrics", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 1 AS a", "metrics": false}},
-    {"item": 1, "name": "a collection named through query_context", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT RAW COUNT(*) FROM _default", "query_context": "default:dbmeta._default"}},
-
-    {"item": 2, "name": "the columns follow the projection", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 2 AS b, 1 AS a, 3 AS c"}},
-    {"item": 2, "name": "SELECT RAW is one column", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT RAW a FROM ARRAY_RANGE(0, 3) AS a"}},
-    {"item": 2, "name": "SELECT * over a document", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT * FROM dbmeta USE KEYS \"dbimp::probe\""}},
-
-    {"item": 3, "name": "every kind of value", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 1 AS i, -1.5 AS f, \"s\" AS s, true AS b, null AS n, MISSING AS m, [1, 2] AS a, {\"x\": 1} AS o, 9007199254740993 AS big, 9223372036854775807 AS maxint, 123456789012345678901234567890 AS huge, 0.1 AS tenth, \"\" AS e, \"2026-09-27T07:06:47.658Z\" AS t, BASE64_ENCODE(\"x\") AS bin, \"663ca2de-2148-49f5-8763-80f1dc4fa5fe\" AS u"}},
-    {"item": 3, "name": "a missing field and a null field of a document", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT d.x, d.y, d.z FROM dbmeta AS d USE KEYS \"dbimp::probe\""}},
-
-    {"item": 4, "name": "positional parameters as $1 and ?", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT $1 AS a, ? AS b, $2 AS c", "args": [1, "it's \"quoted\""]}},
-    {"item": 4, "name": "a named parameter", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT $name AS a, $obj AS b", "$name": "x", "$obj": {"k": [1, null]}}},
-    {"item": 4, "name": "a parameter that no placeholder names", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 1 AS a", "args": [1, 2], "$unused": 3}},
-    {"item": 4, "name": "a placeholder with no argument", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT $1 AS a, $name AS b"}},
-
-    {"item": 5, "name": "a result of 20000 rows", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT RAW a FROM ARRAY_RANGE(0, 20000) AS a", "pretty": false}},
-
-    {"item": 6, "name": "a syntax error before any rows", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELEKT 1"}},
-    {"item": 6, "name": "an error after some rows", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\"boom\") END FROM ARRAY_RANGE(0, 5) AS a"}},
-
-    {"item": 7, "name": "a timeout that the server enforces", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b", "timeout": "50ms"}},
-    {"item": 7, "name": "a long query that the client leaves after 2 seconds", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b", "client_context_id": "dbimp-disconnect"},
-     "timeout": "2s"},
-    {"item": 7, "name": "the active requests 1 second after the client left", "method": "GET", "path": "/admin/active_requests",
-     "wait": "1s"},
-    {"item": 7, "name": "a long query that a statement cancels", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b", "client_context_id": "dbimp-cancel"},
-     "background": true},
-    {"item": 7, "name": "the statement that cancels it", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "DELETE FROM system:active_requests WHERE clientContextID = \"dbimp-cancel\""},
-     "wait": "1s"},
-    {"item": 7, "name": "a cancel of a request that does not exist", "method": "DELETE", "path": "/admin/active_requests/00000000-0000-0000-0000-000000000000"},
-
-    {"item": 8, "name": "a wrong password", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 1 AS a"}, "auth": "wrong"},
-    {"item": 8, "name": "a statement that needs a role", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT * FROM system:user_info"}},
-
-    {"item": 9, "name": "the version that usql reads", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT RAW ds_version()"}},
-
-    {"item": 10, "name": "two statements in one request", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 1 AS a; SELECT 2 AS b"}},
-    {"item": 10, "name": "a statement with comments", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "SELECT 1 AS a /* a ? comment */ -- and $1 another\n"}},
-
-    {"item": 11, "name": "BEGIN WORK", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "BEGIN WORK"}},
-
-    {"item": 12, "name": "a request that asks for gzip", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"], "Accept-Encoding": ["gzip"]},
-     "body": {"statement": "SELECT RAW a FROM ARRAY_RANGE(0, 1000) AS a"}},
-    {"item": 12, "name": "the path without its service", "method": "GET", "path": "/query"},
-
-    {"item": 3, "name": "remove the probe document", "method": "POST", "path": "/query/service",
-     "header": {"Content-Type": ["application/json"]},
-     "body": {"statement": "DELETE FROM dbmeta USE KEYS \"dbimp::probe\""}}
+    {
+      "item": 1,
+      "name": "a statement in a JSON body",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1 AS a"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement in the query of a GET",
+      "method": "GET",
+      "path": "/query/service?statement=SELECT%201%20AS%20a"
+    },
+    {
+      "item": 1,
+      "name": "a DML statement",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta (KEY, VALUE) VALUES (\"dbimp::probe\", {\"x\": 1, \"y\": null})"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a write refused by readonly",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta (KEY, VALUE) VALUES (\"dbimp::readonly\", {})",
+        "readonly": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "a response with no metrics",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1 AS a",
+        "metrics": false
+      }
+    },
+    {
+      "item": 1,
+      "name": "a collection named through query_context",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM _default",
+        "query_context": "default:dbmeta._default"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the columns follow the projection",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 2 AS b, 1 AS a, 3 AS c"
+      }
+    },
+    {
+      "item": 2,
+      "name": "SELECT RAW is one column",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW a FROM ARRAY_RANGE(0, 3) AS a"
+      }
+    },
+    {
+      "item": 2,
+      "name": "SELECT * over a document",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT * FROM dbmeta USE KEYS \"dbimp::probe\""
+      }
+    },
+    {
+      "item": 3,
+      "name": "every kind of value",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1 AS i, -1.5 AS f, \"s\" AS s, true AS b, null AS n, MISSING AS m, [1, 2] AS a, {\"x\": 1} AS o, 9007199254740993 AS big, 9223372036854775807 AS maxint, 123456789012345678901234567890 AS huge, 0.1 AS tenth, \"\" AS e, \"2026-09-27T07:06:47.658Z\" AS t, BASE64_ENCODE(\"x\") AS bin, \"663ca2de-2148-49f5-8763-80f1dc4fa5fe\" AS u"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a missing field and a null field of a document",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT d.x, d.y, d.z FROM dbmeta AS d USE KEYS \"dbimp::probe\""
+      }
+    },
+    {
+      "item": 4,
+      "name": "positional parameters as $1 and ?",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT $1 AS a, ? AS b, $2 AS c",
+        "args": [
+          1,
+          "it's \"quoted\""
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a named parameter",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT $name AS a, $obj AS b",
+        "$name": "x",
+        "$obj": {
+          "k": [
+            1,
+            null
+          ]
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter that no placeholder names",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1 AS a",
+        "args": [
+          1,
+          2
+        ],
+        "$unused": 3
+      }
+    },
+    {
+      "item": 4,
+      "name": "a placeholder with no argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT $1 AS a, $name AS b"
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 20000 rows",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW a FROM ARRAY_RANGE(0, 20000) AS a",
+        "pretty": false
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error before any rows",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELEKT 1"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\"boom\") END FROM ARRAY_RANGE(0, 5) AS a"
+      }
+    },
+    {
+      "item": 7,
+      "name": "a timeout that the server enforces",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b",
+        "timeout": "50ms"
+      }
+    },
+    {
+      "item": 7,
+      "name": "a long query that the client leaves after 2 seconds",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b",
+        "client_context_id": "dbimp-disconnect"
+      },
+      "timeout": "2s"
+    },
+    {
+      "item": 7,
+      "name": "the active requests 1 second after the client left",
+      "method": "GET",
+      "path": "/admin/active_requests",
+      "wait": "1s"
+    },
+    {
+      "item": 7,
+      "name": "a long query that a statement cancels",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b",
+        "client_context_id": "dbimp-cancel"
+      },
+      "background": true
+    },
+    {
+      "item": 7,
+      "name": "the statement that cancels it",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM system:active_requests WHERE clientContextID = \"dbimp-cancel\""
+      },
+      "wait": "1s"
+    },
+    {
+      "item": 7,
+      "name": "a cancel of a request that does not exist",
+      "method": "DELETE",
+      "path": "/admin/active_requests/00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1 AS a"
+      },
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a statement that needs a role",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT * FROM system:user_info"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the version that usql reads",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW ds_version()"
+      }
+    },
+    {
+      "item": 10,
+      "name": "two statements in one request",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1 AS a; SELECT 2 AS b"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement with comments",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1 AS a /* a ? comment */ -- and $1 another\n"
+      }
+    },
+    {
+      "item": 11,
+      "name": "BEGIN WORK",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "BEGIN WORK"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request that asks for gzip",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW a FROM ARRAY_RANGE(0, 1000) AS a"
+      }
+    },
+    {
+      "item": 12,
+      "name": "the path without its service",
+      "method": "GET",
+      "path": "/query"
+    },
+    {
+      "item": 3,
+      "name": "remove the probe document",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta USE KEYS \"dbimp::probe\""
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: create the scope",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE SCOPE dbmeta.dbimp"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "survey: create the collection people",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE COLLECTION dbmeta.dbimp.people"
+      },
+      "phase": "setup",
+      "wait": "2s"
+    },
+    {
+      "item": 1,
+      "name": "survey: create the collection orders",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE COLLECTION dbmeta.dbimp.orders"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "survey: create the collection types",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE COLLECTION dbmeta.dbimp.types"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "survey: create a primary index on people",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE PRIMARY INDEX ON dbmeta.dbimp.people"
+      },
+      "phase": "setup",
+      "wait": "3s"
+    },
+    {
+      "item": 1,
+      "name": "survey: create a primary index on orders",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE PRIMARY INDEX ON dbmeta.dbimp.orders"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "survey: create a primary index on types",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE PRIMARY INDEX ON dbmeta.dbimp.types"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "survey: create a secondary index",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE INDEX dbimp_orders_person ON dbmeta.dbimp.orders(person)"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "survey: insert with RETURNING",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"p1\", {\"name\": \"Ada\", \"age\": 36}) RETURNING META().id AS id, age"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: upsert",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"p2\", {\"name\": \"Bo\", \"age\": 20})"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: upsert with an expiry",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE, OPTIONS) VALUES (\"p3\", {\"name\": \"Cy\"}, {\"expiration\": 3600})"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: insert of a key that exists",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"p1\", {\"name\": \"again\"})"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: insert from a select",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.orders (KEY \"o-\" || META(p).id, VALUE {\"person\": META(p).id, \"total\": 10}) SELECT p FROM dbmeta.dbimp.people AS p WHERE META(p).id IN [\"p1\", \"p2\"]",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: INFER",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INFER dbmeta.dbimp.people"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select by key",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT p.name, p.age FROM dbmeta.dbimp.people AS p USE KEYS \"p1\""
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select with a filter and an order",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(p).id AS id, p.name FROM dbmeta.dbimp.people AS p WHERE p.age > 10 ORDER BY p.name",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select with a join",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT p.name, o.total FROM dbmeta.dbimp.people AS p JOIN dbmeta.dbimp.orders AS o ON o.person = META(p).id ORDER BY p.name",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select with NEST",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT p.name, ARRAY_LENGTH(os) AS n FROM dbmeta.dbimp.people AS p NEST dbmeta.dbimp.orders AS os ON os.person = META(p).id ORDER BY p.name",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select the metadata of a document",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(p).id, META(p).cas, META(p).expiration FROM dbmeta.dbimp.people AS p USE KEYS \"p3\""
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: update with SET and RETURNING",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.people AS p USE KEYS \"p1\" SET p.age = 37 RETURNING p.age"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: update with UNSET",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.people AS p USE KEYS \"p2\" UNSET p.age RETURNING p"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: update that keeps the expiry",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.people AS p USE KEYS \"p3\" SET p.name = \"Cyd\" RETURNING META(p).expiration",
+        "preserve_expiry": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select the expiry after that update",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW META(p).expiration FROM dbmeta.dbimp.people AS p USE KEYS \"p3\""
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: merge",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "MERGE INTO dbmeta.dbimp.people AS p USING [{\"id\": \"p1\", \"age\": 40}] AS s ON META(p).id = s.id WHEN MATCHED THEN UPDATE SET p.age = s.age WHEN NOT MATCHED THEN INSERT (KEY s.id, VALUE {\"age\": s.age}) RETURNING p.age",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select after the writes",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(p).id AS id, p.* FROM dbmeta.dbimp.people AS p ORDER BY META(p).id",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: delete with a filter",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.orders AS o WHERE o.person IN [\"p1\", \"p2\"] RETURNING META(o).id",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: delete by key",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.people USE KEYS [\"p1\", \"p2\", \"p3\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: select after the deletes",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.people",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: insert documents with vectors",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY k, VALUE v) SELECT \"vec\" || TOSTRING(a) AS k, {\"v\": [a, a + 1]} AS v FROM ARRAY_RANGE(0, 16) AS a"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: create a vector index",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE VECTOR INDEX dbimp_vec ON dbmeta.dbimp.people(v VECTOR) WITH {\"dimension\": 2, \"similarity\": \"L2\", \"description\": \"IVF1,SQ8\"}"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a query that orders by vector distance",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW META(p).id FROM dbmeta.dbimp.people AS p WHERE p.v IS VALUED ORDER BY APPROX_VECTOR_DISTANCE(p.v, [1, 2], \"L2\") LIMIT 2",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: drop the vector index",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DROP INDEX dbimp_vec ON dbmeta.dbimp.people"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: SEARCH",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW META(p).id FROM dbmeta.dbimp.people AS p WHERE SEARCH(p, \"vec1\")",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: delete the documents with vectors",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.people AS p WHERE META(p).id LIKE \"vec%\" RETURNING RAW META(p).id",
+        "scan_consistency": "request_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a table with a foreign key",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE TABLE dbimp_t (id INT PRIMARY KEY, other INT REFERENCES dbimp_o(id))"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a unique index",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE UNIQUE INDEX dbimp_u ON dbmeta.dbimp.people(name)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a view",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE VIEW dbimp_v AS SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a partial and array index",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE INDEX dbimp_arr ON dbmeta.dbimp.people(DISTINCT ARRAY t FOR t IN tags END) WHERE age > 0"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: drop an index",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DROP INDEX dbimp_arr ON dbmeta.dbimp.people"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: create a sequence",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE SEQUENCE dbmeta.dbimp.dbimp_seq"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: the next value of a sequence",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT NEXTVAL FOR dbmeta.dbimp.dbimp_seq AS n"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: drop a sequence",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DROP SEQUENCE dbmeta.dbimp.dbimp_seq"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: create an inline function",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE OR REPLACE FUNCTION dbimp_add(a, b) { a + b }"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: call an inline function",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW dbimp_add(1, 2)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: drop an inline function",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DROP FUNCTION dbimp_add"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: create a JavaScript function",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "CREATE OR REPLACE FUNCTION dbimp_js(a) LANGUAGE JAVASCRIPT AS \"function dbimp_js(a) { return a * 2; }\""
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: call a JavaScript function",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW dbimp_js(21)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: drop a JavaScript function",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DROP FUNCTION dbimp_js"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: UNNEST",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW t FROM [{\"a\": [1, 2]}] AS d UNNEST d.a AS t"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: LET",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW x FROM ARRAY_RANGE(0, 3) AS a LET x = a * 2"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: LETTING",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT g, n FROM ARRAY_RANGE(0, 4) AS a GROUP BY a % 2 AS g LETTING n = COUNT(*) ORDER BY g"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: array comprehensions",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT ARRAY v * 2 FOR v IN [1, 2] END AS a, ANY v IN [1, 2] SATISFIES v > 1 END AS b, EVERY v IN [1, 2] SATISFIES v > 0 END AS c"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: SELECT ELEMENT",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT ELEMENT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: SELECT VALUE",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT VALUE 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a window function",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT a, ROW_NUMBER() OVER (ORDER BY a DESC) AS rn FROM ARRAY_RANGE(0, 3) AS a ORDER BY a"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: WITH",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "WITH x AS (SELECT RAW 1) SELECT x"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: WITH RECURSIVE",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "WITH RECURSIVE r AS (SELECT 1 AS n UNION SELECT r.n + 1 AS n FROM r WHERE r.n < 3) SELECT RAW n FROM r"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: LATERAL",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT a, b FROM [1, 2] AS a, LATERAL (SELECT RAW a * 10) AS b"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: PIVOT",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT * FROM [{\"k\": \"a\", \"v\": 1}] AS t PIVOT (SUM(v) FOR k IN (\"a\"))"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: EXPLAIN",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "EXPLAIN SELECT RAW 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: ADVISE",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "ADVISE SELECT * FROM dbmeta WHERE x = 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: PREPARE",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "PREPARE dbimp_prep FROM SELECT RAW $1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: EXECUTE",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "EXECUTE dbimp_prep",
+        "args": [
+          7
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a prepared statement named in the request",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "prepared": "dbimp_prep",
+        "args": [
+          8
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: CURL",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT CURL(\"http://127.0.0.1:8091/pools\")"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: VECTOR_DISTANCE",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT VECTOR_DISTANCE(d.v, [1, 2], \"L2\") AS dist FROM [{\"v\": [1, 3]}] AS d"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: _TIMESERIES",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT t.* FROM [{\"ts_start\": 0, \"ts_end\": 10, \"ts_interval\": 5, \"ts_data\": [1, 2]}] AS d UNNEST _TIMESERIES(d, {\"ts_ranges\": [0, 10]}) AS t"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: the option profile",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "profile": "timings"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: the option max_parallelism",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "max_parallelism": "2"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: the options of a scan",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "scan_cap": "16",
+        "scan_wait": "1s",
+        "pipeline_batch": "8",
+        "pipeline_cap": "16"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: the option use_replica",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "use_replica": "on"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: the option flex_index",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "use_fts": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: the option at_plus without a vector",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "scan_consistency": "at_plus"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a statement run as its own transaction, with the default durability",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"p9\", {\"x\": 1})",
+        "tximplicit": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: a statement run as its own transaction, with no durability",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"p9\", {\"x\": 1})",
+        "tximplicit": true,
+        "durability_level": "none"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: remove the document of that transaction",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.people USE KEYS \"p9\""
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: begin a transaction with the default durability",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "BEGIN WORK"
+      },
+      "capture": {
+        "txid0": "results.0.txid"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a write in that transaction",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"tx0\", {\"v\": 0})",
+        "txid": "{{txid0}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: commit that transaction",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "COMMIT WORK",
+        "txid": "{{txid0}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: begin a transaction",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "BEGIN WORK",
+        "durability_level": "none"
+      },
+      "capture": {
+        "txid": "results.0.txid"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a write in the transaction",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"tx1\", {\"v\": 1})",
+        "txid": "{{txid}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a read outside the transaction",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW p.v FROM dbmeta.dbimp.people AS p USE KEYS \"tx1\""
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a savepoint",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SAVEPOINT s1",
+        "txid": "{{txid}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a write after the savepoint",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"tx2\", {\"v\": 2})",
+        "txid": "{{txid}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: roll back to the savepoint",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "ROLLBACK WORK TO SAVEPOINT s1",
+        "txid": "{{txid}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: commit",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "COMMIT WORK",
+        "txid": "{{txid}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a read after the commit",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(p).id AS id, p.v FROM dbmeta.dbimp.people AS p USE KEYS [\"tx1\", \"tx2\"]"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a statement with the ended txid",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "txid": "{{txid}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: begin a transaction with a timeout of 1 second",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "BEGIN WORK",
+        "txtimeout": "1s",
+        "durability_level": "none"
+      },
+      "capture": {
+        "txid2": "results.0.txid"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a statement after that timeout",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW 1",
+        "txid": "{{txid2}}"
+      },
+      "wait": "2s"
+    },
+    {
+      "item": 11,
+      "name": "survey: begin and roll back",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "BEGIN WORK",
+        "durability_level": "none"
+      },
+      "capture": {
+        "txid3": "results.0.txid"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a write before the rollback",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\"tx3\", {\"v\": 3})",
+        "txid": "{{txid3}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: roll back",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "ROLLBACK WORK",
+        "txid": "{{txid3}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: a read after the rollback",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.people AS p USE KEYS \"tx3\""
+      }
+    },
+    {
+      "item": 11,
+      "name": "survey: remove the committed documents",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.people USE KEYS [\"tx0\", \"tx1\", \"tx2\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a boolean as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t0a\", {\"v\": $v})",
+        "$v": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a boolean as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t0l\", {\"v\": true})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the boolean",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\"t0a\", \"t0l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: update the boolean",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.types AS t USE KEYS [\"t0a\", \"t0l\"] SET t.v = $v RETURNING META(t).id AS id, t.v",
+        "$v": false
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the boolean",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"t0a\", \"t0l\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the deleted boolean",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.types USE KEYS [\"t0a\", \"t0l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a number integer as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t1a\", {\"v\": $v})",
+        "$v": 9007199254740993
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a number integer as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t1l\", {\"v\": 9007199254740993})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the number integer",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\"t1a\", \"t1l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: update the number integer",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.types AS t USE KEYS [\"t1a\", \"t1l\"] SET t.v = $v RETURNING META(t).id AS id, t.v",
+        "$v": -9223372036854775808
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the number integer",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"t1a\", \"t1l\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the deleted number integer",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.types USE KEYS [\"t1a\", \"t1l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a number float as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t2a\", {\"v\": $v})",
+        "$v": -1.5e+300
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a number float as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t2l\", {\"v\": -1.5e300})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the number float",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\"t2a\", \"t2l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: update the number float",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.types AS t USE KEYS [\"t2a\", \"t2l\"] SET t.v = $v RETURNING META(t).id AS id, t.v",
+        "$v": 0.1
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the number float",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"t2a\", \"t2l\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the deleted number float",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.types USE KEYS [\"t2a\", \"t2l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a string as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t3a\", {\"v\": $v})",
+        "$v": "héllo, 世界"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a string as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t3l\", {\"v\": \"héllo, 世界\"})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the string",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\"t3a\", \"t3l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: update the string",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.types AS t USE KEYS [\"t3a\", \"t3l\"] SET t.v = $v RETURNING META(t).id AS id, t.v",
+        "$v": ""
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the string",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"t3a\", \"t3l\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the deleted string",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.types USE KEYS [\"t3a\", \"t3l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a array as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t4a\", {\"v\": $v})",
+        "$v": [
+          1,
+          "a",
+          null
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a array as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t4l\", {\"v\": [1, \"a\", null]})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the array",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\"t4a\", \"t4l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: update the array",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.types AS t USE KEYS [\"t4a\", \"t4l\"] SET t.v = $v RETURNING META(t).id AS id, t.v",
+        "$v": []
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the array",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"t4a\", \"t4l\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the deleted array",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.types USE KEYS [\"t4a\", \"t4l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a object as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t5a\", {\"v\": $v})",
+        "$v": {
+          "k": {
+            "n": 1
+          }
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a object as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t5l\", {\"v\": {\"k\": {\"n\": 1}}})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the object",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\"t5a\", \"t5l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: update the object",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.types AS t USE KEYS [\"t5a\", \"t5l\"] SET t.v = $v RETURNING META(t).id AS id, t.v",
+        "$v": {}
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the object",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"t5a\", \"t5l\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the deleted object",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.types USE KEYS [\"t5a\", \"t5l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a null as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t6a\", {\"v\": $v})",
+        "$v": null
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a null as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"t6l\", {\"v\": null})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the null",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\"t6a\", \"t6l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: update the null",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPDATE dbmeta.dbimp.types AS t USE KEYS [\"t6a\", \"t6l\"] SET t.v = $v RETURNING META(t).id AS id, t.v",
+        "$v": null
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the null",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"t6a\", \"t6l\"] RETURNING META().id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the deleted null",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT RAW COUNT(*) FROM dbmeta.dbimp.types USE KEYS [\"t6a\", \"t6l\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: insert a missing field",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "INSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"tm\", {\"w\": 1})"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: select the missing field",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT t.v, TYPE(t.v) AS type, t.v IS MISSING AS is_missing FROM dbmeta.dbimp.types AS t USE KEYS \"tm\""
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: delete the missing field",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS \"tm\""
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: the type of a binary value",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT TYPE(BASE64_DECODE(\"eA==\")) AS type, BASE64_DECODE(\"eA==\") AS v"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: a binary value encoded again",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT BASE64_ENCODE(BASE64_DECODE(\"3q2+7w==\")) AS b64, ENCODE_JSON(BASE64_DECODE(\"3q2+7w==\")) AS ej"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: store a binary value in a field",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"tb\", {\"v\": BASE64_DECODE(\"3q2+7w==\")}) RETURNING TYPE(v) AS type"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: read back the stored binary value",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT t.v, TYPE(t.v) AS type, BASE64_ENCODE(t.v) AS b64 FROM dbmeta.dbimp.types AS t USE KEYS \"tb\""
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: remove the stored binary value",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS \"tb\""
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: store bytes as a base64 string, as a literal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"tbs\", {\"v\": \"3q2+7w==\"}) RETURNING TYPE(v) AS type, v"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: store bytes as a base64 string, as an argument",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"tbsa\", {\"v\": $1}) RETURNING TYPE(v) AS type, v",
+        "args": [
+          "3q2+7w=="
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: read back the base64 strings",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT META(t).id AS id, t.v, TYPE(t.v) AS type, BASE64_DECODE(t.v) = BASE64_DECODE(\"3q2+7w==\") AS same FROM dbmeta.dbimp.types AS t USE KEYS [\"tbs\", \"tbsa\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: remove the base64 strings",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DELETE FROM dbmeta.dbimp.types USE KEYS [\"tbs\", \"tbsa\"]"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: store a whole binary document",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "UPSERT INTO dbmeta.dbimp.types (KEY, VALUE) VALUES (\"tbd\", BASE64_DECODE(\"3q2+7w==\"))"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: the type of a decimal",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT TYPE(1.5) AS t, TYPE(1) AS i, 0.1 + 0.2 AS sum"
+      }
+    },
+    {
+      "item": 3,
+      "name": "survey: a time",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT NOW_STR() AS s, NOW_MILLIS() AS ms, STR_TO_MILLIS(\"2026-09-27T07:06:47.658123+09:00\") AS parsed, MILLIS_TO_STR(0) AS epoch"
+      }
+    },
+    {
+      "item": 1,
+      "name": "survey: drop the scope",
+      "method": "POST",
+      "path": "/query/service",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "DROP SCOPE dbmeta.dbimp"
+      },
+      "phase": "teardown"
+    }
   ]
 }

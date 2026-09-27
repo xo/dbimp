@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT VECTOR_DISTANCE(d.v, [1, 2], \\\"L2\\\") AS dist FROM [{\\\"v\\\": [1, 3]}] AS d\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "259"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:25 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"e7e89443-f4dd-4173-bd72-009d63bbcfcb\",\n\"signature\": {\"dist\":\"number\"},\n\"results\": [\n{\"dist\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"410.302µs\",\"executionTime\": \"385.962µs\",\"resultCount\": 1,\"resultSize\": 10,\"serviceLoad\": 0}\n}\n"
+  }
+}

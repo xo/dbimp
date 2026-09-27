@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT META(t).id AS id, t.v, TYPE(t.v) AS type FROM dbmeta.dbimp.types AS t USE KEYS [\\\"t4a\\\", \\\"t4l\\\"]\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:53 GMT"
+      ],
+      "Content-Length": [
+        "362"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"e993c370-a085-4641-ace9-a7f2d8af5514\",\n\"signature\": {\"id\":\"json\",\"v\":\"json\",\"type\":\"string\"},\n\"results\": [\n{\"id\":\"t4a\",\"v\":[1,\"a\",null],\"type\":\"array\"},\n{\"id\":\"t4l\",\"v\":[1,\"a\",null],\"type\":\"array\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"514.632µs\",\"executionTime\": \"503.572µs\",\"resultCount\": 2,\"resultSize\": 88,\"serviceLoad\": 0}\n}\n"
+  }
+}

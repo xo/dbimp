@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"UPSERT INTO dbmeta (KEY, VALUE) VALUES (\\\"dbimp::probe\\\", {\\\"x\\\": 1, \\\"y\\\": null})\"}"
+    "body": "{\"statement\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
+      "Content-Length": [
+        "354"
+      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
-      ],
-      "Content-Length": [
-        "253"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"4ae4ea30-e8fe-4d68-9f3f-d56992451a46\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"659.614µs\",\"executionTime\": \"648.854µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"afab9d5c-7f95-48f1-8db3-67f2a4cb6d06\",\n\"errors\": [{\"code\":3000,\"column\":16,\"line\":1,\"msg\":\"syntax error - line 1, column 16, near 'SELECT 1 AS a; ', at: SELECT (reserved word)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"185.021µs\",\"executionTime\": \"164.451µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

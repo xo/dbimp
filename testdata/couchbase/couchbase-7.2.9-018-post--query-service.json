@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\\\"boom\\\") END FROM ARRAY_RANGE(0, 5) AS a\"}"
+    "body": "{\"statement\":\"SELECT 1 AS i, -1.5 AS f, \\\"s\\\" AS s, true AS b, null AS n, MISSING AS m, [1, 2] AS a, {\\\"x\\\": 1} AS o, 9007199254740993 AS big, 9223372036854775807 AS maxint, 123456789012345678901234567890 AS huge, 0.1 AS tenth, \\\"\\\" AS e, \\\"2026-09-27T07:06:47.658Z\\\" AS t, BASE64_ENCODE(\\\"x\\\") AS bin, \\\"663ca2de-2148-49f5-8763-80f1dc4fa5fe\\\" AS u\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "320"
+        "717"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:00 GMT"
+        "Sun, 27 Sep 2026 08:04:57 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"4c03b978-1063-4d10-9bca-4b733985d368\",\n\"signature\": \"json\",\n\"results\": [\n0,\n1,\n2\n],\n\"errors\": [{\"code\":5011,\"msg\":\"Abort: boom. - cause: boom\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"352.712µs\",\"executionTime\": \"337.682µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"8d45c822-614d-437c-a17d-c210248c4d22\",\n\"signature\": {\"a\":\"array\",\"b\":\"boolean\",\"big\":\"number\",\"bin\":\"string\",\"e\":\"string\",\"f\":\"number\",\"huge\":\"number\",\"i\":\"number\",\"m\":\"missing\",\"maxint\":\"number\",\"n\":\"null\",\"o\":\"object\",\"s\":\"string\",\"t\":\"string\",\"tenth\":\"number\",\"u\":\"string\"},\n\"results\": [\n{\"a\":[1,2],\"b\":true,\"big\":9007199254740993,\"bin\":\"Ingi\",\"e\":\"\",\"f\":-1.5,\"huge\":123456789012345680000000000000,\"i\":1,\"maxint\":9223372036854775807,\"n\":null,\"o\":{\"x\":1},\"s\":\"s\",\"t\":\"2026-09-27T07:06:47.658Z\",\"tenth\":0.1,\"u\":\"663ca2de-2148-49f5-8763-80f1dc4fa5fe\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"801.712µs\",\"executionTime\": \"789.692µs\",\"resultCount\": 1,\"resultSize\": 260,\"serviceLoad\": 0}\n}\n"
   }
 }

@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"DELETE FROM system:active_requests WHERE clientContextID = \\\"dbimp-cancel\\\"\"}"
+    "body": "{\"statement\":\"UPDATE dbmeta.dbimp.people AS p USE KEYS \\\"p2\\\" UNSET p.age RETURNING p\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "253"
+        "282"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:26 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"4232a4fd-ed98-4960-b4b9-8182f5eb3b49\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"8.654442ms\",\"executionTime\": \"8.603502ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 1,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"02267cbb-3567-487b-940a-25ecf7dd959c\",\n\"signature\": {\"p\":\"json\"},\n\"results\": [\n{\"p\":{\"name\":\"Bo\"}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"341.191µs\",\"executionTime\": \"329.931µs\",\"resultCount\": 1,\"resultSize\": 19,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

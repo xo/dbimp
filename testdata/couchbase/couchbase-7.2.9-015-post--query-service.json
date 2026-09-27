@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT $1 AS a, $name AS b\"}"
+    "body": "{\"statement\":\"SELECT 2 AS b, 1 AS a, 3 AS c\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Length": [
-        "401"
-      ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:00 GMT"
+        "Sun, 27 Sep 2026 08:04:57 GMT"
+      ],
+      "Content-Length": [
+        "291"
       ]
     },
-    "body": "{\n\"requestID\": \"b862554c-4478-444c-a5a4-41641dc1ca17\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n],\n\"errors\": [{\"code\":5010,\"msg\":\"Error evaluating projection - cause: No value for positional parameter $1 (near line 1, column 7).\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"134.511µs\",\"executionTime\": \"125.781µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"f378cbcb-ad1d-4821-b357-70740a9ac83a\",\n\"signature\": {\"a\":\"number\",\"b\":\"number\",\"c\":\"number\"},\n\"results\": [\n{\"a\":1,\"b\":2,\"c\":3}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"268.551µs\",\"executionTime\": \"259.281µs\",\"resultCount\": 1,\"resultSize\": 19,\"serviceLoad\": 0}\n}\n"
   }
 }

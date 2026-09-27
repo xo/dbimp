@@ -10,21 +10,21 @@
         "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"client_context_id\":\"dbimp-cancel\"}"
+    "body": "{\"statement\":\"SELECT 1 AS a\",\"args\":[1,2],\"$unused\":3}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Length": [
-        "281"
-      ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
+        "Sun, 27 Sep 2026 08:04:57 GMT"
+      ],
+      "Content-Length": [
+        "248"
       ]
     },
-    "body": "{\n\"requestID\": \"83039b68-2279-4432-8676-cf81f735885f\",\n\"clientContextID\": \"dbimp-cancel\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"status\": \"stopped\",\n\"metrics\": {\"elapsedTime\": \"1.00795624s\",\"executionTime\": \"1.00793364s\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"02198534-8e0c-4865-8d2b-52cd0315995c\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"83.79µs\",\"executionTime\": \"73.24µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
   }
 }

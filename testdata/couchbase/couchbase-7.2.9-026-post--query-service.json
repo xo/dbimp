@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW ds_version()\"}"
+    "body": "{\"statement\":\"SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\\\"boom\\\") END FROM ARRAY_RANGE(0, 5) AS a\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "263"
+        "320"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:04 GMT"
+        "Sun, 27 Sep 2026 08:04:57 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"96eae71a-be21-4074-ae81-789ddc22dddf\",\n\"signature\": \"string\",\n\"results\": [\n\"7.2.9-9230-enterprise\"\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"177.911µs\",\"executionTime\": \"168.941µs\",\"resultCount\": 1,\"resultSize\": 23,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"097a1fdd-85d8-44e8-854a-7789608e4883\",\n\"signature\": \"json\",\n\"results\": [\n0,\n1,\n2\n],\n\"errors\": [{\"code\":5011,\"msg\":\"Abort: boom. - cause: boom\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"660.852µs\",\"executionTime\": \"645.712µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

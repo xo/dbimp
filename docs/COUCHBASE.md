@@ -26,6 +26,11 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
 - The scheme in `dburl` has the `Driver` name `n1ql`, the alias `couchbase`,
   and the dialect `n1ql`. At the move of step 16, `couchbase` becomes the
   `Driver` name and `n1ql` an alias (D30).
+- The survey of step 5a is `testdata/couchbase/features.json`. It holds 71
+  operations, features and types, each settled against 8.0.3, and asked of
+  Gemini, DeepSeek, `github.com/couchbase/gocb/v2` v2.12.5 and the Python
+  SDK on 2026-09-27. The script `testdata/couchbase/requests.json` records
+  each one on the three releases, as both principals.
 - `usql` uses `github.com/couchbase/go_n1ql` at
   `v0.0.0-20220303011133-0ed4bf93e31d`, in `usql/drivers/couchbase`. The
   driver here replaces it (D23).
@@ -46,6 +51,16 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
   (recorded).
 - `query_context`, such as `default:dbmeta._default`, names the bucket and
   the scope of a collection that the statement names alone (recorded).
+- A prepared statement runs by name, with `"prepared": "<name>"` and no
+  `statement`, or with `EXECUTE <name>` (recorded). A request that holds both
+  `statement` and `prepared` is refused with code 1060.
+- The options that `gocb` and the Python SDK send are all taken: `profile`,
+  `max_parallelism`, `scan_cap`, `scan_wait`, `pipeline_batch`,
+  `pipeline_cap`, `use_fts`, `preserve_expiry` and `query_context`
+  (recorded). `use_replica` is refused on 7.2.9 with code 1065, and taken on
+  7.6.12 and 8.0.3 (recorded). `scan_consistency: at_plus` needs a
+  `scan_vector`, which only a client of the data service has, and is
+  refused with code 1050 without one (recorded).
 - `client_context_id` names a request. The response then holds
   `clientContextID` after `requestID` (measured with curl on 8.0.3).
 
@@ -86,8 +101,9 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
   (recorded).
 - The response to a DML statement has `"signature": null`, an empty
   `results`, and a count in `metrics.mutationCount` (recorded).
-- `status` is `success`, `fatal` or `stopped` (recorded). A query stopped by
-  a cancel ends with `stopped` and no error.
+- `status` is `success`, `fatal`, `stopped` or `errors` (recorded). An
+  `INSERT` of a key that exists ends with `errors` and code 12009. A query
+  stopped by a cancel ends with `stopped` and no error.
 - A result is one response, and it does not page. A result of 20000 rows
   arrived whole in one body (recorded).
 - 7.6.12 and 8.0.3 limit the result of `ARRAY_RANGE` to 20 MiB, and refuse a
@@ -112,6 +128,45 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
 - A field that is MISSING is absent from the result object, and the
   signature still names it. `SELECT d.x, d.y, d.z` over the document
   `{"x":1,"y":null}` returned `{"x":1,"y":null}`, with no `z` (recorded).
+- `TYPE()` of a value returns its kind. `t.v IS MISSING` is true for a
+  field that a document lacks (recorded).
+- A field of a document has no declared type. Couchbase keeps no schema, so
+  a field holds whatever JSON value was written to it, and JSON has no type
+  for bytes. Bytes are stored as a base64 string, which is how json/v2
+  encodes a Go `[]byte` and how the driver sends one (D40). `{"v":
+  "3q2+7w=="}` as a literal, and `$1` bound to `"3q2+7w=="`, both store a
+  string, and both read back as `3q2+7w==` with the kind `string`, and
+  `BASE64_DECODE` of each equals the four bytes `DEADBEEF` (recorded on
+  8.0.3, in `couchbase-8.0.3-178-post--query-service.json` to `-180-`).
+- The kind `binary` exists only for a value inside a statement, such as the
+  result of `BASE64_DECODE`, and for a whole document written through the
+  data service. The server writes such a value into JSON as the text
+  `"<binary (1 b)>"`, the number of its bytes and not the bytes (recorded on
+  each release, in `couchbase-8.0.3-173-post--query-service.json` and the
+  same request of 7.2.9 and 7.6.12). The engine of the query service does
+  this in its own code: `binaryValue.MarshalJSON` and `WriteJSON` in
+  `value/binary.go` of `github.com/couchbase/query` write `"<binary (%d b)>"`
+  with the length (read on 2026-09-27).
+- So a statement must not turn bytes into a binary value (recorded on
+  8.0.3):
+  - `BASE64_ENCODE` of a binary value encodes the text of the placeholder:
+    the four bytes `DEADBEEF` came back as `IjxiaW5hcnkgKDQgYik+Ig==`, which
+    is `"<binary (4 b)>"`.
+  - A binary value written to a field is stored as the text of the
+    placeholder, and reads back with the kind `string`.
+  - A whole binary document cannot be written through the query service. The
+    server refuses it with code 12030, "UPSERT of binary document is not
+    supported". A binary document written through the data service is not
+    measured, because `dbrun` does not publish its port.
+- Nothing in a response marks a string as base64. The signature names the
+  kind `json` or `string`, so the driver cannot tell bytes from text. So a
+  string that scans into a `*[]byte` is decoded as base64, and copied as it
+  is when it is not valid base64 (D44).
+- There is no decimal type. `TYPE(1.5)` is `number`, and `0.1 + 0.2` is
+  `0.30000000000000004` (recorded).
+- Each kind makes the round trip of step 14a on each release, as a bound
+  argument and as a literal, in a document of the collection
+  `dbmeta.dbimp.types` (recorded).
 - SQL++ has no type for a time, a binary value or a UUID. A time is a string
   in RFC 3339, `BASE64_ENCODE` returns a string, and a UUID is a string
   (recorded). The models agreed on this.
@@ -138,18 +193,27 @@ The type table comes from the code, in step 10.
 
 - `BEGIN WORK` returns a row with a `txid`, for the administrator and for the
   ordinary user (recorded).
-- A later statement with `"txid": "<txid>"` in its body runs in the
-  transaction. A write in it is not seen outside it, and `ROLLBACK WORK` with
-  the txid discards it (measured with curl on 8.0.3). `COMMIT WORK` is not
-  measured.
-- `tximplicit: true` runs one statement in a transaction of its own
-  (measured with curl on 8.0.3).
-- The metrics of a statement in a transaction hold
-  `transactionElapsedTime` and `transactionRemainingTime`, and the timeout
-  was 15 seconds (measured with curl on 8.0.3).
+- With the default durability, `COMMIT WORK` fails on every release with
+  code 17007, "Durability requirements are impossible to achieve", because
+  the one node of the container cannot meet the default durability of
+  `majority`. `tximplicit: true` fails the same way, with code 17020
+  (recorded).
+- With `durability_level: "none"` on `BEGIN WORK`, the transaction works on
+  every release (recorded):
+  - A write in it is not seen outside it.
+  - `SAVEPOINT s1`, a write, and `ROLLBACK WORK TO SAVEPOINT s1` discard the
+    write after the savepoint.
+  - `COMMIT WORK` makes the rest seen.
+  - `ROLLBACK WORK` discards all of it.
+- A statement with the `txid` of a transaction that ended, or that passed
+  its `txtimeout`, is refused with HTTP 500 and code 17004 or 17010
+  (recorded).
+- `tximplicit: true` with `durability_level: "none"` runs one statement in a
+  transaction of its own (recorded).
 - A transaction holds state on the server, so a `database/sql` transaction
   maps onto one connection that carries the txid (D20). The first release
-  supports it (D41).
+  supports it (D41). The DSN key and the option `durability_level` set the
+  durability, because the default cannot commit on a node alone (D43).
 
 ## Errors
 
@@ -232,6 +296,10 @@ and 8.0.3:
   statement that `usql` runs (recorded).
 - The ordinary user can begin a transaction, and can stop its own query with
   `DELETE FROM system:active_requests` (recorded).
+- The ordinary user is refused, with HTTP 401 and code 13014, an index, a
+  vector index, a sequence and the use of one, an inline or a JavaScript
+  function, and `CURL()` (recorded). It can run the CRUD of the survey on a
+  collection that the administrator made, in the bucket `dbmeta`.
 - `dbrun dsn --json` prints no DSN for the ordinary user.
 
 ## Flavors
@@ -325,8 +393,41 @@ measure. Each lead, and what the server said on 8.0.3:
   port 8091, so it is not measured.
 - Both said that Couchbase Analytics is on port 8095. It is not measured.
 
+The survey of step 5a asked the same two models four more questions on
+2026-09-27. The recordings settled where they disagreed:
+
+- DeepSeek said that sequences exist, and Gemini said that they do not.
+  `CREATE SEQUENCE` and `NEXTVAL FOR` work on 7.6.12 and 8.0.3, and are a
+  syntax error on 7.2.9 (recorded).
+- DeepSeek said that `PIVOT` exists from 7.6. It is a syntax error on every
+  release (recorded).
+- DeepSeek said that `LATERAL` exists from 7.6, which is right (recorded).
+- DeepSeek said that a `DECIMAL` type exists, which is wrong (recorded).
+- Both said that foreign keys, unique constraints, views and defaults do not
+  exist, which is right. `CREATE TABLE`, `CREATE UNIQUE INDEX` and
+  `CREATE VIEW` are syntax errors (recorded).
+- `WITH RECURSIVE`, JavaScript functions, `VECTOR_DISTANCE` and
+  `use_replica` fail on 7.2.9, and work on 7.6.12 and 8.0.3 (recorded).
+- A vector index needs vectors to train on. On 8.0.3 it built over 16
+  documents, and a query ordered by `APPROX_VECTOR_DISTANCE` used it
+  (recorded). 7.2.9 and 7.6.12 were not asked, and it is not measured
+  there.
+- `SEARCH()` returns no rows, because the cluster of `dbrun` runs no Search
+  service (recorded). A search index is not measured.
+- `CURL()` exists and is refused by the default configuration, with code
+  5010 for the administrator and 13014 for the ordinary user (recorded).
+- Asked what the server sends for a binary value, Gemini said a base64
+  string, with a confidence of 95 percent, and said that the engine encodes
+  it with `base64.StdEncoding` in `MarshalJSON`. That is wrong: the source of
+  the engine and the recordings show the placeholder. DeepSeek said the
+  placeholder, which is right, and said that `BASE64_ENCODE` recovers the
+  bytes, which is wrong (recorded).
+- `INFER` fails on 7.2.9 with code 7014, "No documents found", over
+  documents that the same run had written, and works on 7.6.12 and 8.0.3
+  (recorded).
+
 ## Open questions
 
 Ken decided the questions of step 9 on 2026-09-27, in D38 to D42 of
-[PLAN.md](PLAN.md). The driver has transactions from its first release
-(D41), so W5 measures `COMMIT WORK` and the end of a `txid` before step 11.
+[PLAN.md](PLAN.md). The durability of a transaction is D43: a key of the DSN and
+an option for one transaction, which the tests set to `none`.

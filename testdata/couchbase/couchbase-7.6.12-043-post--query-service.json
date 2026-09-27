@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT d.x, d.y, d.z FROM dbmeta AS d USE KEYS \\\"dbimp::probe\\\"\"}"
+    "body": "{\"statement\":\"UPSERT INTO dbmeta.dbimp.people (KEY, VALUE, OPTIONS) VALUES (\\\"p3\\\", {\\\"name\\\": \\\"Cy\\\"}, {\\\"expiration\\\": 3600})\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "282"
+        "253"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"45a3464d-0d4d-4da3-94a5-9e4b72a24cde\",\n\"signature\": {\"x\":\"json\",\"y\":\"json\",\"z\":\"json\"},\n\"results\": [\n{\"x\":1,\"y\":null}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"385.202µs\",\"executionTime\": \"378.082µs\",\"resultCount\": 1,\"resultSize\": 16,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"7ae17563-e078-4f41-be16-49f292882113\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"294.511µs\",\"executionTime\": \"285.311µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\\\"p9\\\", {\\\"x\\\": 1})\",\"tximplicit\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "778"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:25 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"a44cdb33-0c6e-4061-9abd-2e84f7e51be2\",\n\"signature\": null,\n\"results\": [\n],\n\"errors\": [{\"cause\":{\"cause\":{\"bucket\":\"dbmeta\",\"collection\":\"_default\",\"document_key\":\"_txn:atr-483-#1\",\"error_description\":\"Durability requirements are impossible to achieve\",\"error_name\":\"DurabilityImpossible\",\"last_connection_id\":\"f1efb76555f84c03/ff5601826d1c01ce\",\"last_dispatched_from\":\"127.0.0.1:42930\",\"last_dispatched_to\":\"127.0.0.1:11210\",\"msg\":\"durability impossible\",\"opaque\":1263,\"scope\":\"_default\",\"status_code\":161},\"raise\":\"failed\",\"retry\":false,\"rollback\":false},\"code\":17020,\"msg\":\"Transaction staging error\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"3.057781ms\",\"executionTime\": \"3.04204ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

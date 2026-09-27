@@ -1,0 +1,669 @@
+{
+  "driver": "couchbase",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "github.com/couchbase/gocb/v2",
+      "kind": "driver",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "github.com/couchbase/couchbase-python-client",
+      "kind": "driver",
+      "date": "2026-09-27"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "insert from a select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "returning",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "crud",
+      "name": "update with unset",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "scope and collection",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "primary index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "secondary index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "partial and array index",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "vector index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "sequence",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "inline function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "javascript function",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-067-post--query-service.json"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-068-post--query-service.json"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-069-post--query-service.json"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-067-post--query-service.json"
+    },
+    {
+      "kind": "schema",
+      "name": "search index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-065-post--query-service.json"
+    },
+    {
+      "kind": "feature",
+      "name": "use keys",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "nest",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "unnest",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "missing",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "meta",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "let",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "letting",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "array comprehension",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "select raw, element and value",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "window function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "with",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "with recursive",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "lateral",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "pivot",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-091-post--query-service.json"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "advise",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "infer",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "prepare and execute",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "curl",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-097-post--query-service.json"
+    },
+    {
+      "kind": "feature",
+      "name": "vector distance",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "timeseries",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "expiry",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/couchbase/gocb/v2"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "savepoint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "single statement transaction",
+      "sources": [
+        "github.com/couchbase/gocb/v2"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "durability level",
+      "sources": [
+        "github.com/couchbase/gocb/v2"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction timeout",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "scan consistency request plus",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "scan consistency at plus",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-105-post--query-service.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query context",
+      "sources": [
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "readonly",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "client context id",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "metrics",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "timeout",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "profile",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "max parallelism",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "scan and pipeline options",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "use replica",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "flex index",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "feature",
+      "name": "preserve expiry",
+      "sources": [
+        "github.com/couchbase/gocb/v2",
+        "github.com/couchbase/couchbase-python-client"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "missing",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "boolean",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "number",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "string",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "array",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "object",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "binary",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-173-post--query-service.json"
+    },
+    {
+      "kind": "type",
+      "name": "bytes as a base64 string",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes"
+    },
+    {
+      "kind": "type",
+      "name": "decimal",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "couchbase-8.0.3-183-post--query-service.json"
+    }
+  ]
+}

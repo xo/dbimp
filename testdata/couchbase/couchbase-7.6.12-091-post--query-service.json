@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT CURL(\\\"http://127.0.0.1:8091/pools\\\")\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "583"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:51 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"bb276ac5-53d2-4eff-a583-cad7c233115d\",\n\"signature\": {\"$1\":\"object\"},\n\"results\": [\n],\n\"errors\": [{\"code\":5010,\"msg\":\"Error evaluating projection\",\"reason\":{\"_level\":\"exception\",\"caller\":\"func_curl:194\",\"cause\":{\"error\":\"The end point http://127.0.0.1:8091/pools is not permitted.  List allowed end points in the configuration.\"},\"code\":5007,\"key\":\"execution.curl\",\"message\":\"Error executing CURL function\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"410.321µs\",\"executionTime\": \"392.271µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

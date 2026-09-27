@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"timeout\":\"50ms\"}"
+    "body": "{\"statement\":\"SELECT META(p).id, META(p).cas, META(p).expiration FROM dbmeta.dbimp.people AS p USE KEYS \\\"p3\\\"\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "330"
+        "339"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:47 GMT"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"3fe8f10f-407e-469c-a265-f11f5cb44182\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":1080,\"msg\":\"Timeout 50ms exceeded\",\"retry\":true}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"50.266758ms\",\"executionTime\": \"50.250748ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"dcc6f30e-4d56-43c3-aa46-c3a339a625be\",\n\"signature\": {\"id\":\"json\",\"cas\":\"json\",\"expiration\":\"json\"},\n\"results\": [\n{\"id\":\"p3\",\"cas\":1790497269637316608,\"expiration\":1790500869}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"438.522µs\",\"executionTime\": \"420.961µs\",\"resultCount\": 1,\"resultSize\": 61,\"serviceLoad\": 0}\n}\n"
   }
 }

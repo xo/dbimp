@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\\\"boom\\\") END FROM ARRAY_RANGE(0, 5) AS a\"}"
+    "body": "{\"statement\":\"SELECT p.name, ARRAY_LENGTH(os) AS n FROM dbmeta.dbimp.people AS p NEST dbmeta.dbimp.orders AS os ON os.person = META(p).id ORDER BY p.name\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "320"
+        "316"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"6ebd13d5-a863-4caa-a165-81c2aa639559\",\n\"signature\": \"json\",\n\"results\": [\n0,\n1,\n2\n],\n\"errors\": [{\"code\":5011,\"msg\":\"Abort: boom. - cause: boom\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"452.573µs\",\"executionTime\": \"428.433µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"597b77be-1abd-47aa-9257-eae7597e00cf\",\n\"signature\": {\"name\":\"json\",\"n\":\"number\"},\n\"results\": [\n{\"name\":\"Ada\",\"n\":1},\n{\"name\":\"Bo\",\"n\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"2.318198ms\",\"executionTime\": \"2.291838ms\",\"resultCount\": 2,\"resultSize\": 39,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
   }
 }

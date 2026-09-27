@@ -10,21 +10,21 @@
         "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS i, -1.5 AS f, \\\"s\\\" AS s, true AS b, null AS n, MISSING AS m, [1, 2] AS a, {\\\"x\\\": 1} AS o, 9007199254740993 AS big, 9223372036854775807 AS maxint, 123456789012345678901234567890 AS huge, 0.1 AS tenth, \\\"\\\" AS e, \\\"2026-09-27T07:06:47.658Z\\\" AS t, BASE64_ENCODE(\\\"x\\\") AS bin, \\\"663ca2de-2148-49f5-8763-80f1dc4fa5fe\\\" AS u\"}"
+    "body": "{\"statement\":\"UPSERT INTO dbmeta.dbimp.people (KEY, VALUE) VALUES (\\\"p2\\\", {\\\"name\\\": \\\"Bo\\\", \\\"age\\\": 20})\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "717"
+        "253"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:47 GMT"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"75d21d22-10b8-424c-a836-c3eae9c517ba\",\n\"signature\": {\"i\":\"number\",\"f\":\"number\",\"s\":\"string\",\"b\":\"boolean\",\"n\":\"null\",\"m\":\"missing\",\"a\":\"array\",\"o\":\"object\",\"big\":\"number\",\"maxint\":\"number\",\"huge\":\"number\",\"tenth\":\"number\",\"e\":\"string\",\"t\":\"string\",\"bin\":\"string\",\"u\":\"string\"},\n\"results\": [\n{\"i\":1,\"f\":-1.5,\"s\":\"s\",\"b\":true,\"n\":null,\"a\":[1,2],\"o\":{\"x\":1},\"big\":9007199254740993,\"maxint\":9223372036854775807,\"huge\":123456789012345680000000000000,\"tenth\":0.1,\"e\":\"\",\"t\":\"2026-09-27T07:06:47.658Z\",\"bin\":\"Ingi\",\"u\":\"663ca2de-2148-49f5-8763-80f1dc4fa5fe\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"618.204µs\",\"executionTime\": \"605.924µs\",\"resultCount\": 1,\"resultSize\": 260,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"51842803-07f9-46b7-b989-2bf1349281e5\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"452.862µs\",\"executionTime\": \"437.062µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

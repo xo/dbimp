@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT ARRAY v * 2 FOR v IN [1, 2] END AS a, ANY v IN [1, 2] SATISFIES v > 1 END AS b, EVERY v IN [1, 2] SATISFIES v > 0 END AS c\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "302"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"f74a1bf8-a5ae-49c8-a20f-106b379d1c3a\",\n\"signature\": {\"a\":\"array\",\"b\":\"boolean\",\"c\":\"boolean\"},\n\"results\": [\n{\"a\":[2,4],\"b\":true,\"c\":true}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"425.002µs\",\"executionTime\": \"412.202µs\",\"resultCount\": 1,\"resultSize\": 29,\"serviceLoad\": 0}\n}\n"
+  }
+}

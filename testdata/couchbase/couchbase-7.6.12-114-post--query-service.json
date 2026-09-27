@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW 1\",\"txid\":\"3d9c9b19-67b8-4ac1-9b51-2784f902254f\"}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Length": [
+        "337"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:51 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"8336af8d-3182-466b-ba94-f0a732c4a7e5\",\n\"errors\": [{\"code\":17004,\"msg\":\"Transaction context error: transaction (3d9c9b19-67b8-4ac1-9b51-2784f902254f) is not present\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"25.16µs\",\"executionTime\": \"6.08µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

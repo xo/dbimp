@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"UPDATE dbmeta.dbimp.types AS t USE KEYS [\\\"t0a\\\", \\\"t0l\\\"] SET t.v = $v RETURNING META(t).id AS id, t.v\",\"$v\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:59 GMT"
+      ],
+      "Content-Length": [
+        "321"
+      ]
+    },
+    "body": "{\n\"requestID\": \"4e99f7e5-7f9f-417f-be34-6dcfbe016a4b\",\n\"signature\": {\"id\":\"json\",\"v\":\"json\"},\n\"results\": [\n{\"id\":\"t0a\",\"v\":false},\n{\"id\":\"t0l\",\"v\":false}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"792.733µs\",\"executionTime\": \"779.393µs\",\"resultCount\": 2,\"resultSize\": 44,\"serviceLoad\": 0,\"mutationCount\": 2}\n}\n"
+  }
+}

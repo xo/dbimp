@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"PREPARE dbimp_prep FROM SELECT RAW $1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1280"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"7b5fbeff-cc2c-4aa1-bb9c-bf02191ba3ba\",\n\"signature\": \"json\",\n\"results\": [\n{\"encoded_plan\":\"H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=\",\"featureControls\":76,\"indexApiVersion\":4,\"name\":\"[127.0.0.1:8091]dbimp_prep\",\"namespace\":\"default\",\"operator\":{\"#operator\":\"Authorize\",\"privileges\":{\"List\":[]},\"~child\":{\"#operator\":\"Sequence\",\"~children\":[{\"#operator\":\"Sequence\",\"~children\":[{\"#operator\":\"DummyScan\",\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.00000000000000000010842021724855044,\"fr_cost\":0.00000000000000000010842021724855044,\"size\":1}},{\"#operator\":\"Parallel\",\"maxParallelism\":1,\"~child\":{\"#operator\":\"Sequence\",\"~children\":[{\"#operator\":\"InitialProject\",\"discard_original\":true,\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.001,\"fr_cost\":0.001,\"size\":1},\"preserve_order\":true,\"raw\":true,\"result_terms\":[{\"expr\":\"$1\"}]}]}}]},{\"#operator\":\"Stream\",\"optimizer_estimates\":{\"cardinality\":1,\"cost\":0.001,\"fr_cost\":0.001,\"size\":1},\"serializable\":true}]}},\"planPreparedTime\":\"2026-09-27T08:05:51.056Z\",\"queryContext\":\"\",\"reqType\":\"SELECT\",\"signature\":\"json\",\"text\":\"PREPARE dbimp_prep FROM SELECT RAW $1\",\"useCBO\":true}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.711095ms\",\"executionTime\": \"1.692135ms\",\"resultCount\": 1,\"resultSize\": 1040,\"serviceLoad\": 0}\n}\n"
+  }
+}

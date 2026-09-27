@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW x FROM ARRAY_RANGE(0, 3) AS a LET x = a * 2\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "244"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"7e90b824-aa90-4657-a5a7-e9dfd272a744\",\n\"signature\": \"json\",\n\"results\": [\n0,\n2,\n4\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"233.811µs\",\"executionTime\": \"220.491µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0}\n}\n"
+  }
+}

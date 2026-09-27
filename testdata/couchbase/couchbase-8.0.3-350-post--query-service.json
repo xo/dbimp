@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT BASE64_ENCODE(BASE64_DECODE(\\\"3q2+7w==\\\")) AS b64, ENCODE_JSON(BASE64_DECODE(\\\"3q2+7w==\\\")) AS ej\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:27 GMT"
+      ],
+      "Content-Length": [
+        "322"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"22aadf1d-fbbc-4877-9b01-5b35dc65ed8c\",\n\"signature\": {\"b64\":\"string\",\"ej\":\"string\"},\n\"results\": [\n{\"b64\":\"IjxiaW5hcnkgKDQgYik+Ig==\",\"ej\":\"\\\"<binary (4 b)>\\\"\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"255.401µs\",\"executionTime\": \"236.881µs\",\"resultCount\": 1,\"resultSize\": 60,\"serviceLoad\": 0}\n}\n"
+  }
+}

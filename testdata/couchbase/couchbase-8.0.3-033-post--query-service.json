@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a\"}"
+    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:09 GMT"
+      ],
       "Content-Length": [
-        "246"
+        "1069"
       ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
-      ],
-      "Date": [
-        "Sun, 27 Sep 2026 07:15:47 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"b268a52a-e09b-494a-b8f4-a5a6ee0bf085\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"96.8µs\",\"executionTime\": \"86.1µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"48aca8e0-7ef5-40d1-9562-ec8e030d122a\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n{\"user_info\":{\"domain\":\"builtin\",\"id\":\"Administrator\",\"name\":\"Administrator\",\"roles\":[{\"role\":\"admin\"}]}},\n{\"user_info\":{\"domain\":\"local\",\"external_groups\":[],\"groups\":[],\"id\":\"dbmeta_user\",\"locked\":false,\"password_change_date\":\"2026-09-27T06:24:01Z\",\"roles\":[{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"update\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"select\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"insert\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"delete\",\"scope_name\":\"*\"},{\"origins\":[{\"type\":\"user\"}],\"role\":\"query_system_catalog\"}],\"temporary_password\":false,\"uuid\":\"2090f826-0348-4bb3-995a-78645469579f\"}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.653715ms\",\"executionTime\": \"1.639795ms\",\"resultCount\": 2,\"resultSize\": 825,\"serviceLoad\": 0}\n}\n"
   }
 }

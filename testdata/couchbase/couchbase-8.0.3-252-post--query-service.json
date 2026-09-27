@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT RAW dbimp_add(1, 2)\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "354"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:21:24 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"7b8bb9c9-23a8-4fb3-8b6d-4ecceb3b07d3\",\n\"errors\": [{\"code\":3000,\"column\":12,\"line\":1,\"msg\":\"Invalid function dbimp_add (resolving to default:dbimp_add) (near line 1, column 12)\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"351.981µs\",\"executionTime\": \"342.851µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

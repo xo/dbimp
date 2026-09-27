@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"DELETE FROM system:active_requests WHERE clientContextID = \\\"dbimp-cancel\\\"\"}"
+    "body": "{\"statement\":\"UPDATE dbmeta.dbimp.people AS p USE KEYS \\\"p2\\\" UNSET p.age RETURNING p\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "251"
+        "282"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:08 GMT"
+        "Sun, 27 Sep 2026 08:05:01 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"956d3d4c-e004-4612-a25c-452754421584\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"8.18467ms\",\"executionTime\": \"8.14431ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 1,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"3bc538ee-f9bd-435d-9468-00649148a148\",\n\"signature\": {\"p\":\"json\"},\n\"results\": [\n{\"p\":{\"name\":\"Bo\"}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"255.151µs\",\"executionTime\": \"247.781µs\",\"resultCount\": 1,\"resultSize\": 19,\"serviceLoad\": 0,\"mutationCount\": 1}\n}\n"
   }
 }

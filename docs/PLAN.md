@@ -57,6 +57,8 @@ so on. Decisions are numbered `D1`, `D2` and so on. The two series never mix.
 | [D40](#d40-parameters-and-options-of-couchbase-decided) | Parameters and options of Couchbase | Decided |
 | [D41](#d41-the-first-couchbase-driver-has-transactions-decided) | The first Couchbase driver has transactions | Decided |
 | [D42](#d42-how-the-couchbase-driver-reads-a-result-decided) | How the Couchbase driver reads a result | Decided |
+| [D43](#d43-the-couchbase-driver-has-a-key-for-durability-decided) | The Couchbase driver has a key for durability | Decided |
+| [D44](#d44-a-couchbase-string-scans-into-a-byte-slice-as-base64-decided) | A Couchbase string scans into a byte slice as base64 | Decided |
 
 ### D1. The module path is github.com/xo/dbimp. Decided.
 
@@ -603,7 +605,7 @@ when the command line already names it, so that reason was wrong.
 
 ### D38. The Couchbase DSN. Decided.
 
-Ken accepted this on 2026-09-27.
+Ken accepted this on 2026-09-27. D43 adds the key `durability_level`.
 
 The DSN is `couchbase://user:pass@host:port/?key=value` (D27 and D35). The
 user information holds the credentials, which the driver sends with basic
@@ -627,7 +629,8 @@ It asks Ken before it adds a key.
 
 ### D39. The values of Couchbase. Decided.
 
-Ken accepted this on 2026-09-27.
+Ken accepted this on 2026-09-27. D44 amends how a string scans into a byte
+slice.
 
 The signature names the kind of each column, and the driver decodes each
 value by what it holds, with `ColumnTypeDatabaseTypeName` the kind in upper
@@ -709,6 +712,39 @@ disconnects, which it does on every release (D36). `Rows.Close` sends no
 cancel. The driver uses no binary encoding, because the server offers none.
 Couchbase Analytics waits for a later work item, because `dbrun` does not
 publish its port.
+
+### D43. The Couchbase driver has a key for durability. Decided.
+
+Ken decided this on 2026-09-27, and it amends D38 and D40. The DSN takes the
+key `durability_level`, with the values that the server takes: `none`,
+`majority`, `majorityAndPersistActive` and `persistToMajority`. If the DSN
+has no such key, the driver sends none, and the server uses its default,
+which is `majority`. `WithOptions` sets it for one transaction, by the order
+of D40.
+
+The survey found that a transaction with the default durability cannot
+commit on the one node that `dbrun` starts, and fails with code 17007
+([COUCHBASE.md](COUCHBASE.md)). The integration tests set
+`durability_level=none`, and a test of the default expects that refusal.
+
+### D44. A Couchbase string scans into a byte slice as base64. Decided.
+
+Ken decided this on 2026-09-27, and it amends D39. A JSON document has no
+type for bytes, so bytes are stored as a base64 string, which is how json/v2
+encodes a `[]byte` argument (D40). Nothing in a response marks such a string
+([COUCHBASE.md](COUCHBASE.md)).
+
+When the value of a column is a JSON string and the destination is a
+`*[]byte`, a `*sql.RawBytes` or a `*sql.Null[[]byte]`, the driver decodes the
+string with the standard base64 encoding, with padding, which is the one
+that json/v2 writes. If the string is not valid base64, the driver copies
+the bytes of the string as they are, and returns no error. So a `[]byte`
+makes a round trip, and text that is not base64 still scans.
+
+Text that happens to be valid base64, such as `abcd`, is decoded too. That
+is the cost of the rule, and a caller that wants the text scans into a
+`*string`. A value that is not a string, such as an object or an array,
+still scans into a `*[]byte` as its JSON text, as D39 says.
 
 ## Open questions
 

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"DELETE FROM dbmeta.dbimp.types USE KEYS [\\\"t3a\\\", \\\"t3l\\\"] RETURNING META().id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:53 GMT"
+      ],
+      "Content-Length": [
+        "290"
+      ]
+    },
+    "body": "{\n\"requestID\": \"60d166da-4f46-44a4-a564-d5e37c27114f\",\n\"signature\": {\"id\":\"json\"},\n\"results\": [\n{\"id\":\"t3a\"},\n{\"id\":\"t3l\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"363.811µs\",\"executionTime\": \"351.201µs\",\"resultCount\": 2,\"resultSize\": 24,\"serviceLoad\": 0,\"mutationCount\": 2}\n}\n"
+  }
+}

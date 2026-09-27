@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT META(p).id AS id, p.name FROM dbmeta.dbimp.people AS p WHERE p.age > 10 ORDER BY p.name\",\"scan_consistency\":\"request_plus\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "323"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:10 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"7cf1b08f-c3ce-4d30-aca6-752c1db2b7ef\",\n\"signature\": {\"id\":\"json\",\"name\":\"json\"},\n\"results\": [\n{\"id\":\"p1\",\"name\":\"Ada\"},\n{\"id\":\"p2\",\"name\":\"Bo\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"752.332µs\",\"executionTime\": \"744.642µs\",\"resultCount\": 2,\"resultSize\": 47,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
+  }
+}

@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT $name AS a, $obj AS b\",\"$name\":\"x\",\"$obj\":{\"k\":[1,null]}}"
+    "body": "{\"statement\":\"INSERT INTO dbmeta.dbimp.orders (KEY \\\"o-\\\" || META(p).id, VALUE {\\\"person\\\": META(p).id, \\\"total\\\": 10}) SELECT p FROM dbmeta.dbimp.people AS p WHERE META(p).id IN [\\\"p1\\\", \\\"p2\\\"]\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
-      ],
       "Content-Length": [
-        "283"
+        "255"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:48 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"52af5786-b62c-4799-bde6-67f18692691f\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n{\"a\":\"x\",\"b\":{\"k\":[1,null]}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"161.321µs\",\"executionTime\": \"143.061µs\",\"resultCount\": 1,\"resultSize\": 28,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"3e32fae1-d4b6-4c2d-b030-827da842ca5e\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"12.089982ms\",\"executionTime\": \"12.078192ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"mutationCount\": 2}\n}\n"
   }
 }

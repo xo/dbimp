@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\\\"boom\\\") END FROM ARRAY_RANGE(0, 5) AS a\"}"
+    "body": "{\"statement\":\"SELECT 1 AS i, -1.5 AS f, \\\"s\\\" AS s, true AS b, null AS n, MISSING AS m, [1, 2] AS a, {\\\"x\\\": 1} AS o, 9007199254740993 AS big, 9223372036854775807 AS maxint, 123456789012345678901234567890 AS huge, 0.1 AS tenth, \\\"\\\" AS e, \\\"2026-09-27T07:06:47.658Z\\\" AS t, BASE64_ENCODE(\\\"x\\\") AS bin, \\\"663ca2de-2148-49f5-8763-80f1dc4fa5fe\\\" AS u\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Type": [
-        "application/json; version=8.0.3-N1QL"
-      ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:43 GMT"
+        "Sun, 27 Sep 2026 08:21:05 GMT"
       ],
       "Content-Length": [
-        "320"
+        "717"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
       ]
     },
-    "body": "{\n\"requestID\": \"3b4c2898-2240-4b7b-a474-5817c14c4de1\",\n\"signature\": \"json\",\n\"results\": [\n0,\n1,\n2\n],\n\"errors\": [{\"code\":5011,\"msg\":\"Abort: boom. - cause: boom\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"303.081µs\",\"executionTime\": \"288.781µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"bb8efcb5-320c-42e4-b981-7ef5c7e76d08\",\n\"signature\": {\"i\":\"number\",\"f\":\"number\",\"s\":\"string\",\"b\":\"boolean\",\"n\":\"null\",\"m\":\"missing\",\"a\":\"array\",\"o\":\"object\",\"big\":\"number\",\"maxint\":\"number\",\"huge\":\"number\",\"tenth\":\"number\",\"e\":\"string\",\"t\":\"string\",\"bin\":\"string\",\"u\":\"string\"},\n\"results\": [\n{\"i\":1,\"f\":-1.5,\"s\":\"s\",\"b\":true,\"n\":null,\"a\":[1,2],\"o\":{\"x\":1},\"big\":9007199254740993,\"maxint\":9223372036854775807,\"huge\":123456789012345680000000000000,\"tenth\":0.1,\"e\":\"\",\"t\":\"2026-09-27T07:06:47.658Z\",\"bin\":\"Ingi\",\"u\":\"663ca2de-2148-49f5-8763-80f1dc4fa5fe\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"801.203µs\",\"executionTime\": \"771.383µs\",\"resultCount\": 1,\"resultSize\": 260,\"serviceLoad\": 0}\n}\n"
   }
 }

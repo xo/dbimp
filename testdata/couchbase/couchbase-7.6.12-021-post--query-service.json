@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"DELETE FROM system:active_requests WHERE clientContextID = \\\"dbimp-cancel\\\"\"}"
+    "body": "{\"statement\":\"SELECT $name AS a, $obj AS b\",\"$name\":\"x\",\"$obj\":{\"k\":[1,null]}}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Length": [
-        "253"
-      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:44 GMT"
+      ],
+      "Content-Length": [
+        "281"
       ]
     },
-    "body": "{\n\"requestID\": \"d9cc3ad4-7e67-4262-bcf4-1b9d49b63033\",\n\"signature\": null,\n\"results\": [\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"8.143419ms\",\"executionTime\": \"8.099179ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 1,\"mutationCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"077a86aa-8033-4e19-8e3a-48a181bef357\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n{\"a\":\"x\",\"b\":{\"k\":[1,null]}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"142.16µs\",\"executionTime\": \"132.51µs\",\"resultCount\": 1,\"resultSize\": 28,\"serviceLoad\": 0}\n}\n"
   }
 }

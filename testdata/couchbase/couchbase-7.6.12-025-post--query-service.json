@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
+    "body": "{\"statement\":\"SELEKT 1\"}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:44 GMT"
       ],
       "Content-Length": [
-        "1029"
+        "322"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ]
     },
-    "body": "{\n\"requestID\": \"1f21ea88-8d64-4b44-b565-4a0c5bcaf915\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n{\"user_info\":{\"domain\":\"local\",\"external_groups\":[],\"groups\":[],\"id\":\"dbmeta_user\",\"password_change_date\":\"2026-09-27T07:16:15.000Z\",\"roles\":[{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"update\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"select\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"insert\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"delete\",\"scope_name\":\"*\"},{\"origins\":[{\"type\":\"user\"}],\"role\":\"query_system_catalog\"}],\"uuid\":\"0301c01c-5add-4386-b43e-ea63d748cca0\"}},\n{\"user_info\":{\"domain\":\"builtin\",\"id\":\"Administrator\",\"name\":\"Administrator\",\"roles\":[{\"role\":\"admin\"}]}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.59806ms\",\"executionTime\": \"1.58148ms\",\"resultCount\": 2,\"resultSize\": 787,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"c11369eb-4be7-4674-aa5e-b0a645237a6f\",\n\"errors\": [{\"code\":3000,\"column\":8,\"line\":1,\"msg\":\"syntax error - line 1, column 8, near 'SELEKT ', at: 1\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"118.521µs\",\"executionTime\": \"94.571µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

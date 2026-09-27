@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT TYPE(BASE64_DECODE(\\\"eA==\\\")) AS type, BASE64_DECODE(\\\"eA==\\\") AS v\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "298"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:06 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"92d2a2b4-2e6f-43e1-90c2-eb79ed793754\",\n\"signature\": {\"type\":\"string\",\"v\":\"string\"},\n\"results\": [\n{\"type\":\"binary\",\"v\":\"<binary (1 b)>\"}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"218.66µs\",\"executionTime\": \"209.89µs\",\"resultCount\": 1,\"resultSize\": 38,\"serviceLoad\": 0}\n}\n"
+  }
+}

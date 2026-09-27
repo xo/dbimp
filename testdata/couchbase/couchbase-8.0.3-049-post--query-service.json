@@ -10,21 +10,21 @@
         "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELEKT 1\"}"
+    "body": "{\"statement\":\"SELECT p.name, o.total FROM dbmeta.dbimp.people AS p JOIN dbmeta.dbimp.orders AS o ON o.person = META(p).id ORDER BY p.name\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
-    "status": 400,
+    "status": 200,
     "header": {
+      "Content-Length": [
+        "328"
+      ],
       "Content-Type": [
         "application/json; version=8.0.3-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:15:47 GMT"
-      ],
-      "Content-Length": [
-        "321"
+        "Sun, 27 Sep 2026 08:21:09 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"c5d4fba3-7966-4ba4-9b61-bdfe533a133d\",\n\"errors\": [{\"code\":3000,\"column\":8,\"line\":1,\"msg\":\"syntax error - line 1, column 8, near 'SELEKT ', at: 1\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"79.611µs\",\"executionTime\": \"63.221µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"f4188e18-2a9a-4093-b4fc-63d525a2dea0\",\n\"signature\": {\"name\":\"json\",\"total\":\"json\"},\n\"results\": [\n{\"name\":\"Ada\",\"total\":10},\n{\"name\":\"Bo\",\"total\":10}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.981317ms\",\"executionTime\": \"1.960767ms\",\"resultCount\": 2,\"resultSize\": 49,\"serviceLoad\": 0,\"sortCount\": 2}\n}\n"
   }
 }

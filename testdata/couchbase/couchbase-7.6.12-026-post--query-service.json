@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT RAW ds_version()\"}"
+    "body": "{\"statement\":\"SELECT RAW CASE WHEN a < 3 THEN a ELSE ABORT(\\\"boom\\\") END FROM ARRAY_RANGE(0, 5) AS a\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Content-Length": [
-        "264"
+        "320"
       ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:22 GMT"
+        "Sun, 27 Sep 2026 08:05:44 GMT"
       ]
     },
-    "body": "{\n\"requestID\": \"27c21b52-97a5-4ee4-a90e-17bacbce245c\",\n\"signature\": \"string\",\n\"results\": [\n\"7.6.12-8946-enterprise\"\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"191.961µs\",\"executionTime\": \"170.561µs\",\"resultCount\": 1,\"resultSize\": 24,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"8a179f77-cea7-4684-a39e-3a54625b04ee\",\n\"signature\": \"json\",\n\"results\": [\n0,\n1,\n2\n],\n\"errors\": [{\"code\":5011,\"msg\":\"Abort: boom. - cause: boom\"}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"482.862µs\",\"executionTime\": \"468.302µs\",\"resultCount\": 3,\"resultSize\": 3,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
   }
 }

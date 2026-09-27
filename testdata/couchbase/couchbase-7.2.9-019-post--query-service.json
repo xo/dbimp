@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
       "Authorization": [
         "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
       ]
     },
-    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"timeout\":\"50ms\"}"
+    "body": "{\"statement\":\"SELECT d.x, d.y, d.z FROM dbmeta AS d USE KEYS \\\"dbimp::probe\\\"\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "Date": [
-        "Sun, 27 Sep 2026 07:16:00 GMT"
+        "Sun, 27 Sep 2026 08:04:57 GMT"
       ],
       "Content-Length": [
-        "330"
+        "282"
       ],
       "Content-Type": [
         "application/json; version=7.2.9-N1QL"
       ]
     },
-    "body": "{\n\"requestID\": \"9e8f269a-f70c-4dcd-af20-a384654c83ea\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"errors\": [{\"code\":1080,\"msg\":\"Timeout 50ms exceeded\",\"retry\":true}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"50.285016ms\",\"executionTime\": \"50.273836ms\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+    "body": "{\n\"requestID\": \"0347e3a4-a527-40da-a820-3de288fda0f2\",\n\"signature\": {\"x\":\"json\",\"y\":\"json\",\"z\":\"json\"},\n\"results\": [\n{\"x\":1,\"y\":null}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"400.692µs\",\"executionTime\": \"388.241µs\",\"resultCount\": 1,\"resultSize\": 16,\"serviceLoad\": 0}\n}\n"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT a, b FROM [1, 2] AS a, LATERAL (SELECT RAW a * 10) AS b\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 08:05:57 GMT"
+      ],
+      "Content-Length": [
+        "285"
+      ],
+      "Content-Type": [
+        "application/json; version=7.6.12-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"f7741d5e-ffd3-4d39-8f76-431a0c24fe0a\",\n\"signature\": {\"a\":\"json\",\"b\":\"json\"},\n\"results\": [\n{\"a\":1,\"b\":10},\n{\"a\":2,\"b\":20}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"263.681µs\",\"executionTime\": \"257.221µs\",\"resultCount\": 2,\"resultSize\": 28,\"serviceLoad\": 0}\n}\n"
+  }
+}

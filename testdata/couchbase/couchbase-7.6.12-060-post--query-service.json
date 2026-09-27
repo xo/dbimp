@@ -3,28 +3,28 @@
     "method": "POST",
     "path": "/query/service",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"statement\":\"SELECT 1 AS a /* a ? comment */ -- and $1 another\\n\"}"
+    "body": "{\"statement\":\"SELECT RAW COUNT(*) FROM dbmeta.dbimp.people\",\"scan_consistency\":\"request_plus\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Length": [
-        "252"
-      ],
       "Content-Type": [
         "application/json; version=7.6.12-N1QL"
       ],
       "Date": [
-        "Sun, 27 Sep 2026 07:16:26 GMT"
+        "Sun, 27 Sep 2026 08:05:48 GMT"
+      ],
+      "Content-Length": [
+        "240"
       ]
     },
-    "body": "{\n\"requestID\": \"cccd8dfd-b87b-4569-b81f-ad7a90701faa\",\n\"signature\": {\"a\":\"number\"},\n\"results\": [\n{\"a\":1}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"144.851µs\",\"executionTime\": \"133.651µs\",\"resultCount\": 1,\"resultSize\": 7,\"serviceLoad\": 0}\n}\n"
+    "body": "{\n\"requestID\": \"eb443798-e714-49f6-9181-9b4db840d730\",\n\"signature\": \"number\",\n\"results\": [\n3\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"447.651µs\",\"executionTime\": \"432.021µs\",\"resultCount\": 1,\"resultSize\": 1,\"serviceLoad\": 0}\n}\n"
   }
 }
