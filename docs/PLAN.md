@@ -1,0 +1,600 @@
+# Decisions
+
+Every decision that shapes this repository, in the order it was made. Entries
+are append only. A decision is never edited to change its conclusion. When a
+later decision replaces one, the older entry keeps its text and gains a line
+at the top saying what replaced it.
+
+Each heading carries a status. `Decided` means Ken settled it or it follows
+from a rule every `xo` repository keeps. `Proposed` means it is a
+recommendation that waits for Ken. An amendment must be visible from both
+sides: if D11 amends D4, then D4 says so too.
+
+Work items live in [BACKLOG.md](BACKLOG.md) and are numbered `W1`, `W2` and
+so on. Decisions are numbered `D1`, `D2` and so on. The two series never mix.
+
+| Decision | Title | Status |
+| --- | --- | --- |
+| [D1](#d1-the-module-path-is-githubcomxodbimp-decided) | The module path is github.com/xo/dbimp | Decided |
+| [D2](#d2-the-go-directive-is-1271-decided) | The go directive is 1.27.1 | Decided |
+| [D3](#d3-the-repository-uses-the-xo-layout-decided) | The repository uses the xo layout | Decided |
+| [D4](#d4-each-driver-is-its-own-package-and-shared-code-is-in-the-root-package-decided) | Each driver is its own package, and shared code is in the root package | Decided |
+| [D5](#d5-dburl-owns-the-schemes-and-the-aliases-decided) | dburl owns the schemes and the aliases | Decided |
+| [D6](#d6-go-conventions-are-the-ones-dburl-and-dbmeta-keep-decided) | Go conventions are the ones dburl and dbmeta keep | Decided |
+| [D7](#d7-a-package-holds-no-configuration-decided) | A package holds no configuration | Decided |
+| [D8](#d8-every-driver-keeps-the-same-contract-with-databasesql-decided) | Every driver keeps the same contract with database/sql | Decided |
+| [D9](#d9-a-test-that-needs-a-server-reads-a-dsn-and-skips-without-one-decided) | A test that needs a server reads a DSN and skips without one | Decided |
+| [D10](#d10-golangci-lint-runs-in-ci-at-a-pinned-version-decided) | golangci-lint runs in CI at a pinned version | Decided |
+| [D11](#d11-agent-skills-are-committed-as-copies-decided) | Agent skills are committed as copies | Decided |
+| [D12](#d12-every-text-a-person-reads-follows-simple-english-decided) | Every text a person reads follows simple-english | Decided |
+| [D13](#d13-the-module-depends-on-the-standard-library-apd-and-approved-binary-encodings-decided) | The module depends on the standard library, apd, and approved binary encodings | Decided |
+| [D14](#d14-the-first-drivers-speak-http-decided) | The first drivers speak HTTP | Decided |
+| [D15](#d15-the-targets-are-in-docstargetsmd-decided) | The targets are in docs/TARGETS.md | Decided |
+| [D16](#d16-an-ideal-target-meets-three-tests-decided) | An ideal target meets three tests | Decided |
+| [D17](#d17-the-priorities-follow-the-three-tests-decided) | The priorities follow the three tests | Decided |
+| [D18](#d18-a-result-that-is-not-a-table-becomes-rows-by-three-rules-decided) | A result that is not a table becomes rows by three rules | Decided |
+| [D19](#d19-a-json-number-is-never-decoded-through-float64-decided) | A JSON number is never decoded through float64 | Decided |
+| [D20](#d20-a-driver-never-fakes-a-transaction-decided) | A driver never fakes a transaction | Decided |
+| [D21](#d21-a-driver-reads-a-result-to-its-end-decided) | A driver reads a result to its end | Decided |
+| [D22](#d22-the-licence-is-mit-decided) | The licence is MIT | Decided |
+| [D23](#d23-the-first-driver-is-a-new-couchbase-driver-decided) | The first driver is a new Couchbase driver | Decided |
+| [D24](#d24-a-target-that-has-a-go-driver-in-usql-is-in-scope-decided) | A target that has a Go driver in usql is in scope | Decided |
+| [D25](#d25-the-code-uses-encodingjsonv2-and-the-conventions-of-go-127-decided) | The code uses encoding/json/v2 and the conventions of Go 1.27 | Decided |
+| [D26](#d26-a-driver-is-named-for-its-database-decided) | A driver is named for its database | Decided |
+| [D27](#d27-a-dsn-is-a-standard-url-decided) | A DSN is a standard URL | Decided |
+| [D28](#d28-a-driver-registers-one-name-decided) | A driver registers one name | Decided |
+| [D29](#d29-the-module-imports-no-other-xo-package-decided) | The module imports no other xo package | Decided |
+| [D30](#d30-the-couchbase-driver-registers-as-couchbase-decided) | The Couchbase driver registers as couchbase | Decided |
+| [D31](#d31-couchbase-is-tested-on-the-enterprise-image-with-an-ordinary-user-decided) | Couchbase is tested on the Enterprise image, with an ordinary user | Decided |
+| [D32](#d32-a-target-has-a-priority-not-a-tier-decided) | A target has a priority, not a tier | Decided |
+| [D33](#d33-a-decimal-is-an-apddecimal-decided) | A decimal is an apd.Decimal | Decided |
+| [D34](#d34-the-root-package-holds-a-parser-for-placeholders-decided) | The root package holds a parser for placeholders | Decided |
+| [D35](#d35-a-dsn-is-a-url-whose-scheme-is-the-name-of-the-driver-decided) | A DSN is a URL whose scheme is the name of the driver | Decided |
+| [D36](#d36-rows-read-the-body-as-a-stream-and-close-closes-it-decided) | Rows read the body as a stream, and Close closes it | Decided |
+
+### D1. The module path is github.com/xo/dbimp. Decided.
+
+Every `xo` module is named `github.com/xo/<repository>`. A driver is a
+package inside this module, so its import path is
+`github.com/xo/dbimp/<driver>` (D4). The root package `dbimp` holds
+the code that the drivers share.
+
+### D2. The go directive is 1.27.1. Decided.
+
+`go.mod` says `go 1.27.1` and has no `toolchain` line. That is Ken's target,
+and `dbmeta`, `cql` and `n1ql` use the same line.
+
+### D3. The repository uses the xo layout. Decided.
+
+This matches `dbmeta` and `cql`:
+
+- The root holds `README.md`, `CLAUDE.md` and `CONTRIBUTING.md`, and no other
+  Markdown. Every other document is in `docs/`, and each one is named in the
+  table in `CLAUDE.md` and in the table in `README.md`.
+- `CLAUDE.md` follows the order that `dbmeta/CLAUDE.md` uses: purpose, a
+  "Which document to read" table, numbered hard rules with their reasons,
+  layout, Go conventions, linting, the commands to run before committing, and
+  how to write documentation. It also carries the table of sibling
+  repositories from `usql/CLAUDE.md`.
+- `CONTRIBUTING.md` holds the same material for a person, and it is shorter.
+  No repository has an `AGENTS.md`, and this one has none.
+- `docs/PLAN.md` is this file. It holds decisions and open questions only.
+- `docs/BACKLOG.md` holds work items, in the format that
+  `usql/docs/BACKLOG.md` uses.
+- Examples are `Example` tests. Golden files go in `testdata/`.
+- CI is one GitHub Actions workflow, `.github/workflows/test.yml`, on
+  `ubuntu-latest`, with `go-version-file: go.mod`. There is no Makefile and no
+  matrix of operating systems.
+- There is one `.gitignore`, at the root. `.gitattributes` sets
+  `* text=auto eol=lf`, as in `dbmeta` and `cql`.
+
+`docs_test.go` holds these rules: `TestTheRootHoldsThreeDocuments`,
+`TestEveryDocumentIsInTheTable`, `TestEveryLinkResolves`,
+`TestEveryDecisionReferenceExists`, `TestTheDecisionIndexIsComplete` and
+`TestEveryTestNameInTheDocsExists`.
+
+### D4. Each driver is its own package, and shared code is in the root package. Decided.
+
+Ken decided this on 2026-09-27. A driver is the package
+`github.com/xo/dbimp/<driver>`, in a folder at the root with the name of the
+driver. That import path is the `GoPackage` of its scheme in `dburl`. A
+consumer imports each driver it wants directly, so a driver that nobody
+imports costs a consumer nothing.
+
+The root package `dbimp` holds the code that the drivers share: the HTTP
+client, the adapters that encode and decode values, and the other utilities
+that two or more drivers use. Every driver imports it. Most targets in
+[TARGETS.md](TARGETS.md) share a large part, such as authentication, a
+decoder that turns a JSON result into rows, and the `database/sql` types
+that sit on top.
+
+This differs from the other `xo` repositories in one way. There is no
+central registry of drivers, and no umbrella package that imports every
+driver. `usql` already selects drivers with build tags, and a second list
+here makes two copies of one fact.
+
+The repository is one module. D13 keeps the dependencies to the standard
+library, `apd` and a few approved binary encodings, so no driver carries a
+dependency tree that another driver must not have.
+
+The exported API of the root package is a public API, because a driver
+outside this repository can import it too. Keep it small, and export a name
+only when a driver in this repository needs it.
+
+### D5. dburl owns the schemes and the aliases. Decided.
+
+`dburl` owns the taxonomy of schemes, aliases and flavors. This repository
+never writes a list of schemes or of aliases. A consumer that holds a URL in
+any form reads `dburl` for it, and `dburl` hands the driver one complete URL
+(D35). This follows `dbmeta` hard rule 1.
+
+Each driver calls `sql.Register` from `init` with one name, which is the name
+of its package and of its database (D28 and D30). The scheme of the URL that
+it reads is that name. The driver parses that URL with `net/url` (D27), and
+nothing else.
+
+When a driver lands here, the `dburl` session changes its scheme: the
+`GoPackage` becomes `github.com/xo/dbimp/<driver>`, `RequiresCGO` says
+whether it needs a C compiler, and the `Driver` name becomes the name of the
+driver if it differs (D30). Step 16 of [DRIVER.md](DRIVER.md) is that move.
+
+### D6. Go conventions are the ones dburl and dbmeta keep. Decided.
+
+The conventions in "Go conventions" in `dbmeta/CLAUDE.md` apply here:
+
+- Errors are wrapped with `%w`. A message is lower case, starts with a
+  gerund, and names what failed.
+- A sentinel error is a constant of a defined string type, as in
+  `type Error string` and `const ErrX Error = "x"`. A variable made with
+  `errors.New` can be reassigned by any importer, and a constant cannot.
+- `ctx` is the first parameter and is never stored in a struct.
+- Accept interfaces, return concrete types, and keep an interface to three
+  methods or fewer, defined where it is consumed.
+- A package name is one short word, and an exported name does not repeat it.
+- A receiver is one or two letters, the same on every method.
+- Generics replace `interface{}` for a container of one type.
+
+The `go-pedantry` skill holds the longer form (D11).
+
+### D7. A package holds no configuration. Decided.
+
+A driver keeps no setting in a package level variable. A setting arrives in
+the DSN, or in a `driver.Connector` that the caller builds and passes to
+`sql.OpenDB`. A driver logs nothing.
+
+One `usql` driver borrowed the configuration of another driver and shipped a
+fault to users. `go_n1ql` keeps its credentials in package variables, and
+that is the pattern not to copy. This follows `dbmeta` hard rule 6 and `cql`
+D8.
+
+### D8. Every driver keeps the same contract with database/sql. Decided.
+
+Each driver does all of these:
+
+- It implements `driver.DriverContext` and `driver.Connector`, and the
+  context forms of every interface it implements, such as
+  `driver.QueryerContext` and `driver.ExecerContext`. It stops work when the
+  context ends.
+- It returns a NULL as nil and never as a zero value. `go-cql-driver`
+  returned an empty string for a CQL NULL, which hid faults for months, until
+  the move to `xo/cql` exposed them (dbmeta D62 and dbmeta D93).
+- It keeps the column order of the statement, returns decoded Go values, and
+  never wraps one column in an object. `go_n1ql` sorted the columns by name,
+  returned JSON text, and wrapped a row of one column as `{"v": ...}`, and
+  each of those ruled out a `dbmeta` model (dbmeta D94).
+- It sends a statement to the server as the caller wrote it, and does not
+  split it. `vertica-sql-go` splits at every `;` and so cannot create a SQL
+  function (dbmeta D88). If a product needs a split, the rule for it is
+  written in a decision first.
+- It returns every error to the caller, wrapped with `%w`. It returns
+  `driver.ErrBadConn` only when the statement did not reach the server,
+  because `database/sql` then runs the statement again, and a second run of a
+  write is a second write.
+
+`dbmeta` needs nothing beyond a correct driver. It takes any value with a
+`QueryContext` method and runs every statement itself. `dbmeta` hard rule 10
+requires its test module to use the same package that `usql` uses for each
+database, so a driver lands in `usql` and in `dbmeta` together.
+
+### D9. A test that needs a server reads a DSN and skips without one. Decided.
+
+A unit test needs no server. A test that needs one reads the DSN from an
+environment variable named for the driver in upper case, followed by `_DSN`,
+such as `CQL_DSN` in `cql`. It calls `t.Skip` when the variable is empty. The
+name of such a test holds the word `Integration`, so that
+`go test -run Integration` selects it. There are no build tags for this and
+no testcontainers.
+
+`dbrun` in `dbmeta` starts every server, and nothing else does. `dbrun dsn`
+prints the DSN that `dbmeta` gives a driver. A database that `dbrun` does not
+know gets its entry in `dbmeta/container/` first, which is work for the
+`dbmeta` session or for Ken. The CI workflow checks out a pinned commit of
+`dbmeta` and runs `dbrun`, as in `cql` D20 and `n1ql` D28. A new pin is a
+commit in this repository.
+
+A driver is tested as the administrator and as an ordinary user. The parity
+tests in `dbmeta` found queries that the server refused to an ordinary user,
+and nobody had recorded them (dbmeta D61).
+
+### D10. golangci-lint runs in CI at a pinned version. Decided.
+
+`.golangci.yml` sets `version: "2"` and `default: all`, with a disable list.
+Each disabled linter has its reason beside it. The version is pinned in the
+workflow, so that a new release cannot turn on a linter that nobody chose.
+This is the posture of `dburl`, `dbmeta` and `cql`.
+
+A linter that makes idiomatic Go worse is disabled. Only a real defect gets a
+code change. A change made only to quiet a linter is itself a defect.
+
+### D11. Agent skills are committed as copies. Decided.
+
+The repository carries two agent skills, `simple-english` and `go-pedantry`,
+copied from `dbmeta`. Each is an ordinary folder under `.agents/skills` and
+under `.claude/skills`, and `skills-lock.json` names its source.
+
+A symbolic link is refused, because a Windows checkout writes a link as a text
+file, and Claude Code then loads no skill and reports nothing.
+`TestSkillsAreCopies` fails on a link, and it fails when the two folders
+differ. This follows dbmeta D89 and `cql` D15.
+
+The first copies in this repository were symbolic links, made before this
+file existed. They were replaced with copies on 2026-09-27.
+
+### D12. Every text a person reads follows simple-english. Decided.
+
+Ken asked that every agent load the `simple-english` skill before it writes
+any text that a user can read. That includes `README.md` and every other
+document, code comments, error messages, commit messages and the text of test
+failures.
+He repeated it on 2026-09-27. The short
+form is in "Writing documentation" in `CLAUDE.md`. This follows dbmeta D89.
+
+### D13. The module depends on the standard library, apd, and approved binary encodings. Decided.
+
+Ken decided this on 2026-09-27. The module is close to free of dependencies.
+It has three kinds of dependency, and no other:
+
+1. The Go standard library. HTTP, JSON, TLS, authentication and request
+   signing are written with it. That includes the AWS Signature Version 4
+   that DynamoDB needs, and the parser for placeholders of D34.
+2. `github.com/cockroachdb/apd/v3`, which holds a decimal (D33).
+3. A package for a binary encoding that the standard library does not have,
+   such as CBOR, when Ken approves it for one database.
+
+A binary encoding is considered for each database on its own, and Ken
+decides each case. Two questions decide it: whether the package for the
+encoding can come into this module with few dependencies, and whether the
+gain is worth the cost of keeping it. Examples are CBOR for SurrealDB,
+VelocyPack for ArangoDB, Smile for Elasticsearch, and the Arrow stream for
+InfluxDB 3 and Databricks. Most targets in [TARGETS.md](TARGETS.md) also
+answer in JSON, so a binary encoding needs a reason that JSON cannot meet.
+
+Ask Ken before you add any package. When he approves one, add it to the
+`depguard` list in `.golangci.yml`, so that the list is the record of every
+package that the module can import.
+
+### D14. The first drivers speak HTTP. Decided.
+
+Ken decided this on 2026-09-27. The first drivers here are adapters and
+clients for databases that have an HTTP or HTTPS interface: SQL, NoSQL and
+others. Each one takes a query that a person can type by hand, such as SQL, a
+dialect like SQL, JSON, or another query language, because that is what
+`usql` sends.
+
+Each driver is pure Go and never needs cgo, because `net/http` is all that it
+needs. A consumer builds it with `CGO_ENABLED=0`, and `RequiresCGO` in
+`dburl` is false for every one of them.
+
+### D15. The targets are in docs/TARGETS.md. Decided.
+
+[TARGETS.md](TARGETS.md) names every target, and the order that Ken wrote.
+It is the only copy of that list. The notes it came from, in
+`xo/websql/notes`, are its source and are not read again. A change to the
+list is a change to that file.
+
+### D16. An ideal target meets three tests. Decided.
+
+Ken decided this on 2026-09-27. An ideal target can be started by `dbrun`,
+takes queries and returns results over HTTP, and has a SQL dialect or a
+dialect like SQL. [TARGETS.md](TARGETS.md) names the three tests R, H and S,
+and measures each target against them.
+
+### D17. The priorities follow the three tests. Decided.
+
+A target that meets R, H and S is P1. A target that fails one is P2.
+A target that fails two or more, or that no longer exists, is P3. Inside
+a priority, a target whose server sends column metadata, and a target that
+`usql` has no driver for, come first.
+
+Ken accepted this rule on 2026-09-27. The review in [TARGETS.md](TARGETS.md)
+applies it. It moves Pinot,
+TDengine, Drill and Solr up to P1. It moves ArangoDB, Neo4j, Dgraph,
+CouchDB, TerminusDB, Qdrant, Weaviate, ScyllaDB Alternator and Stargate down
+to P2. It moves the MongoDB Atlas Data API, Fauna and PostgREST to P3.
+The `dbmeta` session proposed the rule.
+
+### D18. A result that is not a table becomes rows by three rules. Decided.
+
+This answers Q3. Ken accepted it on 2026-09-27.
+
+`database/sql` reads the columns before the first row, so the column set is
+fixed at that point. A `dbmeta` model reads each row by position, so every
+row must have the same columns. The three rules are these:
+
+1. If the server sends column metadata, the columns are that metadata, in its
+   order.
+2. If the server sends only objects, the columns are the keys of the first
+   object, in the order that they appear in the response. Read the keys with
+   `jsontext.Decoder.ReadToken` (D25), and never decode a row into a map. A key
+   that a later row lacks is nil. A key that only a later row has is an error,
+   and never a new column.
+3. If the query returns whole documents, nodes, paths or points with no
+   projection, the result has one column that holds each value. The column
+   has the name that the server gives it, and never the name of a wrapper.
+
+The union of the fields of every row is never the column set, because it
+needs the whole result before the first row. Each driver decides whether a
+missing key and a JSON null are different, in a decision of its own, as n1ql
+D24 did for Couchbase MISSING. The `dbmeta` session proposed these rules.
+
+### D19. A JSON number is never decoded through float64. Decided.
+
+A float64 holds an integer exactly only up to 2^53. ClickHouse, Druid and
+Elasticsearch send 64-bit integers, and DynamoDB sends numbers with up to 38
+digits. Each driver reads a number as the raw text of its token from
+`jsontext` (D25), and converts the text by the type of its column. A decimal
+becomes an `apd.Decimal` (D33). Ken accepted this on 2026-09-27.
+
+### D20. A driver never fakes a transaction. Decided.
+
+Ken accepted this on 2026-09-27. Most HTTP interfaces keep no state between
+requests and have no transactions. If the product has none, `BeginTx` returns a
+sentinel error that says so. If the product has one, such as Neo4j, rqlite,
+libSQL, Trino and Couchbase, the state belongs to the connection, and
+`ResetSession` clears it. Each such driver records its design in a decision of
+its own.
+
+### D21. A driver reads a result to its end. Decided.
+
+Ken accepted this on 2026-09-27. A driver follows every page, cursor and next
+link until the server says that the result is complete. It never returns a
+result that the server cut short as if it were complete. Pinot adds `LIMIT 10`
+to a selection that has no limit, and a driver that says nothing returns ten
+rows. If a server cuts a result and gives no way to read the rest, the driver
+returns an error.
+
+### D22. The licence is MIT. Decided.
+
+Ken added `LICENSE` on 2026-09-27. It is the MIT licence, with the copyright
+of Kenneth Shaw, as in `dbmeta`, `dburl` and `usql`. No file carries a
+licence header.
+
+### D23. The first driver is a new Couchbase driver. Decided.
+
+Ken decided this on 2026-09-27. Couchbase, through its query service and
+SQL++ (N1QL), is the first target in P1. This repository gets a clean
+implementation, and it replaces `xo/n1ql`. It is not a port of `go_n1ql`,
+and it keeps none of the three faults that D8 names.
+
+dbmeta D94 ties the Couchbase model to a rewrite of `xo/n1ql`. When this
+driver works, `dburl`, `usql` and `dbmeta` move to it, and `dbmeta` measures
+its model again, as dbmeta D93 did when Cassandra moved to `xo/cql`.
+
+### D24. A target that has a Go driver in usql is in scope. Decided.
+
+Ken decided this on 2026-09-27. A second goal of this repository is to reduce
+the dependencies of `usql`. A driver here can replace a driver that `usql`
+imports now, such as the ones for ClickHouse, Trino, Presto, DynamoDB,
+Snowflake, BigQuery and Databricks. Such a target is likely P2.
+
+When a driver here replaces one in `usql`, `dbmeta` measures its model again
+on the new driver, because `dbmeta` hard rule 10 requires the package that
+`usql` uses.
+
+### D25. The code uses encoding/json/v2 and the conventions of Go 1.27. Decided.
+
+Ken decided this on 2026-09-27. The module targets Go 1.27.1 or newer (D2),
+and it uses the newest conventions of Go where they fit:
+
+- JSON is read and written with `encoding/json/v2` and
+  `encoding/json/jsontext`, never with `encoding/json`.
+- A nullable value is `sql.Null[T]`, never a type such as `sql.NullString`.
+- A UUID is `uuid.UUID` from the standard library.
+
+The reason for `json/v2` is speed. `jsontext.Decoder` reads one token at a
+time from the body of the response. A driver can then decode a result as it
+arrives from the server, and hand each row to `database/sql` before the rest
+of the result has arrived. The whole result is never held in memory, and the
+keys of an object keep their order (D18). Go 1.27.1 builds both packages with
+no `GOEXPERIMENT` setting. A build on 2026-09-27 showed this.
+
+### D26. A driver is named for its database. Decided.
+
+Ken decided this on 2026-09-27. The package of a driver takes the name of the
+database it targets, and never the name of the query language. The
+Couchbase driver is `github.com/xo/dbimp/couchbase`, not `n1ql`. A driver
+that serves several products takes the name of the product that the others
+follow, and its documentation names the others. The name is one short lower
+case word, as D6 requires.
+
+The name that the driver registers with `database/sql` is the same name, as
+D30 decides.
+
+### D27. A DSN is a standard URL. Decided.
+
+Ken decided this on 2026-09-27. A driver takes only a standard URL as its
+DSN, and parses it with `net/url`, by the rules of the Go standard library.
+`dburl` then writes that URL for each scheme. A driver keeps no form of DSN
+from an earlier driver, such as the list of hosts that `xo/cql` accepts or
+the address of a cluster manager that `go_n1ql` accepts. A DSN that
+`net/url` refuses is an error.
+
+### D28. A driver registers one name. Decided.
+
+Ken decided this on 2026-09-27. Each driver calls `sql.Register` once, with
+one name. It registers no alias. A package outside this repository, such as
+`dburl`, keeps any alias that it chooses for a database, and turns the alias
+into the one name. D30 says which name that is.
+
+### D29. The module imports no other xo package. Decided.
+
+Ken decided this on 2026-09-27. This module never imports `dburl`, `dbmeta`,
+`usql` or `dbtpl`. It reads information from them when it needs a fact, such
+as a scheme in `dburl/scheme.go` or a release in `dbmeta/container/`. It runs
+`dbrun` from a checkout of `dbmeta` as a tool, to start the servers for its
+tests. None of them is in `go.mod`, and `depguard` refuses each one.
+
+### D30. The Couchbase driver registers as couchbase. Decided.
+
+Ken decided this on 2026-09-27, and it answers Q10. The Couchbase driver
+registers the one name `couchbase` with `database/sql`, the same as its
+package (D26 and D28). It never registers `n1ql`.
+
+`dburl` names the scheme `n1ql` today, with `couchbase` as an alias, because
+`go_n1ql` registers `n1ql`. At the move of step 16 of
+[DRIVER.md](DRIVER.md), the `dburl` session makes `couchbase` the `Driver`
+name of the scheme and keeps `n1ql` as an alias. The change waits for the
+move, because `usql` opens `go_n1ql` by the name `n1ql` until then.
+
+The aliases of the scheme belong to `dburl`, and this repository does not
+choose them (D35). The `dburl` session reported that the `Dialect` of the
+scheme changes from `n1ql` to `couchbase` at the rename, because the
+`Dialect` of a scheme names its own `Driver` (dburl D19). A consumer that
+matches on the `Dialect` `n1ql`, in `usql`, `dbtpl` or `dbmeta`, changes in
+the same release.
+
+The rule for every driver follows from D26 and D28: the registered name is
+the name of the package, which is the name of the database. Where `dburl`
+names a scheme differently, the `dburl` session renames it at the move.
+
+### D31. Couchbase is tested on the Enterprise image, with an ordinary user. Decided.
+
+Ken accepted this on 2026-09-27. `dbmeta` starts Couchbase from the image
+`docker.io/library/couchbase`, whose bare tag is the Enterprise edition,
+which is free for development. The `Init` step of that entry creates only
+`Administrator` today. Step 4 of [DRIVER.md](DRIVER.md) needs an ordinary user
+as well, so the `dbmeta` session adds one, with a password that `dbrun`
+knows.
+
+### D32. A target has a priority, not a tier. Decided.
+
+Ken decided this on 2026-09-27, and it answers Q9. [TARGETS.md](TARGETS.md)
+places each target in P1, P2 or P3. The word tier stays with `dbmeta`, which
+uses it for the Tested, Nightly, Verified and Archived releases in CI.
+
+### D33. A decimal is an apd.Decimal. Decided.
+
+Ken decided this on 2026-09-27, and it answers Q6. A decimal is held as an
+`apd.Decimal` from `github.com/cockroachdb/apd/v3`. It is the only dependency
+that is not the standard library or a binary encoding (D13).
+
+The candidates were compared on 2026-09-27. `apd/v3` had its latest release,
+v3.2.3, on 2026-03-23, by the Go module proxy. It uses only the standard
+library, and it holds arbitrary precision with a context that sets the
+precision and the rounding. It has NaN and infinity, which the `Decimal128`
+of MongoDB needs. CockroachDB uses it. `shopspring/decimal` had no release
+after 2024-04-12, and `govalues/decimal` holds at most 19 digits, which is
+too few for DynamoDB and ClickHouse.
+
+`go.mod` gets the requirement with the first code that uses it.
+
+### D34. The root package holds a parser for placeholders. Decided.
+
+Ken decided this on 2026-09-27, and it answers Q7. Some servers bind no
+arguments. For them, the root package holds a small parser that finds each
+`?` and each `@name` in a statement. It skips string literals, quoted
+identifiers and comments, so that a `?` inside a literal stays as it is. That
+fault is in `go_n1ql`. The driver then puts each argument into the statement
+as a literal, written by an escaper that the driver supplies for its product.
+The escaper is never shared, because each product quotes in its own way. Hive
+reads a doubled quote as two literals joined (dbmeta D78).
+
+A driver whose server binds arguments sends them to the server, and does not
+use the parser for that.
+
+An existing package can replace the parser if one fits D13. None was found on
+2026-09-27. The sanitizer of `pgx` is `pgx/v5/internal/sanitize`, which
+cannot be imported, and `interpolateParams` in `go-sql-driver/mysql` is not
+exported.
+
+### D35. A DSN is a URL whose scheme is the name of the driver. Decided.
+
+Ken decided this on 2026-09-27, and it answers Q11. `dburl` hands each driver
+a complete URL, and the scheme of that URL is the one name that the driver
+registers (D28), such as `couchbase://`. A driver knows no alias and accepts
+no other scheme. `dburl` turns every alias into that URL.
+
+The driver reads the rest of the URL by D27: the user information, the host,
+the path and the query keys. Whether it speaks HTTPS or HTTP is a key of the
+query, or another part of the URL that its decisions of step 9 of
+[DRIVER.md](DRIVER.md) name. It is never a second scheme, because the driver
+has one name.
+
+### D36. Rows read the body as a stream, and Close closes it. Decided.
+
+This answers Q8, from Ken's first design and a consultation on 2026-09-27.
+Ken accepted it on 2026-09-27.
+Gemini answered. DeepSeek timed out twice. The source of Go 1.27 settled the
+two claims that the design depends on.
+
+The design is this:
+
+1. `Rows` holds the body of the response and a `jsontext.Decoder` that reads
+   from it, and no other buffer. `jsontext.Decoder` keeps its own buffer and
+   reads from the body into it (measured in `encoding/json/jsontext` in Go
+   1.27.1). A `bufio.Reader` in front of it adds only a second copy.
+2. `Rows.Next` reads the tokens of one row, and no more.
+3. When `Next` reaches the end of the rows, it reads the rest of the
+   response, such as the `errors`, `status` and `metrics` of Couchbase. An
+   error there comes back from `Next`, so a result cut short by the server
+   never looks complete (D21). The body is then at EOF.
+4. `Rows.Close` before the end closes the body and reads nothing more. On
+   HTTP/1.1 the transport then closes the connection, and does not drain it
+   (measured: `bodyEOFSignal.earlyCloseFn` in `net/http/transport.go` of Go
+   1.27.1). On HTTP/2 the stream is reset and the connection stays. To drain
+   a large result to save one connection costs more than the connection.
+5. `Rows.Close` after the end closes a body that is already at EOF, so the
+   connection goes back to the pool.
+6. A cancelled context aborts the read of the body, and `Next` returns the
+   error of the context, never `driver.ErrBadConn`.
+
+A server can keep running a query after the client closes the connection.
+Couchbase has `DELETE /admin/active_requests/<id>`, Trino has a `DELETE` on the
+next URI, and ArangoDB has a `DELETE` on the cursor. `Close` has no context,
+and the library never makes one. So a driver relies on the server noticing the
+closed connection, and item 7 of step 6 of [DRIVER.md](DRIVER.md) measures that
+for each product. Gemini said that Couchbase stops such a query, and nothing
+measured it. If a product does not stop, its driver records a decision of its
+own, and Ken makes it. The choice is between keeping `context.WithoutCancel` of
+the context of the query in `Rows`, which breaks the rule that a struct never
+holds a context, and a timeout that the connector holds.
+
+## Open questions
+
+Do not decide these yourself. Ask Ken.
+
+### Q1. Which targets come after Couchbase?
+
+Couchbase is first (D23). Ken will arrange the other targets after the first
+driver is complete. The review in [TARGETS.md](TARGETS.md) names a start:
+CrateDB, QuestDB, rqlite, libSQL, InfluxDB 3 and TDengine, by D17.
+
+### Q2. Which licence? Answered by D22.
+
+### Q3. How does a result that is not a table become rows? Answered by D18.
+
+### Q4. Does the Couchbase driver here replace xo/n1ql? Answered by D23.
+
+### Q5. Is a target that already has a Go driver in usql in scope? Answered by D24.
+
+### Q6. What Go type holds a decimal? Answered by D33.
+
+### Q7. What does a driver do when the server binds no arguments? Answered by D34.
+
+### Q8. How does rows.Close release a cursor on the server? Answered by D36.
+
+### Q9. Is "tier" the right word? Answered by D32.
+
+### Q10. Does the registered name follow the package name? Answered by D30.
+
+### Q11. Which short aliases does the Couchbase scheme keep? Answered by D35.

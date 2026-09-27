@@ -1,0 +1,51 @@
+# Tests dbimp on every push and pull request.
+#
+# The unit and lint jobs need no server. The integration jobs arrive with the
+# first driver, and start each server with dbrun from a pinned dbmeta commit
+# (W3 in docs/BACKLOG.md, D9 in docs/PLAN.md).
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: Unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Format
+        run: test -z "$(gofmt -l .)"
+      - name: Vet
+        run: go vet ./...
+      - name: Build
+        run: go build ./...
+      # -count=2 finds a registration in a test body, which a second run
+      # refuses.
+      - name: Test
+        run: go test -race -count=2 ./...
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      # Pinned, because .golangci.yml sets default: all and a newer release
+      # can turn on a linter that nobody chose (D10).
+      - name: Install golangci-lint
+        run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.13.2
+      - name: Lint
+        run: golangci-lint run ./...

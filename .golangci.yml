@@ -1,0 +1,132 @@
+# Lint configuration. See D10 in docs/PLAN.md.
+#
+# The posture is `default: all` with a disable list, as in dburl, dbmeta and
+# cql. A new linter that arrives in a release gets a look rather than
+# silence. The version is pinned in the workflow, so an upgrade cannot turn on
+# a linter that nobody chose.
+#
+# The rule for a finding: a linter that makes idiomatic Go worse is disabled
+# here, with the reason beside it. Only a real defect gets a code change. A
+# change made only to quiet a linter is itself a defect.
+#
+# Two hard rules in CLAUDE.md are held here rather than by review. depguard
+# keeps the dependencies to the standard library and apd (D13). forbidigo bans
+# context.Background, context.TODO and the database/sql calls that take no
+# context (D8).
+version: "2"
+
+run:
+  modules-download-mode: readonly
+
+linters:
+  default: all
+  disable:
+    # Layout and naming rules that fight idiomatic Go. Short names such as db,
+    # c and s are the convention for a receiver or a local with a small scope.
+    - lll
+    - nlreturn
+    - varnamelen
+    - wsl
+    - wsl_v5
+    # A struct literal names the fields it sets, and no more.
+    - exhaustruct
+    - exhaustruct_v5
+    # Complexity metrics. A decoder for the types of one product is one
+    # switch, and splitting the switch hides the table.
+    - cyclop
+    - funlen
+    - gocognit
+    - gocyclo
+    - maintidx
+    - nestif
+    # A switch names the cases it handles and answers the rest after the
+    # switch. The remedy this linter wants is an empty case, which says less.
+    - exhaustive
+    # A driver registers itself from init, as every database/sql driver does.
+    - gochecknoinits
+    - gochecknoglobals
+    # A sentinel error is a constant of a defined string type (D6), which
+    # err113 cannot test.
+    - err113
+    # An error is wrapped once, where the context is known. Wrapping an error
+    # from database/sql again destroys nothing, but wrapcheck asks for it at
+    # every return.
+    - wrapcheck
+    # A NULL is nil and needs no error (D8).
+    - nilnil
+    # `if err := f(); err != nil` is idiomatic Go.
+    - noinlineerr
+    # SQL repeats on purpose, and `SELECT a, a` is a column list, not a typo.
+    - goconst
+    - dupword
+    # prealloc rewrites readable loops for a gain that nothing has measured.
+    - prealloc
+    # depguard holds the dependency rule, and holding it twice means two
+    # places to change it. gomodguard is also deprecated.
+    - gomodguard
+    - gomodguard_v2
+
+  settings:
+    # Hard rule 6 and D13. The module imports the standard library, apd for
+    # decimals (D33), and nothing else. A binary encoding that Ken approves
+    # for one database is added here.
+    depguard:
+      rules:
+        main:
+          list-mode: strict
+          allow:
+            - $gostd
+            - github.com/xo/dbimp
+            - github.com/cockroachdb/apd/v3
+    # Hard rule 4, and the database/sql half of D8.
+    forbidigo:
+      analyze-types: true
+      forbid:
+        - pattern: ^context\.(Background|TODO)$
+          msg: take the context from the caller, never make one here
+        - pattern: ^\(\*database/sql\.(DB|Conn|Tx|Stmt)\)\.(Query|Exec|QueryRow|Prepare)$
+          msg: use the Context form, such as QueryContext
+    # A deferred Close has nothing left to report after the code read Err. Wrapping the defer in a closure to discard it reads worse.
+    errcheck:
+      exclude-functions:
+        - (*database/sql.DB).Close
+        - (*database/sql.Rows).Close
+        - (*database/sql.Stmt).Close
+    errorlint:
+      errorf: true
+      asserts: true
+      comparison: true
+    revive:
+      rules:
+        - name: context-as-argument
+        - name: error-naming
+        - name: error-return
+        - name: error-strings
+        - name: exported
+        - name: indent-error-flow
+        - name: package-comments
+        - name: receiver-naming
+        - name: var-naming
+
+  exclusions:
+    rules:
+      # A test builds its own context and does not answer to the context
+      # rule.
+      - path: _test\.go
+        linters:
+          - forbidigo
+      # docs_test.go and skills_test.go read the files of this repository,
+      # which they find by walking the repository itself.
+      - path: (docs|skills)_test\.go
+        linters:
+          - gosec
+        text: G304
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/xo/dbimp
