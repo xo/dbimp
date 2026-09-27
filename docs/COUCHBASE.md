@@ -11,7 +11,10 @@ administrator and as the ordinary user, recorded on 2026-09-27 from the
 script `testdata/couchbase/requests.json` with `dbimptest/cmd/record`. A fact
 that only one release or one principal shows names it. "Measured with curl"
 means that this session sent the request by hand on 8.0.3 on 2026-09-27, and
-no file holds it. A fact marked "not measured" is a lead, not a fact.
+no file holds it. "Tested" means that an integration test in
+`couchbase/integration_test.go` holds it, and passed on 7.2.9, 7.6.12 and
+8.0.3 as both principals on 2026-09-27. A fact marked "not measured" is a
+lead, not a fact.
 
 ## Summary
 
@@ -26,8 +29,10 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
 - The scheme in `dburl` has the `Driver` name `n1ql`, the alias `couchbase`,
   and the dialect `n1ql`. At the move of step 16, `couchbase` becomes the
   `Driver` name and `n1ql` an alias (D30).
-- The survey of step 5a is `testdata/couchbase/features.json`. It holds 71
-  operations, features and types, each settled against 8.0.3, and asked of
+- The survey of step 5a is `testdata/couchbase/features.json`. It holds the
+  operations, the features and the types, each settled against 8.0.3, and
+  each one names the integration test that holds it (step 14a). They were
+  asked of
   Gemini, DeepSeek, `github.com/couchbase/gocb/v2` v2.12.5 and the Python
   SDK on 2026-09-27. The script `testdata/couchbase/requests.json` records
   each one on the three releases, as both principals.
@@ -101,6 +106,16 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
   (recorded).
 - The response to a DML statement has `"signature": null`, an empty
   `results`, and a count in `metrics.mutationCount` (recorded).
+- Other statements with `"signature": null` return rows (tested).
+  `CREATE INDEX` returns one object, `{"id": ..., "name": ..., "state":
+  "online"}`, and `INFER` returns one array. So the driver reads the rows of
+  a null signature as it reads `SELECT *` when the first row is an object,
+  and as it reads `SELECT RAW` when it is not.
+- `BEGIN WORK` has the signature `"json"`, and its one row is an object with
+  the `txid` (tested). A person who types it sees one column that holds the
+  object.
+- The integration tests name the columns of a statement in the order of
+  their names, so that every release returns the same order.
 - `status` is `success`, `fatal`, `stopped` or `errors` (recorded). An
   `INSERT` of a key that exists ends with `errors` and code 12009. A query
   stopped by a cancel ends with `stopped` and no error.
@@ -124,6 +139,11 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
 - The server holds a larger integer as a float64 itself: it sends
   123456789012345678901234567890 as `123456789012345680000000000000`
   (recorded). The driver cannot recover digits that the server did not send.
+- The server writes a float64 that is a whole number as its digits, with no
+  exponent. `-1.5e300` arrives as `-15` and 299 zeros, so the driver returns
+  it as a `*apd.Decimal`, because it does not fit an int64 (tested). A
+  fraction such as `1.5e-300` arrives as a float64 (tested). D39 said that no
+  `*apd.Decimal` arrives from Couchbase, and this corrects it.
 - `0.1` arrives as `0.1` (recorded).
 - A field that is MISSING is absent from the result object, and the
   signature still names it. `SELECT d.x, d.y, d.z` over the document
@@ -166,7 +186,8 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
   `0.30000000000000004` (recorded).
 - Each kind makes the round trip of step 14a on each release, as a bound
   argument and as a literal, in a document of the collection
-  `dbmeta.dbimp.types` (recorded).
+  `dbmeta.dbimp.types` (recorded), and in the collection `types` of the
+  scope that the integration tests make (tested).
 - SQL++ has no type for a time, a binary value or a UUID. A time is a string
   in RFC 3339, `BASE64_ENCODE` returns a string, and a UUID is a string
   (recorded). The models agreed on this.
@@ -174,6 +195,16 @@ no file holds it. A fact marked "not measured" is a lead, not a fact.
 The type table comes from the code, in step 10.
 
 <!-- dbimp:types -->
+| Wire type | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- |
+| missing | `nil` | `interface {}` | `MISSING` | yes |
+| null | `nil` | `interface {}` | `NULL` | yes |
+| boolean | `bool` | `bool` | `BOOLEAN` | yes |
+| number | `int64, float64, or *apd.Decimal for an integer too large for int64` | `interface {}` | `NUMBER` | yes |
+| string | `string` | `string` | `STRING` | yes |
+| array | `[]any` | `[]interface {}` | `ARRAY` | yes |
+| object | `map[string]any` | `map[string]interface {}` | `OBJECT` | yes |
+| bytes as a base64 string | `[]byte, decoded from base64 (D44)` | `string` | `STRING` | yes |
 <!-- /dbimp:types -->
 
 ## Parameters
@@ -188,6 +219,11 @@ The type table comes from the code, in step 10.
   the signature and before any row (recorded).
 - So the driver sends each argument to the server, and never uses the parser
   of D34 for them.
+- `WithParameter(name, value)` sets any parameter of the request by its
+  name, as the raw options of the SDKs do. The tests use it for
+  `client_context_id`, `metrics`, `profile`, `max_parallelism`, `scan_cap`,
+  `pipeline_batch`, `use_replica`, `use_fts`, `preserve_expiry` and
+  `tximplicit`, which the driver has no option of its own for (tested).
 
 ## Transactions
 
@@ -210,6 +246,18 @@ The type table comes from the code, in step 10.
   (recorded).
 - `tximplicit: true` with `durability_level: "none"` runs one statement in a
   transaction of its own (recorded).
+- A transaction that nobody ends applies none of its writes. A write in it
+  did not block a write to the same key from outside it, and the value from
+  outside stayed after the transaction reached its `txtimeout` of 3 seconds.
+  `ROLLBACK WORK` after that timeout is refused with code 17010 (measured
+  with curl on 8.0.3).
+- The timeout of a transaction is 15 seconds for a request that sets no
+  `txtimeout`, and a setting of the node can lower it. The default
+  durability is `majority`. Every statement of a transaction goes to the
+  same query node. These three facts come from the documentation of
+  Couchbase, read on 2026-09-27: "Configure Queries" and "SQL++ Support for
+  Couchbase Transactions". The driver talks to one host (D38), so the last
+  one holds by itself. D45 relies on the first.
 - A transaction holds state on the server, so a `database/sql` transaction
   maps onto one connection that carries the txid (D20). The first release
   supports it (D41). The DSN key and the option `durability_level` set the
@@ -217,6 +265,9 @@ The type table comes from the code, in step 10.
 
 ## Errors
 
+- The driver returns a `*ResponseError` for a response that failed. It holds
+  the HTTP status, the status of the body, and each `Error` with its code,
+  and `errors.As` finds each `Error` in it.
 - A syntax error is HTTP 400 with code 3000, the line and the column, and no
   signature and no results (recorded).
 - An error can arrive after rows. The `ABORT` statement returned HTTP 200,
@@ -239,6 +290,12 @@ The type table comes from the code, in step 10.
   straight after an `UPSERT` returned no rows (the `dbmeta` session). A test
   that writes and then reads sends `scan_consistency: request_plus`, or reads
   by `USE KEYS`.
+- The server makes a scope, a collection or an index a moment after the
+  statement returns. On 7.2.9, `CREATE COLLECTION` straight after
+  `CREATE SCOPE` failed with code 12021, "Scope not found" (tested). A
+  `CREATE INDEX` that failed can still make the index, and the next try gets
+  code 4300, "already exists" (tested). `DROP SCOPE` also ends a moment after
+  it returns. So `TestMain` tries each statement again for a while.
 - After a start, the data service can be cold. On 7.2.9, the first read by
   key, 3.6 seconds after a write, returned no rows (recorded, as the
   administrator). The same read a moment later, as the ordinary user, found
@@ -293,14 +350,18 @@ and 8.0.3:
   the refusal asks for `query_use_sequential_scans`, a role that the user
   does not hold.
 - The ordinary user reads the version with `SELECT RAW ds_version()`, the
-  statement that `usql` runs (recorded).
+  statement that `usql` runs (recorded). Both principals read
+  `7.2.9-9230-enterprise`, `7.6.12-8946-enterprise` and
+  `8.0.3-5933-enterprise` through this driver (tested, by
+  `TestIntegrationVersion`, which step 16 asks for).
 - The ordinary user can begin a transaction, and can stop its own query with
   `DELETE FROM system:active_requests` (recorded).
 - The ordinary user is refused, with HTTP 401 and code 13014, an index, a
   vector index, a sequence and the use of one, an inline or a JavaScript
   function, and `CURL()` (recorded). It can run the CRUD of the survey on a
   collection that the administrator made, in the bucket `dbmeta`.
-- `dbrun dsn --json` prints no DSN for the ordinary user.
+- `dbrun dsn --json` prints no DSN for the ordinary user. The CI workflow
+  builds it from the `url` field, with the name `dbmeta_user`.
 
 ## Flavors
 
@@ -317,6 +378,26 @@ is a question for step 9.
 The interface table comes from the code, in step 10.
 
 <!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping runs SELECT RAW 1, because /admin/ping needs no credentials. |
+| `driver.SessionResetter` | yes | ResetSession rolls back a transaction left open (D41). |
+| `driver.Validator` | yes | A connection holds no state on the server outside a transaction. |
+| `driver.NamedValueChecker` | yes | An argument is any value that json/v2 encodes, and an Option is taken out (D40). |
+| `driver.QueryerContext` | yes | The query service binds each argument itself. |
+| `driver.ExecerContext` | yes | A write returns metrics.mutationCount as its rows affected. |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, bound each time. |
+| `driver.ConnBeginTx` | yes | A transaction of the query service, with a txid (D41). |
+| `driver.RowsColumnScanner` | yes | A value is decoded as it is scanned, and a byte slice gets base64 decoded (D44). |
+| `driver.RowsNextResultSet` | no | A request holds one statement, so a response has one result. |
+| `driver.RowsColumnTypeScanType` | yes | From the kind that the signature names. |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The kind that the signature names, in upper case. |
+| `driver.RowsColumnTypeLength` | no | A document has no schema, so no column has a length. |
+| `driver.RowsColumnTypeNullable` | yes | Every column can be NULL or MISSING, because a document has no schema. |
+| `driver.RowsColumnTypePrecisionScale` | no | A number is a JSON number, with no precision or scale. |
 <!-- /dbimp:interfaces -->
 
 ## Faults
@@ -422,9 +503,16 @@ The survey of step 5a asked the same two models four more questions on
   the engine and the recordings show the placeholder. DeepSeek said the
   placeholder, which is right, and said that `BASE64_ENCODE` recovers the
   bytes, which is wrong (recorded).
-- `INFER` fails on 7.2.9 with code 7014, "No documents found", over
-  documents that the same run had written, and works on 7.6.12 and 8.0.3
-  (recorded).
+- `INFER` failed on 7.2.9 with code 7014, "No documents found", over
+  documents that the same run had written, and worked on 7.6.12 and 8.0.3
+  (recorded). The integration tests later found that `INFER` samples the
+  documents at random, on every release. It can find none for a moment after
+  a write, and for about ten seconds after a collection of the bucket is
+  dropped. On 7.2.9 it can find none in a collection that holds many deleted
+  documents. `INFER` works on each release when it is tried again, over a
+  collection that holds no deleted documents (tested). `INFER` of an
+  expression, such as `INFER [{"a": 1}]`, is a syntax error on 7.2.9, and
+  works on 7.6.12 and 8.0.3 (measured with curl).
 
 ## Open questions
 

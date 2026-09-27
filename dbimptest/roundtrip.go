@@ -1,6 +1,7 @@
 package dbimptest
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -88,8 +89,10 @@ func RoundTrip(tb testing.TB, db *sql.DB, c RoundTripCase) {
 		c.Equal = reflect.DeepEqual
 	}
 	tb.Cleanup(func() {
+		// The context of the test ends before its cleanup runs.
+		ctx := context.WithoutCancel(tb.Context())
 		for _, stmt := range c.Teardown {
-			if _, err := db.ExecContext(tb.Context(), stmt); err != nil {
+			if _, err := db.ExecContext(ctx, stmt); err != nil {
 				tb.Errorf("tearing down the round trip of %s: %s: %v", c.Type, stmt, err)
 			}
 		}

@@ -1,8 +1,10 @@
 # Tests dbimp on every push and pull request.
 #
-# The unit and lint jobs need no server. The integration jobs arrive with the
-# first driver, and start each server with dbrun from a pinned dbmeta commit
-# (W3 in docs/BACKLOG.md, D9 in docs/PLAN.md).
+# The unit and lint jobs need no server. The integration job starts each
+# release of each driver with dbrun from a pinned dbmeta commit, and runs the
+# integration tests against it (W3 in docs/BACKLOG.md, D9 in docs/PLAN.md). A
+# push runs the releases that dbmeta calls tested, and the nightly run adds the
+# ones that it calls nightly. The workflow names no release (dbmeta D69).
 name: Test
 
 on:
@@ -10,10 +12,20 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    # Every night, for the releases that dbmeta calls nightly.
+    - cron: "41 3 * * *"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+env:
+  # ec91128 or later: 2b93710 holds the ordinary Couchbase user (dbmeta D96),
+  # and ec91128 gives each server an owner (dbmeta D98).
+  DBMETA_COMMIT: ec911287f0052189d45fc9d0a8991a0c5bce5e65
+  DBMETA_OWNER: dbimp-ci
+  DBMETA_RUNNER: docker
 
 jobs:
   unit:
@@ -49,3 +61,83 @@ jobs:
         run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.13.2
       - name: Lint
         run: golangci-lint run ./...
+
+  releases:
+    name: Releases
+    runs-on: ubuntu-latest
+    outputs:
+      names: ${{ steps.list.outputs.names }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: xo/dbmeta
+          ref: ${{ env.DBMETA_COMMIT }}
+          path: dbmeta
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: dbmeta/test/go.mod
+          cache-dependency-path: dbmeta/test/go.sum
+      # A driver has the name of its product (D30), and each driver has a
+      # folder under testdata/, so the products come from there.
+      - name: List
+        id: list
+        run: |
+          selectors=tested
+          if [ "${{ github.event_name }}" = schedule ]; then
+            selectors="tested nightly"
+          fi
+          products=$(ls -d testdata/*/ | xargs -n1 basename | jq -R . | jq -sc .)
+          names=$(cd dbmeta/test && go run ./cmd/dbrun list --json $selectors |
+            jq -c --argjson products "$products" '[.[] | select(.product as $p | $products | index($p)) | .name] | unique')
+          echo "names=$names" >> "$GITHUB_OUTPUT"
+
+  integration:
+    name: ${{ matrix.release }}
+    needs: releases
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        release: ${{ fromJSON(needs.releases.outputs.names) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: xo/dbmeta
+          ref: ${{ env.DBMETA_COMMIT }}
+          path: dbmeta
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: |
+            go.sum
+            dbmeta/test/go.sum
+      - name: Start ${{ matrix.release }}
+        working-directory: dbmeta/test
+        run: go run ./cmd/dbrun start ${{ matrix.release }}
+      # The url field is the DSN of the driver, the scheme of which is the
+      # name of the driver (D27). <PRODUCT>_DSN is the administrator, and
+      # <PRODUCT>_ORDINARY_DSN is the ordinary user that dbmeta makes (D9).
+      - name: Test
+        run: |
+          info=$(cd dbmeta/test && go run ./cmd/dbrun dsn --json ${{ matrix.release }})
+          product=$(echo "$info" | jq -r '.[0].product')
+          dsn=$(echo "$info" | jq -r '.[0].url')
+          case "$product" in
+            couchbase) ordinary=dbmeta_user ;;
+          esac
+          prefix=$(echo "$product" | tr '[:lower:]' '[:upper:]')
+          export "${prefix}_DSN=$dsn"
+          if [ -n "$ordinary" ]; then
+            export "${prefix}_ORDINARY_DSN=$(echo "$dsn" | sed -E "s#://[^:@/]+:#://$ordinary:#")"
+          fi
+          go test -race -count=1 -run Integration -v "./$product/..."
+      - name: Logs
+        if: failure()
+        working-directory: dbmeta/test
+        run: go run ./cmd/dbrun logs ${{ matrix.release }}
+      - name: Remove ${{ matrix.release }}
+        if: always()
+        working-directory: dbmeta/test
+        run: go run ./cmd/dbrun remove ${{ matrix.release }}

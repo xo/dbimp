@@ -103,6 +103,12 @@ linters:
         # The body of a response, closed after the part that matters was read.
         - (io.ReadCloser).Close
         - (io.Closer).Close
+        # The rows of a driver, closed in a defer after the part that
+        # matters was read, as with the body.
+        - (*github.com/xo/dbimp/couchbase.rows).Close
+        # A deferred rollback after a commit returns sql.ErrTxDone, and a
+        # test has nothing to do with that.
+        - (*database/sql.Tx).Rollback
     gosec:
       excludes:
         # errcheck holds the rule for an error that is not checked, with the
@@ -156,6 +162,24 @@ linters:
       - path: dbimptest/.*_test\.go
         linters:
           - paralleltest
+      # The integration tests of a driver share one server and the scope that
+      # TestMain makes, and run in order. A body that runs once for each
+      # principal takes *testing.T and is a test, not a helper.
+      - path: integration_test\.go
+        linters:
+          - paralleltest
+          - thelper
+      # A test builds a statement from the name of the scope or the table that
+      # it made, and holds text in other scripts on purpose, and sends SELECT
+      # * as a person does, to test the star signature.
+      - path: _test\.go
+        linters:
+          - gosec
+        text: G202
+      - path: _test\.go
+        linters:
+          - gosmopolitan
+          - unqueryvet
       # The contract reads rows in several shapes, and closes each one in a
       # cleanup of the test, where these linters cannot follow it.
       - path: dbimptest/contract\.go

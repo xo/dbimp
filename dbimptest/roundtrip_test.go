@@ -31,6 +31,8 @@ type memStore struct {
 	stringify bool
 	// keep makes DELETE do nothing, which is a fault.
 	keep bool
+	// dropped is set by the statement DROP of a teardown.
+	dropped bool
 }
 
 func (s *memStore) write(key string, v any, deleted bool) {
@@ -82,8 +84,15 @@ func keyArg(args []driver.NamedValue, i int) (string, error) {
 	return key, nil
 }
 
-func (c memConn) ExecContext(_ context.Context, query string, args []driver.NamedValue) (driver.Result, error) {
+func (c memConn) ExecContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Result, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	switch {
+	case query == "DROP":
+		c.s.mu.Lock()
+		c.s.dropped = true
+		c.s.mu.Unlock()
 	case query == "INSERT":
 		key, err := keyArg(args, 0)
 		if err != nil {
@@ -216,6 +225,22 @@ func TestRoundTripWaitsForALateWrite(t *testing.T) {
 	c := memCase()
 	c.Wait = 2 * time.Second
 	dbimptest.RoundTrip(t, db, c)
+}
+
+// The context of a test ends before its cleanup runs, and the first version
+// sent the teardown with it, so the teardown never ran.
+func TestRoundTripTearsDown(t *testing.T) {
+	s := &memStore{}
+	db := openMem(s)
+	defer db.Close()
+	t.Run("round trip", func(t *testing.T) {
+		c := memCase()
+		c.Teardown = []string{"DROP"}
+		dbimptest.RoundTrip(t, db, c)
+	})
+	if !s.dropped {
+		t.Error("the teardown did not run")
+	}
 }
 
 func TestRoundTripCatchesAFault(t *testing.T) {

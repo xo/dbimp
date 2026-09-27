@@ -90,7 +90,10 @@ first version of `Any` read the name after the value, and a test found it.
 
 `ObjectRows` reads an array of objects by rule 2 of D18. If the driver
 passes no columns, it reads the first object to learn them, and `Next`
-returns that object first. A key that a later object lacks is a nil value,
+returns that object first. `NewObjectRows` reads the `[` that starts the
+array. `ContinueObjectRows` is for a driver that has read the `[` itself,
+such as to look at the kind of the first row before it chooses how to read
+the rows. A key that a later object lacks is a nil value,
 and a JSON null is the value `null`, so a driver can tell the two apart
 when its product has both. A key that only a later object has is
 `ErrExtraColumn`.
@@ -153,7 +156,7 @@ for code that only a test uses. So they are not in the root package (D37).
 
 | File | Holds |
 | --- | --- |
-| `exchange.go` | `Exchange`, `ReadExchange`, `Match`, `DefaultMatch` and `Replay` |
+| `exchange.go` | `Exchange`, `ReadExchange`, `Match`, `DefaultMatch`, `Replay` and `ReplayRelease` |
 | `manifest.go` | `Manifest`, `Entry`, `ReadManifest` and `WriteManifest` |
 | `record.go` | `Recorder` and `WithLabel`, which write the exchanges of step 6 |
 | `cmd/record/` | The command that records the requests of `requests.json` |
@@ -189,7 +192,9 @@ the first exchange that matches it. `DefaultMatch` compares the method, the
 path, the query, and the body, where two JSON bodies match if their
 canonical forms are equal. A driver whose requests hold a value that changes
 each time, such as an id for the request, supplies its own `Match`. A
-request that nothing matches fails the test.
+request that nothing matches fails the test. `ReplayRelease` does the same
+with the exchanges of one release, for a test of what that release sends,
+such as the order of the columns on 7.2.9.
 
 ### The manifest
 

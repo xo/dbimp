@@ -59,6 +59,8 @@ so on. Decisions are numbered `D1`, `D2` and so on. The two series never mix.
 | [D42](#d42-how-the-couchbase-driver-reads-a-result-decided) | How the Couchbase driver reads a result | Decided |
 | [D43](#d43-the-couchbase-driver-has-a-key-for-durability-decided) | The Couchbase driver has a key for durability | Decided |
 | [D44](#d44-a-couchbase-string-scans-into-a-byte-slice-as-base64-decided) | A Couchbase string scans into a byte slice as base64 | Decided |
+| [D45](#d45-a-couchbase-transaction-keeps-the-context-of-begintx-decided) | A Couchbase transaction keeps the context of BeginTx | Decided |
+| [D46](#d46-the-couchbase-dsn-has-a-key-for-the-timeout-of-a-transaction-decided) | The Couchbase DSN has a key for the timeout of a transaction | Decided |
 
 ### D1. The module path is github.com/xo/dbimp. Decided.
 
@@ -605,7 +607,8 @@ when the command line already names it, so that reason was wrong.
 
 ### D38. The Couchbase DSN. Decided.
 
-Ken accepted this on 2026-09-27. D43 adds the key `durability_level`.
+Ken accepted this on 2026-09-27. D43 adds the key `durability_level`, and
+D46 adds the key `txtimeout`.
 
 The DSN is `couchbase://user:pass@host:port/?key=value` (D27 and D35). The
 user information holds the credentials, which the driver sends with basic
@@ -640,6 +643,12 @@ case: `NUMBER`, `STRING`, `BOOLEAN`, `NULL`, `MISSING`, `ARRAY`, `OBJECT` or
 - A number is an `int64` when it is an integer that fits, and a `float64`
   otherwise, as `dbimp.Number` decodes it. The server sends a larger integer
   as a float64 itself, so no `*apd.Decimal` arrives from Couchbase.
+  Correction of 2026-09-27: the server rounds a larger integer to a float64,
+  and sends the digits of the rounded value, such as
+  `123456789012345680000000000000`, with no point and no exponent. Those
+  digits are too large for an `int64`, so `dbimp.Number` returns them as an
+  `*apd.Decimal`, which holds exactly what the server sent. A test of the
+  driver found this.
 - A string is a `string`, a boolean is a `bool`, and a time, a binary value
   and a UUID are the strings that the server sends, because SQL++ has no
   type for them. A caller scans a time into a `time.Time` through
@@ -745,6 +754,50 @@ Text that happens to be valid base64, such as `abcd`, is decoded too. That
 is the cost of the rule, and a caller that wants the text scans into a
 `*string`. A value that is not a string, such as an object or an array,
 still scans into a `*[]byte` as its JSON text, as D39 says.
+
+### D45. A Couchbase transaction keeps the context of BeginTx. Decided.
+
+Ken decided this on 2026-09-27. It is the one exception to hard rule 4,
+which says that the library never stores a context. `driver.Tx.Commit` and
+`driver.Tx.Rollback` take no context, and `COMMIT WORK` and `ROLLBACK WORK`
+are requests that need one. `database/sql` defines the context of `BeginTx`
+as the lifetime of the transaction: it rolls the transaction back when that
+context ends.
+
+So the transaction keeps that context, and nothing else keeps one:
+
+- `Commit` sends `COMMIT WORK` with it.
+- `Rollback` sends `ROLLBACK WORK` with it while it is live. When it has
+  ended, which is when `database/sql` rolls back by itself, `Rollback`
+  forgets the `txid` and sends nothing.
+
+That is safe because of what the server does with a transaction that nobody
+ends. Measured on 8.0.3 on 2026-09-27: a transaction that was left open
+applied none of its writes, did not block a write to the same key from
+outside it, and ended at its `txtimeout`, after which its `txid` was refused
+with code 17010. The timeout is 15 seconds for a request that sets none, by
+the documentation of Couchbase, and a setting of the node can lower it
+([COUCHBASE.md](COUCHBASE.md)).
+
+`pgx`, `gosnowflake` and `go-mssqldb` keep the context of `BeginTx` in the
+same way, which was read in their source on 2026-09-27.
+
+### D46. The Couchbase DSN has a key for the timeout of a transaction. Decided.
+
+Ken decided this on 2026-09-27, and it amends D38. The DSN takes the key
+`txtimeout`, a duration such as `30m`, and `WithTransactionTimeout` sets it
+for one transaction, by the order of D40. The driver sends it with
+`BEGIN WORK`. If the DSN has no such key, the driver sends none, and the
+server ends a transaction 15 seconds after it began.
+
+Fifteen seconds is too short for a person who types statements into an open
+transaction in `usql`. The server takes any length: 2 minutes, 20 minutes
+and 1 hour were accepted on 8.0.3 on 2026-09-27, and the documentation names
+no maximum. The interactive shell of Couchbase, `cbq`, uses 2 minutes. So
+`usql` sets a long default, such as 30 minutes, when the URL has none, and
+that change is part of the move of step 16 of [DRIVER.md](DRIVER.md). The
+driver keeps the default of the server for every other caller, because an
+abandoned transaction holds its state on the server until its timeout.
 
 ## Open questions
 

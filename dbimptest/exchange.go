@@ -88,10 +88,23 @@ func sameBody(a, b []byte) bool {
 // the survey, and closes the server when the test ends.
 func Replay(t *testing.T, dir string, match Match) *httptest.Server {
 	t.Helper()
+	return replay(t, dir, "*.json", match)
+}
+
+// ReplayRelease is Replay for the exchanges of one release only, whose files
+// start with the name of the release, as dbrun names it. A test uses it when
+// releases answer the same request in different ways.
+func ReplayRelease(t *testing.T, dir, release string, match Match) *httptest.Server {
+	t.Helper()
+	return replay(t, dir, release+"-*.json", match)
+}
+
+func replay(t *testing.T, dir, pattern string, match Match) *httptest.Server {
+	t.Helper()
 	if match == nil {
 		match = DefaultMatch
 	}
-	paths, err := filepath.Glob(filepath.Join(dir, "*.json"))
+	paths, err := filepath.Glob(filepath.Join(dir, pattern))
 	if err != nil {
 		t.Fatalf("finding the exchanges in %s: %v", dir, err)
 	}

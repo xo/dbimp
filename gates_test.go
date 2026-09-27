@@ -405,7 +405,9 @@ func gateGlobals(root string) []string {
 					for _, spec := range gd.Specs {
 						if vs, ok := spec.(*ast.ValueSpec); ok {
 							for _, n := range vs.Names {
-								globals[n.Name] = true
+								if n.Name != "_" {
+									globals[n.Name] = true
+								}
 							}
 						}
 					}
@@ -451,7 +453,9 @@ func gateRegister(root string) []string {
 	for _, d := range driverDirs(root) {
 		var names []string
 		var outside bool
-		for _, f := range parseDir(root, d, false) {
+		files := parseDir(root, d, false)
+		consts := stringConsts(files)
+		for _, f := range files {
 			sqlName := importName(f, "database/sql")
 			for _, decl := range f.Decls {
 				fn, ok := decl.(*ast.FuncDecl)
@@ -466,8 +470,15 @@ func gateRegister(root string) []string {
 					outside = outside || fn.Name.Name != "init"
 					name := "?"
 					if len(call.Args) > 0 {
-						if lit, ok := call.Args[0].(*ast.BasicLit); ok && lit.Kind == token.STRING {
-							name, _ = strconv.Unquote(lit.Value)
+						switch arg := call.Args[0].(type) {
+						case *ast.BasicLit:
+							if arg.Kind == token.STRING {
+								name, _ = strconv.Unquote(arg.Value)
+							}
+						case *ast.Ident:
+							if v, ok := consts[arg.Name]; ok {
+								name = v
+							}
 						}
 					}
 					names = append(names, name)
@@ -486,6 +497,32 @@ func gateRegister(root string) []string {
 		}
 	}
 	return problems
+}
+
+// stringConsts returns the string constants of a package, by name, such as
+// the Name that a driver registers.
+func stringConsts(files []*ast.File) map[string]string {
+	consts := map[string]string{}
+	for _, f := range files {
+		for _, decl := range f.Decls {
+			gd, ok := decl.(*ast.GenDecl)
+			if !ok || gd.Tok != token.CONST {
+				continue
+			}
+			for _, spec := range gd.Specs {
+				vs, ok := spec.(*ast.ValueSpec)
+				if !ok || len(vs.Names) != len(vs.Values) {
+					continue
+				}
+				for i, n := range vs.Names {
+					if lit, ok := vs.Values[i].(*ast.BasicLit); ok && lit.Kind == token.STRING {
+						consts[n.Name], _ = strconv.Unquote(lit.Value)
+					}
+				}
+			}
+		}
+	}
+	return consts
 }
 
 // releaseName matches a release as dbrun names it, such as couchbase-8.0.3.

@@ -7,8 +7,9 @@ use them. The first drivers are for databases that take queries over HTTP.
 The drivers use the Go standard library, with
 [apd](https://github.com/cockroachdb/apd) for decimals, and need no cgo.
 
-The repository is new, and it holds no driver yet.
-[docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support.
+The repository is new. It holds one driver, for Couchbase, which is not yet
+released. [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to
+support.
 
 ## Use
 
@@ -23,11 +24,10 @@ import (
 	_ "github.com/xo/dbimp/couchbase"
 )
 
-db, err := sql.Open("couchbase", "couchbase://user:pass@localhost:8093")
+db, err := sql.Open("couchbase", "couchbase://user:pass@localhost:8093/")
 ```
 
-The Couchbase driver does not exist yet, and the example shows the form that
-it will take. A driver registers one name and knows no alias.
+A driver registers one name and knows no alias.
 [dburl](https://github.com/xo/dburl) turns an alias, such as `n1ql`, into the
 URL that the driver reads, so every alias works in `usql`.
 

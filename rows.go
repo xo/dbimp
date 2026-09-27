@@ -29,6 +29,12 @@ func NewObjectRows(dec *jsontext.Decoder, cols []string) (*ObjectRows, error) {
 	if err := readDelim(dec, '['); err != nil {
 		return nil, fmt.Errorf("reading the rows: %w", err)
 	}
+	return ContinueObjectRows(dec, cols)
+}
+
+// ContinueObjectRows is NewObjectRows for a caller that has read the start
+// of the array, such as to peek at the kind of the first row.
+func ContinueObjectRows(dec *jsontext.Decoder, cols []string) (*ObjectRows, error) {
 	r := &ObjectRows{dec: dec}
 	if cols != nil {
 		r.setColumns(cols)

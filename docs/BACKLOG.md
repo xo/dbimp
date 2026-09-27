@@ -48,6 +48,11 @@ driver, in order, and this item does not repeat them.
 
 ## W3. Run the integration tests in CI
 
+The jobs `releases` and `integration` went into `.github/workflows/test.yml`
+on 2026-09-27, staged for Ken to review, with the pin `ec91128` and the
+owner `dbimp-ci`. The products come from the folders of `testdata/`, because
+a driver has the name of its product (D30).
+
 When the first driver exists, add the jobs that `cql/.github/workflows/test.yml`
 has: a job that reads the releases from `dbrun list --json --names`, and a
 matrix job that starts each release with `dbrun` and runs `go test -run
@@ -123,15 +128,10 @@ transactions from its first release (D41), so step 6 also records
 `COMMIT WORK`, a `txid` that expired, and a `txid` sent after the end.
 
 The survey of step 5a is done, on 2026-09-27, in
-`testdata/couchbase/features.json`, and each of its 71 entries is settled
+`testdata/couchbase/features.json`, and each of its entries is settled
 against 8.0.3 and recorded on the three releases. `COMMIT WORK` works only
 with `durability_level: "none"` on a node alone, so the driver takes the key
 `durability_level` (D43).
-
-[COUCHBASE.md](COUCHBASE.md) does not follow the template of
-[DRIVER.md](DRIVER.md) yet. Give it the headings of the template in step 8,
-because `TestEveryDriverHasItsDocument` fails once the folder `couchbase`
-exists.
 
 The package is `github.com/xo/dbimp/couchbase` (D26). It registers the one
 name `couchbase` (D30), and it takes a `couchbase://` URL (D35). Its
@@ -142,8 +142,28 @@ dbmeta D96). Two questions about the output of `dbrun dsn --json` remain,
 and each is a change to `dbrun`, so it goes to Ken through the `dbmeta`
 session once step 9 settles the URL. The first asks how `dbrun` prints the
 `couchbase://` URL: as a second field, or in a form for each consumer. The
-second asks whether it also prints a DSN for the ordinary user. Until then,
-the tests build the URL from the `http://` form.
+second asks whether it also prints a DSN for the ordinary user. `dbrun` now
+prints the `couchbase://` URL in the field `url`, so the first question is
+answered. Until the second one is, the CI workflow builds the DSN of the
+ordinary user from the `url` field.
+
+Steps 8 to 15 went in on 2026-09-27, staged for Ken to review. The package
+`couchbase` holds the driver, with its DSN, contract, replay and table tests.
+`couchbase/integration_test.go` names a test for each entry of the survey,
+and every one passed on 7.2.9, 7.6.12 and 8.0.3 as both principals on
+2026-09-27. The integration tests found four faults of the first version,
+which each have a test now:
+
+1. The rows of a null signature, such as those of `CREATE INDEX`, failed.
+2. `BEGIN WORK` found no `txid`, because its signature is `"json"`.
+3. `dbimptest.RoundTrip` sent its teardown with the context of the test,
+   which ends before the cleanup runs, so the teardown never ran.
+4. A large float that is a whole number arrives as its digits, and is a
+   `*apd.Decimal`, which D39 said never arrives.
+
+The gate of step 15 needs a run of the workflow after a push, and its URL
+goes here. Step 16 waits for Ken, because it asks the sessions of `dburl`,
+`usql` and `dbmeta` to change their repositories.
 
 At the move of step 16, three repositories change. The `n1ql` session listed
 them in its W13:
@@ -154,7 +174,10 @@ them in its W13:
    the same release (D30). The `dburl` session writes its generator from the
    parser of this driver, at the version that `usql` pins.
 2. `usql`: `drivers/couchbase` imports this driver, changes the prefix of
-   its errors, and drops the `strconv.Unquote` in its `Version` function.
+   its errors, and drops the `strconv.Unquote` in its `Version` function. It
+   adds `txtimeout=30m`, or another long default, to a URL that has no
+   `txtimeout`, so that a person who types into a transaction has the time
+   (D46).
 3. `dbmeta`: it measures its Couchbase model on this driver (dbmeta D94).
 
 ## W6. Write the tests that hold DRIVER.md

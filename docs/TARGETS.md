@@ -97,7 +97,7 @@ cloud service fails R for good, unless an emulator exists. Every target that
 | Target | Notes |
 | --- | --- |
 | ClickHouse | `dbrun` starts it today (measured in `dbmeta`). `usql` already has a driver, so it is likely P2 (D24). 64-bit integers arrive quoted in JSON. |
-| Couchbase | `dbrun` starts it today (measured in `dbmeta`). The first driver (D23). Couchbase Analytics is part of this target, and not a target of its own. See "Couchbase Analytics" in [COUCHBASE.md](COUCHBASE.md). |
+| Couchbase | `dbrun` starts it today (measured in `dbmeta`). The first driver (D23). The driver is `github.com/xo/dbimp/couchbase`. Couchbase Analytics is part of this target, and not a target of its own. See "Couchbase Analytics" in [COUCHBASE.md](COUCHBASE.md). |
 | Trino and Presto | `dbrun` starts both today (measured in `dbmeta`). `usql` already has drivers, so they are likely P2 (D24). Results page through `nextUri`, and an error can arrive on a later page. |
 | CrateDB | Returns a column list, type codes and row arrays. Binds arguments. |
 | QuestDB | Returns a column list. `/exec` binds no arguments. |

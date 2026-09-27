@@ -56,10 +56,14 @@ import (
 	"net/http"
 )
 
+const Name = "good"
+
 var client = http.DefaultClient
 
+var _ = client
+
 func init() {
-	sql.Register("good", nil)
+	sql.Register(Name, nil)
 }
 
 func use() {

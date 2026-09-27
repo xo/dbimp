@@ -16,8 +16,8 @@ only when Ken approves it for one database (D13).
 A second goal is to reduce the dependencies of `usql`, so a driver here can
 replace a driver that `usql` imports now (D24).
 
-The repository is new. No driver exists yet. The first driver is a new
-Couchbase driver that replaces `xo/n1ql` (D23). The targets are in
+The repository is new. The first driver, in `couchbase/`, is a new
+Couchbase driver that replaces `xo/n1ql` (D23), and it is not yet released. The targets are in
 [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Which document to read
@@ -62,7 +62,8 @@ Ken.
    wrap one column in an object. Each of these faults was found in a driver
    that `dbmeta` then had to replace. See D8.
 4. `context.Context` comes first, is named `ctx`, and is never stored in a
-   struct. The library never calls `context.Background` or `context.TODO`.
+   struct, except by a Couchbase transaction (D45). The library never calls
+   `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.
 5. Every error reaches the caller, wrapped with `%w`. Return
