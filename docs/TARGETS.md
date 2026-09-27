@@ -32,10 +32,27 @@ the end keep the split of the two lists that Ken wrote.
 
 ## The order
 
+Ken set the order of the work on 2026-09-27 (D73). After Couchbase,
+SurrealDB and Neo4j, the drivers are these, in order:
+
+1. InfluxDB.
+2. CrateDB.
+3. ArangoDB.
+4. Databend.
+5. TDengine.
+6. Apache Pinot.
+7. rqlite.
+8. libSQL, and Turso.
+
+The other targets below keep their priority, and their place in the order
+is open.
+
+### The first list
+
 Ken wrote this order in `drivers.txt`, with these numbers. A blank line in
 that file separates the groups, and each group here is one paragraph.
-Couchbase is first (D23). Ken will arrange the rest after the first driver is
-complete (Q1 in [PLAN.md](PLAN.md)).
+Couchbase is first (D23). Ken arranged the rest after the first driver was
+complete (Q1 in [PLAN.md](PLAN.md), which D73 answers).
 
 1. Couchbase, with N1QL. It is the first driver, and it replaces `xo/n1ql`
    (D23 in [decisions/](decisions/README.md)).

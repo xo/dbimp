@@ -33,7 +33,9 @@ who asked that every driver test CRUD, the features of its database and
 every native type, after it asks two models what they are. W8 came from Ken
 on 2026-09-27, who named SurrealDB as the second target, and W9 from Ken the
 same day, who named Neo4j as the third. W10 came from the `dbmeta` session on
-2026-09-27, which found two faults of the SurrealDB driver through `usql`.
+2026-09-27, which found two faults of the SurrealDB driver through `usql`. W11
+came from Ken on 2026-09-27, who set the order of the drivers after Neo4j
+in D73.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -445,3 +447,12 @@ and from `tblfmt` run on a result set with no rows.
 
 A fix reaches `usql` only in a new release of `dbimp`, by steps 18 to 20 of
 [DRIVER.md](DRIVER.md).
+
+## W11. Write the InfluxDB driver
+
+InfluxDB is the next target, by D73. Follow [DRIVER.md](DRIVER.md) from step
+2. InfluxDB 3 speaks SQL and InfluxQL over HTTP, InfluxDB 1 speaks InfluxQL,
+and InfluxDB 2 speaks Flux (not measured). Step 9 decides which releases and
+which languages the driver serves. After InfluxDB come CrateDB, ArangoDB,
+Databend, TDengine, Apache Pinot, rqlite and libSQL, each a work item of its
+own when its turn comes.

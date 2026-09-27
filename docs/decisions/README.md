@@ -93,3 +93,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D70](D070-a-surrealdb-recordid-writes-its-surrealql-form.md) | A SurrealDB RecordID writes its SurrealQL form as text | Proposed. Amends D53 |
 | [D71](D071-every-xo-repository-is-set-up-for-coding-agents.md) | Every xo repository is set up for coding agents the same way | Amends D3 and D11 |
 | [D72](D072-the-decisions-are-one-file-each.md) | The decisions are one file each | Amends D3 |
+| [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Decided |

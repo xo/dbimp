@@ -20,15 +20,15 @@ holds the purpose of the project and the open questions for Ken.
 
 Do not decide these yourself. Ask Ken.
 
-### Q1. Which targets come after Couchbase?
+### Q1. Which targets come after Couchbase? Answered by D73.
 
 Couchbase is first (D23). Ken will arrange the other targets after the first
 driver is complete. The review in [TARGETS.md](TARGETS.md) names a start:
 CrateDB, QuestDB, rqlite, libSQL, InfluxDB 3 and TDengine, by D17.
 
 On 2026-09-27, Ken named SurrealDB as the second target. W8 is that work.
-The same day, he named Neo4j as the third. W9 is that work. The targets
-after Neo4j are still open.
+The same day, he named Neo4j as the third. W9 is that work. The same day,
+he set the order after Neo4j, in D73.
 
 ### Q2. Which licence? Answered by D22.
 
