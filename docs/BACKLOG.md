@@ -50,16 +50,17 @@ When the first driver exists, add the jobs that `cql/.github/workflows/test.yml`
 has: a job that reads the releases from `dbrun list --json --names`, and a
 matrix job that starts each release with `dbrun` and runs `go test -run
 Integration` with the DSN set. Pin the `dbmeta` commit in the workflow, as in
-`cql` D20. The pin is `2b93710` or later, because that commit of `dbmeta`
-holds the ordinary Couchbase user (dbmeta D96). Do not write the list of releases in the workflow.
+`cql` D20. The pin is `2b93710` or later, because that commit of `dbmeta` holds
+the ordinary Couchbase user (dbmeta D96). Do not write the list of releases in
+the workflow.
 
 ## W4. Design the root package before the first driver
 
 Write `docs/DESIGN.md`, and add it to the tables in `CLAUDE.md` and
 `README.md`. It holds the design of the code that every driver shares in the
 root package (D4). It follows D33 for decimals, D34 for placeholders and
-D36 for reading and closing a result. Cover each
-of these points, which the `cql` session reported on 2026-09-27:
+D36 for reading and closing a result. Cover each of these points, which the
+`cql` session reported on 2026-09-27:
 
 1. Implement `driver.RowsColumnScanner` from Go 1.27, so that
    `database/sql` hands the destination of the caller to the driver.
@@ -102,6 +103,10 @@ of these points, which the `cql` session reported on 2026-09-27:
 
 `cql/docs/DESIGN.md` is the nearest example.
 
+[DESIGN.md](DESIGN.md) holds the design, and the last section maps each
+point above to the code. The code is in the root package and in `dbimptest`
+(D37).
+
 ## W5. Write the Couchbase driver
 
 Write the first driver, for the Couchbase query service and SQL++, to D23.
@@ -110,17 +115,22 @@ It replaces `xo/n1ql`. Do W4 and W6 first, then follow
 fact about the query service and every fault of `go_n1ql` that the driver
 must not repeat.
 
+[COUCHBASE.md](COUCHBASE.md) does not follow the template of
+[DRIVER.md](DRIVER.md) yet. Give it the headings of the template in step 8,
+because `TestEveryDriverHasItsDocument` fails once the folder `couchbase`
+exists.
+
 The package is `github.com/xo/dbimp/couchbase` (D26). It registers the one
 name `couchbase` (D30), and it takes a `couchbase://` URL (D35). Its
 integration tests read `COUCHBASE_DSN` (D9).
 
 The `dbmeta` session added the ordinary user on 2026-09-27 (D31, and
-dbmeta D96). Two questions about the output of `dbrun dsn --json` remain, and each
-is a change to `dbrun`, so it goes to Ken through the `dbmeta` session once
-step 9 settles the URL. The first asks how `dbrun` prints the `couchbase://`
-URL: as a second field, or in a form for each consumer. The second asks
-whether it also prints a DSN for the ordinary user. Until then, the tests
-build the URL from the `http://` form.
+dbmeta D96). Two questions about the output of `dbrun dsn --json` remain,
+and each is a change to `dbrun`, so it goes to Ken through the `dbmeta`
+session once step 9 settles the URL. The first asks how `dbrun` prints the
+`couchbase://` URL: as a second field, or in a form for each consumer. The
+second asks whether it also prints a DSN for the ordinary user. Until then,
+the tests build the URL from the `http://` form.
 
 At the move of step 16, three repositories change. The `n1ql` session listed
 them in its W13:
@@ -136,9 +146,15 @@ them in its W13:
 
 ## W6. Write the tests that hold DRIVER.md
 
-Write the tests that "The tests that tell you what you forgot" in
-[DRIVER.md](DRIVER.md) lists as planned, before the first driver is done.
-Each one fails with a message that names the step that was skipped. Where a
-table can be made from the code, generate it and test only that the file is
-current. The `dbmeta` session proposed the list, from what its own gate
-tests caught.
+Write the gates that hold the steps of [DRIVER.md](DRIVER.md), before the
+first driver is done. Each one fails with a message that names the step that
+was skipped. Where a table can be made from the code, generate it and test
+only that the file is current. The `dbmeta` session proposed the list, from
+what its own gate tests caught.
+
+The gates are in `gates_test.go`, and "The tests that tell you what you
+forgot" in [DRIVER.md](DRIVER.md) lists them. The repository has no driver
+yet, so each gate passes with nothing to read. `gates_self_test.go` makes
+sure that each gate passes a complete driver and fails an incomplete one.
+The code and the design of W4 went in with the gates, on 2026-09-27, staged
+for Ken to review.

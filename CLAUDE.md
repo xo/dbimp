@@ -29,7 +29,8 @@ Couchbase driver that replaces `xo/n1ql` (D23). The targets are in
 | writing the Couchbase driver | [docs/COUCHBASE.md](docs/COUCHBASE.md), then D23 and W5 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16 and D17 in [docs/PLAN.md](docs/PLAN.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
-| sharing code between two drivers | D4 in [docs/PLAN.md](docs/PLAN.md). Shared code goes in the root package |
+| sharing code between two drivers | [docs/DESIGN.md](docs/DESIGN.md), then D4 in [docs/PLAN.md](docs/PLAN.md). Shared code goes in the root package |
+| using or changing the root package or dbimptest | [docs/DESIGN.md](docs/DESIGN.md) |
 | testing against a server | "Before you commit" below, and D9 |
 | answering a lint finding | "Linting" below, and D10 |
 | adding a dependency | hard rule 6, and D13 |
@@ -96,9 +97,11 @@ Ken.
 | --- | --- |
 | `/` | The root package `dbimp`. It holds the code that the drivers share: the HTTP client, the adapters that encode and decode values, and other utilities. `doc.go` holds its package documentation. See D4. |
 | `<driver>/` | One driver, as the package `github.com/xo/dbimp/<driver>`, named for its database and not for its query language, such as `couchbase` (D26). It imports the root package. That path is the `GoPackage` of its scheme in `dburl`, and a consumer imports it directly. See D4. |
-| `testdata/` | Golden files. |
+| `dbimptest/` | The helpers for the tests of a driver: recorded exchanges, the contract, the test for goroutines and the two tables. Only a test imports it (D37). |
+| `testdata/` | Golden files, and the recorded exchanges of each driver under `testdata/<driver>/`. |
 | `docs_test.go` | The rules for the documents, from D3. |
 | `skills_test.go` | The rule for the agent skills, from D11. |
+| `gates_test.go` | The gates that hold the steps of `docs/DRIVER.md`, from W6. `gates_self_test.go` tests the gates themselves. |
 
 There is no registry of drivers and no package that imports every driver.
 This differs from the other `xo` repositories. Examples are `Example` tests

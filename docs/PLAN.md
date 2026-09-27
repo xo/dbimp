@@ -51,6 +51,7 @@ so on. Decisions are numbered `D1`, `D2` and so on. The two series never mix.
 | [D34](#d34-the-root-package-holds-a-parser-for-placeholders-decided) | The root package holds a parser for placeholders | Decided |
 | [D35](#d35-a-dsn-is-a-url-whose-scheme-is-the-name-of-the-driver-decided) | A DSN is a URL whose scheme is the name of the driver | Decided |
 | [D36](#d36-rows-read-the-body-as-a-stream-and-close-closes-it-decided) | Rows read the body as a stream, and Close closes it | Decided |
+| [D37](#d37-the-shared-test-helpers-are-the-package-dbimptest-decided) | The shared test helpers are the package dbimptest | Decided |
 
 ### D1. The module path is github.com/xo/dbimp. Decided.
 
@@ -164,8 +165,8 @@ the DSN, or in a `driver.Connector` that the caller builds and passes to
 
 One `usql` driver borrowed the configuration of another driver and shipped a
 fault to users. `go_n1ql` keeps its credentials in package variables, and
-that is the pattern not to copy. This follows `dbmeta` hard rule 6 and `cql`
-D8.
+that is the pattern not to copy. This follows `dbmeta` hard rule 6 and
+`cql` D8.
 
 ### D8. Every driver keeps the same contract with database/sql. Decided.
 
@@ -334,8 +335,8 @@ row must have the same columns. The three rules are these:
 
 The union of the fields of every row is never the column set, because it
 needs the whole result before the first row. Each driver decides whether a
-missing key and a JSON null are different, in a decision of its own, as n1ql
-D24 did for Couchbase MISSING. The `dbmeta` session proposed these rules.
+missing key and a JSON null are different, in a decision of its own, as
+n1ql D24 did for Couchbase MISSING. The `dbmeta` session proposed these rules.
 
 ### D19. A JSON number is never decoded through float64. Decided.
 
@@ -343,7 +344,7 @@ A float64 holds an integer exactly only up to 2^53. ClickHouse, Druid and
 Elasticsearch send 64-bit integers, and DynamoDB sends numbers with up to 38
 digits. Each driver reads a number as the raw text of its token from
 `jsontext` (D25), and converts the text by the type of its column. A decimal
-becomes an `apd.Decimal` (D33). Ken accepted this on 2026-09-27.
+becomes an `*apd.Decimal` (D33). Ken accepted this on 2026-09-27.
 
 ### D20. A driver never fakes a transaction. Decided.
 
@@ -496,7 +497,13 @@ of MongoDB needs. CockroachDB uses it. `shopspring/decimal` had no release
 after 2024-04-12, and `govalues/decimal` holds at most 19 digits, which is
 too few for DynamoDB and ClickHouse.
 
-`go.mod` gets the requirement with the first code that uses it.
+A driver hands a decimal to `database/sql` as an `*apd.Decimal`, and a new
+one for each value. An `apd.Decimal` holds a pointer to its digits once they
+are large, so a copy of the value shares them with the original.
+[DESIGN.md](DESIGN.md) says how `dbimp.Assign` stores one.
+
+`go.mod` requires `apd/v3` v3.2.3, from the first code that uses it, in the
+root package.
 
 ### D34. The root package holds a parser for placeholders. Decided.
 
@@ -568,6 +575,26 @@ measured it. If a product does not stop, its driver records a decision of its
 own, and Ken makes it. The choice is between keeping `context.WithoutCancel` of
 the context of the query in `Rows`, which breaks the rule that a struct never
 holds a context, and a timeout that the connector holds.
+
+### D37. The shared test helpers are the package dbimptest. Decided.
+
+Ken accepted this on 2026-09-27. D4 puts the code that the drivers share in
+the root package. The helpers for the tests of a driver are the exception.
+They are the package `github.com/xo/dbimp/dbimptest`, which only a test
+imports.
+
+The helpers import `testing` and `net/http/httptest`. Every driver imports
+the root package. If the root package held the helpers, every consumer of a
+driver links both packages and runs their `init`, for code that only a test
+uses. The root package keeps what a driver needs at run time,
+and `dbimptest` keeps what it needs in a test.
+
+The first reason written here was that `httptest` adds a command line flag
+to every program. The source of Go 1.27.1 showed that it adds the flag only
+when the command line already names it, so that reason was wrong.
+
+`dbimptest` is not a driver, so the gates of W6 skip its folder.
+[DESIGN.md](DESIGN.md) holds what it contains.
 
 ## Open questions
 

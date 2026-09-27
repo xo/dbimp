@@ -40,5 +40,6 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/PLAN.md](docs/PLAN.md) | Every decision, and the open questions |
 | [docs/TARGETS.md](docs/TARGETS.md) | Every target database, its priority, and the review of the list |
 | [docs/DRIVER.md](docs/DRIVER.md) | Every step to add a driver, in order |
+| [docs/DESIGN.md](docs/DESIGN.md) | The design of the code that every driver shares |
 | [docs/COUCHBASE.md](docs/COUCHBASE.md) | What is measured about the Couchbase query service |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |

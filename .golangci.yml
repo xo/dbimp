@@ -65,6 +65,14 @@ linters:
     # places to change it. gomodguard is also deprecated.
     - gomodguard
     - gomodguard_v2
+    # A driver hands the body of a response to dbimp.Stream, which closes it
+    # when the rows close (D36). bodyclose cannot follow the body into the
+    # Stream, so it fires on every driver.
+    - bodyclose
+    # A timeout, a buffer size or an offset in a parser is named at the one
+    # place that sets it. A constant for each 2 in the parser for
+    # placeholders reads worse than the 2. dbmeta disables it too.
+    - mnd
 
   settings:
     # Hard rule 6 and D13. The module imports the standard library, apd for
@@ -92,13 +100,27 @@ linters:
         - (*database/sql.DB).Close
         - (*database/sql.Rows).Close
         - (*database/sql.Stmt).Close
+        # The body of a response, closed after the part that matters was read.
+        - (io.ReadCloser).Close
+        - (io.Closer).Close
+    gosec:
+      excludes:
+        # errcheck holds the rule for an error that is not checked, with the
+        # list above. G104 holds it again without the list.
+        - G104
+        # A driver sends each request to the host that its caller named in the
+        # DSN. That is the product, not a forged request.
+        - G704
     errorlint:
       errorf: true
       asserts: true
       comparison: true
     revive:
       rules:
+        # A test helper takes *testing.T first, and the context after it.
         - name: context-as-argument
+          arguments:
+            - allowTypesBefore: "*testing.T"
         - name: error-naming
         - name: error-return
         - name: error-strings
@@ -115,12 +137,30 @@ linters:
       - path: _test\.go
         linters:
           - forbidigo
-      # docs_test.go and skills_test.go read the files of this repository,
-      # which they find by walking the repository itself.
-      - path: (docs|skills)_test\.go
+      # The tests of the documents, the skills and the gates read the files of
+      # this repository, which they find by walking the repository itself.
+      # The gate tests write a repository of their own to test the gates.
+      - path: (docs|skills|gates|gates_self)_test\.go
         linters:
           - gosec
-        text: G304
+        text: G30[146]
+      # The test helpers read and write the files under testdata/, which the
+      # test names and which are committed, so any reader can read them.
+      - path: dbimptest/
+        linters:
+          - gosec
+        text: G30[146]|G703
+      # A test in dbimptest counts the goroutines of the process, or sets an
+      # environment variable, so it must not run in parallel.
+      - path: dbimptest/.*_test\.go
+        linters:
+          - paralleltest
+      # The contract reads rows in several shapes, and closes each one in a
+      # cleanup of the test, where these linters cannot follow it.
+      - path: dbimptest/contract\.go
+        linters:
+          - rowserrcheck
+          - sqlclosecheck
 
 formatters:
   enable:

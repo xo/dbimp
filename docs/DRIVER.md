@@ -139,10 +139,12 @@ Send requests to the running server. Send each one as the administrator and
 again as the ordinary user. A server can refuse to an ordinary user what it
 gives an administrator, and that changes the design. Save each
 request and each response under `testdata/<driver>/`, with the status, the
-headers and the body, as you send it. Use `curl` for the first look. The
-recording mode of the shared test helpers (W4) writes the same files from a
-test. Every file comes from a real server, and never from your memory of the
-documentation.
+headers and the body, as you send it. Use `curl` for the first look. Then
+record the files from a test, with `dbimptest.Recorder` as the transport of
+the client, when `DBIMP_RECORD` is set. Call `Label` before each item, with
+its number and the principal. Every file comes from a real server, and never
+from your memory of the documentation. [DESIGN.md](DESIGN.md) holds the form
+of a file and of the manifest.
 
 Measure each of these:
 
@@ -169,11 +171,14 @@ Measure each of these:
     the rate of requests, such as HTTP 429.
 
 List every recorded file in `testdata/<driver>/manifest.json`, with the item
-number, the principal, the release and the date.
+number, the principal, the release and the date. `Recorder.WriteManifest`
+writes it. An item that does not apply to the product has an entry with the
+reason in `absent`, such as transactions for a product that has none.
 
-Gate: the manifest names a file for each item, for each principal, from a
-named release. If a condition of "When it cannot be a driver" holds, stop and
-ask Ken now.
+Gate: `TestEveryDriverHasItsManifest` passes. The manifest names a file or a
+reason for each item, for each principal, from a named release, and every file
+under `testdata/<driver>/` is in the manifest. If a condition of "When it cannot
+be a driver" holds, stop and ask Ken now.
 
 ### 7. Ask two models, then test every answer on the server
 
@@ -198,7 +203,10 @@ it to the tables in `CLAUDE.md` and `README.md`. Mark each fact "measured",
 with the release and the date, or "not measured", with its source. Write
 facts only. A choice goes in a decision in step 9.
 
-Gate: every heading of the template is in the document, every fact in it is
+Each heading of the template is a heading of the document, written as `## `
+and the name before the colon, such as `## The DSN`.
+
+Gate: `TestEveryDriverHasItsDocument` passes, every fact in the document is
 marked, and the tests for the documents pass.
 
 ## Deciding
@@ -241,9 +249,11 @@ database type name in upper case, whether the column can be NULL, and the
 length, the precision and the scale where they apply. Use one Go type for
 each wire type in every place: a scan into `*any`, `Rows.Next`, and
 `ColumnTypeScanType`. A nullable value is `sql.Null[T]`, and a UUID is
-`uuid.UUID` (D25), and a decimal is `apd.Decimal` (D33). The table lives in the
-code, as the map of the driver. The table in `docs/<PRODUCT>.md` is made from
-that map, so the two cannot disagree.
+`uuid.UUID` (D25), and a decimal is `*apd.Decimal` (D33). The table lives in
+the code, as the map of the driver. A test passes the map to
+`dbimptest.TypeTable`, which writes the table between the markers
+`<!-- dbimp:types -->` and `<!-- /dbimp:types -->` in `docs/<PRODUCT>.md`,
+so the two cannot disagree.
 
 The interface table names each optional interface of `database/sql/driver`,
 says whether the driver implements it, and says why. Cover at least these:
@@ -252,10 +262,16 @@ says whether the driver implements it, and says why. Cover at least these:
 `ConnBeginTx`, `RowsColumnScanner`, `RowsNextResultSet`, and each
 `RowsColumnType` method. A `Pinger` sends a real request that costs little.
 A `SessionResetter` exists only if the connection holds state from the
-server, such as a transaction.
+server, such as a transaction. A test passes the types of the driver and a
+reason for each interface to `dbimptest.InterfaceTable`, which learns from
+the types whether each one is implemented, and writes the table between
+`<!-- dbimp:interfaces -->` and `<!-- /dbimp:interfaces -->`.
 
-Gate: every type from step 6 has a row, and every interface above has a row
-with its reason.
+Run the tests with `DBIMP_UPDATE=1` to write both tables. Without it, each
+test fails when the document holds another table.
+
+Gate: `TestEveryDriverGeneratesItsTables` passes, every type from step 6 has
+a row, and every interface has a reason.
 
 ## Writing it
 
@@ -263,18 +279,24 @@ with its reason.
 
 Make the package with `init`, which registers the driver, and with stubs
 that return an error. Then write the unit tests. They run against
-`httptest.Server`, which replays the files from step 6. A test reads a
+`dbimptest.Replay`, which replays the files from step 6. A test reads a
 recorded file, and never a response written into the test as a string. The
 response then decodes through the real decoder, as `xo/cql` runs the real
 encoding of gocql in its fake.
 
-Each driver also runs the shared suite for the contract in the root package,
-which W4 designs. The suite tests D8 and D18 to D21: NULL as nil, the order
-of the columns, cancellation, `driver.ErrBadConn` only before the request is
-sent, paging to the end, no faked transaction, and an error after some rows.
+Each driver also calls `dbimptest.RunContract`, with bodies in the form of
+its product. It tests the order of the columns, NULL as nil, an error after
+some rows, a close before the end, cancellation, a request sent once,
+`driver.ErrBadConn` only before the request reached the server, and no
+faked transaction. It does not test paging (D21), because each product
+pages in its own way, so the driver tests that with its recorded exchanges.
+The test that calls `RunContract` must not run in parallel, because each
+subtest counts the goroutines of the process. [DESIGN.md](DESIGN.md) holds
+the list.
 
-Gate: `go test ./<driver>/...` compiles, and fails only on assertions of the
-contract. No test is skipped and no assertion is empty.
+Gate: `TestEveryDriverRunsTheContract` passes, and `go test ./<driver>/...`
+compiles and fails only on assertions of the contract. No test is skipped
+and no assertion is empty.
 
 ### 12. Write the driver
 
@@ -309,27 +331,33 @@ these, and a unit test holds each one:
   `driver.ErrBadConn`.
 - The driver never sends a request again after it can have reached the
   server. HTTP 429 and HTTP 503 are errors that reach the caller.
-- The driver sets no `http.Client.Timeout`, and takes each deadline from the
-  context. The transport sets timeouts for the dial, TLS and the headers of
-  the response.
+- The connector builds its transport with `dbimp.NewTransport` and its
+  client with `dbimp.NewClient`, and sends each request with `dbimp.Send`.
+  The client has no `Timeout`, and each deadline comes from the context. The
+  transport bounds the dial and the TLS handshake, and not the headers of
+  the response, because a server can send them only after a long query ends.
 - The transport takes a proxy from the environment, and the driver does not
   set `Accept-Encoding` itself, so that the transport decompresses gzip.
 - No error message holds a password or a token. Write a URL in an error with
   `url.URL.Redacted`.
 - Two queries can run at the same time on one `sql.DB`.
-- A test makes sure that no goroutine is left running after each test.
+- A test makes sure that no goroutine is left running after each test, with
+  `dbimptest.CheckGoroutines`.
 
-Gate: `go test -race -count=2 ./<driver>/...` passes.
+Gate: `TestNoDriverTouchesGlobalState` and `TestEveryDriverRegistersOneName`
+pass, and `go test -race -count=2 ./<driver>/...` passes.
 
 ### 13. Test the DSN
 
-The DSN is a standard URL, parsed with `net/url` (D27). Write a test that
-parses each DSN from step 9 and formats it again, and a fuzz test for the
-parser. Both found real faults in `xo/cql` on the first day: a host that is
-an IPv6 address, TLS turned on with no settings, and an empty host.
+The DSN is a standard URL, parsed with `net/url` (D27), which the driver reads
+with `dbimp.ParseURL` and `dbimp.NewQuery`. Write a test that parses each DSN
+from step 9 and formats it again, with `RoundTrip` in its name, and a fuzz test
+for the parser, whose name starts with `Fuzz`. Both found real faults in
+`xo/cql` on the first day: a host that is an IPv6 address, TLS turned on with no
+settings, and an empty host.
 
-Gate: both tests pass, and the fuzz test ran with `-fuzztime=60s` and found
-nothing.
+Gate: `TestEveryDriverTestsItsDSN` passes, both tests pass, and the fuzz test
+ran with `-fuzztime=60s` and found nothing.
 
 ## Proving it
 
@@ -369,8 +397,8 @@ Add the jobs that W3 describes to `.github/workflows/test.yml`. The matrix
 comes from `dbrun list --json --names`, and never from names written in the
 workflow (dbmeta D69). A push runs the releases that `dbmeta` calls tested,
 and the nightly run adds the ones it calls nightly. The workflow checks out a
-pinned commit of `dbmeta` from its main branch, as in `cql` D20 and `n1ql`
-D28.
+pinned commit of `dbmeta` from its main branch, as in `cql` D20 and
+`n1ql` D28.
 
 Gate: the workflow passes on a push, and the URL of the run is in the work
 item.
@@ -407,11 +435,13 @@ reports that its change is staged.
 
 ### 17. Write it down
 
-- Mark the target done in [TARGETS.md](TARGETS.md).
+- Mark the target done in [TARGETS.md](TARGETS.md): its row names the
+  package, as `` `github.com/xo/dbimp/<driver>` ``.
 - Make `docs/<PRODUCT>.md` complete.
 - Mark the work item done in [BACKLOG.md](BACKLOG.md), once Ken commits it.
 
-Gate: the tests for the documents, and the tests of W6, pass.
+Gate: `TestEveryDriverIsATarget`, the tests for the documents, and every
+test in the table at the end of this file pass.
 
 ## Before you call it done
 
@@ -456,7 +486,7 @@ change:
 - Step 14: a test skips a difference between flavors with the reason, and
   every flavor runs in the matrix.
 
-## The template for docs/PRODUCT.md
+## The template for a product document
 
 Each heading below is a section of `docs/<PRODUCT>.md`. Mark every fact
 "measured", with the release and the date, or "not measured", with its
@@ -494,42 +524,37 @@ source.
 
 ## The tests that tell you what you forgot
 
-These tests exist now:
+These tests exist so that an unfinished driver fails, rather than passing
+quietly. Each gate reads every driver folder, and each problem that it finds
+names the step to finish. `gates_self_test.go` holds the gates themselves:
+`TestTheGatesPassACompleteDriver` builds a complete driver in a repository of
+its own and fails if a gate finds a problem, and
+`TestTheGatesCatchAnIncompleteDriver` builds an incomplete one and fails if a
+gate finds nothing.
 
 | Test | Fails when |
 | --- | --- |
+| `TestEveryDriverIsATarget` | the row of a driver in `TARGETS.md` does not name its package, or `TARGETS.md` names a package that has no folder (step 17) |
+| `TestEveryDriverHasItsDocument` | a driver has no `docs/<PRODUCT>.md`, or it lacks a heading of the template (step 8) |
+| `TestEveryDriverHasItsManifest` | the manifest lacks an item or a principal, names a file that does not exist, or misses a file under `testdata/<driver>/` (step 6) |
+| `TestEveryDriverGeneratesItsTables` | the document lacks the markers of a table, or the tests do not call `TypeTable` and `InterfaceTable` (step 10) |
+| `TestEveryDriverRunsTheContract` | the tests of a driver do not call `dbimptest.RunContract` (step 11) |
+| `TestNoDriverTouchesGlobalState` | a driver assigns to `http.DefaultTransport`, `http.DefaultClient` or a package variable outside `init`, or calls `io.ReadAll` (step 12) |
+| `TestEveryDriverRegistersOneName` | a driver calls `sql.Register` more than once, outside `init`, or with a name that is not its folder (step 9) |
+| `TestEveryDriverTestsItsDSN` | a driver has no fuzz test, or no round trip test, for its DSN (step 13) |
+| `TestTheWorkflowNamesNoRelease` | a workflow names a release, or runs the integration tests without reading the releases from `dbrun` (step 15) |
 | `TestEveryDocumentIsInTheTable` | a document in `docs/` is missing from `CLAUDE.md` or `README.md` |
 | `TestEveryDecisionReferenceExists` | a document points at a decision that does not exist |
 | `TestTheDecisionIndexIsComplete` | a decision is written and not indexed |
 | `TestEveryTestNameInTheDocsExists` | a document names a test that does not exist |
 | `TestEveryLinkResolves` | a link points at a file that does not exist |
 
-W6 in [BACKLOG.md](BACKLOG.md) adds a test for each of these, before the
-first driver is done:
-
-- Each driver folder has a row in [TARGETS.md](TARGETS.md), and each target
-  marked done has a folder.
-- Each driver has its `docs/<PRODUCT>.md`, with every heading of the
-  template.
-- Each `testdata/<driver>/manifest.json` names a file for each item of step
-  6, for each principal, and each file that it names exists.
-- Each file under `testdata/<driver>/` is named in the manifest and read by a
-  test.
-- Each driver calls the shared suite for the contract. The test reads the
-  test files of each driver with `go/parser`, so that a driver cannot leave
-  the suite out without a failure.
-- Each driver has a round trip test and a fuzz test for its DSN.
-- Each driver records what an ordinary user gets, or a reason why the
-  product has no ordinary user.
-- The type table and the interface table in each `docs/<PRODUCT>.md` match
-  the code.
-- No driver assigns to `http.DefaultTransport`, `http.DefaultClient` or a
-  package variable after `init`, and no driver calls `io.ReadAll` on the body
-  of a response.
-- The CI workflow reads the list of releases from `dbrun`, and names none of
-  its own.
+`TestNoDriverTouchesGlobalState` finds an assignment to a package variable
+by a heuristic. It counts an assignment to a name that the function does not
+declare itself, so a driver that shadows a package variable in a closure can
+pass it. Review the code as well.
 
 Where a table is made from something that the code already knows, generate
 it, and test only that the file is current. Generation is stronger than a
-test, because a stale table cannot exist. Never write a count in prose unless a
-test or a generator makes sure that it is correct.
+test, because a stale table cannot exist. Never write a count in prose unless
+a test or a generator makes sure that it is correct.
