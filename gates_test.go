@@ -6,6 +6,7 @@ import (
 	"go/parser"
 	"go/token"
 	"io/fs"
+	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -39,6 +40,7 @@ var gates = map[string]gate{
 	"TestNoDriverTouchesGlobalState":    gateGlobals,
 	"TestEveryDriverRegistersOneName":   gateRegister,
 	"TestTheWorkflowNamesNoRelease":     gateWorkflow,
+	"TestEveryDriverHasItsFeatures":     gateFeatures,
 }
 
 func runGate(t *testing.T, g gate) {
@@ -91,6 +93,153 @@ func TestEveryDriverRegistersOneName(t *testing.T) {
 func TestTheWorkflowNamesNoRelease(t *testing.T) {
 	t.Parallel()
 	runGate(t, gateWorkflow)
+}
+
+func TestEveryDriverHasItsFeatures(t *testing.T) {
+	t.Parallel()
+	runGate(t, gateFeatures)
+}
+
+// crudNames are the statements of CRUD that every survey names.
+var crudNames = []string{"insert", "select", "update", "delete"}
+
+// gateFeatures holds steps 5a, 6, 10 and 14a: each driver has a survey that
+// asked two models and another driver, names each statement of CRUD, and
+// settles every entry against the server, and each entry names a test that
+// exists. The test of each type calls dbimptest.RoundTrip, and the type table
+// of the product document has a row for each type marked yes, and no other.
+func gateFeatures(root string) []string {
+	var problems []string
+	for _, d := range driverDirs(root) {
+		dir := filepath.Join(root, "testdata", d)
+		f, err := dbimptest.ReadFeatures(filepath.Join(dir, dbimptest.FeaturesName))
+		if err != nil {
+			problems = append(problems, fmt.Sprintf("step 5a: %s: %v", d, err))
+			continue
+		}
+		counts := map[string]map[string]bool{dbimptest.SourceModel: {}, dbimptest.SourceDriver: {}}
+		for _, c := range f.Consulted {
+			if counts[c.Kind] != nil {
+				counts[c.Kind][c.Source] = true
+			}
+		}
+		if n := len(counts[dbimptest.SourceModel]); n < 2 {
+			problems = append(problems, fmt.Sprintf("step 5a: the survey of %s asked %d models, want at least 2", d, n))
+		}
+		if len(counts[dbimptest.SourceDriver]) == 0 {
+			problems = append(problems, fmt.Sprintf("step 5a: the survey of %s read no other driver", d))
+		}
+		for _, name := range crudNames {
+			if !slices.ContainsFunc(f.Entries, func(e dbimptest.Feature) bool {
+				return e.Kind == dbimptest.KindCRUD && e.Name == name
+			}) {
+				problems = append(problems, fmt.Sprintf("step 5a: the survey of %s has no entry for %s", d, name))
+			}
+		}
+		tests := testFuncs(root, d)
+		yesTypes := map[string]bool{}
+		for _, e := range f.Entries {
+			id := e.Kind + " " + e.Name
+			switch {
+			case len(e.Sources) == 0:
+				problems = append(problems, fmt.Sprintf("step 5a: the entry %s of %s names no source", id, d))
+			case e.Verdict == dbimptest.NotMeasured:
+				problems = append(problems, fmt.Sprintf("step 6: the entry %s of %s is not measured", id, d))
+			case e.Verdict != dbimptest.Yes && e.Verdict != dbimptest.No:
+				problems = append(problems, fmt.Sprintf("step 6: the entry %s of %s has the verdict %q", id, d, e.Verdict))
+			}
+			if e.Verdict == dbimptest.No {
+				if _, err := os.Stat(filepath.Join(dir, e.Evidence)); e.Evidence == "" || err != nil {
+					problems = append(problems, fmt.Sprintf("step 6: the entry %s of %s is no, and names no recorded refusal", id, d))
+				}
+			}
+			fn, _, _ := strings.Cut(e.Test, "/")
+			decl, ok := tests[fn]
+			switch {
+			case e.Test == "":
+				problems = append(problems, fmt.Sprintf("step 14a: the entry %s of %s names no test", id, d))
+			case !ok:
+				problems = append(problems, fmt.Sprintf("step 14a: the entry %s of %s names %s, which no test of %s defines", id, d, fn, d))
+			case e.Kind == dbimptest.KindType && e.Verdict == dbimptest.Yes && !callsIn(decl, "RoundTrip"):
+				problems = append(problems, fmt.Sprintf("step 14a: %s, the test of the type %s of %s, does not call dbimptest.RoundTrip", fn, e.Name, d))
+			}
+			if e.Kind == dbimptest.KindType && e.Verdict == dbimptest.Yes {
+				yesTypes[e.Name] = true
+			}
+		}
+		rows := typeTableRows(readFile(root, "docs", strings.ToUpper(d)+".md"))
+		for _, name := range slices.Sorted(maps.Keys(yesTypes)) {
+			if !rows[name] {
+				problems = append(problems, fmt.Sprintf("step 10: the type table of %s has no row for %s, which the survey marks yes", d, name))
+			}
+		}
+		for _, name := range slices.Sorted(maps.Keys(rows)) {
+			if !yesTypes[name] {
+				problems = append(problems, fmt.Sprintf("step 10: the type table of %s has a row for %s, which the survey does not mark yes", d, name))
+			}
+		}
+	}
+	return problems
+}
+
+// testDecl is a test function and the name under which its file imports
+// dbimptest.
+type testDecl struct {
+	fn  *ast.FuncDecl
+	pkg string
+}
+
+// testFuncs returns every function of the tests of the driver in folder d, by
+// name.
+func testFuncs(root, d string) map[string]testDecl {
+	funcs := map[string]testDecl{}
+	for _, f := range parseDir(root, d, true) {
+		pkg := importName(f, "github.com/xo/dbimp/dbimptest")
+		for _, decl := range f.Decls {
+			if fn, ok := decl.(*ast.FuncDecl); ok && fn.Recv == nil {
+				funcs[fn.Name.Name] = testDecl{fn: fn, pkg: pkg}
+			}
+		}
+	}
+	return funcs
+}
+
+// callsIn reports whether the body of the function calls the function name
+// of dbimptest.
+func callsIn(d testDecl, name string) bool {
+	found := false
+	if d.fn.Body == nil {
+		return false
+	}
+	ast.Inspect(d.fn.Body, func(n ast.Node) bool {
+		if call, ok := n.(*ast.CallExpr); ok && isSelector(call.Fun, d.pkg, name) {
+			found = true
+		}
+		return !found
+	})
+	return found
+}
+
+// typeTableRows returns the wire type of each row of the type table between
+// its markers in a product document.
+func typeTableRows(doc string) map[string]bool {
+	rows := map[string]bool{}
+	i, j := strings.Index(doc, dbimptest.TypesBegin), strings.Index(doc, dbimptest.TypesEnd)
+	if i < 0 || j < i {
+		return rows
+	}
+	for line := range strings.SplitSeq(doc[i+len(dbimptest.TypesBegin):j], "\n") {
+		cells := strings.Split(line, "|")
+		if len(cells) < 3 {
+			continue
+		}
+		name := strings.TrimSpace(cells[1])
+		if name == "" || name == "Wire type" || strings.HasPrefix(name, "---") {
+			continue
+		}
+		rows[name] = true
+	}
+	return rows
 }
 
 // gateTargets holds step 17: the row of a driver in docs/TARGETS.md names its
@@ -150,7 +299,7 @@ func gateManifest(root string) []string {
 		if m.NoOrdinaryUser != "" {
 			principals = principals[:1]
 		}
-		named := map[string]bool{dbimptest.ManifestName: true}
+		named := map[string]bool{dbimptest.ManifestName: true, dbimptest.RequestsName: true, dbimptest.FeaturesName: true}
 		for item := 1; item <= items; item++ {
 			for _, p := range principals {
 				i := slices.IndexFunc(m.Entries, func(e dbimptest.Entry) bool {

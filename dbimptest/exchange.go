@@ -84,8 +84,8 @@ func sameBody(a, b []byte) bool {
 // Replay starts a fake server that answers each request with the response
 // of the first exchange in dir that match accepts. If match is nil, it uses
 // DefaultMatch. A request that no exchange matches fails the test. Replay
-// reads every file in dir except manifest.json, and closes the server when
-// the test ends.
+// reads every file in dir except the manifest, the script of requests and
+// the survey, and closes the server when the test ends.
 func Replay(t *testing.T, dir string, match Match) *httptest.Server {
 	t.Helper()
 	if match == nil {
@@ -97,7 +97,7 @@ func Replay(t *testing.T, dir string, match Match) *httptest.Server {
 	}
 	var exchanges []*Exchange
 	for _, path := range paths {
-		if filepath.Base(path) == ManifestName {
+		if base := filepath.Base(path); base == ManifestName || base == RequestsName || base == FeaturesName {
 			continue
 		}
 		ex, err := ReadExchange(path)

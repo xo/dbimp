@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT COUNT(*) AS c FROM ARRAY_RANGE(0, 3000) AS a, ARRAY_RANGE(0, 3000) AS b\",\"client_context_id\":\"dbimp-cancel\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 07:16:08 GMT"
+      ],
+      "Content-Length": [
+        "283"
+      ],
+      "Content-Type": [
+        "application/json; version=7.2.9-N1QL"
+      ]
+    },
+    "body": "{\n\"requestID\": \"a027b8e6-579f-47f3-be98-d5aee1a0645b\",\n\"clientContextID\": \"dbimp-cancel\",\n\"signature\": {\"c\":\"number\"},\n\"results\": [\n],\n\"status\": \"stopped\",\n\"metrics\": {\"elapsedTime\": \"1.008490517s\",\"executionTime\": \"1.008463687s\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 1}\n}\n"
+  }
+}

@@ -10,6 +10,10 @@ import (
 // ManifestName is the name of the manifest in testdata/<driver>/.
 const ManifestName = "manifest.json"
 
+// RequestsName is the name of the script in testdata/<driver>/ that the
+// command dbimptest/cmd/record reads. It lists the requests of step 6.
+const RequestsName = "requests.json"
+
 // The principals of step 6 of docs/DRIVER.md.
 const (
 	// Administrator is the principal that administers the server.

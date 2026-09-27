@@ -28,7 +28,9 @@ conventions that `dbmeta` described for the `xo` repositories. W4 came from
 the review of the targets on the same day, from what the `cql` session
 learned when it rewrote `xo/cql`. W5 came from D23, and from what the `n1ql`
 session measured on the Couchbase query service. W6 came from the advice of
-the `dbmeta` session on `docs/DRIVER.md`.
+the `dbmeta` session on `docs/DRIVER.md`. W7 came from Ken on 2026-09-27,
+who asked that every driver test CRUD, the features of its database and
+every native type, after it asks two models what they are.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -50,9 +52,10 @@ When the first driver exists, add the jobs that `cql/.github/workflows/test.yml`
 has: a job that reads the releases from `dbrun list --json --names`, and a
 matrix job that starts each release with `dbrun` and runs `go test -run
 Integration` with the DSN set. Pin the `dbmeta` commit in the workflow, as in
-`cql` D20. The pin is `2b93710` or later, because that commit of `dbmeta` holds
-the ordinary Couchbase user (dbmeta D96). Do not write the list of releases in
-the workflow.
+`cql` D20. The pin is `ec91128` or later. `2b93710` holds the ordinary
+Couchbase user (dbmeta D96), and `ec91128` gives each server an owner
+(dbmeta D98). The workflow sets `DBMETA_OWNER` to name itself, such as
+`dbimp-ci`. Do not write the list of releases in the workflow.
 
 ## W4. Design the root package before the first driver
 
@@ -115,6 +118,14 @@ It replaces `xo/n1ql`. Do W4 and W6 first, then follow
 fact about the query service and every fault of `go_n1ql` that the driver
 must not repeat.
 
+Ken decided the questions of step 9 in D38 to D42. The driver has
+transactions from its first release (D41), so step 6 also records
+`COMMIT WORK`, a `txid` that expired, and a `txid` sent after the end.
+
+The recordings of step 6 were made before step 5a existed. Do the survey of
+step 5a for Couchbase, record a request for each entry that step 6 did not
+cover, and settle every verdict, before step 11.
+
 [COUCHBASE.md](COUCHBASE.md) does not follow the template of
 [DRIVER.md](DRIVER.md) yet. Give it the headings of the template in step 8,
 because `TestEveryDriverHasItsDocument` fails once the folder `couchbase`
@@ -158,3 +169,27 @@ yet, so each gate passes with nothing to read. `gates_self_test.go` makes
 sure that each gate passes a complete driver and fails an incomplete one.
 The code and the design of W4 went in with the gates, on 2026-09-27, staged
 for Ken to review.
+
+## W7. Add the survey of features and the round trip of types
+
+Steps 5a and 14a of [DRIVER.md](DRIVER.md) needed three things, which went
+in on 2026-09-27, staged for Ken to review. Gemini and DeepSeek proposed the
+parts, and Ken asked for them.
+
+1. `dbimptest.Features` is the form of `testdata/<driver>/features.json`.
+2. `dbimptest.RoundTrip` runs the round trip of one type. It runs every step
+   itself and compares each value and its Go type, so a test cannot skip a
+   step or compare nothing. Its tests hold a store in memory with three
+   faults, and each one fails.
+3. `TestEveryDriverHasItsFeatures` in `gates_test.go` holds the survey. The
+   complete driver and the incomplete driver of `gates_self_test.go` hold
+   the gate itself.
+
+[DESIGN.md](DESIGN.md) describes the first two, and the table in
+[DRIVER.md](DRIVER.md) lists the gate.
+
+Two ideas of the models were not taken. A gate on the history of git, which
+makes sure that the survey came before the tests, breaks when a branch is
+rebased or squashed, and Ken reviews the order of the work anyway. A linter
+that looks for a comparison after each `Scan` is a guess, and the helper
+does the comparing itself.

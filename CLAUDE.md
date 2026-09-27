@@ -97,7 +97,7 @@ Ken.
 | --- | --- |
 | `/` | The root package `dbimp`. It holds the code that the drivers share: the HTTP client, the adapters that encode and decode values, and other utilities. `doc.go` holds its package documentation. See D4. |
 | `<driver>/` | One driver, as the package `github.com/xo/dbimp/<driver>`, named for its database and not for its query language, such as `couchbase` (D26). It imports the root package. That path is the `GoPackage` of its scheme in `dburl`, and a consumer imports it directly. See D4. |
-| `dbimptest/` | The helpers for the tests of a driver: recorded exchanges, the contract, the test for goroutines and the two tables. Only a test imports it (D37). |
+| `dbimptest/` | The helpers for the tests of a driver: recorded exchanges, the contract, the test for goroutines, the two tables, the survey of step 5a and the round trip of a type. Only a test imports it (D37). `dbimptest/cmd/record` records the exchanges of step 6. |
 | `testdata/` | Golden files, and the recorded exchanges of each driver under `testdata/<driver>/`. |
 | `docs_test.go` | The rules for the documents, from D3. |
 | `skills_test.go` | The rule for the agent skills, from D11. |

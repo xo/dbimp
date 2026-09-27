@@ -133,8 +133,9 @@ linters:
   exclusions:
     rules:
       # A test builds its own context and does not answer to the context
-      # rule.
-      - path: _test\.go
+      # rule. Neither does the main function of a command, which is where the
+      # context of a program starts.
+      - path: (_test\.go|/cmd/)
         linters:
           - forbidigo
       # The tests of the documents, the skills and the gates read the files of

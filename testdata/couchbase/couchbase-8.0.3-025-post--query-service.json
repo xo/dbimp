@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1069"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 07:15:47 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"571b771d-e8b8-47a8-a710-a5fc42562f94\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n{\"user_info\":{\"domain\":\"local\",\"external_groups\":[],\"groups\":[],\"id\":\"dbmeta_user\",\"locked\":false,\"password_change_date\":\"2026-09-27T06:24:01Z\",\"roles\":[{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"update\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"select\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"insert\",\"scope_name\":\"*\"},{\"bucket_name\":\"dbmeta\",\"collection_name\":\"*\",\"origins\":[{\"type\":\"user\"}],\"role\":\"delete\",\"scope_name\":\"*\"},{\"origins\":[{\"type\":\"user\"}],\"role\":\"query_system_catalog\"}],\"temporary_password\":false,\"uuid\":\"2090f826-0348-4bb3-995a-78645469579f\"}},\n{\"user_info\":{\"domain\":\"builtin\",\"id\":\"Administrator\",\"name\":\"Administrator\",\"roles\":[{\"role\":\"admin\"}]}}\n],\n\"status\": \"success\",\n\"metrics\": {\"elapsedTime\": \"1.483109ms\",\"executionTime\": \"1.454649ms\",\"resultCount\": 2,\"resultSize\": 825,\"serviceLoad\": 0}\n}\n"
+  }
+}

@@ -155,10 +155,13 @@ for code that only a test uses. So they are not in the root package (D37).
 | --- | --- |
 | `exchange.go` | `Exchange`, `ReadExchange`, `Match`, `DefaultMatch` and `Replay` |
 | `manifest.go` | `Manifest`, `Entry`, `ReadManifest` and `WriteManifest` |
-| `record.go` | `Recorder`, which writes the exchanges of step 6 |
+| `record.go` | `Recorder` and `WithLabel`, which write the exchanges of step 6 |
+| `cmd/record/` | The command that records the requests of `requests.json` |
 | `goroutines.go` | `CheckGoroutines` |
 | `contract.go` | `Contract` and `RunContract` |
 | `tables.go` | `TypeTable` and `InterfaceTable` |
+| `features.go` | `Features`, the survey of step 5a, and `ReadFeatures` |
+| `roundtrip.go` | `RoundTrip`, the round trip of one type for step 14a |
 
 ### Recorded exchanges
 
@@ -167,11 +170,19 @@ Each file under `testdata/<driver>/`, except the manifest, is one
 request, and the status, the headers and the body of its response.
 
 `Recorder` is an `http.RoundTripper` that writes each exchange with a real
-server. A driver test sets it as the transport of the client when
-`DBIMP_RECORD` is set, and calls `Label` before each item of step 6, with
-the number of the item and the principal. The recorder writes the value of
-`Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`. `WriteManifest`
-adds what it recorded to `manifest.json`.
+server. It names each file for the release, a number and the request. It
+takes the item of step 6 and the principal of an exchange from the context
+of its request, which `WithLabel` sets, or else from the last call of
+`Label`. The context keeps the label right for a request that runs in the
+background while others are sent.
+
+The command `dbimptest/cmd/record` reads `testdata/<driver>/requests.json`,
+sends each request in it as both principals through a `Recorder`, and writes the
+exchanges and the manifest. It replaces the files and the entries that an
+earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
+it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
+the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.
+`WriteManifest` adds what it recorded to `manifest.json`.
 
 `Replay` starts a fake server that answers each request with the response of
 the first exchange that matches it. `DefaultMatch` compares the method, the
@@ -216,6 +227,39 @@ calls `RunContract` must not run in parallel with another test.
 
 The contract does not test paging (D21), because each product pages in its
 own way. The driver tests that with its recorded exchanges.
+
+### The survey
+
+`testdata/<driver>/features.json` is the survey of step 5a, as
+`dbimptest.Features`. It lists each model and each driver that the survey
+asked, with the date, and one entry for each operation, feature and type.
+An entry holds its kind (`crud`, `schema`, `feature` or `type`), its name,
+the sources that named it, a verdict (`not measured`, `yes` or `no`), the
+recorded file that shows what the server answered, and the test that
+exercises it, as a function and a subtest. A type is named as the type
+table names it. `TestEveryDriverHasItsFeatures` holds the rules for the
+file, and the gates and `Replay` skip it.
+
+### The round trip of a type
+
+`RoundTrip` runs the round trip of one type for step 14a. The driver gives
+it a `RoundTripCase`: the statements that set up and tear down the table,
+insert a row with a key and a value, write the same row with literals,
+select the value by the key, update it, and delete it, and at least two
+values. For each value, once as a bound argument and once as a literal,
+`RoundTrip` inserts the row, selects it and compares the value, updates it
+to the next value, selects and compares again, deletes it, and selects to
+see that it is gone.
+
+It reads each value into a `*any` and compares with `reflect.DeepEqual`
+unless the case supplies `Equal`, so the comparison covers the Go type. It
+never selects a literal in place of a stored value. It tears the table down
+in a cleanup, so the teardown runs when a test fails. For a database that
+updates an index after a write, `Wait` makes it read again until the read
+sees the write, with no fixed sleep. A value that has no literal in the
+database is logged and skipped for the literal form only. Its tests hold a
+store in memory with three faults: a value that changes its type, a delete
+that keeps the row, and a write that is late.
 
 ### The two tables
 

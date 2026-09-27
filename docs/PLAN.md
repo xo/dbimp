@@ -52,6 +52,11 @@ so on. Decisions are numbered `D1`, `D2` and so on. The two series never mix.
 | [D35](#d35-a-dsn-is-a-url-whose-scheme-is-the-name-of-the-driver-decided) | A DSN is a URL whose scheme is the name of the driver | Decided |
 | [D36](#d36-rows-read-the-body-as-a-stream-and-close-closes-it-decided) | Rows read the body as a stream, and Close closes it | Decided |
 | [D37](#d37-the-shared-test-helpers-are-the-package-dbimptest-decided) | The shared test helpers are the package dbimptest | Decided |
+| [D38](#d38-the-couchbase-dsn-decided) | The Couchbase DSN | Decided |
+| [D39](#d39-the-values-of-couchbase-decided) | The values of Couchbase | Decided |
+| [D40](#d40-parameters-and-options-of-couchbase-decided) | Parameters and options of Couchbase | Decided |
+| [D41](#d41-the-first-couchbase-driver-has-transactions-decided) | The first Couchbase driver has transactions | Decided |
+| [D42](#d42-how-the-couchbase-driver-reads-a-result-decided) | How the Couchbase driver reads a result | Decided |
 
 ### D1. The module path is github.com/xo/dbimp. Decided.
 
@@ -595,6 +600,115 @@ when the command line already names it, so that reason was wrong.
 
 `dbimptest` is not a driver, so the gates of W6 skip its folder.
 [DESIGN.md](DESIGN.md) holds what it contains.
+
+### D38. The Couchbase DSN. Decided.
+
+Ken accepted this on 2026-09-27.
+
+The DSN is `couchbase://user:pass@host:port/?key=value` (D27 and D35). The
+user information holds the credentials, which the driver sends with basic
+authentication, and never in the `creds` parameter, which puts the password
+in the body. The host and the port are the query service, with the port
+8093 by default, or 18093 when `tls` is true. The path is empty or `/`, and
+any other path is an error. The keys of the query are these:
+
+- `tls`: `true` to speak HTTPS, `false` by default.
+- `query_context`: the bucket and the scope that a collection named alone
+  belongs to, such as `default:dbmeta._default`.
+- `scan_consistency`: `not_bounded` by default, or `request_plus`.
+- `timeout`: a duration, such as `30s`, that the server enforces with code
+  1080.
+
+The driver talks to the host of the URL only. It does not find the other
+nodes of a cluster, because `dbrun` cannot test that, and a cluster in a
+container answers with addresses that a client outside it cannot reach
+([COUCHBASE.md](COUCHBASE.md)). It follows no redirect, and none was seen.
+It asks Ken before it adds a key.
+
+### D39. The values of Couchbase. Decided.
+
+Ken accepted this on 2026-09-27.
+
+The signature names the kind of each column, and the driver decodes each
+value by what it holds, with `ColumnTypeDatabaseTypeName` the kind in upper
+case: `NUMBER`, `STRING`, `BOOLEAN`, `NULL`, `MISSING`, `ARRAY`, `OBJECT` or
+`JSON`.
+
+- A number is an `int64` when it is an integer that fits, and a `float64`
+  otherwise, as `dbimp.Number` decodes it. The server sends a larger integer
+  as a float64 itself, so no `*apd.Decimal` arrives from Couchbase.
+- A string is a `string`, a boolean is a `bool`, and a time, a binary value
+  and a UUID are the strings that the server sends, because SQL++ has no
+  type for them. A caller scans a time into a `time.Time` through
+  `database/sql`.
+- An array is a `[]any` and an object is a `map[string]any`, as `dbimp.Any`
+  decodes them. A scan into a `*[]byte` or a `*jsontext.Value` gets the JSON
+  text of the value instead, so a caller that wants the text keeps it.
+- NULL and MISSING are both nil, as n1ql D24 decided, because
+  `database/sql` has one NULL. A caller that must tell them apart reads the
+  kind of the column.
+- On 7.2.9 the columns arrive in the order of their names, and the driver
+  returns that order, as n1ql D33 decided. It does not send a second request
+  to learn the order of the projection.
+
+### D40. Parameters and options of Couchbase. Decided.
+
+Ken accepted this on 2026-09-27.
+
+The driver sends each argument to the server, which binds it (D34). A
+positional argument goes in `args`, and a `sql.Named` argument goes in
+`$name`. `?` and `$1` in a statement are both positional, and the driver
+changes neither. A value is encoded with `encoding/json/v2`, so a map, a
+slice and a struct are arguments as well as a scalar. The driver implements
+`driver.NamedValueChecker` for that, and returns `driver.ErrSkip` for a
+`driver.Valuer`.
+
+An option of one query comes from the DSN, then from the context through
+`WithOptions`, then from an argument of the type `Option`, in that order, as
+cql D23 does. The options are the keys of D38 without `tls`, and `readonly`.
+
+### D41. The first Couchbase driver has transactions. Decided.
+
+Ken decided this on 2026-09-27. The query service has transactions through
+a `txid`, and the first release of the driver supports them (D20):
+
+- `BeginTx` sends `BEGIN WORK`, and the connection keeps the `txid` that it
+  returns. Each statement on the connection carries the `txid` until the
+  transaction ends.
+- `Tx.Commit` sends `COMMIT WORK`, and `Tx.Rollback` sends `ROLLBACK WORK`,
+  each with the `txid`. The connection then forgets it.
+- `ResetSession` rolls back a transaction that is still open, and returns
+  `driver.ErrBadConn` if that fails, so that `database/sql` drops the
+  connection rather than hand its state to another caller.
+- `TxOptions.ReadOnly` sends `readonly`. An isolation level other than the
+  default is an error that wraps `dbimp.ErrNotSupported`, because the query
+  service has one level.
+- The timeout of a transaction is an option, as D40 describes.
+
+A transaction lives on the one query node that began it. The driver talks to
+one host (D38), so every statement of a transaction reaches that node.
+
+`COMMIT WORK`, a `txid` that expired, and a `txid` sent after the end are
+not measured yet. W5 measures them in step 6, and step 14a tests the
+transaction as a feature.
+
+### D42. How the Couchbase driver reads a result. Decided.
+
+Ken accepted this on 2026-09-27.
+
+A result is one response, and it does not page. The driver reads the
+`signature` for the columns, then each row of `results` as `Rows.Next` asks
+(D36). After the last row it reads the rest of the response. If `errors` is
+not empty, or `status` is not `success`, `Rows.Next` returns an error that
+wraps `dbimp.ErrIncomplete` and holds each code and message (D21). A
+`status` of `stopped` is an error for the same reason, because the result
+is cut short.
+
+The driver relies on the server to stop a query when the client
+disconnects, which it does on every release (D36). `Rows.Close` sends no
+cancel. The driver uses no binary encoding, because the server offers none.
+Couchbase Analytics waits for a later work item, because `dbrun` does not
+publish its port.
 
 ## Open questions
 

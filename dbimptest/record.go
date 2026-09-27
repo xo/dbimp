@@ -2,6 +2,7 @@ package dbimptest
 
 import (
 	"bytes"
+	"context"
 	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"errors"
@@ -42,7 +43,7 @@ type Recorder struct {
 
 // NewRecorder returns a Recorder that sends each request with next and
 // writes each exchange into dir. release is the release of the server, as
-// dbrun names it.
+// dbrun names it, and the name of each file starts with it.
 func NewRecorder(dir, release string, next http.RoundTripper) *Recorder {
 	return &Recorder{
 		next:    next,
@@ -52,8 +53,24 @@ func NewRecorder(dir, release string, next http.RoundTripper) *Recorder {
 	}
 }
 
+// label is the item of step 6 and the principal of one exchange.
+type label struct {
+	item      int
+	principal string
+}
+
+// labelKey is the key of a label in the context of a request.
+type labelKey struct{}
+
+// WithLabel returns a context that labels the request made with it. A
+// Recorder uses that label rather than the one that Label set, so that a
+// request that runs while others are sent keeps its own item.
+func WithLabel(ctx context.Context, item int, principal string) context.Context {
+	return context.WithValue(ctx, labelKey{}, label{item: item, principal: principal})
+}
+
 // Label sets the item of step 6 and the principal of the exchanges that
-// follow.
+// follow, when a request carries no label of its own.
 func (r *Recorder) Label(item int, principal string) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -100,7 +117,8 @@ func (r *Recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 			Body:   string(resBody),
 		},
 	}
-	if err := r.write(&ex); err != nil {
+	l, _ := req.Context().Value(labelKey{}).(label)
+	if err := r.write(&ex, l); err != nil {
 		return nil, err
 	}
 	return res, nil
@@ -124,11 +142,14 @@ func (r *Recorder) WriteManifest(driver string) error {
 	return WriteManifest(path, m)
 }
 
-func (r *Recorder) write(ex *Exchange) error {
+func (r *Recorder) write(ex *Exchange, l label) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	if l.principal == "" {
+		l = label{item: r.item, principal: r.principal}
+	}
 	r.n++
-	name := fmt.Sprintf("%03d-%s.json", r.n, slug(ex.Request.Method+" "+ex.Request.Path))
+	name := fmt.Sprintf("%s-%03d-%s.json", r.release, r.n, slug(ex.Request.Method+" "+ex.Request.Path))
 	b, err := json.Marshal(ex, jsontext.Multiline(true), jsontext.WithIndent("  "))
 	if err != nil {
 		return fmt.Errorf("recording %s: %w", name, err)
@@ -140,8 +161,8 @@ func (r *Recorder) write(ex *Exchange) error {
 		return fmt.Errorf("recording %s: %w", name, err)
 	}
 	r.entries = append(r.entries, Entry{
-		Item:      r.item,
-		Principal: r.principal,
+		Item:      l.item,
+		Principal: l.principal,
 		Release:   r.release,
 		Date:      r.date,
 		File:      name,

@@ -31,6 +31,7 @@ write that Ken accepted something that he did not say in the conversation:
   Enterprise (step 4).
 - An image that somebody other than the vendor built (step 4).
 - A target that meets a condition of "When it cannot be a driver" (step 6).
+- A server that refuses one of insert, select, update and delete (step 6).
 - Every decision of step 9, including any package that is not the standard
   library or `apd` (D13).
 - A feature that the product has in a form that stretches the contract, such
@@ -99,7 +100,8 @@ the headings of the template at the end of this file. Each one is marked
 
 `dbrun` in `dbmeta` starts every server, and nothing else does (D9). If
 `dbrun list` does not name the product, the `dbmeta` session writes its entry
-in `dbmeta/container/<product>.go`. Send it these facts:
+in `dbmeta/container/<product>.go`, by `dbmeta/docs/CONTAINERS.md`. Send it
+these facts:
 
 - The image and the tags. `dbmeta/docs/EVALUATION.md` chooses the range of
   releases.
@@ -125,13 +127,56 @@ twice on one release with the same result.
 (cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release>)
 ```
 
-The `dsn` field of the second command is the DSN that the driver reads. Plain
-`dbrun dsn` prints a table.
+`dbmeta/docs/DBRUN.md` holds every command of `dbrun`, its output, and the
+rules for sharing the machine: start and stop only the servers that you
+test, and never stop the server of another session. From dbmeta commit
+`ec91128`, each server carries an owner, and `dbrun` refuses to stop or
+remove a server of another owner unless you pass `--force`. Never pass it
+for a server that is not yours. A server that another session runs is
+shared, and `dbrun status` names its owner. The `dsn` field of the
+second command is an `http://` URL, and the `url` field is the URL in the
+form of `dburl`. Plain `dbrun dsn` prints a table.
 
 Gate: a `curl` request for the version returns HTTP 200 and a body that
 `jq .` parses, and the file is saved under `testdata/<driver>/`.
 
 ## Measuring the interface
+
+### 5a. Survey the operations, the features and the types
+
+Do this before you measure anything, and before you write any test. The
+survey says what to measure in step 6 and what to test in step 14a.
+
+Ask at least two models, such as Gemini and DeepSeek, in separate
+conversations. Ask each one the same four questions:
+
+1. Which statements of CRUD the database supports: insert, select, update,
+   delete, and any form of its own, such as an upsert or a merge.
+2. Which operations on a schema it supports: a table or a collection, a
+   primary key, a foreign key, an index, a unique constraint, a view, and a
+   default value.
+3. Which features are its own, which a driver for another database never
+   meets. Examples are `USE KEYS` and `MISSING` in Couchbase, `SAMPLE BY` in
+   QuestDB, and object columns in CrateDB.
+4. Which native types it has, with the range and the precision of each.
+
+Then read what other drivers claim. Read at least one driver in Go and one
+driver in another language, such as the official SDK. Record each feature
+that a driver claims.
+
+Write each answer into `testdata/<driver>/features.json`, one entry for each
+operation, feature and type. Each entry holds its kind, its name, the
+sources that named it, the verdict `not measured`, and no test yet. Record
+each model and each driver that you asked, with the date.
+`dbimptest.Features` is the form of the file, and [DESIGN.md](DESIGN.md)
+describes it.
+
+A model can be wrong, and step 6 settles each entry against the server. Do
+not leave out an entry because one model did not name it.
+
+Gate: `features.json` names at least two models and at least one other
+driver. It has an entry for each of insert, select, update and delete, and
+an entry for every native type that any source named.
 
 ### 6. Measure the HTTP interface, and record every response
 
@@ -140,11 +185,21 @@ again as the ordinary user. A server can refuse to an ordinary user what it
 gives an administrator, and that changes the design. Save each
 request and each response under `testdata/<driver>/`, with the status, the
 headers and the body, as you send it. Use `curl` for the first look. Then
-record the files from a test, with `dbimptest.Recorder` as the transport of
-the client, when `DBIMP_RECORD` is set. Call `Label` before each item, with
-its number and the principal. Every file comes from a real server, and never
-from your memory of the documentation. [DESIGN.md](DESIGN.md) holds the form
-of a file and of the manifest.
+write the requests into `testdata/<driver>/requests.json`, one or more for
+each item, and record them with the command `dbimptest/cmd/record`, once for
+each release:
+
+```bash
+go run ./dbimptest/cmd/record -dir testdata/<driver> -release <release> \
+	-admin <URL of the administrator> -ordinary <URL of the ordinary user>
+```
+
+The command sends each request as both principals, through `dbimptest.Recorder`,
+and replaces what an earlier run recorded for the same release. A request can
+wait, give up after a timeout, run in the background while a later one acts on
+it, or send a wrong password. Every file comes from a real server, and never
+from your memory of the documentation. [DESIGN.md](DESIGN.md) holds the form of
+a file and of the manifest.
 
 Measure each of these:
 
@@ -170,6 +225,12 @@ Measure each of these:
 12. The headers that matter: `Content-Encoding`, a redirect, and a limit on
     the rate of requests, such as HTTP 429.
 
+Also send at least one request for each entry of `features.json`, and
+record it with the item that it belongs to, such as item 3 for a type. Then
+set the verdict of the entry to `yes` or `no` from what the server answered.
+A verdict of `no` names the recorded file that shows the refusal. Never set
+`no` from the documentation or from a model alone.
+
 List every recorded file in `testdata/<driver>/manifest.json`, with the item
 number, the principal, the release and the date. `Recorder.WriteManifest`
 writes it. An item that does not apply to the product has an entry with the
@@ -177,8 +238,9 @@ reason in `absent`, such as transactions for a product that has none.
 
 Gate: `TestEveryDriverHasItsManifest` passes. The manifest names a file or a
 reason for each item, for each principal, from a named release, and every file
-under `testdata/<driver>/` is in the manifest. If a condition of "When it cannot
-be a driver" holds, stop and ask Ken now.
+under `testdata/<driver>/` is in the manifest. No entry of `features.json` has
+the verdict `not measured`. If a condition of "When it cannot be a driver"
+holds, stop and ask Ken now.
 
 ### 7. Ask two models, then test every answer on the server
 
@@ -193,8 +255,12 @@ file, one model claimed that `database/sql` drops the names of parameters
 without `driver.NamedValueChecker`, which is false. A lead that the server did
 not show to be true stays "not measured", with the model that gave it.
 
+Add each lead that names an operation, a feature or a type to
+`features.json`, and settle its verdict against the server as step 6 does.
+
 Gate: each lead, and what the server answered for it, is in the draft of
-`docs/<PRODUCT>.md`, including the leads that proved wrong.
+`docs/<PRODUCT>.md`, including the leads that proved wrong. No entry of
+`features.json` has the verdict `not measured`.
 
 ### 8. Write the document for the product
 
@@ -269,6 +335,9 @@ the types whether each one is implemented, and writes the table between
 
 Run the tests with `DBIMP_UPDATE=1` to write both tables. Without it, each
 test fails when the document holds another table.
+
+The type table has one row for each type that `features.json` marks `yes`,
+and no other row.
 
 Gate: `TestEveryDriverGeneratesItsTables` passes, every type from step 6 has
 a row, and every interface has a reason.
@@ -391,6 +460,61 @@ integration test skipped is not a run.
 Gate: the tests pass on every release, no test skipped for a missing DSN, and
 `docs/<PRODUCT>.md` names each release with the date.
 
+### 14a. Round trip every operation, feature and type
+
+Test each entry of `features.json` against a real server, in an integration
+test, as step 14 runs them. Each entry names its test.
+
+For CRUD, create at least three tables, or collections where the database
+has no tables, in the namespace of the test. If the database has foreign
+keys, one table refers to another. If it has indexes, one table has an index
+that a query uses. On each table, insert rows, select them, update them,
+select them again, delete them, and select again to see that they are gone.
+Compare each value that a select returns with the value that the test
+wrote. A test that only sees no error proves nothing.
+
+For each type that `features.json` marks `yes`, run `dbimptest.RoundTrip`.
+It stores values in a column of that type, and never selects
+a literal in place of a stored value. For each value, it does these, in
+order:
+
+- Inserts the value as a bound argument, and again as a literal.
+- Selects each row by its key, and compares the value exactly, and the Go
+  type that `database/sql` returns.
+- Updates the value to a second value, selects it, and compares again.
+- Deletes the row, and selects it to see that it is gone.
+
+The values for each type are NULL, the zero value, the smallest and the
+largest value, an empty value, a long value, and a value that tests the
+type: text with characters outside ASCII for a string, a time zone and the
+smallest step of time for a time, and the last digit of precision for a
+number.
+
+For each feature of the database that `features.json` marks `yes`, write a
+test that uses it and compares what it returns. For each entry marked `no`,
+write a test that sends the operation and expects the refusal of the server.
+If the server accepts it, the verdict was wrong, and the test fails.
+
+Run every test as the administrator and as the ordinary user. If the
+ordinary user cannot create a table, the administrator creates it and the
+ordinary user runs the rest, and the test says so. If the database updates
+an index after a write, as Couchbase does, use the option of the driver that
+waits for the write, such as `scan_consistency`, or poll with a limit on the
+time. Never sleep for a fixed time.
+
+Drop every table and every namespace that a test creates, even when the test
+fails, and select at the end to see that nothing is left.
+
+A database can refuse part of CRUD by design. A store that only appends has
+no update or delete, and Couchbase has no foreign key. Mark each such entry
+`no` with its recording, test the refusal, and test the form that the
+database has in its place, such as an upsert or dropping a partition, as a
+feature of its own.
+
+Gate: `TestEveryDriverHasItsFeatures` passes. Every entry of `features.json`
+names a test that exists, the test of each type calls `dbimptest.RoundTrip`,
+and every integration test passes on every release as both principals.
+
 ### 15. Add the CI job
 
 Add the jobs that W3 describes to `.github/workflows/test.yml`. The matrix
@@ -485,6 +609,8 @@ change:
   statement runs on each flavor and says which one answered (dbmeta D91).
 - Step 14: a test skips a difference between flavors with the reason, and
   every flavor runs in the matrix.
+- Steps 5a and 14a: `features.json` records a verdict for each flavor, and a
+  feature that one flavor lacks has a test of its refusal on that flavor.
 
 ## The template for a product document
 
@@ -542,6 +668,7 @@ gate finds nothing.
 | `TestNoDriverTouchesGlobalState` | a driver assigns to `http.DefaultTransport`, `http.DefaultClient` or a package variable outside `init`, or calls `io.ReadAll` (step 12) |
 | `TestEveryDriverRegistersOneName` | a driver calls `sql.Register` more than once, outside `init`, or with a name that is not its folder (step 9) |
 | `TestEveryDriverTestsItsDSN` | a driver has no fuzz test, or no round trip test, for its DSN (step 13) |
+| `TestEveryDriverHasItsFeatures` | the survey asked fewer than two models or no other driver, lacks a statement of CRUD, leaves an entry not measured, marks one `no` with no recorded refusal, names a test that does not exist, has a type whose test does not call `RoundTrip`, or disagrees with the type table (steps 5a, 6, 10 and 14a) |
 | `TestTheWorkflowNamesNoRelease` | a workflow names a release, or runs the integration tests without reading the releases from `dbrun` (step 15) |
 | `TestEveryDocumentIsInTheTable` | a document in `docs/` is missing from `CLAUDE.md` or `README.md` |
 | `TestEveryDecisionReferenceExists` | a document points at a decision that does not exist |

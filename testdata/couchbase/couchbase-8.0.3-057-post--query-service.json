@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/service",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statement\":\"SELECT * FROM system:user_info\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Content-Length": [
+        "470"
+      ],
+      "Content-Type": [
+        "application/json; version=8.0.3-N1QL"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 07:15:51 GMT"
+      ]
+    },
+    "body": "{\n\"requestID\": \"cf918af8-de09-40eb-b185-9b906c9f9ed2\",\n\"signature\": {\"*\":\"*\"},\n\"results\": [\n],\n\"errors\": [{\"code\":13014,\"msg\":\"User does not have credentials to Local User Admin. Add role user_admin_local to allow the statement to run.\",\"reason\":{\"missing_role\":\"user_admin_local\",\"path\":\"#system:user_info\"}}],\n\"status\": \"fatal\",\n\"metrics\": {\"elapsedTime\": \"237.702µs\",\"executionTime\": \"212.641µs\",\"resultCount\": 0,\"resultSize\": 0,\"serviceLoad\": 0,\"errorCount\": 1}\n}\n"
+  }
+}

@@ -43,7 +43,7 @@ func completeDriver(t *testing.T) map[string]string {
 	for _, h := range templateHeadings(".") {
 		fmt.Fprintf(&doc, "## %s\n\nText.\n\n", h)
 	}
-	doc.WriteString(dbimptest.TypesBegin + "\n" + dbimptest.TypesEnd + "\n")
+	doc.WriteString(dbimptest.TypesBegin + "\n| Wire type | Go type | Scan type | Database type | Can be NULL |\n| --- | --- | --- | --- | --- |\n| number | `int64` | `int64` | `NUMBER` | yes |\n" + dbimptest.TypesEnd + "\n")
 	doc.WriteString(dbimptest.InterfacesBegin + "\n" + dbimptest.InterfacesEnd + "\n")
 
 	files := map[string]string{
@@ -85,6 +85,11 @@ func TestTables(t *testing.T) {
 }
 func TestDSNRoundTrip(t *testing.T) {}
 func FuzzParseDSN(f *testing.F)    {}
+func TestCRUD(t *testing.T)        {}
+func TestRefusals(t *testing.T)    {}
+func TestTypes(t *testing.T) {
+	dbimptest.RoundTrip(t, nil, dbimptest.RoundTripCase{})
+}
 `,
 		".github/workflows/test.yml": "run: go run ./cmd/dbrun list --json --names tested\nrun: go test -run Integration ./...\n",
 	}
@@ -101,6 +106,22 @@ func FuzzParseDSN(f *testing.F)    {}
 		t.Fatal(err)
 	}
 	files["testdata/good/manifest.json"] = readFile(root, "manifest.json")
+	features := `{"driver": "good",
+  "consulted": [
+    {"source": "model-a", "kind": "model", "date": "2026-09-27"},
+    {"source": "model-b", "kind": "model", "date": "2026-09-27"},
+    {"source": "example.com/other", "kind": "driver", "date": "2026-09-27"}
+  ],
+  "entries": [
+    {"kind": "crud", "name": "insert", "sources": ["model-a"], "verdict": "yes", "test": "TestCRUD/insert"},
+    {"kind": "crud", "name": "select", "sources": ["model-a"], "verdict": "yes", "test": "TestCRUD/select"},
+    {"kind": "crud", "name": "update", "sources": ["model-b"], "verdict": "yes", "test": "TestCRUD/update"},
+    {"kind": "crud", "name": "delete", "sources": ["model-b"], "verdict": "yes", "test": "TestCRUD/delete"},
+    {"kind": "schema", "name": "foreign key", "sources": ["model-a"], "verdict": "no", "evidence": "001-administrator.json", "test": "TestRefusals/foreign-key"},
+    {"kind": "type", "name": "number", "sources": ["model-a", "model-b"], "verdict": "yes", "test": "TestTypes/number"}
+  ]
+}`
+	files["testdata/good/features.json"] = features
 	return files
 }
 

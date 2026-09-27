@@ -2,25 +2,52 @@
 
 This file holds what is known about the Couchbase query service, for the
 first driver, `github.com/xo/dbimp/couchbase` (D23 and D26 in
-[PLAN.md](PLAN.md)). W5 in [BACKLOG.md](BACKLOG.md) is
-the work.
+[PLAN.md](PLAN.md)). W5 in [BACKLOG.md](BACKLOG.md) is the work, and it
+follows [DRIVER.md](DRIVER.md). The headings are the template of that file.
 
-The `n1ql` session measured these facts on 2026-09-27. It sent requests with
-`curl` to Couchbase Server Enterprise 7.2.9, 7.6.12 and 8.0.3, which `dbrun`
-started from dbmeta commit `3be3293`. `dbrun` publishes only port 8093, which
-is the query service. A fact marked "not measured" is a lead, not a fact.
+Each fact says how it was measured. "Recorded" means that an exchange under
+`testdata/couchbase/` holds it, for 7.2.9, 7.6.12 and 8.0.3, as the
+administrator and as the ordinary user, recorded on 2026-09-27 from the
+script `testdata/couchbase/requests.json` with `dbimptest/cmd/record`. A fact
+that only one release or one principal shows names it. "Measured with curl"
+means that this session sent the request by hand on 8.0.3 on 2026-09-27, and
+no file holds it. A fact marked "not measured" is a lead, not a fact.
+
+## Summary
+
+- The product is Couchbase Server, through its query service and SQL++,
+  which Couchbase also calls N1QL.
+- `dbrun` names three releases: `couchbase-7.2.9` and `couchbase-8.0.3` in
+  the Tested tier, and `couchbase-7.6.12` in the Nightly tier (read from
+  `dbrun list --json` at dbmeta commit `2b93710` on 2026-09-27). Each is the
+  Enterprise image `docker.io/library/couchbase`, which is free for
+  development (D31).
+- It meets R, H and S, and it is P1 and the first driver (D23).
+- The scheme in `dburl` has the `Driver` name `n1ql`, the alias `couchbase`,
+  and the dialect `n1ql`. At the move of step 16, `couchbase` becomes the
+  `Driver` name and `n1ql` an alias (D30).
+- `usql` uses `github.com/couchbase/go_n1ql` at
+  `v0.0.0-20220303011133-0ed4bf93e31d`, in `usql/drivers/couchbase`. The
+  driver here replaces it (D23).
 
 ## Requests
 
-- A query is `POST /query/service` with `Content-Type: application/json`, on
-  all three releases.
-- `"args": [...]` holds the positional parameters. `"$name": value` holds a
-  named parameter. A string with a double quote, and a nested object, both
-  arrive at the server unchanged. The driver never writes an argument into
-  the text of the statement.
-- Basic authentication works on the query service. The password is percent
-  encoded in the user information of the URL. The older `creds` parameter and
-  authentication with a certificate are not measured.
+- A query is `POST /query/service` with `Content-Type: application/json`, and
+  the statement in `statement` (recorded). `GET /query/service?statement=...`
+  works too (recorded).
+- `"args": [...]` holds the positional parameters, and `"$name": value` holds
+  a named parameter (recorded).
+- Basic authentication works (recorded). The `creds` parameter in the body
+  works in place of it (measured with curl on 8.0.3). Authentication with a
+  certificate and TLS on port 18093 are not measured, because `dbrun`
+  publishes only port 8093.
+- `readonly: true` refuses a write with HTTP 403 and code 1000 (recorded).
+- `metrics: false` leaves the `metrics` object out of the response
+  (recorded).
+- `query_context`, such as `default:dbmeta._default`, names the bucket and
+  the scope of a collection that the statement names alone (recorded).
+- `client_context_id` names a request. The response then holds
+  `clientContextID` after `requestID` (measured with curl on 8.0.3).
 
 ## The DSN
 
@@ -28,49 +55,156 @@ is the query service. A fact marked "not measured" is a lead, not a fact.
   `couchbase://user:pass@127.0.0.1:8093`, and no other scheme (D35). `dburl`
   turns each alias, such as `n1ql`, into that URL.
 - Whether the driver speaks HTTPS or HTTP is a key of the query, which step 9
-  of [DRIVER.md](DRIVER.md) decides. It is never a second scheme such as
-  `couchbases`, because the driver registers one name (D28).
-- The `dsn` field of `dbrun dsn --json couchbase-<release>` is
-  `http://user:pass@127.0.0.1:<port>` today, which is the query service
-  itself, in the form that `go_n1ql` reads. The integration tests need a
-  `couchbase://` URL, which W5 asks the `dbmeta` session for.
-- The `n1ql` scheme in `dburl` defaults to `http://localhost:8093/`. The
-  driver registers `couchbase`, and at the move `dburl` makes `couchbase` the
-  name of the scheme (D30).
+  decides. It is never a second scheme such as `couchbases`, because the
+  driver registers one name (D28).
+- `dbrun dsn --json couchbase-<release>` prints two forms: `dsn`, which is
+  `http://Administrator:...@127.0.0.1:<port>` for `go_n1ql`, and `url`, which
+  is `couchbase://Administrator:...@127.0.0.1:<port>/` (read on 2026-09-27).
+  The `url` field has the form of D35. It prints nothing for the ordinary
+  user.
 - `go_n1ql` first treats a DSN as the address of a cluster manager, on port
-  8091. A cluster in a container answers with addresses inside the container,
-  which a client outside it cannot reach. `dbmeta` points straight at the
-  query service. This driver keeps no form of DSN from `go_n1ql` (D27).
-  Whether it discovers the nodes of a cluster at all was n1ql open question
-  Q12, and it is now a decision of step 9 for this driver.
+  8091. A cluster in a container answers with addresses inside the
+  container, which a client outside it cannot reach (the `n1ql` session).
+  This driver keeps no form of DSN from `go_n1ql` (D27). Whether it
+  discovers the nodes of a cluster is a decision of step 9.
 
 ## Responses
 
-- The fields of a response arrive in this order: `requestID`, `signature`,
-  `results`, `errors`, `status`, `metrics`. The signature arrives before the
+- The fields of a response arrive in this order: `requestID`, then
+  `clientContextID` if the request named one, `signature`, `results`,
+  `errors`, `status`, `metrics` (recorded). The signature arrives before the
   first row, so the driver knows the columns before it reads a row (D18).
-- 7.6.12 and 8.0.3 send the signature and every result object in the order of
-  the projection. 7.2.9 sends both in the order of the names. On 7.2.9,
-  `PREPARE` returns a plan that lists the names in the order of the
-  projection, but its signature is still sorted. Ken accepted the order of the
-  names on 7.2, rather than a second request for each query (n1ql D33).
-- A field that is MISSING is absent from the result object, and the signature
-  still names it. `SELECT k.name, k.namespace, k.bucket, k.scope FROM
-  system:keyspaces` returned `{"name":"dbmeta","namespace":"default"}` for a
-  bucket. Ken decided that NULL and MISSING both scan as nil (n1ql D24).
-- For `SELECT RAW`, the signature is a string such as `"number"` or `"json"`,
-  not an object, and each result is a bare value. The result has one column.
-- The number 9007199254740993 arrives exact in the text of the response. A
-  decode through float64 changes it, so the driver converts the text of the
-  token (D19).
-- The response to a DML statement has `"signature": null`, no `results`, and
-  a count in `metrics.mutationCount`. The `dbmeta` session measured this on
-  2026-09-27.
+- 7.6.12 and 8.0.3 send the signature and every result object in the order
+  of the projection. 7.2.9 sends both in the order of the names (recorded).
+  Ken accepted the order of the names on 7.2 for `xo/n1ql`, rather than a
+  second request for each query (n1ql D33). This driver decides it in step 9.
+- For `SELECT RAW`, the signature is a string such as `"json"`, not an
+  object, and each result is a bare value (recorded). The result has one
+  column.
+- `SELECT *` has the signature `{"*":"*"}`, and each result is an object with
+  one member, named for the keyspace, that holds the whole document
+  (recorded).
+- The response to a DML statement has `"signature": null`, an empty
+  `results`, and a count in `metrics.mutationCount` (recorded).
+- `status` is `success`, `fatal` or `stopped` (recorded). A query stopped by
+  a cancel ends with `stopped` and no error.
+- A result is one response, and it does not page. A result of 20000 rows
+  arrived whole in one body (recorded).
+- 7.6.12 and 8.0.3 limit the result of `ARRAY_RANGE` to 20 MiB, and refuse a
+  larger one with code 5037 and HTTP 200, before any row. 7.2.9 has no such
+  limit, and sent 20000000 rows, 188 MB, for the same statement. That
+  recording was deleted for its size, and the script no longer sends it.
+- The server does not compress a response, even when the request asks for
+  gzip (recorded).
+
+## Types
+
+- The signature names the kind of each column: `number`, `string`,
+  `boolean`, `null`, `missing`, `array`, `object`, or `json` when the kind is
+  not known (recorded). A field read from a document is `json`, and a
+  literal has its kind.
+- The number 9007199254740993 and the largest int64, 9223372036854775807,
+  arrive exact (recorded). The driver converts the text of the token (D19).
+- The server holds a larger integer as a float64 itself: it sends
+  123456789012345678901234567890 as `123456789012345680000000000000`
+  (recorded). The driver cannot recover digits that the server did not send.
+- `0.1` arrives as `0.1` (recorded).
+- A field that is MISSING is absent from the result object, and the
+  signature still names it. `SELECT d.x, d.y, d.z` over the document
+  `{"x":1,"y":null}` returned `{"x":1,"y":null}`, with no `z` (recorded).
+- SQL++ has no type for a time, a binary value or a UUID. A time is a string
+  in RFC 3339, `BASE64_ENCODE` returns a string, and a UUID is a string
+  (recorded). The models agreed on this.
+
+The type table comes from the code, in step 10.
+
+<!-- dbimp:types -->
+<!-- /dbimp:types -->
+
+## Parameters
+
+- The server binds positional and named parameters (recorded). A string with
+  a quote and a double quote, and a nested object, arrive unchanged.
+- `?` and `$1` are both positional, and both take the first argument
+  (recorded).
+- The server ignores an argument that no placeholder names, positional or
+  named (recorded).
+- A placeholder with no argument fails with code 5010 and HTTP 200, after
+  the signature and before any row (recorded).
+- So the driver sends each argument to the server, and never uses the parser
+  of D34 for them.
+
+## Transactions
+
+- `BEGIN WORK` returns a row with a `txid`, for the administrator and for the
+  ordinary user (recorded).
+- A later statement with `"txid": "<txid>"` in its body runs in the
+  transaction. A write in it is not seen outside it, and `ROLLBACK WORK` with
+  the txid discards it (measured with curl on 8.0.3). `COMMIT WORK` is not
+  measured.
+- `tximplicit: true` runs one statement in a transaction of its own
+  (measured with curl on 8.0.3).
+- The metrics of a statement in a transaction hold
+  `transactionElapsedTime` and `transactionRemainingTime`, and the timeout
+  was 15 seconds (measured with curl on 8.0.3).
+- A transaction holds state on the server, so a `database/sql` transaction
+  maps onto one connection that carries the txid (D20). The first release
+  supports it (D41).
+
+## Errors
+
+- A syntax error is HTTP 400 with code 3000, the line and the column, and no
+  signature and no results (recorded).
+- An error can arrive after rows. The `ABORT` statement returned HTTP 200,
+  the results `[0,1,2]`, then code 5011 and `"status": "fatal"` (recorded).
+  The driver returns that error from `Rows.Next`, and never reports the
+  result as complete (D21).
+- A wrong password is HTTP 401 with code 2120 on 7.6.12 and 8.0.3
+  (recorded). 7.2.9 accepted a wrong password for `SELECT 1 AS a`, and ran it
+  (recorded). Gemini said that 7.2 checks credentials only for a statement
+  that reads a keyspace. Whether 7.2.9 refuses a wrong password for a
+  statement that reads a keyspace is not measured.
+- A statement that needs a role that the user lacks is HTTP 401 with code
+  13014 and the missing role (recorded, for the ordinary user on
+  `system:user_info`).
+- A request with no statement is HTTP 400 with code 1050 (recorded).
+- A prepared statement that the server does not know gives code 4040 on
+  7.2.9 and 8.0.3, and `PREPARE` with a name that exists gives 4060 (the
+  `n1ql` session).
 - An index is updated after a write, not with it. On 7.6.12, a `SELECT`
-  straight after an `UPSERT` returned no rows, and a `DELETE` by `META().id`
-  found nothing to delete. A test that writes and then reads sends
-  `scan_consistency=request_plus`, or reads by `USE KEYS`. The `dbmeta`
-  session measured this on 2026-09-27.
+  straight after an `UPSERT` returned no rows (the `dbmeta` session). A test
+  that writes and then reads sends `scan_consistency: request_plus`, or reads
+  by `USE KEYS`.
+- After a start, the data service can be cold. On 7.2.9, the first read by
+  key, 3.6 seconds after a write, returned no rows (recorded, as the
+  administrator). The same read a moment later, as the ordinary user, found
+  the document.
+
+## Cancellation and timeouts
+
+- The server stops a query when the client disconnects. A query that runs
+  for 8 seconds was running 2 seconds after it started. The client left at 2
+  seconds, and 1 second later `GET /admin/active_requests` listed nothing
+  (recorded, on each release). D36 relies on this.
+- `timeout` in the body makes the server stop the query, with code 1080,
+  `"retry": true`, and HTTP 200 (recorded).
+- `DELETE FROM system:active_requests WHERE clientContextID = "<id>"` stops
+  the query that carries that id. The query ends with `"status": "stopped"`
+  and no error (recorded, for both principals).
+- `DELETE /admin/active_requests/<requestID>` stops the query, and yet
+  answers HTTP 500 with code 1130, "is not a http request" (measured with
+  curl on 8.0.3). The same call with a `client_context_id` answers the same
+  500, and does not stop the query (measured with curl on 8.0.3). A call
+  with an id that does not exist answers the same 500 (recorded).
+
+## Statements
+
+- One request holds one statement. Two statements separated by `;` are
+  HTTP 400 with code 3000 (recorded). The driver never splits a statement
+  (D8), so it sends two as the caller wrote them, and the server refuses
+  them.
+- A comment with `/* */` or `--`, and a `?` or a `$1` inside one, does not
+  affect the statement (recorded).
 
 ## Principals
 
@@ -92,48 +226,35 @@ and 8.0.3:
   user information".
 - `Init` makes a primary index on `dbmeta`. Without one, a `SELECT` over the
   bucket is refused on every release. 7.2 has no sequential scan, and on 8.0
-  the refusal asks for `query_use_sequential_scans`, a role that the user does
-  not hold.
-- After a stop and a start, the query service answers before the bucket is
-  warm. On 7.2.9 an `INSERT` failed in that window with "DML Error, possible
-  causes include concurrent modification". `Init` now waits until
-  `SELECT RAW COUNT(*) FROM dbmeta` succeeds.
+  the refusal asks for `query_use_sequential_scans`, a role that the user
+  does not hold.
+- The ordinary user reads the version with `SELECT RAW ds_version()`, the
+  statement that `usql` runs (recorded).
+- The ordinary user can begin a transaction, and can stop its own query with
+  `DELETE FROM system:active_requests` (recorded).
+- `dbrun dsn --json` prints no DSN for the ordinary user.
 
-`dbrun dsn --json` prints one DSN for each server, with the credentials of
-`Administrator`. It prints none for the ordinary user. W5 holds that
-question.
-
-## Errors
-
-- A syntax error is HTTP 400, with no signature and no results. `errors`
-  holds code 3000, with the line and the column.
-- An error can arrive after rows. `SELECT RAW CASE WHEN a < 3 THEN a ELSE
-  ABORT("boom") END FROM ARRAY_RANGE(0, 5) AS a` returned HTTP 200, the
-  results `[0,1,2]`, then `"errors": [{"code": 5011, ...}]` and
-  `"status": "fatal"`. The driver must return that error from `Rows.Next` and
-  `Rows.Close`, and never report the result as complete.
-- A prepared statement that the server does not know gives code 4040 on 7.2.9
-  and 8.0.3. `PREPARE` with a name that exists gives 4060. Code 4050 was not
-  seen. Prepare again and retry only on 4040.
-
-## Cancellation
-
-`DELETE /admin/active_requests/<id>` exists, and returns HTTP 500 for an id
-that the server does not know. `GET /admin/active_requests` returns `[]`.
-Whether the id is the `requestID` or the `client_context_id` is not measured.
-
-## Couchbase Analytics
+## Flavors
 
 Ken decided on 2026-09-27 that Couchbase Analytics is part of this target,
 and not a target of its own. By his reading, it is the same as the query
-service. The reviewers of the targets described it as SQL++ on port 8095, in
-the Enterprise image that `dbmeta` already runs. Nothing about it is
-measured. Step 6 of [DRIVER.md](DRIVER.md) measures it with the query
-service, and "Flavors" in that file applies if the two differ.
+service. The models describe it as `POST /analytics/service` on port 8095,
+with the same fields in the request and in the response, no transactions,
+and a cancel that takes the `client_context_id`. `dbrun` does not publish
+port 8095, so none of that is measured. Whether it is a flavor of this driver
+is a question for step 9.
 
-## Faults in go_n1ql that the new driver must not repeat
+## Interfaces
 
-The `n1ql` session and `dbmeta` found these:
+The interface table comes from the code, in step 10.
+
+<!-- dbimp:interfaces -->
+<!-- /dbimp:interfaces -->
+
+## Faults
+
+The `n1ql` session and `dbmeta` found these faults in `go_n1ql`, which this
+driver must not repeat:
 
 - It writes each argument into the text of the statement with no escaping,
   and it rewrites a `?` inside a literal.
@@ -157,25 +278,55 @@ The `n1ql` session and `dbmeta` found these:
 
 The `Version` function of the Couchbase driver in `usql` calls
 `strconv.Unquote` on the result of `SELECT RAW ds_version()`. That call
-depends on the JSON text fault, and it must go when `usql` moves to this
+depends on the JSON text fault, and it goes when `usql` moves to this
 driver.
 
-## The design of xo/n1ql
+The `n1ql` session stopped its rewrite of `xo/n1ql` on 2026-09-27, when Ken
+decided that this driver replaces it. Its `docs/PLAN.md` keeps its decisions
+as a record, and these parts of them fit this driver: the standard library
+only, `ctx` everywhere, `driver.RowsColumnScanner`, no request sent again
+after it can have reached the server, `RowsAffected` from
+`metrics.mutationCount`, an error from `LastInsertId`, and options from the
+DSN, then the context, then an argument.
 
-Ken approved a design for the rewrite of `xo/n1ql`. It is in
-`xo/n1ql/docs/PLAN.md`, in its decisions 4 to 10, 13, 17 to 20, 24, 26 to
-29 and 33. These parts of it fit this repository:
+## Second opinions
 
-- The standard library only, and not `gocb/v2`.
-- `ctx` everywhere, and `driver.RowsColumnScanner` from Go 1.27.
-- No `driver.ErrBadConn` for a fault in a query, and no request sent again
-  after it can have reached the server.
-- `RowsAffected` comes from `metrics.mutationCount`, and `LastInsertId`
-  returns an error.
-- Options for one query come as typed arguments or from `WithOptions(ctx)`.
-  The DSN comes first, then the context, then the argument, as in cql D23.
-- Transactions come after the first release (D20).
+DeepSeek and Gemini were asked on 2026-09-27 about what step 6 did not
+measure. Each lead, and what the server said on 8.0.3:
 
-The `n1ql` session stopped its rewrite on 2026-09-27, when Ken decided that
-this driver replaces it. Its `docs/PLAN.md` keeps its decisions as a record,
-and its D31 points at this repository.
+- A `txid` joins a statement to a transaction, and `ROLLBACK WORK` ends it.
+  Both models said so, and the server agreed (measured with curl).
+- `tximplicit: true` runs one statement in a transaction. The server took it
+  (measured with curl).
+- `readonly: true` refuses a write. The server agreed, with HTTP 403 and code
+  1000 (recorded). Gemini said HTTP 400 and code 1160, which was wrong.
+- `metrics: false` leaves the metrics out. The server agreed (recorded).
+- `query_context` names the bucket and the scope. The server agreed
+  (recorded).
+- The `creds` parameter authenticates. The server agreed (measured with
+  curl).
+- A `DELETE` of an active request takes the `requestID`. The server stopped
+  the query, but answered HTTP 500, which neither model said (measured with
+  curl).
+- Gemini said that a `DELETE` with a `client_context_id` answers HTTP 500
+  with code 1130, and that the SQL `DELETE FROM system:active_requests`
+  cancels by the context id. Both were right (recorded and measured with
+  curl).
+- DeepSeek said that `format: jsonl` makes the server send one object for
+  each line. The server refused it with code 1030, "Unknown format value",
+  so that lead was wrong (measured with curl).
+- Both said that a `warnings` array can appear. A hint for an index that does
+  not exist produced none, so it is not measured.
+- Gemini said that 7.2 checks credentials only for a statement that reads a
+  keyspace. The recording agrees for `SELECT 1`, and the rest is not
+  measured.
+- Both said that the nodes of a cluster are in
+  `GET /pools/default/nodeServices` on port 8091. `dbrun` does not publish
+  port 8091, so it is not measured.
+- Both said that Couchbase Analytics is on port 8095. It is not measured.
+
+## Open questions
+
+Ken decided the questions of step 9 on 2026-09-27, in D38 to D42 of
+[PLAN.md](PLAN.md). The driver has transactions from its first release
+(D41), so W5 measures `COMMIT WORK` and the end of a `txid` before step 11.
