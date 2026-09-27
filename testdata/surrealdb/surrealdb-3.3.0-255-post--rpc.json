@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:c1 SET name = 'Ada'; DELETE dbimp_people:c1\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "615713ee-308d-48d3-aa63-f4e1bc254624"
+      ],
+      "Content-Length": [
+        "171"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:17 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_people:c1\",\"name\":\"Ada\"}],\"status\":\"OK\",\"time\":\"14.346255ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"17.751361ms\",\"type\":null}]}"
+  }
+}

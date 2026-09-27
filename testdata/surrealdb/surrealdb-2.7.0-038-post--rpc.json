@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN [0.1dec + 0.2dec, 0.1 + 0.2, <decimal>'0.1']\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "bc21679f-5f36-4b0d-b61b-d28d139daa2c"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[\"0.3\",0.30000000000000004,\"0.1\"],\"status\":\"OK\",\"time\":\"28.11µs\"}]}"
+  }
+}

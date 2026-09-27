@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN $1\",{\"1\":\"one\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "110afb12-6db0-4dc9-9764-e0a10de18f3f"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:30 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"error\":{\"code\":-32000,\"message\":\"There was a problem with the database: Parse error: Unexpected token `$`, expected an expression\\n --> [1:8]\\n  |\\n1 | RETURN $1\\n  |        ^ \\n\"}}"
+  }
+}

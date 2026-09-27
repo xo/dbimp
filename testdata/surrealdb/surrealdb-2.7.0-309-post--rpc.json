@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"SELECT * FROM dbimp_people VERSION d'2026-01-01T00:00:00Z'\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "fd3b7485-5c91-43a1-a394-f445cf4bd6e0"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:34 GMT"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":\"The underlying datastore does not support versioned queries\",\"status\":\"ERR\",\"time\":\"71.2µs\"}]}"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"LET $a = 5; RETURN $a * 2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:07 GMT"
+      ],
+      "Content-Length": [
+        "130"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "5bf2c24b-a173-4e72-9baf-1c0027c3ab80"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"66.31µs\",\"type\":null},{\"result\":10,\"status\":\"OK\",\"time\":\"23.16µs\",\"type\":null}]}"
+  }
+}

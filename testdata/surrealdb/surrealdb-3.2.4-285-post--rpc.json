@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s6 SCHEMALESS; DEFINE ANALYZER dbimp_az TOKENIZERS blank FILTERS lowercase; DEFINE INDEX ft ON dbimp_s6 FIELDS t FULLTEXT ANALYZER dbimp_az BM25; CREATE dbimp_s6:a SET t = 'Hello world'; SELECT id FROM dbimp_s6 WHERE t @@ 'hello'; REMOVE TABLE dbimp_s6; REMOVE ANALYZER dbimp_az\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb/3.2.4+20260803.93ab219"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "X-Request-Id": [
+        "99f3d1c5-e9da-4544-9a05-2359c38fbe29"
+      ],
+      "Content-Length": [
+        "504"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:42 GMT"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"35.677775ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"8.445734ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"178.813788ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_s6:a\",\"t\":\"Hello world\"}],\"status\":\"OK\",\"time\":\"40.064202ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_s6:a\"}],\"status\":\"OK\",\"time\":\"315.221µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"10.622697ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"10.778406ms\",\"type\":null}]}"
+  }
+}

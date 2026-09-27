@@ -109,14 +109,14 @@ func (r *Recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 			Path:   req.URL.Path,
 			Query:  req.URL.RawQuery,
 			Header: redact(req.Header, "Authorization", "Cookie"),
-			Body:   string(reqBody),
 		},
 		Response: Response{
 			Status: res.StatusCode,
 			Header: redact(res.Header, "Set-Cookie"),
-			Body:   string(resBody),
 		},
 	}
+	ex.Request.Body, ex.Request.Binary = body(reqBody)
+	ex.Response.Body, ex.Response.Binary = body(resBody)
 	l, _ := req.Context().Value(labelKey{}).(label)
 	if err := r.write(&ex, l); err != nil {
 		return nil, err

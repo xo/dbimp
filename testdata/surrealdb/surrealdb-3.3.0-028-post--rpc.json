@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN 9223372036854775808\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:03 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "X-Request-Id": [
+        "85bd6813-3915-484d-89d1-8b105e3b6d63"
+      ],
+      "Content-Length": [
+        "238"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ]
+    },
+    "body": "{\"error\":{\"cause\":null,\"code\":-32000,\"kind\":\"Validation\",\"message\":\"Parse error: Failed to parse number: number cannot fit within a 64bit signed integer\\n --> [1:8]\\n  |\\n1 | RETURN 9223372036854775808\\n  |        ^^^^^^^^^^^^^^^^^^^\\n\"}}"
+  }
+}

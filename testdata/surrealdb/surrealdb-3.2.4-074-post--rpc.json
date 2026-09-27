@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"SELECT * FROM dbimp_orders WHERE sleep(10ms) = NONE TIMEOUT 50ms\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "X-Request-Id": [
+        "6b9354c0-32fc-464c-9ab5-48ad0c055905"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.2.4+20260803.93ab219"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Content-Length": [
+        "213"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:30 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ]
+    },
+    "body": "{\"result\":[{\"details\":{\"details\":{\"duration\":\"50ms\"},\"kind\":\"TimedOut\"},\"kind\":\"Query\",\"result\":\"The query was not executed because it exceeded the timeout: 50ms\",\"status\":\"ERR\",\"time\":\"51.673558ms\",\"type\":null}]}"
+  }
+}

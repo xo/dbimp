@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN 9223372036854775808\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:16 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Content-Length": [
+        "238"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "4aa4280d-e3ff-4911-8eec-eaec320ffae3"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"cause\":null,\"code\":-32000,\"kind\":\"Validation\",\"message\":\"Parse error: Failed to parse number: number cannot fit within a 64bit signed integer\\n --> [1:8]\\n  |\\n1 | RETURN 9223372036854775808\\n  |        ^^^^^^^^^^^^^^^^^^^\\n\"}}"
+  }
+}

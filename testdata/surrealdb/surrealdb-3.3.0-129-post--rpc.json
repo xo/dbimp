@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s7 SCHEMALESS; DEFINE ANALYZER dbimp_az2 TOKENIZERS blank FILTERS lowercase; DEFINE INDEX ft ON dbimp_s7 FIELDS t SEARCH ANALYZER dbimp_az2 BM25; REMOVE TABLE dbimp_s7; REMOVE ANALYZER dbimp_az2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "8f15112e-b0ab-4491-8802-87f3dc598df5"
+      ],
+      "Content-Length": [
+        "262"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:11 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ]
+    },
+    "body": "{\"error\":{\"cause\":null,\"code\":-32000,\"kind\":\"Validation\",\"message\":\"Parse error: Unexpected token `an identifier`, expected Eof\\n --> [1:134]\\n  |\\n1 | ... FIELDS t SEARCH ANALYZER dbimp_az2 BM25; REMOVE TABLE dbimp_s7; REMOVE AN...\\n  |              ^^^^^^\\n\"}}"
+  }
+}

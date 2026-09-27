@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN array::len(array::range(0, 200000))\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:03 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Content-Length": [
+        "176"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "X-Request-Id": [
+        "6610602b-dfa1-4b3d-b866-eba88698ffb6"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"result\":[{\"kind\":\"Internal\",\"result\":\"Incorrect arguments for function array::range(). Output must not exceed 1048576 bytes.\",\"status\":\"ERR\",\"time\":\"128.31µs\",\"type\":null}]}"
+  }
+}

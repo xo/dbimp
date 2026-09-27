@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN [1..5, 1..=5, ..5, 1.., 'a'..'z']\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "4c76d20e-8653-4ecd-a2a3-eef765fcf5b1"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"beg\":{\"Included\":{\"Number\":{\"Int\":1}}},\"end\":{\"Excluded\":{\"Number\":{\"Int\":5}}}},{\"beg\":{\"Included\":{\"Number\":{\"Int\":1}}},\"end\":{\"Included\":{\"Number\":{\"Int\":5}}}},{\"beg\":\"Unbounded\",\"end\":{\"Excluded\":{\"Number\":{\"Int\":5}}}},{\"beg\":{\"Included\":{\"Number\":{\"Int\":1}}},\"end\":\"Unbounded\"},{\"beg\":{\"Included\":{\"Strand\":\"a\"}},\"end\":{\"Excluded\":{\"Strand\":\"z\"}}}],\"status\":\"OK\",\"time\":\"17.03µs\"}]}"
+  }
+}

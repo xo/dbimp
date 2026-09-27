@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"-- a comment with $x\\nRETURN 1 /* ; RETURN 2 */; # another\\nRETURN '$x -- ;'\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "X-Request-Id": [
+        "7cc0d44f-6d6e-425c-8dc3-2fe81793f4c9"
+      ],
+      "Content-Length": [
+        "133"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.2.4+20260803.93ab219"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:39 GMT"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":1,\"status\":\"OK\",\"time\":\"46.19µs\",\"type\":null},{\"result\":\"$x -- ;\",\"status\":\"OK\",\"time\":\"6.22µs\",\"type\":null}]}"
+  }
+}

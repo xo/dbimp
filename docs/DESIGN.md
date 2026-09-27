@@ -20,6 +20,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `rows.go` | `ObjectRows` and `ArrayRows`, which read rows by D18 |
 | `values.go` | The functions that turn a JSON value into a Go value, and `Assign` |
 | `placeholder.go` | `Syntax`, which finds placeholders and binds arguments (D34) |
+| `cbor.go` | `CBORDecoder` and `CBOREncoder`, which read and write CBOR (D49) |
 
 ### Errors
 
@@ -43,7 +44,10 @@ the error that its product writes there. HTTP 429 and HTTP 503 are a
 
 `ParseURL(name, dsn)` parses the DSN with `net/url`, and refuses a scheme
 that is not the one name of the driver (D27 and D35). Its error never holds
-the DSN, because the DSN can hold a password.
+the DSN, because the DSN can hold a password. It also refuses a host with a
+colon that is not an IPv6 address. `net/url` reads the host `::` as `:`,
+which no URL can write back. The fuzz test of the SurrealDB DSN found it,
+and the Couchbase DSN of `v0.1.0` took it too.
 
 `NewQuery(u, known...)` reads the query of the URL. It refuses a key that is
 not in `known` and a key that appears twice, so each value that `Query`
@@ -134,6 +138,29 @@ method of `apd.Decimal` take text. So `sql.Null[apd.Decimal]` works, a NULL
 in a `*string` is the error of `database/sql`, and a NULL in a
 `sql.Null[T]` is not valid.
 
+### CBOR
+
+`cbor.go` reads and writes CBOR (RFC 8949), for a driver whose server speaks
+it. Ken approved CBOR for SurrealDB, written here with the standard library
+only (D49 and D13). The code knows the major types, and gives a tag no
+meaning, because each product gives its tags their own meaning.
+
+`CBORDecoder` reads one item at a time, as `jsontext.Decoder` does, so a
+driver never holds a result in memory (D25). `PeekHead` and `ReadHead` read
+the head of an item. `ReadString` reads a string, and each chunk of a string
+of indefinite length. `More` reports whether an array or a map holds another
+item, and reads the break of one of indefinite length. `ReadRaw` returns the
+bytes of one whole item, which a driver keeps as the raw value of a column
+and decodes when it is scanned. `Skip` reads one item and keeps nothing.
+
+The decoder refuses an item nested deeper than 256 levels, and it grows a
+string as its bytes arrive, so a hostile length or a hostile nesting costs
+no memory and no stack. A fuzz test holds that `ReadRaw` reads back what it
+returns.
+
+`CBOREncoder` writes each head in its shortest form, and a float as 64 bits.
+The driver writes its tags with `Tag`.
+
 ### Placeholders
 
 `Syntax` says how a product writes literals, quoted identifiers and
@@ -170,7 +197,9 @@ for code that only a test uses. So they are not in the root package (D37).
 
 Each file under `testdata/<driver>/`, except the manifest, is one
 `Exchange`: the method, the path, the query, the headers and the body of a
-request, and the status, the headers and the body of its response.
+request, and the status, the headers and the body of its response. A body
+that is text is in `body`. A binary body, such as one in CBOR, is in
+`binary`, which the file holds as base64, and `Content` returns either.
 
 `Recorder` is an `http.RoundTripper` that writes each exchange with a real
 server. It names each file for the release, a number and the request. It
@@ -181,7 +210,10 @@ background while others are sent.
 
 The command `dbimptest/cmd/record` reads `testdata/<driver>/requests.json`,
 sends each request in it as both principals through a `Recorder`, and writes the
-exchanges and the manifest. It replaces the files and the entries that an
+exchanges and the manifest. A request sends its `body` as JSON, or as CBOR
+when its `encoding` is `cbor`, or its `text` as plain text. The script can
+name headers that every request of one principal sends, in `header`, such as
+the headers that say where a SurrealDB user is defined. It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
 it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
 the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.
@@ -212,7 +244,7 @@ the same way. The driver supplies a function that opens it against a URL,
 and the bodies of four results in the form of its product. Each subtest
 starts a fake server:
 
-1. The columns keep the order of the statement.
+1. The columns keep the order in which they arrive.
 2. A NULL scans as nil into a `*any`, as not valid into a
    `*sql.Null[string]`, and as an error into a `*string`.
 3. An error after some rows reaches `Rows.Err`, after exactly those rows.
@@ -229,6 +261,9 @@ test started is still running when it ends. That catches a connector that
 does not close its idle connections, and a body that nothing closed.
 `CheckGoroutines` counts every goroutine of the process, so a test that
 calls `RunContract` must not run in parallel with another test.
+
+A driver sets `ContentType` when its bodies are not JSON, such as
+`application/cbor`, and the fake servers send that content type.
 
 The contract does not test paging (D21), because each product pages in its
 own way. The driver tests that with its recorded exchanges.
@@ -262,7 +297,12 @@ never selects a literal in place of a stored value. It tears the table down
 in a cleanup, so the teardown runs when a test fails. For a database that
 updates an index after a write, `Wait` makes it read again until the read
 sees the write, with no fixed sleep. A value that has no literal in the
-database is logged and skipped for the literal form only. Its tests hold a
+database is logged and skipped for the literal form only. For a database
+that binds named parameters only, `Named` passes the key and the value as
+`sql.Named("key", ...)` and `sql.Named("value", ...)`, and `KeyArg` turns
+the key into the argument that the statements take, such as a record id.
+It sends the teardown with a context that does not end with the test,
+because the context of a test ends before its cleanup runs. Its tests hold a
 store in memory with three faults: a value that changes its type, a delete
 that keeps the row, and a write that is late.
 

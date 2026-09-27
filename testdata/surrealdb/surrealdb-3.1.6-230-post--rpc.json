@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"SLEEP 2s; CREATE dbimp_people:cancelled\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:17 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Request-Id": [
+        "741341f4-592c-435d-9a48-401d8ff33686"
+      ],
+      "Content-Length": [
+        "408"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"details\":{\"details\":{\"details\":{\"action\":\"Edit\",\"actor\":\"/ns:dbmeta/db:dbmeta/Actor::dbmeta_user(Editor)\",\"resource\":\"/Table:\\\"\\\"\"},\"kind\":\"NotAllowed\"},\"kind\":\"Auth\"},\"kind\":\"NotAllowed\",\"result\":\"IAM error: Not enough permissions to perform this action\",\"status\":\"ERR\",\"time\":\"43.89µs\",\"type\":null},{\"result\":[{\"id\":\"dbimp_people:cancelled\"}],\"status\":\"OK\",\"time\":\"23.977925ms\",\"type\":null}]}"
+  }
+}

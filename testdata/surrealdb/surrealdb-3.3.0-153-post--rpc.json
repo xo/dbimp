@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN <future> { 1 + 1 }\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "208"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:13 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "fd2ea883-1e36-440f-93ba-f422b7e29cd8"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ]
+    },
+    "body": "{\"error\":{\"cause\":null,\"code\":-32000,\"kind\":\"Validation\",\"message\":\"Parse error: Unexpected token `an identifier`, expected a kind name\\n --> [1:9]\\n  |\\n1 | RETURN <future> { 1 + 1 }\\n  |         ^^^^^^\\n\"}}"
+  }
+}

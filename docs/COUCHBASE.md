@@ -71,6 +71,10 @@ lead, not a fact.
 
 ## The DSN
 
+- `v0.1.0` took the DSN `couchbase://::/`, which `net/url` reads as the host
+  `:`, and `FormatDSN` of it wrote a URL that does not parse. The fuzz test
+  of the SurrealDB DSN found it, and `dbimp.ParseURL` now refuses a host
+  with a colon that is not an IPv6 address.
 - The driver takes a URL whose scheme is `couchbase`, such as
   `couchbase://user:pass@127.0.0.1:8093`, and no other scheme (D35). `dburl`
   turns each alias, such as `n1ql`, into that URL.
@@ -265,6 +269,11 @@ The type table comes from the code, in step 10.
 
 ## Errors
 
+- 8.0 reserves the word `roles`, and 7.6 does not, so an unquoted `u.roles`
+  is a syntax error on 8.0 alone. `system:dictionary` fails with code 5001, a
+  panic of the server, on 7.6.12 and 8.0.3, even after
+  `UPDATE STATISTICS`. The `dbmeta` session measured both through this driver
+  on 2026-09-27, which reports each one as an error.
 - The driver returns a `*ResponseError` for a response that failed. It holds
   the HTTP status, the status of the body, and each `Error` with its code,
   and `errors.As` finds each `Error` in it.
@@ -360,8 +369,9 @@ and 8.0.3:
   vector index, a sequence and the use of one, an inline or a JavaScript
   function, and `CURL()` (recorded). It can run the CRUD of the survey on a
   collection that the administrator made, in the bucket `dbmeta`.
-- `dbrun dsn --json` prints no DSN for the ordinary user. The CI workflow
-  builds it from the `url` field, with the name `dbmeta_user`.
+- From dbmeta D102, `dbrun dsn --json` prints the URL of the ordinary user,
+  in the field `principals`, with the role `user`. The CI workflow reads it
+  from there (read at dbmeta commit `eb35c7c` on 2026-09-27).
 
 ## Flavors
 

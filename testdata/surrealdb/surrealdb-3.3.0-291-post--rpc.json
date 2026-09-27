@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE SEQUENCE OVERWRITE dbimp_seq; RETURN [sequence::nextval('dbimp_seq'), sequence::nextval('dbimp_seq')]; REMOVE SEQUENCE dbimp_seq\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Request-Id": [
+        "3d883b26-33bc-4ab9-bfb2-de920b91cc29"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:23 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ]
+    },
+    "body": "{\"result\":[{\"details\":{\"details\":{\"details\":{\"action\":\"Edit\",\"actor\":\"/ns:dbmeta/db:dbmeta/Actor::dbmeta_user(Editor)\",\"resource\":\"/ns:dbmeta/db:dbmeta/Sequence:\\\"\\\"\"},\"kind\":\"NotAllowed\"},\"kind\":\"Auth\"},\"kind\":\"NotAllowed\",\"result\":\"IAM error: Not enough permissions to perform this action\",\"status\":\"ERR\",\"time\":\"74.61µs\",\"type\":null},{\"kind\":\"Internal\",\"result\":\"The sequence 'dbimp_seq' does not exist\",\"status\":\"ERR\",\"time\":\"104.22µs\",\"type\":null},{\"details\":{\"details\":{\"details\":{\"action\":\"Edit\",\"actor\":\"/ns:dbmeta/db:dbmeta/Actor::dbmeta_user(Editor)\",\"resource\":\"/ns:dbmeta/db:dbmeta/Sequence:\\\"\\\"\"},\"kind\":\"NotAllowed\"},\"kind\":\"Auth\"},\"kind\":\"NotAllowed\",\"result\":\"IAM error: Not enough permissions to perform this action\",\"status\":\"ERR\",\"time\":\"11.3µs\",\"type\":null}]}"
+  }
+}

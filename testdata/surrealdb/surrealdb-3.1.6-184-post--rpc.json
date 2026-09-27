@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN f'bucket:/a.txt'\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:16 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Request-Id": [
+        "82f3bac7-9611-4f11-9485-b62572d15b00"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Content-Length": [
+        "241"
+      ]
+    },
+    "body": "{\"error\":{\"cause\":null,\"code\":-32000,\"kind\":\"Validation\",\"message\":\"Parse error: Unexpected token `a file`, expected the experimental files feature to be enabled\\n --> [1:8]\\n  |\\n1 | RETURN f'bucket:/a.txt'\\n  |        ^^^^^^^^^^^^^^^^\\n\"}}"
+  }
+}

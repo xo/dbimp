@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s1 SCHEMAFULL; DEFINE FIELD name ON dbimp_s1 TYPE string; DEFINE FIELD age ON dbimp_s1 TYPE int DEFAULT 0 ASSERT $value >= 0; CREATE dbimp_s1:a SET name = 'x'; CREATE dbimp_s1:b SET name = 1; CREATE dbimp_s1:c SET name = 'y', age = -1; SELECT * FROM dbimp_s1; REMOVE TABLE dbimp_s1\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:19 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "X-Request-Id": [
+        "2a3139db-9c5e-4f8f-9ee4-21dd2b180d61"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"16.101148ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"18.614782ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"18.923873ms\",\"type\":null},{\"result\":[{\"age\":0,\"id\":\"dbimp_s1:a\",\"name\":\"x\"}],\"status\":\"OK\",\"time\":\"18.394582ms\",\"type\":null},{\"kind\":\"Internal\",\"result\":\"Couldn't coerce value for field `name` of `dbimp_s1:b`: Expected `string` but found `1`\",\"status\":\"ERR\",\"time\":\"194.18µs\",\"type\":null},{\"kind\":\"Internal\",\"result\":\"Found -1 for field `age`, with record `dbimp_s1:c`, but field must conform to: $value >= 0\",\"status\":\"ERR\",\"time\":\"41.09µs\",\"type\":null},{\"result\":[{\"age\":0,\"id\":\"dbimp_s1:a\",\"name\":\"x\"}],\"status\":\"OK\",\"time\":\"166.441µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"23.74215ms\",\"type\":null}]}"
+  }
+}

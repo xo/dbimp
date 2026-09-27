@@ -32,6 +32,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/xo/dbimp"
 	"github.com/xo/dbimp/dbimptest"
 )
 
@@ -43,6 +44,10 @@ type Script struct {
 	Requests []Request `json:"requests"`
 	// Absent lists the items of step 6 that do not apply to the product.
 	Absent []Absent `json:"absent,omitzero"`
+	// Header holds, by the name of each principal, the headers that every
+	// request of that principal sends, such as the headers that say where a
+	// SurrealDB user is defined.
+	Header map[string]http.Header `json:"header,omitzero"`
 }
 
 // Request is one request of the script.
@@ -59,6 +64,10 @@ type Request struct {
 	Header http.Header `json:"header,omitzero"`
 	// Body is the JSON body to send, if any.
 	Body jsontext.Value `json:"body,omitzero"`
+	// Text is a body of plain text to send, in place of Body.
+	Text string `json:"text,omitzero"`
+	// Encoding is "cbor" to send Body as CBOR, or "" to send it as JSON.
+	Encoding string `json:"encoding,omitzero"`
 	// Auth is "wrong" to send a wrong password, or "" for the right one.
 	Auth string `json:"auth,omitzero"`
 	// Timeout makes the client give up after it. The request is then not
@@ -159,6 +168,7 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 				continue
 			}
 			r.Body = expand(r.Body, kept)
+			r.Header = withHeader(r.Header, script.Header[p])
 			if r.Background {
 				wg.Go(func() {
 					if err := send(ctx, client, base, p, r, nil); err != nil {
@@ -194,9 +204,94 @@ func runPhase(ctx context.Context, client *http.Client, admin *url.URL, script S
 		if r.Phase != phase {
 			continue
 		}
+		r.Header = withHeader(r.Header, script.Header[dbimptest.Administrator])
 		if err := send(ctx, client, admin, dbimptest.Administrator, r, nil); err != nil {
 			return fmt.Errorf("the %s, item %d, %s: %w", phase, r.Item, r.Name, err)
 		}
+	}
+	return nil
+}
+
+// withHeader returns h with the headers of extra added.
+func withHeader(h, extra http.Header) http.Header {
+	if len(extra) == 0 {
+		return h
+	}
+	h = h.Clone()
+	if h == nil {
+		h = http.Header{}
+	}
+	for key, vals := range extra {
+		for _, val := range vals {
+			h.Add(key, val)
+		}
+	}
+	return h
+}
+
+// toCBOR returns the JSON value v as CBOR. An object is a map, an array is an
+// array, a number with no fraction and no exponent is an integer, and any
+// other number is a float64.
+func toCBOR(v jsontext.Value) ([]byte, error) {
+	var e dbimp.CBOREncoder
+	dec := jsontext.NewDecoder(bytes.NewReader(v))
+	if err := jsonToCBOR(&e, dec); err != nil {
+		return nil, err
+	}
+	return e.Bytes(), nil
+}
+
+func jsonToCBOR(e *dbimp.CBOREncoder, dec *jsontext.Decoder) error {
+	switch dec.PeekKind() {
+	case '{', '[':
+		tok, err := dec.ReadToken()
+		if err != nil {
+			return err
+		}
+		end := jsontext.EndObject
+		if tok.Kind() == '[' {
+			end = jsontext.EndArray
+		}
+		var inner dbimp.CBOREncoder
+		n := 0
+		for dec.PeekKind() != end.Kind() {
+			if err := jsonToCBOR(&inner, dec); err != nil {
+				return err
+			}
+			n++
+		}
+		if _, err := dec.ReadToken(); err != nil {
+			return err
+		}
+		if tok.Kind() == '{' {
+			e.Map(n / 2)
+		} else {
+			e.Array(n)
+		}
+		e.Raw(inner.Bytes())
+		return nil
+	}
+	tok, err := dec.ReadToken()
+	if err != nil {
+		return err
+	}
+	switch tok.Kind() {
+	case 'n':
+		e.Null()
+	case 't', 'f':
+		e.Bool(tok.Bool())
+	case '"':
+		e.Text(tok.String())
+	case '0':
+		if i, err := strconv.ParseInt(tok.String(), 10, 64); err == nil {
+			e.Int(i)
+			break
+		}
+		f, err := strconv.ParseFloat(tok.String(), 64)
+		if err != nil {
+			return err
+		}
+		e.Float(f)
 	}
 	return nil
 }
@@ -267,7 +362,16 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 	path, query, _ := strings.Cut(r.Path, "?")
 	u.Path, u.RawQuery = path, query
 	var body io.Reader
-	if len(r.Body) > 0 {
+	switch {
+	case r.Text != "":
+		body = strings.NewReader(r.Text)
+	case len(r.Body) > 0 && r.Encoding == "cbor":
+		b, err := toCBOR(r.Body)
+		if err != nil {
+			return fmt.Errorf("encoding the body as CBOR: %w", err)
+		}
+		body = bytes.NewReader(b)
+	case len(r.Body) > 0:
 		v := r.Body.Clone()
 		if err := v.Compact(); err != nil {
 			return fmt.Errorf("compacting the body: %w", err)

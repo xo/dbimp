@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"SELECT VALUE a FROM [{a: 1}, {a: 2}]\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "25fb9e29-4c2a-4a41-8beb-4d151eeb04a8"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[1,2],\"status\":\"OK\",\"time\":\"49.38µs\"}]}"
+  }
+}

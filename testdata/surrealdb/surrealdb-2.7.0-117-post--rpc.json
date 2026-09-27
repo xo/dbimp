@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s2 SCHEMALESS; DEFINE FIELD owner ON dbimp_s2 TYPE option<record<dbimp_people>> REFERENCE ON DELETE CASCADE; CREATE dbimp_people:own; CREATE dbimp_s2:a SET owner = dbimp_people:own; DELETE dbimp_people:own; SELECT * FROM dbimp_s2; REMOVE TABLE dbimp_s2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "cbc542e0-b7e3-4b79-863c-2e3a699abf04"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:28 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ]
+    },
+    "body": "{\"error\":{\"code\":-32000,\"message\":\"There was a problem with the database: Parse error: Experimental capability `record_references` is not enabled\\n --> [1:98]\\n  |\\n1 | ...mp_people>> REFERENCE ON DELETE CASCADE; CREATE dbimp_people:own; CREATE d...\\n  |              ^ Use of `REFERENCE` keyword is still experimental\\n\"}}"
+  }
+}

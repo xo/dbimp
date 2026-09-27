@@ -38,6 +38,11 @@ write that Ken accepted something that he did not say in the conversation:
   as a transaction that is not a transaction. Leave it unsupported and write
   down why.
 - Any open question at the end of [PLAN.md](PLAN.md).
+- A commit and a push (step 18), a tag and a release (step 19), and the
+  requests to the consumers (step 20). Ken approves each one before you do
+  it. His approval of one is not his approval of the next, and his approval
+  of the staged changes covers those changes and nothing that you write
+  after them.
 
 ## Before you write anything
 
@@ -197,7 +202,9 @@ go run ./dbimptest/cmd/record -dir testdata/<driver> -release <release> \
 The command sends each request as both principals, through `dbimptest.Recorder`,
 and replaces what an earlier run recorded for the same release. A request can
 wait, give up after a timeout, run in the background while a later one acts on
-it, or send a wrong password. Every file comes from a real server, and never
+it, or send a wrong password. It can send a body of plain text, or its JSON
+body as CBOR, and the script can name the headers that every request of one
+principal sends. A binary response is kept as base64. Every file comes from a real server, and never
 from your memory of the documentation. [DESIGN.md](DESIGN.md) holds the form of
 a file and of the manifest.
 
@@ -449,7 +456,7 @@ one at a time:
 ```bash
 (cd ../dbmeta/test && go run ./cmd/dbrun list --json --names tested)
 (cd ../dbmeta/test && go run ./cmd/dbrun start <release>)
-export <DRIVER>_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release> | jq -r '.[0].dsn')
+export <DRIVER>_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release> | jq -r '.[0].url')
 go test -race -count=1 -run Integration -v ./<driver>/...
 (cd ../dbmeta/test && go run ./cmd/dbrun remove <release>)
 ```
@@ -524,12 +531,13 @@ and the nightly run adds the ones it calls nightly. The workflow checks out a
 pinned commit of `dbmeta` from its main branch, as in `cql` D20 and
 `n1ql` D28.
 
-Gate: the workflow passes on a push, and the URL of the run is in the work
-item.
+Gate: `actionlint` passes on the workflow, and
+`TestTheWorkflowNamesNoRelease` passes. The run on a push is the gate of
+step 18.
 
 ## Handing it over
 
-### 16. Move the consumers
+### 16. Write the requests to the consumers
 
 First run the statement that `usql` runs for the version on this driver, as
 the administrator and as the ordinary user, and record what each one gets in
@@ -537,9 +545,11 @@ the administrator and as the ordinary user, and record what each one gets in
 `v$instance` for Oracle, which an ordinary user cannot see, and nobody
 noticed until `dbmeta` measured it.
 
-Then move the consumers. The move is one deliverable across three
-repositories, and each repository follows its own rules. Ask each session,
-and do not edit their files:
+Then write the request to each consumer. The move is one deliverable across
+three repositories, and each repository follows its own rules. Each session
+changes its own repository, and you never edit its files. Do not send a
+request yet. A request names a release of this repository, so step 20 sends
+it after step 19 publishes that release:
 
 1. The `dburl` session sets the `GoPackage` of the scheme to
    `github.com/xo/dbimp/<driver>`, sets `RequiresCGO` to false (D5 and D14),
@@ -554,15 +564,15 @@ and do not edit their files:
    The `Version` function for Couchbase calls `strconv.Unquote`, which is one
    example.
 
-Gate: the document holds both answers for the version, and each session
-reports that its change is staged.
+Gate: the document holds both answers for the version, and the work item
+holds the text of each request.
 
 ### 17. Write it down
 
 - Mark the target done in [TARGETS.md](TARGETS.md): its row names the
   package, as `` `github.com/xo/dbimp/<driver>` ``.
 - Make `docs/<PRODUCT>.md` complete.
-- Mark the work item done in [BACKLOG.md](BACKLOG.md), once Ken commits it.
+- Mark the work item done in [BACKLOG.md](BACKLOG.md) after step 20.
 
 Gate: `TestEveryDriverIsATarget`, the tests for the documents, and every
 test in the table at the end of this file pass.
@@ -575,7 +585,52 @@ golangci-lint run ./...
 ```
 
 `gofmt -l .` must print nothing. Then stage the work and stop. Ken reviews
-the staged changes, and he commits.
+the staged changes. Steps 18 to 20 follow only when he approves each one.
+
+## Releasing it
+
+### 18. Commit and push
+
+Commit the staged changes and push them only when Ken says so. If you change
+anything after he reviewed it, stage it and ask him again. Write the commit
+message by the `simple-english` skill, and do not mix the decisions and the
+work items in one message.
+
+Gate: the workflow passes on the push, and the URL of the run is in the work
+item. If it fails, fix it, stage the fix, and ask Ken again before the next
+commit.
+
+### 19. Tag and publish the release
+
+When the workflow has passed on the commit, ask Ken for the version and for
+his approval to tag it. The first release of the module is `v0.1.0`. Tag
+that commit, and push the tag:
+
+```bash
+git tag -a v0.1.0 -m "v0.1.0"
+git push origin v0.1.0
+```
+
+Write the release notes from the commits since the last tag, by the
+`simple-english` skill. Name each driver that the release adds or changes,
+what a consumer must change, and each fault that it fixes. Show them to Ken.
+When he approves them, publish the release:
+
+```bash
+gh release create v0.1.0 --title v0.1.0 --notes-file <notes>
+```
+
+Gate: `gh release view v0.1.0` shows the release as public, and its URL is
+in the work item.
+
+### 20. Send the requests to the consumers
+
+When the release is public, send each request of step 16 to its session, and
+name the tag in it, so that each consumer pins the release and not a commit.
+Tell each session what changed for it, and what it must measure before it
+releases.
+
+Gate: each session reports that its change is staged.
 
 ## When it cannot be a driver
 

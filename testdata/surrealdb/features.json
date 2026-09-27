@@ -1,0 +1,892 @@
+{
+  "driver": "surrealdb",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "github.com/surrealdb/surrealdb.go",
+      "kind": "driver",
+      "date": "2026-09-27"
+    },
+    {
+      "source": "surrealdb (npm)",
+      "kind": "driver",
+      "date": "2026-09-27"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "create",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/create"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "update with merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update_with_merge"
+    },
+    {
+      "kind": "crud",
+      "name": "update with content",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update_with_content"
+    },
+    {
+      "kind": "crud",
+      "name": "update with patch",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update_with_patch"
+    },
+    {
+      "kind": "crud",
+      "name": "relate",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/relate"
+    },
+    {
+      "kind": "crud",
+      "name": "insert relation",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert_relation"
+    },
+    {
+      "kind": "crud",
+      "name": "insert on duplicate key update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert_on_duplicate_key_update"
+    },
+    {
+      "kind": "crud",
+      "name": "return clause",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/return_clause"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "schemafull table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/schemafull_table"
+    },
+    {
+      "kind": "schema",
+      "name": "field with a type",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/field_with_a_type"
+    },
+    {
+      "kind": "schema",
+      "name": "record id as primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/record_id_as_primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "record link",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/record_link"
+    },
+    {
+      "kind": "schema",
+      "name": "reference with on delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/reference_with_on_delete"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/unique_index"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "assert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/assert"
+    },
+    {
+      "kind": "schema",
+      "name": "event",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/event"
+    },
+    {
+      "kind": "schema",
+      "name": "function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/function"
+    },
+    {
+      "kind": "schema",
+      "name": "param",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/param"
+    },
+    {
+      "kind": "schema",
+      "name": "full text index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/full_text_index"
+    },
+    {
+      "kind": "schema",
+      "name": "vector index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/vector_index"
+    },
+    {
+      "kind": "schema",
+      "name": "sequence",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/sequence"
+    },
+    {
+      "kind": "feature",
+      "name": "record id",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/record_id"
+    },
+    {
+      "kind": "feature",
+      "name": "graph traversal",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/graph_traversal"
+    },
+    {
+      "kind": "feature",
+      "name": "fetch",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/fetch"
+    },
+    {
+      "kind": "feature",
+      "name": "split",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/split"
+    },
+    {
+      "kind": "feature",
+      "name": "group all",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/group_all"
+    },
+    {
+      "kind": "feature",
+      "name": "omit",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/omit"
+    },
+    {
+      "kind": "feature",
+      "name": "only",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/only"
+    },
+    {
+      "kind": "feature",
+      "name": "live select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-139-post--rpc.json",
+      "test": "TestIntegrationFeatures/live_select"
+    },
+    {
+      "kind": "feature",
+      "name": "let",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/let"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction in one request",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/transaction_in_one_request"
+    },
+    {
+      "kind": "feature",
+      "name": "interactive transaction",
+      "sources": [
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-071-post--rpc.json",
+      "test": "TestIntegrationFeatures/interactive_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "return",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/return"
+    },
+    {
+      "kind": "feature",
+      "name": "if else",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/if_else"
+    },
+    {
+      "kind": "feature",
+      "name": "for",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/for"
+    },
+    {
+      "kind": "feature",
+      "name": "throw",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/throw"
+    },
+    {
+      "kind": "feature",
+      "name": "info for",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/info_for"
+    },
+    {
+      "kind": "feature",
+      "name": "with index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/with_index"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/explain"
+    },
+    {
+      "kind": "feature",
+      "name": "timeout",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/timeout"
+    },
+    {
+      "kind": "feature",
+      "name": "parallel",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-147-post--rpc.json",
+      "test": "TestIntegrationFeatures/parallel"
+    },
+    {
+      "kind": "feature",
+      "name": "tempfiles",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/tempfiles"
+    },
+    {
+      "kind": "feature",
+      "name": "version clause",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-151-post--rpc.json",
+      "test": "TestIntegrationFeatures/version_clause"
+    },
+    {
+      "kind": "feature",
+      "name": "future",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "surrealdb (npm)"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-153-post--rpc.json",
+      "test": "TestIntegrationFeatures/future"
+    },
+    {
+      "kind": "feature",
+      "name": "closure",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/closure"
+    },
+    {
+      "kind": "feature",
+      "name": "range",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/range"
+    },
+    {
+      "kind": "feature",
+      "name": "changefeed",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/changefeed"
+    },
+    {
+      "kind": "feature",
+      "name": "bound parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/bound_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "signin token",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/signin_token"
+    },
+    {
+      "kind": "type",
+      "name": "none",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/none"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/null"
+    },
+    {
+      "kind": "type",
+      "name": "bool",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/bool"
+    },
+    {
+      "kind": "type",
+      "name": "int",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/int"
+    },
+    {
+      "kind": "type",
+      "name": "float",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/float"
+    },
+    {
+      "kind": "type",
+      "name": "decimal",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/decimal"
+    },
+    {
+      "kind": "type",
+      "name": "string",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/string"
+    },
+    {
+      "kind": "type",
+      "name": "datetime",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/datetime"
+    },
+    {
+      "kind": "type",
+      "name": "duration",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/duration"
+    },
+    {
+      "kind": "type",
+      "name": "uuid",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/uuid"
+    },
+    {
+      "kind": "type",
+      "name": "bytes",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/bytes"
+    },
+    {
+      "kind": "type",
+      "name": "array",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/array"
+    },
+    {
+      "kind": "type",
+      "name": "set",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/set"
+    },
+    {
+      "kind": "type",
+      "name": "object",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/object"
+    },
+    {
+      "kind": "type",
+      "name": "record",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/record"
+    },
+    {
+      "kind": "type",
+      "name": "geometry",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/geometry"
+    },
+    {
+      "kind": "type",
+      "name": "range",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/range"
+    },
+    {
+      "kind": "type",
+      "name": "file",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "surrealdb (npm)"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-026-post--rpc.json",
+      "test": "TestIntegrationTypes/file"
+    },
+    {
+      "kind": "type",
+      "name": "regex",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-023-post--rpc.json",
+      "test": "TestIntegrationTypes/regex"
+    },
+    {
+      "kind": "type",
+      "name": "closure",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "surrealdb-3.3.0-024-post--rpc.json",
+      "test": "TestIntegrationTypes/closure"
+    },
+    {
+      "kind": "type",
+      "name": "table",
+      "sources": [
+        "github.com/surrealdb/surrealdb.go",
+        "surrealdb (npm)"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationTypes/table"
+    }
+  ]
+}

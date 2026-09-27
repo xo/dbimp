@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"BEGIN; CREATE dbimp_people:tx SET v = 1; COMMIT; SELECT * FROM dbimp_people:tx; DELETE dbimp_people:tx\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:28 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "67fd71ce-06e8-4704-8159-3897fb21c4ad"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_people:tx\",\"v\":1}],\"status\":\"OK\",\"time\":\"166.491µs\"},{\"result\":[{\"id\":\"dbimp_people:tx\",\"v\":1}],\"status\":\"OK\",\"time\":\"54.66µs\"},{\"result\":[],\"status\":\"OK\",\"time\":\"193.1µs\"}]}"
+  }
+}

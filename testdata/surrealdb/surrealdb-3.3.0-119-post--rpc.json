@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s3 SCHEMALESS; DEFINE INDEX i_n ON dbimp_s3 FIELDS n; DEFINE INDEX u_e ON dbimp_s3 FIELDS e UNIQUE; CREATE dbimp_s3:a SET e = 'x'; CREATE dbimp_s3:b SET e = 'x'; REMOVE TABLE dbimp_s3\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "ed030a27-92f7-43d1-b5f1-46980bc2d663"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Length": [
+        "498"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:09 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"22.472058ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"311.852605ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"269.729734ms\",\"type\":null},{\"result\":[{\"e\":\"x\",\"id\":\"dbimp_s3:a\"}],\"status\":\"OK\",\"time\":\"37.903274ms\",\"type\":null},{\"kind\":\"Internal\",\"result\":\"Database index `u_e` already contains 'x', with record `dbimp_s3:a`\",\"status\":\"ERR\",\"time\":\"178.181µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"17.9261ms\",\"type\":null}]}"
+  }
+}

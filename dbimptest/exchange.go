@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 	"slices"
 	"testing"
+	"unicode/utf8"
 )
 
 // Exchange is one request to a real server and its response, as a file
@@ -30,20 +31,50 @@ type Exchange struct {
 	Response Response `json:"response"`
 }
 
-// Request is the recorded part of a request.
+// Request is the recorded part of a request. A body that is text is in
+// Body, and a binary body, such as one in CBOR, is in Binary, which the file
+// holds as base64.
 type Request struct {
 	Method string      `json:"method"`
 	Path   string      `json:"path"`
 	Query  string      `json:"query,omitzero"`
 	Header http.Header `json:"header,omitzero"`
 	Body   string      `json:"body,omitzero"`
+	Binary []byte      `json:"binary,omitzero"`
 }
 
-// Response is the recorded part of a response.
+// Content returns the bytes of the body.
+func (r Request) Content() []byte {
+	if len(r.Binary) > 0 {
+		return r.Binary
+	}
+	return []byte(r.Body)
+}
+
+// Response is the recorded part of a response. A body that is text is in
+// Body, and a binary body is in Binary, as for a Request.
 type Response struct {
 	Status int         `json:"status"`
 	Header http.Header `json:"header,omitzero"`
 	Body   string      `json:"body"`
+	Binary []byte      `json:"binary,omitzero"`
+}
+
+// Content returns the bytes of the body.
+func (r Response) Content() []byte {
+	if len(r.Binary) > 0 {
+		return r.Binary
+	}
+	return []byte(r.Body)
+}
+
+// body returns the text and the binary form of b: the text if b is valid
+// UTF-8, and the binary form otherwise.
+func body(b []byte) (string, []byte) {
+	if utf8.Valid(b) {
+		return string(b), nil
+	}
+	return "", b
 }
 
 // ReadExchange reads the exchange in the file at path.
@@ -70,7 +101,7 @@ func DefaultMatch(r *http.Request, body []byte, ex *Exchange) bool {
 	if r.Method != ex.Request.Method || r.URL.Path != ex.Request.Path || r.URL.RawQuery != ex.Request.Query {
 		return false
 	}
-	return sameBody(body, []byte(ex.Request.Body))
+	return sameBody(body, ex.Request.Content())
 }
 
 func sameBody(a, b []byte) bool {
@@ -142,7 +173,7 @@ func replay(t *testing.T, dir, pattern string, match Match) *httptest.Server {
 		}
 		w.Header().Del("Content-Length")
 		w.WriteHeader(res.Status)
-		if _, err := io.WriteString(w, res.Body); err != nil {
+		if _, err := w.Write(res.Content()); err != nil {
 			t.Errorf("writing a response from the fake server: %v", err)
 		}
 	}))

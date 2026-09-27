@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"SELECT * FROM dbimp_people WITH NOINDEX WHERE name = 'x' EXPLAIN\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "e06eec2a-01d6-4a0f-a007-75f28e579169"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:34 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"detail\":{\"direction\":\"forward\",\"table\":\"dbimp_people\"},\"operation\":\"Iterate Table\"},{\"detail\":{\"reason\":\"WITH NOINDEX\"},\"operation\":\"Fallback\"},{\"detail\":{\"type\":\"Memory\"},\"operation\":\"Collector\"}],\"status\":\"OK\",\"time\":\"223.21µs\"}]}"
+  }
+}

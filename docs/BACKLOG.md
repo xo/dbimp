@@ -30,7 +30,8 @@ learned when it rewrote `xo/cql`. W5 came from D23, and from what the `n1ql`
 session measured on the Couchbase query service. W6 came from the advice of
 the `dbmeta` session on `docs/DRIVER.md`. W7 came from Ken on 2026-09-27,
 who asked that every driver test CRUD, the features of its database and
-every native type, after it asks two models what they are.
+every native type, after it asks two models what they are. W8 came from Ken
+on 2026-09-27, who named SurrealDB as the second target.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -46,12 +47,24 @@ The first driver is Couchbase, and it replaces `xo/n1ql` (D23). W5 is that
 work. Do W4 and W6 first. [DRIVER.md](DRIVER.md) holds every step to add a
 driver, in order, and this item does not repeat them.
 
-## W3. Run the integration tests in CI
+## W3. Run the integration tests in CI. Done.
 
 The jobs `releases` and `integration` went into `.github/workflows/test.yml`
 on 2026-09-27, staged for Ken to review, with the pin `ec91128` and the
 owner `dbimp-ci`. The products come from the folders of `testdata/`, because
-a driver has the name of its product (D30).
+a driver has the name of its product (D30). Ken committed them on
+2026-09-27, and the first run passed on couchbase-7.2.9 and couchbase-8.0.3
+as both principals:
+https://github.com/xo/dbimp/actions/runs/36309539254.
+
+`dbmeta` committed D101 and D102 on 2026-09-27, as `eb35c7c`. The pin moved
+to that commit, staged for Ken to review. From D102, `dbrun list --json` and
+`dbrun dsn --json` have a field `principals`, with the administrator first
+and then the ordinary user, each with its own `url`. The workflow reads the
+`url` of the principal with the role `user`, and no longer builds that DSN
+itself. A product that has no such principal gets an empty DSN, so its tests
+for the ordinary user skip. From dbmeta D101, the `dsn` field of Couchbase is
+the same `couchbase://` URL as the `url` field.
 
 When the first driver exists, add the jobs that `cql/.github/workflows/test.yml`
 has: a job that reads the releases from `dbrun list --json --names`, and a
@@ -115,7 +128,7 @@ D36 for reading and closing a result. Cover each of these points, which the
 point above to the code. The code is in the root package and in `dbimptest`
 (D37).
 
-## W5. Write the Couchbase driver
+## W5. Write the Couchbase driver. Done.
 
 Write the first driver, for the Couchbase query service and SQL++, to D23.
 It replaces `xo/n1ql`. Do W4 and W6 first, then follow
@@ -144,8 +157,8 @@ session once step 9 settles the URL. The first asks how `dbrun` prints the
 `couchbase://` URL: as a second field, or in a form for each consumer. The
 second asks whether it also prints a DSN for the ordinary user. `dbrun` now
 prints the `couchbase://` URL in the field `url`, so the first question is
-answered. Until the second one is, the CI workflow builds the DSN of the
-ordinary user from the `url` field.
+answered. Ken answered the second on 2026-09-27: `dbrun` prints every
+principal (dbmeta D102).
 
 Steps 8 to 15 went in on 2026-09-27, staged for Ken to review. The package
 `couchbase` holds the driver, with its DSN, contract, replay and table tests.
@@ -161,9 +174,56 @@ which each have a test now:
 4. A large float that is a whole number arrives as its digits, and is a
    `*apd.Decimal`, which D39 said never arrives.
 
-The gate of step 15 needs a run of the workflow after a push, and its URL
-goes here. Step 16 waits for Ken, because it asks the sessions of `dburl`,
-`usql` and `dbmeta` to change their repositories.
+Ken committed steps 8 to 17 on 2026-09-27 as `373a7d6`. The workflow passed
+on it: https://github.com/xo/dbimp/actions/runs/36309539254. Ken approved
+the tag, and the release `v0.1.0` is public:
+https://github.com/xo/dbimp/releases/tag/v0.1.0.
+
+The requests of step 16 went to the sessions of `dburl`, `usql` and
+`dbmeta` on 2026-09-27, each naming `v0.1.0`:
+
+1. `dburl`: rename the scheme to `couchbase` with `n1ql` as an alias, set
+   `GoPackage` to `github.com/xo/dbimp/couchbase` and `RequiresCGO` to
+   false, and make the generator write the URL of D35. Whether the
+   `Dialect` becomes `couchbase` now is a question for Ken.
+2. `usql`: import the driver, drop the `strconv.Unquote` in `Version`,
+   change the prefix of its errors, and add a long `txtimeout` default
+   (D46).
+3. `dbmeta`: measure its model on the driver, and ask Ken whether
+   `dbrun dsn --json` prints a DSN for the ordinary user.
+
+The `dburl` session reported on 2026-09-27 that its change is staged for
+Ken. The `Driver` of the scheme is `couchbase`, with the aliases `n1ql` and
+`n1`, and the `Dialect` is `couchbase`. Its generator writes no default
+port, because the driver picks 8093 or 18093 from `tls`. It checked the
+output of the generator against `couchbase.ParseDSN` at `v0.1.0`. Ken
+then ruled that the generator writes the default port, as rule 7 of `dburl`
+says: 8093, or 18093 when `tls` is true by `strconv.ParseBool`, which is how
+the driver reads it. `dburl` released it as `v0.33.0` on 2026-09-27, as
+dburl D25.
+
+The `usql` session reported on 2026-09-27 that its change is staged for
+Ken. `drivers/couchbase` imports the driver at `v0.1.0`, reads the version
+with no `strconv.Unquote`, reports the code and the message of an `Error`,
+and adds `txtimeout=30m` to a URL that has none. It does not set
+`durability_level`. It can commit only after `dburl` tags the rename of the
+scheme, because `usql` pins `dburl` `v0.32.0`, where the scheme is still
+`n1ql`. `dburl` `v0.33.0` has the rename, and the `usql` session was told.
+
+The `usql` session reported on 2026-09-27 that its change is staged for
+Ken, on `dburl` `v0.33.0`, and that its tests pass. `couchbase://` and
+`n1ql://` both reach the driver through `usql`.
+
+The `dbmeta` session reported on 2026-09-27 that its change is staged for
+Ken. It uses the driver at `v0.1.0`, and renames its dialect from `n1ql` to
+`couchbase` (dbmeta D101). It measured its model on 8.0.3 through the
+driver, as both principals.
+
+Each of the three sessions reported that its change is staged, so this item
+is done. `usql` committed its change on 2026-09-27 as `8407785`, on `dbimp`
+`v0.1.0` and `dburl` `v0.33.0`. Ken decided that `usql` does not set
+`durability_level`. Its README explains `durability_level=none` for a server
+of one node instead.
 
 At the move of step 16, three repositories change. The `n1ql` session listed
 them in its W13:
@@ -218,3 +278,44 @@ makes sure that the survey came before the tests, breaks when a branch is
 rebased or squashed, and Ken reviews the order of the work anyway. A linter
 that looks for a comparison after each `Scan` is a guess, and the helper
 does the comparing itself.
+
+## W8. Write the SurrealDB driver
+
+Ken named SurrealDB as the second target on 2026-09-27 (Q1 in
+[PLAN.md](PLAN.md)). Follow [DRIVER.md](DRIVER.md) from step 2.
+[SURREALDB.md](SURREALDB.md) holds every fact about its HTTP interface.
+
+`dbrun` starts 2.7.0 and 3.3.0 in the Tested tier, and 3.1.6 and 3.2.4 in
+the Nightly tier, from dbmeta D103 at commit `78f1e44`, with the ordinary
+user `dbmeta_user`. `dburl` has no scheme for SurrealDB, and `usql` has no
+driver for it.
+
+Steps 1 to 15 and 17 went in on 2026-09-27, staged for Ken to review. Ken
+decided D47 to D57. The package `surrealdb` holds the driver, with its DSN,
+contract, replay, codec and table tests. `surrealdb/integration_test.go`
+names a test for each entry of the survey, and every one passed on 2.7.0,
+3.1.6, 3.2.4 and 3.3.0 as both principals on 2026-09-27. The root package
+gained the CBOR codec of D49, and `dbimptest` gained a binary body for an
+exchange, a content type for the contract, named arguments for the round
+trip, and a body of text or CBOR and headers for each principal in the
+recording command.
+
+The fuzz test of the DSN found a fault that `v0.1.0` has for Couchbase too:
+`net/url` reads the host `::` as `:`. `dbimp.ParseURL` now refuses it.
+
+Step 16 wrote these requests. Step 20 sends them after Ken approves the
+release that holds the driver, and each names that tag:
+
+1. `dburl`: add a scheme whose `Driver` and `Dialect` are `surrealdb` (D47),
+   with the `GoPackage` `github.com/xo/dbimp/surrealdb` and `RequiresCGO`
+   false. Its generator writes
+   `surrealdb://user:pass@host:port/<namespace>/<database>`, with the default
+   port 8000, with TLS or without, and passes the keys `tls`, `auth` and
+   `encoding` through (D48, D49 and D51). Aliases such as `surreal` are for
+   `dburl` and Ken.
+2. `usql`: add `drivers/surrealdb`, which imports the driver. Its `Version`
+   asserts `*sql.DB`, takes a `Conn`, and calls `surrealdb.Version` inside
+   `Conn.Raw` (D57). Each statement of a query is a result set (D52), so it
+   shows each one.
+3. `dbmeta`: nothing to change now. Its entry already holds what the tests
+   need. A model for SurrealDB is a question for Ken.

@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"INSERT INTO dbimp_people {id: 'i1', name: 'Ada'}; INSERT INTO dbimp_people [{id: 'i2'}, {id: 'i3'}]; DELETE dbimp_people:i1, dbimp_people:i2, dbimp_people:i3\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "60812d69-5033-4223-823e-9e1fc91980df"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:33 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_people:i1\",\"name\":\"Ada\"}],\"status\":\"OK\",\"time\":\"207.671µs\"},{\"result\":[{\"id\":\"dbimp_people:i2\"},{\"id\":\"dbimp_people:i3\"}],\"status\":\"OK\",\"time\":\"237.27µs\"},{\"result\":[],\"status\":\"OK\",\"time\":\"531.291µs\"}]}"
+  }
+}

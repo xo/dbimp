@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"BEGIN; CREATE dbimp_people:txc SET v = 1; CANCEL; SELECT * FROM dbimp_people:txc\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "7a5cc845-8b15-49ec-b867-80729f330bc6"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:28 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":\"The query was not executed due to a cancelled transaction\",\"status\":\"ERR\",\"time\":\"155µs\"},{\"result\":[],\"status\":\"OK\",\"time\":\"37.82µs\"}]}"
+  }
+}

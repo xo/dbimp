@@ -106,6 +106,9 @@ linters:
         # The rows of a driver, closed in a defer after the part that
         # matters was read, as with the body.
         - (*github.com/xo/dbimp/couchbase.rows).Close
+        - (*github.com/xo/dbimp/surrealdb.rows).Close
+        # A deferred close of a connection that a test took from the pool.
+        - (*database/sql.Conn).Close
         # A deferred rollback after a commit returns sql.ErrTxDone, and a
         # test has nothing to do with that.
         - (*database/sql.Tx).Rollback

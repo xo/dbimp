@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:u1 SET age = 1; UPDATE dbimp_people:u1 SET age += 1; UPDATE dbimp_people:u1 MERGE {city: 'Oslo'}; UPDATE dbimp_people:u1 CONTENT {age: 9}; UPDATE dbimp_people:u1 PATCH [{op: 'replace', path: '/age', value: 10}]; DELETE dbimp_people:u1\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:07 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "X-Request-Id": [
+        "70870ec5-af03-4244-8d61-497e02fa3c29"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"age\":1,\"id\":\"dbimp_people:u1\"}],\"status\":\"OK\",\"time\":\"7.020981ms\",\"type\":null},{\"result\":[{\"age\":2,\"id\":\"dbimp_people:u1\"}],\"status\":\"OK\",\"time\":\"8.755855ms\",\"type\":null},{\"result\":[{\"age\":2,\"city\":\"Oslo\",\"id\":\"dbimp_people:u1\"}],\"status\":\"OK\",\"time\":\"7.983304ms\",\"type\":null},{\"result\":[{\"age\":9,\"id\":\"dbimp_people:u1\"}],\"status\":\"OK\",\"time\":\"7.164072ms\",\"type\":null},{\"result\":[{\"age\":10,\"id\":\"dbimp_people:u1\"}],\"status\":\"OK\",\"time\":\"8.068263ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"8.721504ms\",\"type\":null}]}"
+  }
+}

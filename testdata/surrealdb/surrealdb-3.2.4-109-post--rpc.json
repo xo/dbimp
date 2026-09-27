@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:r1, dbimp_people:r2; RELATE dbimp_people:r1->dbimp_knows->dbimp_people:r2 SET since = 2020; SELECT ->dbimp_knows->dbimp_people AS friends FROM dbimp_people:r1; INSERT RELATION INTO dbimp_knows {in: dbimp_people:r2, out: dbimp_people:r1}; DELETE dbimp_knows; DELETE dbimp_people:r1, dbimp_people:r2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.2.4+20260803.93ab219"
+      ],
+      "X-Request-Id": [
+        "b4029518-fc61-4a20-82c4-040e7090d728"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:31 GMT"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_people:r1\"},{\"id\":\"dbimp_people:r2\"}],\"status\":\"OK\",\"time\":\"11.537898ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_knows:d52e3p8969msipyr3xbi\",\"in\":\"dbimp_people:r1\",\"out\":\"dbimp_people:r2\",\"since\":2020}],\"status\":\"OK\",\"time\":\"35.163062ms\",\"type\":null},{\"result\":[{\"friends\":[\"dbimp_people:r2\"]}],\"status\":\"OK\",\"time\":\"182.771µs\",\"type\":null},{\"result\":[{\"id\":\"dbimp_knows:fd1ymjaon44vkdybopmm\",\"in\":\"dbimp_people:r2\",\"out\":\"dbimp_people:r1\"}],\"status\":\"OK\",\"time\":\"9.768424ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"10.947587ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"14.180311ms\",\"type\":null}]}"
+  }
+}

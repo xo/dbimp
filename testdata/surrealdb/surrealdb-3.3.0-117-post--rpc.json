@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s2 SCHEMALESS; DEFINE FIELD owner ON dbimp_s2 TYPE option<record<dbimp_people>> REFERENCE ON DELETE CASCADE; CREATE dbimp_people:own; CREATE dbimp_s2:a SET owner = dbimp_people:own; DELETE dbimp_people:own; SELECT * FROM dbimp_s2; REMOVE TABLE dbimp_s2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Content-Length": [
+        "511"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Request-Id": [
+        "a173d7e1-c524-4700-b852-b7bc9d884a37"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:08 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"18.593981ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"17.6275ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_people:own\"}],\"status\":\"OK\",\"time\":\"19.450722ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_s2:a\",\"owner\":\"dbimp_people:own\"}],\"status\":\"OK\",\"time\":\"18.577182ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"18.00451ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"167.18µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"18.132491ms\",\"type\":null}]}"
+  }
+}

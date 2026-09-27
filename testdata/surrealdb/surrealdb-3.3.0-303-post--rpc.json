@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"SELECT * FROM dbimp_people WITH NOINDEX WHERE name = 'x' EXPLAIN\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Request-Id": [
+        "bc8e2ba1-32c2-4212-a44b-0ac6d68ae23c"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Content-Length": [
+        "308"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:23 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":{\"attributes\":{\"projections\":\"*\"},\"children\":[{\"attributes\":{\"direction\":\"Forward\",\"pre_decode_filter\":\"yes\",\"predicate\":\"name = 'x'\",\"table\":\"dbimp_people\"},\"context\":\"Db\",\"operator\":\"TableScan\"}],\"context\":\"Db\",\"operator\":\"SelectProject\"},\"status\":\"OK\",\"time\":\"198.8µs\",\"type\":null}]}"
+  }
+}

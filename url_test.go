@@ -20,6 +20,10 @@ func TestParseURL(t *testing.T) {
 		{"other://localhost", dbimp.ErrScheme},
 		{"n1ql://localhost", dbimp.ErrScheme},
 		{"fake:opaque", dbimp.ErrInvalidValue},
+		// The fuzz test of the SurrealDB DSN found this host, which net/url
+		// reads as ":".
+		{"fake://::/", dbimp.ErrInvalidValue},
+		{"fake://[::]/", nil},
 	} {
 		_, err := dbimp.ParseURL("fake", tt.dsn)
 		if !errors.Is(err, tt.want) {

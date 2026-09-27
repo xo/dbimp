@@ -53,6 +53,33 @@ type RoundTripCase struct {
 	// Equal compares a value read back with the value wanted. If it is nil,
 	// RoundTrip uses reflect.DeepEqual, which also compares the Go types.
 	Equal func(got, want any) bool
+	// Named passes each argument by name, for a database that binds named
+	// parameters only: the key as sql.Named("key", k), and the value as
+	// sql.Named("value", v). The statements then name the key and the value,
+	// such as $key and $value.
+	Named bool
+	// KeyArg turns the key into the argument that the statements take, such
+	// as a record id. If it is nil, the argument is the key as a string.
+	// Literal gets the key as a string, and writes it in the same form.
+	KeyArg func(key string) any
+}
+
+// args returns the arguments of a statement: the value, if the statement
+// takes one, and the key.
+func (rt roundTrip) args(value any, withValue bool) []any {
+	var key any = rt.key
+	if rt.c.KeyArg != nil {
+		key = rt.c.KeyArg(rt.key)
+	}
+	switch {
+	case rt.c.Named && withValue:
+		return []any{sql.Named("value", value), sql.Named("key", key)}
+	case rt.c.Named:
+		return []any{sql.Named("key", key)}
+	case withValue:
+		return []any{value, key}
+	}
+	return []any{key}
 }
 
 // Value is one value of a round trip.
@@ -140,25 +167,35 @@ func (rt roundTrip) run(v, next Value, literal bool) {
 			rt.tb.Errorf("%s: inserting: %s: %v", label, stmt, err)
 			return
 		}
-	} else if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Insert, rt.key, v.In); err != nil {
+	} else if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Insert, rt.insertArgs(v.In)...); err != nil {
 		rt.tb.Errorf("%s: inserting: %v", label, err)
 		return
 	}
 	if !rt.read(label+", after the insert", v.want()) {
 		return
 	}
-	if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Update, next.In, rt.key); err != nil {
+	if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Update, rt.args(next.In, true)...); err != nil {
 		rt.tb.Errorf("%s: updating to %s: %v", label, next.Name, err)
 		return
 	}
 	if !rt.read(label+", after the update to "+next.Name, next.want()) {
 		return
 	}
-	if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Delete, rt.key); err != nil {
+	if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Delete, rt.args(nil, false)...); err != nil {
 		rt.tb.Errorf("%s: deleting: %v", label, err)
 		return
 	}
 	rt.gone(label + ", after the delete")
+}
+
+// insertArgs returns the arguments of the insert: the key and the value, in
+// that order, for a database that binds by position.
+func (rt roundTrip) insertArgs(value any) []any {
+	args := rt.args(value, true)
+	if !rt.c.Named {
+		args[0], args[1] = args[1], args[0]
+	}
+	return args
 }
 
 // read selects the value of the row, until it equals want or the wait ends.
@@ -212,7 +249,7 @@ func (rt roundTrip) gone(label string) {
 
 func (rt roundTrip) selectValue() (any, error) {
 	var got any
-	err := rt.db.QueryRowContext(rt.tb.Context(), rt.c.Select, rt.key).Scan(&got)
+	err := rt.db.QueryRowContext(rt.tb.Context(), rt.c.Select, rt.args(nil, false)...).Scan(&got)
 	return got, err
 }
 

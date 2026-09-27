@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s5 SCHEMALESS; DEFINE EVENT e ON dbimp_s5 WHEN $event = 'CREATE' THEN (CREATE dbimp_s5_log SET at = $after.id); CREATE dbimp_s5:a; SELECT * FROM dbimp_s5_log; REMOVE TABLE dbimp_s5; REMOVE TABLE dbimp_s5_log\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "d16efb8e-843c-47f2-b3c2-a0ba71e3cf3a"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Content-Length": [
+        "463"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:21 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"17.85414ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"17.957212ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_s5:a\"}],\"status\":\"OK\",\"time\":\"24.537582ms\",\"type\":null},{\"result\":[{\"at\":\"dbimp_s5:a\",\"id\":\"dbimp_s5_log:kihm81g3ydnon6azlhg9\"}],\"status\":\"OK\",\"time\":\"212.441µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"18.634242ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"30.818364ms\",\"type\":null}]}"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s4 AS SELECT count() AS n FROM dbimp_people GROUP ALL; CREATE dbimp_people:v1; SELECT * FROM dbimp_s4; DELETE dbimp_people:v1; REMOVE TABLE dbimp_s4\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.2.4+20260803.93ab219"
+      ],
+      "X-Request-Id": [
+        "982c0631-9c51-4cc5-b68e-4b491a9152af"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:33 GMT"
+      ],
+      "Content-Length": [
+        "367"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"17.101436ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_people:v1\"}],\"status\":\"OK\",\"time\":\"6.213149ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_s4:[]\",\"n\":1}],\"status\":\"OK\",\"time\":\"164.041µs\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"6.060589ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"5.652078ms\",\"type\":null}]}"
+  }
+}

@@ -20,8 +20,9 @@ func openAt(t *testing.T, url string) *sql.DB {
 	return db
 }
 
-func TestContract(t *testing.T) {
-	t.Parallel()
+// RunContract counts the goroutines of the process, so this test must not
+// run in parallel with another.
+func TestContract(t *testing.T) { //nolint:paralleltest // RunContract counts the goroutines of the process.
 	dbimptest.RunContract(t, dbimptest.Contract{
 		Open:  openAt,
 		Query: "SELECT 1",

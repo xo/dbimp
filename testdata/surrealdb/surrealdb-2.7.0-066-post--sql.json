@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/sql",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "RETURN 1; SELEC 1"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "1268b15a-e6a7-4c08-b33a-241905d7ec8b"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ]
+    },
+    "body": "{\"code\":400,\"details\":\"Request problems detected\",\"description\":\"There is a problem with your request. Refer to the documentation for further information.\",\"information\":\"There was a problem with the database: Parse error: Unexpected token `a number`, expected Eof\\n --> [1:17]\\n  |\\n1 | RETURN 1; SELEC 1\\n  |                 ^ \\n\"}"
+  }
+}

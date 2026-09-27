@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE USER dbimp_nobody ON DATABASE PASSWORD 'x' ROLES VIEWER; REMOVE USER IF EXISTS dbimp_nobody ON DATABASE\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "a61fb980-0061-443c-9e49-7c3bf6e8a3c6"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:20 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ]
+    },
+    "body": "{\"result\":[{\"details\":{\"details\":{\"details\":{\"action\":\"Edit\",\"actor\":\"/ns:dbmeta/db:dbmeta/Actor::dbmeta_user(Editor)\",\"resource\":\"/ns:dbmeta/db:dbmeta/Actor:\\\"\\\"\"},\"kind\":\"NotAllowed\"},\"kind\":\"Auth\"},\"kind\":\"NotAllowed\",\"result\":\"IAM error: Not enough permissions to perform this action\",\"status\":\"ERR\",\"time\":\"69.74µs\",\"type\":null},{\"details\":{\"details\":{\"details\":{\"action\":\"Edit\",\"actor\":\"/ns:dbmeta/db:dbmeta/Actor::dbmeta_user(Editor)\",\"resource\":\"/ns:dbmeta/db:dbmeta/Actor:\\\"\\\"\"},\"kind\":\"NotAllowed\"},\"kind\":\"Auth\"},\"kind\":\"NotAllowed\",\"result\":\"IAM error: Not enough permissions to perform this action\",\"status\":\"ERR\",\"time\":\"21.63µs\",\"type\":null}]}"
+  }
+}

@@ -1,0 +1,3340 @@
+{
+ "driver": "surrealdb",
+ "header": {
+  "administrator": {
+   "Surreal-NS": [
+    "dbmeta"
+   ],
+   "Surreal-DB": [
+    "dbmeta"
+   ]
+  },
+  "ordinary": {
+   "Surreal-NS": [
+    "dbmeta"
+   ],
+   "Surreal-DB": [
+    "dbmeta"
+   ],
+   "Surreal-Auth-NS": [
+    "dbmeta"
+   ],
+   "Surreal-Auth-DB": [
+    "dbmeta"
+   ]
+  }
+ },
+ "requests": [
+  {
+   "item": 1,
+   "name": "set up the tables",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE IF NOT EXISTS dbimp_people SCHEMALESS; DEFINE TABLE IF NOT EXISTS dbimp_orders SCHEMALESS; DEFINE TABLE IF NOT EXISTS dbimp_types SCHEMALESS"
+    ]
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "a query on /rpc (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "a query on /rpc (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "a query on /sql",
+   "method": "POST",
+   "path": "/sql",
+   "header": {
+    "Accept": [
+     "application/json"
+    ]
+   },
+   "text": "RETURN 1; RETURN 2"
+  },
+  {
+   "item": 1,
+   "name": "a query on /sql in CBOR",
+   "method": "POST",
+   "path": "/sql",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ]
+   },
+   "text": "RETURN 1"
+  },
+  {
+   "item": 1,
+   "name": "ping",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "ping",
+    "params": []
+   }
+  },
+  {
+   "item": 1,
+   "name": "health",
+   "method": "GET",
+   "path": "/health"
+  },
+  {
+   "item": 1,
+   "name": "a query with an id",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "id": 7,
+    "method": "query",
+    "params": [
+     "RETURN 1"
+    ]
+   }
+  },
+  {
+   "item": 2,
+   "name": "the order of a projection (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT b, a, c FROM [{a: 1, b: 2, c: 3}]"
+    ]
+   }
+  },
+  {
+   "item": 2,
+   "name": "the order of a projection (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT b, a, c FROM [{a: 1, b: 2, c: 3}]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 2,
+   "name": "records with different fields (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:o1 SET name = 'Ada', age = 36; CREATE dbimp_people:o2 SET name = 'Bo', city = 'Oslo'; SELECT * FROM dbimp_people WHERE id IN [dbimp_people:o1, dbimp_people:o2] ORDER BY id; DELETE dbimp_people:o1, dbimp_people:o2"
+    ]
+   }
+  },
+  {
+   "item": 2,
+   "name": "records with different fields (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:o1 SET name = 'Ada', age = 36; CREATE dbimp_people:o2 SET name = 'Bo', city = 'Oslo'; SELECT * FROM dbimp_people WHERE id IN [dbimp_people:o1, dbimp_people:o2] ORDER BY id; DELETE dbimp_people:o1, dbimp_people:o2"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 2,
+   "name": "one record with ONLY (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM ONLY {x: 1, y: 2}"
+    ]
+   }
+  },
+  {
+   "item": 2,
+   "name": "one record with ONLY (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM ONLY {x: 1, y: 2}"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 2,
+   "name": "an array of values (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT VALUE a FROM [{a: 1}, {a: 2}]"
+    ]
+   }
+  },
+  {
+   "item": 2,
+   "name": "an array of values (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT VALUE a FROM [{a: 1}, {a: 2}]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "each type (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [9223372036854775807, -9223372036854775808, 0.1, 1.5e300, 1.23456789012345678901234567890dec, 100dec, d'2026-09-27T10:00:00.123456789Z', 1h30m, 1y2w3d, u'0192f1c4-3b5e-7a2c-9f00-000000000001', <bytes>'hi', dbimp_people:tobie, dbimp_people:['a', 1], dbimp_people:{a: 1}, dbimp_people:123, <set>[3, 1, 2], (1.5, 2.5), 1..5, NONE, NULL, true, 's', type::table('dbimp_people')]"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "each type (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [9223372036854775807, -9223372036854775808, 0.1, 1.5e300, 1.23456789012345678901234567890dec, 100dec, d'2026-09-27T10:00:00.123456789Z', 1h30m, 1y2w3d, u'0192f1c4-3b5e-7a2c-9f00-000000000001', <bytes>'hi', dbimp_people:tobie, dbimp_people:['a', 1], dbimp_people:{a: 1}, dbimp_people:123, <set>[3, 1, 2], (1.5, 2.5), 1..5, NONE, NULL, true, 's', type::table('dbimp_people')]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "geometry (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [(1.5, 2.5), {type: 'LineString', coordinates: [[0, 0], [1, 1]]}, {type: 'Polygon', coordinates: [[[0, 0], [1, 0], [1, 1], [0, 0]]]}, {type: 'MultiPoint', coordinates: [[0, 0], [1, 1]]}, {type: 'GeometryCollection', geometries: [{type: 'Point', coordinates: [1, 2]}]}]"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "geometry (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [(1.5, 2.5), {type: 'LineString', coordinates: [[0, 0], [1, 1]]}, {type: 'Polygon', coordinates: [[[0, 0], [1, 0], [1, 1], [0, 0]]]}, {type: 'MultiPoint', coordinates: [[0, 0], [1, 1]]}, {type: 'GeometryCollection', geometries: [{type: 'Point', coordinates: [1, 2]}]}]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a regex (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN /a.b/"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a regex (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN /a.b/"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a closure (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN |$x| $x + 1"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a closure (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN |$x| $x + 1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a file (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN f'bucket:/a.txt'"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a file (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN f'bucket:/a.txt'"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "an integer too large (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 9223372036854775808"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "an integer too large (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 9223372036854775808"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "NONE and NULL in an object (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN {x: NONE, y: NULL, z: 1}"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "NONE and NULL in an object (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN {x: NONE, y: NULL, z: 1}"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a missing field (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT a, b FROM [{a: 1}]"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a missing field (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT a, b FROM [{a: 1}]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "an empty value (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN ['', [], {}, 0]"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "an empty value (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN ['', [], {}, 0]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a float that is a whole number (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [1f, 1.0, <float>1, -0.0]"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a float that is a whole number (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [1f, 1.0, <float>1, -0.0]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "decimal arithmetic (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [0.1dec + 0.2dec, 0.1 + 0.2, <decimal>'0.1']"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "decimal arithmetic (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [0.1dec + 0.2dec, 0.1 + 0.2, <decimal>'0.1']"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "datetimes (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [d'1970-01-01T00:00:00Z', d'2262-04-11T23:47:16Z', d'1600-01-01T00:00:00Z', d'9999-12-31T23:59:59.999999999Z']"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "datetimes (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [d'1970-01-01T00:00:00Z', d'2262-04-11T23:47:16Z', d'1600-01-01T00:00:00Z', d'9999-12-31T23:59:59.999999999Z']"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "durations (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [0ns, 1ns, 300y, 1ms]"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "durations (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [0ns, 1ns, 300y, 1ms]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a record id of each kind of key (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [a:1, a:[1, 2], a:{k: 1}, a:u'0192f1c4-3b5e-7a2c-9f00-000000000001', `select`:1, a:`b c`]"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a record id of each kind of key (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [a:1, a:[1, 2], a:{k: 1}, a:u'0192f1c4-3b5e-7a2c-9f00-000000000001', `select`:1, a:`b c`]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a range of each kind (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [1..5, 1..=5, ..5, 1.., 'a'..'z']"
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a range of each kind (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [1..5, 1..=5, ..5, 1.., 'a'..'z']"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 3,
+   "name": "a round trip in a table (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_types:rt CONTENT {v: $v}; SELECT v FROM dbimp_types:rt; DELETE dbimp_types:rt",
+     {
+      "v": {
+       "n": 1,
+       "s": "x",
+       "a": [
+        1,
+        2.5
+       ],
+       "b": true,
+       "z": null
+      }
+     }
+    ]
+   }
+  },
+  {
+   "item": 3,
+   "name": "a round trip in a table (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_types:rt CONTENT {v: $v}; SELECT v FROM dbimp_types:rt; DELETE dbimp_types:rt",
+     {
+      "v": {
+       "n": 1,
+       "s": "x",
+       "a": [
+        1,
+        2.5
+       ],
+       "b": true,
+       "z": null
+      }
+     }
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 4,
+   "name": "named parameters (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [$s, $i, $f, $b, $n, $o]",
+     {
+      "s": "it's",
+      "i": 42,
+      "f": 1.5,
+      "b": true,
+      "n": null,
+      "o": {
+       "k": [
+        1
+       ]
+      }
+     }
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "named parameters (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [$s, $i, $f, $b, $n, $o]",
+     {
+      "s": "it's",
+      "i": 42,
+      "f": 1.5,
+      "b": true,
+      "n": null,
+      "o": {
+       "k": [
+        1
+       ]
+      }
+     }
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN $1",
+     {
+      "1": "one"
+     }
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN $1",
+     {
+      "1": "one"
+     }
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 4,
+   "name": "a parameter that no statement names (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1",
+     {
+      "unused": 1
+     }
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter that no statement names (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1",
+     {
+      "unused": 1
+     }
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 4,
+   "name": "a name that no parameter gives (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN $nothing"
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a name that no parameter gives (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN $nothing"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 4,
+   "name": "a parameter in the query of /sql",
+   "method": "POST",
+   "path": "/sql?x=5",
+   "header": {
+    "Accept": [
+     "application/json"
+    ]
+   },
+   "text": "RETURN $x"
+  },
+  {
+   "item": 5,
+   "name": "set up many records",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE |dbimp_orders:5000| RETURN NONE"
+    ]
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 5,
+   "name": "many records (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_orders"
+    ]
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 5,
+   "name": "many records (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_orders"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 5,
+   "name": "a limit (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_orders LIMIT 3"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "a limit (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_orders LIMIT 3"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 5,
+   "name": "the cap on the output of a function",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN array::len(array::range(0, 200000))"
+    ]
+   }
+  },
+  {
+   "item": 6,
+   "name": "a syntax error (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELEC 1"
+    ]
+   }
+  },
+  {
+   "item": 6,
+   "name": "a syntax error (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELEC 1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 6,
+   "name": "a syntax error on /sql",
+   "method": "POST",
+   "path": "/sql",
+   "header": {
+    "Accept": [
+     "application/json"
+    ]
+   },
+   "text": "RETURN 1; SELEC 1"
+  },
+  {
+   "item": 6,
+   "name": "an error after a result (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1; THROW 'boom'; RETURN 3"
+    ]
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error after a result (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1; THROW 'boom'; RETURN 3"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 6,
+   "name": "a table that does not exist (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_nothing"
+    ]
+   }
+  },
+  {
+   "item": 6,
+   "name": "a table that does not exist (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_nothing"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 6,
+   "name": "a method that does not exist",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "begin",
+    "params": []
+   }
+  },
+  {
+   "item": 6,
+   "name": "a body that is not JSON",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "text": "{not json"
+  },
+  {
+   "item": 7,
+   "name": "a query that the client leaves",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SLEEP 2s; CREATE dbimp_people:cancelled"
+    ]
+   },
+   "timeout": "500ms"
+  },
+  {
+   "item": 7,
+   "name": "what that query did",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people:cancelled"
+    ]
+   },
+   "wait": "3s"
+  },
+  {
+   "item": 7,
+   "name": "a TIMEOUT clause",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_orders WHERE sleep(10ms) = NONE TIMEOUT 50ms"
+    ]
+   }
+  },
+  {
+   "item": 7,
+   "name": "clean up",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DELETE dbimp_people:cancelled"
+    ]
+   }
+  },
+  {
+   "item": 8,
+   "name": "a wrong password",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1"
+    ]
+   },
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "a user that the ordinary user cannot define",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE USER dbimp_nobody ON DATABASE PASSWORD 'x' ROLES VIEWER; REMOVE USER IF EXISTS dbimp_nobody ON DATABASE"
+    ]
+   }
+  },
+  {
+   "item": 8,
+   "name": "the root of the server",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "INFO FOR ROOT"
+    ]
+   }
+  },
+  {
+   "item": 8,
+   "name": "signin as the ordinary user",
+   "method": "POST",
+   "path": "/signin",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "ns": "dbmeta",
+    "db": "dbmeta",
+    "user": "dbmeta_user",
+    "pass": "wrong-on-purpose"
+   }
+  },
+  {
+   "item": 9,
+   "name": "the version method",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "version",
+    "params": []
+   }
+  },
+  {
+   "item": 9,
+   "name": "the version endpoint",
+   "method": "GET",
+   "path": "/version"
+  },
+  {
+   "item": 10,
+   "name": "two statements (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1; RETURN 2"
+    ]
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN 1; RETURN 2"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 10,
+   "name": "comments (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "-- a comment with $x\nRETURN 1 /* ; RETURN 2 */; # another\nRETURN '$x -- ;'"
+    ]
+   }
+  },
+  {
+   "item": 10,
+   "name": "comments (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "-- a comment with $x\nRETURN 1 /* ; RETURN 2 */; # another\nRETURN '$x -- ;'"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 10,
+   "name": "LET and a later statement (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "LET $a = 5; RETURN $a * 2"
+    ]
+   }
+  },
+  {
+   "item": 10,
+   "name": "LET and a later statement (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "LET $a = 5; RETURN $a * 2"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 11,
+   "name": "a transaction in one request (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN; CREATE dbimp_people:tx SET v = 1; COMMIT; SELECT * FROM dbimp_people:tx; DELETE dbimp_people:tx"
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "a transaction in one request (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN; CREATE dbimp_people:tx SET v = 1; COMMIT; SELECT * FROM dbimp_people:tx; DELETE dbimp_people:tx"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 11,
+   "name": "a cancelled transaction (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN; CREATE dbimp_people:txc SET v = 1; CANCEL; SELECT * FROM dbimp_people:txc"
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "a cancelled transaction (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN; CREATE dbimp_people:txc SET v = 1; CANCEL; SELECT * FROM dbimp_people:txc"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 11,
+   "name": "a failed statement in a transaction (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN; CREATE dbimp_people:txf SET v = 1; THROW 'no'; COMMIT; SELECT * FROM dbimp_people:txf"
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "a failed statement in a transaction (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN; CREATE dbimp_people:txf SET v = 1; THROW 'no'; COMMIT; SELECT * FROM dbimp_people:txf"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 11,
+   "name": "BEGIN alone (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN"
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "BEGIN alone (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "BEGIN"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 12,
+   "name": "compression",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ],
+    "Accept-Encoding": [
+     "gzip"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN array::range(0, 2000)"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud create (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:c1 SET name = 'Ada'; DELETE dbimp_people:c1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud create (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:c1 SET name = 'Ada'; DELETE dbimp_people:c1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud insert (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "INSERT INTO dbimp_people {id: 'i1', name: 'Ada'}; INSERT INTO dbimp_people [{id: 'i2'}, {id: 'i3'}]; DELETE dbimp_people:i1, dbimp_people:i2, dbimp_people:i3"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud insert (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "INSERT INTO dbimp_people {id: 'i1', name: 'Ada'}; INSERT INTO dbimp_people [{id: 'i2'}, {id: 'i3'}]; DELETE dbimp_people:i1, dbimp_people:i2, dbimp_people:i3"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud select (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:s1 SET name = 'Ada', age = 36; SELECT name, age FROM dbimp_people:s1; SELECT * FROM dbimp_people WHERE age > 30 AND id = dbimp_people:s1; DELETE dbimp_people:s1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud select (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:s1 SET name = 'Ada', age = 36; SELECT name, age FROM dbimp_people:s1; SELECT * FROM dbimp_people WHERE age > 30 AND id = dbimp_people:s1; DELETE dbimp_people:s1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud update (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:u1 SET age = 1; UPDATE dbimp_people:u1 SET age += 1; UPDATE dbimp_people:u1 MERGE {city: 'Oslo'}; UPDATE dbimp_people:u1 CONTENT {age: 9}; UPDATE dbimp_people:u1 PATCH [{op: 'replace', path: '/age', value: 10}]; DELETE dbimp_people:u1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud update (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:u1 SET age = 1; UPDATE dbimp_people:u1 SET age += 1; UPDATE dbimp_people:u1 MERGE {city: 'Oslo'}; UPDATE dbimp_people:u1 CONTENT {age: 9}; UPDATE dbimp_people:u1 PATCH [{op: 'replace', path: '/age', value: 10}]; DELETE dbimp_people:u1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud upsert (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "UPSERT dbimp_people:up SET n = 1; UPSERT dbimp_people:up SET n = 2; DELETE dbimp_people:up"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud upsert (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "UPSERT dbimp_people:up SET n = 1; UPSERT dbimp_people:up SET n = 2; DELETE dbimp_people:up"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud delete (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:d1; DELETE dbimp_people:d1 RETURN BEFORE; SELECT * FROM dbimp_people:d1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud delete (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:d1; DELETE dbimp_people:d1 RETURN BEFORE; SELECT * FROM dbimp_people:d1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud relate (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:r1, dbimp_people:r2; RELATE dbimp_people:r1->dbimp_knows->dbimp_people:r2 SET since = 2020; SELECT ->dbimp_knows->dbimp_people AS friends FROM dbimp_people:r1; INSERT RELATION INTO dbimp_knows {in: dbimp_people:r2, out: dbimp_people:r1}; DELETE dbimp_knows; DELETE dbimp_people:r1, dbimp_people:r2"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud relate (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:r1, dbimp_people:r2; RELATE dbimp_people:r1->dbimp_knows->dbimp_people:r2 SET since = 2020; SELECT ->dbimp_knows->dbimp_people AS friends FROM dbimp_people:r1; INSERT RELATION INTO dbimp_knows {in: dbimp_people:r2, out: dbimp_people:r1}; DELETE dbimp_knows; DELETE dbimp_people:r1, dbimp_people:r2"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud insert on duplicate key update (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "INSERT INTO dbimp_people {id: 'k1', n: 1}; INSERT INTO dbimp_people {id: 'k1', n: 1} ON DUPLICATE KEY UPDATE n += 1; DELETE dbimp_people:k1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud insert on duplicate key update (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "INSERT INTO dbimp_people {id: 'k1', n: 1}; INSERT INTO dbimp_people {id: 'k1', n: 1} ON DUPLICATE KEY UPDATE n += 1; DELETE dbimp_people:k1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "crud return clause (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:rc SET n = 1 RETURN NONE; UPDATE dbimp_people:rc SET n = 2 RETURN DIFF; UPDATE dbimp_people:rc SET n = 3 RETURN BEFORE; DELETE dbimp_people:rc RETURN AFTER"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "crud return clause (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:rc SET n = 1 RETURN NONE; UPDATE dbimp_people:rc SET n = 2 RETURN DIFF; UPDATE dbimp_people:rc SET n = 3 RETURN BEFORE; DELETE dbimp_people:rc RETURN AFTER"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema table and fields (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s1 SCHEMAFULL; DEFINE FIELD name ON dbimp_s1 TYPE string; DEFINE FIELD age ON dbimp_s1 TYPE int DEFAULT 0 ASSERT $value >= 0; CREATE dbimp_s1:a SET name = 'x'; CREATE dbimp_s1:b SET name = 1; CREATE dbimp_s1:c SET name = 'y', age = -1; SELECT * FROM dbimp_s1; REMOVE TABLE dbimp_s1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema table and fields (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s1 SCHEMAFULL; DEFINE FIELD name ON dbimp_s1 TYPE string; DEFINE FIELD age ON dbimp_s1 TYPE int DEFAULT 0 ASSERT $value >= 0; CREATE dbimp_s1:a SET name = 'x'; CREATE dbimp_s1:b SET name = 1; CREATE dbimp_s1:c SET name = 'y', age = -1; SELECT * FROM dbimp_s1; REMOVE TABLE dbimp_s1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema record link and reference (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s2 SCHEMALESS; DEFINE FIELD owner ON dbimp_s2 TYPE option<record<dbimp_people>> REFERENCE ON DELETE CASCADE; CREATE dbimp_people:own; CREATE dbimp_s2:a SET owner = dbimp_people:own; DELETE dbimp_people:own; SELECT * FROM dbimp_s2; REMOVE TABLE dbimp_s2"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema record link and reference (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s2 SCHEMALESS; DEFINE FIELD owner ON dbimp_s2 TYPE option<record<dbimp_people>> REFERENCE ON DELETE CASCADE; CREATE dbimp_people:own; CREATE dbimp_s2:a SET owner = dbimp_people:own; DELETE dbimp_people:own; SELECT * FROM dbimp_s2; REMOVE TABLE dbimp_s2"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema index and unique index (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s3 SCHEMALESS; DEFINE INDEX i_n ON dbimp_s3 FIELDS n; DEFINE INDEX u_e ON dbimp_s3 FIELDS e UNIQUE; CREATE dbimp_s3:a SET e = 'x'; CREATE dbimp_s3:b SET e = 'x'; REMOVE TABLE dbimp_s3"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema index and unique index (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s3 SCHEMALESS; DEFINE INDEX i_n ON dbimp_s3 FIELDS n; DEFINE INDEX u_e ON dbimp_s3 FIELDS e UNIQUE; CREATE dbimp_s3:a SET e = 'x'; CREATE dbimp_s3:b SET e = 'x'; REMOVE TABLE dbimp_s3"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema view (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s4 AS SELECT count() AS n FROM dbimp_people GROUP ALL; CREATE dbimp_people:v1; SELECT * FROM dbimp_s4; DELETE dbimp_people:v1; REMOVE TABLE dbimp_s4"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema view (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s4 AS SELECT count() AS n FROM dbimp_people GROUP ALL; CREATE dbimp_people:v1; SELECT * FROM dbimp_s4; DELETE dbimp_people:v1; REMOVE TABLE dbimp_s4"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema event (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s5 SCHEMALESS; DEFINE EVENT e ON dbimp_s5 WHEN $event = 'CREATE' THEN (CREATE dbimp_s5_log SET at = $after.id); CREATE dbimp_s5:a; SELECT * FROM dbimp_s5_log; REMOVE TABLE dbimp_s5; REMOVE TABLE dbimp_s5_log"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema event (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s5 SCHEMALESS; DEFINE EVENT e ON dbimp_s5 WHEN $event = 'CREATE' THEN (CREATE dbimp_s5_log SET at = $after.id); CREATE dbimp_s5:a; SELECT * FROM dbimp_s5_log; REMOVE TABLE dbimp_s5; REMOVE TABLE dbimp_s5_log"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema function and param (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE FUNCTION OVERWRITE fn::dbimp_add($a: int, $b: int) { RETURN $a + $b; }; DEFINE PARAM OVERWRITE $dbimp_p VALUE 5; RETURN fn::dbimp_add(1, $dbimp_p); REMOVE FUNCTION fn::dbimp_add; REMOVE PARAM $dbimp_p"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema function and param (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE FUNCTION OVERWRITE fn::dbimp_add($a: int, $b: int) { RETURN $a + $b; }; DEFINE PARAM OVERWRITE $dbimp_p VALUE 5; RETURN fn::dbimp_add(1, $dbimp_p); REMOVE FUNCTION fn::dbimp_add; REMOVE PARAM $dbimp_p"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema full text index (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s6 SCHEMALESS; DEFINE ANALYZER dbimp_az TOKENIZERS blank FILTERS lowercase; DEFINE INDEX ft ON dbimp_s6 FIELDS t FULLTEXT ANALYZER dbimp_az BM25; CREATE dbimp_s6:a SET t = 'Hello world'; SELECT id FROM dbimp_s6 WHERE t @@ 'hello'; REMOVE TABLE dbimp_s6; REMOVE ANALYZER dbimp_az"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema full text index (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s6 SCHEMALESS; DEFINE ANALYZER dbimp_az TOKENIZERS blank FILTERS lowercase; DEFINE INDEX ft ON dbimp_s6 FIELDS t FULLTEXT ANALYZER dbimp_az BM25; CREATE dbimp_s6:a SET t = 'Hello world'; SELECT id FROM dbimp_s6 WHERE t @@ 'hello'; REMOVE TABLE dbimp_s6; REMOVE ANALYZER dbimp_az"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema full text index with SEARCH (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s7 SCHEMALESS; DEFINE ANALYZER dbimp_az2 TOKENIZERS blank FILTERS lowercase; DEFINE INDEX ft ON dbimp_s7 FIELDS t SEARCH ANALYZER dbimp_az2 BM25; REMOVE TABLE dbimp_s7; REMOVE ANALYZER dbimp_az2"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema full text index with SEARCH (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s7 SCHEMALESS; DEFINE ANALYZER dbimp_az2 TOKENIZERS blank FILTERS lowercase; DEFINE INDEX ft ON dbimp_s7 FIELDS t SEARCH ANALYZER dbimp_az2 BM25; REMOVE TABLE dbimp_s7; REMOVE ANALYZER dbimp_az2"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema vector index (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s8 SCHEMALESS; DEFINE INDEX v ON dbimp_s8 FIELDS e HNSW DIMENSION 2 DIST EUCLIDEAN; CREATE dbimp_s8:a SET e = [0, 0]; CREATE dbimp_s8:b SET e = [5, 5]; SELECT id FROM dbimp_s8 WHERE e <|1,40|> [1, 1]; REMOVE TABLE dbimp_s8"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema vector index (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_s8 SCHEMALESS; DEFINE INDEX v ON dbimp_s8 FIELDS e HNSW DIMENSION 2 DIST EUCLIDEAN; CREATE dbimp_s8:a SET e = [0, 0]; CREATE dbimp_s8:b SET e = [5, 5]; SELECT id FROM dbimp_s8 WHERE e <|1,40|> [1, 1]; REMOVE TABLE dbimp_s8"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "schema sequence (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE SEQUENCE OVERWRITE dbimp_seq; RETURN [sequence::nextval('dbimp_seq'), sequence::nextval('dbimp_seq')]; REMOVE SEQUENCE dbimp_seq"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "schema sequence (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE SEQUENCE OVERWRITE dbimp_seq; RETURN [sequence::nextval('dbimp_seq'), sequence::nextval('dbimp_seq')]; REMOVE SEQUENCE dbimp_seq"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature graph traversal and fetch (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:g1 SET name = 'A', best = dbimp_people:g2; CREATE dbimp_people:g2 SET name = 'B'; SELECT name, best.name AS bn FROM dbimp_people:g1; SELECT * FROM dbimp_people:g1 FETCH best; DELETE dbimp_people:g1, dbimp_people:g2"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature graph traversal and fetch (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "CREATE dbimp_people:g1 SET name = 'A', best = dbimp_people:g2; CREATE dbimp_people:g2 SET name = 'B'; SELECT name, best.name AS bn FROM dbimp_people:g1; SELECT * FROM dbimp_people:g1 FETCH best; DELETE dbimp_people:g1, dbimp_people:g2"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature split, group all, omit and only (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM [{t: [1, 2]}] SPLIT t; SELECT count() AS n FROM [1, 2, 3] GROUP ALL; SELECT * OMIT b FROM [{a: 1, b: 2}]; SELECT * FROM ONLY [{a: 1}] LIMIT 1"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature split, group all, omit and only (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM [{t: [1, 2]}] SPLIT t; SELECT count() AS n FROM [1, 2, 3] GROUP ALL; SELECT * OMIT b FROM [{a: 1, b: 2}]; SELECT * FROM ONLY [{a: 1}] LIMIT 1"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature live select (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "LIVE SELECT * FROM dbimp_people"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature live select (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "LIVE SELECT * FROM dbimp_people"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature control flow (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "IF 1 > 0 { RETURN 'yes' } ELSE { RETURN 'no' }; FOR $i IN [1, 2] { CREATE dbimp_people:[$i]; }; SELECT id FROM dbimp_people:[1], dbimp_people:[2]; DELETE dbimp_people:[1], dbimp_people:[2]; THROW 'thrown'"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature control flow (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "IF 1 > 0 { RETURN 'yes' } ELSE { RETURN 'no' }; FOR $i IN [1, 2] { CREATE dbimp_people:[$i]; }; SELECT id FROM dbimp_people:[1], dbimp_people:[2]; DELETE dbimp_people:[1], dbimp_people:[2]; THROW 'thrown'"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature info for (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "INFO FOR DB; INFO FOR TABLE dbimp_people"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature info for (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "INFO FOR DB; INFO FOR TABLE dbimp_people"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature with index and explain (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people WITH NOINDEX WHERE name = 'x' EXPLAIN"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature with index and explain (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people WITH NOINDEX WHERE name = 'x' EXPLAIN"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature parallel (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people PARALLEL"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature parallel (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people PARALLEL"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature tempfiles (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people ORDER BY name TEMPFILES"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature tempfiles (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people ORDER BY name TEMPFILES"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature version clause (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people VERSION d'2026-01-01T00:00:00Z'"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature version clause (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "SELECT * FROM dbimp_people VERSION d'2026-01-01T00:00:00Z'"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature future (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN <future> { 1 + 1 }"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature future (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN <future> { 1 + 1 }"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature closure in a statement (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "LET $f = |$x: int| $x * 2; RETURN $f(21)"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature closure in a statement (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "LET $f = |$x: int| $x * 2; RETURN $f(21)"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature changefeed (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_cf CHANGEFEED 1h; CREATE dbimp_cf:a; SHOW CHANGES FOR TABLE dbimp_cf SINCE 0 LIMIT 5; REMOVE TABLE dbimp_cf"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature changefeed (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "DEFINE TABLE dbimp_cf CHANGEFEED 1h; CREATE dbimp_cf:a; SHOW CHANGES FOR TABLE dbimp_cf SINCE 0 LIMIT 5; REMOVE TABLE dbimp_cf"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "feature a function of each module (json)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [string::uppercase('a'), math::max([1, 3]), array::len([1]), time::year(d'2026-01-01'), rand::uuid::v7() != NONE, crypto::md5('a')]"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "feature a function of each module (cbor)",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/cbor"
+    ],
+    "Content-Type": [
+     "application/cbor"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "RETURN [string::uppercase('a'), math::max([1, 3]), array::len([1]), time::year(d'2026-01-01'), rand::uuid::v7() != NONE, crypto::md5('a')]"
+    ]
+   },
+   "encoding": "cbor"
+  },
+  {
+   "item": 1,
+   "name": "remove the tables",
+   "method": "POST",
+   "path": "/rpc",
+   "header": {
+    "Accept": [
+     "application/json"
+    ],
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "method": "query",
+    "params": [
+     "REMOVE TABLE IF EXISTS dbimp_people; REMOVE TABLE IF EXISTS dbimp_orders; REMOVE TABLE IF EXISTS dbimp_types; REMOVE TABLE IF EXISTS dbimp_knows"
+    ]
+   },
+   "phase": "teardown"
+  }
+ ]
+}

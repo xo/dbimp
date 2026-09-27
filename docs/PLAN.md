@@ -61,6 +61,17 @@ so on. Decisions are numbered `D1`, `D2` and so on. The two series never mix.
 | [D44](#d44-a-couchbase-string-scans-into-a-byte-slice-as-base64-decided) | A Couchbase string scans into a byte slice as base64 | Decided |
 | [D45](#d45-a-couchbase-transaction-keeps-the-context-of-begintx-decided) | A Couchbase transaction keeps the context of BeginTx | Decided |
 | [D46](#d46-the-couchbase-dsn-has-a-key-for-the-timeout-of-a-transaction-decided) | The Couchbase DSN has a key for the timeout of a transaction | Decided |
+| [D47](#d47-the-surrealdb-driver-is-named-surrealdb-decided) | The SurrealDB driver is named surrealdb | Decided |
+| [D48](#d48-the-surrealdb-url-names-the-namespace-and-the-database-in-its-path-decided) | The SurrealDB URL names the namespace and the database in its path | Decided |
+| [D49](#d49-the-surrealdb-driver-speaks-cbor-written-here-and-json-as-an-option-decided) | The SurrealDB driver speaks CBOR, written here, and JSON as an option | Decided |
+| [D50](#d50-the-surrealdb-driver-sends-each-statement-to-post-rpc-decided) | The SurrealDB driver sends each statement to POST /rpc | Decided |
+| [D51](#d51-the-surrealdb-dsn-has-the-key-auth-for-the-level-of-the-user-decided) | The SurrealDB DSN has the key auth for the level of the user | Decided |
+| [D52](#d52-each-surrealdb-statement-is-a-result-set-and-its-rows-follow-d18-decided) | Each SurrealDB statement is a result set, and its rows follow D18 | Decided |
+| [D53](#d53-the-go-types-of-surrealdb-decided) | The Go types of SurrealDB | Decided |
+| [D54](#d54-the-surrealdb-driver-has-no-transactions-decided) | The SurrealDB driver has no transactions | Decided |
+| [D55](#d55-the-errors-and-the-results-of-a-surrealdb-write-decided) | The errors and the results of a SurrealDB write | Decided |
+| [D56](#d56-a-surrealdb-query-stops-when-its-context-ends-decided) | A SurrealDB query stops when its context ends | Decided |
+| [D57](#d57-the-surrealdb-driver-exports-version-decided) | The SurrealDB driver exports Version | Decided |
 
 ### D1. The module path is github.com/xo/dbimp. Decided.
 
@@ -282,6 +293,9 @@ answer in JSON, so a binary encoding needs a reason that JSON cannot meet.
 Ask Ken before you add any package. When he approves one, add it to the
 `depguard` list in `.golangci.yml`, so that the list is the record of every
 package that the module can import.
+
+Ken approved CBOR for SurrealDB on 2026-09-27, written in the root package
+with the standard library, so it adds no package (D49).
 
 ### D14. The first drivers speak HTTP. Decided.
 
@@ -799,6 +813,206 @@ that change is part of the move of step 16 of [DRIVER.md](DRIVER.md). The
 driver keeps the default of the server for every other caller, because an
 abandoned transaction holds its state on the server until its timeout.
 
+### D47. The SurrealDB driver is named surrealdb. Decided.
+
+Ken accepted it on 2026-09-27, with D48. It follows D26 and D30, and decides
+items 1 and 2 of step 9 of [DRIVER.md](DRIVER.md) for SurrealDB. The package
+is `github.com/xo/dbimp/surrealdb`, and it registers the one name
+`surrealdb` with `database/sql`, which is the name of the database. The
+scheme of its URL is `surrealdb` (D35), and the `Driver` of the scheme in
+`dburl` and the dialect in `dbmeta` take the same name. `dburl` keeps any
+alias, such as `surreal`.
+
+### D48. The SurrealDB URL names the namespace and the database in its path. Decided.
+
+Ken decided this on 2026-09-27. It decides the form of item 3 of step 9 for
+SurrealDB. The URL is
+`surrealdb://user:pass@host:port/<namespace>/<database>`, such as
+`surrealdb://root:pw@127.0.0.1:8000/dbmeta/dbmeta`. Every request of
+SurrealDB names a namespace and a database, so the path must hold exactly
+two segments, and a URL with fewer or more is refused. A segment is decoded
+by the rules of `net/url`, so a name with a `/` is written `%2F`.
+
+The default port is 8000. The key `tls=true` makes the driver speak HTTPS on
+the same port. Whether SurrealDB serves TLS on the port that it binds is not
+measured, and step 6 measures it if `dbrun` can start it with TLS.
+The other query keys wait for the measurements of step 6, and each one is a
+decision of its own.
+
+### D49. The SurrealDB driver speaks CBOR, written here, and JSON as an option. Decided.
+
+Ken decided this on 2026-09-27, and approved CBOR for SurrealDB by D13. It
+decides item 12 of step 9 for SurrealDB.
+
+The driver sends each request and reads each response in CBOR, with
+`Content-Type` and `Accept` set to `application/cbor`. JSON writes a
+decimal, a datetime, a duration, a UUID and a record id as strings, NONE as
+null, and bytes as an array of numbers, and 2.7 writes a range as the dump
+of a Rust enum (measured on 2.7.0 and 3.3.0 on 2026-09-27). CBOR keeps each
+of them with a tag. Both SDKs of SurrealDB speak CBOR.
+
+The encoder and the decoder of CBOR are written in the root package, with
+the standard library only, so no dependency is added (D13). The decoder
+reads one item at a time, as `jsontext` does, so a result is never held in
+memory (D25). A later driver that speaks CBOR uses the same code.
+
+The DSN key `encoding=json` makes the driver speak JSON, so that a person
+can read the requests and the responses while they debug. In JSON, a value
+arrives as the JSON type that the server wrote, and the driver does not
+guess the type of a string. The default is `encoding=cbor`.
+
+### D50. The SurrealDB driver sends each statement to POST /rpc. Decided.
+
+Ken accepted this on 2026-09-27. It decides items 6 and 8 of step 9 for SurrealDB. The driver sends each
+statement as the RPC method `query`, with the text and the arguments as
+`params`, to `POST /rpc`. `POST /sql` binds a parameter of its query string
+as a string, so `$x` of `?x=5` is `"5"` (measured on 3.3.0). `/rpc` keeps the
+type of each argument (measured on 2.7.0 and 3.3.0).
+
+Each request sends `Surreal-NS` and `Surreal-DB`, from the path of the URL
+(D48).
+
+SurrealQL has named parameters only, and `$1` is a syntax error (measured on
+both releases). So `sql.Named("x", v)` binds `$x`, and a positional argument
+is an error that says to use `sql.Named`. The driver never rewrites the text
+of a statement. Ken decided the treatment of a positional argument on
+2026-09-27.
+
+The server sends the whole response at once. 3.3.0 sent a `Content-Length`
+and 2.7.0 sent chunks, and neither pages. 100000 records arrived in one body
+of 3.4 MB (measured). The driver still reads the body one item at a time as
+`Rows.Next` asks (D21 and D25).
+
+### D51. The SurrealDB DSN has the key auth for the level of the user. Decided.
+
+Ken decided this on 2026-09-27, and it adds a key to D48. The key `auth` is
+`root`, `namespace` or `database`, and the default is `root`. It says where
+the user of the URL is defined. For `database`, the driver sends the headers
+`Surreal-Auth-NS` and `Surreal-Auth-DB` with the names of the path, and for
+`namespace` it sends `Surreal-Auth-NS`.
+
+A database user is refused with HTTP 401 without those headers, and root is
+refused with HTTP 401 with them (measured on 2.7.0 and 3.3.0). So the driver
+cannot use one form for both, and it never tries a second form after a
+failure. `dbrun` writes `?auth=database` into the URL of its ordinary user.
+
+### D52. Each SurrealDB statement is a result set, and its rows follow D18. Decided.
+
+Ken accepted this on 2026-09-27. It decides items 5 and 8 of step 9 for SurrealDB. The response holds one
+result for each statement of the request, in order. Each one is a result
+set, which `Rows.NextResultSet` moves to (`driver.RowsNextResultSet`).
+
+A result becomes rows by D18. SurrealDB sends no column metadata, so rule 1
+never applies:
+
+- An array of objects is one row for each object, and the columns are the
+  keys of the first object, by rule 2. A key that a later object lacks is
+  nil. A key that only a later object has is `ErrExtraColumn`, so a
+  `SELECT *` over records with different fields fails at the first record
+  that has a new field. Naming the fields in the statement avoids it.
+- An array of other values, or of values of mixed kinds, is one column with
+  the name `""`, and one row for each value, by rule 3.
+- A result that is not an array, such as the result of `RETURN 1` or of
+  `SELECT ... FROM ONLY`, is one row. An object gives its keys as the
+  columns, and any other value gives one column with the name `""`.
+
+The server sorts the keys of every object, so `SELECT b, a` gives the
+columns `a` and `b` (measured on 2.7.0 and 3.3.0). The order of the
+statement never reaches the client, so the driver keeps the order that the
+server sends, as the Couchbase driver does on 7.2.
+
+NONE and NULL are both nil for `database/sql` (item 5). CBOR tells them
+apart (tag 6), but a caller of `database/sql` has one nil.
+
+### D53. The Go types of SurrealDB. Decided.
+
+Ken accepted this on 2026-09-27. It decides item 4 of step 9 for SurrealDB. In CBOR, the driver decodes
+each value by its tag:
+
+- An integer is an `int64`, a float is a `float64`, and a decimal (tag 10) is
+  an `*apd.Decimal` (D33).
+- A string is a `string`, a boolean is a `bool`, and bytes are `[]byte`.
+- A datetime (tags 0 and 12) is a `time.Time` in UTC, with its nanoseconds.
+- A duration (tags 13 and 14) is a `time.Duration`. A duration longer than
+  a `time.Duration` holds, about 292 years, is an error.
+- A UUID (tags 9 and 37) is a `uuid.UUID` (D25).
+- A record id (tag 8) is a `surrealdb.RecordID`, with the table and the key.
+  Its `String` method writes it as SurrealQL does, such as `person:tobie`.
+  Ken decided this on 2026-09-27.
+- An array and a set (tag 56) are `[]any`, and an object is
+  `map[string]any`.
+- A geometry (tags 88 to 94) is the `map[string]any` of its GeoJSON, as the
+  server writes it in JSON.
+- A table (tag 7), a range (tags 49 to 51), a file (tag 55) and a future (tag
+  15) are strings, in the form that SurrealQL writes them.
+- NONE (tag 6) and NULL are nil (D52).
+
+An argument is encoded the other way, so a `time.Time`, a `uuid.UUID`, a
+`RecordID` and an `*apd.Decimal` keep their types on the server.
+
+### D54. The SurrealDB driver has no transactions. Decided.
+
+Ken accepted this on 2026-09-27. It decides item 7 of step 9 for SurrealDB. `BeginTx` returns
+`ErrNotSupported`. The RPC methods `begin` and `commit` do not exist over
+HTTP, on either release, and every request is a transaction of its own
+(measured). The Go SDK refuses an interactive transaction over HTTP too.
+`BEGIN`, `COMMIT` and `CANCEL` still work inside the text of one statement,
+which is one request (measured), and D20 allows that, because the server
+runs it.
+
+### D55. The errors and the results of a SurrealDB write. Decided.
+
+Ken accepted this on 2026-09-27. It decides how the SurrealDB driver reports an error, with item 8 of step
+9.
+
+- A response with a status other than 200 is an error from `QueryContext`
+  or `ExecContext`. A parse error anywhere in the text is HTTP 400, and no
+  statement runs. A wrong password is HTTP 401 (measured).
+- An error of the RPC call, such as a parse error in `/rpc`, is HTTP 200 with
+  an `error` object, and it is an error from `QueryContext`.
+- A statement that fails is HTTP 200 with `"status": "ERR"` for that
+  statement, and the other statements still run (measured). The error
+  reaches the caller when the rows reach that result set. `ExecContext`
+  reads every result, and returns the first error.
+- `RowsAffected` and `LastInsertId` return `ErrNotSupported`. The server
+  sends no count, and a `DELETE` returns an empty array.
+
+Ken decided on 2026-09-27 that the errors take the form of the errors of the
+Couchbase driver, so that a caller such as `usql` reads both drivers in the
+same way. A failed statement, a failed RPC call, and a request that the
+server refuses with a body of JSON, such as HTTP 400, are each a
+`*ResponseError`. It holds the HTTP status, the status of the statement,
+such as `ERR`, and each `Error`, which `errors.As` finds. An `Error` is a
+value with `Code`, `Kind` and `Msg`. `Kind` is the kind that 3.x names,
+which Couchbase has no form for. A response that is neither JSON nor CBOR,
+such as the plain text of HTTP 401, is a `*dbimp.StatusError`, as in the
+Couchbase driver.
+
+### D56. A SurrealDB query stops when its context ends. Decided.
+
+Ken accepted this on 2026-09-27. It decides items 9 and 10 of step 9 for SurrealDB. The server stops a
+query when the client disconnects. `SLEEP 3s; CREATE cancel:x` was left after
+1 second, and `cancel:x` did not exist 4 seconds later, on 2.7.0 and 3.3.0
+(measured). So the driver closes the body when the context ends, as D36
+says, and sends nothing more.
+
+The driver follows no redirect, and sends the credentials only to the host of
+the URL. The server sent no redirect in any measurement.
+
+No other product speaks this interface, so the driver has no flavors (item
+11).
+
+### D57. The SurrealDB driver exports Version. Decided.
+
+Ken decided this on 2026-09-27, for step 16 of [DRIVER.md](DRIVER.md). No
+statement of SurrealQL returns the version, and only the RPC method
+`version` and `GET /version` do, for both principals (measured on 2.7.0 and
+3.3.0). The `Version` function of a driver of `usql` gets only the methods
+of a query. So the driver exports `Version(ctx, dc)`, which calls the RPC
+method `version` on a connection of the driver. A caller hands it the
+connection inside `sql.Conn.Raw`, and `usql` does that from its `Version`
+function. The driver never rewrites the text of a statement to serve it.
+
 ## Open questions
 
 Do not decide these yourself. Ask Ken.
@@ -808,6 +1022,9 @@ Do not decide these yourself. Ask Ken.
 Couchbase is first (D23). Ken will arrange the other targets after the first
 driver is complete. The review in [TARGETS.md](TARGETS.md) names a start:
 CrateDB, QuestDB, rqlite, libSQL, InfluxDB 3 and TDengine, by D17.
+
+On 2026-09-27, Ken named SurrealDB as the second target. W8 is that work.
+The targets after SurrealDB are still open.
 
 ### Q2. Which licence? Answered by D22.
 

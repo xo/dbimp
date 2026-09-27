@@ -17,8 +17,9 @@ A second goal is to reduce the dependencies of `usql`, so a driver here can
 replace a driver that `usql` imports now (D24).
 
 The repository is new. The first driver, in `couchbase/`, is a new
-Couchbase driver that replaces `xo/n1ql` (D23), and it is not yet released. The targets are in
-[docs/TARGETS.md](docs/TARGETS.md).
+Couchbase driver that replaces `xo/n1ql` (D23). It was first released in
+`v0.1.0`. The second, in `surrealdb/`, is not yet released (W8). The targets
+are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Which document to read
 
@@ -27,6 +28,7 @@ Couchbase driver that replaces `xo/n1ql` (D23), and it is not yet released. The 
 | asking why something is the way it is | the table at the top of [docs/PLAN.md](docs/PLAN.md) |
 | looking for the next piece of work | [docs/BACKLOG.md](docs/BACKLOG.md) |
 | writing the Couchbase driver | [docs/COUCHBASE.md](docs/COUCHBASE.md), then D23 and W5 |
+| writing the SurrealDB driver | [docs/SURREALDB.md](docs/SURREALDB.md), then W8 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16 and D17 in [docs/PLAN.md](docs/PLAN.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | sharing code between two drivers | [docs/DESIGN.md](docs/DESIGN.md), then D4 in [docs/PLAN.md](docs/PLAN.md). Shared code goes in the root package |
@@ -89,8 +91,9 @@ Ken.
     See D9.
 11. Register a driver from `init`, never from a test body. `go test
     -count=2` fails on a second registration, and that is why CI runs it.
-12. Ken reviews the staged changes. Stage your work and stop. Commit or push
-    only when Ken says so.
+12. Ken reviews the staged changes. Stage your work and stop. Commit, push,
+    tag or publish a release only when Ken says so, and ask again for each
+    one. Steps 18 to 20 of [docs/DRIVER.md](docs/DRIVER.md) hold the order.
 
 ## Layout
 
@@ -185,7 +188,7 @@ that `dbrun` prints. The release name has the form `<product>-<release>`:
 
 ```bash
 (cd ../dbmeta/test && go run ./cmd/dbrun start <release>)
-export <DRIVER>_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release> | jq -r '.[0].dsn')
+export <DRIVER>_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release> | jq -r '.[0].url')
 go test -race -count=1 -run Integration ./<driver>/...
 ```
 

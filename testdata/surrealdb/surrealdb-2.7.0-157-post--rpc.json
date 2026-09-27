@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_cf CHANGEFEED 1h; CREATE dbimp_cf:a; SHOW CHANGES FOR TABLE dbimp_cf SINCE 0 LIMIT 5; REMOVE TABLE dbimp_cf\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:28 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "66a5ba4d-e5ee-4ce7-83c2-f767ace58ade"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"337.851µs\"},{\"result\":[{\"id\":\"dbimp_cf:a\"}],\"status\":\"OK\",\"time\":\"448.2µs\"},{\"result\":[{\"changes\":[{\"define_table\":{\"id\":16,\"name\":\"dbimp_cf\"}}],\"versionstamp\":65536},{\"changes\":[{\"update\":{\"id\":\"dbimp_cf:a\"}}],\"versionstamp\":131072}],\"status\":\"OK\",\"time\":\"163.151µs\"},{\"result\":null,\"status\":\"OK\",\"time\":\"245.35µs\"}]}"
+  }
+}

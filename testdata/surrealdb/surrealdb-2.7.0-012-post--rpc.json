@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:o1 SET name = 'Ada', age = 36; CREATE dbimp_people:o2 SET name = 'Bo', city = 'Oslo'; SELECT * FROM dbimp_people WHERE id IN [dbimp_people:o1, dbimp_people:o2] ORDER BY id; DELETE dbimp_people:o1, dbimp_people:o2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "e37ea05a-c5a1-4694-87a3-6f61ec7ae035"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"age\":36,\"id\":\"dbimp_people:o1\",\"name\":\"Ada\"}],\"status\":\"OK\",\"time\":\"800.682µs\"},{\"result\":[{\"city\":\"Oslo\",\"id\":\"dbimp_people:o2\",\"name\":\"Bo\"}],\"status\":\"OK\",\"time\":\"154.91µs\"},{\"result\":[{\"age\":36,\"id\":\"dbimp_people:o1\",\"name\":\"Ada\"},{\"city\":\"Oslo\",\"id\":\"dbimp_people:o2\",\"name\":\"Bo\"}],\"status\":\"OK\",\"time\":\"34.609171ms\"},{\"result\":[],\"status\":\"OK\",\"time\":\"377.14µs\"}]}"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE FUNCTION OVERWRITE fn::dbimp_add($a: int, $b: int) { RETURN $a + $b; }; DEFINE PARAM OVERWRITE $dbimp_p VALUE 5; RETURN fn::dbimp_add(1, $dbimp_p); REMOVE FUNCTION fn::dbimp_add; REMOVE PARAM $dbimp_p\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "cd2e5e8c-68c2-4829-a122-a3ea8f79bd80"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:29 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"232.431µs\"},{\"result\":null,\"status\":\"OK\",\"time\":\"105.98µs\"},{\"result\":6,\"status\":\"OK\",\"time\":\"67.49µs\"},{\"result\":null,\"status\":\"OK\",\"time\":\"101.43µs\"},{\"result\":null,\"status\":\"OK\",\"time\":\"85.83µs\"}]}"
+  }
+}

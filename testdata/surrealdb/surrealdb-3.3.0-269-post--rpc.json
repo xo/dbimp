@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"INSERT INTO dbimp_people {id: 'k1', n: 1}; INSERT INTO dbimp_people {id: 'k1', n: 1} ON DUPLICATE KEY UPDATE n += 1; DELETE dbimp_people:k1\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:18 GMT"
+      ],
+      "X-Request-Id": [
+        "c1a4dfb8-d205-42e8-a28a-75edde726538"
+      ],
+      "Content-Length": [
+        "255"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_people:k1\",\"n\":1}],\"status\":\"OK\",\"time\":\"17.359001ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_people:k1\",\"n\":2}],\"status\":\"OK\",\"time\":\"17.283239ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"18.564602ms\",\"type\":null}]}"
+  }
+}

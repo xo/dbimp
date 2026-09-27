@@ -4,9 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"net/netip"
 	"net/url"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -26,6 +28,14 @@ func ParseURL(name, dsn string) (*url.URL, error) {
 		return nil, fmt.Errorf("parsing the dsn: scheme %q is not %q: %w", u.Scheme, name, ErrScheme)
 	case u.Opaque != "":
 		return nil, fmt.Errorf("parsing the dsn: %s:%s has no host: %w", u.Scheme, u.Opaque, ErrInvalidValue)
+	}
+	// net/url takes a host such as "::" and reads it as the host ":", which
+	// no URL can write back. A host with a colon is an IPv6 address, so it
+	// must parse as one.
+	if h := u.Hostname(); strings.Contains(h, ":") {
+		if _, err := netip.ParseAddr(h); err != nil {
+			return nil, fmt.Errorf("parsing the dsn: the host %q is not an IPv6 address: %w", h, ErrInvalidValue)
+		}
 	}
 	return u, nil
 }

@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s2 SCHEMALESS; DEFINE FIELD owner ON dbimp_s2 TYPE option<record<dbimp_people>> REFERENCE ON DELETE CASCADE; CREATE dbimp_people:own; CREATE dbimp_s2:a SET owner = dbimp_people:own; DELETE dbimp_people:own; SELECT * FROM dbimp_s2; REMOVE TABLE dbimp_s2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "ebc97189-fcf7-43ae-9faf-47f787eb92f4"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:21 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"27.39374ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"16.296694ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_people:own\"}],\"status\":\"OK\",\"time\":\"7.831251ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_s2:a\",\"owner\":\"dbimp_people:own\"}],\"status\":\"OK\",\"time\":\"12.905689ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"14.722211ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"143.631µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"19.464978ms\",\"type\":null}]}"
+  }
+}

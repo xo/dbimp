@@ -7,9 +7,9 @@ use them. The first drivers are for databases that take queries over HTTP.
 The drivers use the Go standard library, with
 [apd](https://github.com/cockroachdb/apd) for decimals, and need no cgo.
 
-The repository is new. It holds one driver, for Couchbase, which is not yet
-released. [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to
-support.
+The repository is new. It holds two drivers: `couchbase`, which was first
+released in `v0.1.0`, and `surrealdb`, which is not yet released.
+[docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support.
 
 ## Use
 
@@ -42,4 +42,5 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/DRIVER.md](docs/DRIVER.md) | Every step to add a driver, in order |
 | [docs/DESIGN.md](docs/DESIGN.md) | The design of the code that every driver shares |
 | [docs/COUCHBASE.md](docs/COUCHBASE.md) | What is measured about the Couchbase query service |
+| [docs/SURREALDB.md](docs/SURREALDB.md) | What is known about the HTTP interface of SurrealDB |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |

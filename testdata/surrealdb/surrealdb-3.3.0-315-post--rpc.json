@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_cf CHANGEFEED 1h; CREATE dbimp_cf:a; SHOW CHANGES FOR TABLE dbimp_cf SINCE 0 LIMIT 5; REMOVE TABLE dbimp_cf\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "X-Request-Id": [
+        "cc8197f0-9ef0-4d4a-abcb-6a3bae40c9d0"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:24 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"14.338145ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_cf:a\"}],\"status\":\"OK\",\"time\":\"18.279672ms\",\"type\":null},{\"result\":[{\"changes\":[{\"define_table\":{\"changefeed\":{\"expiry\":\"1h\",\"original\":false},\"drop\":false,\"id\":25,\"kind\":{\"kind\":\"ANY\"},\"name\":\"dbimp_cf\",\"permissions\":{\"create\":false,\"delete\":false,\"select\":false,\"update\":false},\"schemafull\":false}}],\"versionstamp\":117342543973449728},{\"changes\":[{\"update\":{\"id\":\"dbimp_cf:a\"}}],\"versionstamp\":117342543974825984},{\"changes\":[{\"define_table\":{\"changefeed\":{\"expiry\":\"1h\",\"original\":false},\"drop\":false,\"id\":26,\"kind\":{\"kind\":\"ANY\"},\"name\":\"dbimp_cf\",\"permissions\":{\"create\":false,\"delete\":false,\"select\":false,\"update\":false},\"schemafull\":false}}],\"versionstamp\":117342543979806720},{\"changes\":[{\"update\":{\"id\":\"dbimp_cf:a\"}}],\"versionstamp\":117342543980986368},{\"changes\":[{\"define_table\":{\"changefeed\":{\"expiry\":\"1h\",\"original\":false},\"drop\":false,\"id\":43,\"kind\":{\"kind\":\"ANY\"},\"name\":\"dbimp_cf\",\"permissions\":{\"create\":false,\"delete\":false,\"select\":false,\"update\":false},\"schemafull\":false}}],\"versionstamp\":117342544927195136}],\"status\":\"OK\",\"time\":\"167.331µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"19.036003ms\",\"type\":null}]}"
+  }
+}

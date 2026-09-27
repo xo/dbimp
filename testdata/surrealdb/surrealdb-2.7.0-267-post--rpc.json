@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:r1, dbimp_people:r2; RELATE dbimp_people:r1->dbimp_knows->dbimp_people:r2 SET since = 2020; SELECT ->dbimp_knows->dbimp_people AS friends FROM dbimp_people:r1; INSERT RELATION INTO dbimp_knows {in: dbimp_people:r2, out: dbimp_people:r1}; DELETE dbimp_knows; DELETE dbimp_people:r1, dbimp_people:r2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:33 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Request-Id": [
+        "00aa0415-786d-4117-bf6e-b216c7f0c7dd"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_people:r1\"},{\"id\":\"dbimp_people:r2\"}],\"status\":\"OK\",\"time\":\"307.37µs\"},{\"result\":[{\"id\":\"dbimp_knows:fds27k7524k3tqp4q3pb\",\"in\":\"dbimp_people:r1\",\"out\":\"dbimp_people:r2\",\"since\":2020}],\"status\":\"OK\",\"time\":\"110.48µs\"},{\"result\":[{\"friends\":[\"dbimp_people:r2\"]}],\"status\":\"OK\",\"time\":\"291.411µs\"},{\"result\":[{\"id\":\"dbimp_knows:fi571f90a293vevsm8pw\",\"in\":\"dbimp_people:r2\",\"out\":\"dbimp_people:r1\"}],\"status\":\"OK\",\"time\":\"255.59µs\"},{\"result\":[],\"status\":\"OK\",\"time\":\"194.991µs\"},{\"result\":[],\"status\":\"OK\",\"time\":\"428.16µs\"}]}"
+  }
+}

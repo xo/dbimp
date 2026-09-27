@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"SELECT * FROM dbimp_orders LIMIT 3\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Request-Id": [
+        "1cff902b-54d0-4b20-94d6-0cc8bc0e6c2a"
+      ],
+      "Content-Length": [
+        "200"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:03 GMT"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_orders:000kayv4vrqwrsqjnj4b\"},{\"id\":\"dbimp_orders:003y236wp0yw34117b80\"},{\"id\":\"dbimp_orders:00dokrjzb31iyxx806pg\"}],\"status\":\"OK\",\"time\":\"214.071µs\",\"type\":null}]}"
+  }
+}

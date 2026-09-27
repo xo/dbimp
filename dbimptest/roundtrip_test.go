@@ -72,14 +72,32 @@ func (c memConn) Prepare(string) (driver.Stmt, error) { return nil, dbimp.ErrNot
 func (c memConn) Close() error                        { return nil }
 func (c memConn) Begin() (driver.Tx, error)           { return nil, dbimp.ErrNotSupported }
 
-// keyArg returns argument i as a key.
-func keyArg(args []driver.NamedValue, i int) (string, error) {
-	if i >= len(args) {
-		return "", fmt.Errorf("the store needs argument %d", i)
+// arg returns the argument with the name name, if the arguments have names,
+// and argument i otherwise.
+func arg(args []driver.NamedValue, i int, name string) (driver.NamedValue, error) {
+	if len(args) > 0 && args[0].Name != "" {
+		for _, a := range args {
+			if a.Name == name {
+				return a, nil
+			}
+		}
+		return driver.NamedValue{}, fmt.Errorf("the store needs the argument %s", name)
 	}
-	key, ok := args[i].Value.(string)
+	if i >= len(args) {
+		return driver.NamedValue{}, fmt.Errorf("the store needs argument %d", i)
+	}
+	return args[i], nil
+}
+
+// keyArg returns argument i, or the argument named key, as a key.
+func keyArg(args []driver.NamedValue, i int) (string, error) {
+	a, err := arg(args, i, "key")
+	if err != nil {
+		return "", err
+	}
+	key, ok := a.Value.(string)
 	if !ok {
-		return "", fmt.Errorf("the key is a %T, want a string", args[i].Value)
+		return "", fmt.Errorf("the key is a %T, want a string", a.Value)
 	}
 	return key, nil
 }
@@ -98,7 +116,11 @@ func (c memConn) ExecContext(ctx context.Context, query string, args []driver.Na
 		if err != nil {
 			return nil, err
 		}
-		c.s.write(key, args[1].Value, false)
+		v, err := arg(args, 1, "value")
+		if err != nil {
+			return nil, err
+		}
+		c.s.write(key, v.Value, false)
 	case strings.HasPrefix(query, "LITERAL "):
 		f := strings.Fields(query)
 		v, err := strconv.ParseInt(f[2], 10, 64)
@@ -111,7 +133,11 @@ func (c memConn) ExecContext(ctx context.Context, query string, args []driver.Na
 		if err != nil {
 			return nil, err
 		}
-		c.s.write(key, args[0].Value, false)
+		v, err := arg(args, 0, "value")
+		if err != nil {
+			return nil, err
+		}
+		c.s.write(key, v.Value, false)
 	case query == "DELETE":
 		key, err := keyArg(args, 0)
 		if err != nil {
@@ -217,6 +243,19 @@ func TestRoundTripPassesAStoreThatKeepsValues(t *testing.T) {
 	db := openMem(&memStore{})
 	defer db.Close()
 	dbimptest.RoundTrip(t, db, memCase())
+}
+
+// A database with named parameters only gets the key and the value by name,
+// and the key in the form of KeyArg.
+func TestRoundTripNamed(t *testing.T) {
+	db := openMem(&memStore{})
+	defer db.Close()
+	c := memCase()
+	c.Named = true
+	c.KeyArg = func(key string) any { return "record:" + key }
+	literal := c.Literal
+	c.Literal = func(key string, v any) (string, error) { return literal("record:"+key, v) }
+	dbimptest.RoundTrip(t, db, c)
 }
 
 func TestRoundTripWaitsForALateWrite(t *testing.T) {

@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/signin",
+    "header": {
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"ns\":\"dbmeta\",\"db\":\"dbmeta\",\"user\":\"dbmeta_user\",\"pass\":\"wrong-on-purpose\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "X-Request-Id": [
+        "891e35ae-11a6-4ca3-872e-597c9da4dd26"
+      ],
+      "Content-Length": [
+        "213"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:20 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ]
+    },
+    "body": "{\"code\":401,\"details\":\"Authentication failed\",\"description\":\"Your authentication details are invalid. Reauthenticate using valid authentication parameters.\",\"information\":\"There was a problem with authentication\"}"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:o1 SET name = 'Ada', age = 36; CREATE dbimp_people:o2 SET name = 'Bo', city = 'Oslo'; SELECT * FROM dbimp_people WHERE id IN [dbimp_people:o1, dbimp_people:o2] ORDER BY id; DELETE dbimp_people:o1, dbimp_people:o2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Content-Length": [
+        "447"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:16 GMT"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "7d252501-d2cc-4abf-8cbb-d4751244929d"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"age\":36,\"id\":\"dbimp_people:o1\",\"name\":\"Ada\"}],\"status\":\"OK\",\"time\":\"10.738245ms\",\"type\":null},{\"result\":[{\"city\":\"Oslo\",\"id\":\"dbimp_people:o2\",\"name\":\"Bo\"}],\"status\":\"OK\",\"time\":\"14.630312ms\",\"type\":null},{\"result\":[{\"age\":36,\"id\":\"dbimp_people:o1\",\"name\":\"Ada\"},{\"city\":\"Oslo\",\"id\":\"dbimp_people:o2\",\"name\":\"Bo\"}],\"status\":\"OK\",\"time\":\"198.12µs\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"13.125148ms\",\"type\":null}]}"
+  }
+}

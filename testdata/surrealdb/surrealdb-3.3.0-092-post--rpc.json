@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"BEGIN; CREATE dbimp_people:txf SET v = 1; THROW 'no'; COMMIT; SELECT * FROM dbimp_people:txf\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "X-Request-Id": [
+        "5d3b3a71-b33e-4963-87ef-04d7677405c3"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:07 GMT"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"0ns\",\"type\":null},{\"details\":{\"kind\":\"NotExecuted\"},\"kind\":\"Query\",\"result\":\"The query was not executed due to a failed transaction\",\"status\":\"ERR\",\"time\":\"146.91µs\",\"type\":null},{\"kind\":\"Thrown\",\"result\":\"An error occurred: no\",\"status\":\"ERR\",\"time\":\"28.04µs\",\"type\":null},{\"details\":{\"kind\":\"NotExecuted\"},\"kind\":\"Query\",\"result\":\"Cannot COMMIT: the transaction was aborted due to a prior error\",\"status\":\"ERR\",\"time\":\"0ns\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"71.04µs\",\"type\":null}]}"
+  }
+}

@@ -27,7 +27,7 @@ not start a container by hand (D9).
 
 ```bash
 (cd ../dbmeta/test && go run ./cmd/dbrun start <release>)
-export <DRIVER>_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release> | jq -r '.[0].dsn')
+export <DRIVER>_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release> | jq -r '.[0].url')
 go test -race -count=1 -run Integration ./<driver>/...
 ```
 

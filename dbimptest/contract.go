@@ -38,6 +38,17 @@ type Contract struct {
 	// Transactions is true if the driver supports transactions. If it is
 	// false, BeginTx must return dbimp.ErrNotSupported (D20).
 	Transactions bool
+	// ContentType is the content type of the bodies of the cases, such as
+	// "application/cbor". It is "application/json" when it is empty.
+	ContentType string
+}
+
+// contentType returns the content type of the bodies of c.
+func (c Contract) contentType() string {
+	if c.ContentType == "" {
+		return "application/json"
+	}
+	return c.ContentType
 }
 
 // ColumnsCase is a result and the names of its columns, in order.
@@ -76,7 +87,7 @@ const streamBytes = 64 << 20
 func RunContract(t *testing.T, c Contract) {
 	t.Helper()
 	t.Run("columns keep their order", func(t *testing.T) {
-		db := open(t, c, serve(c.Columns.Body))
+		db := open(t, c, serve(c.Columns.Body, c.contentType()))
 		rows := query(t, db, c.Query)
 		cols, err := rows.Columns()
 		if err != nil {
@@ -87,11 +98,11 @@ func RunContract(t *testing.T, c Contract) {
 		}
 	})
 	t.Run("a NULL is nil", func(t *testing.T) {
-		db := open(t, c, serve(c.Null.Body))
+		db := open(t, c, serve(c.Null.Body, c.contentType()))
 		checkNull(t, db, c)
 	})
 	t.Run("an error after rows reaches the caller", func(t *testing.T) {
-		db := open(t, c, serve(c.ErrorAfterRows.Body))
+		db := open(t, c, serve(c.ErrorAfterRows.Body, c.contentType()))
 		rows := query(t, db, c.Query)
 		n := 0
 		for rows.Next() {
@@ -105,7 +116,7 @@ func RunContract(t *testing.T, c Contract) {
 		}
 	})
 	t.Run("close before the end reads nothing more", func(t *testing.T) {
-		h := newStreamHandler(c.Stream, nil)
+		h := newStreamHandler(c.Stream, c.contentType(), nil)
 		db := open(t, c, h)
 		rows := query(t, db, c.Query)
 		if !rows.Next() {
@@ -125,7 +136,7 @@ func RunContract(t *testing.T, c Contract) {
 	})
 	t.Run("a cancelled context stops the read", func(t *testing.T) {
 		wait := make(chan struct{})
-		h := newStreamHandler(c.Stream, wait)
+		h := newStreamHandler(c.Stream, c.contentType(), wait)
 		db := open(t, c, h)
 		ctx, cancel := context.WithCancel(t.Context())
 		defer cancel()
@@ -191,7 +202,7 @@ func RunContract(t *testing.T, c Contract) {
 		if c.Transactions {
 			t.Skip("the driver supports transactions")
 		}
-		db := open(t, c, serve(c.Columns.Body))
+		db := open(t, c, serve(c.Columns.Body, c.contentType()))
 		tx, err := db.BeginTx(t.Context(), nil)
 		if err == nil {
 			_ = tx.Rollback()
@@ -271,11 +282,12 @@ func checkNull(t *testing.T, db *sql.DB, c Contract) {
 	}
 }
 
-// serve returns a handler that answers every request with body.
-func serve(body string) http.Handler {
+// serve returns a handler that answers every request with body, of the
+// content type contentType.
+func serve(body, contentType string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.Copy(io.Discard, r.Body)
-		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Content-Type", contentType)
 		_, _ = io.WriteString(w, body)
 	})
 }
@@ -283,6 +295,7 @@ func serve(body string) http.Handler {
 // streamHandler sends a result of about 64 MiB, and counts what it wrote.
 type streamHandler struct {
 	c       StreamCase
+	ctype   string
 	wait    chan struct{}
 	n       int
 	total   int64
@@ -292,10 +305,11 @@ type streamHandler struct {
 
 // newStreamHandler returns a streamHandler. If wait is not nil, the handler
 // sends the first row, then waits until wait closes or the request ends.
-func newStreamHandler(c StreamCase, wait chan struct{}) *streamHandler {
+func newStreamHandler(c StreamCase, contentType string, wait chan struct{}) *streamHandler {
 	n := streamBytes / (len(c.Row) + len(c.Sep))
 	return &streamHandler{
 		c:     c,
+		ctype: contentType,
 		wait:  wait,
 		n:     n,
 		total: int64(len(c.Head) + n*len(c.Row) + (n-1)*len(c.Sep) + len(c.Tail)),
@@ -306,7 +320,7 @@ func newStreamHandler(c StreamCase, wait chan struct{}) *streamHandler {
 func (h *streamHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer close(h.done)
 	_, _ = io.Copy(io.Discard, r.Body)
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", h.ctype)
 	flusher, _ := w.(http.Flusher)
 	write := func(s string) bool {
 		n, err := io.WriteString(w, s)

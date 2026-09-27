@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:o1 SET name = 'Ada', age = 36; CREATE dbimp_people:o2 SET name = 'Bo', city = 'Oslo'; SELECT * FROM dbimp_people WHERE id IN [dbimp_people:o1, dbimp_people:o2] ORDER BY id; DELETE dbimp_people:o1, dbimp_people:o2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:03 GMT"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Content-Length": [
+        "448"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "X-Request-Id": [
+        "ce68de63-0fed-4fd9-b7b6-6254248ce51b"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"age\":36,\"id\":\"dbimp_people:o1\",\"name\":\"Ada\"}],\"status\":\"OK\",\"time\":\"17.088778ms\",\"type\":null},{\"result\":[{\"city\":\"Oslo\",\"id\":\"dbimp_people:o2\",\"name\":\"Bo\"}],\"status\":\"OK\",\"time\":\"14.438235ms\",\"type\":null},{\"result\":[{\"age\":36,\"id\":\"dbimp_people:o1\",\"name\":\"Ada\"},{\"city\":\"Oslo\",\"id\":\"dbimp_people:o2\",\"name\":\"Bo\"}],\"status\":\"OK\",\"time\":\"353.281µs\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"11.779529ms\",\"type\":null}]}"
+  }
+}

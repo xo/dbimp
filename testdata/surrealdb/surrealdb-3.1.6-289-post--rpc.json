@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s8 SCHEMALESS; DEFINE INDEX v ON dbimp_s8 FIELDS e HNSW DIMENSION 2 DIST EUCLIDEAN; CREATE dbimp_s8:a SET e = [0, 0]; CREATE dbimp_s8:b SET e = [5, 5]; SELECT id FROM dbimp_s8 WHERE e <|1,40|> [1, 1]; REMOVE TABLE dbimp_s8\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Content-Length": [
+        "459"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "391944d4-cd8e-4f84-aaee-43b6ef2d0fbd"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"32.373547ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"211.844121ms\",\"type\":null},{\"result\":[{\"e\":[0,0],\"id\":\"dbimp_s8:a\"}],\"status\":\"OK\",\"time\":\"17.513847ms\",\"type\":null},{\"result\":[{\"e\":[5,5],\"id\":\"dbimp_s8:b\"}],\"status\":\"OK\",\"time\":\"30.501974ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_s8:a\"}],\"status\":\"OK\",\"time\":\"268.761µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"7.00959ms\",\"type\":null}]}"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN [(1.5, 2.5), {type: 'LineString', coordinates: [[0, 0], [1, 1]]}, {type: 'Polygon', coordinates: [[[0, 0], [1, 0], [1, 1], [0, 0]]]}, {type: 'MultiPoint', coordinates: [[0, 0], [1, 1]]}, {type: 'GeometryCollection', geometries: [{type: 'Point', coordinates: [1, 2]}]}]\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb/3.2.4+20260803.93ab219"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:25 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Content-Length": [
+        "390"
+      ],
+      "X-Request-Id": [
+        "6d29fb33-620c-4b07-a00c-6f41800f6086"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"coordinates\":[1.5,2.5],\"type\":\"Point\"},{\"coordinates\":[[0.0,0.0],[1.0,1.0]],\"type\":\"LineString\"},{\"coordinates\":[[[0.0,0.0],[1.0,0.0],[1.0,1.0],[0.0,0.0]]],\"type\":\"Polygon\"},{\"coordinates\":[[0.0,0.0],[1.0,1.0]],\"type\":\"MultiPoint\"},{\"geometries\":[{\"coordinates\":[1.0,2.0],\"type\":\"Point\"}],\"type\":\"GeometryCollection\"}],\"status\":\"OK\",\"time\":\"26.791µs\",\"type\":null}]}"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN [(1.5, 2.5), {type: 'LineString', coordinates: [[0, 0], [1, 1]]}, {type: 'Polygon', coordinates: [[[0, 0], [1, 0], [1, 1], [0, 0]]]}, {type: 'MultiPoint', coordinates: [[0, 0], [1, 1]]}, {type: 'GeometryCollection', geometries: [{type: 'Point', coordinates: [1, 2]}]}]\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Surreal-Version": [
+        "surrealdb-2.7.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "X-Request-Id": [
+        "a1ecfabf-09de-4a02-bde4-742dbe7c8c76"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"type\":\"Point\",\"coordinates\":[1.5,2.5]},{\"type\":\"LineString\",\"coordinates\":[[0.0,0.0],[1.0,1.0]]},{\"type\":\"Polygon\",\"coordinates\":[[[0.0,0.0],[1.0,0.0],[1.0,1.0],[0.0,0.0]]]},{\"type\":\"MultiPoint\",\"coordinates\":[[0.0,0.0],[1.0,1.0]]},{\"type\":\"GeometryCollection\",\"geometries\":[{\"type\":\"Point\",\"coordinates\":[1.0,2.0]}]}],\"status\":\"OK\",\"time\":\"44.69µs\"}]}"
+  }
+}

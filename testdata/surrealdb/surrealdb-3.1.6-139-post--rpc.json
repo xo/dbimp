@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"LIVE SELECT * FROM dbimp_people\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Request-Id": [
+        "984bf642-9db8-43d4-8efb-f44ee4924b1f"
+      ],
+      "Content-Length": [
+        "175"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:15 GMT"
+      ],
+      "Server": [
+        "SurrealDB"
+      ]
+    },
+    "body": "{\"result\":[{\"details\":{\"kind\":\"LiveQueryNotSupported\"},\"kind\":\"Configuration\",\"result\":\"Unable to perform the realtime query\",\"status\":\"ERR\",\"time\":\"43.03µs\",\"type\":\"live\"}]}"
+  }
+}

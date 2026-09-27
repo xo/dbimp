@@ -21,9 +21,11 @@ permissions:
   contents: read
 
 env:
-  # ec91128 or later: 2b93710 holds the ordinary Couchbase user (dbmeta D96),
-  # and ec91128 gives each server an owner (dbmeta D98).
-  DBMETA_COMMIT: ec911287f0052189d45fc9d0a8991a0c5bce5e65
+  # 78f1e44 or later: 2b93710 holds the ordinary Couchbase user (dbmeta D96),
+  # ec91128 gives each server an owner (dbmeta D98), eb35c7c prints the URL
+  # of each principal (dbmeta D102), and 78f1e44 starts SurrealDB with its
+  # ordinary user (dbmeta D103).
+  DBMETA_COMMIT: 78f1e44d7857ee107ae0ce779de4df38c2f92c5b
   DBMETA_OWNER: dbimp-ci
   DBMETA_RUNNER: docker
 
@@ -118,20 +120,15 @@ jobs:
         run: go run ./cmd/dbrun start ${{ matrix.release }}
       # The url field is the DSN of the driver, the scheme of which is the
       # name of the driver (D27). <PRODUCT>_DSN is the administrator, and
-      # <PRODUCT>_ORDINARY_DSN is the ordinary user that dbmeta makes (D9).
+      # <PRODUCT>_ORDINARY_DSN is the ordinary user that dbmeta makes (D9),
+      # which dbrun names with the role "user" (dbmeta D102).
       - name: Test
         run: |
           info=$(cd dbmeta/test && go run ./cmd/dbrun dsn --json ${{ matrix.release }})
           product=$(echo "$info" | jq -r '.[0].product')
-          dsn=$(echo "$info" | jq -r '.[0].url')
-          case "$product" in
-            couchbase) ordinary=dbmeta_user ;;
-          esac
           prefix=$(echo "$product" | tr '[:lower:]' '[:upper:]')
-          export "${prefix}_DSN=$dsn"
-          if [ -n "$ordinary" ]; then
-            export "${prefix}_ORDINARY_DSN=$(echo "$dsn" | sed -E "s#://[^:@/]+:#://$ordinary:#")"
-          fi
+          export "${prefix}_DSN=$(echo "$info" | jq -r '.[0].url')"
+          export "${prefix}_ORDINARY_DSN=$(echo "$info" | jq -r '[.[0].principals[]? | select(.role == "user") | .url][0] // empty')"
           go test -race -count=1 -run Integration -v "./$product/..."
       - name: Logs
         if: failure()

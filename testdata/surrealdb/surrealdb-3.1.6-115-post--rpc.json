@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"DEFINE TABLE dbimp_s1 SCHEMAFULL; DEFINE FIELD name ON dbimp_s1 TYPE string; DEFINE FIELD age ON dbimp_s1 TYPE int DEFAULT 0 ASSERT $value >= 0; CREATE dbimp_s1:a SET name = 'x'; CREATE dbimp_s1:b SET name = 1; CREATE dbimp_s1:c SET name = 'y', age = -1; SELECT * FROM dbimp_s1; REMOVE TABLE dbimp_s1\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "3b1743ed-033a-47d0-90cf-96d7fa294284"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:34:12 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.1.6+20260813.cfbaec4"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "mcp-session-id,mcp-protocol-version"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":null,\"status\":\"OK\",\"time\":\"31.849735ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"18.884977ms\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"12.751998ms\",\"type\":null},{\"result\":[{\"age\":0,\"id\":\"dbimp_s1:a\",\"name\":\"x\"}],\"status\":\"OK\",\"time\":\"10.538415ms\",\"type\":null},{\"kind\":\"Internal\",\"result\":\"Couldn't coerce value for field `name` of `dbimp_s1:b`: Expected `string` but found `1`\",\"status\":\"ERR\",\"time\":\"129.64µs\",\"type\":null},{\"kind\":\"Internal\",\"result\":\"Found -1 for field `age`, with record `dbimp_s1:c`, but field must conform to: $value >= 0\",\"status\":\"ERR\",\"time\":\"26.28µs\",\"type\":null},{\"result\":[{\"age\":0,\"id\":\"dbimp_s1:a\",\"name\":\"x\"}],\"status\":\"OK\",\"time\":\"132.91µs\",\"type\":null},{\"result\":null,\"status\":\"OK\",\"time\":\"17.856755ms\",\"type\":null}]}"
+  }
+}

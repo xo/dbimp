@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Ns": [
+        "dbmeta"
+      ],
+      "Surreal-Auth-Db": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"CREATE dbimp_people:r1, dbimp_people:r2; RELATE dbimp_people:r1->dbimp_knows->dbimp_people:r2 SET since = 2020; SELECT ->dbimp_knows->dbimp_people AS friends FROM dbimp_people:r1; INSERT RELATION INTO dbimp_knows {in: dbimp_people:r2, out: dbimp_people:r1}; DELETE dbimp_knows; DELETE dbimp_people:r1, dbimp_people:r2\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "b6011278-c983-45fd-8c03-1e56c11f205f"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:18 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ],
+      "Server": [
+        "SurrealDB"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers",
+        "accept-encoding"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[{\"id\":\"dbimp_people:r1\"},{\"id\":\"dbimp_people:r2\"}],\"status\":\"OK\",\"time\":\"15.646867ms\",\"type\":null},{\"result\":[{\"id\":\"dbimp_knows:3g7o59e19crr46b3d54q\",\"in\":\"dbimp_people:r1\",\"out\":\"dbimp_people:r2\",\"since\":2020}],\"status\":\"OK\",\"time\":\"26.201446ms\",\"type\":null},{\"result\":[{\"friends\":[\"dbimp_people:r2\"]}],\"status\":\"OK\",\"time\":\"389.45µs\",\"type\":null},{\"result\":[{\"id\":\"dbimp_knows:xn0zmwnsrqzk6sxswvm9\",\"in\":\"dbimp_people:r2\",\"out\":\"dbimp_people:r1\"}],\"status\":\"OK\",\"time\":\"37.721795ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"33.965179ms\",\"type\":null},{\"result\":[],\"status\":\"OK\",\"time\":\"28.448179ms\",\"type\":null}]}"
+  }
+}

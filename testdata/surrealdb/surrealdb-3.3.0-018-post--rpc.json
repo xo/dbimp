@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/rpc",
+    "header": {
+      "Surreal-Db": [
+        "dbmeta"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Surreal-Ns": [
+        "dbmeta"
+      ]
+    },
+    "body": "{\"method\":\"query\",\"params\":[\"RETURN [9223372036854775807, -9223372036854775808, 0.1, 1.5e300, 1.23456789012345678901234567890dec, 100dec, d'2026-09-27T10:00:00.123456789Z', 1h30m, 1y2w3d, u'0192f1c4-3b5e-7a2c-9f00-000000000001', <bytes>'hi', dbimp_people:tobie, dbimp_people:['a', 1], dbimp_people:{a: 1}, dbimp_people:123, <set>[3, 1, 2], (1.5, 2.5), 1..5, NONE, NULL, true, 's', type::table('dbimp_people')]\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "SurrealDB"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "440"
+      ],
+      "Vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Expose-Headers": [
+        "retry-after,mcp-session-id,mcp-protocol-version"
+      ],
+      "X-Request-Id": [
+        "ae0ee272-22b8-438e-8c10-d99f0f1cab4c"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 10:35:03 GMT"
+      ],
+      "Surreal-Version": [
+        "surrealdb/3.3.0"
+      ]
+    },
+    "body": "{\"result\":[{\"result\":[9223372036854775807,-9223372036854775808,0.1,1.5e+300,\"1.2345678901234567890123456789\",\"100\",\"2026-09-27T10:00:00.123456789Z\",\"1h30m\",\"1y2w3d\",\"0192f1c4-3b5e-7a2c-9f00-000000000001\",[104,105],\"dbimp_people:tobie\",\"dbimp_people:['a', 1]\",\"dbimp_people:{ a: 1 }\",\"dbimp_people:123\",[1,2,3],{\"coordinates\":[1.5,2.5],\"type\":\"Point\"},\"1..5\",null,null,true,\"s\",\"dbimp_people\"],\"status\":\"OK\",\"time\":\"173.26µs\",\"type\":null}]}"
+  }
+}
