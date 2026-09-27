@@ -72,6 +72,8 @@ so on. Decisions are numbered `D1`, `D2` and so on. The two series never mix.
 | [D55](#d55-the-errors-and-the-results-of-a-surrealdb-write-decided) | The errors and the results of a SurrealDB write | Decided |
 | [D56](#d56-a-surrealdb-query-stops-when-its-context-ends-decided) | A SurrealDB query stops when its context ends | Decided |
 | [D57](#d57-the-surrealdb-driver-exports-version-decided) | The SurrealDB driver exports Version | Decided |
+| [D58](#d58-a-graph-query-language-that-a-person-types-meets-s-decided) | A graph query language that a person types meets S | Decided |
+| [D59](#d59-neo4j-runs-as-enterprise-edition-under-the-evaluation-agreement-decided) | Neo4j runs as Enterprise Edition under the evaluation agreement | Decided |
 
 ### D1. The module path is github.com/xo/dbimp. Decided.
 
@@ -1013,6 +1015,33 @@ method `version` on a connection of the driver. A caller hands it the
 connection inside `sql.Conn.Raw`, and `usql` does that from its `Version`
 function. The driver never rewrites the text of a statement to serve it.
 
+### D58. A graph query language that a person types meets S. Decided.
+
+Ken decided this on 2026-09-27, and it amends S of D16. A query language for
+graphs that a person types by hand, with clauses such as `MATCH`, `WHERE` and
+`RETURN`, meets S, as Cypher does. So Neo4j is P1 by D17. Each later target
+of this kind, such as ArangoDB with AQL, is still judged on its own in step 2
+of [DRIVER.md](DRIVER.md).
+
+### D59. Neo4j runs as Enterprise Edition under the evaluation agreement. Decided.
+
+Ken decided this on 2026-09-27, in step 4 of [DRIVER.md](DRIVER.md). The
+Community Edition has no roles, and "all users have implied administrator
+privileges" (the Operations Manual of Neo4j, read on 2026-09-27), so it has
+no ordinary user (D31). The Enterprise Edition has roles. Its image starts
+only with `NEO4J_ACCEPT_LICENSE_AGREEMENT`, which is `yes` for a commercial
+licence, or `eval` for the Neo4j Software Evaluation Agreement (read in the
+entrypoint of `neo4j/docker-neo4j` on 2026-09-27).
+
+Ken accepted the evaluation agreement for the servers that `dbrun` starts,
+including in CI. The agreement grants a licence for 30 days, for internal
+development use only, and Neo4j collects data about the use of the software
+unless a setting turns that off (read on 2026-09-27). The `dbmeta` session
+records the acceptance in its own decision, as dbmeta D76 does for SAP HANA.
+
+The image of 4.4 takes only `yes`, so 4.4 cannot run this way, and it is not
+tested.
+
 ## Open questions
 
 Do not decide these yourself. Ask Ken.
@@ -1024,7 +1053,8 @@ driver is complete. The review in [TARGETS.md](TARGETS.md) names a start:
 CrateDB, QuestDB, rqlite, libSQL, InfluxDB 3 and TDengine, by D17.
 
 On 2026-09-27, Ken named SurrealDB as the second target. W8 is that work.
-The targets after SurrealDB are still open.
+The same day, he named Neo4j as the third. W9 is that work. The targets
+after Neo4j are still open.
 
 ### Q2. Which licence? Answered by D22.
 

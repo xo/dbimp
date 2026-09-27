@@ -31,7 +31,8 @@ session measured on the Couchbase query service. W6 came from the advice of
 the `dbmeta` session on `docs/DRIVER.md`. W7 came from Ken on 2026-09-27,
 who asked that every driver test CRUD, the features of its database and
 every native type, after it asks two models what they are. W8 came from Ken
-on 2026-09-27, who named SurrealDB as the second target.
+on 2026-09-27, who named SurrealDB as the second target, and W9 from Ken the
+same day, who named Neo4j as the third.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -319,3 +320,35 @@ release that holds the driver, and each names that tag:
    shows each one.
 3. `dbmeta`: nothing to change now. Its entry already holds what the tests
    need. A model for SurrealDB is a question for Ken.
+
+Ken committed steps 1 to 17 on 2026-09-27 as `bd0f165`, and the workflow
+passed on it, with 2.7.0 and 3.3.0 as both principals:
+https://github.com/xo/dbimp/actions/runs/36316196918. That is the gate of
+step 18. Steps 19 and 20 wait for Ken.
+
+## W9. Write the Neo4j driver
+
+Ken named Neo4j as the third target on 2026-09-27 (Q1 in
+[PLAN.md](PLAN.md)). Cypher meets S by D58, so it is P1. `dbrun` runs the
+Enterprise Edition under the evaluation agreement (D59). Follow
+[DRIVER.md](DRIVER.md).
+
+`dburl` has no scheme for Neo4j, and `usql` has no driver for it. The
+`dbmeta` session was asked for the entry of step 4 on 2026-09-27, with the
+facts below, which this session read and did not measure:
+
+- The image is `docker.io/library/neo4j`, and each release has a tag with
+  `-enterprise`. On 2026-09-27 three lines were rebuilt that month: 4.4
+  (4.4.48), 5.26, the release of long term support (5.26.31), and the
+  monthly releases, the newest 2026.09.0. The support page of Neo4j gives
+  5.26 hotfixes until 2028-06-06, gives each monthly release hotfixes until
+  the next one, and ended the support of 4.4 on 2025-11-30.
+- 4.4 cannot run under the evaluation agreement (D59), so the floor is 5.26
+  and the ceiling is the newest monthly release.
+- The HTTP interface is on port 7474. Bolt, on port 7687, is not HTTP.
+- In the Community Edition every user is an administrator. The Enterprise
+  Edition has the roles `PUBLIC`, which every user holds, `reader`, `editor`,
+  `publisher`, `architect` and `admin` (the Operations Manual of Neo4j, read
+  on 2026-09-27). `publisher` reads, writes, and makes new labels, property
+  keys and types of relationship, and cannot make an index or a constraint,
+  so it is the proposal for the ordinary user.

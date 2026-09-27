@@ -111,6 +111,7 @@ cloud service fails R for good, unless an emulator exists. Every target that
 | Apache Druid | The quickstart runs in one container, but it can exceed the 4 GB limit of `dbmeta`. Measure that before R counts. |
 | Elasticsearch and OpenSearch | Only through `_sql`, which pages with a cursor. The Query DSL and ES\|QL fail S. |
 | SurrealDB | The second target (W8). The driver is `github.com/xo/dbimp/surrealdb`. R: yes, `dbrun` starts 2.7.0, 3.1.6, 3.2.4 and 3.3.0 (dbmeta D103). H: yes, `POST /rpc` on port 8000. S: yes, SurrealQL. P1. Returns objects and no column list, with the keys sorted by name. See [SURREALDB.md](SURREALDB.md). |
+| Neo4j | The third target (W9). R: not yet, because `dbrun` has no entry. The `dbmeta` session was asked for one on 2026-09-27. H: yes, `POST /db/{database}/tx/commit` on port 7474 (not measured). S: yes, Cypher, by D58. P1. `dbrun` runs the Enterprise Edition under the evaluation agreement (D59). |
 | Amazon DynamoDB | PartiQL, on `amazon/dynamodb-local`, which supports `ExecuteStatement` (not measured). Needs SigV4. An item is a map with no column order, and a number can have 38 digits. `usql` already has a driver, so it is likely P2 (D24). |
 | Databend | New. SQL on `/v1/query`. `usql` has a driver, and dbmeta D66 names it. |
 | GreptimeDB | New. SQL on `/v1/sql`. |
@@ -133,8 +134,6 @@ as S. That is Ken's decision:
 Fails S:
 
 - ArangoDB: AQL is `FOR`, `FILTER` and `RETURN`.
-- Neo4j: Cypher. The Community image is GPL. Enterprise needs a licence
-  acceptance that a decision must record.
 - Dgraph: DQL and GraphQL.
 - CouchDB: Mango is JSON.
 - TerminusDB: WOQL.
