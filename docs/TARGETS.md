@@ -32,7 +32,7 @@ the end keep the split of the two lists that Ken wrote.
 
 ## The order
 
-Ken set the order of the work on 2026-09-27 (D73). After Couchbase,
+Ken set the order of the work on 2026-09-27 (D73 and D74). After Couchbase,
 SurrealDB and Neo4j, the drivers are these, in order:
 
 1. InfluxDB.
@@ -43,6 +43,9 @@ SurrealDB and Neo4j, the drivers are these, in order:
 6. Apache Pinot.
 7. rqlite.
 8. libSQL, and Turso.
+9. Apache Calcite Avatica, and the products that speak it: the standalone
+   Avatica server, the Apache Phoenix Query Server and Apache Druid (D74).
+   See [AVATICA.md](AVATICA.md).
 
 The other targets below keep their priority, and their place in the order
 is open.
@@ -132,7 +135,7 @@ cloud service fails R for good, unless an emulator exists. Every target that
 | Amazon DynamoDB | PartiQL, on `amazon/dynamodb-local`, which supports `ExecuteStatement` (not measured). Needs SigV4. An item is a map with no column order, and a number can have 38 digits. `usql` already has a driver, so it is likely P2 (D24). |
 | Databend | New. SQL on `/v1/query`. `usql` has a driver, and dbmeta D66 names it. |
 | GreptimeDB | New. SQL on `/v1/sql`. |
-| Apache Phoenix Query Server and Apache Calcite Avatica | New. A reviewer named it, and neither list of Ken does. DeepSeek placed the Phoenix Query Server in P1. It speaks the Avatica protocol, with JSON or protobuf over HTTP, so one driver can serve both. `usql` has a driver for Avatica, so it is likely P2 (D24). |
+| Apache Phoenix Query Server and Apache Calcite Avatica | A reviewer named it, and Ken placed it ninth in the order on 2026-09-27 (D74). It speaks the Avatica protocol, with JSON or protobuf over HTTP, so one driver serves the standalone Avatica server, the Phoenix Query Server and Druid as flavors. R, H and S are not measured. `usql` has a driver for Avatica (D24). See [AVATICA.md](AVATICA.md). |
 | Apache Kylin | New. A reviewer named it. DeepSeek placed it in P1. SQL over HTTP. |
 | OrientDB | New. A reviewer named it. DeepSeek placed it in P1 or P2, and named it among the best additions to P1. It has a dialect like SQL over HTTP. DeepSeek was not sure of the licence. |
 

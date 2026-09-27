@@ -1,6 +1,6 @@
 # D73. The targets after Neo4j, in order
 
-Status: Decided.
+Status: Amended by D74.
 
 Ken decided on 2026-09-27 the order in which the drivers after Neo4j are
 written. It answers Q1 in [PLAN.md](../PLAN.md). Couchbase (D23), SurrealDB

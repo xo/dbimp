@@ -46,6 +46,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Couchbase driver | [docs/COUCHBASE.md](docs/COUCHBASE.md), then D23 and W5 |
 | writing the SurrealDB driver | [docs/SURREALDB.md](docs/SURREALDB.md), then W8 |
 | writing the Neo4j driver | [docs/NEO4J.md](docs/NEO4J.md), then W9 |
+| writing the Avatica driver | [docs/AVATICA.md](docs/AVATICA.md), then D74 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16 and D17 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | sharing code between two drivers | [docs/DESIGN.md](docs/DESIGN.md), then D4 in [docs/decisions/](docs/decisions/README.md). Shared code goes in the root package |

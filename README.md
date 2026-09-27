@@ -47,4 +47,5 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/COUCHBASE.md](docs/COUCHBASE.md) | What is measured about the Couchbase query service |
 | [docs/SURREALDB.md](docs/SURREALDB.md) | What is known about the HTTP interface of SurrealDB |
 | [docs/NEO4J.md](docs/NEO4J.md) | What is known about the HTTP interface of Neo4j |
+| [docs/AVATICA.md](docs/AVATICA.md) | What is known about Apache Calcite Avatica and the products that speak it |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
