@@ -436,7 +436,7 @@ GitHub release of step 19, and the requests of step 20, wait for Ken. So
 this item stays open. On 2026-09-28, dburl D28 added the scheme `neo4j`,
 and no release of `dburl` held it yet.
 
-## W10. Fix the faults that usql found in the SurrealDB driver
+## W10. Fix the faults that usql found in the SurrealDB driver. Done.
 
 The `dbmeta` session ran `usql` at commit `54c12a4`, which pins `v0.2.0` of
 the SurrealDB driver, against 3.3.0 on 2026-09-27. It found two faults:
@@ -447,9 +447,9 @@ the SurrealDB driver, against 3.3.0 on 2026-09-27. It found two faults:
    in `v0.19.1`, which `usql` requires. So D52 stands, and the driver does
    not change (Q12 in [PLAN.md](PLAN.md)).
 2. A record id inside an array prints as the fields of `RecordID`, such as
-   `[{"Table": "book", "ID": "earthsea"}]`. D70 proposes `MarshalText`, and
-   `TestRecordIDText` holds it. That change is committed in `b475894`, and D70
-   waits for Ken.
+   `[{"Table": "book", "ID": "earthsea"}]`. D70 gives it `MarshalText`, and
+   `TestRecordIDText` holds it. That change is committed in `b475894`, and Ken
+   accepted D70 on 2026-09-29.
 
 The session also reported that a `usql` user who writes `$1` gets a parse
 error from the server, and that `\bind` passes positional arguments, which
@@ -462,8 +462,9 @@ the recordings of 3.3.0, from the source of `usql` and of `tblfmt` v0.16.0,
 and from `tblfmt` run on a result set with no rows.
 
 A fix reaches `usql` only in a new release of `dbimp`, by steps 18 to 20 of
-[DRIVER.md](DRIVER.md). The first fault needs nothing more, so only D70
-keeps this item open.
+[DRIVER.md](DRIVER.md). The first fault needs nothing more, and Ken accepted
+D70 on 2026-09-29, so this item is done. The fix of the second fault reaches
+`usql` with the next release of `dbimp`.
 
 ## W11. Write the InfluxDB driver
 
@@ -484,7 +485,7 @@ Ken decided these on 2026-09-28, and they are staged for his review:
 
 - D75: Flux meets S, so Flux does not rule out InfluxDB 2.
 - D77: a JSON result that is an array of objects becomes rows by rule 2 of
-  D18. Step 6 measures the three facts that D77 names.
+  D18. D80 amends it.
 - D78: one driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3
   and later, as flavors. The dialect `influxdb` is SQL, on InfluxDB 3 and
   later only. The dialect `influxql` is InfluxQL, on every release. The
@@ -493,17 +494,66 @@ Ken decided these on 2026-09-28, and they are staged for his review:
 - D79: the tests run 1.13.1, 2.9.1, 3.9.13 and 3.11.5 in the Tested tier, and
   1.11.8, 2.8.0 and 3.10.6 in the Nightly tier.
 
-The URL of the DSN, the forms of authentication on each release, and the
-rest of step 9 are still open (D78).
-
 On 2026-09-28, dburl D29 added the schemes `influxdb` and `influxql` of
 D78, committed on the `main` of `dburl` as `a2f1a3a` and not tagged.
 
-On 2026-09-28, dbmeta D112 added a `dbrun` entry for each target that D73
-names, and dbmeta D113 added three Avatica flavors, staged and not
-committed. Each Tested release passed `dbrun test` that day. The
-entry for InfluxDB is InfluxDB 3 Core, with 3.9.13 and 3.11.5 in the Tested
-tier and 3.10.6 in the Nightly tier. The entries for InfluxDB 1 and InfluxDB
-2 were requested from the `dbmeta` session and do not exist yet. Step 4 is
-not done until they exist, because D79 names their releases. The entry for
-InfluxDB 2 also makes the DBRP mapping of D78.
+On 2026-09-28, dbmeta D112 and dbmeta D114 added the `dbrun` entries for
+InfluxDB 3, and for InfluxDB 1 and 2, staged in `dbmeta` and not committed.
+So step 4 is done while those entries stay as they are.
+
+Steps 5 to 8 went in on 2026-09-28, staged for Ken to review:
+
+- Step 5a: `testdata/influxdb/features.json` asked Gemini, DeepSeek and four
+  clients. Every entry has a verdict from a server.
+- Step 6: `testdata/influxdb/requests.json` was recorded on all seven
+  releases, as the administrator and, on InfluxDB 1 and 2, as the ordinary
+  user. For it, `-ordinary` of the recorder can be empty for a release that
+  has no ordinary user, and a request can name its `releases`. A response
+  whose body the server closed early is kept with `truncated`, and `Replay`
+  closes it early too.
+- Step 7: the leads of Gemini and DeepSeek were tested on 1.13.1, 2.9.1 and
+  3.11.5.
+- Step 8: [INFLUXDB.md](INFLUXDB.md) holds every measured fact.
+
+Ken decided the rest of step 9 on the same day: D80 (the columns of SQL
+come from `DESCRIBE`), D81 (a series of InfluxQL is a result set with its
+name and its tags), D82 (the DSN), and D83 (chunks only on InfluxDB 1, the
+gaps in `statement_id`, and the numbers of InfluxQL). Steps 10 to 17 are
+next.
+
+Steps 10 to 17 went in on 2026-09-28, staged for Ken to review:
+
+- Steps 10 to 13: the package `influxdb/`, its type table and interface
+  table in [INFLUXDB.md](INFLUXDB.md), the contract, the replay of every
+  recording, and the DSN tests. The fuzz test ran for 60 seconds, with 20
+  million inputs, and found nothing.
+- Ken decided D85 on the same day: the driver takes INSERT of the `influx`
+  shell and sends it to `/write`, and sends DELETE to the server. On
+  2026-09-29 he accepted D86, the three fields that let RoundTrip serve
+  InfluxDB, and added the rule for the column time to D83.
+- Steps 14 and 14a: every integration test passed on all seven releases, one
+  at a time, as both principals where the release has an ordinary user.
+- Step 15: the job `releases` selects a Staged release by its cadence
+  (dbmeta D120), and fails when a product has no release. It pins dbmeta
+  `415e830`, which prints the `url` of D82 for each InfluxDB principal. The
+  Test step of the workflow passed with that pin on 1.13.1, 2.9.1 and 3.11.5
+  on 2026-09-29.
+- Step 17: the row in [TARGETS.md](TARGETS.md) names the package.
+
+The requests of step 16, which step 20 sends after the release that holds
+the driver:
+
+1. To `dburl`: the schemes `influxdb` and `influxql` of dburl D29 already
+   name the `GoPackage` `github.com/xo/dbimp/influxdb`, and their generators
+   write the URL of D82. Please make sure that `RequiresCGO` is false for
+   both, and that `GenInfluxQL` keeps the keys `describe`, `chunked`, `rp`
+   and `tls` of the URL, which the driver reads (D82 and D83).
+2. To `dbmeta`: dbmeta has no model for InfluxDB, so there is nothing to
+   measure on the package yet. When a model comes, it reads the driver
+   `influxdb`, whose dialect `influxdb` is SQL with an `information_schema`,
+   and whose dialect `influxql` has the SHOW statements (D78).
+3. To `usql`: add `drivers/influxdb/influxdb.go`, which imports
+   `github.com/xo/dbimp/influxdb` for the schemes `influxdb` and `influxql`.
+   It reads the version with `influxdb.Version` and the dialect with
+   `influxdb.Dialect`, each inside `sql.Conn.Raw` (D78). An InfluxQL result
+   has a result set for each series, so it needs `NextResultSet` (D81).
