@@ -50,7 +50,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/NEO4J.md](docs/NEO4J.md) | What is known about the HTTP interface of Neo4j |
 | [docs/AVATICA.md](docs/AVATICA.md) | What is known about Apache Calcite Avatica and the products that speak it |
 | [docs/INFLUXDB.md](docs/INFLUXDB.md) | What InfluxDB 1, 2 and 3 answer, as measured on seven releases |
-| [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, before a server runs |
+| [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, and why it has no driver here |
 | [docs/ARANGODB.md](docs/ARANGODB.md) | What is known about ArangoDB, before a server runs |
 | [docs/DATABEND.md](docs/DATABEND.md) | What is known about Databend, before a server runs |
 | [docs/TDENGINE.md](docs/TDENGINE.md) | What is known about TDengine, before a server runs |

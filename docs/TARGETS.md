@@ -40,7 +40,8 @@ SurrealDB and Neo4j, the drivers are these, in order:
 
 1. InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later, in one driver (D78).
    See [INFLUXDB.md](INFLUXDB.md).
-2. CrateDB. See [CRATEDB.md](CRATEDB.md).
+2. CrateDB gets no driver here, because `usql` reaches it with `pgx` on the
+   PostgreSQL wire protocol (D88). See [CRATEDB.md](CRATEDB.md).
 3. ArangoDB. See [ARANGODB.md](ARANGODB.md).
 4. Databend. See [DATABEND.md](DATABEND.md).
 5. TDengine. See [TDENGINE.md](TDENGINE.md).
@@ -140,7 +141,7 @@ that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 | ClickHouse | `dbrun` starts it today (measured in `dbmeta`). `usql` already has a driver, so it is likely P2 (D24). 64-bit integers arrive quoted in JSON. |
 | Couchbase | `dbrun` starts it today (measured in `dbmeta`). The first driver (D23). The driver is `github.com/xo/dbimp/couchbase`. Couchbase Analytics is part of this target, and not a target of its own. See "Couchbase Analytics" in [COUCHBASE.md](COUCHBASE.md). |
 | Trino and Presto | `dbrun` starts both today (measured in `dbmeta`). `usql` already has drivers, so they are likely P2 (D24). Results page through `nextUri`, and an error can arrive on a later page. |
-| CrateDB | Second in the order after Neo4j (D73). Its driver is `cratedb` (D76). R: `dbrun` starts 6.3.7 and 6.4.5. Returns a column list, type codes and row arrays. Binds arguments. See [CRATEDB.md](CRATEDB.md). |
+| CrateDB | No driver here (D88). `usql` reaches it with `pgx` on the PostgreSQL wire protocol, which the `dbmeta` session measured on 6.4.5, and `dbmeta` reads it through a dialect of its own. The HTTP interface builds each whole result in the memory of the server, and has no paging. R: `dbrun` starts 6.3.7 and 6.4.5. See [CRATEDB.md](CRATEDB.md). |
 | ArangoDB | Third in the order after Neo4j (D73). R: `dbrun` starts 3.12.12. H: `POST /_api/cursor` on port 8529. S: yes, AQL, by D75. P1. See [ARANGODB.md](ARANGODB.md). |
 | QuestDB | Returns a column list. `/exec` binds no arguments. |
 | InfluxDB | First in the order after Neo4j (D73). The driver is `github.com/xo/dbimp/influxdb`. One driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later. Its dialect `influxdb` is SQL on InfluxDB 3 and later, and its dialect `influxql` is InfluxQL through `/query` on each release (D78). Flux meets S (D75), and the driver does not speak it. R: `dbrun` starts each release that D79 names, 1.11.8 to 3.11.5. SQL has an `information_schema`. A JSON result is an array of objects with no NULL keys, so the driver reads the columns from `DESCRIBE` (D80). See [INFLUXDB.md](INFLUXDB.md). |

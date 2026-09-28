@@ -1,7 +1,7 @@
 # ArangoDB
 
 This file holds what is known about the HTTP interface of ArangoDB, for a
-driver that D73 places after InfluxDB and CrateDB. Its work item comes when
+driver that D73 places after InfluxDB. D88 removed CrateDB from before it. Its work item comes when
 its turn comes. The headings are the template of [DRIVER.md](DRIVER.md).
 
 This is the draft of step 3. No server has run for this driver yet, so every

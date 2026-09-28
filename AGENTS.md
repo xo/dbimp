@@ -49,7 +49,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Neo4j driver | [docs/NEO4J.md](docs/NEO4J.md), then W9 |
 | writing the Avatica driver | [docs/AVATICA.md](docs/AVATICA.md), then D74 |
 | writing the InfluxDB driver | [docs/INFLUXDB.md](docs/INFLUXDB.md), then W11 and D78 to D83 |
-| writing the CrateDB driver | [docs/CRATEDB.md](docs/CRATEDB.md), then D73 and D76 |
+| asking why CrateDB has no driver here | [docs/CRATEDB.md](docs/CRATEDB.md), then D88 |
 | writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then D73 and D75 |
 | writing the Databend driver | [docs/DATABEND.md](docs/DATABEND.md), then D73 and D76 |
 | writing the TDengine driver | [docs/TDENGINE.md](docs/TDENGINE.md), then D73 |

@@ -1,8 +1,38 @@
 # CrateDB
 
-This file holds what is known about the HTTP interface of CrateDB, for the
-driver that D73 places after InfluxDB. Its work item comes when its turn
-comes. The headings are the template of [DRIVER.md](DRIVER.md).
+This file holds what is known about the HTTP interface of CrateDB. Ken
+decided on 2026-09-29 that dbimp writes no driver for it (D88). `usql`
+reaches CrateDB with `pgx` on the PostgreSQL wire protocol, and `dbmeta`
+reads it through a dialect of its own. W12 in [BACKLOG.md](BACKLOG.md) is
+closed. The file stays as the record of why. The headings are the template
+of [DRIVER.md](DRIVER.md).
+
+## The wire protocol
+
+The `dbmeta` session measured the PostgreSQL wire protocol of 6.4.5 on
+2026-09-29, through `dbrun` with port 5432 published, with `pgx` v5 and
+`lib/pq`, as the user `crate`:
+
+- The extended protocol with `$1` parameters, prepared statements, a
+  pipelined batch of `pgx`, DDL and DML work.
+- Bigint, double, bool, timestamp, `now()`, arrays, ip and geo_point scan. An
+  object arrives as the bytes of JSON.
+- `SHOW server_version` and `current_setting('server_version')` answer 14.0,
+  and `server_version_num` answers 140000. `version()` answers
+  `CrateDB 6.4.5 ...`.
+- A transaction fails on both drivers. `pgx` sends ROLLBACK, which the
+  parser refuses, and `lib/pq` fails at BEGIN with "unexpected transaction
+  status idle".
+- COPY of `pgx` fails, because the server refuses the binary form of COPY.
+  LISTEN is a parse error.
+- A timeout of the context ended a call after 300 ms, which `pgx` did from
+  its side. Whether the server stopped the query is not measured.
+- The postgres model of `dbmeta` runs 11 of its 55 queries. The other 44 fail
+  on tables and functions of `pg_catalog` that CrateDB lacks, such as
+  `pg_cast`, `pg_trigger` and `format_type`.
+
+Not measured: whether the wire protocol streams a result, or builds it in
+memory as the HTTP interface does.
 
 This is the draft of step 3. No server has run for this driver yet, so every
 fact here is "not measured" and names its source. R is the exception, because

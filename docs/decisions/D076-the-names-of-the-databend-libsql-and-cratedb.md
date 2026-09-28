@@ -1,6 +1,6 @@
 # D76. The names of the Databend, libSQL and CrateDB drivers
 
-Status: Decided.
+Status: Amended by D88.
 
 Ken decided these on 2026-09-28. They decide items 1 and 2 of step 9 of
 [DRIVER.md](../DRIVER.md) for three drivers, ahead of their turn in D73.
@@ -17,7 +17,8 @@ Each package registers its one name, and the scheme of its URL is that name
   in `dburl`, which owns the aliases (D5). [LIBSQL.md](../LIBSQL.md) holds
   what is known.
 - CrateDB: the package is `github.com/xo/dbimp/cratedb`, and its name is
-  `cratedb`. [CRATEDB.md](../CRATEDB.md) holds what is known.
+  `cratedb`. D88 withdrew this driver, because `usql` reaches CrateDB with
+  `pgx`. [CRATEDB.md](../CRATEDB.md) holds what is known.
 
 The URL of each, its keys and its default port are still decisions of step
 9 of each driver.

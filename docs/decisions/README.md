@@ -93,10 +93,10 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D70](D070-a-surrealdb-recordid-writes-its-surrealql-form.md) | A SurrealDB RecordID writes its SurrealQL form as text | Amends D53 |
 | [D71](D071-every-xo-repository-is-set-up-for-coding-agents.md) | Every xo repository is set up for coding agents the same way | Amends D3 and D11 |
 | [D72](D072-the-decisions-are-one-file-each.md) | The decisions are one file each | Amends D3 |
-| [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74 and D84 |
+| [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74, D84 and D88 |
 | [D74](D074-avatica-and-its-flavors-come-after-libsql.md) | Avatica and its flavors come after libSQL | Amends D73 |
 | [D75](D075-aql-and-flux-meet-s.md) | AQL and Flux meet S | Amends D16 |
-| [D76](D076-the-names-of-the-databend-libsql-and-cratedb.md) | The names of the Databend, libSQL and CrateDB drivers | Decided |
+| [D76](D076-the-names-of-the-databend-libsql-and-cratedb.md) | The names of the Databend, libSQL and CrateDB drivers | Amended by D88 |
 | [D77](D077-an-influxdb-result-is-an-array-of-objects-read.md) | An InfluxDB result is an array of objects, read by rule 2 of D18 | Amended by D80 |
 | [D78](D078-one-influxdb-driver-with-the-dialects-influxdb.md) | One InfluxDB driver, with the dialects influxdb and influxql | Amended by D85 |
 | [D79](D079-the-influxdb-releases-that-the-tests-run.md) | The InfluxDB releases that the tests run | Decided |
@@ -108,3 +108,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D85](D085-the-influxdb-driver-takes-insert-of-the-influx-shell.md) | The InfluxDB driver takes INSERT of the influx shell | Amends D78 |
 | [D86](D086-roundtrip-serves-a-database-that-cannot-do-every.md) | RoundTrip serves a database that cannot do every step | Decided |
 | [D87](D087-milvus-and-postgrest-move-to-p2-and-ksqldb.md) | Milvus and PostgREST move to P2, and ksqlDB stays in P2 | Amends D17 |
+| [D88](D088-cratedb-gets-no-driver-here.md) | CrateDB gets no driver here | Amends D73 and D76 |
