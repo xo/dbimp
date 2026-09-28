@@ -469,9 +469,9 @@ D70 on 2026-09-29, so this item is done. The fix of the second fault reaches
 ## W11. Write the InfluxDB driver
 
 InfluxDB is the next target, by D73. Follow [DRIVER.md](DRIVER.md) from step
-2. After InfluxDB come CrateDB, ArangoDB, Databend, TDengine, Apache Pinot,
-rqlite, libSQL and then Avatica (D73 and D74). Each one gets a work item of
-its own when its turn comes.
+2. After InfluxDB come ArangoDB, Databend, TDengine, Apache Pinot,
+rqlite, libSQL and then Avatica (D73, D74 and D88). Each one gets a work
+item of its own when its turn comes.
 
 Step 3 went in on 2026-09-28 for each target that D73 names, staged for Ken
 to review: [INFLUXDB.md](INFLUXDB.md), [CRATEDB.md](CRATEDB.md),
@@ -557,3 +557,21 @@ the driver:
    It reads the version with `influxdb.Version` and the dialect with
    `influxdb.Dialect`, each inside `sql.Conn.Raw` (D78). An InfluxQL result
    has a result set for each series, so it needs `NextResultSet` (D81).
+
+Ken committed steps 1 to 17 on 2026-09-29 as `8548135` and `e29bd29`. The
+workflow passed on `e29bd29`, on 1.13.1, 2.9.1, 3.9.13 and 3.11.5, which is
+the gate of step 18:
+https://github.com/xo/dbimp/actions/runs/36469657061. At Ken's request,
+`v0.4.0` was tagged on `e29bd29` and published the same day, which is the
+gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.4.0. The
+requests of step 20 wait for Ken. So this item stays open.
+
+## W12. Write the CrateDB driver. Dropped.
+
+CrateDB was second in the order after Neo4j (D73). Ken decided on
+2026-09-29 that dbimp writes no driver for it (D88). `usql` reaches it with
+`pgx` on the PostgreSQL wire protocol, which the `dbmeta` session measured
+on 6.4.5 that day, and `dbmeta` reads it through a dialect of its own. Ken
+asks the `dbmeta` session for the dialects of CrateDB and CockroachDB
+himself. Step 3 of the driver is in [CRATEDB.md](CRATEDB.md), which stays as
+the record of why. ArangoDB is the next driver.
