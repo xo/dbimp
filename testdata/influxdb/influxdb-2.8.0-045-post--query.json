@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=CREATE%20CONTINUOUS%20QUERY%20dbimp_cq%20ON%20dbmeta%20BEGIN%20SELECT%20mean%28f%29%20INTO%20dbimp_mean%20FROM%20types%20GROUP%20BY%20time%281h%29%20END"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Influxdb-Version": [
+        "v2.8.0"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:25 GMT"
+      ],
+      "Content-Length": [
+        "84"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"error\":\"not implemented: CREATE CONTINUOUS QUERY\"}]}\n"
+  }
+}

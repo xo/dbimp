@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"SELECT * FROM types WHERE host = 'd' OR host = 'a'\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "78d98e3b-ff3e-48b0-a77f-66f62e73c877"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:48 GMT"
+      ]
+    },
+    "body": "[{\"host\":\"d\",\"time\":\"2023-11-14T22:13:23\",\"u\":18446744073709551615},{\"b\":true,\"f\":1.5,\"host\":\"a\",\"i\":9223372036854775807,\"s\":\"text\",\"time\":\"2023-11-14T22:13:20\"}]"
+  }
+}

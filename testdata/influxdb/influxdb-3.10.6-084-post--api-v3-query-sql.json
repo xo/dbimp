@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_name = 'types'\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "f6a06fe8-7348-4505-ba6f-2a9fca6c885b"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:39 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[{\"table_name\":\"types\",\"column_name\":\"b\",\"data_type\":\"Boolean\"},{\"table_name\":\"types\",\"column_name\":\"f\",\"data_type\":\"Float64\"},{\"table_name\":\"types\",\"column_name\":\"host\",\"data_type\":\"Dictionary(Int32, Utf8)\"},{\"table_name\":\"types\",\"column_name\":\"i\",\"data_type\":\"Int64\"},{\"table_name\":\"types\",\"column_name\":\"region\",\"data_type\":\"Dictionary(Int32, Utf8)\"},{\"table_name\":\"types\",\"column_name\":\"s\",\"data_type\":\"Utf8\"},{\"table_name\":\"types\",\"column_name\":\"time\",\"data_type\":\"Timestamp(ns)\"},{\"table_name\":\"types\",\"column_name\":\"u\",\"data_type\":\"UInt64\"}]"
+  }
+}

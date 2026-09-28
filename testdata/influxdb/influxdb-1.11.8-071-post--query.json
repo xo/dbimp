@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELEC%201"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Influxdb-Error": [
+        "error parsing query: found SELEC, expected SELECT, DELETE, SHOW, CREATE, DROP, EXPLAIN, GRANT, REVOKE, ALTER, SET, KILL at line 1, char 1"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ],
+      "X-Request-Id": [
+        "57812055-bac8-11f1-804b-ce336a42b8fa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Length": [
+        "150"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "57812055-bac8-11f1-804b-ce336a42b8fa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ]
+    },
+    "body": "{\"error\":\"error parsing query: found SELEC, expected SELECT, DELETE, SHOW, CREATE, DROP, EXPLAIN, GRANT, REVOKE, ALTER, SET, KILL at line 1, char 1\"}\n"
+  }
+}

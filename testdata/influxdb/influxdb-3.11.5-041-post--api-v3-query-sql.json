@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"SELECT nope FROM types\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Cluster-Uuid": [
+        "78d98e3b-ff3e-48b0-a77f-66f62e73c877"
+      ],
+      "Content-Length": [
+        "134"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:49 GMT"
+      ]
+    },
+    "body": "Schema error: No field named nope. Valid fields are types.b, types.f, types.host, types.i, types.region, types.s, types.time, types.u."
+  }
+}

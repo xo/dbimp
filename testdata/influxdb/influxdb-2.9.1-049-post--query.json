@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "q=SELECT%20mean%28f%29%20FROM%20types%20WHERE%20time%20%3E%3D%20%272023-11-14T22%3A13%3A00Z%27%20AND%20time%20%3C%20%272023-11-14T22%3A14%3A00Z%27%20GROUP%20BY%20time%2810s%29%20fill%280%29"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v2.9.1"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:45 GMT"
+      ],
+      "Content-Length": [
+        "264"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"types\",\"columns\":[\"time\",\"mean\"],\"values\":[[\"2023-11-14T22:13:00Z\",0],[\"2023-11-14T22:13:10Z\",0],[\"2023-11-14T22:13:20Z\",-0.25],[\"2023-11-14T22:13:30Z\",0],[\"2023-11-14T22:13:40Z\",0],[\"2023-11-14T22:13:50Z\",0]]}]}]}\n"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELECT%20count%28n%29%20FROM%20big%20WHERE%20time%20%3E%3D%20%272020-09-13T12%3A26%3A40Z%27%20AND%20time%20%3C%20%272020-09-13T16%3A00%3A00Z%27%20GROUP%20BY%20time%281h%29"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Request-Id": [
+        "f287c0ae-bac8-11f1-80cb-e60a1b3166aa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "1.13.1"
+      ],
+      "X-Request-Id": [
+        "f287c0ae-bac8-11f1-80cb-e60a1b3166aa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:45 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"big\",\"columns\":[\"time\",\"count\"],\"values\":[[\"2020-09-13T12:00:00Z\",2000],[\"2020-09-13T13:00:00Z\",3600],[\"2020-09-13T14:00:00Z\",3600],[\"2020-09-13T15:00:00Z\",2800]]}]}]}\n"
+  }
+}

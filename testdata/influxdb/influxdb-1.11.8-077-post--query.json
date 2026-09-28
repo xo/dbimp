@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=DROP%20MEASUREMENT%20dbimp_none"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "X-Request-Id": [
+        "5786e2af-bac8-11f1-8051-ce336a42b8fa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Length": [
+        "141"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "5786e2af-bac8-11f1-8051-ce336a42b8fa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Error": [
+        "error authorizing query: dbmeta_user not authorized to execute statement 'DROP MEASUREMENT dbimp_none', requires admin privilege"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ]
+    },
+    "body": "{\"error\":\"error authorizing query: dbmeta_user not authorized to execute statement 'DROP MEASUREMENT dbimp_none', requires admin privilege\"}\n"
+  }
+}

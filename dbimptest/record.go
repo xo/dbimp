@@ -99,10 +99,17 @@ func (r *Recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 	if cerr := res.Body.Close(); err == nil {
 		err = cerr
 	}
-	if err != nil {
+	truncated := errors.Is(err, io.ErrUnexpectedEOF)
+	switch {
+	case truncated:
+		// The server closed the connection before the end of the body. The
+		// exchange keeps what arrived, and the caller reads the same error.
+		res.Body = io.NopCloser(io.MultiReader(bytes.NewReader(resBody), errReader{err}))
+	case err != nil:
 		return nil, fmt.Errorf("recording a response: %w", err)
+	default:
+		res.Body = io.NopCloser(bytes.NewReader(resBody))
 	}
-	res.Body = io.NopCloser(bytes.NewReader(resBody))
 	ex := Exchange{
 		Request: Request{
 			Method: req.Method,
@@ -111,8 +118,9 @@ func (r *Recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 			Header: redact(req.Header, "Authorization", "Cookie"),
 		},
 		Response: Response{
-			Status: res.StatusCode,
-			Header: redact(res.Header, "Set-Cookie"),
+			Status:    res.StatusCode,
+			Header:    redact(res.Header, "Set-Cookie"),
+			Truncated: truncated,
 		},
 	}
 	ex.Request.Body, ex.Request.Binary = body(reqBody)
@@ -191,3 +199,8 @@ func slug(s string) string {
 		return '-'
 	}, s), "-")
 }
+
+// errReader is a reader that returns its error.
+type errReader struct{ err error }
+
+func (r errReader) Read([]byte) (int, error) { return 0, r.err }

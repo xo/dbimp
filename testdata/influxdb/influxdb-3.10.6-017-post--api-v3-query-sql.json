@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"DESCRIBE SELECT time, s FROM types WHERE s = 'none'\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Cluster-Uuid": [
+        "f6a06fe8-7348-4505-ba6f-2a9fca6c885b"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:36 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "[{\"column_name\":\"time\",\"data_type\":\"Timestamp(ns)\",\"is_nullable\":\"NO\"},{\"column_name\":\"s\",\"data_type\":\"Utf8\",\"is_nullable\":\"YES\"}]"
+  }
+}

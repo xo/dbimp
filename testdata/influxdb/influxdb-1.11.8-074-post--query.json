@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=KILL%20QUERY%20999999"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Request-Id": [
+        "57813d9b-bac8-11f1-804e-ce336a42b8fa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Error": [
+        "error authorizing query: dbmeta_user not authorized to execute statement 'KILL QUERY 999999', requires admin privilege"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ],
+      "X-Request-Id": [
+        "57813d9b-bac8-11f1-804e-ce336a42b8fa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Length": [
+        "131"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"error authorizing query: dbmeta_user not authorized to execute statement 'KILL QUERY 999999', requires admin privilege\"}\n"
+  }
+}

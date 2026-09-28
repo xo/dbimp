@@ -57,7 +57,8 @@ is open.
 ### The first list
 
 Ken wrote this order in `drivers.txt`, with these numbers. A blank line in
-that file separates the groups, and each group here is one paragraph.
+that file separates the groups, and each group here is one paragraph. The
+numbers 10 and 20 are gone, because Stargate and Gel left the list (D84).
 Couchbase is first (D23). Ken arranged the rest after the first driver was
 complete (Q1 in [PLAN.md](PLAN.md), which D73 answers).
 
@@ -73,7 +74,6 @@ complete (Q1 in [PLAN.md](PLAN.md), which D73 answers).
 8. QuestDB.
 9. InfluxDB.
 
-10. Cassandra through the Stargate API.
 11. ScyllaDB and DynamoDB. The note asks whether the two are the same
     interface.
 
@@ -88,16 +88,14 @@ complete (Q1 in [PLAN.md](PLAN.md), which D73 answers).
 
 18. TerminusDB.
 
-19. SPARQL: Apache Jena Fuseki, Virtuoso, Stardog, GraphDB and Blazegraph.
-
-20. Gel, which was EdgeDB.
+19. SPARQL: Apache Jena Fuseki, Virtuoso, Stardog and GraphDB.
 
 21. Qdrant.
 22. Milvus, Weaviate, or Chroma.
 23. Apache Druid.
 
 `drivers.txt` names Meilisearch, Typesense, Milvus, Chroma, Virtuoso,
-Stardog, GraphDB and Blazegraph, and the two tables do not. The tables name
+Stardog and GraphDB, and the two tables do not. The tables name
 these, and `drivers.txt` does not: ClickHouse, CouchDB through its view
 interface, Trino and Presto, OpenSearch, Apache Pinot, ksqlDB, TDengine,
 SingleStore, Snowflake, Google BigQuery, Databricks, Apache Drill, Fauna,
@@ -118,10 +116,22 @@ cloud service fails R for good, unless an emulator exists. Every target that
 
 dbmeta D112 adds the entries for the targets from InfluxDB to libSQL in the
 order, and dbmeta D113 adds them for Avatica, the Phoenix Query Server
-and Druid. Both are staged in `dbmeta` and not committed. InfluxDB 1 and
-InfluxDB 2 have no entry yet. The `dbmeta` session measured each entry
+and Druid. dbmeta D114 adds InfluxDB 1 and InfluxDB 2. Each is staged in
+`dbmeta` and not committed. The `dbmeta` session measured each entry
 through `dbrun`, and each Tested release of dbmeta D112 passed `dbrun test`
 on 2026-09-28. So each of these targets meets R by that measurement.
+
+dbmeta D118, staged and not committed, adds entries for most of the other
+targets. The `dbmeta` session measured each one through `dbrun` on
+2026-09-28, with an ordinary user that reads and is refused a write. The
+entries are Dgraph, QuestDB, CouchDB, MongoDB, Elasticsearch, OpenSearch,
+Meilisearch, Typesense, Apache Solr in SolrCloud mode, TerminusDB, Apache
+Jena Fuseki, Virtuoso, Qdrant, Milvus, Weaviate, Chroma, ksqlDB with Kafka,
+Apache Drill, PostgREST on PostgreSQL 18, DynamoDB Local and ScyllaDB
+Alternator. Stardog, GraphDB 11 and VoltDB have entries that appear only
+when a licence file from Ken exists, and none of them has started yet.
+Several notes below said that a target fails R, and the entries change
+that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 
 ### P1: meets R, H and S
 
@@ -133,7 +143,7 @@ on 2026-09-28. So each of these targets meets R by that measurement.
 | CrateDB | Second in the order after Neo4j (D73). Its driver is `cratedb` (D76). R: `dbrun` starts 6.3.7 and 6.4.5. Returns a column list, type codes and row arrays. Binds arguments. See [CRATEDB.md](CRATEDB.md). |
 | ArangoDB | Third in the order after Neo4j (D73). R: `dbrun` starts 3.12.12. H: `POST /_api/cursor` on port 8529. S: yes, AQL, by D75. P1. See [ARANGODB.md](ARANGODB.md). |
 | QuestDB | Returns a column list. `/exec` binds no arguments. |
-| InfluxDB | First in the order after Neo4j (D73). One driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later. Its dialect `influxdb` is SQL on InfluxDB 3 and later, and its dialect `influxql` is InfluxQL through `/query` on each release (D78). Flux meets S (D75), and the driver does not speak it. R: `dbrun` starts InfluxDB 3 Core 3.9.13, 3.11.5 and 3.10.6. D79 names the releases that the tests run. SQL has an `information_schema`. A JSON result is an array of objects (D77), and the Arrow output has a schema. See [INFLUXDB.md](INFLUXDB.md). |
+| InfluxDB | First in the order after Neo4j (D73). The driver is `github.com/xo/dbimp/influxdb`. One driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later. Its dialect `influxdb` is SQL on InfluxDB 3 and later, and its dialect `influxql` is InfluxQL through `/query` on each release (D78). Flux meets S (D75), and the driver does not speak it. R: `dbrun` starts each release that D79 names, 1.11.8 to 3.11.5. SQL has an `information_schema`. A JSON result is an array of objects with no NULL keys, so the driver reads the columns from `DESCRIBE` (D80). See [INFLUXDB.md](INFLUXDB.md). |
 | rqlite | Seventh in the order after Neo4j (D73). SQLite over HTTP. Returns columns and types. The `dbmeta` model for sqlite3 can read it as a flavor. R: `dbrun` starts 9.4.5 and 10.3.6. See [RQLITE.md](RQLITE.md). |
 | libSQL | Eighth in the order after Neo4j (D73). Its driver is `libsql`, and `turso` is an alias in `dburl` (D76). The same as rqlite for `dbmeta`. R: `dbrun` starts the local `libsql-server` 0.24.33. Turso is the same protocol in the cloud, and the cloud service fails R. See [LIBSQL.md](LIBSQL.md). |
 | TDengine | Moves up from P2. Fifth in the order after Neo4j (D73). Its REST interface is `taosAdapter` on port 6041, and it returns column metadata. R: `dbrun` starts 3.3.8.8 and 3.4.2.8. See [TDENGINE.md](TDENGINE.md). |
@@ -151,16 +161,14 @@ on 2026-09-28. So each of these targets meets R by that measurement.
 | Apache Kylin | New. A reviewer named it. DeepSeek placed it in P1. SQL over HTTP. |
 | OrientDB | New. A reviewer named it. DeepSeek placed it in P1 or P2, and named it among the best additions to P1. It has a dialect like SQL over HTTP. DeepSeek was not sure of the licence. |
 
-Two targets pass only if a query language that matches graph patterns counts
-as S. D58 says that such a language meets S when a person types it, and
+One group of targets passes only if a query language that matches graph
+patterns counts as S. D58 says that such a language meets S when a person types it, and
 step 2 of [DRIVER.md](DRIVER.md) judges each target on its own:
 
 - Apache Jena Fuseki, and the other SPARQL servers. A binding carries a type,
-  a datatype and a language, and an unbound variable must be nil. No image
-  that the Apache project publishes is known. DeepSeek placed Virtuoso in
+  a datatype and a language, and an unbound variable must be nil. The Apache
+  project publishes no image, and dbmeta D118 builds one for Fuseki. DeepSeek placed Virtuoso in
   P2, for its GPL licence and the details of its SQL over HTTP.
-- Gel. EdgeQL has `SELECT` and `FILTER` on a typed object model, and a rich
-  catalog.
 
 ### P2: fails one test
 
@@ -172,6 +180,12 @@ Fails S:
 - Qdrant and Weaviate: JSON filters and GraphQL.
 - Meilisearch, Typesense and Chroma: JSON bodies. They are in `drivers.txt`
   only.
+- Milvus: JSON bodies. It moved up from P3, because `dbrun` starts the
+  standalone server in one container, with etcd inside it and its data on
+  the local disk, and no MinIO (dbmeta D118), so it meets R (D87).
+- PostgREST: its filter language in the URL is not a statement. It moved up
+  from P3, because `dbrun` starts it on PostgreSQL 18 (dbmeta D118), so it
+  meets R (D87).
 - ScyllaDB Alternator: Alternator does not support PartiQL
   (`ExecuteStatement`), from `docs/alternator/compatibility.md` in
   `scylladb/scylladb`, which the `cql` session read. It also needs its own
@@ -179,18 +193,20 @@ Fails S:
 
 Fails R:
 
-- Cassandra through Stargate: Cassandra, a coordinator and the REST service
-  are three processes. `/v2/cql` is off by default, binds no arguments and
-  returns JSON with no types. `xo/cql` covers Cassandra already, so the `cql`
-  session advises P3.
-- ksqlDB: needs Kafka.
-- SingleStore: the image needs a licence key from an account.
+- SingleStore: Ken chose that `dbrun` gets no entry for it (dbmeta D118).
 - Snowflake, BigQuery and Databricks: cloud only. A community emulator for
   BigQuery exists, and it can move BigQuery up if it answers the same. `usql`
   has drivers for all three (D24).
 - Neon: cloud only. A local copy needs a proxy and PostgreSQL.
 - PlanetScale: cloud only, and `psdb.v1alpha1` is the internal protocol of
   its serverless driver, not a documented public API.
+
+Held in P2 by Ken on 2026-09-29 (D87):
+
+- ksqlDB. `dbrun` starts it with Kafka (dbmeta D118), so it meets R, and it
+  meets H and S by the review. A push query streams new rows for as long as
+  the client listens, and never ends, so it stays in P2 until step 2 of
+  [DRIVER.md](DRIVER.md) measures its push queries and its pull queries.
 
 Placed in P2 by Ken on 2026-09-27. These places are his opinion, and
 nothing about these targets is measured:
@@ -211,9 +227,6 @@ nothing about these targets is measured:
   Atlas App Services. The target does not exist.
 - Fauna: the service shut down on 2025-05-30. Fauna said that it will release an
   open source version.
-- PostgREST: needs PostgreSQL, and its filter language in the URL is not a
-  statement.
-- Milvus: JSON bodies, and the standalone server needs etcd and MinIO.
 
 Placed in P3 by Ken on 2026-09-27. These places are his opinion, and
 nothing about these targets is measured:
@@ -234,8 +247,8 @@ the order in D73 and D74, and "The order" above holds it.
 
 ## The first list: targets.csv
 
-Every row of `targets.csv`. The link on each name goes to the
-documentation of its HTTP interface.
+Every row of `targets.csv`, except Gel and Stargate, which left it (D84).
+The link on each name goes to the documentation of its HTTP interface.
 
 | Database | Model | Query language | HTTP endpoint | Request type | Response type |
 | --- | --- | --- | --- | --- | --- |
@@ -257,12 +270,10 @@ documentation of its HTTP interface.
 | [Apache Druid](https://druid.apache.org/docs/latest/querying/sql-api) | Columnar OLAP | Druid SQL / Native JSON | `POST /druid/v2/sql, POST /druid/v2` | application/json | application/json, text/csv |
 | [Elasticsearch / OpenSearch](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-sql-query) | Search / Document | Query DSL / SQL / ES\|QL | `POST /_search, POST /_sql` | application/json, application/cbor, application/smile, application/x-ndjson | application/json, application/cbor, text/csv |
 | [Apache Jena Fuseki (SPARQL)](https://jena.apache.org/documentation/fuseki2/fuseki-server-protocol.html) | RDF Graph | SPARQL | `POST /{dataset}/query, GET /{dataset}/query` | application/sparql-query, application/x-www-form-urlencoded | application/sparql-results+json, text/turtle, text/csv |
-| [Gel (formerly EdgeDB)](https://docs.gel.com/reference/edgeql_over_http) | Graph-Relational | EdgeQL / GraphQL | `POST /db/{db}/edgeql, POST /db/{db}/graphql` | application/json, application/graphql | application/json |
 | [TerminusDB](https://terminusdb.com/docs/terminuscms/reference-guides/rest-api) | Versioned Graph / Document | WOQL (Datalog) / GraphQL | `POST /api/woql/{org}/{db}` | application/json | application/json |
 | [Qdrant](https://api.qdrant.tech/api-reference/search/points) | Vector Search | JSON Filters & Vector Queries | `POST /collections/{col}/points/query` | application/json | application/json |
 | [Weaviate](https://weaviate.io/developers/weaviate/api/graphql) | Vector / Graph | GraphQL / REST | `POST /v1/graphql, POST /v1/objects` | application/json, application/graphql | application/json |
 | [MongoDB Atlas Data API](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/) | Document | MQL (Extended JSON) | `POST /endpoint/data/v1/action/{find, aggregate}` | application/json, application/ejson | application/json, application/ejson |
-| [Cassandra via Stargate](https://stargate.io/docs/latest/cql/cql-using.html) | Wide-column / Document | CQL | `POST /v2/cql` | text/plain, application/json | application/json |
 
 ## The second list: targets-2.csv
 

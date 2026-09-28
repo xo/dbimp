@@ -19,8 +19,9 @@ replace a driver that `usql` imports now (D24).
 The repository is new. The first driver, in `couchbase/`, is a new
 Couchbase driver that replaces `xo/n1ql` (D23). It was first released in
 `v0.1.0`. The second, in `surrealdb/`, was first released in `v0.2.0`
-(W8). The third, in `neo4j/`, is committed, and no release holds it yet
-(W9). The targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
+(W8). The third, in `neo4j/`, is in the tag `v0.3.0` (W9). The fourth, in
+`influxdb/`, is staged for review, and no release holds it yet (W11). The
+targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
 
@@ -47,7 +48,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the SurrealDB driver | [docs/SURREALDB.md](docs/SURREALDB.md), then W8 |
 | writing the Neo4j driver | [docs/NEO4J.md](docs/NEO4J.md), then W9 |
 | writing the Avatica driver | [docs/AVATICA.md](docs/AVATICA.md), then D74 |
-| writing the InfluxDB driver | [docs/INFLUXDB.md](docs/INFLUXDB.md), then W11 and D78 |
+| writing the InfluxDB driver | [docs/INFLUXDB.md](docs/INFLUXDB.md), then W11 and D78 to D83 |
 | writing the CrateDB driver | [docs/CRATEDB.md](docs/CRATEDB.md), then D73 and D76 |
 | writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then D73 and D75 |
 | writing the Databend driver | [docs/DATABEND.md](docs/DATABEND.md), then D73 and D76 |

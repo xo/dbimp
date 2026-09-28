@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"DESCRIBE SELECT time, s, f, region FROM types ORDER BY time\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "78d98e3b-ff3e-48b0-a77f-66f62e73c877"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:48 GMT"
+      ]
+    },
+    "body": "[{\"column_name\":\"time\",\"data_type\":\"Timestamp(ns)\",\"is_nullable\":\"NO\"},{\"column_name\":\"s\",\"data_type\":\"Utf8\",\"is_nullable\":\"YES\"},{\"column_name\":\"f\",\"data_type\":\"Float64\",\"is_nullable\":\"YES\"},{\"column_name\":\"region\",\"data_type\":\"Dictionary(Int32, Utf8)\",\"is_nullable\":\"YES\"}]"
+  }
+}

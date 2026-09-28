@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"CREATE VIEW dbimp_v AS SELECT 1 AS a\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:51 GMT"
+      ],
+      "Cluster-Uuid": [
+        "78d98e3b-ff3e-48b0-a77f-66f62e73c877"
+      ],
+      "Content-Length": [
+        "52"
+      ]
+    },
+    "body": "Error during planning: DDL not supported: CreateView"
+  }
+}

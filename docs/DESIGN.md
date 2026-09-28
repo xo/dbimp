@@ -200,6 +200,11 @@ Each file under `testdata/<driver>/`, except the manifest, is one
 request, and the status, the headers and the body of its response. A body
 that is text is in `body`. A binary body, such as one in CBOR, is in
 `binary`, which the file holds as base64, and `Content` returns either.
+If the server closed the connection before the end of the body, as
+InfluxDB 3 does for an error after some rows, `truncated` is true and the
+body holds what arrived. `Replay` then sends that part and closes the
+connection, so the driver reads `io.ErrUnexpectedEOF` as it did from the
+server.
 
 `Recorder` is an `http.RoundTripper` that writes each exchange with a real
 server. It names each file for the release, a number and the request. It
@@ -209,14 +214,17 @@ of its request, which `WithLabel` sets, or else from the last call of
 background while others are sent.
 
 The command `dbimptest/cmd/record` reads `testdata/<driver>/requests.json`,
-sends each request in it as both principals through a `Recorder`, and writes the
+sends each request in it as both principals through a `Recorder`, or as the
+administrator only when `-ordinary` is empty, and writes the
 exchanges and the manifest. A request sends its `body` as JSON, or as CBOR
 when its `encoding` is `cbor`, or its `text` as plain text. The script can
 name headers that every request of one principal sends, in `header`, such as
 the headers that say where a SurrealDB user is defined. A request keeps a
 value of its response with `capture`, such as the id of a transaction of
 Neo4j, and a later request of the same principal writes it into its body or
-its path as `{{name}}`. It replaces the files and the entries that an
+its path as `{{name}}`. A request with `releases` runs only on a release
+whose name starts with one of them, such as `influxdb-3`, as `principals`
+limits a request to some principals. It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
 it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
 the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.
@@ -308,6 +316,14 @@ It sends the teardown with a context that does not end with the test,
 because the context of a test ends before its cleanup runs. Its tests hold a
 store in memory with three faults: a value that changes its type, a delete
 that keeps the row, and a write that is late.
+
+Three fields serve a database that cannot do every step, such as InfluxDB
+(D86). `Column` names the column of the value, when the select returns other
+columns with it. `SkipUpdate` returns why an update from one value to the
+next cannot run, and `RoundTrip` logs the reason and skips that update and
+the read after it. An empty `Delete` says that the database cannot delete one
+row, and `RoundTrip` logs that and skips the delete and the check that the
+row is gone. Each of the three keeps the old behaviour when it is not set.
 
 ### The two tables
 

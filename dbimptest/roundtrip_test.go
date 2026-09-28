@@ -31,6 +31,9 @@ type memStore struct {
 	stringify bool
 	// keep makes DELETE do nothing, which is a fault.
 	keep bool
+	// keepOnNull makes an UPDATE to NULL keep the old value, as InfluxDB
+	// does for a field that a write leaves out.
+	keepOnNull bool
 	// dropped is set by the statement DROP of a teardown.
 	dropped bool
 }
@@ -137,6 +140,9 @@ func (c memConn) ExecContext(ctx context.Context, query string, args []driver.Na
 		if err != nil {
 			return nil, err
 		}
+		if v.Value == nil && c.s.keepOnNull {
+			break
+		}
 		c.s.write(key, v.Value, false)
 	case query == "DELETE":
 		key, err := keyArg(args, 0)
@@ -150,29 +156,47 @@ func (c memConn) ExecContext(ctx context.Context, query string, args []driver.Na
 	return driver.RowsAffected(1), nil
 }
 
-func (c memConn) QueryContext(_ context.Context, _ string, args []driver.NamedValue) (driver.Rows, error) {
+// QueryContext answers SELECT with the value, and SELECT WIDE with the key
+// and then the value, as InfluxQL returns other columns with a value.
+func (c memConn) QueryContext(_ context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
 	key, err := keyArg(args, 0)
 	if err != nil {
 		return nil, err
 	}
 	v, ok, visible := c.s.read(key)
-	return &memRows{v: v, ok: ok && visible}, nil
+	r := &memRows{v: v, ok: ok && visible}
+	if query == "SELECT WIDE" {
+		r.key = key
+	}
+	return r, nil
 }
 
 type memRows struct {
 	v    any
 	ok   bool
 	done bool
+	// key is the key, which a wide row holds before the value.
+	key string
 }
 
-func (r *memRows) Columns() []string { return []string{"v"} }
-func (r *memRows) Close() error      { return nil }
+func (r *memRows) Columns() []string {
+	if r.key != "" {
+		return []string{"key", "v"}
+	}
+	return []string{"v"}
+}
+
+func (r *memRows) Close() error { return nil }
 
 func (r *memRows) Next(dest []driver.Value) error {
 	if !r.ok || r.done {
 		return io.EOF
 	}
 	r.done = true
+	if r.key != "" {
+		dest[0], dest[1] = r.key, r.v
+		return nil
+	}
 	dest[0] = r.v
 	return nil
 }
@@ -319,4 +343,45 @@ func TestRoundTripNeedsTwoValues(t *testing.T) {
 	if len(errs) == 0 || !strings.Contains(errs[0], "needs at least 2") {
 		t.Errorf("RoundTrip with one value reported %q", errs)
 	}
+}
+
+// A select that returns other columns with the value names the column of
+// the value.
+func TestRoundTripReadsItsColumn(t *testing.T) {
+	db := openMem(&memStore{})
+	defer db.Close()
+	c := memCase()
+	c.Select, c.Column = "SELECT WIDE", 1
+	dbimptest.RoundTrip(t, db, c)
+}
+
+// A store that keeps the old value on an update to NULL fails the round
+// trip, unless SkipUpdate names why that update cannot run.
+func TestRoundTripSkipsAnUpdate(t *testing.T) {
+	db := openMem(&memStore{keepOnNull: true})
+	defer db.Close()
+	errs := failures(t, func(tb testing.TB) {
+		tb.Helper()
+		dbimptest.RoundTrip(tb, db, memCase())
+	})
+	if !strings.Contains(strings.Join(errs, "\n"), "after the update to null") {
+		t.Errorf("an update to NULL that keeps the old value reported %q", errs)
+	}
+	c := memCase()
+	c.SkipUpdate = func(_, to dbimptest.Value) string {
+		if to.In == nil {
+			return "the store keeps the old value"
+		}
+		return ""
+	}
+	dbimptest.RoundTrip(t, db, c)
+}
+
+// A database that cannot delete one row has no Delete, and the row stays.
+func TestRoundTripWithoutDelete(t *testing.T) {
+	db := openMem(&memStore{keep: true})
+	defer db.Close()
+	c := memCase()
+	c.Delete = ""
+	dbimptest.RoundTrip(t, db, c)
 }

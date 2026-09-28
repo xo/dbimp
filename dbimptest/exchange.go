@@ -52,12 +52,15 @@ func (r Request) Content() []byte {
 }
 
 // Response is the recorded part of a response. A body that is text is in
-// Body, and a binary body is in Binary, as for a Request.
+// Body, and a binary body is in Binary, as for a Request. Truncated is true
+// when the server closed the connection before the end of the body, as
+// InfluxDB 3 does for an error after some rows. Body then holds what arrived.
 type Response struct {
-	Status int         `json:"status"`
-	Header http.Header `json:"header,omitzero"`
-	Body   string      `json:"body"`
-	Binary []byte      `json:"binary,omitzero"`
+	Status    int         `json:"status"`
+	Header    http.Header `json:"header,omitzero"`
+	Body      string      `json:"body"`
+	Binary    []byte      `json:"binary,omitzero"`
+	Truncated bool        `json:"truncated,omitzero"`
 }
 
 // Content returns the bytes of the body.
@@ -175,6 +178,14 @@ func replay(t *testing.T, dir, pattern string, match Match) *httptest.Server {
 		w.WriteHeader(res.Status)
 		if _, err := w.Write(res.Content()); err != nil {
 			t.Errorf("writing a response from the fake server: %v", err)
+		}
+		if res.Truncated {
+			// The client gets what the server sent, and then the connection
+			// closes before the end of the body, as it did on the server.
+			if err := http.NewResponseController(w).Flush(); err != nil {
+				t.Errorf("flushing a response from the fake server: %v", err)
+			}
+			panic(http.ErrAbortHandler)
 		}
 	}))
 	t.Cleanup(srv.Close)

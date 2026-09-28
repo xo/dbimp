@@ -1,6 +1,6 @@
 # D17. The priorities follow the three tests
 
-Status: Decided.
+Status: Amended by D84 and D87.
 
 A target that meets R, H and S is P1. A target that fails one is P2.
 A target that fails two or more, or that no longer exists, is P3. Inside

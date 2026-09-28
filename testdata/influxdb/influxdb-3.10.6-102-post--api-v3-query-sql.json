@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"DESCRIBE SELECT date_bin(INTERVAL '1 hour', time) AS b, count(*) AS c FROM types GROUP BY 1 ORDER BY 1\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "f6a06fe8-7348-4505-ba6f-2a9fca6c885b"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:39 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[{\"column_name\":\"b\",\"data_type\":\"Timestamp(ns)\",\"is_nullable\":\"YES\"},{\"column_name\":\"c\",\"data_type\":\"Int64\",\"is_nullable\":\"NO\"}]"
+  }
+}

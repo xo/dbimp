@@ -1,6 +1,6 @@
 # D78. One InfluxDB driver, with the dialects influxdb and influxql
 
-Status: Decided.
+Status: Amended by D85.
 
 Ken decided on 2026-09-28 the scope of the InfluxDB driver, which is part
 of step 9 of [DRIVER.md](../DRIVER.md). Gemini and DeepSeek reviewed the
@@ -48,11 +48,11 @@ it connects. It works as `sslmode` does for PostgreSQL:
 | `require` | It sends `GET /ping` when it connects, and speaks SQL. The connection fails on InfluxDB 1 and InfluxDB 2. |
 
 `GET /ping` answers on each release with the header `X-Influxdb-Version`,
-such as `1.13.1`, `2.9.1` or `3.11.5` (the documents, and Gemini and
-DeepSeek agree). The driver sends it once for each new connection, and
-keeps no cache, so a new connection sees a server that was upgraded. The
-Core API reference says that `/ping` needs a token on InfluxDB 3 by default,
-and Gemini said that it does not. Step 6 measures it.
+which is `1.13.1`, `v2.9.1`, `3.9.13` or `3.11.5` (measured). InfluxDB 2
+puts a `v` before the number. The driver sends it once for each new connection, and
+keeps no cache, so a new connection sees a server that was upgraded. On
+InfluxDB 3, `/ping` answers HTTP 401 without a token, as the Core API
+reference says (measured on 3.9.13 and 3.11.5, D82).
 
 With `disable` and `allow`, the driver sends no ping, so the key `version`
 of the DSN, `1`, `2` or `3`, says which release it talks to, and so which
@@ -85,6 +85,6 @@ DBRP (not measured), and the `Init` of its `dbrun` entry makes it.
 
 ## What is still open
 
-D79 names the releases that the tests run. The URL of the DSN, the forms of
-authentication on each release, and the rest of step 9 are decisions still
-to make.
+D79 names the releases that the tests run. D82 names the URL of the DSN and
+the authentication on each release. D80 and D81 say how each dialect reads
+its result.

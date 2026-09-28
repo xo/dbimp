@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SHOW%20DIAGNOSTICS"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Request-Id": [
+        "f27747db-bac8-11f1-8087-e60a1b3166aa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "1.13.1"
+      ],
+      "X-Request-Id": [
+        "f27747db-bac8-11f1-8087-e60a1b3166aa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:44 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"build\",\"columns\":[\"Branch\",\"Build Time\",\"Commit\",\"Version\"],\"values\":[[\"unknown\",\"\",\"f0281924ae2d2865dd1b981320d795a5e246639e\",\"1.13.1\"]]},{\"name\":\"config\",\"columns\":[\"aggressive-points-per-block\",\"cache-max-memory-size\",\"cache-snapshot-memory-size\",\"cache-snapshot-write-cold-duration\",\"compact-full-write-cold-duration\",\"compact-throughput\",\"compact-throughput-burst\",\"dir\",\"max-concurrent-compactions\",\"max-index-log-file-size\",\"max-series-per-database\",\"max-values-per-tag\",\"series-file-max-concurrent-compactions\",\"series-id-set-cache-size\",\"strict-error-handling\",\"wal-dir\",\"wal-fsync-delay\"],\"values\":[[\"10000\",\"1g\",\"25m\",\"10m0s\",\"4h0m0s\",\"48m\",\"48m\",\"/var/lib/influxdb/data\",0,\"1m\",1000000,100000,0,100,false,\"/var/lib/influxdb/wal\",\"0s\"]]},{\"name\":\"config-coordinator\",\"columns\":[\"log-queries-after\",\"log-timedout-queries\",\"max-concurrent-queries\",\"max-select-buckets\",\"max-select-point\",\"max-select-series\",\"query-timeout\",\"write-timeout\"],\"values\":[[\"0s\",false,0,0,0,0,\"0s\",\"10s\"]]},{\"name\":\"config-cqs\",\"columns\":[\"enabled\",\"query-stats-enabled\",\"run-interval\"],\"values\":[[true,false,\"1s\"]]},{\"name\":\"config-data\",\"columns\":[\"aggressive-points-per-block\",\"cache-max-memory-size\",\"cache-snapshot-memory-size\",\"cache-snapshot-write-cold-duration\",\"compact-full-write-cold-duration\",\"compact-throughput\",\"compact-throughput-burst\",\"dir\",\"max-concurrent-compactions\",\"max-index-log-file-size\",\"max-series-per-database\",\"max-values-per-tag\",\"series-file-max-concurrent-compactions\",\"series-id-set-cache-size\",\"strict-error-handling\",\"wal-dir\",\"wal-fsync-delay\"],\"values\":[[\"10000\",\"1g\",\"25m\",\"10m0s\",\"4h0m0s\",\"48m\",\"48m\",\"/var/lib/influxdb/data\",0,\"1m\",1000000,100000,0,100,false,\"/var/lib/influxdb/wal\",\"0s\"]]},{\"name\":\"config-httpd\",\"columns\":[\"access-log-path\",\"bind-address\",\"enabled\",\"flux-enabled\",\"https-enabled\",\"https-ignore-sanity-checks\",\"https-insecure-certificate\",\"max-connection-limit\",\"max-row-limit\"],\"values\":[[\"\",\":8086\",true,false,false,false,false,0,0]]},{\"name\":\"config-meta\",\"columns\":[\"dir\"],\"values\":[[\"/var/lib/influxdb/meta\"]]},{\"name\":\"config-monitor\",\"columns\":[\"store-database\",\"store-enabled\",\"store-interval\"],\"values\":[[\"_internal\",true,\"10s\"]]},{\"name\":\"config-precreator\",\"columns\":[\"advance-period\",\"check-interval\",\"enabled\"],\"values\":[[\"30m0s\",\"10m0s\",true]]},{\"name\":\"config-retention\",\"columns\":[\"check-interval\",\"enabled\"],\"values\":[[\"30m0s\",true]]},{\"name\":\"config-subscriber\",\"columns\":[\"enabled\",\"http-timeout\",\"write-buffer-size\",\"write-concurrency\"],\"values\":[[true,\"30s\",1000,40]]},{\"name\":\"cq\"},{\"name\":\"network\",\"columns\":[\"hostname\"],\"values\":[[\"b922e9cd6613\"]]},{\"name\":\"runtime\",\"columns\":[\"GOARCH\",\"GOMAXPROCS\",\"GOOS\",\"version\"],\"values\":[[\"amd64\",32,\"linux\",\"go1.26.5\"]]},{\"name\":\"stats\",\"columns\":[\"compact-throughput-usage-percentage\"],\"values\":[[0]]},{\"name\":\"system\",\"columns\":[\"PID\",\"currentTime\",\"started\",\"uptime\"],\"values\":[[1,\"2026-09-27T23:12:44.93259717Z\",\"2026-09-27T23:08:05.285997594Z\",\"4m39.646599576s\"]]}]}]}\n"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "q=SELECT%20n%20FROM%20big%20LIMIT%202%3B%20SELECT%20nope%28n%29%20FROM%20big"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ],
+      "X-Request-Id": [
+        "578128bf-bac8-11f1-804c-ce336a42b8fa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "578128bf-bac8-11f1-804c-ce336a42b8fa"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"big\",\"columns\":[\"time\",\"n\"],\"values\":[[\"2020-09-13T12:26:40Z\",0],[\"2020-09-13T12:26:41Z\",1]]}]}]}\n{\"results\":[{\"statement_id\":1,\"error\":\"undefined function nope()\"}]}\n"
+  }
+}

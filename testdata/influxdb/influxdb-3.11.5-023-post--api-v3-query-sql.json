@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"DESCRIBE SELECT CAST('12345678901234567890.123456789' AS DECIMAL(38,9)) AS dec, DATE '2024-01-02' AS d, CAST('12:30:00' AS TIME) AS tm, INTERVAL '1 day 2 hours' AS iv, arrow_cast(TIMESTAMP '2024-01-02T03:04:05.123456789', 'Timestamp(Nanosecond, Some(\\\"UTC\\\"))') AS tz, TIMESTAMP '2024-01-02T03:04:05.123456789' AS ts, arrow_cast('ab', 'Binary') AS bin, [1, 2, 3] AS arr, named_struct('a', 1) AS st, CAST(1 AS TINYINT) AS i8, CAST(1.5 AS FLOAT) AS f32, arrow_cast(255, 'UInt8') AS u8, 9223372036854775807 AS imax, arrow_cast(18446744073709551615, 'UInt64') AS umax, 'NaN'::DOUBLE AS nan, 'inf'::DOUBLE AS inf, 'é' AS s, '' AS empty, true AS b\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:48 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "78d98e3b-ff3e-48b0-a77f-66f62e73c877"
+      ]
+    },
+    "body": "[{\"column_name\":\"dec\",\"data_type\":\"Decimal128(38, 9)\",\"is_nullable\":\"NO\"},{\"column_name\":\"d\",\"data_type\":\"Date32\",\"is_nullable\":\"NO\"},{\"column_name\":\"tm\",\"data_type\":\"Time64(ns)\",\"is_nullable\":\"NO\"},{\"column_name\":\"iv\",\"data_type\":\"Interval(MonthDayNano)\",\"is_nullable\":\"NO\"},{\"column_name\":\"tz\",\"data_type\":\"Timestamp(ns, \\\"UTC\\\")\",\"is_nullable\":\"NO\"},{\"column_name\":\"ts\",\"data_type\":\"Timestamp(ns)\",\"is_nullable\":\"NO\"},{\"column_name\":\"bin\",\"data_type\":\"Binary\",\"is_nullable\":\"NO\"},{\"column_name\":\"arr\",\"data_type\":\"List(Int64)\",\"is_nullable\":\"YES\"},{\"column_name\":\"st\",\"data_type\":\"Struct(\\\"a\\\": Int64)\",\"is_nullable\":\"YES\"},{\"column_name\":\"i8\",\"data_type\":\"Int8\",\"is_nullable\":\"NO\"},{\"column_name\":\"f32\",\"data_type\":\"Float32\",\"is_nullable\":\"NO\"},{\"column_name\":\"u8\",\"data_type\":\"UInt8\",\"is_nullable\":\"NO\"},{\"column_name\":\"imax\",\"data_type\":\"Int64\",\"is_nullable\":\"NO\"},{\"column_name\":\"umax\",\"data_type\":\"UInt64\",\"is_nullable\":\"NO\"},{\"column_name\":\"nan\",\"data_type\":\"Float64\",\"is_nullable\":\"NO\"},{\"column_name\":\"inf\",\"data_type\":\"Float64\",\"is_nullable\":\"NO\"},{\"column_name\":\"s\",\"data_type\":\"Utf8\",\"is_nullable\":\"NO\"},{\"column_name\":\"empty\",\"data_type\":\"Utf8\",\"is_nullable\":\"NO\"},{\"column_name\":\"b\",\"data_type\":\"Boolean\",\"is_nullable\":\"NO\"}]"
+  }
+}

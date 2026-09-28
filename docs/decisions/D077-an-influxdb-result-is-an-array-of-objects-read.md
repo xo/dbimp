@@ -1,6 +1,6 @@
 # D77. An InfluxDB result is an array of objects, read by rule 2 of D18
 
-Status: Decided.
+Status: Amended by D80.
 
 Ken decided on 2026-09-28 that the InfluxDB driver reads a result in JSON
 as it reads any other JSON result that is an array of objects. The columns
@@ -22,3 +22,6 @@ before the driver is written. None is measured yet:
 
 If step 6 shows the first fact, the driver fails a query whose first row
 holds a NULL. Ken decides then whether that holds.
+
+Step 6 showed the first fact, and D80 settles it. The driver sends
+`DESCRIBE` first by default, and this decision holds with `describe=disable`.

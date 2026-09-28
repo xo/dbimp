@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELECT%20n%20FROM%20big%20LIMIT%202%3B%20SELECT%20nope%28n%29%20FROM%20big"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "74bd7e86-3a2b-4528-aedd-f57bfabd3d49"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:30 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"big\",\"columns\":[\"time\",\"n\"],\"values\":[[\"2020-09-13T12:26:40Z\",0],[\"2020-09-13T12:26:41Z\",1]]}]},{\"statement_id\":1,\"error\":\"datafusion error: rewriting statement\\ncaused by\\ngather information about select statement\\ncaused by\\nError during planning: unsupported function nope()\"}]}"
+  }
+}

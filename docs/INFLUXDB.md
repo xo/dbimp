@@ -4,21 +4,24 @@ This file holds what is known about InfluxDB, for the driver that D73 names
 first after Neo4j. W11 in [BACKLOG.md](BACKLOG.md) is the work, and it
 follows [DRIVER.md](DRIVER.md). The headings are the template of that file.
 
-This is the draft of step 3. No server has run for this driver yet, so every
-fact here is "not measured" and names its source. R is the exception, because
-`dbrun` measured it (Summary). The sources, each read on 2026-09-28,
-are these:
+Step 6 measured the servers on 2026-09-28, on seven releases that `dbrun`
+started: `influxdb-1.11.8`, `influxdb-1.13.1`, `influxdb-2.8.0`,
+`influxdb-2.9.1`, `influxdb-3.9.13`, `influxdb-3.10.6` and
+`influxdb-3.11.5`. A fact marked "measured" names its releases. Each
+recorded exchange is a file under `testdata/influxdb/`, named for its
+release and a number, so "3.11.5-042" is
+`influxdb-3.11.5-042-post--api-v3-query-sql.json`. The requests are in
+`testdata/influxdb/requests.json`.
+
+A fact that no server showed is "not measured", and names its source. The
+sources, each read on 2026-09-28, are these:
 
 - "The Core API reference" is
   `api-docs/influxdb3/core/influxdb3-core-openapi.yaml` in
   `github.com/influxdata/docs-v2`. It names the version v3.11.2.
-- "The query guide" is
-  `content/shared/influxdb3-query-guides/execute-queries/influxdb3-api.md`,
-  and "the parameter guide" is
-  `content/shared/influxdb3-query-guides/sql/parameterized-queries.md`, both
-  in `docs-v2`.
-- "The SQL reference" is `content/shared/sql-reference/_index.md`,
-  `data-types.md` and `functions/misc.md` in `docs-v2`.
+- "The parameter guide" is
+  `content/shared/influxdb3-query-guides/sql/parameterized-queries.md`, and
+  "the SQL reference" is `content/shared/sql-reference/`, both in `docs-v2`.
 - "The token guides" are `content/shared/influxdb3-admin/tokens/` and
   `content/influxdb3/enterprise/admin/tokens/resource/` in `docs-v2`.
 - "The configuration reference" is
@@ -26,414 +29,434 @@ are these:
 - "The Enterprise guides" are `content/influxdb3/enterprise/admin/license.md`
   and `delete-data.md` in `docs-v2`.
 - "The v1 API reference" is `api-docs/influxdb/v1/influxdb-oss-v1-openapi.yaml`
-  in `docs-v2`, which names the version 1.8.10. "The v1 guides" are
+  in `docs-v2`, and "the v1 guides" are
   `content/influxdb/v1/administration/config.md` and
   `authentication_and_authorization.md` in `docs-v2`.
 - "The v2 API reference" is
-  `api-docs/influxdb/v2/influxdb-oss-v2-openapi.yaml` in `docs-v2`. "The Flux
-  note" is `content/flux/v0/future-of-flux.md` in `docs-v2`.
-- "The source" is `github.com/influxdata/influxdb` at the tag `v3.11.5`:
-  `influxdb3_server/src/http.rs`, `influxdb3_types/src/http.rs` and
-  `core/iox_v1_query_api/src/handler.rs`.
-- "arrow-json" is `arrow-json/src/writer/mod.rs` on the main branch of
-  `github.com/apache/arrow-rs`. The source uses it to write JSON. The release
-  of arrow-json that v3.11.5 links was not read.
-- "The image documents" are `influxdb/content.md` in
-  `github.com/docker-library/docs`, and the start scripts of each release in
-  `github.com/influxdata/influxdata-docker/influxdb/`.
-- "The dbmeta entry" is `container/influxdb.go` in `dbmeta`. It is staged,
-  and not committed.
+  `api-docs/influxdb/v2/influxdb-oss-v2-openapi.yaml`, and "the Flux note"
+  is `content/flux/v0/future-of-flux.md`, both in `docs-v2`.
+- "The source" is `github.com/influxdata/influxdb` at the tag `v3.11.5`.
+- "The dbmeta entry" is `container/influxdb.go` in `dbmeta`, staged for
+  dbmeta D112 and dbmeta D114 and not committed.
 - "The Go client" is `github.com/InfluxCommunity/influxdb3-go/v2` v2.17.0.
-- "GitHub" and "Docker Hub" are the releases and the tags that each one
-  listed.
-- "Gemini" is `gemini-3.8-flash`, and "DeepSeek" is `deepseek-flash`, both
-  asked on 2026-09-28.
+- "Gemini" is `gemini-3.1-pro-preview`, and "DeepSeek" is `deepseek-flash`,
+  both asked on 2026-09-28.
 
 ## Summary
 
 - InfluxDB is a time series database from InfluxData. Its major versions
-  speak different languages (the image documents):
-  - InfluxDB 1 speaks InfluxQL at `/query`.
+  speak different languages:
+  - InfluxDB 1 speaks InfluxQL at `/query` (measured on 1.11.8 and 1.13.1).
   - InfluxDB 2 speaks Flux at `/api/v2/query`, and InfluxQL at `/query`
-    through its v1 compatibility API (the v2 API reference).
-  - InfluxDB 3 Core and InfluxDB 3 Enterprise speak SQL at
-    `/api/v3/query_sql` and InfluxQL at `/api/v3/query_influxql`, and keep
-    the v1 `/query` endpoint (the Core API reference). The SQL is the SQL of
-    Apache DataFusion (the SQL reference).
+    through its v1 compatibility API (measured for InfluxQL on 2.8.0 and
+    2.9.1, and from the v2 API reference for Flux).
+  - InfluxDB 3 Core speaks SQL at `/api/v3/query_sql` and InfluxQL at
+    `/query` (measured on 3.9.13, 3.10.6 and 3.11.5). The SQL is the SQL of
+    Apache DataFusion 51.0.0 on 3.9.13 and 3.11.5 (measured, 3.11.5-053).
 - InfluxDB 3 also takes SQL and InfluxQL through Flight SQL over gRPC (the
-  Core API reference). The Go client queries only through Flight, and uses
-  HTTP only to write (the Go client).
+  Core API reference). The Go client queries only through Flight.
 - Flux is in maintenance mode, and InfluxDB 3 does not have it (the Flux
-  note). InfluxDB 1 and InfluxDB 2 are in maintenance too (`docs-v2`,
-  `content/shared/influxdb3/which-influxdb-3.md`).
-- The newest tags on GitHub are `v3.11.5`, `v2.9.1` and `v1.13.1`, and
-  GitHub also has `v3.12.0-0.rc.2` (GitHub). On Docker Hub, `latest` is the
-  same image as `2.9.1`, and `core` is the same image as `3.11.5-core`
-  (Docker Hub).
-- `dburl` has two schemes for this driver, committed on its `main` as
-  `a2f1a3a` and not tagged (dburl D29 and `dburl/scheme.go`). Their default
-  port is 8086 with `version=1` or `version=2`, and 8181 otherwise. The scheme `influxdb` has the dialect
-  `influxdb`, the aliases `in` and `influx`, and the generator `GenInfluxDB`.
-  The scheme `influxql` has the dialect `influxql`, the alias `iq`, and the
-  generator `GenInfluxQL`, which returns `influxdb` as the Go driver and
-  adds only `sqlmode=disable`. Each names the `GoPackage`
-  `github.com/xo/dbimp/influxdb`.
-- `usql` has no driver for InfluxDB. Its backlog names InfluxDB and InfluxQL
-  among the databases that have a Go API and no `database/sql` driver
-  (`usql/docs/BACKLOG.md`, item 157).
-- `dbmeta` has no model for InfluxDB. The dbmeta entry names InfluxDB 3 Core
-  as the product `influxdb`, with `3.9.13` and `3.11.5` in the Tested tier
-  and `3.10.6` in the Nightly tier. It cites dbmeta D112, which is staged and
-  not committed.
-- R, H and S depend on the flavor. H and S are not measured:
-  - R: InfluxDB 3 Core passes, because each Tested release passed `dbrun
-    test` (below). InfluxDB 3 Enterprise needs a person to follow a link in
-    an email before the server starts (the dbmeta entry and the Enterprise
-    guides), so it fails R now. InfluxDB 1 and InfluxDB 2 have images, and
-    `dbrun` has no entry for them yet, so R is not measured for them.
-  - H: every flavor takes queries over HTTP.
-  - S: SQL on InfluxDB 3 meets S. InfluxQL is a dialect like SQL. Ken
-    decided on 2026-09-28 that Flux meets S (D75), although a Flux query is
-    a chain of functions such as `from(bucket: ...) |> range(start: -5m)`
-    (the v2 API reference).
-- TARGETS.md has InfluxDB 3 as a P1 target, and says that its JSON output
-  can lack a schema. Responses, below, confirms that from the source.
-- `dbrun` has an entry, staged in `dbmeta` for Ken's review and not committed,
-  from dbmeta D112. The `dbmeta` session reported on 2026-09-28 that each
-  Tested release passed `dbrun test`: `influxdb-3.9.13` and `influxdb-3.11.5`,
-  with `3.10.6` in the Nightly tier. The entry has no ordinary user, because
-  InfluxDB 3 Core has admin tokens only. The admin DSN is
-  `http://_admin:<token>@...`, and `/health` needs the token.
-- D79 names the releases that the tests run. InfluxDB 1 and InfluxDB 2 need
-  their own entries in `dbrun` for `1.13.1` and `2.9.1` in the Tested tier,
-  and `1.11.8` and `2.8.0` in the Nightly tier.
+  note).
+- The releases, and their names in `dbrun`, are in D79. `dbrun` starts each
+  one from the dbmeta entry. The Tested tier is 1.13.1, 2.9.1, 3.9.13 and
+  3.11.5, and the Nightly tier is 1.11.8, 2.8.0 and 3.10.6.
+- R, H and S:
+  - R: InfluxDB 1, 2 and 3 Core pass, because `dbrun` starts every release
+    above (measured). InfluxDB 3 Enterprise needs a person to follow a link
+    in an email before it starts, so it fails R (the Enterprise guides).
+  - H: every release takes queries over HTTP (measured).
+  - S: SQL and InfluxQL meet S. Flux meets S too (D75), and the driver does
+    not speak it (D78).
+  - The priority is P1 (TARGETS.md).
+- `dburl` has two schemes for this driver (dburl D29). The scheme
+  `influxdb` has the dialect `influxdb`, the aliases `in` and `influx`, and
+  the generator `GenInfluxDB`. The scheme `influxql` has the dialect
+  `influxql`, the alias `iq`, and the generator `GenInfluxQL`, which names
+  `influxdb` as the Go driver and adds `sqlmode=disable`. Both name the
+  `GoPackage` `github.com/xo/dbimp/influxdb`.
+- `usql` has no driver for InfluxDB (`usql/docs/BACKLOG.md`).
+- The driver is `influxdb`, with the dialects `influxdb` and `influxql`
+  (D78). D80 to D83 settle the rest of step 9.
 
 ## Requests
 
-### InfluxDB 3
-
-- A SQL query is `GET` or `POST` to `/api/v3/query_sql`, and an InfluxQL
-  query is `GET` or `POST` to `/api/v3/query_influxql` (the Core API
-  reference and the source).
-- A `GET` takes `db`, `q`, `format` and `params` in the query string. The
-  value of `params` is JSON text (the Core API reference and the source).
-- A `POST` takes a JSON body with `db`, `q`, `format` and `params`, where
-  `params` is an object (the Core API reference and the source). `db` is
-  required for SQL. For InfluxQL, the statement can name the database in
-  place of `db`, and the two must agree (the source).
-- `format` is `json`, `jsonl` or `json_lines`, `csv`, `pretty` or `parquet`.
-  The default is `json` (the Core API reference and the source).
-- The `Accept` header also chooses the format. `format` in the request wins
-  over it (the source). The source reads the header first, and it knows
-  only `application/vnd.apache.parquet`, `text/csv`, `text/plain`,
-  `application/json`, `*/*` and no header. Any other value is HTTP 400,
-  even when `format` is present (the source). The Core API reference lists
-  `application/jsonl` for `Accept`, and the source refuses it. The two
-  disagree.
-- The v1 `/query` endpoint takes InfluxQL with `db`, `q`, `epoch`,
-  `chunked`, `chunk_size`, `pretty`, `rp`, `u` and `p`, by `GET` or `POST`.
-  A `POST` can send them as JSON, as a form, or as the statement alone with
-  `Content-Type: application/vnd.influxql` (the Core API reference).
-- Authentication is a token. `Authorization: Bearer <token>` works on every
-  endpoint. `Authorization: Token <token>` works on the v1 and v2
-  endpoints. HTTP Basic with any user name and the token as the password,
-  and `u` and `p` in the query string, work on the v1 endpoints (the Core
-  API reference and the token guides).
-- A token begins with `apiv3_` (the dbmeta entry). The first admin token is
-  the operator token, named `_admin` (the token guides).
-- Authentication is on by default. `--without-auth` turns it off, and
-  `--disable-authz` with `health`, `ping` or `metrics` opens those
-  endpoints (the configuration reference).
-- A request body is 10 MB at most by default, set by
-  `--max-http-request-size`. A larger one is HTTP 413 (the configuration
-  reference and the source).
-- The default port is 8181 (the configuration reference, the image
-  documents and the dbmeta entry).
-- Writes are line protocol, at `/api/v3/write_lp`, `/write` and
-  `/api/v2/write` (the Core API reference). `/api/v3/configure/database`
-  and `/api/v3/configure/table` create and delete a database and a table
-  (the Core API reference).
-
-### InfluxDB 1
-
-- A query is `GET` or `POST` to `/query`, with `db`, `q`, `epoch`, `pretty`,
-  `chunked`, `u` and `p` (the v1 API reference). `GET` is for `SELECT` and
-  `SHOW`. `POST` is for `SELECT ... INTO`, `ALTER`, `CREATE`, `DELETE`,
-  `DROP`, `GRANT`, `KILL` and `REVOKE` (the v1 API reference).
-- Authentication is off by default. When it is on, a request uses HTTP
-  Basic, or `u` and `p` in the query string (the v1 API reference and the v1
-  guides).
-- The default port is 8086 (the v1 guides).
-
-### InfluxDB 2
-
-- A Flux query is `POST /api/v2/query`, with `org` or `orgID` in the query
-  string, and the body as `application/vnd.flux` or as JSON (the v2 API
-  reference).
-- An InfluxQL query is `/query`, where `db` and `rp` map to a bucket through
-  a mapping of the database and the retention policy (the v2 API reference).
-- The default port is 8086 (the image documents).
+- A SQL statement is `POST /api/v3/query_sql` with a JSON body of `db`, `q`,
+  `format` and `params` (measured on 3.9.13 and 3.11.5). `GET` with the same
+  keys in the query string works too (measured on 3.11.5). The driver sends
+  `"format": "json"`.
+- An InfluxQL statement is `POST /query`, with `db` in the query string and
+  the form `q=...` in the body, as
+  `application/x-www-form-urlencoded` (measured on every release). `GET` with
+  `q` in the query string works for `SHOW` and `SELECT` (measured on every
+  release, 1.13.1-007).
+- `/api/v3/query_sql` is HTTP 404 on InfluxDB 1 (measured, 1.13.1-008). On
+  InfluxDB 2 it is HTTP 200 with the HTML page of the user interface
+  (measured, 2.9.1-008). So a SQL request to InfluxDB 2 cannot be read as
+  JSON.
+- HTTP Basic authentication works on every endpoint and every release
+  (measured):
+  - InfluxDB 1 takes a user and its password.
+  - InfluxDB 2 takes a v1 user and its password, or any user with the token
+    as the password. `Authorization: Token <token>` works too.
+  - InfluxDB 3 takes any user with the token as the password.
+    `Authorization: Bearer <token>` works too.
+- `GET /ping` answers HTTP 204 without credentials on InfluxDB 1 and 2, even
+  with a wrong password (measured, 1.13.1-023 and 2.9.1-023). On InfluxDB 3
+  it answers HTTP 401 without a token (measured, 3.11.5-048).
+- `dbrun` gives each release a database `dbmeta`. On InfluxDB 2, `/query`
+  maps `db=dbmeta` to the bucket through the mapping that the dbmeta entry
+  makes, with the retention policy `autogen`.
+- Writes are line protocol, at `/write` on every release, and also at
+  `/api/v3/write_lp` on InfluxDB 3 (measured). No server parses INSERT. The
+  driver takes `INSERT [INTO <database>[.<retention-policy>]] <line
+  protocol>`, as the `influx` shell does, in both dialects, and sends the
+  lines to `/write` (D85). It binds each argument as a literal of line
+  protocol (measured through the driver on every release, 2026-09-28).
 
 ## The DSN
 
-- The name of the package and of the driver is `influxdb` (D78). Step 9
-  decides the URL (D27 and D35). dburl D29 says that the form of the URL,
-  the port and the authentication are not settled.
-- The DSN has the keys `sqlmode` and `version` (D78). `sqlmode` is
-  `disable`, `allow`, `prefer` or `require`, and its default is `prefer`.
-  `version` is `1`, `2` or `3`, and its default is `3`. The driver reads
-  both keys, and sends neither to the server.
-- The dbmeta entry gives the URL `http://_admin:<token>@127.0.0.1:<port>`,
-  with the name of the token, `_admin`, as the user and the admin token as
-  the password. It has no path, so it names no database. Init in the dbmeta
-  entry creates the database `dbmeta`.
-- Each InfluxDB 3 query needs a database (the Core API reference), so step 9
-  decides how the URL names it.
+D82 settles the DSN. It is `influxdb://user:password@host:port/database`,
+with these keys:
+
+| Key | Values | Default | Decision |
+| --- | --- | --- | --- |
+| `sqlmode` | `disable`, `allow`, `prefer`, `require` | `prefer` | D78 |
+| `version` | `1`, `2`, `3` | `3` | D78 |
+| `describe` | `always`, `disable` | `always` | D80 |
+| `chunked` | `prefer`, `disable` | `prefer` | D83 |
+| `rp` | a retention policy | none | D82 |
+| `tls` | `true`, `false` | `false` | D82 |
+
+- The path is the database, which the driver sends as `db`.
+- A token is the password. Without a port, the driver uses 8086 for `version`
+  `1` or `2`, and 8181 otherwise.
+- Examples: `influxdb://_admin:apiv3_token@localhost:8181/dbmeta` for
+  InfluxDB 3, and
+  `influxdb://admin:secret@localhost:8086/dbmeta?sqlmode=disable&version=1`
+  for InfluxDB 1.
+- The dbmeta entry gives `http://` URLs with no path, such as
+  `http://_admin:<token>@127.0.0.1:<port>`. The tests add the path `dbmeta`.
 
 ## Responses
 
-### InfluxDB 3
+### SQL on InfluxDB 3
 
 - `json` is one JSON array with one object for each row, such as
-  `[{"co":0,"hum":36.2,"room":"Kitchen","temp":23.0,"time":"2022-01-01T09:00:00"}]`
-  (the parameter guide). `jsonl` is one such object on each line (the query
-  guide). Neither has a list of columns or of types (the source).
-- The Core API reference gives the v1 form, `results` with `series`,
-  `columns` and `values`, as its example of a SQL response. The query guide,
-  the parameter guide and the source give an array of objects. The two
-  disagree.
-- A NULL is not written. The key is left out of the object (the source and
-  arrow-json). The source builds its writers with the defaults of
-  arrow-json, and arrow-json says that its writers leave out a key whose
-  value is null.
-- A result with no rows is `[]` for `json`, and an empty body for `parquet`
-  (the source). So neither format names the columns of an empty result.
-  `tblfmt` writes such a result set as `psql` does from `v0.19.1`
-  (tblfmt D31, and Q12 in [PLAN.md](PLAN.md)). Whether `csv` writes its header for
-  an empty result is not measured.
-- By rule 2 of D18, the columns of `json` and `jsonl` are the keys of the
-  first row (D77). A NULL in the first row removes its column, and the same
-  key in a later row is then an error. If step 6 shows this, Ken decides
-  whether it holds (D77).
-- `csv` writes a header row before the first batch of rows, and no header
-  after it (the source). It has no types.
-- `json`, `jsonl` and `csv` stream. The server writes each batch of rows as
-  the query makes it (the source). `pretty` and `parquet` read the whole
-  result into the memory of the server before they send it (the source).
-- The status and the content type are sent before the first row (the
-  source).
-- There is no paging and no cursor over HTTP (the Core API reference). No
-  default `LIMIT` is written in the documents that were read.
-- On Core, `--query-file-limit` caps a query at 432 Parquet files by
-  default. With the default `gen1-duration` of 10 minutes, that is about 72
-  hours of data. A query over the limit is an error (the configuration
-  reference).
-- The v1 `/query` on InfluxDB 3 gives the v1 form, below, and `chunked` with
-  a `chunk_size` of 10,000 by default (the Core API reference and the
-  source).
+  `[{"time":"2023-11-14T22:13:20","s":"text","f":1.5}]` (measured on 3.9.13
+  and 3.11.5, 3.11.5-014). It has no list of columns and no types.
+- The keys keep the order of the statement. `SELECT *` gives the columns of
+  the table in order by name (measured, 3.11.5-014 and 3.11.5-016).
+- A NULL is not written, so the key is missing from its object.
+  `SELECT NULL AS a, 1 AS b` returns `[{"b":1}]` (measured, 3.11.5-012). A
+  row of NULLs is `{}` (measured, 3.11.5-064). A key can arrive first in a
+  later row.
+- A result with no rows is `[]` (measured, 3.11.5-018).
+- `DESCRIBE` followed by a `SELECT` returns one object for each column, with
+  `column_name`, `data_type` and `is_nullable`, in the order of the
+  statement, even for a result with no rows (measured, 3.11.5-011, 013 and
+  017). It refuses every statement that is not a `SELECT`: HTTP 400 on
+  3.9.13 and HTTP 405 on 3.11.5 (measured, 3.9.13-090 and 3.11.5-090). D80
+  says how the driver uses it.
+- The body streams with `Transfer-Encoding: chunked` (measured). There is no
+  paging and no cap: 12,000 rows arrive in one body (measured, 3.11.5-037).
+  The query guide and the Core API reference name no cursor.
+- The other formats are `jsonl`, `csv`, `pretty` and `parquet` (measured, by
+  the error for an unknown format). `csv` writes nothing for a result with
+  no rows, and writes a NULL and an empty string alike (measured on
+  3.11.5). An `Accept` header of `application/vnd.apache.arrow.stream` is
+  HTTP 400 (measured on 3.11.5).
+- The server does not compress the answer, even with
+  `Accept-Encoding: gzip` (measured, 3.11.5-064).
 
-### InfluxDB 1
+### InfluxQL on every release
 
-- A response is `{"results": [...]}`, with one entry for each statement. An
-  entry holds `statement_id`, and either `series` or `error`. Each series
-  holds `name`, `columns` and `values`, one array for each row. A NULL is
-  `null` in `values` (the v1 API reference). So the columns arrive before
-  the rows of a series, and rule 1 of D18 applies.
-- `chunked=true` streams the result in chunks by series, or every 10,000
-  points. A number sets the size of a chunk (the v1 API reference).
-- `max-row-limit` caps a result that is not chunked. Its default is 0, which
-  is no limit. Over the limit, the response holds `"partial":true` (the v1
-  guides).
-- `Accept: application/csv` gives CSV (the v1 API reference).
-
-### InfluxDB 2
-
-- `/api/v2/query` answers Flux in CSV, with the columns `result`, `table`,
-  `_start`, `_stop`, `_time`, `_value` and the tags (the v2 API reference).
-  It takes `Accept-Encoding: gzip` (the v2 API reference).
-- `/query` gives the v1 form, and its example holds `"partial":true` for a
-  chunk (the v2 API reference).
+- The answer is `{"results": [...]}`, with one result for each statement.
+  A result holds `statement_id`, and then `series`, `error`, or neither. A
+  series holds `name`, an optional `tags` object, `columns` and `values`,
+  one array for each row, with `null` for a NULL (measured on every
+  release). So the columns arrive before the rows, and rule 1 of D18
+  applies. D81 maps each series to a result set.
+- `GROUP BY host` gives one series for each value of the tag, with the tag
+  in `tags` and not in `columns` (measured, 1.13.1-010). A statement on two
+  measurements gives one series for each, with different columns (measured,
+  1.13.1-011).
+- A statement with no series is `{"statement_id":0}` (measured on every
+  release, 1.13.1-012).
+- With `chunked=true`, InfluxDB 1 sends one JSON document for each chunk of
+  10,000 rows, and a series that continues holds `"partial":true` (measured,
+  1.13.1-017 and 1.13.1-018). InfluxDB 2 sends its chunks with a
+  `Content-Length`, so it builds the whole answer first (measured on 2.8.0
+  and 2.9.1). InfluxDB 3 leaves out the result of each statement that has
+  no series (measured, 3.11.5-059). D83 settles which releases the driver
+  asks for chunks.
+- InfluxDB 2 leaves out the result of `DELETE` and of `DROP MEASUREMENT`, in
+  both forms (measured, 2.9.1-031). D83 fills the gap.
+- A result without `chunked` is not capped: 20,000 rows arrive in one
+  document on 1.13.1, 2.9.1 and 3.11.5 (measured by `curl`, not recorded).
+  `max-row-limit` caps a result on InfluxDB 1, and its default is 0, which
+  is no limit (the v1 guides).
+- InfluxDB 1 compresses the answer with `Accept-Encoding: gzip` (measured,
+  1.13.1-033). InfluxDB 2 and 3 do not (measured, 2.9.1-033 and
+  3.11.5-063).
+- No recorded answer is a redirect (measured on every release).
 
 ## Types
 
-Step 10 writes the type table. These are the SQL types of InfluxDB 3, with
-their Arrow types (the SQL reference):
+The type table is written from the code by `TestTables` (step 10). It has
+one row for each type that a line of line protocol writes, which are the
+types of `features.json`.
 
-- `STRING`, `CHAR`, `VARCHAR` and `TEXT` are `Utf8`.
-- `BIGINT` is `Int64`, from -9223372036854775808 to 9223372036854775807.
-- `BIGINT UNSIGNED` is `UInt64`, from 0 to 18446744073709551615.
-- `DOUBLE` is `Float64`, and `FLOAT` and `REAL` are `Float32`. A float field
-  is stored as `Float64`.
-- `TIMESTAMP` is `Timestamp(Nanosecond, None)`, a time with nanoseconds and
-  no zone.
-- `INTERVAL` is `Interval(MonthDayNano)`.
-- `BOOLEAN` is `Boolean`.
-- A tag column is `Dictionary(Int32, Utf8)` (the query guide).
-- UUID, BLOB, CLOB, BINARY, VARBINARY, ARRAY, ENUM, SET, DATETIME and BYTEA
-  are not supported, with others (the SQL reference).
+<!-- dbimp:types -->
+| Wire type | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- |
+| null | `nil in SQL, from the data_type Null. InfluxQL: nil` | `interface {}` | `NULL` | yes |
+| float | `float64 in SQL, from the data_type Float64. InfluxQL: float64, or int64 for a whole number` | `sql.Null[float64]` | `FLOAT64` | yes |
+| integer | `int64 in SQL, from the data_type Int64. InfluxQL: int64` | `sql.Null[int64]` | `INT64` | yes |
+| unsigned integer | `uint64 in SQL, from the data_type UInt64. InfluxQL: int64, or uint64 above the range of int64` | `sql.Null[uint64]` | `UINT64` | yes |
+| string | `string in SQL, from the data_type Utf8. InfluxQL: string` | `sql.Null[string]` | `UTF8` | yes |
+| boolean | `bool in SQL, from the data_type Boolean. InfluxQL: bool` | `sql.Null[bool]` | `BOOLEAN` | yes |
+| tag | `string in SQL, from the data_type Dictionary(Int32, Utf8). InfluxQL: string` | `sql.Null[string]` | `DICTIONARY(INT32, UTF8)` | yes |
+| timestamp | `time.Time in SQL, from the data_type Timestamp(ns). InfluxQL: time.Time, in the column time` | `time.Time` | `TIMESTAMP(NS)` | no |
+<!-- /dbimp:types -->
 
-How each type arrives in JSON:
+SQL can make other types in an expression, and the driver decodes each one
+by its `data_type`: a decimal as an `*apd.Decimal`, a date as a `time.Time`
+at midnight in UTC, binary data as a `[]byte`, and a list or a struct as it
+decodes JSON. A time of day and an interval stay the strings of the server.
+These are the facts that step 6 measured.
 
-- A time arrives as a string with no zone, such as
-  `"2025-02-25T20:19:34.984098"` (the Core API reference).
-- Whether an `Int64` and a `UInt64` arrive as JSON numbers is not measured.
-  If they do, a `UInt64` above 2^53 needs D19.
-- arrow-json writes binary data in hex by default (arrow-json).
-- A missing key is a NULL, above. JSON gives no way to tell a NULL from a
-  column that a row lacks.
+SQL on InfluxDB 3, with the `data_type` that `DESCRIBE` gives and the JSON of
+a value (measured on 3.9.13 and 3.11.5, 3.11.5-023 to 026):
 
-InfluxDB 1 has float, integer, string, boolean and time values (not
-measured, from the example of the v1 API reference, which shows floats,
-strings, `null` and RFC 3339 times). `epoch` turns a time into a number in
-`ns`, `u`, `ms`, `s`, `m` or `h` (the v1 API reference).
+| `data_type` | JSON |
+| --- | --- |
+| `Int64`, `Int8` | a number, such as `9223372036854775807` |
+| `UInt64`, `UInt8` | a number, such as `18446744073709551615` |
+| `Float64`, `Float32` | a number, such as `1.5` or `0.0`. NaN, +Inf and -Inf are an explicit `null` |
+| `Decimal128(38, 9)` | a number with every digit, such as `12345678901234567890.123456789` |
+| `Utf8` | a string |
+| `Dictionary(Int32, Utf8)` | a string. A tag is this type |
+| `Boolean` | `true` or `false` |
+| `Timestamp(ns)` | a string with no zone, such as `"2024-01-02T03:04:05.123456789"` |
+| `Timestamp(ns, "UTC")` | a string with `Z` |
+| `Date32` | a string, such as `"2024-01-02"` |
+| `Time64(ns)` | a string, such as `"12:30:00"` |
+| `Interval(MonthDayNano)` | a string, such as `"1 days 2 hours"` |
+| `Binary` | a string of hex, such as `"6162"` |
+| `List(Int64)` | an array |
+| `Struct("a": Int64)` | an object |
+| `Null` | always a missing key |
+
+- A NaN, +Inf or -Inf reaches the JSON as an explicit `null`, and a NULL
+  leaves out its key (measured, 3.11.5-024, and on 3.11.5 on 2026-09-29).
+  So the driver tells a value that is not finite from a NULL, and reads it
+  as `math.NaN()`, because the JSON cannot tell the three apart (D80).
+  `format=csv` writes them as `NaN`, `inf` and `-inf`. Line protocol refuses
+  `NaN`, so only an expression makes one, and InfluxQL answers 0 for a
+  division by zero.
+- A decimal keeps every digit only when it is made from a string. A literal
+  such as `CAST(12345678901234567890.123456789 AS DECIMAL(38,9))` passes
+  through a float first and loses digits (measured by `curl` on 3.11.5).
+- A parameter is typed `Null` by `DESCRIBE`, whatever its value (measured,
+  3.11.5-030). So a column typed `Null` can hold values.
+- A line protocol field is a float, an integer, an unsigned integer, a
+  string or a boolean, and a tag is a string (measured). InfluxDB 1 refuses
+  an unsigned integer, with HTTP 400 and `invalid number` (measured,
+  1.13.1-003).
+
+InfluxQL on every release:
+
+- A float and an integer are both JSON numbers. A float that holds 0 arrives
+  as `0` (measured, 1.13.1-014). `/query` names no types. `SHOW FIELD KEYS`
+  gives the type of each field (measured, 1.13.1-015). D83 decodes a number
+  by its text.
+- The column `time` is a string in RFC 3339 with `Z`, such as
+  `"2023-11-14T22:13:20Z"`, or with the offset of a `tz()` clause, such as
+  `"2023-11-15T07:13:20+09:00"` (measured, 3.11.5-095). With `epoch=ms` it
+  is a number (measured, 3.11.5-096). The driver sends no `epoch`.
+- The largest integers, `9223372036854775807` and `-9223372036854775808`,
+  and the unsigned `18446744073709551615`, arrive exactly (measured,
+  2.9.1-013).
+- An empty string and a NULL are different: `""` and `null` (measured,
+  1.13.1-013).
 
 ## Parameters
 
-- InfluxDB 3 binds named parameters, written `$name`, for SQL and for
-  InfluxQL. The values go in `params`, an object of names and values (the
-  parameter guide and the Core API reference).
-- A value can be null, a boolean, a `u_int64`, an `int64`, a `float64` or a
-  string. A time is a string (the parameter guide).
-- A parameter works only in a `WHERE` predicate. It does not work in
-  `SELECT`, in `GROUP BY`, as the argument of a function, as a name, or as
-  an interval (the parameter guide).
-- A parameter with no value is an error (the parameter guide).
-- There are no prepared statements (the parameter guide).
-- The v1 `/query` of InfluxDB 1 takes `params`, as JSON text, with `$key` in
-  the statement (the v1 API reference).
-- Flux takes `params` in the JSON body, which the query reads as
-  `params.name` (the v2 API reference).
+- SQL takes named parameters, `$name`, and positional ones, `$1`, from the
+  object `params` (measured, 3.11.5-031 and 033). The key of `$1` is `"1"`.
+  The key `"$1"` is not found (measured, 3.11.5-116).
+- A parameter works in `SELECT`, in `WHERE` and in `LIMIT` (measured,
+  3.11.5-031 and 3.11.5-117). The parameter guide says that it works only in
+  `WHERE`, and the server disagrees.
+- A value is null, a boolean, a number or a string. An array or an object is
+  HTTP 400 (measured, 3.11.5-114 and 115). A time is a string (measured,
+  3.11.5-113).
+- A missing parameter is HTTP 400 for the statement, and `DESCRIBE` of the
+  same statement succeeds (measured, 3.11.5-034 and 035).
+- InfluxQL takes named parameters from the form value `params`, JSON text,
+  on every release (measured, 1.13.1-016). A time works as a string on every
+  release (measured, 3.11.5-119). A time as an integer works on 1.13.1 and
+  2.9.1, and is an error on 3.11.5 (measured). An array is an error on every
+  release (measured).
+- So the server binds every parameter, and the driver needs no parser for
+  placeholders (D34).
 
 ## Transactions
 
-- InfluxDB 3 has no transactions (Gemini and DeepSeek). The SQL reference
-  gives only the syntax of `SELECT`, with `WITH`, `JOIN`, `WHERE`, `GROUP
-  BY`, `HAVING`, `UNION`, `ORDER BY` and `LIMIT`.
-- SQL on InfluxDB 3 does not insert, update or delete (Gemini and DeepSeek).
-  Rows arrive by line protocol (the Core API reference). On Core, a delete
-  drops a whole table or database (the Core API reference). On Enterprise
-  from 3.11, `influxdb3 delete rows` deletes rows by time and tag. The delete
-  is asynchronous and takes effect up to 24 hours later by default (the
-  Enterprise guides).
-- InfluxDB 1 has `DELETE` and `DROP` in InfluxQL, and no transactions (the
-  v1 API reference).
+- No release has transactions (not measured, because no statement or
+  endpoint begins one to send). The documents, Gemini and DeepSeek name
+  none.
+- SQL has no `INSERT`, `UPDATE` or `DELETE`. Each is HTTP 400 with
+  `DML not supported` (measured, 3.11.5-067, 068 and 071). The driver takes
+  INSERT of line protocol itself (D85), and sends DELETE to the server,
+  which runs it on InfluxDB 1 and 2 and refuses it on InfluxDB 3 Core
+  (measured on 3.11.5, with a WHERE clause too).
+- A write of the same series and the same time replaces the value of each
+  field that it names, and keeps each field that it leaves out, so a point
+  cannot be updated to NULL (measured by `TestIntegrationRoundTrip` on every
+  release). A new tag value or a new time is a new point.
+- InfluxQL has `DELETE`, `DROP SERIES` and `DROP MEASUREMENT` on InfluxDB 1
+  (measured, 1.13.1-037 to 039). InfluxDB 2 runs `DELETE` and
+  `DROP MEASUREMENT`, and answers `not implemented` to `DROP SERIES`
+  (measured, 2.9.1-037 to 039). InfluxDB 3 answers `not implemented` to each
+  (measured, 3.11.5-070 to 073). No release has `UPDATE` (measured).
 
 ## Errors
 
-### InfluxDB 3
+SQL on InfluxDB 3:
 
-The source maps these errors to these statuses:
+- A plan error is HTTP 400, such as a missing parameter or a statement that
+  DataFusion does not plan (measured, 3.11.5-035).
+- A column that does not exist is HTTP 500 with `Schema error: ...`
+  (measured, 3.11.5-041).
+- A feature that DataFusion does not implement is HTTP 400 on 3.9.13 and
+  HTTP 405 on 3.11.5 (measured, 3.9.13-055 and 3.11.5-055).
+- A database that does not exist is HTTP 404 with
+  `{"error":"query error: database not found: nope"}` (measured by `curl` on
+  3.11.5).
+- A failed authentication is HTTP 401 with
+  `{"error": "the request was not authenticated"}` (measured, 3.11.5-050).
+- An error body is plain text or JSON (measured).
+- An error after some rows closes the body before its end, with HTTP 200 and
+  no text of the error (measured, 3.9.13-042 and 3.11.5-042). The body holds
+  the first batches of rows and no closing `]`. So the driver reads
+  `io.ErrUnexpectedEOF` and returns it from `Rows.Next` (D8).
 
-- A plan or parse error of DataFusion is HTTP 400. A feature that
-  DataFusion does not implement is HTTP 405. An error while the query runs
-  is HTTP 500.
-- A database that does not exist is HTTP 404, with the body
-  `{"error": "..."}`.
-- A failed authentication is HTTP 401, and a refused permission is HTTP 403.
-  Both have an empty body.
-- A request that is too large is HTTP 413. A limit on requests is HTTP 429.
-- A missing parameter, bad JSON, and an unknown `Accept` are HTTP 400. An
-  unknown `Content-Type` is HTTP 415.
-- InfluxQL at `/api/v3/query_influxql` with more than one statement is HTTP
-  400.
-- Many errors have a plain text body, and some have the JSON object
-  `{"error": ..., "data": ...}` (the source and the Core API reference).
+InfluxQL:
 
-The status is sent before the rows (the source), so an error after some rows
-cannot change it. How the body ends then is not measured.
-
-The v1 `/query` on InfluxDB 3 answers a statement that does not parse with
-HTTP 200 and the error in the body. It gives each failed statement an error
-in its entry of `results` (the source).
-
-### InfluxDB 1
-
-A syntax error is HTTP 400 with `{"error": "error parsing query: ..."}`, and
-a failed authentication is HTTP 401 with `{"error": "authorization failed"}`
-(the v1 API reference). An entry of `results` can hold `error` in a response
-with HTTP 200 (the v1 API reference). The v1 API reference and the source of
-InfluxDB 3 disagree on the status of a parse error.
+- A statement that does not parse is HTTP 400 on InfluxDB 1 and 2, and
+  HTTP 200 with the error in its result on InfluxDB 3 (measured,
+  1.13.1-019, 2.9.1-019 and 3.11.5-043).
+- An error in a later statement is HTTP 200, with the error in the result of
+  that statement, after the rows of the statements before it (measured,
+  1.13.1-020). On InfluxDB 3, a failed statement does not stop the
+  statements after it (measured, 3.11.5-061).
+- A failed authentication is HTTP 401 on every release (measured,
+  1.13.1-024). The bodies differ: `{"error":"authorization failed"}` on 1,
+  `{"code":"unauthorized","message":"Unauthorized"}` on 2.
+- A refused privilege is HTTP 403 on InfluxDB 1, and HTTP 200 with
+  `insufficient permissions` in the result on InfluxDB 2 (measured,
+  1.13.1-080 and 2.9.1-080).
+- A database that does not exist is HTTP 200 with the error in the result
+  on InfluxDB 3 (measured by `curl` on 3.11.5).
+- No recorded answer is HTTP 429, and no header limits the rate (measured
+  on every release).
 
 ## Cancellation and timeouts
 
-- InfluxDB 3 has no endpoint to cancel a query in the Core API reference.
-  `system.queries` has a column `cancelled` (the query guide).
-- Whether InfluxDB 3 stops a query when the client disconnects is not
-  measured. Gemini and DeepSeek say that it does.
-- InfluxDB 1 has `KILL QUERY` (the v1 API reference). `query-timeout` kills
-  a query after a time, and its default is `0s`, which is no limit (the v1
-  guides).
+- On InfluxDB 3, a query that the client leaves is recorded in
+  `system.queries` with the phase `cancel` (measured, 3.11.5-045). So the
+  server stops a query when the client disconnects.
+- InfluxDB 3 has no statement or endpoint to stop a query, and sends no
+  header that names the id of a query (measured, 3.11.5-118).
+- InfluxDB 1 has `SHOW QUERIES` and `KILL QUERY`, and `KILL QUERY` needs the
+  administrator (measured, 1.13.1-021, 022 and 077). InfluxDB 2 answers
+  `not implemented` to both (measured, 2.9.1-021). InfluxDB 3 does not parse
+  them (measured, 3.11.5-046).
+- Whether InfluxDB 1 and 2 stop a query when the client disconnects is not
+  measured. `query-timeout` on InfluxDB 1 stops a query after a time, and
+  its default is `0s`, which is no limit (the v1 guides).
 
 ## Statements
 
-- `/api/v3/query_influxql` takes one statement (the source). Whether
-  `/api/v3/query_sql` takes more than one is not measured. Gemini and
-  DeepSeek say that it takes one.
-- The v1 `/query` takes statements separated by `;`, and answers each one in
-  `results` with its `statement_id` (the v1 API reference and the source).
-- SQL comments are `--` to the end of the line, and `/* */` (the SQL
-  reference).
+- SQL takes one statement. Two statements are HTTP 400 on 3.9.13 and HTTP
+  405 on 3.11.5 (measured, 3.9.13-055 and 3.11.5-055).
+- InfluxQL takes statements separated by `;`, and answers each one in order
+  with its `statement_id` (measured on every release, 1.13.1-028). D83 fills
+  a gap in the ids.
+- A comment with `--` and `/* */` works in SQL (measured, 3.11.5-057). A
+  comment with `--` works in InfluxQL (measured, 1.13.1-032).
 
 ## Principals
 
-- InfluxDB 3 Core has admin tokens and no users. A token with fewer rights
-  is an Enterprise feature (the dbmeta entry and the token guides). So Core
-  has no ordinary user.
-- InfluxDB 3 Enterprise has resource tokens. A database token grants `read`,
-  `write` or both on named databases, or on every database with `*`, such as
-  `db:DATABASE1,DATABASE2:read,write`. A system token reads the information
-  of the server (the token guides).
-- InfluxDB 1 has admin users and users that are not admins. An admin grants
-  `READ`, `WRITE` or `ALL` on a database to a user that is not an admin. A new
-  user that is not an admin can reach no database (the v1 guides). The image
-  of InfluxDB 1 takes `INFLUXDB_ADMIN_USER`, `INFLUXDB_USER`,
-  `INFLUXDB_READ_USER`, `INFLUXDB_WRITE_USER` and `INFLUXDB_HTTP_AUTH_ENABLED`
-  (the image documents).
-- InfluxDB 2 has users and authorizations at `/api/v2/users` and
-  `/api/v2/authorizations` (the v2 API reference). Its image sets the first
-  user, organization, bucket and admin token with `DOCKER_INFLUXDB_INIT_*`
-  (the image documents).
-- The version on InfluxDB 3 is `GET /ping`. It answers with the headers
-  `x-influxdb-version` and `x-influxdb-build`, which is `Core` or
-  `Enterprise`, and a JSON body with `version`, `revision` and `process_id`
-  (the Core API reference). The source also writes the name of the product
-  in the body. `/ping` needs a token by default (the Core API reference).
-- The SQL function `version()` gives the version of DataFusion, and not the
-  version of InfluxDB (the SQL reference).
-- On InfluxDB 1, `/ping` answers HTTP 204 with `X-Influxdb-Version` and
-  `X-Influxdb-Build`, which is `OSS` or `ENT` (the v1 API reference).
+- InfluxDB 3 Core has admin tokens and no users, so it has no ordinary user
+  (the token guides and the dbmeta entry). Step 6 recorded only the
+  administrator on InfluxDB 3.
+- On InfluxDB 1, the ordinary user `dbmeta_user` has `READ` on `dbmeta`
+  (the dbmeta entry). It can `SELECT`, `SHOW DATABASES`, which lists only
+  `dbmeta`, and `SHOW QUERIES` (measured, 1.13.1-062 and 076). It cannot
+  write, `DROP MEASUREMENT`, `KILL QUERY` or `SHOW DIAGNOSTICS`, and each is
+  HTTP 403 (measured, 1.13.1-077 to 082).
+- On InfluxDB 2, the ordinary user is a v1 user with read on the bucket
+  `dbmeta` (the dbmeta entry). It can `SELECT`. It cannot write, which is
+  HTTP 403, or `DROP MEASUREMENT`, which is HTTP 200 with
+  `insufficient permissions` (measured, 2.9.1-080 and 081).
+- The version is the header `X-Influxdb-Version` of `GET /ping`: `1.13.1`,
+  `v2.9.1`, `3.9.13` or `3.11.5` (measured, 1.13.1-005, 2.9.1-005 and 3.11.5-005).
+  InfluxDB 2 writes a `v` before the number. On InfluxDB 1 and 2 an ordinary
+  user reads it, because `/ping` needs no credentials (measured, 1.13.1-061
+  and 2.9.1-061). On InfluxDB 3, `/ping` also answers a JSON body with
+  `product_name`, `version` and `revision` (measured, 3.11.5-005).
+- `SELECT version()` gives the version of DataFusion, not of InfluxDB
+  (measured, 3.11.5-053). `SHOW DIAGNOSTICS` gives the version on InfluxDB
+  1 to the administrator only, and InfluxDB 2 and 3 do not have it
+  (measured, 1.13.1-027, 2.9.1-027 and 3.11.5-054).
 
 ## Flavors
 
-Ken decided on 2026-09-28 that the driver serves InfluxDB 1, InfluxDB 2, and
-InfluxDB 3 and later, as flavors (D78).
+The driver serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later (D78).
 
-- InfluxDB 3 Core: the image `docker.io/library/influxdb`, with the tags
-  `3.9.13-core`, `3.10.6-core` and `3.11.5-core` (Docker Hub and the dbmeta
-  entry). The port is 8181. The dbmeta entry writes the admin token to a
-  file, starts the server with `--admin-token-file`, and caps its memory to
-  fit the 4 GB limit of `dbmeta`. SQL and InfluxQL.
-- InfluxDB 3 Enterprise: the same image, with tags such as
-  `3.11.5-enterprise` (Docker Hub). The documents that were read do not name
-  its port. A trial
-  or home licence needs a person to follow a link in an email (the
-  Enterprise guides and the dbmeta entry). SQL and InfluxQL, with resource
-  tokens and the delete of rows.
-- InfluxDB 2: the same image, with tags such as `2.9.1` and `2.8.0` (Docker
-  Hub). The port is 8086. Flux, and InfluxQL through `/query`. The driver
-  speaks only InfluxQL to it (D78).
-- InfluxDB 1: the same image, with tags such as `1.13.1`, `1.12.4` and
-  `1.11.8` (Docker Hub). The port is 8086. InfluxQL.
-- The header `X-Influxdb-Build` of `/ping` names `Core` or `Enterprise` on
-  InfluxDB 3 and `OSS` or `ENT` on InfluxDB 1 (the Core API reference and
-  the v1 API reference). What InfluxDB 2 answers is not measured.
-- With `sqlmode` `prefer` or `require`, the driver tells the flavors apart
-  by the header `X-Influxdb-Version` of `GET /ping`. With `disable` or
-  `allow`, it sends no ping, and the key `version` names the release (D78).
+| Flavor | `X-Influxdb-Build` | Port | SQL | InfluxQL |
+| --- | --- | --- | --- | --- |
+| InfluxDB 1 | `OSS` | 8086 | no | yes, and chunks stream |
+| InfluxDB 2 | `OSS` | 8086 | no, `/api/v3/query_sql` gives HTML | yes, through the v1 API |
+| InfluxDB 3 Core | `Core` | 8181 | yes | yes |
+
+- The rows of this table are measured on every release, except the ports,
+  which come from the dbmeta entry and the image documents.
+- With `sqlmode` set to `prefer` or `require`, the driver tells the flavors
+  apart by the major number of `X-Influxdb-Version`, after it removes a
+  leading `v`. With `disable` or `allow`, the key `version` names it (D78).
+- InfluxDB 3 Enterprise, InfluxDB Cloud Serverless, Cloud Dedicated and
+  Clustered speak the same endpoints, and differ in their tokens and limits
+  (Gemini and DeepSeek, not measured). None of them meets R now.
+- InfluxDB 1 Enterprise sends `ENT` in `X-Influxdb-Build` (the v1 API
+  reference, not measured).
 
 ## Interfaces
 
-Step 10 writes the interface table from the code.
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares. Connect sends GET /ping for sqlmode prefer and require (D78). |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping runs SELECT 1 or SHOW MEASUREMENTS, which checks the credentials and the database, as GET /ping does not on InfluxDB 1 and 2. |
+| `driver.SessionResetter` | no | A connection holds no state on the server, so nothing needs a reset. |
+| `driver.Validator` | no | A connection holds no state on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps a uint64 and a decimal, which the default converter refuses or turns into text. |
+| `driver.QueryerContext` | yes | The server binds each argument itself, from params. |
+| `driver.ExecerContext` | yes | Exec reads every result to its end. InfluxDB counts no rows. |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, bound each time. |
+| `driver.ConnBeginTx` | yes | BeginTx returns dbimp.ErrNotSupported, because InfluxDB has no transactions (D20). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when it is scanned, by its type in SQL (D80) and by its text in InfluxQL (D83). |
+| `driver.RowsNextResultSet` | yes | Each series of InfluxQL is a result set (D81). SQL has one statement and one result. |
+| `driver.RowsColumnTypeScanType` | yes | SQL gives the type from DESCRIBE (D80). InfluxQL names no types, so each is any. |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | SQL gives the data_type of DESCRIBE in upper case. InfluxQL names no types. |
+| `driver.RowsColumnTypeLength` | no | No column of InfluxDB has a length. |
+| `driver.RowsColumnTypeNullable` | yes | SQL gives is_nullable of DESCRIBE. InfluxQL names no types. |
+| `driver.RowsColumnTypePrecisionScale` | yes | SQL gives the precision and the scale of a decimal from DESCRIBE. |
+<!-- /dbimp:interfaces -->
 
 ## Faults
 
@@ -450,63 +473,70 @@ this driver must not repeat. These facts about the other clients are for step
 
 ## Second opinions
 
-Step 7 tests these leads on the server. Until then, each one is a lead.
+Step 3 took these leads from Gemini and DeepSeek, and step 6 tested them:
 
-- Gemini and DeepSeek say that a NULL in `json` leaves out its key. The
-  source and arrow-json agree.
-- Gemini says that `Int64` and `UInt64` arrive as JSON numbers, a time as a
-  string with no zone, such as `"2024-01-01T12:00:00.123456789"`, and a tag
-  as a string. DeepSeek says that a time arrives with a `Z`. The example in
-  the Core API reference has no zone, so DeepSeek disagrees with it.
-- Gemini says that `format=parquet` keeps the schema of a result with no
-  rows. The source sends an empty body when the query gives no batch, so it
-  disagrees.
-- DeepSeek says that `format=arrow` and `Accept:
-  application/vnd.apache.arrow.stream` give an Arrow stream. The source has
-  no Arrow format, and it answers an unknown `Accept` with HTTP 400, so it
-  disagrees. DeepSeek also says that `csv` gives the names and not the
-  types, which agrees with the source.
-- DeepSeek writes a database token as `db:read:<database>`. The token guides
-  write `db:<databases>:<actions>`, so it disagrees.
-- Gemini and DeepSeek say that SQL has no `INSERT`, `UPDATE`, `DELETE` or
-  transactions, that `/api/v3/query_sql` takes one statement, that the
-  server stops a query when the client disconnects, and that there is no
-  `KILL QUERY`.
-- Gemini and DeepSeek say that Core has only admin tokens, as the token
-  guides say.
-- Gemini says that `SHOW DIAGNOSTICS` needs an admin on InfluxDB 1, that
-  InfluxDB 2 has no `SHOW DIAGNOSTICS`, `SHOW QUERIES` or `KILL QUERY`, and
-  that the InfluxQL of InfluxDB 2 needs a mapping of the database and the
-  retention policy, with a default of `<bucket>/autogen`.
+- Both said that a NULL in `json` leaves out its key. True (measured).
+- Gemini said that a time arrives with no zone, and DeepSeek said that it
+  arrives with `Z`. Both are true: `Timestamp(ns)` has no zone and
+  `Timestamp(ns, "UTC")` has `Z` (measured).
+- Gemini said that `format=parquet` keeps the schema of a result with no
+  rows. Not measured, because the driver does not read Parquet (D13).
+- DeepSeek said that an `Accept` of `application/vnd.apache.arrow.stream`
+  gives an Arrow stream. False: it is HTTP 400 (measured).
+- Both said that SQL has no `INSERT`, `UPDATE`, `DELETE` or transactions,
+  and that `/api/v3/query_sql` takes one statement. True (measured).
+- Both said that the server stops a query when the client disconnects. True
+  on InfluxDB 3 (measured). Not measured on 1 and 2.
+- Gemini said that InfluxDB 2 has no `SHOW DIAGNOSTICS`, `SHOW QUERIES` or
+  `KILL QUERY`. True (measured).
+
+Step 7 asked Gemini and DeepSeek again on 2026-09-28, and tested each lead
+on 1.13.1, 2.9.1 and 3.11.5:
+
+- Gemini said that a SQL parameter works only in `WHERE`. False: it works
+  in `SELECT` and `LIMIT` too (measured, 3.11.5-031 and 117).
+- Both said that a SQL parameter cannot be an array. True: an array and an
+  object are HTTP 400 (measured, 3.11.5-114 and 115).
+- DeepSeek said that the key of a positional parameter can be `"1"` or
+  `"$1"`. Only `"1"` works (measured, 3.11.5-033 and 116).
+- Gemini said that an InfluxQL parameter cannot bind a time string. False:
+  it works on every release (measured, 3.11.5-119). DeepSeek said to test a
+  time as an integer. It works on 1 and 2, and fails on 3 (measured).
+- Both said that an InfluxQL parameter takes only scalar values. True: an
+  array fails on every release (measured).
+- Gemini said that `max-row-limit` caps a result that is not chunked on 1
+  and 2. The default does not cap: 20,000 rows arrived (measured). A limit
+  that is set was not measured.
+- Gemini said that InfluxDB 3 Core limits a query to 72 hours of data. A
+  query over three years of data succeeded (measured, 3.11.5-021). The
+  configuration reference says that the limit is on the number of Parquet
+  files, which this data does not reach.
+- DeepSeek said that InfluxDB 3 can send a header with the id of a query.
+  False: `/api/v3/query_sql` sends none (measured, 3.11.5-118).
+- Gemini said that InfluxDB 2 and 3 need `Authorization: Bearer`, unlike
+  InfluxDB 1. False: HTTP Basic works on every release (measured).
+- Both named memory limits on InfluxDB 3, such as `--query-memory-bytes`,
+  and the flavors of InfluxDB 3 in the cloud. Not measured.
 
 ## Open questions
 
-[PLAN.md](PLAN.md) has no entry for these yet. Each one is for Ken.
+[PLAN.md](PLAN.md) has no open question for InfluxDB. Ken settled each one
+of steps 6 and 9 on 2026-09-28 and 2026-09-29: D80 to D83, D85 and D86.
+These facts remain:
 
-- Ken decided on 2026-09-28 which versions and languages the driver serves
-  (D78): one driver with two dialects, `influxdb` for SQL on InfluxDB 3 and
-  later and `influxql` for InfluxQL on every release, no Flux, and the key
-  `sqlmode`, whose default `prefer` chooses by the release. `dburl` holds
-  the two dialects as the schemes `influxdb` and `influxql` (dburl D29).
-  D79 names the releases that the tests run.
-- Ken decided on 2026-09-28 how SQL on InfluxDB 3 gets its columns: from
-  the keys of the first object of `json`, in order, by rule 2 of D18 (D77).
-  D77 names what step 6 measures first. The question as it stood: `json`
-  and `jsonl` leave out a
-  NULL and name no column, so D18 cannot supply the columns. The other ways
-  are the header of `csv`, which has no types and cannot tell a NULL from an
-  empty string, `parquet`, which the server builds whole in memory and which
-  is a binary encoding under D13, the v1 `/query` with InfluxQL, which names
-  its columns, and Flight SQL over gRPC, which needs packages under D13. This
-  is a question of step 6 and of "When it cannot be a driver".
-- SQL on InfluxDB 3 does not insert, update or delete. Writes are line
-  protocol, and Core deletes only a whole table or database. Step 6 stops
-  and asks Ken when the server refuses one of insert, select, update and
-  delete.
-- Core has no ordinary user, and Enterprise fails R now. InfluxDB 1 and
-  InfluxDB 2 have ordinary users. Step 6 needs both principals.
-- None about Flux and S: Ken decided on 2026-09-28 that Flux meets S
-  (D75). The driver serves InfluxDB 2 through InfluxQL, and does not speak
-  Flux (D78).
-- On Core, the default `--query-file-limit` caps a query at about 72 hours of
-  data. Step 4 decides whether the dbmeta entry changes it.
+- `features.json` holds one verdict for each entry, and several entries hold
+  on some releases only. This document names the releases of each.
+- From dbmeta `415e830`, the `url` that `dbrun dsn` prints for each
+  InfluxDB principal is the DSN of D82, such as
+  `influxdb://_admin:<token>@127.0.0.1:<port>/dbmeta`. The Test step of the
+  workflow passed with it on 1.13.1, 2.9.1 and 3.11.5 on 2026-09-29.
+
+## The test runs
+
+The integration tests passed on 2026-09-28, run one release at a time from
+`dbrun`, as the administrator and, on InfluxDB 1 and 2, as the ordinary
+user: 1.11.8, 1.13.1, 2.8.0, 2.9.1, 3.9.13, 3.10.6 and 3.11.5. They include
+the round trip of every type in each dialect (step 14a). The version, from
+`GET /ping`, reads the same for both principals on InfluxDB 1 and 2, because
+`/ping` needs no credentials there (measured, 1.13.1-061 and 2.9.1-061).
+InfluxDB 3 Core has no ordinary user.

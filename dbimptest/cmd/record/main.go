@@ -82,6 +82,9 @@ type Request struct {
 	// Principals limits the request to these principals. It is empty for
 	// both.
 	Principals []string `json:"principals,omitzero"`
+	// Releases limits the request to the releases whose name starts with one
+	// of these, such as "influxdb-3". It is empty for every release.
+	Releases []string `json:"releases,omitzero"`
 	// Phase is "setup" for a request that runs once, as the administrator,
 	// before the requests of both principals, "teardown" for one that runs
 	// once, as the administrator, after them, or "" for a request that each
@@ -112,11 +115,11 @@ func record() error {
 	dir := flag.String("dir", "", "the folder under testdata that holds requests.json")
 	release := flag.String("release", "", "the release, as dbrun names it")
 	admin := flag.String("admin", "", "the http URL of the server, with the user and password of the administrator")
-	ordinary := flag.String("ordinary", "", "the http URL of the server, with the user and password of the ordinary user")
+	ordinary := flag.String("ordinary", "", "the http URL of the server, with the user and password of the ordinary user, or empty for a release that has none")
 	flag.Parse()
-	if *dir == "" || *release == "" || *admin == "" || *ordinary == "" {
+	if *dir == "" || *release == "" || *admin == "" {
 		flag.Usage()
-		return errors.New("every flag is needed")
+		return errors.New("the flags dir, release and admin are needed")
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -154,10 +157,20 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 	if err != nil {
 		return fmt.Errorf("parsing the URL of the administrator: %w", err)
 	}
+	script.Requests = slices.DeleteFunc(script.Requests, func(r Request) bool {
+		return len(r.Releases) > 0 && !slices.ContainsFunc(r.Releases, func(prefix string) bool {
+			return strings.HasPrefix(release, prefix)
+		})
+	})
 	if err := runPhase(ctx, client, admin, script, "setup"); err != nil {
 		return err
 	}
 	for _, p := range []string{dbimptest.Administrator, dbimptest.Ordinary} {
+		// A release with no ordinary user, such as InfluxDB 3 Core, records
+		// the administrator only.
+		if principals[p] == "" {
+			continue
+		}
 		base, err := url.Parse(principals[p])
 		if err != nil {
 			return fmt.Errorf("parsing the URL of the %s user: %w", p, err)
@@ -413,7 +426,11 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 	}
 	defer res.Body.Close()
 	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
+	switch {
+	case errors.Is(err, io.ErrUnexpectedEOF):
+		fmt.Printf("item %d, %s: %s, and the server closed the body early\n", r.Item, r.Name, res.Status)
+		return nil
+	case err != nil:
 		return err
 	}
 	if len(r.Capture) > 0 && kept != nil {

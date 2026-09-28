@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"SELECT CAST('12345678901234567890.123456789' AS DECIMAL(38,9)) AS dec, DATE '2024-01-02' AS d, CAST('12:30:00' AS TIME) AS tm, INTERVAL '1 day 2 hours' AS iv, arrow_cast(TIMESTAMP '2024-01-02T03:04:05.123456789', 'Timestamp(Nanosecond, Some(\\\"UTC\\\"))') AS tz, TIMESTAMP '2024-01-02T03:04:05.123456789' AS ts, arrow_cast('ab', 'Binary') AS bin, [1, 2, 3] AS arr, named_struct('a', 1) AS st, CAST(1 AS TINYINT) AS i8, CAST(1.5 AS FLOAT) AS f32, arrow_cast(255, 'UInt8') AS u8, 9223372036854775807 AS imax, arrow_cast(18446744073709551615, 'UInt64') AS umax, 'NaN'::DOUBLE AS nan, 'inf'::DOUBLE AS inf, 'é' AS s, '' AS empty, true AS b\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "74bd7e86-3a2b-4528-aedd-f57bfabd3d49"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:30 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[{\"dec\":12345678901234567890.123456789,\"d\":\"2024-01-02\",\"tm\":\"12:30:00\",\"iv\":\"1 days 2 hours\",\"tz\":\"2024-01-02T03:04:05.123456789Z\",\"ts\":\"2024-01-02T03:04:05.123456789\",\"bin\":\"6162\",\"arr\":[1,2,3],\"st\":{\"a\":1},\"i8\":1,\"f32\":1.5,\"u8\":255,\"imax\":9223372036854775807,\"umax\":18446744073709551615,\"nan\":null,\"inf\":null,\"s\":\"é\",\"empty\":\"\",\"b\":true}]"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELECT%20f%20FROM%20types%20GROUP%20BY%20host%20SLIMIT%201%20SOFFSET%201"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Request-Id": [
+        "5787649f-bac8-11f1-8063-ce336a42b8fa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ],
+      "X-Request-Id": [
+        "5787649f-bac8-11f1-8063-ce336a42b8fa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"types\",\"tags\":{\"host\":\"b\"},\"columns\":[\"time\",\"f\"],\"values\":[[\"2023-11-14T22:13:21Z\",-2.25]]}]}]}\n"
+  }
+}

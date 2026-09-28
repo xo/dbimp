@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SHOW%20DIAGNOSTICS"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "57700d3d-bac8-11f1-8020-ce336a42b8fa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "57700d3d-bac8-11f1-8020-ce336a42b8fa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"build\",\"columns\":[\"Branch\",\"Build Time\",\"Commit\",\"Version\"],\"values\":[[\"unknown\",\"\",\"199a607e1c7a5a687f96a636bb3bab9a61e4ae31\",\"v1.11.8\"]]},{\"name\":\"config\",\"columns\":[\"bind-address\",\"reporting-disabled\"],\"values\":[[\"127.0.0.1:8088\",true]]},{\"name\":\"config-coordinator\",\"columns\":[\"log-queries-after\",\"log-timedout-queries\",\"max-concurrent-queries\",\"max-select-buckets\",\"max-select-point\",\"max-select-series\",\"query-timeout\",\"write-timeout\"],\"values\":[[\"0s\",false,0,0,0,0,\"0s\",\"10s\"]]},{\"name\":\"config-cqs\",\"columns\":[\"enabled\",\"query-stats-enabled\",\"run-interval\"],\"values\":[[true,false,\"1s\"]]},{\"name\":\"config-data\",\"columns\":[\"cache-max-memory-size\",\"cache-snapshot-memory-size\",\"cache-snapshot-write-cold-duration\",\"compact-full-write-cold-duration\",\"dir\",\"max-concurrent-compactions\",\"max-index-log-file-size\",\"max-series-per-database\",\"max-values-per-tag\",\"series-file-max-concurrent-compactions\",\"series-id-set-cache-size\",\"strict-error-handling\",\"wal-dir\",\"wal-fsync-delay\"],\"values\":[[1073741824,26214400,\"10m0s\",\"4h0m0s\",\"/var/lib/influxdb/data\",0,1048576,1000000,100000,0,100,false,\"/var/lib/influxdb/wal\",\"0s\"]]},{\"name\":\"config-httpd\",\"columns\":[\"access-log-path\",\"bind-address\",\"enabled\",\"https-enabled\",\"max-connection-limit\",\"max-row-limit\"],\"values\":[[\"\",\":8086\",true,false,0,0]]},{\"name\":\"config-meta\",\"columns\":[\"dir\"],\"values\":[[\"/var/lib/influxdb/meta\"]]},{\"name\":\"config-monitor\",\"columns\":[\"store-database\",\"store-enabled\",\"store-interval\"],\"values\":[[\"_internal\",true,\"10s\"]]},{\"name\":\"config-precreator\",\"columns\":[\"advance-period\",\"check-interval\",\"enabled\"],\"values\":[[\"30m0s\",\"10m0s\",true]]},{\"name\":\"config-retention\",\"columns\":[\"check-interval\",\"enabled\"],\"values\":[[\"30m0s\",true]]},{\"name\":\"config-subscriber\",\"columns\":[\"enabled\",\"http-timeout\",\"write-buffer-size\",\"write-concurrency\"],\"values\":[[true,\"30s\",1000,40]]},{\"name\":\"network\",\"columns\":[\"hostname\"],\"values\":[[\"984ae7b2268b\"]]},{\"name\":\"runtime\",\"columns\":[\"GOARCH\",\"GOMAXPROCS\",\"GOOS\",\"version\"],\"values\":[[\"amd64\",32,\"linux\",\"go1.22.7\"]]},{\"name\":\"system\",\"columns\":[\"PID\",\"currentTime\",\"started\",\"uptime\"],\"values\":[[1,\"2026-09-27T23:08:24.838338617Z\",\"2026-09-27T23:08:01.961595124Z\",\"22.876743493s\"]]}]}]}\n"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELECT%20max%28m%29%20FROM%20%28SELECT%20mean%28f%29%20AS%20m%20FROM%20types%20GROUP%20BY%20host%29"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "126"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v2.8.0"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:25 GMT"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"types\",\"columns\":[\"time\",\"max\"],\"values\":[[\"1970-01-01T00:00:00Z\",1.5]]}]}]}\n"
+  }
+}

@@ -37,7 +37,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D14](D014-the-first-drivers-speak-http.md) | The first drivers speak HTTP | Decided |
 | [D15](D015-the-targets-are-in-docs-targets-md.md) | The targets are in docs/TARGETS.md | Decided |
 | [D16](D016-an-ideal-target-meets-three-tests.md) | An ideal target meets three tests | Amended by D58 and D75 |
-| [D17](D017-the-priorities-follow-the-three-tests.md) | The priorities follow the three tests | Decided |
+| [D17](D017-the-priorities-follow-the-three-tests.md) | The priorities follow the three tests | Amended by D84 and D87 |
 | [D18](D018-a-result-that-is-not-a-table-becomes-rows-by.md) | A result that is not a table becomes rows by three rules | Decided |
 | [D19](D019-a-json-number-is-never-decoded-through-float64.md) | A JSON number is never decoded through float64 | Decided |
 | [D20](D020-a-driver-never-fakes-a-transaction.md) | A driver never fakes a transaction | Decided |
@@ -73,7 +73,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D50](D050-the-surrealdb-driver-sends-each-statement-to.md) | The SurrealDB driver sends each statement to POST /rpc | Decided |
 | [D51](D051-the-surrealdb-dsn-has-the-key-auth-for-the-level.md) | The SurrealDB DSN has the key auth for the level of the user | Decided |
 | [D52](D052-each-surrealdb-statement-is-a-result-set-and-its.md) | Each SurrealDB statement is a result set, and its rows follow D18 | Decided |
-| [D53](D053-the-go-types-of-surrealdb.md) | The Go types of SurrealDB | Decided, and D70 proposes an amendment |
+| [D53](D053-the-go-types-of-surrealdb.md) | The Go types of SurrealDB | Amended by D70 |
 | [D54](D054-the-surrealdb-driver-has-no-transactions.md) | The SurrealDB driver has no transactions | Decided |
 | [D55](D055-the-errors-and-the-results-of-a-surrealdb-write.md) | The errors and the results of a SurrealDB write | Decided |
 | [D56](D056-a-surrealdb-query-stops-when-its-context-ends.md) | A SurrealDB query stops when its context ends | Decided |
@@ -90,13 +90,21 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D67](D067-the-neo4j-dsn-has-the-key-cancel-for-how-a-query.md) | The Neo4j DSN has the key cancel, for how a query stops | Decided |
 | [D68](D068-the-neo4j-driver-serves-neo4j-5-26-and-later-and.md) | The Neo4j driver serves Neo4j 5.26 and later, and has no flavors | Decided |
 | [D69](D069-a-neo4j-transaction-keeps-the-context-of-begintx.md) | A Neo4j transaction keeps the context of BeginTx | Amends D65 |
-| [D70](D070-a-surrealdb-recordid-writes-its-surrealql-form.md) | A SurrealDB RecordID writes its SurrealQL form as text | Proposed. Amends D53 |
+| [D70](D070-a-surrealdb-recordid-writes-its-surrealql-form.md) | A SurrealDB RecordID writes its SurrealQL form as text | Amends D53 |
 | [D71](D071-every-xo-repository-is-set-up-for-coding-agents.md) | Every xo repository is set up for coding agents the same way | Amends D3 and D11 |
 | [D72](D072-the-decisions-are-one-file-each.md) | The decisions are one file each | Amends D3 |
-| [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74 |
+| [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74 and D84 |
 | [D74](D074-avatica-and-its-flavors-come-after-libsql.md) | Avatica and its flavors come after libSQL | Amends D73 |
 | [D75](D075-aql-and-flux-meet-s.md) | AQL and Flux meet S | Amends D16 |
 | [D76](D076-the-names-of-the-databend-libsql-and-cratedb.md) | The names of the Databend, libSQL and CrateDB drivers | Decided |
-| [D77](D077-an-influxdb-result-is-an-array-of-objects-read.md) | An InfluxDB result is an array of objects, read by rule 2 of D18 | Decided |
-| [D78](D078-one-influxdb-driver-with-the-dialects-influxdb.md) | One InfluxDB driver, with the dialects influxdb and influxql | Decided |
+| [D77](D077-an-influxdb-result-is-an-array-of-objects-read.md) | An InfluxDB result is an array of objects, read by rule 2 of D18 | Amended by D80 |
+| [D78](D078-one-influxdb-driver-with-the-dialects-influxdb.md) | One InfluxDB driver, with the dialects influxdb and influxql | Amended by D85 |
 | [D79](D079-the-influxdb-releases-that-the-tests-run.md) | The InfluxDB releases that the tests run | Decided |
+| [D80](D080-the-influxdb-sql-dialect-reads-its-columns-from.md) | The InfluxDB SQL dialect reads its columns from DESCRIBE | Amends D77 |
+| [D81](D081-an-influxql-series-is-a-result-set-with-its.md) | An InfluxQL series is a result set, with its name and its tags | Decided |
+| [D82](D082-the-influxdb-dsn-names-the-database-in-its-path.md) | The InfluxDB DSN names the database in its path | Decided |
+| [D83](D083-the-influxql-dialect-asks-for-chunks-only-on.md) | The InfluxQL dialect asks for chunks only on InfluxDB 1 | Decided |
+| [D84](D084-gel-blazegraph-and-stargate-leave-the-targets.md) | Gel, Blazegraph and Stargate leave the targets | Amends D17 and D73 |
+| [D85](D085-the-influxdb-driver-takes-insert-of-the-influx-shell.md) | The InfluxDB driver takes INSERT of the influx shell | Amends D78 |
+| [D86](D086-roundtrip-serves-a-database-that-cannot-do-every.md) | RoundTrip serves a database that cannot do every step | Decided |
+| [D87](D087-milvus-and-postgrest-move-to-p2-and-ksqldb.md) | Milvus and PostgREST move to P2, and ksqlDB stays in P2 | Amends D17 |

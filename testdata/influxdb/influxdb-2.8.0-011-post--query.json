@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELECT%20%2A%20FROM%20types%2C%20big%20LIMIT%201"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v2.8.0"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:25 GMT"
+      ],
+      "Content-Length": [
+        "358"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"big\",\"columns\":[\"time\",\"b\",\"f\",\"host\",\"i\",\"n\",\"region\",\"s\",\"u\"],\"values\":[[\"2020-09-13T12:26:40Z\",null,null,null,null,0,null,null,null]]},{\"name\":\"types\",\"columns\":[\"time\",\"b\",\"f\",\"host\",\"i\",\"n\",\"region\",\"s\",\"u\"],\"values\":[[\"2023-11-14T22:13:20Z\",true,1.5,\"a\",9223372036854775807,null,null,\"text\",null]]}]}]}\n"
+  }
+}

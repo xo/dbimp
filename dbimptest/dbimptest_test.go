@@ -2,6 +2,7 @@ package dbimptest_test
 
 import (
 	"database/sql"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -103,6 +104,63 @@ func TestRecordThenReplay(t *testing.T) {
 	}
 	if want := `{"echo":{"statement":"SELECT 1"}}`; string(body) != want {
 		t.Errorf("the replayed body is %s, want %s", body, want)
+	}
+}
+
+func TestRecordThenReplayATruncatedBody(t *testing.T) {
+	dir := t.TempDir()
+	backend := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = io.WriteString(w, `[{"a":1},`)
+		if err := http.NewResponseController(w).Flush(); err != nil {
+			t.Errorf("flushing: %v", err)
+		}
+		panic(http.ErrAbortHandler)
+	}))
+	defer backend.Close()
+
+	rec := dbimptest.NewRecorder(dir, "fake-1.0", http.DefaultTransport)
+	rec.Label(6, dbimptest.Administrator)
+	req, err := http.NewRequestWithContext(t.Context(), http.MethodGet, backend.URL+"/rows", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := rec.RoundTrip(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	if string(got) != `[{"a":1},` || !errors.Is(err, io.ErrUnexpectedEOF) {
+		t.Errorf("the recorded response reads %q and %v, want the part that arrived and io.ErrUnexpectedEOF", got, err)
+	}
+	if err := rec.WriteManifest("fake"); err != nil {
+		t.Fatal(err)
+	}
+	m, err := dbimptest.ReadManifest(filepath.Join(dir, dbimptest.ManifestName))
+	if err != nil {
+		t.Fatal(err)
+	}
+	ex, err := dbimptest.ReadExchange(filepath.Join(dir, m.Entries[0].File))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ex.Response.Truncated {
+		t.Error("the exchange does not say that the body was truncated")
+	}
+
+	srv := dbimptest.Replay(t, dir, nil)
+	req, err = http.NewRequestWithContext(t.Context(), http.MethodGet, srv.URL+"/rows", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err = http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer res.Body.Close()
+	got, err = io.ReadAll(res.Body)
+	if string(got) != `[{"a":1},` || !errors.Is(err, io.ErrUnexpectedEOF) {
+		t.Errorf("the replayed response reads %q and %v, want the part that arrived and io.ErrUnexpectedEOF", got, err)
 	}
 }
 

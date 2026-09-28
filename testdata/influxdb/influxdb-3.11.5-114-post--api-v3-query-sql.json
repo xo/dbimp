@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"SELECT $a AS a\",\"format\":\"json\",\"params\":{\"a\":[1,2]}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Cluster-Uuid": [
+        "78d98e3b-ff3e-48b0-a77f-66f62e73c877"
+      ],
+      "Content-Length": [
+        "131"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:52 GMT"
+      ]
+    },
+    "body": "serde json error: JSON arrays are not supported as query parameters. Expected null, boolean, number, or string. at line 1 column 72"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"SELECT 1 AS a; SELECT 2 AS b\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Cluster-Uuid": [
+        "74bd7e86-3a2b-4528-aedd-f57bfabd3d49"
+      ],
+      "Content-Length": [
+        "91"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:32 GMT"
+      ]
+    },
+    "body": "This feature is not implemented: The context currently only supports a single SQL statement"
+  }
+}

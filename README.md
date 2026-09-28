@@ -8,8 +8,9 @@ The drivers use the Go standard library, with
 [apd](https://github.com/cockroachdb/apd) for decimals, and need no cgo.
 
 The repository is new. It holds the drivers `couchbase`, which was first
-released in `v0.1.0`, `surrealdb`, which was first released in `v0.2.0`, and
-`neo4j`, which no release holds yet. [docs/TARGETS.md](docs/TARGETS.md)
+released in `v0.1.0`, `surrealdb`, which was first released in `v0.2.0`,
+`neo4j`, which the tag `v0.3.0` holds, and `influxdb`, which no release
+holds yet. [docs/TARGETS.md](docs/TARGETS.md)
 names the databases it aims to support, and the order of the work.
 
 ## Use
@@ -48,7 +49,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/SURREALDB.md](docs/SURREALDB.md) | What is known about the HTTP interface of SurrealDB |
 | [docs/NEO4J.md](docs/NEO4J.md) | What is known about the HTTP interface of Neo4j |
 | [docs/AVATICA.md](docs/AVATICA.md) | What is known about Apache Calcite Avatica and the products that speak it |
-| [docs/INFLUXDB.md](docs/INFLUXDB.md) | What is known about InfluxDB, before a server runs |
+| [docs/INFLUXDB.md](docs/INFLUXDB.md) | What InfluxDB 1, 2 and 3 answer, as measured on seven releases |
 | [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, before a server runs |
 | [docs/ARANGODB.md](docs/ARANGODB.md) | What is known about ArangoDB, before a server runs |
 | [docs/DATABEND.md](docs/DATABEND.md) | What is known about Databend, before a server runs |

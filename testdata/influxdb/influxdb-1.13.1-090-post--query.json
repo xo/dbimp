@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "q=SELECT%20v%20INTO%20crud_copy%20FROM%20crud"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Length": [
+        "147"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "f287a61f-bac8-11f1-80c5-e60a1b3166aa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Error": [
+        "error authorizing query: dbmeta_user not authorized to execute statement 'SELECT v INTO crud_copy FROM crud', requires WRITE on dbmeta"
+      ],
+      "X-Influxdb-Version": [
+        "1.13.1"
+      ],
+      "X-Request-Id": [
+        "f287a61f-bac8-11f1-80c5-e60a1b3166aa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:45 GMT"
+      ]
+    },
+    "body": "{\"error\":\"error authorizing query: dbmeta_user not authorized to execute statement 'SELECT v INTO crud_copy FROM crud', requires WRITE on dbmeta\"}\n"
+  }
+}

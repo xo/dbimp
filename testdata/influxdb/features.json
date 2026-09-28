@@ -1,0 +1,584 @@
+{
+  "driver": "influxdb",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-09-28"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-09-28"
+    },
+    {
+      "source": "github.com/influxdata/influxdb1-client",
+      "kind": "driver",
+      "date": "2026-09-28"
+    },
+    {
+      "source": "github.com/InfluxCommunity/influxdb3-go/v2",
+      "kind": "driver",
+      "date": "2026-09-28"
+    },
+    {
+      "source": "influxdb (PyPI)",
+      "kind": "driver",
+      "date": "2026-09-28"
+    },
+    {
+      "source": "influxdb3-python (PyPI)",
+      "kind": "driver",
+      "date": "2026-09-28"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/influxdata/influxdb1-client",
+        "github.com/InfluxCommunity/influxdb3-go/v2",
+        "influxdb (PyPI)",
+        "influxdb3-python (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-065-post--write.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/influxdata/influxdb1-client",
+        "github.com/InfluxCommunity/influxdb3-go/v2",
+        "influxdb (PyPI)",
+        "influxdb3-python (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-008-post--query.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "influxdb-3.11.5-066-post--query.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-2.9.1-037-post--query.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "select into",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-1.13.1-036-post--query.json",
+      "test": "TestIntegrationCRUD/select_into"
+    },
+    {
+      "kind": "crud",
+      "name": "drop series",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-1.13.1-038-post--query.json",
+      "test": "TestIntegrationCRUD/drop_series"
+    },
+    {
+      "kind": "crud",
+      "name": "drop measurement",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-2.9.1-039-post--query.json",
+      "test": "TestIntegrationCRUD/drop_measurement"
+    },
+    {
+      "kind": "schema",
+      "name": "create database",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-1.13.1-040-post--query.json",
+      "test": "TestIntegrationSchema/create_database"
+    },
+    {
+      "kind": "schema",
+      "name": "drop database",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-1.13.1-041-post--query.json",
+      "test": "TestIntegrationSchema/drop_database"
+    },
+    {
+      "kind": "schema",
+      "name": "retention policy",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-1.13.1-042-post--query.json",
+      "test": "TestIntegrationSchema/retention_policy"
+    },
+    {
+      "kind": "schema",
+      "name": "continuous query",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-1.13.1-045-post--query.json",
+      "test": "TestIntegrationSchema/continuous_query"
+    },
+    {
+      "kind": "schema",
+      "name": "information schema",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-084-post--api-v3-query-sql.json",
+      "test": "TestIntegrationSchema/information_schema"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "influxdb-3.11.5-085-post--api-v3-query-sql.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "influxdb-3.11.5-086-post--api-v3-query-sql.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "influxdb-3.11.5-087-post--api-v3-query-sql.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "influxdb-3.11.5-088-post--api-v3-query-sql.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "influxdb-3.11.5-089-post--api-v3-query-sql.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "feature",
+      "name": "line protocol",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/influxdata/influxdb1-client",
+        "github.com/InfluxCommunity/influxdb3-go/v2",
+        "influxdb (PyPI)",
+        "influxdb3-python (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-065-post--write.json",
+      "test": "TestIntegrationFeatures/line_protocol"
+    },
+    {
+      "kind": "feature",
+      "name": "group by time",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-092-post--query.json",
+      "test": "TestIntegrationFeatures/group_by_time"
+    },
+    {
+      "kind": "feature",
+      "name": "fill",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-093-post--query.json",
+      "test": "TestIntegrationFeatures/fill"
+    },
+    {
+      "kind": "feature",
+      "name": "slimit and soffset",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-2.9.1-050-post--query.json",
+      "test": "TestIntegrationFeatures/slimit_and_soffset"
+    },
+    {
+      "kind": "feature",
+      "name": "tz clause",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-095-post--query.json",
+      "test": "TestIntegrationFeatures/tz_clause"
+    },
+    {
+      "kind": "feature",
+      "name": "epoch precision",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/influxdata/influxdb1-client",
+        "influxdb (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-096-post--query.json",
+      "test": "TestIntegrationFeatures/epoch_precision"
+    },
+    {
+      "kind": "feature",
+      "name": "influxql subquery",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-097-post--query.json",
+      "test": "TestIntegrationFeatures/influxql_subquery"
+    },
+    {
+      "kind": "feature",
+      "name": "show databases",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-008-post--query.json",
+      "test": "TestIntegrationFeatures/show_databases"
+    },
+    {
+      "kind": "feature",
+      "name": "show measurements",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-098-post--query.json",
+      "test": "TestIntegrationFeatures/show_measurements"
+    },
+    {
+      "kind": "feature",
+      "name": "show tag keys",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-099-post--query.json",
+      "test": "TestIntegrationFeatures/show_tag_keys"
+    },
+    {
+      "kind": "feature",
+      "name": "show tag values",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-2.9.1-056-post--query.json",
+      "test": "TestIntegrationFeatures/show_tag_values"
+    },
+    {
+      "kind": "feature",
+      "name": "show field keys",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-029-post--query.json",
+      "test": "TestIntegrationFeatures/show_field_keys"
+    },
+    {
+      "kind": "feature",
+      "name": "show series",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-2.9.1-057-post--query.json",
+      "test": "TestIntegrationFeatures/show_series"
+    },
+    {
+      "kind": "feature",
+      "name": "show retention policies",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-078-post--query.json",
+      "test": "TestIntegrationFeatures/show_retention_policies"
+    },
+    {
+      "kind": "feature",
+      "name": "date bin",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-103-post--api-v3-query-sql.json",
+      "test": "TestIntegrationFeatures/date_bin"
+    },
+    {
+      "kind": "feature",
+      "name": "selector functions",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-105-post--api-v3-query-sql.json",
+      "test": "TestIntegrationFeatures/selector_functions"
+    },
+    {
+      "kind": "feature",
+      "name": "last cache",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-108-post--api-v3-query-sql.json",
+      "test": "TestIntegrationFeatures/last_cache"
+    },
+    {
+      "kind": "feature",
+      "name": "distinct cache",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-111-post--api-v3-query-sql.json",
+      "test": "TestIntegrationFeatures/distinct_cache"
+    },
+    {
+      "kind": "feature",
+      "name": "time column",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-019-post--query.json",
+      "test": "TestIntegrationFeatures/time_column"
+    },
+    {
+      "kind": "feature",
+      "name": "several statements",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-058-post--query.json",
+      "test": "TestIntegrationFeatures/several_statements"
+    },
+    {
+      "kind": "feature",
+      "name": "parameters",
+      "sources": [
+        "github.com/InfluxCommunity/influxdb3-go/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-031-post--api-v3-query-sql.json",
+      "test": "TestIntegrationFeatures/parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "time parameter",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-119-post--query.json",
+      "test": "TestIntegrationFeatures/time_parameter"
+    },
+    {
+      "kind": "feature",
+      "name": "array parameter",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "influxdb-3.11.5-121-post--query.json",
+      "test": "TestIntegrationFeatures/array_parameter"
+    },
+    {
+      "kind": "feature",
+      "name": "chunked responses",
+      "sources": [
+        "github.com/influxdata/influxdb1-client",
+        "influxdb (PyPI)"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-039-post--query.json",
+      "test": "TestIntegrationFeatures/chunked_responses"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-027-post--query.json",
+      "test": "TestIntegrationRoundTrip/influxql/null"
+    },
+    {
+      "kind": "type",
+      "name": "float",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-027-post--query.json",
+      "test": "TestIntegrationRoundTrip/influxql/float"
+    },
+    {
+      "kind": "type",
+      "name": "integer",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-027-post--query.json",
+      "test": "TestIntegrationRoundTrip/influxql/integer"
+    },
+    {
+      "kind": "type",
+      "name": "unsigned integer",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-026-post--api-v3-query-sql.json",
+      "test": "TestIntegrationRoundTrip/influxql/unsigned_integer"
+    },
+    {
+      "kind": "type",
+      "name": "string",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-027-post--query.json",
+      "test": "TestIntegrationRoundTrip/influxql/string"
+    },
+    {
+      "kind": "type",
+      "name": "boolean",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-027-post--query.json",
+      "test": "TestIntegrationRoundTrip/influxql/boolean"
+    },
+    {
+      "kind": "type",
+      "name": "tag",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-027-post--query.json",
+      "test": "TestIntegrationRoundTrip/influxql/tag"
+    },
+    {
+      "kind": "type",
+      "name": "timestamp",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "influxdb-3.11.5-026-post--api-v3-query-sql.json",
+      "test": "TestIntegrationRoundTrip/influxql/timestamp"
+    }
+  ]
+}

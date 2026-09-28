@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SHOW%20DIAGNOSTICS"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "X-Request-Id": [
+        "f2875313-bac8-11f1-80bd-e60a1b3166aa"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:45 GMT"
+      ],
+      "Content-Length": [
+        "130"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "f2875313-bac8-11f1-80bd-e60a1b3166aa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Error": [
+        "error authorizing query: dbmeta_user not authorized to execute statement 'SHOW DIAGNOSTICS', requires admin privilege"
+      ],
+      "X-Influxdb-Version": [
+        "1.13.1"
+      ]
+    },
+    "body": "{\"error\":\"error authorizing query: dbmeta_user not authorized to execute statement 'SHOW DIAGNOSTICS', requires admin privilege\"}\n"
+  }
+}

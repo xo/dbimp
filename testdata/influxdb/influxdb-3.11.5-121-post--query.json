@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELECT%20f%20FROM%20types%20WHERE%20host%20%3D%20%24h&params=%7B%22h%22%3A%5B%22a%22%2C%22b%22%5D%7D"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "78d98e3b-ff3e-48b0-a77f-66f62e73c877"
+      ],
+      "Content-Length": [
+        "152"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:12:52 GMT"
+      ]
+    },
+    "body": "{\"error\":\"error decoding query body: JSON arrays are not supported as query parameters. Expected null, boolean, number, or string. at line 1 column 15\"}"
+  }
+}

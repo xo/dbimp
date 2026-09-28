@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "q=SELECT%20%2A%20FROM%20nothere%3B%20SELECT%20f%20FROM%20types%20LIMIT%201%3B%20SELECT%20%2A%20FROM%20nothere"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "57702ec7-bac8-11f1-8023-ce336a42b8fa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ],
+      "X-Request-Id": [
+        "57702ec7-bac8-11f1-8023-ce336a42b8fa"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0},{\"statement_id\":1,\"series\":[{\"name\":\"types\",\"columns\":[\"time\",\"f\"],\"values\":[[\"2023-11-14T22:13:20Z\",1.5]]}]},{\"statement_id\":2}]}\n"
+  }
+}

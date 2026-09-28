@@ -41,8 +41,21 @@ type RoundTripCase struct {
 	// Update sets the value of the row with a key. Its arguments are the
 	// value and the key.
 	Update string
-	// Delete deletes the row with a key, which is its one argument.
+	// Delete deletes the row with a key, which is its one argument. If it is
+	// empty, RoundTrip logs that the database cannot delete one row, and
+	// skips the delete and the check that the row is gone, as for InfluxDB 3
+	// Core.
 	Delete string
+	// Column is the column of the value in the row that Select returns, for a
+	// database that returns other columns with it, such as the name and the
+	// time of an InfluxQL series. It is 0 by default.
+	Column int
+	// SkipUpdate returns why the update from one value to the next cannot
+	// run, or "" when it can. RoundTrip logs the reason, and skips the update
+	// and the read after it. It is for a database that cannot hold the
+	// update, such as InfluxDB, which keeps the old value of a field that an
+	// update leaves out as NULL. If it is nil, every update runs.
+	SkipUpdate func(from, to Value) string
 	// Values are the values to store. RoundTrip updates each value to the
 	// next one, and the last one to the first, so it needs at least two.
 	Values []Value
@@ -174,11 +187,19 @@ func (rt roundTrip) run(v, next Value, literal bool) {
 	if !rt.read(label+", after the insert", v.want()) {
 		return
 	}
-	if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Update, rt.args(next.In, true)...); err != nil {
-		rt.tb.Errorf("%s: updating to %s: %v", label, next.Name, err)
-		return
+	if why := rt.skipUpdate(v, next); why != "" {
+		rt.tb.Logf("%s: the update to %s does not run: %s", label, next.Name, why)
+	} else {
+		if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Update, rt.args(next.In, true)...); err != nil {
+			rt.tb.Errorf("%s: updating to %s: %v", label, next.Name, err)
+			return
+		}
+		if !rt.read(label+", after the update to "+next.Name, next.want()) {
+			return
+		}
 	}
-	if !rt.read(label+", after the update to "+next.Name, next.want()) {
+	if rt.c.Delete == "" {
+		rt.tb.Logf("%s: the database cannot delete one row, so the row stays", label)
 		return
 	}
 	if _, err := rt.db.ExecContext(rt.tb.Context(), rt.c.Delete, rt.args(nil, false)...); err != nil {
@@ -247,10 +268,44 @@ func (rt roundTrip) gone(label string) {
 	rt.tb.Errorf("%s: the row is still there", label)
 }
 
+// skipUpdate returns why the update from v to next cannot run, or "".
+func (rt roundTrip) skipUpdate(v, next Value) string {
+	if rt.c.SkipUpdate == nil {
+		return ""
+	}
+	return rt.c.SkipUpdate(v, next)
+}
+
+// selectValue selects the row of the key, and returns the value in its
+// column Column. It returns sql.ErrNoRows when there is no row.
 func (rt roundTrip) selectValue() (any, error) {
-	var got any
-	err := rt.db.QueryRowContext(rt.tb.Context(), rt.c.Select, rt.args(nil, false)...).Scan(&got)
-	return got, err
+	rows, err := rt.db.QueryContext(rt.tb.Context(), rt.c.Select, rt.args(nil, false)...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	if !rows.Next() {
+		if err := rows.Err(); err != nil {
+			return nil, err
+		}
+		return nil, sql.ErrNoRows
+	}
+	cols, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	if rt.c.Column >= len(cols) {
+		return nil, fmt.Errorf("the select returns %d columns, and the value is in column %d", len(cols), rt.c.Column)
+	}
+	vals := make([]any, len(cols))
+	ptrs := make([]any, len(cols))
+	for i := range vals {
+		ptrs[i] = &vals[i]
+	}
+	if err := rows.Scan(ptrs...); err != nil {
+		return nil, err
+	}
+	return vals[rt.c.Column], rows.Err()
 }
 
 // key returns the key of one value of a round trip.

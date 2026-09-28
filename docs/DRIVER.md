@@ -201,7 +201,8 @@ go run ./dbimptest/cmd/record -dir testdata/<driver> -release <release> \
 	-admin <URL of the administrator> -ordinary <URL of the ordinary user>
 ```
 
-The command sends each request as both principals, through `dbimptest.Recorder`,
+If a release has no ordinary user, leave out `-ordinary`, and the command
+records the administrator only. The command sends each request as both principals, through `dbimptest.Recorder`,
 and replaces what an earlier run recorded for the same release. A request can
 wait, give up after a timeout, run in the background while a later one acts on
 it, or send a wrong password. It can send a body of plain text, or its JSON

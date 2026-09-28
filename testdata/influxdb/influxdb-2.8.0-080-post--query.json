@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "q=SELECT%20f%20FROM%20types%20LIMIT%201%3B%20SHOW%20MEASUREMENTS"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v2.8.0"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:25 GMT"
+      ],
+      "Content-Length": [
+        "241"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"results\":[{\"statement_id\":0,\"series\":[{\"name\":\"types\",\"columns\":[\"time\",\"f\"],\"values\":[[\"2023-11-14T22:13:20Z\",1.5]]}]},{\"statement_id\":1,\"series\":[{\"name\":\"measurements\",\"columns\":[\"name\"],\"values\":[[\"big\"],[\"crud\"],[\"types\"],[\"w\"]]}]}]}\n"
+  }
+}

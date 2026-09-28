@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta&chunked=true",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "q=DROP%20SERIES%20FROM%20crud_copy"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:24 GMT"
+      ],
+      "Content-Length": [
+        "140"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Request-Id": [
+        "57873a75-bac8-11f1-805d-ce336a42b8fa"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Error": [
+        "error authorizing query: dbmeta_user not authorized to execute statement 'DROP SERIES FROM crud_copy', requires WRITE on dbmeta"
+      ],
+      "X-Influxdb-Version": [
+        "v1.11.8"
+      ],
+      "X-Request-Id": [
+        "57873a75-bac8-11f1-805d-ce336a42b8fa"
+      ]
+    },
+    "body": "{\"error\":\"error authorizing query: dbmeta_user not authorized to execute statement 'DROP SERIES FROM crud_copy', requires WRITE on dbmeta\"}\n"
+  }
+}

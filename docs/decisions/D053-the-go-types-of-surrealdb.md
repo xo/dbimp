@@ -1,9 +1,9 @@
 # D53. The Go types of SurrealDB
 
-Status: Decided, and D70 proposes an amendment.
+Status: Amended by D70.
 
-Ken accepted this on 2026-09-27. It decides item 4 of step 9 for SurrealDB. D70 proposes a text form
-for a `RecordID`. In CBOR, the driver decodes each value by its tag:
+Ken accepted this on 2026-09-27. It decides item 4 of step 9 for SurrealDB. D70 gives a `RecordID` a
+text form. In CBOR, the driver decodes each value by its tag:
 
 - An integer is an `int64`, a float is a `float64`, and a decimal (tag 10) is
   an `*apd.Decimal` (D33).

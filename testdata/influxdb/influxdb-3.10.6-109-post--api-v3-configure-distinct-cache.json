@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/configure/distinct_cache",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"table\":\"types\",\"name\":\"dbimp_dc\",\"columns\":[\"host\"]}"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Cluster-Uuid": [
+        "f6a06fe8-7348-4505-ba6f-2a9fca6c885b"
+      ],
+      "Content-Length": [
+        "346"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:39 GMT"
+      ]
+    },
+    "body": "{\"catalog_batch\":{\"Database\":{\"time_ns\":1790550519554180065,\"database_id\":1,\"database_name\":\"dbmeta\",\"ops\":[{\"CreateDistinctCache\":{\"table_id\":0,\"table_name\":\"types\",\"node_spec\":\"all\",\"cache_id\":0,\"cache_name\":\"dbimp_dc\",\"column_ids\":[{\"tag\":0}],\"max_cardinality\":100000,\"max_age_seconds\":86400,\"source\":{\"type\":\"User\"}}}]}},\"sequence_number\":13}"
+  }
+}

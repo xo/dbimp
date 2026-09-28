@@ -4,7 +4,9 @@
 # release of each driver with dbrun from a pinned dbmeta commit, and runs the
 # integration tests against it (W3 in docs/BACKLOG.md, D9 in docs/decisions/). A
 # push runs the releases that dbmeta calls tested, and the nightly run adds the
-# ones that it calls nightly. The workflow names no release (dbmeta D69).
+# ones that it calls nightly. A release that no dbmeta model reads is Staged,
+# and its cadence says the same (dbmeta D119 and dbmeta D120). The workflow names no
+# release (dbmeta D69).
 name: Test
 
 on:
@@ -21,11 +23,12 @@ permissions:
   contents: read
 
 env:
-  # 78f1e44 or later: 2b93710 holds the ordinary Couchbase user (dbmeta D96),
-  # ec91128 gives each server an owner (dbmeta D98), eb35c7c prints the URL
-  # of each principal (dbmeta D102), and 78f1e44 starts SurrealDB with its
-  # ordinary user (dbmeta D103).
-  DBMETA_COMMIT: 19a8a9a34d7ab5acc8a3b5c64bf7eb1f1a8eaa69
+  # 415e830 or later: 2b93710 holds the ordinary Couchbase user
+  # (dbmeta D96), ec91128 gives each server an owner (dbmeta D98), eb35c7c
+  # prints the URL of each principal (dbmeta D102), 78f1e44 starts SurrealDB with its
+  # ordinary user (dbmeta D103), e00d4e7 gives each Staged release its
+  # cadence (dbmeta D120), and 415e830 prints the URL of D82 for InfluxDB.
+  DBMETA_COMMIT: 415e830af51c249afc505a256bc4c4e24d7f536e
   DBMETA_OWNER: dbimp-ci
   DBMETA_RUNNER: docker
 
@@ -81,17 +84,28 @@ jobs:
           go-version-file: dbmeta/test/go.mod
           cache-dependency-path: dbmeta/test/go.sum
       # A driver has the name of its product (D30), and each driver has a
-      # folder under testdata/, so the products come from there.
+      # folder under testdata/, so the products come from there. A product
+      # that a dbmeta model reads is in the tiers tested and nightly, and any
+      # other is Staged, with the tier that it would have as its cadence
+      # (dbmeta D120). A product with no release fails the job, so that a
+      # change in dbmeta never drops the tests of a driver without a word.
       - name: List
         id: list
         run: |
-          selectors=tested
+          cadences='["tested"]'
           if [ "${{ github.event_name }}" = schedule ]; then
-            selectors="tested nightly"
+            cadences='["tested","nightly"]'
           fi
+          tiers=$(echo "$cadences" | jq -r 'join(" ")')
           products=$(ls -d testdata/*/ | xargs -n1 basename | jq -R . | jq -sc .)
-          names=$(cd dbmeta/test && go run ./cmd/dbrun list --json $selectors |
-            jq -c --argjson products "$products" '[.[] | select(.product as $p | $products | index($p)) | .name] | unique')
+          list=$(cd dbmeta/test && go run ./cmd/dbrun list --json $tiers staged)
+          names=$(echo "$list" | jq -c --argjson products "$products" --argjson cadences "$cadences"             '[.[] | select(.product as $p | $products | index($p))
+              | select(.tier != "staged" or (.cadence as $c | $cadences | index($c))) | .name] | unique')
+          missing=$(echo "$names" | jq -r --argjson products "$products"             '. as $names | $products[] | select(. as $p | [$names[] | startswith($p + "-")] | any | not)')
+          if [ -n "$missing" ]; then
+            echo "dbrun lists no release to test for: $missing"
+            exit 1
+          fi
           echo "names=$names" >> "$GITHUB_OUTPUT"
 
   integration:

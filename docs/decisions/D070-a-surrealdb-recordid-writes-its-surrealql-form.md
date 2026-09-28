@@ -1,8 +1,8 @@
 # D70. A SurrealDB RecordID writes its SurrealQL form as text
 
-Status: Proposed. Amends D53.
+Status: Amends D53.
 
-This amends D53. The `dbmeta` session found the fault through `usql` at
+Ken accepted this on 2026-09-29. It amends D53. The `dbmeta` session found the fault through `usql` at
 commit `54c12a4`, on 3.3.0. A record id in its own column prints as
 `author:ursula`, because `tblfmt` calls its `String` method. A record id
 inside an array prints as `{"Table": "book", "ID": "earthsea"}`. `tblfmt`

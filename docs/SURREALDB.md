@@ -378,7 +378,7 @@ Ken decided the questions of step 9 on 2026-09-27, in D47 to D56 of
 
 D70 amends D53: a `RecordID` writes its SurrealQL form as text, through
 `MarshalText`, so a record id inside an array prints as `book:earthsea`. The
-code holds it, and D70 is Proposed until Ken accepts it.
+code holds it, and Ken accepted D70 on 2026-09-29.
 
 Q12 in [PLAN.md](PLAN.md) asked what a result set with no columns gives,
 such as the empty array of `DELETE author`. tblfmt D31, in `tblfmt`

@@ -108,6 +108,9 @@ linters:
         - (*github.com/xo/dbimp/couchbase.rows).Close
         - (*github.com/xo/dbimp/surrealdb.rows).Close
         - (*github.com/xo/dbimp/neo4j.rows).Close
+        - (database/sql/driver.Rows).Close
+        # The stream of a body, closed after the part that matters was read.
+        - (*github.com/xo/dbimp.Stream).Close
         # A deferred close of a connection that a test took from the pool.
         - (*database/sql.Conn).Close
         # A deferred rollback after a commit returns sql.ErrTxDone, and a
@@ -191,6 +194,11 @@ linters:
       # such as _element_id and neo4j_version, which the driver cannot
       # rename.
       - path: neo4j/
+        linters:
+          - tagliatelle
+      # The tags of the InfluxDB driver are the names that the server sends,
+      # such as column_name and statement_id, which the driver cannot rename.
+      - path: influxdb/
         linters:
           - tagliatelle
       # The contract reads rows in several shapes, and closes each one in a

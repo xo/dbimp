@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v3/query_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"db\":\"dbmeta\",\"q\":\"UPDATE crud SET v = 2\",\"format\":\"json\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Cluster-Uuid": [
+        "74bd7e86-3a2b-4528-aedd-f57bfabd3d49"
+      ],
+      "Content-Length": [
+        "48"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:33 GMT"
+      ]
+    },
+    "body": "Error during planning: DML not supported: Update"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query",
+    "query": "db=dbmeta",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "q=UPDATE%20crud%20SET%20v%20%3D%202"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Influxdb-Build": [
+        "OSS"
+      ],
+      "X-Influxdb-Version": [
+        "v2.8.0"
+      ],
+      "X-Platform-Error-Code": [
+        "invalid"
+      ],
+      "Date": [
+        "Sun, 27 Sep 2026 23:08:25 GMT"
+      ],
+      "Content-Length": [
+        "171"
+      ]
+    },
+    "body": "{\"code\":\"invalid\",\"message\":\"failed to parse query: found UPDATE, expected SELECT, DELETE, SHOW, CREATE, DROP, EXPLAIN, GRANT, REVOKE, ALTER, SET, KILL at line 1, char 1\"}"
+  }
+}
