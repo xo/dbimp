@@ -43,7 +43,7 @@ order:
    Done, in `v0.4.0`. See [INFLUXDB.md](INFLUXDB.md).
 2. CrateDB gets no driver here, because `usql` reaches it with `pgx` on the
    PostgreSQL wire protocol (D88). See [CRATEDB.md](CRATEDB.md).
-3. ArangoDB. Staged for review (W13). See [ARANGODB.md](ARANGODB.md).
+3. ArangoDB. Done, in `v0.5.0` (W13). See [ARANGODB.md](ARANGODB.md).
 4. Databend. See [DATABEND.md](DATABEND.md).
 5. TDengine. See [TDENGINE.md](TDENGINE.md).
 6. Apache Pinot. See [PINOT.md](PINOT.md).

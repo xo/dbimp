@@ -36,7 +36,8 @@ same day, who named Neo4j as the third. W10 came from the `dbmeta` session on
 2026-09-27, which found two faults of the SurrealDB driver through `usql`. W11
 came from Ken on 2026-09-27, who set the order of the drivers after Neo4j
 in D73. W12 came from that order, and D88 dropped it. W13 came from Ken on
-2026-09-29, who asked for the ArangoDB driver, and W14 from D94.
+2026-09-29, who asked for the ArangoDB driver, W14 from D94 and D110, and W15
+from D109.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -287,7 +288,7 @@ rebased or squashed, and Ken reviews the order of the work anyway. A linter
 that looks for a comparison after each `Scan` is a guess, and the helper
 does the comparing itself.
 
-## W8. Write the SurrealDB driver
+## W8. Write the SurrealDB driver. Done.
 
 Ken named SurrealDB as the second target on 2026-09-27 (Q1 in
 [PLAN.md](PLAN.md)). Follow [DRIVER.md](DRIVER.md) from step 2.
@@ -335,10 +336,13 @@ step 18. At Ken's request, the session tagged `v0.2.0` on `82c1902` the same day
 driver, and `dburl` released the scheme `surrealdb` in `v0.34.0`, checked
 against `v0.2.0` (dburl D26). The `usql` session added `drivers/surrealdb` on
 `v0.2.0` before step 20, in its commit `54c12a4` (W10). The release notes
-and the GitHub release of step 19, and the requests of step 20, wait for
-Ken. So this item stays open.
+and the GitHub release of step 19, and the requests of step 20, waited for
+Ken. On 2026-09-29, Ken closed this item as overtaken: `v0.4.0` and
+`v0.5.0` are the GitHub releases that hold the driver, and the step 20 of
+`v0.5.0` in W13 reached `dburl`, `dbmeta` and `usql`. The tag `v0.2.0` stays,
+with no GitHub release.
 
-## W9. Write the Neo4j driver
+## W9. Write the Neo4j driver. Done.
 
 Ken named Neo4j as the third target on 2026-09-27 (Q1 in
 [PLAN.md](PLAN.md)). Cypher meets S by D58, so it is P1. `dbrun` runs the
@@ -434,7 +438,10 @@ passed on it, on 5.26.31 and 2026.09.0:
 https://github.com/xo/dbimp/actions/runs/36330535630. That is the gate of
 step 18. The tag `v0.3.0` is on `b475894`, and `v0.4.0` is the first GitHub
 release that holds the driver. The release notes of `v0.3.0`, and the
-requests of step 20, wait for Ken. So this item stays open. dburl D28 added
+requests of step 20, waited for Ken. On 2026-09-29, Ken closed this item as
+overtaken: `v0.4.0` and `v0.5.0` hold the driver, and the step 20 of
+`v0.5.0` in W13 reached `dburl`, `dbmeta` and `usql`. The tag `v0.3.0`
+stays, with no GitHub release. dburl D28 added
 the scheme `neo4j` on 2026-09-28, and dburl `v0.35.0` holds it.
 
 ## W10. Fix the faults that usql found in the SurrealDB driver. Done.
@@ -467,7 +474,7 @@ A fix reaches `usql` only in a new release of `dbimp`, by steps 18 to 20 of
 D70 on 2026-09-29, so this item is done. The tag `v0.3.0` holds the fix of
 the second fault, and `usql` has it through `v0.4.0`.
 
-## W11. Write the InfluxDB driver
+## W11. Write the InfluxDB driver. Done.
 
 InfluxDB was the next target, by D73. Follow [DRIVER.md](DRIVER.md) from step
 2. After InfluxDB come ArangoDB, Databend, TDengine, Apache Pinot,
@@ -564,7 +571,9 @@ the gate of step 18:
 https://github.com/xo/dbimp/actions/runs/36469657061. At Ken's request, the
 session tagged `v0.4.0` on `e29bd29` and published it the same day, which is the
 gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.4.0. The
-requests of step 20 wait for Ken. So this item stays open.
+requests of step 20 waited for Ken. On 2026-09-29, Ken closed this item as
+overtaken: the step 20 of `v0.5.0` in W13 reached `dburl`, `dbmeta` and
+`usql`, and `usql` checked the InfluxDB driver of `v0.5.0` on a server.
 
 ## W12. Write the CrateDB driver. Dropped.
 
@@ -651,14 +660,50 @@ the driver:
    version with `RETURN VERSION()`. A document arrives as one column that
    holds a map, and a projection as its columns (D89).
 
-## W14. Add the key auth to the InfluxDB driver
+## W14. Add the key auth to the InfluxDB and Neo4j drivers
 
-D94 gives every HTTP driver the key `auth=basic|bearer`. The InfluxDB driver
-of `v0.4.0` sends basic authentication only (D82). Add the key, with `basic`
-as the default, and `bearer`, which sends the token as
-`Authorization: Bearer`. InfluxDB 3 takes it (measured, in "Requests" of
-[INFLUXDB.md](INFLUXDB.md)). Couchbase and Neo4j have no key `auth`, and the
-key `auth` of SurrealDB names the level of the user (D51). Ken decides how
-D94 applies to each of them. Measure it on
-InfluxDB 2, which took `Authorization: Token` in step 6. Record it in the
-next release.
+D94 gives every HTTP driver the key `auth=basic|bearer`, and D110 names the
+drivers that take it. The InfluxDB and Neo4j drivers of `v0.5.0` send basic
+authentication only (D82 and D61). Add the key to both, with `basic` as the
+default, and `bearer`, which sends the secret as `Authorization: Bearer`,
+and sends no user.
+
+- InfluxDB 3 takes it (measured, in "Requests" of
+  [INFLUXDB.md](INFLUXDB.md)). Measure it on InfluxDB 2, which took
+  `Authorization: Token` in step 6.
+- Neo4j offers Bearer in `Www-Authenticate` (recorded). Measure a Bearer
+  token on 5.26.31 and 2026.09.0, which need a server that issues one.
+
+Couchbase stays with basic authentication, and SurrealDB keeps its key
+`auth` for the level of the user (D110). Record it in the next release.
+
+## W15. Give every driver the same options
+
+D109 gives every driver options for one statement, through the machinery
+of the root package. Couchbase has them now (D40), and moves to that
+machinery. For each driver:
+
+1. Move `Option`, `WithOptions` and the order DSN, then context, then
+   argument, into `dbimp.Option[T]`, `dbimp.WithOptions` and
+   `dbimp.Resolve`, with a test of the order and of the removal of an
+   `Option` argument.
+2. Give each driver `WithTimeout`, `WithReadonly`, `WithParameter` and
+   `WithDatabase`. Map each one to the setting of its server, measure it,
+   and return an error that wraps `dbimp.ErrNotSupported` where the server
+   has none. These are the leads, which step 6 of each driver measures:
+
+   | Driver | `WithTimeout` | `WithReadonly` | `WithDatabase` |
+   | --- | --- | --- | --- |
+   | Couchbase | `timeout` | `readonly` | `query_context` |
+   | Neo4j | `maxExecutionTime` on 2026.04 and later | `accessMode: READ` | the path of the request |
+   | ArangoDB | `options.maxRuntime` | not known | the path of the request |
+   | SurrealDB | not known | not known | the header `Surreal-DB` |
+   | InfluxDB | not known | not known | `db` |
+
+3. Give each driver an option for each key of its DSN that can change for
+   one statement, with the same meaning (D109).
+4. Write the options into the section "Compared with Couchbase" of each
+   product document, and into the table of interfaces where they change it.
+
+Record it in the next release. It adds to the API of every driver, and
+changes the type of `couchbase.Option`, which stays source compatible.
