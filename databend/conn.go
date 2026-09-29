@@ -41,7 +41,6 @@ var (
 	_ driver.ConnBeginTx        = (*conn)(nil)
 	_ driver.NamedValueChecker  = (*conn)(nil)
 	_ driver.Pinger             = (*conn)(nil)
-	_ driver.SessionResetter    = (*conn)(nil)
 )
 
 // CheckNamedValue satisfies driver.NamedValueChecker. It keeps an Option,
@@ -127,14 +126,6 @@ func (c *conn) Close() error {
 func (c *conn) Ping(ctx context.Context) error {
 	_, err := c.exec(ctx, "SELECT 1", nil)
 	return err
-}
-
-// ResetSession satisfies driver.SessionResetter. It sets the session back to
-// the session of the DSN, so that a USE or a SET of one caller does not reach
-// the next (D122).
-func (c *conn) ResetSession(context.Context) error {
-	c.sess, c.node = nil, ""
-	return nil
 }
 
 // current returns the session of the connection.

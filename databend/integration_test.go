@@ -444,8 +444,9 @@ func TestIntegrationOptions(t *testing.T) {
 	})
 }
 
-// TestIntegrationSession holds D122: USE and SET stay on one connection, and
-// database/sql resets them before it hands the connection to another caller.
+// TestIntegrationSession holds D122 and D126: USE and SET stay on the
+// connection, also when database/sql hands it to the next caller, as usql
+// runs each statement.
 func TestIntegrationSession(t *testing.T) {
 	forEach(t, func(t *testing.T, _ principal, db *sql.DB) {
 		db.SetMaxOpenConns(1)
@@ -460,8 +461,7 @@ func TestIntegrationSession(t *testing.T) {
 		if err := conn.Close(); err != nil {
 			t.Fatal(err)
 		}
-		if got := column(t, db, "SELECT timezone()"); reflect.DeepEqual(got, []any{"Asia/Tokyo"}) {
-			t.Errorf("the next caller got the timezone %v of SET, want the session of the DSN", got)
-		}
+		same(t, "the timezone of the next caller", column(t, db, "SELECT timezone()"), "Asia/Tokyo")
+		same(t, "the database of the next caller", column(t, db, "SELECT database()"), "dbmeta")
 	})
 }

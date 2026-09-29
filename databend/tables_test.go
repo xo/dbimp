@@ -57,7 +57,7 @@ func TestTables(t *testing.T) {
 		"driver.Connector":                      "The connector owns the transport, which every connection shares.",
 		"io.Closer on the connector":            "Close closes the idle connections of the transport.",
 		"driver.Pinger":                         "Ping runs SELECT 1, which checks the credentials and the database.",
-		"driver.SessionResetter":                "A USE or a SET of one caller stays in the session of the connection, so the reset sets it back to the session of the DSN (D122).",
+		"driver.SessionResetter":                "A USE or a SET stays in the session of the connection for as long as it lives, as on MySQL, so nothing needs a reset (D126).",
 		"driver.Validator":                      "A connection holds its session in memory, so it is always valid.",
 		"driver.NamedValueChecker":              "It keeps an Option, a uint64 and a decimal, which the server binds as JSON (D120).",
 		"driver.QueryerContext":                 "The server binds each argument itself, through params (D120).",

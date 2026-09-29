@@ -1,6 +1,6 @@
 # D122. A Databend connection keeps its session
 
-Status: Decided.
+Status: Amended by D126.
 
 Ken decided this on 2026-09-29, at step 9 of the Databend driver.
 The server keeps no session for a client of HTTP. Each response returns

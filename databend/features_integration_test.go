@@ -226,9 +226,11 @@ func TestIntegrationFeatures(t *testing.T) {
 			same(t, "flatten", column(t, db, "SELECT value FROM FLATTEN(INPUT => parse_json('[1, 2]'))"), int64(1), int64(2))
 		})
 		t.Run("result_scan", func(t *testing.T) {
-			// Each request of HTTP is a session of its own, so it has no last
-			// query (recorded).
-			refused(t, db, "SELECT * FROM RESULT_SCAN(LAST_QUERY_ID())", 1006)
+			// The session that the connection keeps names the last query
+			// (D126), and the server keeps no result of it for RESULT_SCAN,
+			// with 1016 (measured). A request with no session names no last
+			// query, with 1006 (recorded).
+			refused(t, db, "SELECT * FROM RESULT_SCAN(LAST_QUERY_ID())", 1016)
 		})
 		t.Run("task", func(t *testing.T) {
 			want := 1702

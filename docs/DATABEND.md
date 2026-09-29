@@ -533,6 +533,10 @@ Measured on 2026-09-29, on both releases:
 
 - `dbmeta_user` has `ALL` on the database `dbmeta`, and runs every
   statement of CRUD there (recorded).
+- `RESULT_SCAN(LAST_QUERY_ID())` fails with 1006 in a request with no
+  session, which names no last query (recorded). In the session that the
+  driver keeps, it fails with 1016 "No cache key found in current session",
+  because the server kept no result to scan (tested on 2026-09-29).
 - It is refused, with 1063, `CREATE DATABASE`, `system.settings`, a
   sequence, a stage, a task and an aggregating index, which need `Super`, and
   `FLASHBACK`, which needs `Alter` on `*.*`. On 1.2.881 an inverted and an
@@ -604,7 +608,7 @@ files, Docker Hub and the Go driver):
 | `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
 | `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
 | `driver.Pinger` | yes | Ping runs SELECT 1, which checks the credentials and the database. |
-| `driver.SessionResetter` | yes | A USE or a SET of one caller stays in the session of the connection, so the reset sets it back to the session of the DSN (D122). |
+| `driver.SessionResetter` | no | A USE or a SET stays in the session of the connection for as long as it lives, as on MySQL, so nothing needs a reset (D126). |
 | `driver.Validator` | no | A connection holds its session in memory, so it is always valid. |
 | `driver.NamedValueChecker` | yes | It keeps an Option, a uint64 and a decimal, which the server binds as JSON (D120). |
 | `driver.QueryerContext` | yes | The server binds each argument itself, through params (D120). |
@@ -809,8 +813,8 @@ The differences that a caller sees:
   kills it (D123).
 - A DDL statement ends a transaction, and so does any error, and `Commit`
   then says so (D121 and D122).
-- `USE` and `SET` stay on the connection until `database/sql` resets it
-  (D122), where Couchbase keeps no session.
+- `USE` and `SET` stay on the connection for as long as it lives (D122 and
+  D126), where Couchbase keeps no session.
 
 ### The driver
 
@@ -825,7 +829,7 @@ The differences that a caller sees:
 | Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | Every value arrives as text, and the driver decodes it by its type: `int64`, `float64`, `*apd.Decimal`, `bool`, `[]byte`, `time.Time`, and `[]any` and maps for the nested types (D118 and D119). A `Bitmap` fails with `dbimp.ErrNotSupported` |
 | Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` from the columns named `number of rows ...`, or `dbimp.ErrNotSupported` when the result names none, as for `REPLACE INTO`. `LastInsertId` returns `dbimp.ErrNotSupported` |
 | Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` sends `BEGIN`, and the session carries the transaction (D121). A DDL statement or any error ends it, and `Commit` then returns why (D121 and D122). `ReadOnly` gives `dbimp.ErrNotSupported` |
-| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | `ResetSession` sets the session back to that of the DSN, because `USE` and `SET` stay on the connection (D122) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. `USE` and `SET` stay on the connection for as long as it lives (D126) |
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The driver names each query, and kills it when the context ends or the rows close early, with `cancel=kill` (D123) |
 | Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Code, Message}`, which unwraps to `*dbimp.StatusError` for a status that is not 2xx |
 | Authentication | Basic | `auth=basic` or `auth=bearer` (D94) |

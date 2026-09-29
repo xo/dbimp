@@ -122,8 +122,8 @@ func TestOptionArguments(t *testing.T) {
 }
 
 // TestOptionSession holds that a SET stays in the session of the connection,
-// and that ResetSession, when database/sql reuses the connection, sets it back
-// to the session of the DSN (D122).
+// also when database/sql reuses the connection for the next caller (D122 and
+// D126).
 func TestOptionSession(t *testing.T) {
 	t.Parallel()
 	s := &optionServer{}
@@ -151,8 +151,8 @@ func TestOptionSession(t *testing.T) {
 	if settingsOf(reqs[1])["x"] != "1" {
 		t.Errorf("the statement after SET sent %v, want the setting x of SET", reqs[1]["session"])
 	}
-	if settingsOf(reqs[2])["x"] != nil {
-		t.Errorf("the statement after the reset sent %v, want the session of the DSN", reqs[2]["session"])
+	if settingsOf(reqs[2])["x"] != "1" {
+		t.Errorf("the statement of the next caller sent %v, want the setting x of SET, which the connection keeps (D126)", reqs[2]["session"])
 	}
 }
 

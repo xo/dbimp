@@ -61,7 +61,9 @@ func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, e
 // returns why, and sends COMMIT only to end a transaction that failed, which
 // the server keeps until then (D121 and D122).
 func (t *tx) Commit() error {
-	defer func() { t.c.tx = nil }()
+	// The transaction leaves the connection first, so that the statement
+	// that ends it runs, even after the transaction ended.
+	t.c.tx = nil
 	if t.ended != nil {
 		if t.failed {
 			_, _ = t.c.exec(context.WithoutCancel(t.ctx), "ROLLBACK", nil)
@@ -79,7 +81,7 @@ func (t *tx) Commit() error {
 // can have ended (D122, as D100 does for Neo4j). A transaction that a
 // statement committed has nothing to roll back.
 func (t *tx) Rollback() error {
-	defer func() { t.c.tx = nil }()
+	t.c.tx = nil
 	if t.ended != nil && !t.failed {
 		return nil
 	}
