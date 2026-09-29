@@ -583,17 +583,16 @@ Step 1 is done by D73, and step 2 by D75 and the entry of dbmeta D112, which
 starts 3.12.12. Step 3 is in [ARANGODB.md](ARANGODB.md). Ken asked on
 2026-09-29 for the work to begin.
 
-Steps 4 to 17 went in on 2026-09-29, staged for Ken to review:
+Steps 4 to 17a went in on 2026-09-29:
 
 - Step 5a and step 6: `testdata/arangodb/features.json` and the recordings of
   3.12.12, as both principals. The recorder now writes a captured value into
   a header too, for `x-arango-trx-id`.
 - Step 7: the leads of Gemini and DeepSeek were tested. In the second round,
   on 2026-09-29, DeepSeek gave no answer.
-- Step 9: Ken decided D89 to D94, and D99 on 2026-09-29. D94 is the
-  convention of every HTTP driver: the secret is the password, and
-  `auth=basic|bearer`. D103 and D104 propose the choices of the code for
-  items 4, 6, and 10 to 12, and wait for Ken.
+- Step 9: Ken decided D89 to D94, D99, D103, D104 and D106 on 2026-09-29.
+  D94 is the convention of every HTTP driver: the secret is the password,
+  and `auth=basic|bearer`.
 - Steps 10 to 14a: the package `arangodb/`, its tables, the contract, the
   replay tests, the DSN tests, and the integration tests, which passed on
   3.12.12 as both principals.
@@ -602,8 +601,13 @@ Steps 4 to 17 went in on 2026-09-29, staged for Ken to review:
   integration tests passed against that commit on 2026-09-29, as both
   principals. `actionlint` passes on the workflow.
 - Step 17a: `## Compared with Couchbase` is in ARANGODB.md, and D97 gave
-  SurrealDB, Neo4j and InfluxDB the same section. Ken reviews them before
+  SurrealDB, Neo4j and InfluxDB the same section. Ken reviewed them before
   step 18 (D97).
+
+Ken committed steps 4 to 17a on 2026-09-29 as `109da2c` and `611397c`. The
+workflow passed on `611397c`, on every release of every driver, with
+`arangodb-3.12.12` for the first time, which is the gate of step 18:
+https://github.com/xo/dbimp/actions/runs/36501952076.
 
 The release that holds this driver also carries D95, D96, D100, D105 and
 D107, which change the drivers of `v0.4.0`, and the fixes of the review of
@@ -620,10 +624,10 @@ D97, such as `BeginTx` of SurrealDB. Step 20 tells `usql` of each:
 The requests of step 16, which step 20 sends after the release that holds
 the driver:
 
-1. To `dburl`: the provisional scheme `arangodb` of dburl D32 matches D93.
-   Please check `GenArangoDB` against the release: the path is the
-   database, the query passes through, and the generator adds no port,
-   because the driver uses 8529 (dburl D34).
+1. To `dburl`: the provisional scheme `arangodb` of dburl D32, which dburl
+   `v0.36.0` releases, matches D93. Please check `GenArangoDB` against the
+   release: the path is the database, the query passes through, and the
+   generator adds no port, because the driver uses 8529 (dburl D34).
 2. To `dbmeta`: dbmeta has no model for ArangoDB, so nothing to measure yet.
 3. To `usql`: add `drivers/arangodb/arangodb.go`, which imports
    `github.com/xo/dbimp/arangodb` for the scheme `arangodb`. It reads the
