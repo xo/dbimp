@@ -38,7 +38,8 @@ came from Ken on 2026-09-27, who set the order of the drivers after Neo4j
 in D73. W12 came from that order, and D88 dropped it. W13 came from Ken on
 2026-09-29, who asked for the ArangoDB driver, W14 from D94 and D110, and W15
 from D109. W16 came from Ken on 2026-09-29, who named Databend as the next
-target at step 1, and W17 from D119.
+target at step 1, W17 from D119, and W18 from Ken on 2026-09-29, who
+named TDengine as the next target at step 1.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -586,7 +587,7 @@ asks the `dbmeta` session for the dialects of CrateDB and CockroachDB
 himself. Step 3 of the driver is in [CRATEDB.md](CRATEDB.md), which stays as
 the record of why. ArangoDB is the next driver.
 
-## W13. Write the ArangoDB driver
+## W13. Write the ArangoDB driver. Done.
 
 ArangoDB is the next target, by D73 and D88. Follow [DRIVER.md](DRIVER.md).
 Step 1 is done by D73, and step 2 by D75 and the entry of dbmeta D112, which
@@ -635,6 +636,10 @@ Step 20 sent the requests below on 2026-09-29, each naming `v0.5.0`:
   Couchbase driver, at `v0.1.0`. It moves its test module to `v0.5.0`, and
   runs the three releases of Couchbase, after Ken decides on the change that
   it has staged. So this item stays open until `dbmeta` reports.
+
+`dbmeta` moved its test module from dbimp `v0.1.0` straight to `v0.6.0`
+instead, on 2026-09-29, as dbmeta `03876ce`, and the three releases of
+Couchbase passed there. That closed this item.
 
 The release that holds this driver also carries D95, D96, D100, D105 and
 D107, which change the drivers of `v0.4.0`, and the fixes of the review of
@@ -786,8 +791,30 @@ Steps 10 to 17a went in on 2026-09-29:
   decision explained: `RowsAffected` returns an error for a statement whose
   result names no count, such as `REPLACE INTO`.
 
-The requests of step 16, which step 20 sends after the release that holds
-the driver:
+Ken committed steps 2 to 17a on 2026-09-29 as `198a3ed`, and the pin as
+`54e9563`. The workflow passed on `54e9563`, on every release of every
+driver, with both releases of Databend for the first time, which is the gate
+of step 18: https://github.com/xo/dbimp/actions/runs/36566730781. At Ken's
+request, the session tagged `v0.6.0` on `54e9563` and published it the same
+day, which is the gate of step 19:
+https://github.com/xo/dbimp/releases/tag/v0.6.0. The release also holds the
+options of W15 (D109) and the key `auth` of W14.
+
+Step 20 sent the requests below on 2026-09-29, each naming `v0.6.0`. This
+item stays open until each session reports its change as staged.
+
+`dburl` reported the same day that `GenDatabend` matches `databend.ParseDSN`
+of `v0.6.0` with no change, and released it in dburl `v0.37.0` (dburl D39).
+`dbmeta` moved to `v0.6.0` as dbmeta `03876ce`, which needed nothing for
+Databend.
+
+`usql` staged its switch to `v0.6.0` and dburl `v0.37.0`, and measured it on
+both releases. It found that D122 dropped `USE` and `SET` between its
+statements, because `database/sql` calls `ResetSession` each time a
+connection goes back to the pool. Ken decided D126 the same day, which drops
+`ResetSession`. It also found that a DDL statement, whose result names no
+count, gives no `RowsAffected` (D125), and `usql` maps that error to 0 in its
+driver. D126 needs a release, which this item waits for.
 
 1. To `dburl`: dburl D39, staged, moves the scheme `databend` to
    `github.com/xo/dbimp/databend`. Please check `GenDatabend` against the
@@ -816,3 +843,35 @@ package or a reader written here.
   arrives as bytes, which JSON never gives (D119).
 - Add the reader beside the JSON one, through the interface that D119
   shapes after SurrealDB (D108), so the rows code does not change.
+
+## W18. Write the TDengine driver. Dropped.
+
+TDengine is the next target, by D73 and D88. Ken named it at step 1 on
+2026-09-29. Follow [DRIVER.md](DRIVER.md). Step 3 is in
+[TDENGINE.md](TDENGINE.md). `usql` has no driver for TDengine, so this
+driver replaces none (D24), and `dburl` holds the provisional scheme
+`tdengine` (dburl D36).
+
+Step 6 measures first the question at the end of TDENGINE.md: whether the
+server drops an error that comes after some rows, and whether
+`restfulRowLimit` cuts a result with no sign. Either one meets a condition
+of "When it cannot be a driver" in DRIVER.md, and then the work stops for
+Ken.
+
+Step 2 went in on 2026-09-29: R, H and S hold on 3.3.8.8 and 3.4.2.8, as
+both principals. The first measurement of step 6 stopped the work: a query
+killed while its result streams ends with a valid body, `code` 0 and a
+`rows` that counts only what was sent, on both releases (TDENGINE.md,
+Errors). So the server cuts a result short with no sign (D21), and the work
+waits for Ken.
+
+Ken asked on 2026-09-29 for the WebSocket interface to be measured first.
+It reports the failure that REST loses: after `DROP DATABASE` during the
+fetches, the next `fetch` answered `code` 24 on both releases, where REST
+ended with `code` 0 and a partial `rows`. Its rows arrive as binary blocks
+of taosd, and it is no request of HTTP for each statement (D14). The work
+waits for Ken again.
+
+Ken decided the same day that dbimp writes no driver for TDengine, and moved
+it to P3 (D127). TDENGINE.md stays as the record of why. Apache Pinot is the
+next target.
