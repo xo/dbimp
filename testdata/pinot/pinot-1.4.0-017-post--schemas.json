@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/schemas",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"schemaName\":\"dbimp_object\",\"dimensionFieldSpecs\":[{\"name\":\"o\",\"dataType\":\"OBJECT\"}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "699"
+      ],
+      "Pinot-Controller-Host": [
+        "d91d6a48ca64"
+      ],
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ]
+    },
+    "body": "{\"code\":400,\"error\":\"Invalid schema config json string: {\\\"schemaName\\\":\\\"dbimp_object\\\",\\\"dimensionFieldSpecs\\\":[{\\\"name\\\":\\\"o\\\",\\\"dataType\\\":\\\"OBJECT\\\"}]}. Reason: Cannot deserialize value of type `org.apache.pinot.spi.data.FieldSpec$DataType` from String \\\"OBJECT\\\": not one of the values accepted for Enum class: [JSON, UNKNOWN, BYTES, INT, STRING, BIG_DECIMAL, STRUCT, TIMESTAMP, FLOAT, LIST, BOOLEAN, DOUBLE, MAP, LONG]\\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 84] (through reference chain: org.apache.pinot.spi.data.Schema[\\\"dimensionFieldSpecs\\\"]->java.util.ArrayList[0]->org.apache.pinot.spi.data.DimensionFieldSpec[\\\"dataType\\\"])\"}"
+  }
+}

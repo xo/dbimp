@@ -231,7 +231,10 @@ value of its response with `capture`, such as the id of a transaction of
 Neo4j, and a later request of the same principal writes it into its body, its
 path or a header as `{{name}}`. A request with `releases` runs only on a release
 whose name starts with one of them, such as `influxdb-3`, as `principals`
-limits a request to some principals. It replaces the files and the entries that an
+limits a request to some principals. A request of the setup or the teardown
+with `"server": "second"` goes to the URL of the flag `-second`, such as the
+Controller of Pinot, through which the setup makes the tables that the
+Broker cannot. It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
 it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
 the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.

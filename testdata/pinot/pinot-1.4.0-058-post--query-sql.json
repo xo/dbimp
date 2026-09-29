@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id, JSON_EXTRACT_SCALAR(j, '$.k[0]', 'INT') AS x FROM dbimp_types\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "2091"
+      ],
+      "X-Pinot-Error-Code": [
+        "200"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"numRowsResultSet\":0,\"partialResult\":true,\"exceptions\":[{\"message\":\"Received 1 error from stage 1 on Server_192.168.1.5_7050: Caught exception while doing operator: class org.apache.pinot.core.operator.streaming.StreamingSelectionOnlyOperator: Cannot resolve JSON path on some records. Consider setting a default value.\",\"errorCode\":200}],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"maxRowsInJoinReached\":false,\"maxRowsInWindowReached\":false,\"timeUsedMs\":5,\"stageStats\":{\"type\":\"MAILBOX_RECEIVE\",\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_SEND\",\"stage\":1,\"parallelism\":1,\"fanOut\":1,\"rawMessages\":2,\"serializedBytes\":347,\"serializationTimeMs\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"LEAF\",\"table\":\"dbimp_types\",\"parallelism\":1,\"clockTimeMs\":0}]}]},\"maxRowsInOperator\":0,\"requestId\":\"1275200996000000193\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":0,\"totalDocs\":0,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":0,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":0,\"numSegmentsProcessed\":0,\"numSegmentsMatched\":0,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":1,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"dbimp_types\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

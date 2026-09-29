@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id, JSON_EXTRACT_SCALAR(j, '$.k[0]', 'INT') AS x FROM dbimp_types\",\"queryOptions\":\"enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1698"
+      ],
+      "X-Pinot-Error-Code": [
+        "200"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"numRowsResultSet\":0,\"partialResult\":true,\"exceptions\":[{\"message\":\"Caught exception while doing operator: class org.apache.pinot.core.operator.query.SelectionOnlyOperator on segment dbimp_types_1600000000000_1700000000123_1790710925253: Cannot resolve JSON path on some records. Consider setting a default value.\",\"errorCode\":200}],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"timeUsedMs\":2,\"requestId\":\"1275200996000000119\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":0,\"totalDocs\":3,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":0,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":0,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":0,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"dbimp_types\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[-1],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

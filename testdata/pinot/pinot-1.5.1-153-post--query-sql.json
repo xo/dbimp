@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT k, JSON_EXTRACT_SCALAR(j, '$.a', 'INT', -1) AS a FROM dbimp_idx WHERE k < 4 ORDER BY k\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Length": [
+        "93"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"code\":403,\"error\":\"Permission denied.Reason: Authorization Failed for tables: [dbimp_idx]\"}"
+  }
+}

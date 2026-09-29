@@ -44,11 +44,11 @@ order:
 2. CrateDB gets no driver here, because `usql` reaches it with `pgx` on the
    PostgreSQL wire protocol (D88). See [CRATEDB.md](CRATEDB.md).
 3. ArangoDB. Done, in `v0.5.0` (W13). See [ARANGODB.md](ARANGODB.md).
-4. Databend. Staged for review in `github.com/xo/dbimp/databend` (W16). See
-   [DATABEND.md](DATABEND.md).
+4. Databend. Done, in `v0.6.0` (W16). See [DATABEND.md](DATABEND.md).
 5. TDengine gets no driver here, because its REST interface cuts a result
    short with no sign (D127). See [TDENGINE.md](TDENGINE.md).
-6. Apache Pinot. See [PINOT.md](PINOT.md).
+6. Apache Pinot. Staged for review in `github.com/xo/dbimp/pinot` (W19).
+   See [PINOT.md](PINOT.md).
 7. rqlite. See [RQLITE.md](RQLITE.md).
 8. libSQL, and Turso. See [LIBSQL.md](LIBSQL.md).
 9. Apache Calcite Avatica, and the products that speak it: the standalone
@@ -152,7 +152,7 @@ that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 | rqlite | Seventh in the order after Neo4j (D73). SQLite over HTTP. Returns columns and types. The `dbmeta` model for sqlite3 can read it as a flavor. R: `dbrun` starts 9.4.5 and 10.3.6. See [RQLITE.md](RQLITE.md). |
 | libSQL | Eighth in the order after Neo4j (D73). Its driver is `libsql`, and `turso` is an alias in `dburl` (D76). The same as rqlite for `dbmeta`. R: `dbrun` starts the local `libsql-server` 0.24.33. Turso is the same protocol in the cloud, and the cloud service fails R. See [LIBSQL.md](LIBSQL.md). |
 | Apache Drill | Moves up from P2. Its REST interface can cap the size of a result. |
-| Apache Pinot | Moves up from P2. Sixth in the order after Neo4j (D73). The QuickStart image runs every part in one container. A selection with no `LIMIT` returns ten rows. R: `dbrun` starts 1.4.0 and 1.5.1. See [PINOT.md](PINOT.md). |
+| Apache Pinot | Moves up from P2. Sixth in the order after Neo4j (D73). The QuickStart image runs every part in one container. A selection with no `LIMIT` returns ten rows on the single-stage engine. The driver is `github.com/xo/dbimp/pinot`, and it takes no write, because the Broker takes none (W19 and D128). R: `dbrun` starts 1.4.0 and 1.5.1. H and S: `POST /query/sql` answered SQL on both, as both principals (measured on 2026-09-30, W19). See [PINOT.md](PINOT.md). |
 | Apache Solr | Moves up from P2. Parallel SQL needs SolrCloud mode, which runs in one container. |
 | Apache Druid | R: `dbrun` starts 36.0.0 and 37.0.0 in one container, with 2.7 GB at most, inside the 4 GB limit of `dbmeta` (dbmeta D113). It is also a flavor of Avatica (D74). |
 | Elasticsearch and OpenSearch | Only through `_sql`, which pages with a cursor. The Query DSL and ES\|QL fail S. |

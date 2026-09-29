@@ -1,0 +1,733 @@
+{
+  "driver": "pinot",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-09-30"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-09-30"
+    },
+    {
+      "source": "github.com/startreedata/pinot-client-go",
+      "kind": "driver",
+      "date": "2026-09-30"
+    },
+    {
+      "source": "github.com/apache/pinot/pinot-clients/pinot-jdbc-client",
+      "kind": "driver",
+      "date": "2026-09-30"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-027-post--query-sql.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-022-post--query-sql.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-030-post--query-sql.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-031-post--query-sql.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "insert select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-029-post--query-sql.json",
+      "test": "TestIntegrationCRUD/insert_select"
+    },
+    {
+      "kind": "crud",
+      "name": "insert from file",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-033-post--query-sql.json",
+      "test": "TestIntegrationCRUD/insert_from_file"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-081-post--query-sql.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-032-post--query-sql.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-019-post--tables.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-032-post--query-sql.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-032-post--query-sql.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-075-post--query-sql.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-043-post--query-sql.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "time column",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-093-post--query-sql.json",
+      "test": "TestIntegrationSchema/time_column"
+    },
+    {
+      "kind": "schema",
+      "name": "sorted index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-082-post--query-sql.json",
+      "test": "TestIntegrationSchema/sorted_index"
+    },
+    {
+      "kind": "schema",
+      "name": "inverted index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-083-post--query-sql.json",
+      "test": "TestIntegrationSchema/inverted_index"
+    },
+    {
+      "kind": "schema",
+      "name": "range index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-084-post--query-sql.json",
+      "test": "TestIntegrationSchema/range_index"
+    },
+    {
+      "kind": "schema",
+      "name": "bloom filter",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-085-post--query-sql.json",
+      "test": "TestIntegrationSchema/bloom_filter"
+    },
+    {
+      "kind": "schema",
+      "name": "star-tree index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-090-post--query-sql.json",
+      "test": "TestIntegrationSchema/star-tree_index"
+    },
+    {
+      "kind": "schema",
+      "name": "text index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-086-post--query-sql.json",
+      "test": "TestIntegrationSchema/text_index"
+    },
+    {
+      "kind": "schema",
+      "name": "json index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-087-post--query-sql.json",
+      "test": "TestIntegrationSchema/json_index"
+    },
+    {
+      "kind": "schema",
+      "name": "fst index",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-088-post--query-sql.json",
+      "test": "TestIntegrationSchema/fst_index"
+    },
+    {
+      "kind": "schema",
+      "name": "geospatial index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-091-post--query-sql.json",
+      "test": "TestIntegrationSchema/geospatial_index"
+    },
+    {
+      "kind": "schema",
+      "name": "vector index",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-092-post--query-sql.json",
+      "test": "TestIntegrationSchema/vector_index"
+    },
+    {
+      "kind": "schema",
+      "name": "timestamp index",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-089-post--query-sql.json",
+      "test": "TestIntegrationSchema/timestamp_index"
+    },
+    {
+      "kind": "feature",
+      "name": "multi-stage engine",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-080-post--query-sql.json",
+      "test": "TestIntegrationFeatures/multi-stage_engine"
+    },
+    {
+      "kind": "feature",
+      "name": "set options",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-073-post--query-sql.json",
+      "test": "TestIntegrationFeatures/set_options"
+    },
+    {
+      "kind": "feature",
+      "name": "option clause",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-074-post--query-sql.json",
+      "test": "TestIntegrationFeatures/option_clause"
+    },
+    {
+      "kind": "feature",
+      "name": "default limit of 10",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-051-post--query-sql.json",
+      "test": "TestIntegrationFeatures/default_limit_of_10"
+    },
+    {
+      "kind": "feature",
+      "name": "cursor",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-054-get--responsestore-1590964612000000440-results.json",
+      "test": "TestIntegrationFeatures/cursor"
+    },
+    {
+      "kind": "feature",
+      "name": "lookup join",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-076-post--query-sql.json",
+      "test": "TestIntegrationFeatures/lookup_join"
+    },
+    {
+      "kind": "feature",
+      "name": "lookup function",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-077-post--query-sql.json",
+      "test": "TestIntegrationFeatures/lookup_function"
+    },
+    {
+      "kind": "feature",
+      "name": "json_extract_scalar",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-078-post--query-sql.json",
+      "test": "TestIntegrationFeatures/json_extract_scalar"
+    },
+    {
+      "kind": "feature",
+      "name": "id_set",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-079-post--query-sql.json",
+      "test": "TestIntegrationFeatures/id_set"
+    },
+    {
+      "kind": "feature",
+      "name": "upsert table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-019-post--tables.json",
+      "test": "TestIntegrationFeatures/upsert_table"
+    },
+    {
+      "kind": "feature",
+      "name": "real-time table",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-020-post--tables.json",
+      "test": "TestIntegrationFeatures/real-time_table"
+    },
+    {
+      "kind": "feature",
+      "name": "null handling",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationFeatures/null_handling"
+    },
+    {
+      "kind": "feature",
+      "name": "query timeout",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-062-post--query-sql.json",
+      "test": "TestIntegrationFeatures/query_timeout"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel a query",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-064-delete--query-dbimp-cancel.json",
+      "test": "TestIntegrationFeatures/cancel_a_query"
+    },
+    {
+      "kind": "feature",
+      "name": "window function",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-080-post--query-sql.json",
+      "test": "TestIntegrationFeatures/window_function"
+    },
+    {
+      "kind": "feature",
+      "name": "transactions",
+      "sources": [
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-095-post--query-sql.json",
+      "test": "TestIntegrationFeatures/transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "null literal",
+      "sources": [
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-045-post--query-sql.json",
+      "test": "TestIntegrationFeatures/null_literal"
+    },
+    {
+      "kind": "type",
+      "name": "INT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/INT"
+    },
+    {
+      "kind": "type",
+      "name": "LONG",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/LONG"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/FLOAT"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/DOUBLE"
+    },
+    {
+      "kind": "type",
+      "name": "BIG_DECIMAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/BIG_DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "STRING",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/STRING"
+    },
+    {
+      "kind": "type",
+      "name": "JSON",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-040-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/JSON"
+    },
+    {
+      "kind": "type",
+      "name": "BYTES",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go",
+        "github.com/apache/pinot/pinot-clients/pinot-jdbc-client"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/BYTES"
+    },
+    {
+      "kind": "type",
+      "name": "MAP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/MAP"
+    },
+    {
+      "kind": "type",
+      "name": "INT_ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/INT_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "LONG_ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/LONG_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT_ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/FLOAT_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE_ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/DOUBLE_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN_ARRAY",
+      "sources": [
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "STRING_ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/STRING_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP_ARRAY",
+      "sources": [
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "pinot-1.5.1-038-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "BYTES_ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-042-post--query-sql.json",
+      "test": "TestIntegrationRoundTrip/BYTES_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "UUID",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-016-post--schemas.json",
+      "test": "TestIntegrationRoundTrip/UUID"
+    },
+    {
+      "kind": "type",
+      "name": "OBJECT",
+      "sources": [
+        "github.com/startreedata/pinot-client-go"
+      ],
+      "verdict": "no",
+      "evidence": "pinot-1.5.1-017-post--schemas.json",
+      "test": "TestIntegrationRoundTrip/OBJECT"
+    }
+  ]
+}

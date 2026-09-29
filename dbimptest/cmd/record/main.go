@@ -9,6 +9,10 @@
 //	go run ./dbimptest/cmd/record -dir testdata/couchbase -release couchbase-8.0.3 \
 //		-admin http://Administrator:pass@127.0.0.1:55059 \
 //		-ordinary http://dbmeta_user:pass@127.0.0.1:55059
+//
+// A product with a second server, such as the Controller of Pinot, names its
+// URL with -second, and a request of the setup or the teardown goes there
+// when it says "server": "second".
 package main
 
 import (
@@ -100,6 +104,11 @@ type Request struct {
 	// answer, until an answer has no such URI, as a client that reads every
 	// page does. It follows at most maxFollow times.
 	Follow string `json:"follow,omitzero"`
+	// Server is "second" to send the request to the URL of the flag -second,
+	// such as the Controller of Pinot, with the credentials of that URL, or
+	// "" to send it to the URL of the principal. Only a request of the setup
+	// or the teardown can name it.
+	Server string `json:"server,omitzero"`
 }
 
 // maxFollow bounds the pages that one request follows.
@@ -125,6 +134,7 @@ func record() error {
 	release := flag.String("release", "", "the release, as dbrun names it")
 	admin := flag.String("admin", "", "the http URL of the server, with the user and password of the administrator")
 	ordinary := flag.String("ordinary", "", "the http URL of the server, with the user and password of the ordinary user, or empty for a release that has none")
+	second := flag.String("second", "", "the http URL of a second server of the product, such as the Controller of Pinot, or empty for none")
 	flag.Parse()
 	if *dir == "" || *release == "" || *admin == "" {
 		flag.Usage()
@@ -132,13 +142,13 @@ func record() error {
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
-	return run(ctx, *dir, *release, map[string]string{
+	return run(ctx, *dir, *release, *second, map[string]string{
 		dbimptest.Administrator: *admin,
 		dbimptest.Ordinary:      *ordinary,
 	})
 }
 
-func run(ctx context.Context, dir, release string, principals map[string]string) error {
+func run(ctx context.Context, dir, release, second string, principals map[string]string) error {
 	b, err := os.ReadFile(filepath.Join(dir, dbimptest.RequestsName))
 	if err != nil {
 		return fmt.Errorf("reading the script: %w", err)
@@ -166,12 +176,18 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 	if err != nil {
 		return fmt.Errorf("parsing the URL of the administrator: %w", err)
 	}
+	servers := map[string]*url.URL{"": admin}
+	if second != "" {
+		if servers["second"], err = url.Parse(second); err != nil {
+			return fmt.Errorf("parsing the URL of the second server: %w", err)
+		}
+	}
 	script.Requests = slices.DeleteFunc(script.Requests, func(r Request) bool {
 		return len(r.Releases) > 0 && !slices.ContainsFunc(r.Releases, func(prefix string) bool {
 			return strings.HasPrefix(release, prefix)
 		})
 	})
-	if err := runPhase(ctx, client, admin, script, "setup"); err != nil {
+	if err := runPhase(ctx, client, servers, script, "setup"); err != nil {
 		return err
 	}
 	for _, p := range []string{dbimptest.Administrator, dbimptest.Ordinary} {
@@ -188,6 +204,9 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 		for _, r := range script.Requests {
 			if r.Phase != "" || len(r.Principals) > 0 && !slices.Contains(r.Principals, p) {
 				continue
+			}
+			if r.Server != "" {
+				return fmt.Errorf("reading item %d, %s: only a request of the setup or the teardown can name a server", r.Item, r.Name)
 			}
 			r.Body = expand(r.Body, kept)
 			r.Path = expandText(r.Path, kept)
@@ -208,7 +227,7 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 		}
 		wg.Wait()
 	}
-	if err := runPhase(ctx, client, admin, script, "teardown"); err != nil {
+	if err := runPhase(ctx, client, servers, script, "teardown"); err != nil {
 		return err
 	}
 	if err := errors.Join(errs...); err != nil {
@@ -220,14 +239,19 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 	return addAbsent(dir, release, script.Absent)
 }
 
-// runPhase sends the requests of a phase once, as the administrator.
-func runPhase(ctx context.Context, client *http.Client, admin *url.URL, script Script, phase string) error {
+// runPhase sends the requests of a phase once, as the administrator, each
+// to the server that it names.
+func runPhase(ctx context.Context, client *http.Client, servers map[string]*url.URL, script Script, phase string) error {
 	for _, r := range script.Requests {
 		if r.Phase != phase {
 			continue
 		}
+		base, ok := servers[r.Server]
+		if !ok {
+			return fmt.Errorf("running the %s, item %d, %s: no URL for the server %q", phase, r.Item, r.Name, r.Server)
+		}
 		r.Header = withHeader(r.Header, script.Header[dbimptest.Administrator])
-		if err := send(ctx, client, admin, dbimptest.Administrator, r, nil); err != nil {
+		if err := send(ctx, client, base, dbimptest.Administrator, r, nil); err != nil {
 			return fmt.Errorf("running the %s, item %d, %s: %w", phase, r.Item, r.Name, err)
 		}
 	}

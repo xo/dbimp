@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id FROM dbimp_types WHERE s = 'é''\\\"\\\\ x' AND bd = CAST('12345678901234567890.0123456789' AS BIG_DECIMAL) AND by = hexToBytes('00ff') AND ts = 1700000000123 AND l = 9223372036854775807 AND d = 0.1 AND b = true\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "95"
+      ]
+    },
+    "body": "{\"code\":403,\"error\":\"Permission denied.Reason: Authorization Failed for tables: [dbimp_types]\"}"
+  }
+}

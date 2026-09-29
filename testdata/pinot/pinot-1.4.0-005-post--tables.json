@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/tables",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"tableName\":\"dbimp_idx\",\"tableType\":\"OFFLINE\",\"segmentsConfig\":{\"replication\":\"1\",\"timeColumnName\":\"ts\"},\"tableIndexConfig\":{\"loadMode\":\"MMAP\",\"sortedColumn\":[\"k\"],\"invertedIndexColumns\":[\"s\"],\"rangeIndexColumns\":[\"n\"],\"bloomFilterColumns\":[\"s\"],\"jsonIndexColumns\":[\"j\"],\"noDictionaryColumns\":[\"t\",\"p\",\"v\"],\"starTreeIndexConfigs\":[{\"dimensionsSplitOrder\":[\"s\"],\"functionColumnPairs\":[\"SUM__n\"],\"maxLeafRecords\":1}]},\"tenants\":{},\"metadata\":{},\"fieldConfigList\":[{\"name\":\"t\",\"encodingType\":\"RAW\",\"indexTypes\":[\"TEXT\"]},{\"name\":\"f\",\"encodingType\":\"DICTIONARY\",\"indexTypes\":[\"FST\"]},{\"name\":\"ts\",\"encodingType\":\"DICTIONARY\",\"indexTypes\":[\"TIMESTAMP\"],\"timestampConfig\":{\"granularities\":[\"DAY\"]}},{\"name\":\"p\",\"encodingType\":\"RAW\",\"indexType\":\"H3\",\"properties\":{\"resolutions\":\"5\"}},{\"name\":\"v\",\"encodingType\":\"RAW\",\"indexType\":\"VECTOR\",\"properties\":{\"vectorIndexType\":\"HNSW\",\"vectorDimension\":\"2\",\"vectorDistanceFunction\":\"EUCLIDEAN\",\"version\":\"1\"}}],\"ingestionConfig\":{\"transformConfigs\":[{\"columnName\":\"p\",\"transformFunction\":\"stPoint(lon,lat)\"}]}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "83"
+      ],
+      "Pinot-Controller-Host": [
+        "d91d6a48ca64"
+      ],
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"unrecognizedProperties\":{},\"status\":\"Table dbimp_idx_OFFLINE successfully added\"}"
+  }
+}

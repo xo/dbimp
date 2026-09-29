@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT k, bya FROM dbimp_bya\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "2208"
+      ],
+      "X-Pinot-Error-Code": [
+        "200"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"numRowsResultSet\":0,\"partialResult\":true,\"exceptions\":[{\"message\":\"Received 1 error from stage 1 on Server_192.168.1.5_7050: Caught exception while doing operator: class org.apache.pinot.core.operator.streaming.StreamingSelectionOnlyOperator: Unsupported value type: BYTES for multi-value column\",\"errorCode\":200}],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"numGroups\":0,\"maxRowsInJoinReached\":false,\"maxRowsInJoin\":0,\"maxRowsInWindowReached\":false,\"maxRowsInWindow\":0,\"timeUsedMs\":4,\"stageStats\":{\"type\":\"MAILBOX_RECEIVE\",\"fanIn\":1,\"rawMessages\":1,\"deserializedBytes\":350,\"upstreamWaitMs\":1,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_SEND\",\"stage\":1,\"parallelism\":1,\"fanOut\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"LEAF\",\"table\":\"dbimp_bya\",\"totalDocs\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"sseExecutionTimeMs\":1,\"parallelism\":1,\"clockTimeMs\":0}]}]},\"maxRowsInOperator\":0,\"requestId\":\"1590964612000000429\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":0,\"totalDocs\":1,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":0,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":0,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":1,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"dbimp_bya\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

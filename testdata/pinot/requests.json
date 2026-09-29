@@ -1,0 +1,1894 @@
+{
+ "driver": "pinot",
+ "requests": [
+  {
+   "item": 1,
+   "name": "make the schema of dbimp_types",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_types",
+    "enableColumnBasedNullHandling": true,
+    "dimensionFieldSpecs": [
+     {
+      "name": "id",
+      "dataType": "INT"
+     },
+     {
+      "name": "i",
+      "dataType": "INT"
+     },
+     {
+      "name": "l",
+      "dataType": "LONG"
+     },
+     {
+      "name": "f",
+      "dataType": "FLOAT"
+     },
+     {
+      "name": "d",
+      "dataType": "DOUBLE"
+     },
+     {
+      "name": "bd",
+      "dataType": "BIG_DECIMAL"
+     },
+     {
+      "name": "b",
+      "dataType": "BOOLEAN"
+     },
+     {
+      "name": "s",
+      "dataType": "STRING"
+     },
+     {
+      "name": "j",
+      "dataType": "JSON"
+     },
+     {
+      "name": "by",
+      "dataType": "BYTES"
+     },
+     {
+      "name": "ia",
+      "dataType": "INT",
+      "singleValueField": false
+     },
+     {
+      "name": "la",
+      "dataType": "LONG",
+      "singleValueField": false
+     },
+     {
+      "name": "fa",
+      "dataType": "FLOAT",
+      "singleValueField": false
+     },
+     {
+      "name": "da",
+      "dataType": "DOUBLE",
+      "singleValueField": false
+     },
+     {
+      "name": "boa",
+      "dataType": "BOOLEAN",
+      "singleValueField": false
+     },
+     {
+      "name": "sa",
+      "dataType": "STRING",
+      "singleValueField": false
+     },
+     {
+      "name": "ta",
+      "dataType": "TIMESTAMP",
+      "singleValueField": false
+     }
+    ],
+    "complexFieldSpecs": [
+     {
+      "name": "m",
+      "dataType": "MAP",
+      "fieldType": "COMPLEX",
+      "childFieldSpecs": {
+       "key": {
+        "name": "key",
+        "dataType": "STRING",
+        "fieldType": "DIMENSION"
+       },
+       "value": {
+        "name": "value",
+        "dataType": "INT",
+        "fieldType": "DIMENSION"
+       }
+      }
+     }
+    ],
+    "dateTimeFieldSpecs": [
+     {
+      "name": "ts",
+      "dataType": "TIMESTAMP",
+      "format": "1:MILLISECONDS:TIMESTAMP",
+      "granularity": "1:MILLISECONDS"
+     }
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "make the table dbimp_types",
+   "method": "POST",
+   "path": "/tables",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "tableName": "dbimp_types",
+    "tableType": "OFFLINE",
+    "segmentsConfig": {
+     "replication": "1",
+     "timeColumnName": "ts"
+    },
+    "tableIndexConfig": {
+     "loadMode": "MMAP"
+    },
+    "tenants": {},
+    "metadata": {}
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "load the rows of dbimp_types",
+   "method": "POST",
+   "path": "/ingestFromFile?tableNameWithType=dbimp_types_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+   "header": {
+    "Content-Type": [
+     "multipart/form-data; boundary=dbimp"
+    ]
+   },
+   "text": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"id\":1,\"i\":-2147483648,\"l\":9223372036854775807,\"f\":1.5,\"d\":0.1,\"bd\":\"12345678901234567890.0123456789\",\"b\":true,\"s\":\"é'\\\"\\\\ x\",\"j\":{\"k\":[1,null,\"s\"]},\"by\":\"00ff\",\"ia\":[1,2,3],\"la\":[-9223372036854775808,9223372036854775807],\"fa\":[1.5,-0.25],\"da\":[0.1,1.7976931348623157e+308],\"boa\":[true,false],\"sa\":[\"x\",\"y\"],\"ta\":[1700000000123],\"m\":{\"a\":1,\"b\":2},\"ts\":1700000000123},{\"id\":2,\"i\":2147483647,\"l\":-9223372036854775808,\"f\":-3.4e+38,\"d\":1.7976931348623157e+308,\"bd\":\"-1\",\"b\":false,\"s\":\"\",\"j\":[],\"by\":\"\",\"ia\":[],\"la\":[],\"fa\":[],\"da\":[],\"boa\":[],\"sa\":[],\"ta\":[],\"m\":{},\"ts\":1650000000000},{\"id\":3,\"ts\":1600000000000}]\r\n--dbimp--\r\n",
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "make the schema of dbimp_idx",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_idx",
+    "dimensionFieldSpecs": [
+     {
+      "name": "k",
+      "dataType": "INT"
+     },
+     {
+      "name": "s",
+      "dataType": "STRING"
+     },
+     {
+      "name": "t",
+      "dataType": "STRING"
+     },
+     {
+      "name": "j",
+      "dataType": "JSON"
+     },
+     {
+      "name": "f",
+      "dataType": "STRING"
+     },
+     {
+      "name": "p",
+      "dataType": "BYTES"
+     },
+     {
+      "name": "v",
+      "dataType": "FLOAT",
+      "singleValueField": false
+     }
+    ],
+    "metricFieldSpecs": [
+     {
+      "name": "n",
+      "dataType": "LONG"
+     }
+    ],
+    "dateTimeFieldSpecs": [
+     {
+      "name": "ts",
+      "dataType": "TIMESTAMP",
+      "format": "1:MILLISECONDS:TIMESTAMP",
+      "granularity": "1:MILLISECONDS"
+     }
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "make the table dbimp_idx",
+   "method": "POST",
+   "path": "/tables",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "tableName": "dbimp_idx",
+    "tableType": "OFFLINE",
+    "segmentsConfig": {
+     "replication": "1",
+     "timeColumnName": "ts"
+    },
+    "tableIndexConfig": {
+     "loadMode": "MMAP",
+     "sortedColumn": [
+      "k"
+     ],
+     "invertedIndexColumns": [
+      "s"
+     ],
+     "rangeIndexColumns": [
+      "n"
+     ],
+     "bloomFilterColumns": [
+      "s"
+     ],
+     "jsonIndexColumns": [
+      "j"
+     ],
+     "noDictionaryColumns": [
+      "t",
+      "p",
+      "v"
+     ],
+     "starTreeIndexConfigs": [
+      {
+       "dimensionsSplitOrder": [
+        "s"
+       ],
+       "functionColumnPairs": [
+        "SUM__n"
+       ],
+       "maxLeafRecords": 1
+      }
+     ]
+    },
+    "tenants": {},
+    "metadata": {},
+    "fieldConfigList": [
+     {
+      "name": "t",
+      "encodingType": "RAW",
+      "indexTypes": [
+       "TEXT"
+      ]
+     },
+     {
+      "name": "f",
+      "encodingType": "DICTIONARY",
+      "indexTypes": [
+       "FST"
+      ]
+     },
+     {
+      "name": "ts",
+      "encodingType": "DICTIONARY",
+      "indexTypes": [
+       "TIMESTAMP"
+      ],
+      "timestampConfig": {
+       "granularities": [
+        "DAY"
+       ]
+      }
+     },
+     {
+      "name": "p",
+      "encodingType": "RAW",
+      "indexType": "H3",
+      "properties": {
+       "resolutions": "5"
+      }
+     },
+     {
+      "name": "v",
+      "encodingType": "RAW",
+      "indexType": "VECTOR",
+      "properties": {
+       "vectorIndexType": "HNSW",
+       "vectorDimension": "2",
+       "vectorDistanceFunction": "EUCLIDEAN",
+       "version": "1"
+      }
+     }
+    ],
+    "ingestionConfig": {
+     "transformConfigs": [
+      {
+       "columnName": "p",
+       "transformFunction": "stPoint(lon,lat)"
+      }
+     ]
+    }
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "load the rows of dbimp_idx",
+   "method": "POST",
+   "path": "/ingestFromFile?tableNameWithType=dbimp_idx_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+   "header": {
+    "Content-Type": [
+     "multipart/form-data; boundary=dbimp"
+    ]
+   },
+   "text": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"k\":1,\"s\":\"s1\",\"t\":\"the quick brown fox 1\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word1\",\"lon\":-121.99,\"lat\":37.01,\"v\":[1.0,1.0],\"n\":10,\"ts\":1700086400000},{\"k\":2,\"s\":\"s2\",\"t\":\"lazy dog 2\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word2\",\"lon\":-121.98,\"lat\":37.02,\"v\":[2.0,2.0],\"n\":20,\"ts\":1700172800000},{\"k\":3,\"s\":\"s3\",\"t\":\"the quick brown fox 3\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word3\",\"lon\":-121.97,\"lat\":37.03,\"v\":[3.0,3.0],\"n\":30,\"ts\":1700259200000},{\"k\":4,\"s\":\"s4\",\"t\":\"lazy dog 4\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word4\",\"lon\":-121.96,\"lat\":37.04,\"v\":[4.0,4.0],\"n\":40,\"ts\":1700345600000},{\"k\":5,\"s\":\"s0\",\"t\":\"the quick brown fox 5\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word5\",\"lon\":-121.95,\"lat\":37.05,\"v\":[5.0,5.0],\"n\":50,\"ts\":1700432000000},{\"k\":6,\"s\":\"s1\",\"t\":\"lazy dog 6\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word6\",\"lon\":-121.94,\"lat\":37.06,\"v\":[6.0,6.0],\"n\":60,\"ts\":1700518400000},{\"k\":7,\"s\":\"s2\",\"t\":\"the quick brown fox 7\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word7\",\"lon\":-121.93,\"lat\":37.07,\"v\":[7.0,0.0],\"n\":70,\"ts\":1700604800000},{\"k\":8,\"s\":\"s3\",\"t\":\"lazy dog 8\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word8\",\"lon\":-121.92,\"lat\":37.08,\"v\":[8.0,1.0],\"n\":80,\"ts\":1700691200000},{\"k\":9,\"s\":\"s4\",\"t\":\"the quick brown fox 9\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word9\",\"lon\":-121.91,\"lat\":37.09,\"v\":[9.0,2.0],\"n\":90,\"ts\":1700777600000},{\"k\":10,\"s\":\"s0\",\"t\":\"lazy dog 10\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word10\",\"lon\":-121.9,\"lat\":37.1,\"v\":[10.0,3.0],\"n\":100,\"ts\":1700864000000},{\"k\":11,\"s\":\"s1\",\"t\":\"the quick brown fox 11\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word11\",\"lon\":-121.89,\"lat\":37.11,\"v\":[11.0,4.0],\"n\":110,\"ts\":1700950400000},{\"k\":12,\"s\":\"s2\",\"t\":\"lazy dog 12\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word12\",\"lon\":-121.88,\"lat\":37.12,\"v\":[12.0,5.0],\"n\":120,\"ts\":1701036800000},{\"k\":13,\"s\":\"s3\",\"t\":\"the quick brown fox 13\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word13\",\"lon\":-121.87,\"lat\":37.13,\"v\":[13.0,6.0],\"n\":130,\"ts\":1701123200000},{\"k\":14,\"s\":\"s4\",\"t\":\"lazy dog 14\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word14\",\"lon\":-121.86,\"lat\":37.14,\"v\":[14.0,0.0],\"n\":140,\"ts\":1701209600000},{\"k\":15,\"s\":\"s0\",\"t\":\"the quick brown fox 15\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word15\",\"lon\":-121.85,\"lat\":37.15,\"v\":[15.0,1.0],\"n\":150,\"ts\":1701296000000},{\"k\":16,\"s\":\"s1\",\"t\":\"lazy dog 16\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word16\",\"lon\":-121.84,\"lat\":37.16,\"v\":[16.0,2.0],\"n\":160,\"ts\":1701382400000},{\"k\":17,\"s\":\"s2\",\"t\":\"the quick brown fox 17\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word17\",\"lon\":-121.83,\"lat\":37.17,\"v\":[17.0,3.0],\"n\":170,\"ts\":1701468800000},{\"k\":18,\"s\":\"s3\",\"t\":\"lazy dog 18\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word18\",\"lon\":-121.82,\"lat\":37.18,\"v\":[18.0,4.0],\"n\":180,\"ts\":1701555200000},{\"k\":19,\"s\":\"s4\",\"t\":\"the quick brown fox 19\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word19\",\"lon\":-121.81,\"lat\":37.19,\"v\":[19.0,5.0],\"n\":190,\"ts\":1701641600000},{\"k\":20,\"s\":\"s0\",\"t\":\"lazy dog 20\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word20\",\"lon\":-121.8,\"lat\":37.2,\"v\":[20.0,6.0],\"n\":200,\"ts\":1701728000000},{\"k\":21,\"s\":\"s1\",\"t\":\"the quick brown fox 21\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word21\",\"lon\":-121.79,\"lat\":37.21,\"v\":[21.0,0.0],\"n\":210,\"ts\":1701814400000},{\"k\":22,\"s\":\"s2\",\"t\":\"lazy dog 22\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word22\",\"lon\":-121.78,\"lat\":37.22,\"v\":[22.0,1.0],\"n\":220,\"ts\":1701900800000},{\"k\":23,\"s\":\"s3\",\"t\":\"the quick brown fox 23\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word23\",\"lon\":-121.77,\"lat\":37.23,\"v\":[23.0,2.0],\"n\":230,\"ts\":1701987200000},{\"k\":24,\"s\":\"s4\",\"t\":\"lazy dog 24\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word24\",\"lon\":-121.76,\"lat\":37.24,\"v\":[24.0,3.0],\"n\":240,\"ts\":1702073600000},{\"k\":25,\"s\":\"s0\",\"t\":\"the quick brown fox 25\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word25\",\"lon\":-121.75,\"lat\":37.25,\"v\":[25.0,4.0],\"n\":250,\"ts\":1702160000000},{\"k\":26,\"s\":\"s1\",\"t\":\"lazy dog 26\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word26\",\"lon\":-121.74,\"lat\":37.26,\"v\":[26.0,5.0],\"n\":260,\"ts\":1702246400000},{\"k\":27,\"s\":\"s2\",\"t\":\"the quick brown fox 27\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word27\",\"lon\":-121.73,\"lat\":37.27,\"v\":[27.0,6.0],\"n\":270,\"ts\":1702332800000},{\"k\":28,\"s\":\"s3\",\"t\":\"lazy dog 28\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word28\",\"lon\":-121.72,\"lat\":37.28,\"v\":[28.0,0.0],\"n\":280,\"ts\":1702419200000},{\"k\":29,\"s\":\"s4\",\"t\":\"the quick brown fox 29\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word29\",\"lon\":-121.71,\"lat\":37.29,\"v\":[29.0,1.0],\"n\":290,\"ts\":1702505600000},{\"k\":30,\"s\":\"s0\",\"t\":\"lazy dog 30\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word30\",\"lon\":-121.7,\"lat\":37.3,\"v\":[30.0,2.0],\"n\":300,\"ts\":1702592000000},{\"k\":31,\"s\":\"s1\",\"t\":\"the quick brown fox 31\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word31\",\"lon\":-121.69,\"lat\":37.31,\"v\":[31.0,3.0],\"n\":310,\"ts\":1702678400000},{\"k\":32,\"s\":\"s2\",\"t\":\"lazy dog 32\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word32\",\"lon\":-121.68,\"lat\":37.32,\"v\":[32.0,4.0],\"n\":320,\"ts\":1702764800000},{\"k\":33,\"s\":\"s3\",\"t\":\"the quick brown fox 33\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word33\",\"lon\":-121.67,\"lat\":37.33,\"v\":[33.0,5.0],\"n\":330,\"ts\":1702851200000},{\"k\":34,\"s\":\"s4\",\"t\":\"lazy dog 34\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word34\",\"lon\":-121.66,\"lat\":37.34,\"v\":[34.0,6.0],\"n\":340,\"ts\":1702937600000},{\"k\":35,\"s\":\"s0\",\"t\":\"the quick brown fox 35\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word35\",\"lon\":-121.65,\"lat\":37.35,\"v\":[35.0,0.0],\"n\":350,\"ts\":1703024000000},{\"k\":36,\"s\":\"s1\",\"t\":\"lazy dog 36\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word36\",\"lon\":-121.64,\"lat\":37.36,\"v\":[36.0,1.0],\"n\":360,\"ts\":1703110400000},{\"k\":37,\"s\":\"s2\",\"t\":\"the quick brown fox 37\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word37\",\"lon\":-121.63,\"lat\":37.37,\"v\":[37.0,2.0],\"n\":370,\"ts\":1703196800000},{\"k\":38,\"s\":\"s3\",\"t\":\"lazy dog 38\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word38\",\"lon\":-121.62,\"lat\":37.38,\"v\":[38.0,3.0],\"n\":380,\"ts\":1703283200000},{\"k\":39,\"s\":\"s4\",\"t\":\"the quick brown fox 39\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word39\",\"lon\":-121.61,\"lat\":37.39,\"v\":[39.0,4.0],\"n\":390,\"ts\":1703369600000},{\"k\":40,\"s\":\"s0\",\"t\":\"lazy dog 40\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word40\",\"lon\":-121.6,\"lat\":37.4,\"v\":[40.0,5.0],\"n\":400,\"ts\":1703456000000},{\"k\":41,\"s\":\"s1\",\"t\":\"the quick brown fox 41\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word41\",\"lon\":-121.59,\"lat\":37.41,\"v\":[41.0,6.0],\"n\":410,\"ts\":1703542400000},{\"k\":42,\"s\":\"s2\",\"t\":\"lazy dog 42\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word42\",\"lon\":-121.58,\"lat\":37.42,\"v\":[42.0,0.0],\"n\":420,\"ts\":1703628800000},{\"k\":43,\"s\":\"s3\",\"t\":\"the quick brown fox 43\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word43\",\"lon\":-121.57,\"lat\":37.43,\"v\":[43.0,1.0],\"n\":430,\"ts\":1703715200000},{\"k\":44,\"s\":\"s4\",\"t\":\"lazy dog 44\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word44\",\"lon\":-121.56,\"lat\":37.44,\"v\":[44.0,2.0],\"n\":440,\"ts\":1703801600000},{\"k\":45,\"s\":\"s0\",\"t\":\"the quick brown fox 45\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word45\",\"lon\":-121.55,\"lat\":37.45,\"v\":[45.0,3.0],\"n\":450,\"ts\":1703888000000},{\"k\":46,\"s\":\"s1\",\"t\":\"lazy dog 46\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word46\",\"lon\":-121.54,\"lat\":37.46,\"v\":[46.0,4.0],\"n\":460,\"ts\":1703974400000},{\"k\":47,\"s\":\"s2\",\"t\":\"the quick brown fox 47\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word47\",\"lon\":-121.53,\"lat\":37.47,\"v\":[47.0,5.0],\"n\":470,\"ts\":1704060800000},{\"k\":48,\"s\":\"s3\",\"t\":\"lazy dog 48\",\"j\":{\"a\":0,\"b\":\"x\"},\"f\":\"word48\",\"lon\":-121.52,\"lat\":37.48,\"v\":[48.0,6.0],\"n\":480,\"ts\":1704147200000},{\"k\":49,\"s\":\"s4\",\"t\":\"the quick brown fox 49\",\"j\":{\"a\":1,\"b\":\"x\"},\"f\":\"word49\",\"lon\":-121.51,\"lat\":37.49,\"v\":[49.0,0.0],\"n\":490,\"ts\":1704233600000},{\"k\":50,\"s\":\"s0\",\"t\":\"lazy dog 50\",\"j\":{\"a\":2,\"b\":\"x\"},\"f\":\"word50\",\"lon\":-121.5,\"lat\":37.5,\"v\":[50.0,1.0],\"n\":500,\"ts\":1704320000000}]\r\n--dbimp--\r\n",
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "make the schema of dbimp_dim",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_dim",
+    "dimensionFieldSpecs": [
+     {
+      "name": "s",
+      "dataType": "STRING"
+     },
+     {
+      "name": "label",
+      "dataType": "STRING"
+     }
+    ],
+    "primaryKeyColumns": [
+     "s"
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "make the table dbimp_dim",
+   "method": "POST",
+   "path": "/tables",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "tableName": "dbimp_dim",
+    "tableType": "OFFLINE",
+    "segmentsConfig": {
+     "replication": "1",
+     "segmentPushType": "REFRESH"
+    },
+    "tableIndexConfig": {
+     "loadMode": "MMAP"
+    },
+    "tenants": {},
+    "metadata": {},
+    "isDimTable": true,
+    "quota": {
+     "storage": "10M"
+    }
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "load the rows of dbimp_dim",
+   "method": "POST",
+   "path": "/ingestFromFile?tableNameWithType=dbimp_dim_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+   "header": {
+    "Content-Type": [
+     "multipart/form-data; boundary=dbimp"
+    ]
+   },
+   "text": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"s\":\"s0\",\"label\":\"zero\"},{\"s\":\"s1\",\"label\":\"one\"}]\r\n--dbimp--\r\n",
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "make the schema of dbimp_defaults",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_defaults",
+    "dimensionFieldSpecs": [
+     {
+      "name": "k",
+      "dataType": "INT"
+     },
+     {
+      "name": "v",
+      "dataType": "INT",
+      "defaultNullValue": -1
+     },
+     {
+      "name": "s",
+      "dataType": "STRING"
+     }
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "make the table dbimp_defaults",
+   "method": "POST",
+   "path": "/tables",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "tableName": "dbimp_defaults",
+    "tableType": "OFFLINE",
+    "segmentsConfig": {
+     "replication": "1"
+    },
+    "tableIndexConfig": {
+     "loadMode": "MMAP"
+    },
+    "tenants": {},
+    "metadata": {}
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "load the rows of dbimp_defaults",
+   "method": "POST",
+   "path": "/ingestFromFile?tableNameWithType=dbimp_defaults_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+   "header": {
+    "Content-Type": [
+     "multipart/form-data; boundary=dbimp"
+    ]
+   },
+   "text": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"k\":1,\"v\":5,\"s\":\"x\"},{\"k\":2}]\r\n--dbimp--\r\n",
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "make the schema of dbimp_bya",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_bya",
+    "dimensionFieldSpecs": [
+     {
+      "name": "k",
+      "dataType": "INT"
+     },
+     {
+      "name": "bya",
+      "dataType": "BYTES",
+      "singleValueField": false
+     }
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "make the table dbimp_bya",
+   "method": "POST",
+   "path": "/tables",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "tableName": "dbimp_bya",
+    "tableType": "OFFLINE",
+    "segmentsConfig": {
+     "replication": "1"
+    },
+    "tableIndexConfig": {
+     "loadMode": "MMAP"
+    },
+    "tenants": {},
+    "metadata": {}
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "load the rows of dbimp_bya",
+   "method": "POST",
+   "path": "/ingestFromFile?tableNameWithType=dbimp_bya_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+   "header": {
+    "Content-Type": [
+     "multipart/form-data; boundary=dbimp"
+    ]
+   },
+   "text": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"k\":1,\"bya\":[\"00ff\",\"\"]}]\r\n--dbimp--\r\n",
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "make a schema with a UUID column",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_uuid",
+    "dimensionFieldSpecs": [
+     {
+      "name": "u",
+      "dataType": "UUID"
+     }
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 3,
+   "name": "make a schema with an OBJECT column",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_object",
+    "dimensionFieldSpecs": [
+     {
+      "name": "o",
+      "dataType": "OBJECT"
+     }
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "make a schema with a primary key for an upsert",
+   "method": "POST",
+   "path": "/schemas",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schemaName": "dbimp_upsert",
+    "dimensionFieldSpecs": [
+     {
+      "name": "k",
+      "dataType": "STRING"
+     }
+    ],
+    "dateTimeFieldSpecs": [
+     {
+      "name": "ts",
+      "dataType": "TIMESTAMP",
+      "format": "1:MILLISECONDS:TIMESTAMP",
+      "granularity": "1:MILLISECONDS"
+     }
+    ],
+    "primaryKeyColumns": [
+     "k"
+    ]
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "make an OFFLINE table with an upsert",
+   "method": "POST",
+   "path": "/tables",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "tableName": "dbimp_upsert",
+    "tableType": "OFFLINE",
+    "segmentsConfig": {
+     "replication": "1",
+     "timeColumnName": "ts"
+    },
+    "tableIndexConfig": {
+     "loadMode": "MMAP"
+    },
+    "tenants": {},
+    "metadata": {},
+    "upsertConfig": {
+     "mode": "FULL"
+    }
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 10,
+   "name": "make a REALTIME table with no stream",
+   "method": "POST",
+   "path": "/tables",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "tableName": "dbimp_upsert",
+    "tableType": "REALTIME",
+    "segmentsConfig": {
+     "replication": "1",
+     "timeColumnName": "ts"
+    },
+    "tableIndexConfig": {
+     "loadMode": "MMAP"
+    },
+    "tenants": {},
+    "metadata": {}
+   },
+   "phase": "setup",
+   "server": "second"
+  },
+  {
+   "item": 9,
+   "name": "read the version from the Controller",
+   "method": "GET",
+   "path": "/version",
+   "phase": "setup",
+   "server": "second",
+   "wait": "5s"
+  },
+  {
+   "item": 1,
+   "name": "a query on the multi-stage engine",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName, yearID FROM baseballStats ORDER BY playerID, yearID LIMIT 2",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a query on the single-stage engine",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName, yearID FROM baseballStats ORDER BY playerID, yearID LIMIT 2",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a query with no queryOptions",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName, yearID FROM baseballStats ORDER BY playerID, yearID LIMIT 2"
+   }
+  },
+  {
+   "item": 1,
+   "name": "the statement of a ping",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a body with no sql",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "SELECT 1"
+   }
+  },
+  {
+   "item": 1,
+   "name": "INSERT VALUES on the multi-stage engine",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbimp_types (id, ts) VALUES (9, 1700000000000)",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "INSERT VALUES on the single-stage engine",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbimp_types (id, ts) VALUES (9, 1700000000000)",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "INSERT SELECT",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbimp_types SELECT * FROM dbimp_types",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "UPDATE",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "UPDATE dbimp_types SET i = 1 WHERE id = 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "DELETE",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DELETE FROM dbimp_types WHERE id = 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "CREATE TABLE",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE TABLE dbimp_new (k INT)",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "INSERT FROM FILE",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbimp_types FROM FILE 's3://dbimp/none'",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 2,
+   "name": "columns in the order of the statement",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT yearID, playerName, teamID FROM baseballStats ORDER BY playerID, yearID LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 2,
+   "name": "SELECT * of the table of every type",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM dbimp_types ORDER BY id",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a column named twice",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT yearID, yearID FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a result with no rows",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName, yearID FROM baseballStats WHERE yearID < 0",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "every stored type, with null handling",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, i, l, f, d, bd, b, s, j, by, ia, la, fa, da, boa, sa, ta, m, ts FROM dbimp_types ORDER BY id",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "every stored type, without null handling",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, i, l, f, d, bd, b, s, j, by, ia, la, fa, da, boa, sa, ta, m, ts FROM dbimp_types ORDER BY id",
+    "queryOptions": "useMultistageEngine=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "every stored type on the single-stage engine",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, i, l, f, d, bd, b, s, j, by, ia, la, fa, da, boa, sa, ta, m, ts FROM dbimp_types ORDER BY id",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a key of a MAP",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, m['a'] AS a FROM dbimp_types ORDER BY id",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a BYTES array",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, bya FROM dbimp_bya",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a default null value, without null handling",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, v, s FROM dbimp_defaults ORDER BY k",
+    "queryOptions": "useMultistageEngine=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a default null value, with null handling",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, v, s FROM dbimp_defaults ORDER BY k",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "the literals of each type",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT CAST(2147483647 AS INT) AS i, CAST(-9223372036854775808 AS LONG) AS l, CAST(1.5 AS FLOAT) AS f, CAST(0.1 AS DOUBLE) AS d, CAST('-12345678901234567890.01234567890123456789' AS BIG_DECIMAL) AS bd, true AS b, 'x' AS s, CAST(1700000000123 AS TIMESTAMP) AS ts, hexToBytes('00ff') AS by, NULL AS n, ARRAY[1, 2] AS ia, ARRAY['x', 'y'] AS sa FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a cast to JSON",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT CAST('{\"a\":1}' AS JSON) AS j FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 3,
+   "name": "NaN and the infinities",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT CAST('NaN' AS DOUBLE) AS nan, CAST('Infinity' AS DOUBLE) AS inf, CAST('-Infinity' AS DOUBLE) AS ninf FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a ? placeholder",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName FROM baseballStats WHERE playerID = ? LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 4,
+   "name": "the literals that the driver writes, against stored values",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id FROM dbimp_types WHERE s = 'é''\"\\ x' AND bd = CAST('12345678901234567890.0123456789' AS BIG_DECIMAL) AND by = hexToBytes('00ff') AND ts = 1700000000123 AND l = 9223372036854775807 AND d = 0.1 AND b = true",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a field for parameters in the body",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true",
+    "parameters": [
+     "x"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "no LIMIT on the single-stage engine",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT DISTINCT yearID FROM baseballStats ORDER BY yearID",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 5,
+   "name": "no LIMIT on the multi-stage engine",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT DISTINCT yearID FROM baseballStats ORDER BY yearID",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 5,
+   "name": "a cursor of three rows",
+   "method": "POST",
+   "path": "/query/sql?getCursor=true&numRows=3",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT DISTINCT yearID FROM baseballStats ORDER BY yearID",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   },
+   "capture": {
+    "rid": "requestId"
+   }
+  },
+  {
+   "item": 5,
+   "name": "the next page of the cursor",
+   "method": "GET",
+   "path": "/responseStore/{{rid}}/results?offset=3&numRows=3"
+  },
+  {
+   "item": 6,
+   "name": "a table that does not exist",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM dbimp_none",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a syntax error",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELEC 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a function that fails on one segment, single-stage",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, JSON_EXTRACT_SCALAR(j, '$.k[0]', 'INT') AS x FROM dbimp_types",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a function that fails on one segment, multi-stage",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, JSON_EXTRACT_SCALAR(j, '$.k[0]', 'INT') AS x FROM dbimp_types",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a join that stops at maxRowsInJoin, with rows and a partial result",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM baseballStats a JOIN baseballStats b ON a.yearID = b.yearID",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true;maxRowsInJoin=1000;joinOverflowMode=BREAK"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a join over maxRowsInJoin",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM baseballStats a JOIN baseballStats b ON a.yearID = b.yearID",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true;maxRowsInJoin=1000"
+   }
+  },
+  {
+   "item": 6,
+   "name": "the HTTP status of an error",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "Pinot-Use-Http-Status-For-Errors": [
+     "true"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM dbimp_none",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 7,
+   "name": "a timeout of 500 ms",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM baseballStats a JOIN baseballStats b ON a.yearID = b.yearID WHERE strpos(concat(a.playerID, b.playerID, '-'), 'zzzz') > 0",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true;maxRowsInJoin=2000000000;timeoutMs=500"
+   }
+  },
+  {
+   "item": 7,
+   "name": "a slow query that a client names",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM baseballStats a JOIN baseballStats b ON a.yearID = b.yearID WHERE strpos(concat(a.playerID, b.playerID, '-'), 'zzzz') > 0",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true;maxRowsInJoin=2000000000;timeoutMs=60000;clientQueryId=dbimp-cancel"
+   },
+   "background": true
+  },
+  {
+   "item": 7,
+   "name": "the running queries",
+   "method": "GET",
+   "path": "/queries",
+   "wait": "1s"
+  },
+  {
+   "item": 7,
+   "name": "cancel the query by the id of the client",
+   "method": "DELETE",
+   "path": "/query/dbimp-cancel?client=true",
+   "wait": "500ms"
+  },
+  {
+   "item": 7,
+   "name": "cancel an id that the Broker does not know",
+   "method": "DELETE",
+   "path": "/query/dbimp-none?client=true",
+   "wait": "2s"
+  },
+  {
+   "item": 8,
+   "name": "a wrong password",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   },
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "a table that only the administrator can read",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 9,
+   "name": "the version from the Broker",
+   "method": "GET",
+   "path": "/version"
+  },
+  {
+   "item": 9,
+   "name": "a version function",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT version() FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 FROM baseballStats LIMIT 1; SELECT 2 FROM baseballStats LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "comments",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "-- a comment\nSELECT /* a comment */ playerName FROM baseballStats ORDER BY playerID LIMIT 1",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "SET before the query",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SET timeoutMs = 5000; SELECT count(*) FROM baseballStats",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "OPTION at the end, single-stage",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM baseballStats OPTION(timeoutMs=5000)",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "CREATE VIEW",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE VIEW dbimp_view AS SELECT * FROM baseballStats",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a lookup join",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT /*+ joinOptions(join_strategy='lookup') */ i.k, d.label FROM dbimp_idx i JOIN dbimp_dim d ON i.s = d.s WHERE i.k < 3 ORDER BY i.k",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the LOOKUP function",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, LOOKUP('dbimp_dim', 'label', 's', s) AS l FROM dbimp_idx WHERE k < 3 ORDER BY k",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "JSON_EXTRACT_SCALAR",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, JSON_EXTRACT_SCALAR(j, '$.a', 'INT', -1) AS a FROM dbimp_idx WHERE k < 4 ORDER BY k",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "ID_SET",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ID_SET(k) FROM dbimp_idx WHERE k < 4",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a window function",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, SUM(n) OVER (ORDER BY k) AS c FROM dbimp_idx WHERE k < 4 ORDER BY k",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a query on the upsert table",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM dbimp_upsert",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the sorted index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE k = 7",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the inverted index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE s = 's1'",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the range index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE n BETWEEN 100 AND 200",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the bloom filter",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE s = 'nothere'",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the text index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE TEXT_MATCH(t, 'fox')",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the JSON index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE JSON_MATCH(j, '\"$.a\"=1')",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the FST index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE REGEXP_LIKE(f, 'word1.*')",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the timestamp index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT dateTrunc('DAY', ts) AS d, count(*) FROM dbimp_idx GROUP BY d ORDER BY d LIMIT 2",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the star-tree index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT s, SUM(n) FROM dbimp_idx GROUP BY s ORDER BY s",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the geospatial index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE ST_Distance(p, ST_Point(-121.9, 37.1)) < 0.05",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the vector index",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k FROM dbimp_idx WHERE VECTOR_SIMILARITY(v, ARRAY[3.0, 3.0], 2) ORDER BY k LIMIT 5",
+    "queryOptions": "enableNullHandling=true"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the time column",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) FROM dbimp_idx WHERE ts >= 1702000000000",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 11,
+   "name": "BEGIN",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "BEGIN",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 11,
+   "name": "START TRANSACTION",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "START TRANSACTION",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 12,
+   "name": "gzip",
+   "method": "POST",
+   "path": "/query/sql",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "Accept-Encoding": [
+     "gzip"
+    ]
+   },
+   "body": {
+    "sql": "SELECT playerName FROM baseballStats ORDER BY playerID LIMIT 200",
+    "queryOptions": "useMultistageEngine=true;enableNullHandling=true"
+   }
+  },
+  {
+   "item": 1,
+   "name": "drop the table dbimp_types",
+   "method": "DELETE",
+   "path": "/tables/dbimp_types",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the schema of dbimp_types",
+   "method": "DELETE",
+   "path": "/schemas/dbimp_types",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the table dbimp_idx",
+   "method": "DELETE",
+   "path": "/tables/dbimp_idx",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the schema of dbimp_idx",
+   "method": "DELETE",
+   "path": "/schemas/dbimp_idx",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the table dbimp_dim",
+   "method": "DELETE",
+   "path": "/tables/dbimp_dim",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the schema of dbimp_dim",
+   "method": "DELETE",
+   "path": "/schemas/dbimp_dim",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the table dbimp_defaults",
+   "method": "DELETE",
+   "path": "/tables/dbimp_defaults",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the schema of dbimp_defaults",
+   "method": "DELETE",
+   "path": "/schemas/dbimp_defaults",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the table dbimp_bya",
+   "method": "DELETE",
+   "path": "/tables/dbimp_bya",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the schema of dbimp_bya",
+   "method": "DELETE",
+   "path": "/schemas/dbimp_bya",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the table dbimp_upsert",
+   "method": "DELETE",
+   "path": "/tables/dbimp_upsert",
+   "phase": "teardown",
+   "server": "second"
+  },
+  {
+   "item": 1,
+   "name": "drop the schema of dbimp_upsert",
+   "method": "DELETE",
+   "path": "/schemas/dbimp_upsert",
+   "phase": "teardown",
+   "server": "second"
+  }
+ ]
+}

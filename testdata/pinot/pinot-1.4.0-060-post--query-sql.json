@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT count(*) FROM baseballStats a JOIN baseballStats b ON a.yearID = b.yearID\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true;maxRowsInJoin=1000\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Pinot-Error-Code": [
+        "245"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "3124"
+      ]
+    },
+    "body": "{\"numRowsResultSet\":0,\"partialResult\":true,\"exceptions\":[{\"message\":\"Received 1 error from stage 2 on Server_192.168.1.5_7050: Cannot build in memory hash table for join operator, reached number of rows limit: 1000.\\nConsider increasing the limit for the maximum number of rows in a join either via:\\n  - The query option 'maxRowsInJoin'\\n  - The hint 'max_rows_in_join' in the 'joinOptions\\n'Alternatively, if partial results are acceptable, the join overflow mode can be set to 'BREAK' either via:\\n  - The query option 'joinOverflowMode'\\n  - The hint 'join_overflow_mode' in the 'joinOptions'\\n\",\"errorCode\":245}],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"maxRowsInJoinReached\":false,\"maxRowsInWindowReached\":false,\"timeUsedMs\":8,\"stageStats\":{\"type\":\"MAILBOX_RECEIVE\",\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_SEND\",\"stage\":1,\"parallelism\":1,\"fanOut\":1,\"rawMessages\":2,\"serializedBytes\":678,\"clockTimeMs\":0,\"children\":[{\"type\":\"AGGREGATE\",\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_RECEIVE\",\"fanIn\":1,\"inMemoryMessages\":1,\"upstreamWaitMs\":1,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_SEND\",\"stage\":2,\"parallelism\":1,\"fanOut\":1,\"inMemoryMessages\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"AGGREGATE\",\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"HASH_JOIN\",\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_RECEIVE\",\"fanIn\":1,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"EMPTY_MAILBOX_SEND\",\"stage\":3,\"description\":\"No stats available for this stage\",\"table\":\"baseballStats\"}]},{\"type\":\"MAILBOX_RECEIVE\",\"emittedRows\":10000,\"fanIn\":1,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"EMPTY_MAILBOX_SEND\",\"stage\":4,\"description\":\"No stats available for this stage\",\"table\":\"baseballStats\"}]}]}]}]}]}]}]}]},\"maxRowsInOperator\":10000,\"requestId\":\"1275200996000000195\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":0,\"totalDocs\":0,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":0,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":0,\"numSegmentsProcessed\":0,\"numSegmentsMatched\":0,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":1,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"baseballStats\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

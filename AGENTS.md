@@ -23,7 +23,8 @@ third, in `neo4j/`, is in the tag `v0.3.0` (W9). The fourth, in `influxdb/`,
 was first released in `v0.4.0` (W11), which is the first GitHub release that
 holds the second and the third. The fifth, in
 `arangodb/`, was first released in `v0.5.0` (W13). The sixth, in
-`databend/`, is staged for review, and no release holds it yet (W16). The
+`databend/`, was first released in `v0.6.0` (W16). The seventh, in
+`pinot/`, is staged for review, and no release holds it yet (W19). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -57,7 +58,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then W13 and D89 to D94 |
 | writing the Databend driver | [docs/DATABEND.md](docs/DATABEND.md), then D73 and D76 |
 | asking why TDengine has no driver here | [docs/TDENGINE.md](docs/TDENGINE.md), then D127 |
-| writing the Apache Pinot driver | [docs/PINOT.md](docs/PINOT.md), then D73 |
+| writing the Apache Pinot driver | [docs/PINOT.md](docs/PINOT.md), then W19 and D128 to D134 |
 | writing the rqlite driver | [docs/RQLITE.md](docs/RQLITE.md), then D73 |
 | writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then D73 and D76 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |

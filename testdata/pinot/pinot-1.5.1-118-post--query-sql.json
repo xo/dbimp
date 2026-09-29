@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT k, v, s FROM dbimp_defaults ORDER BY k\",\"queryOptions\":\"useMultistageEngine=true\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "98"
+      ]
+    },
+    "body": "{\"code\":403,\"error\":\"Permission denied.Reason: Authorization Failed for tables: [dbimp_defaults]\"}"
+  }
+}

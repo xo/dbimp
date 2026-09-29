@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id, i, l, f, d, bd, b, s, j, by, ia, la, fa, da, boa, sa, ta, m, ts FROM dbimp_types ORDER BY id\",\"queryOptions\":\"useMultistageEngine=true\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Pinot-Error-Code": [
+        "-1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "3598"
+      ]
+    },
+    "body": "{\"resultTable\":{\"dataSchema\":{\"columnNames\":[\"id\",\"i\",\"l\",\"f\",\"d\",\"bd\",\"b\",\"s\",\"j\",\"by\",\"ia\",\"la\",\"fa\",\"da\",\"boa\",\"sa\",\"ta\",\"m\",\"ts\"],\"columnDataTypes\":[\"INT\",\"INT\",\"LONG\",\"FLOAT\",\"DOUBLE\",\"BIG_DECIMAL\",\"BOOLEAN\",\"STRING\",\"STRING\",\"BYTES\",\"INT_ARRAY\",\"LONG_ARRAY\",\"FLOAT_ARRAY\",\"DOUBLE_ARRAY\",\"BOOLEAN_ARRAY\",\"STRING_ARRAY\",\"TIMESTAMP_ARRAY\",\"MAP\",\"TIMESTAMP\"]},\"rows\":[[1,-2147483648,9223372036854775807,1.5,0.1,\"12345678901234567890.0123456789\",true,\"é'\\\"\\\\ x\",\"{\\\"k\\\":[1,null,\\\"s\\\"]}\",\"00ff\",[1,2,3],[-9223372036854775808,9223372036854775807],[1.5,-0.25],[0.1,1.7976931348623157E308],[true,false],[\"x\",\"y\"],[\"2023-11-14 22:13:20.123\"],{\"a\":1,\"b\":2},\"2023-11-14 22:13:20.123\"],[2,2147483647,-9223372036854775808,-3.4E38,1.7976931348623157E308,\"-1\",false,\"\",\"[]\",\"\",[-2147483648],[-9223372036854775808],[\"-Infinity\"],[\"-Infinity\"],[false],[\"null\"],[\"1970-01-01 00:00:00.0\"],{},\"2022-04-15 05:20:00.0\"],[3,-2147483648,-9223372036854775808,\"-Infinity\",\"-Infinity\",\"0\",false,\"null\",\"null\",\"\",[-2147483648],[-9223372036854775808],[\"-Infinity\"],[\"-Infinity\"],[false],[\"null\"],[\"1970-01-01 00:00:00.0\"],{},\"2020-09-13 12:26:40.0\"]]},\"numRowsResultSet\":3,\"partialResult\":false,\"exceptions\":[],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"numGroups\":0,\"maxRowsInJoinReached\":false,\"maxRowsInJoin\":0,\"maxRowsInWindowReached\":false,\"maxRowsInWindow\":0,\"timeUsedMs\":6,\"stageStats\":{\"type\":\"MAILBOX_RECEIVE\",\"emittedRows\":3,\"fanIn\":1,\"rawMessages\":2,\"deserializedBytes\":1636,\"upstreamWaitMs\":1,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_SEND\",\"emittedRows\":3,\"stage\":1,\"parallelism\":1,\"fanOut\":1,\"rawMessages\":1,\"serializedBytes\":1369,\"clockTimeMs\":0,\"children\":[{\"type\":\"SORT_OR_LIMIT\",\"emittedRows\":3,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_RECEIVE\",\"emittedRows\":3,\"fanIn\":1,\"inMemoryMessages\":2,\"upstreamWaitMs\":1,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_SEND\",\"emittedRows\":3,\"stage\":2,\"parallelism\":1,\"fanOut\":1,\"inMemoryMessages\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"LEAF\",\"table\":\"dbimp_types\",\"emittedRows\":3,\"numDocsScanned\":3,\"totalDocs\":3,\"numEntriesScannedPostFilter\":57,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"sseExecutionTimeMs\":1,\"parallelism\":1,\"clockTimeMs\":0}]}]}]}]}]},\"maxRowsInOperator\":3,\"requestId\":\"1590964612000000426\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":3,\"totalDocs\":3,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":57,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":1,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"dbimp_types\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

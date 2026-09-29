@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/ingestFromFile",
+    "query": "tableNameWithType=dbimp_bya_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+    "header": {
+      "Content-Type": [
+        "multipart/form-data; boundary=dbimp"
+      ]
+    },
+    "body": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"k\":1,\"bya\":[\"00ff\",\"\"]}]\r\n--dbimp--\r\n"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "105"
+      ],
+      "Pinot-Controller-Host": [
+        "e715e2224768"
+      ]
+    },
+    "body": "{\"status\":\"Successfully ingested file into table: dbimp_bya_OFFLINE as segment: dbimp_bya_1790710906942\"}"
+  }
+}

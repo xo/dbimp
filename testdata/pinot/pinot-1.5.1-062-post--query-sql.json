@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT count(*) FROM baseballStats a JOIN baseballStats b ON a.yearID = b.yearID WHERE strpos(concat(a.playerID, b.playerID, '-'), 'zzzz') > 0\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true;maxRowsInJoin=2000000000;timeoutMs=500\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Pinot-Error-Code": [
+        "250"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "3521"
+      ]
+    },
+    "body": "{\"numRowsResultSet\":0,\"partialResult\":true,\"exceptions\":[{\"message\":\"Received 1 error from stage 2 on Server_192.168.1.5_7050: Timing out on: HASH_JOIN\",\"errorCode\":250}],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"numGroups\":0,\"maxRowsInJoinReached\":false,\"maxRowsInJoin\":97889,\"maxRowsInWindowReached\":false,\"maxRowsInWindow\":0,\"timeUsedMs\":542,\"stageStats\":{\"type\":\"MAILBOX_RECEIVE\",\"executionTimeMs\":535,\"fanIn\":1,\"rawMessages\":1,\"deserializedBytes\":434,\"upstreamWaitMs\":535,\"parallelism\":1,\"clockTimeMs\":535,\"selfExecutionTimeMs\":535,\"selfClockTimeMs\":535,\"children\":[{\"type\":\"MAILBOX_SEND\",\"stage\":1,\"parallelism\":1,\"fanOut\":1,\"clockTimeMs\":0,\"selfExecutionTimeMs\":-534,\"selfClockTimeMs\":-534,\"children\":[{\"type\":\"AGGREGATE\",\"executionTimeMs\":534,\"parallelism\":1,\"clockTimeMs\":534,\"children\":[{\"type\":\"MAILBOX_RECEIVE\",\"executionTimeMs\":534,\"fanIn\":1,\"inMemoryMessages\":1,\"upstreamWaitMs\":535,\"parallelism\":1,\"clockTimeMs\":534,\"selfExecutionTimeMs\":534,\"selfClockTimeMs\":534,\"children\":[{\"type\":\"MAILBOX_SEND\",\"stage\":2,\"parallelism\":1,\"fanOut\":1,\"clockTimeMs\":0,\"selfExecutionTimeMs\":-533,\"selfClockTimeMs\":-533,\"children\":[{\"type\":\"AGGREGATE\",\"executionTimeMs\":533,\"parallelism\":1,\"clockTimeMs\":533,\"children\":[{\"type\":\"HASH_JOIN\",\"executionTimeMs\":533,\"timeBuildingHashTableMs\":3,\"maxRowsInJoin\":97889,\"parallelism\":1,\"clockTimeMs\":533,\"selfExecutionTimeMs\":533,\"selfClockTimeMs\":533,\"children\":[{\"type\":\"MAILBOX_RECEIVE\",\"emittedRows\":10000,\"fanIn\":1,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"EMPTY_MAILBOX_SEND\",\"stage\":3,\"description\":\"No stats available for this stage\",\"table\":\"baseballStats\"}]},{\"type\":\"MAILBOX_RECEIVE\",\"emittedRows\":97889,\"fanIn\":1,\"inMemoryMessages\":11,\"upstreamWaitMs\":4,\"parallelism\":1,\"clockTimeMs\":0,\"children\":[{\"type\":\"MAILBOX_SEND\",\"emittedRows\":97889,\"stage\":4,\"parallelism\":1,\"fanOut\":1,\"inMemoryMessages\":10,\"clockTimeMs\":0,\"children\":[{\"type\":\"LEAF\",\"table\":\"baseballStats\",\"emittedRows\":97889,\"numDocsScanned\":97889,\"totalDocs\":97889,\"numEntriesScannedPostFilter\":195778,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"sseExecutionTimeMs\":3,\"parallelism\":1,\"clockTimeMs\":0}]}]}]}]}]}]}]}]}]},\"maxRowsInOperator\":97889,\"requestId\":\"1590964612000000447\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":97889,\"totalDocs\":97889,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":195778,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":535,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"baseballStats\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

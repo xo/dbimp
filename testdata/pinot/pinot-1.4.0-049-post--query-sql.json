@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id FROM dbimp_types WHERE s = 'é''\\\"\\\\ x' AND bd = CAST('12345678901234567890.0123456789' AS BIG_DECIMAL) AND by = hexToBytes('00ff') AND ts = 1700000000123 AND l = 9223372036854775807 AND d = 0.1 AND b = true\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Pinot-Error-Code": [
+        "-1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "2223"
+      ]
+    },
+    "body": "{\"resultTable\":{\"dataSchema\":{\"columnNames\":[\"id\"],\"columnDataTypes\":[\"INT\"]},\"rows\":[[1]]},\"numRowsResultSet\":1,\"partialResult\":false,\"exceptions\":[],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"maxRowsInJoinReached\":false,\"maxRowsInWindowReached\":false,\"timeUsedMs\":16,\"stageStats\":{\"type\":\"MAILBOX_RECEIVE\",\"executionTimeMs\":1,\"emittedRows\":1,\"fanIn\":1,\"rawMessages\":2,\"deserializedBytes\":301,\"upstreamWaitMs\":1,\"parallelism\":1,\"clockTimeMs\":1,\"children\":[{\"type\":\"MAILBOX_SEND\",\"executionTimeMs\":1,\"emittedRows\":1,\"stage\":1,\"parallelism\":1,\"fanOut\":1,\"rawMessages\":1,\"serializedBytes\":97,\"clockTimeMs\":1,\"children\":[{\"type\":\"LEAF\",\"table\":\"dbimp_types\",\"executionTimeMs\":1,\"emittedRows\":1,\"numDocsScanned\":1,\"totalDocs\":3,\"numEntriesScannedInFilter\":13,\"numEntriesScannedPostFilter\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"parallelism\":1,\"clockTimeMs\":1}]}]},\"maxRowsInOperator\":1,\"requestId\":\"1275200996000000188\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":1,\"totalDocs\":3,\"numEntriesScannedInFilter\":13,\"numEntriesScannedPostFilter\":1,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":1,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"dbimp_types\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

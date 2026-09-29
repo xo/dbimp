@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT k, SUM(n) OVER (ORDER BY k) AS c FROM dbimp_idx WHERE k < 4 ORDER BY k\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "93"
+      ]
+    },
+    "body": "{\"code\":403,\"error\":\"Permission denied.Reason: Authorization Failed for tables: [dbimp_idx]\"}"
+  }
+}

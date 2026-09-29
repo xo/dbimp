@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT yearID, playerName, teamID FROM baseballStats ORDER BY playerID, yearID LIMIT 1\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Pinot-Error-Code": [
+        "-1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "2974"
+      ]
+    },
+    "body": "{\"resultTable\":{\"dataSchema\":{\"columnNames\":[\"yearID\",\"playerName\",\"teamID\"],\"columnDataTypes\":[\"INT\",\"STRING\",\"STRING\"]},\"rows\":[[2004,\"David Allan\",\"SFN\"]]},\"numRowsResultSet\":1,\"partialResult\":false,\"exceptions\":[],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"numGroups\":0,\"maxRowsInJoinReached\":false,\"maxRowsInJoin\":0,\"maxRowsInWindowReached\":false,\"maxRowsInWindow\":0,\"timeUsedMs\":9,\"stageStats\":{\"type\":\"MAILBOX_RECEIVE\",\"executionTimeMs\":4,\"emittedRows\":1,\"fanIn\":1,\"rawMessages\":2,\"deserializedBytes\":585,\"upstreamWaitMs\":4,\"parallelism\":1,\"clockTimeMs\":4,\"selfExecutionTimeMs\":4,\"selfClockTimeMs\":4,\"children\":[{\"type\":\"MAILBOX_SEND\",\"executionTimeMs\":4,\"emittedRows\":1,\"stage\":1,\"parallelism\":1,\"fanOut\":1,\"rawMessages\":1,\"serializedBytes\":262,\"serializationTimeMs\":1,\"clockTimeMs\":4,\"selfExecutionTimeMs\":1,\"selfClockTimeMs\":1,\"children\":[{\"type\":\"SORT_OR_LIMIT\",\"executionTimeMs\":3,\"emittedRows\":1,\"parallelism\":1,\"clockTimeMs\":3,\"children\":[{\"type\":\"MAILBOX_RECEIVE\",\"executionTimeMs\":3,\"emittedRows\":1,\"fanIn\":1,\"inMemoryMessages\":2,\"upstreamWaitMs\":4,\"parallelism\":1,\"clockTimeMs\":3,\"selfExecutionTimeMs\":3,\"selfClockTimeMs\":3,\"children\":[{\"type\":\"MAILBOX_SEND\",\"executionTimeMs\":3,\"emittedRows\":1,\"stage\":2,\"parallelism\":1,\"fanOut\":1,\"inMemoryMessages\":1,\"clockTimeMs\":3,\"children\":[{\"type\":\"LEAF\",\"table\":\"baseballStats\",\"executionTimeMs\":3,\"emittedRows\":1,\"numDocsScanned\":97889,\"totalDocs\":97889,\"numEntriesScannedPostFilter\":195780,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"sseExecutionTimeMs\":3,\"parallelism\":1,\"clockTimeMs\":3,\"selfExecutionTimeMs\":3,\"selfClockTimeMs\":3}]}]}]}]}]},\"maxRowsInOperator\":1,\"requestId\":\"1590964612000000421\",\"clientRequestId\":null,\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":97889,\"totalDocs\":97889,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":195780,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":4,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"tablesQueried\":[\"baseballStats\"],\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"pools\":[],\"rlsFiltersApplied\":false,\"groupsTrimmed\":false}"
+  }
+}

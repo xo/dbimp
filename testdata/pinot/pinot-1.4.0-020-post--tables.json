@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/tables",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"tableName\":\"dbimp_upsert\",\"tableType\":\"REALTIME\",\"segmentsConfig\":{\"replication\":\"1\",\"timeColumnName\":\"ts\"},\"tableIndexConfig\":{\"loadMode\":\"MMAP\"},\"tenants\":{},\"metadata\":{}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "81"
+      ],
+      "Pinot-Controller-Host": [
+        "d91d6a48ca64"
+      ],
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ]
+    },
+    "body": "{\"code\":400,\"error\":\"Cannot find streamConfigs for table: dbimp_upsert_REALTIME\"}"
+  }
+}

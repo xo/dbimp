@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT k FROM dbimp_idx WHERE VECTOR_SIMILARITY(v, ARRAY[3.0, 3.0], 2) ORDER BY k LIMIT 5\",\"queryOptions\":\"enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "93"
+      ]
+    },
+    "body": "{\"code\":403,\"error\":\"Permission denied.Reason: Authorization Failed for tables: [dbimp_idx]\"}"
+  }
+}

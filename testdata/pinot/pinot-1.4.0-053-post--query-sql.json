@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query/sql",
+    "query": "getCursor=true&numRows=3",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT DISTINCT yearID FROM baseballStats ORDER BY yearID\",\"queryOptions\":\"useMultistageEngine=true;enableNullHandling=true\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1750"
+      ],
+      "X-Pinot-Error-Code": [
+        "-1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"resultTable\":{\"dataSchema\":{\"columnNames\":[\"yearID\"],\"columnDataTypes\":[\"INT\"]},\"rows\":[[1871],[1872],[1873]]},\"numRowsResultSet\":143,\"partialResult\":false,\"exceptions\":[],\"numGroupsLimitReached\":false,\"numGroupsWarningLimitReached\":false,\"timeUsedMs\":5,\"requestId\":\"1275200996000000191\",\"brokerId\":\"Broker_192.168.1.5_8000\",\"numDocsScanned\":143,\"totalDocs\":97889,\"numEntriesScannedInFilter\":0,\"numEntriesScannedPostFilter\":143,\"numServersQueried\":1,\"numServersResponded\":1,\"numSegmentsQueried\":1,\"numSegmentsProcessed\":1,\"numSegmentsMatched\":1,\"numConsumingSegmentsQueried\":0,\"numConsumingSegmentsProcessed\":0,\"numConsumingSegmentsMatched\":0,\"minConsumingFreshnessTimeMs\":0,\"numSegmentsPrunedByBroker\":0,\"numSegmentsPrunedByServer\":0,\"numSegmentsPrunedInvalid\":0,\"numSegmentsPrunedByLimit\":0,\"numSegmentsPrunedByValue\":0,\"brokerReduceTimeMs\":1,\"offlineThreadCpuTimeNs\":0,\"realtimeThreadCpuTimeNs\":0,\"offlineSystemActivitiesCpuTimeNs\":0,\"realtimeSystemActivitiesCpuTimeNs\":0,\"offlineResponseSerializationCpuTimeNs\":0,\"realtimeResponseSerializationCpuTimeNs\":0,\"offlineTotalCpuTimeNs\":0,\"realtimeTotalCpuTimeNs\":0,\"explainPlanNumEmptyFilterSegments\":0,\"explainPlanNumMatchAllFilterSegments\":0,\"traceInfo\":{},\"groupsTrimmed\":false,\"offset\":0,\"numRows\":3,\"cursorResultWriteTimeMs\":1,\"cursorFetchTimeMs\":0,\"submissionTimeMs\":1790710933091,\"expirationTimeMs\":1790714533091,\"brokerHost\":\"192.168.1.5\",\"brokerPort\":8000,\"bytesWritten\":1077,\"clientRequestId\":null,\"offlineThreadMemAllocatedBytes\":0,\"realtimeThreadMemAllocatedBytes\":0,\"offlineResponseSerMemAllocatedBytes\":0,\"realtimeResponseSerMemAllocatedBytes\":0,\"offlineTotalMemAllocatedBytes\":0,\"realtimeTotalMemAllocatedBytes\":0,\"tablesQueried\":[\"baseballStats\"],\"pools\":[],\"rlsFiltersApplied\":false}"
+  }
+}

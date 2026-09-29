@@ -505,6 +505,10 @@ None. Ken decided on 2026-09-29 that dbimp writes no driver for TDengine
 (D127). The questions below were open until then, and the first one decided
 it.
 
+After D127, Ken decided in dburl that its provisional scheme `tdengine`, its
+alias `td` and `GenTDengine` go away (dburl D41). dburl `v0.38.0`, of
+2026-09-29, removes them, as the `dburl` session reported.
+
 - An error after some rows is lost, and `restfulRowLimit` cuts a result
   with no sign (the adapter code). If step 6 shows either on the server, the
   condition of "When it cannot be a driver" about a result cut short

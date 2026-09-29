@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/tables",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"tableName\":\"dbimp_upsert\",\"tableType\":\"OFFLINE\",\"segmentsConfig\":{\"replication\":\"1\",\"timeColumnName\":\"ts\"},\"tableIndexConfig\":{\"loadMode\":\"MMAP\"},\"tenants\":{},\"metadata\":{},\"upsertConfig\":{\"mode\":\"FULL\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "69"
+      ],
+      "Pinot-Controller-Host": [
+        "d91d6a48ca64"
+      ],
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"code\":400,\"error\":\"Upsert/Dedup table is for realtime table only.\"}"
+  }
+}

@@ -39,7 +39,8 @@ in D73. W12 came from that order, and D88 dropped it. W13 came from Ken on
 2026-09-29, who asked for the ArangoDB driver, W14 from D94 and D110, and W15
 from D109. W16 came from Ken on 2026-09-29, who named Databend as the next
 target at step 1, W17 from D119, and W18 from Ken on 2026-09-29, who
-named TDengine as the next target at step 1.
+named TDengine as the next target at step 1. W19 came from Ken on
+2026-09-30, who named Apache Pinot as the next target at step 1.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -742,7 +743,7 @@ settled. The integration tests passed on Neo4j 5.26.31 and 2026.09.0,
 ArangoDB 3.12.12, SurrealDB 2.7.0 and 3.3.0, InfluxDB 1.13.1, 2.9.1 and
 3.11.5, and Couchbase 8.0.3.
 
-## W16. Write the Databend driver
+## W16. Write the Databend driver. Done.
 
 Databend is the next target, by D73 and D88. Ken named it at step 1 on
 2026-09-29. Follow [DRIVER.md](DRIVER.md). Step 3 is in
@@ -816,6 +817,15 @@ connection goes back to the pool. Ken decided D126 the same day, which drops
 count, gives no `RowsAffected` (D125), and `usql` maps that error to 0 in its
 driver. D126 needs a release, which this item waits for.
 
+At Ken's request, the session released D126 in `v0.6.1` on `42e2f36`, on
+which the workflow passed on every release, and sent it to `usql` the same
+day: https://github.com/xo/dbimp/releases/tag/v0.6.1.
+
+`usql` staged its move to `v0.6.1` the same day, with the switch of
+`drivers/databend` and dburl `v0.38.0`. On both releases, through `*sql.DB`,
+`use system` then `select current_database()` gave `system`, a `SET` read
+back, and a transaction worked. That closed this item.
+
 1. To `dburl`: dburl D39, staged, moves the scheme `databend` to
    `github.com/xo/dbimp/databend`. Please check `GenDatabend` against the
    release: the path is the database, the keys `tls`, `auth`, `cancel` and
@@ -875,3 +885,75 @@ waits for Ken again.
 Ken decided the same day that dbimp writes no driver for TDengine, and moved
 it to P3 (D127). TDENGINE.md stays as the record of why. Apache Pinot is the
 next target.
+
+## W19. Write the Apache Pinot driver
+
+Apache Pinot is the next target, by D73 and D127. Ken named it at step 1 on
+2026-09-30. Follow [DRIVER.md](DRIVER.md). Step 3 is in [PINOT.md](PINOT.md).
+`usql` has no driver for Pinot, so this driver replaces none (D24), and
+`dburl` holds the provisional scheme `pinot` (dburl D36).
+
+Step 6 measures first two points that can stop the work for Ken: Pinot takes
+no insert, update or delete of rows through SQL, which DRIVER.md names as a
+stop, and the Broker builds each whole result before it sends it, which
+the cursor of `getCursor=true` can page.
+
+Step 2 went in on 2026-09-30: R, H and S hold on 1.4.0 and 1.5.1, as both
+principals. The first measurements of step 6 found that the Broker refuses
+every insert, update and delete of rows, on both engines, and that the cursor
+pages a result (PINOT.md, Parameters). The work waited for Ken, as DRIVER.md
+says for a server that refuses one of insert, select, update and delete, and
+he decided D128 the same day: the driver runs queries and takes no write.
+
+Steps 5a to 9 went in on 2026-09-30:
+
+- Step 5a: `testdata/pinot/features.json`, from Gemini, DeepSeek, the Go
+  client and the JDBC client.
+- Step 6: the recordings of 1.4.0 and 1.5.1, as both principals. The
+  recorder gained `-second` and `"server": "second"`, so that the setup of
+  the script makes its tables and loads its rows through the Controller,
+  which the `dbmeta` session publishes as the second port of the entry.
+- Step 9 is D128 to D133, which Ken decided on 2026-09-30. D134, which
+  would amend D133, is proposed, and waits for Ken.
+
+Steps 10 to 17a went in on 2026-09-30:
+
+- Steps 10 to 13: the package `pinot/`, its tables, the contract, the
+  replay tests, the unit tests of the literals, the types and the options,
+  and the DSN tests. The fuzz test ran for 60 seconds and found nothing.
+- Steps 14 and 14a: the integration tests passed on 1.4.0 and 1.5.1, as
+  both principals, with the round trip of every type. The type tests load
+  their rows through the Controller, with a connector of the tests that
+  sends each write of `dbimptest.RoundTrip` there. The ordinary user can
+  read only `baseballStats` (dbmeta D112), so it gets HTTP 403 for the
+  tables of the tests, and the administrator runs the rest. On 1.4.0 the
+  test of the cancel skips, because its Broker has query cancellation off.
+- Step 15: the workflow exports `<PRODUCT>_SECOND_ADDRESS` from
+  `secondAddress`. The pin of `dbmeta` must move to the commit that holds
+  the second port of Pinot and its `url` of D129, which the `dbmeta` session
+  staged on 2026-09-30 and has not committed. Until then, a Pinot job of CI
+  gets an `http` URL, which the driver refuses.
+- Step 16: no statement on the Broker gives the version, for either
+  principal. `SELECT version()` fails with 700, and `GET /version` of the
+  Broker is HTTP 404. The Controller gives it with no user (PINOT.md,
+  Principals). The requests below wait for the release.
+- Step 17a: `## Compared with Couchbase` is in PINOT.md. It waits for Ken's
+  review.
+
+Two questions wait for Ken: D134, and the `JSON` column that the
+multi-stage engine names `STRING` (PINOT.md, Open questions).
+
+1. To `dburl`: dbimp D129 settles the provisional scheme `pinot` (dburl
+   D36). Please set its `GoPackage` to `github.com/xo/dbimp/pinot` and
+   `RequiresCGO` to false. The URL is `pinot://user:password@host:port`,
+   with no path, and the driver refuses a path. With no port, the driver
+   uses 8099, the port of a Broker, so the generator adds none (dburl D34).
+   The keys `tls`, `auth`, `cancel` and `engine` pass through, and any
+   other key is refused.
+2. To `dbmeta`: dbmeta has no model for Pinot, so there is nothing to
+   measure yet. The `url` of the entry has the form of D129, and
+   `secondAddress` names the Controller (step 15).
+3. To `usql`: `usql` has no driver for Pinot, so this is a new driver:
+   `drivers/pinot/pinot.go` imports `github.com/xo/dbimp/pinot`. No
+   statement gives the version, so its `Version` cannot run SQL. The driver
+   takes no write, and a write fails with the error of the server (D128).

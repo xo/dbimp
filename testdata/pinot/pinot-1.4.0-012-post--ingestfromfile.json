@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/ingestFromFile",
+    "query": "tableNameWithType=dbimp_defaults_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+    "header": {
+      "Content-Type": [
+        "multipart/form-data; boundary=dbimp"
+      ]
+    },
+    "body": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"k\":1,\"v\":5,\"s\":\"x\"},{\"k\":2}]\r\n--dbimp--\r\n"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "115"
+      ],
+      "Pinot-Controller-Host": [
+        "d91d6a48ca64"
+      ],
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"status\":\"Successfully ingested file into table: dbimp_defaults_OFFLINE as segment: dbimp_defaults_1790710925760\"}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/tables",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"tableName\":\"dbimp_upsert\",\"tableType\":\"OFFLINE\",\"segmentsConfig\":{\"replication\":\"1\",\"timeColumnName\":\"ts\"},\"tableIndexConfig\":{\"loadMode\":\"MMAP\"},\"tenants\":{},\"metadata\":{},\"upsertConfig\":{\"mode\":\"FULL\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "188"
+      ],
+      "Pinot-Controller-Host": [
+        "e715e2224768"
+      ],
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ]
+    },
+    "body": "{\"code\":400,\"error\":\"Offline upsert table must have segment partition config to ensure correct partition-based segment assignment. Configure segmentPartitionConfig in the indexingConfig.\"}"
+  }
+}

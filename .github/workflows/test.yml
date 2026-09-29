@@ -138,6 +138,9 @@ jobs:
       # name of the driver (D27). <PRODUCT>_DSN is the administrator, and
       # <PRODUCT>_ORDINARY_DSN is the ordinary user that dbmeta makes (D9),
       # which dbrun names with the role "user" (dbmeta D102).
+      # <PRODUCT>_SECOND_ADDRESS is the second port of the entry, as
+      # host:port, such as the Controller of Pinot, through which its tests
+      # make their tables (D128), and empty for a product that has none.
       - name: Test
         run: |
           info=$(cd dbmeta/test && go run ./cmd/dbrun dsn --json ${{ matrix.release }})
@@ -145,6 +148,7 @@ jobs:
           prefix=$(echo "$product" | tr '[:lower:]' '[:upper:]')
           export "${prefix}_DSN=$(echo "$info" | jq -r '.[0].url')"
           export "${prefix}_ORDINARY_DSN=$(echo "$info" | jq -r '[.[0].principals[]? | select(.role == "user") | .url][0] // empty')"
+          export "${prefix}_SECOND_ADDRESS=$(echo "$info" | jq -r '.[0].secondAddress // empty')"
           go test -race -count=1 -run Integration -v "./$product/..."
       - name: Logs
         if: failure()

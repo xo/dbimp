@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/ingestFromFile",
+    "query": "tableNameWithType=dbimp_types_OFFLINE&batchConfigMapStr=%7B%22inputFormat%22%3A%22json%22%7D",
+    "header": {
+      "Content-Type": [
+        "multipart/form-data; boundary=dbimp"
+      ]
+    },
+    "body": "--dbimp\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rows.json\"\r\nContent-Type: application/json\r\n\r\n[{\"id\":1,\"i\":-2147483648,\"l\":9223372036854775807,\"f\":1.5,\"d\":0.1,\"bd\":\"12345678901234567890.0123456789\",\"b\":true,\"s\":\"é'\\\"\\\\ x\",\"j\":{\"k\":[1,null,\"s\"]},\"by\":\"00ff\",\"ia\":[1,2,3],\"la\":[-9223372036854775808,9223372036854775807],\"fa\":[1.5,-0.25],\"da\":[0.1,1.7976931348623157e+308],\"boa\":[true,false],\"sa\":[\"x\",\"y\"],\"ta\":[1700000000123],\"m\":{\"a\":1,\"b\":2},\"ts\":1700000000123},{\"id\":2,\"i\":2147483647,\"l\":-9223372036854775808,\"f\":-3.4e+38,\"d\":1.7976931348623157e+308,\"bd\":\"-1\",\"b\":false,\"s\":\"\",\"j\":[],\"by\":\"\",\"ia\":[],\"la\":[],\"fa\":[],\"da\":[],\"boa\":[],\"sa\":[],\"ta\":[],\"m\":{},\"ts\":1650000000000},{\"id\":3,\"ts\":1600000000000}]\r\n--dbimp--\r\n"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "137"
+      ],
+      "Pinot-Controller-Host": [
+        "d91d6a48ca64"
+      ],
+      "Pinot-Controller-Version": [
+        "Unknown"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, OPTIONS, DELETE"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ]
+    },
+    "body": "{\"status\":\"Successfully ingested file into table: dbimp_types_OFFLINE as segment: dbimp_types_1600000000000_1700000000123_1790710925253\"}"
+  }
+}

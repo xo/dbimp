@@ -148,3 +148,10 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D125](D125-databend-counts-the-rows-that-a-result-names.md) | Databend counts the rows that a result names | Decided |
 | [D126](D126-a-databend-connection-keeps-its-session-when-it.md) | A Databend connection keeps its session when it is reused | Amends D122 |
 | [D127](D127-tdengine-gets-no-driver-here.md) | TDengine gets no driver here | Amends D73 and D74 |
+| [D128](D128-the-pinot-driver-is-read-only.md) | The Pinot driver is read-only | Decided |
+| [D129](D129-the-pinot-dsn-names-a-broker.md) | The Pinot DSN names a Broker | Decided |
+| [D130](D130-the-go-types-of-pinot.md) | The Go types of Pinot, and NULL | Decided |
+| [D131](D131-pinot-runs-a-query-on-the-multi-stage-engine.md) | Pinot runs a query on the multi-stage engine | Decided |
+| [D132](D132-pinot-arguments-are-written-into-the-text.md) | Pinot arguments are written into the text | Decided |
+| [D133](D133-pinot-reads-one-answer-and-cancels-by-its-id.md) | Pinot reads one answer, and cancels a query by its id | Decided |
+| [D134](D134-pinot-cancels-only-a-query-whose-answer-has-not.md) | Pinot cancels only a query whose answer has not arrived | Proposed |
