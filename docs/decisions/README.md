@@ -137,3 +137,12 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D114](D114-only-couchbase-gives-json-text.md) | Only Couchbase gives JSON text | Decided |
 | [D115](D115-an-influxdb-query-stops-when-the-client-leaves.md) | An InfluxDB query stops when the client leaves | Decided |
 | [D116](D116-auth-bearer-sends-the-scheme-that-each-server-takes.md) | auth=bearer sends the scheme that each server takes | Amends D110 |
+| [D117](D117-the-databend-dsn-names-the-database-in-its-path.md) | The Databend DSN names the database in its path | Decided |
+| [D118](D118-the-go-types-of-databend.md) | The Go types of Databend | Decided |
+| [D119](D119-databend-reads-nested-values-by-the-schema-and.md) | Databend reads nested values by the schema, and speaks JSON only | Decided |
+| [D120](D120-databend-binds-parameters-on-the-server.md) | Databend binds parameters on the server | Amended by D124 |
+| [D121](D121-a-databend-transaction-is-carried-in-the-session.md) | A Databend transaction is carried in the session | Decided |
+| [D122](D122-a-databend-connection-keeps-its-session.md) | A Databend connection keeps its session | Decided |
+| [D123](D123-databend-reads-a-result-by-its-pages-and-kills.md) | Databend reads a result by its pages, and kills a query that it leaves | Decided |
+| [D124](D124-a-databend-decimal-argument-is-a-json-string.md) | A Databend decimal argument is a JSON string | Amends D120 |
+| [D125](D125-databend-counts-the-rows-that-a-result-names.md) | Databend counts the rows that a result names | Decided |

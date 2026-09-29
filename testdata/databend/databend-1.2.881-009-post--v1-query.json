@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ]
+    },
+    "body": "SELECT 1 AS one"
+  },
+  "response": {
+    "status": 415,
+    "header": {
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:28 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ],
+      "Content-Length": [
+        "96"
+      ]
+    },
+    "body": "{\"error\":{\"code\":415,\"message\":\"invalid content type `text/plain`, expect: `application/json`\"}}"
+  }
+}

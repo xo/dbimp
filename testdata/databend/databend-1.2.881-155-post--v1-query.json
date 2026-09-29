@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"COPY INTO dbmeta.crud FROM @dbimp_stage FILE_FORMAT = (TYPE = PARQUET) FORCE = TRUE\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4c64fd74329db7571723422ff7"
+      ],
+      "X-Databend-Query-State": [
+        "Succeeded"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "1"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ],
+      "Content-Length": [
+        "1385"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:44 GMT"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c64fd74329db7571723422ff7\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Succeeded\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"account_admin\",\"settings\":{},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c64fd74329db7571723422ff7\\\"]}\"},\"error\":null,\"warnings\":[],\"has_result_set\":true,\"schema\":[{\"name\":\"File\",\"type\":\"String\"},{\"name\":\"Rows_loaded\",\"type\":\"Int32\"},{\"name\":\"Errors_seen\",\"type\":\"Int32\"},{\"name\":\"First_error\",\"type\":\"Nullable(String)\"},{\"name\":\"First_error_line\",\"type\":\"Nullable(Int32)\"}],\"data\":[[\"data_01a0ec4c64e37db0a84e01eb72f75204_0000_00000000.parquet\",\"1\",\"0\",null,null]],\"affect\":null,\"result_timeout_secs\":60,\"settings\":{\"timezone\":\"UTC\",\"geometry_output_format\":\"GEOJSON\",\"binary_output_format\":\"HEX\",\"http_json_result_mode\":\"display\"},\"stats\":{\"scan_progress\":{\"rows\":1,\"bytes\":27},\"write_progress\":{\"rows\":1,\"bytes\":23},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":1,\"bytes\":647},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":36},\"stats_uri\":\"/v1/query/01a0ec4c64fd74329db7571723422ff7\",\"final_uri\":\"/v1/query/01a0ec4c64fd74329db7571723422ff7/final\",\"next_uri\":\"/v1/query/01a0ec4c64fd74329db7571723422ff7/final\",\"kill_uri\":\"/v1/query/01a0ec4c64fd74329db7571723422ff7/kill\"}"
+  }
+}

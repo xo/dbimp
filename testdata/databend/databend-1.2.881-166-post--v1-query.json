@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT * FROM dbmeta.types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databend-Query-State": [
+        "Succeeded"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "3"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ],
+      "Content-Length": [
+        "3528"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:44 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4c65407c22b5ab6a1d678af010"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c65407c22b5ab6a1d678af010\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Succeeded\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"dbmeta_role\",\"settings\":{},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c65407c22b5ab6a1d678af010\\\"]}\"},\"error\":null,\"warnings\":[],\"has_result_set\":true,\"schema\":[{\"name\":\"id\",\"type\":\"Nullable(Int32)\"},{\"name\":\"b\",\"type\":\"Nullable(Boolean)\"},{\"name\":\"i8\",\"type\":\"Nullable(Int8)\"},{\"name\":\"i16\",\"type\":\"Nullable(Int16)\"},{\"name\":\"i32\",\"type\":\"Nullable(Int32)\"},{\"name\":\"i64\",\"type\":\"Nullable(Int64)\"},{\"name\":\"u8\",\"type\":\"Nullable(UInt8)\"},{\"name\":\"u16\",\"type\":\"Nullable(UInt16)\"},{\"name\":\"u32\",\"type\":\"Nullable(UInt32)\"},{\"name\":\"u64\",\"type\":\"Nullable(UInt64)\"},{\"name\":\"f\",\"type\":\"Nullable(Float32)\"},{\"name\":\"d\",\"type\":\"Nullable(Float64)\"},{\"name\":\"d38\",\"type\":\"Nullable(Decimal(38, 10))\"},{\"name\":\"d76\",\"type\":\"Nullable(Decimal(76, 20))\"},{\"name\":\"dt\",\"type\":\"Nullable(Date)\"},{\"name\":\"ts\",\"type\":\"Nullable(Timestamp)\"},{\"name\":\"tz\",\"type\":\"Nullable(Timestamp_Tz)\"},{\"name\":\"iv\",\"type\":\"Nullable(Interval)\"},{\"name\":\"s\",\"type\":\"Nullable(String)\"},{\"name\":\"bin\",\"type\":\"Nullable(Binary)\"},{\"name\":\"arr\",\"type\":\"Nullable(Array(Int32 NULL))\"},{\"name\":\"m\",\"type\":\"Nullable(Map(String, Int32 NULL))\"},{\"name\":\"tup\",\"type\":\"Nullable(Tuple(Int32 NULL, String NULL))\"},{\"name\":\"v\",\"type\":\"Nullable(Variant)\"},{\"name\":\"bm\",\"type\":\"Nullable(Bitmap)\"},{\"name\":\"vec\",\"type\":\"Nullable(Vector(3))\"},{\"name\":\"g\",\"type\":\"Nullable(Geometry)\"},{\"name\":\"geo\",\"type\":\"Nullable(Geography)\"}],\"data\":[[\"1\",\"1\",\"-128\",\"-32768\",\"-2147483648\",\"-9223372036854775808\",\"0\",\"0\",\"0\",\"0\",\"1.5\",\"0.1\",\"1234567890123456789012345678.0123456789\",\"12345678901234567890123456789012345678901234567890123456.12345678901234567890\",\"1000-01-01\",\"1000-01-01 00:00:00.000000\",\"2026-09-29 12:34:56.123456 +0530\",\"1 day 2:00:00.000003\",\"é'\\\"\\\\ x\",\"00FF\",\"[1,NULL,3]\",\"{\\\"a\\\":1,\\\"b\\\":NULL}\",\"(1,\\\"x\\\")\",\"{\\\"k\\\":[1,null,\\\"s\\\"],\\\"n\\\":1.5}\",\"<bitmap binary>\",\"[1.5,-2.0,3.0]\",\"{\\\"type\\\": \\\"Point\\\", \\\"coordinates\\\": [1,2]}\",\"{\\\"type\\\": \\\"Point\\\", \\\"coordinates\\\": [3,4]}\"],[\"2\",\"0\",\"127\",\"32767\",\"2147483647\",\"9223372036854775807\",\"255\",\"65535\",\"4294967295\",\"18446744073709551615\",\"-3.4e+38\",\"1.7976931348623157e+308\",\"-9999999999999999999999999999.9999999999\",\"-99999999999999999999999999999999999999999999999999999999.99999999999999999999\",\"9999-12-31\",\"9999-12-30 21:59:59.999999\",\"1970-01-01 00:00:00.000000 +0000\",\"-1 month\",\"\",\"\",\"[]\",\"{}\",\"(0,\\\"\\\")\",\"[]\",\"<bitmap binary>\",\"[0.0,0.0,0.0]\",\"{\\\"type\\\": \\\"LineString\\\", \\\"coordinates\\\": [[0,0],[1,1]]}\",\"{\\\"type\\\": \\\"Point\\\", \\\"coordinates\\\": [0,0]}\"],[\"3\",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,\"null\",null,null,null,null]],\"affect\":null,\"result_timeout_secs\":60,\"settings\":{\"timezone\":\"UTC\",\"geometry_output_format\":\"GEOJSON\",\"binary_output_format\":\"HEX\",\"http_json_result_mode\":\"display\"},\"stats\":{\"scan_progress\":{\"rows\":3,\"bytes\":1078},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":3,\"bytes\":1078},\"total_scan\":{\"rows\":3,\"bytes\":1320},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":19},\"stats_uri\":\"/v1/query/01a0ec4c65407c22b5ab6a1d678af010\",\"final_uri\":\"/v1/query/01a0ec4c65407c22b5ab6a1d678af010/final\",\"next_uri\":\"/v1/query/01a0ec4c65407c22b5ab6a1d678af010/final\",\"kill_uri\":\"/v1/query/01a0ec4c65407c22b5ab6a1d678af010/kill\"}"
+  }
+}

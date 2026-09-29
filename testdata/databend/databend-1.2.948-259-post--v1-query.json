@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"MERGE INTO dbmeta.crud AS t USING (SELECT 1 AS k, 'm' AS v UNION ALL SELECT 5, 'n') AS s ON t.k = s.k WHEN MATCHED THEN UPDATE SET t.v = s.v WHEN NOT MATCHED THEN INSERT (k, v) VALUES (s.k, s.v)\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databend-Query-Id": [
+        "01a0ec4c10427a118d6d22f22c53d8b5"
+      ],
+      "X-Databend-Query-State": [
+        "Succeeded"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "1"
+      ],
+      "X-Databend-Version": [
+        "1.2.948-nightly"
+      ],
+      "Content-Length": [
+        "1203"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:23 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c10427a118d6d22f22c53d8b5\",\"session_id\":\"\",\"node_id\":\"CuqT7lnh1ZcXpeGKXa55R4\",\"state\":\"Succeeded\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"dbmeta_role\",\"settings\":{},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"CuqT7lnh1ZcXpeGKXa55R4\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c10427a118d6d22f22c53d8b5\\\"]}\"},\"error\":null,\"warnings\":[],\"has_result_set\":true,\"schema\":[{\"name\":\"number of rows inserted\",\"type\":\"UInt64\"},{\"name\":\"number of rows updated\",\"type\":\"UInt64\"}],\"data\":[[\"1\",\"1\"]],\"affect\":null,\"result_timeout_secs\":60,\"settings\":{\"timezone\":\"UTC\",\"geometry_output_format\":\"GEOJSON\",\"binary_output_format\":\"HEX\",\"http_json_result_mode\":\"display\"},\"stats\":{\"scan_progress\":{\"rows\":3,\"bytes\":7},\"write_progress\":{\"rows\":2,\"bytes\":111},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":6,\"bytes\":1942},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":66},\"stats_uri\":\"/v1/query/01a0ec4c10427a118d6d22f22c53d8b5\",\"final_uri\":\"/v1/query/01a0ec4c10427a118d6d22f22c53d8b5/final\",\"next_uri\":\"/v1/query/01a0ec4c10427a118d6d22f22c53d8b5/final\",\"kill_uri\":\"/v1/query/01a0ec4c10427a118d6d22f22c53d8b5/kill\"}"
+  }
+}

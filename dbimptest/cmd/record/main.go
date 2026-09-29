@@ -92,9 +92,18 @@ type Request struct {
 	Phase string `json:"phase,omitzero"`
 	// Capture names values of the response to keep, by a path such as
 	// "results.0.txid". A later request of the same principal writes a kept
-	// value into its body, its path or a header as {{name}}.
+	// value into its body, its path or a header as {{name}}. In a body, the
+	// value is escaped as the text of a JSON string.
 	Capture map[string]string `json:"capture,omitzero"`
+	// Follow names a URI of the response, by a path such as "next_uri". The
+	// command then sends GET to it, with the same headers, and records the
+	// answer, until an answer has no such URI, as a client that reads every
+	// page does. It follows at most maxFollow times.
+	Follow string `json:"follow,omitzero"`
 }
+
+// maxFollow bounds the pages that one request follows.
+const maxFollow = 1000
 
 // Absent is an item of step 6 that does not apply to the product.
 type Absent struct {
@@ -332,14 +341,20 @@ func expandHeader(h http.Header, kept map[string]string) http.Header {
 	return out
 }
 
-// expand writes each kept value into body where {{name}} stands.
+// expand writes each kept value into body where {{name}} stands, escaped as
+// the text of a JSON string, so that a value with a quote, such as the
+// session of Databend, stays valid JSON.
 func expand(body jsontext.Value, kept map[string]string) jsontext.Value {
 	if len(body) == 0 || len(kept) == 0 {
 		return body
 	}
 	s := string(body)
 	for name, v := range kept {
-		s = strings.ReplaceAll(s, "{{"+name+"}}", v)
+		q, err := jsontext.AppendQuote(nil, v)
+		if err != nil {
+			q = []byte(`"` + v + `"`)
+		}
+		s = strings.ReplaceAll(s, "{{"+name+"}}", string(q[1:len(q)-1]))
 	}
 	return jsontext.Value(s)
 }
@@ -351,20 +366,9 @@ func capture(body []byte, paths map[string]string, kept map[string]string) error
 		return fmt.Errorf("reading the response to capture: %w", err)
 	}
 	for name, path := range paths {
-		cur := v
-		for part := range strings.SplitSeq(path, ".") {
-			switch c := cur.(type) {
-			case map[string]any:
-				cur = c[part]
-			case []any:
-				i, err := strconv.Atoi(part)
-				if err != nil || i >= len(c) {
-					return fmt.Errorf("capturing %s: no element %s", name, part)
-				}
-				cur = c[i]
-			default:
-				return fmt.Errorf("capturing %s: nothing at %s", name, part)
-			}
+		cur, err := lookup(v, path)
+		if err != nil {
+			return fmt.Errorf("capturing %s: %w", name, err)
 		}
 		s, ok := cur.(string)
 		if !ok {
@@ -373,6 +377,42 @@ func capture(body []byte, paths map[string]string, kept map[string]string) error
 		kept[name] = s
 	}
 	return nil
+}
+
+// lookup returns the value of v at path, such as "results.0.txid", or nil
+// when an object has no such member.
+func lookup(v any, path string) (any, error) {
+	cur := v
+	for part := range strings.SplitSeq(path, ".") {
+		switch c := cur.(type) {
+		case map[string]any:
+			cur = c[part]
+		case []any:
+			i, err := strconv.Atoi(part)
+			if err != nil || i >= len(c) {
+				return nil, fmt.Errorf("no element %s", part)
+			}
+			cur = c[i]
+		default:
+			return nil, fmt.Errorf("nothing at %s", part)
+		}
+	}
+	return cur, nil
+}
+
+// next returns the URI of body at the path follow, or "" when the body has
+// none.
+func next(body []byte, follow string) string {
+	var v any
+	if json.Unmarshal(body, &v) != nil {
+		return ""
+	}
+	cur, err := lookup(v, follow)
+	if err != nil {
+		return ""
+	}
+	s, _ := cur.(string)
+	return s
 }
 
 // send sends one request. A request with a timeout is expected to fail.
@@ -454,7 +494,56 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		}
 	}
 	fmt.Printf("item %d, %s: %s\n", r.Item, r.Name, res.Status)
-	return nil
+	if r.Follow == "" {
+		return nil
+	}
+	for range maxFollow {
+		uri := next(resBody, r.Follow)
+		if uri == "" {
+			return nil
+		}
+		if resBody, err = get(ctx, client, base, r, uri); err != nil {
+			return fmt.Errorf("following %s: %w", uri, err)
+		}
+	}
+	return fmt.Errorf("following %s: more than %d pages", r.Follow, maxFollow)
+}
+
+// get sends GET to the URI uri of a page that r follows, with the headers
+// and the credentials of r, and returns the body of the answer, which the
+// transport records.
+func get(ctx context.Context, client *http.Client, base *url.URL, r Request, uri string) ([]byte, error) {
+	u := *base
+	u.User = nil
+	path, query, _ := strings.Cut(uri, "?")
+	u.Path, u.RawQuery = path, query
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("building the request: %w", err)
+	}
+	for key, vals := range r.Header {
+		if key == "Content-Type" {
+			continue
+		}
+		for _, val := range vals {
+			req.Header.Add(key, val)
+		}
+	}
+	if user := base.User; user != nil {
+		pass, _ := user.Password()
+		req.SetBasicAuth(user.Username(), pass)
+	}
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("sending the request: %w", err)
+	}
+	defer res.Body.Close()
+	b, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, fmt.Errorf("reading the response: %w", err)
+	}
+	fmt.Printf("item %d, %s: GET %s: %s\n", r.Item, r.Name, path, res.Status)
+	return b, nil
 }
 
 // forget removes the files and the entries that an earlier run wrote for

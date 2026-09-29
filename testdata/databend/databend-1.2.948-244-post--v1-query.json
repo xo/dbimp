@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"ROLLBACK\",\"session\":{\"database\":\"dbmeta\",\"txn_state\":\"Active\",\"internal\":\"{\\\"last_node_id\\\":\\\"CuqT7lnh1ZcXpeGKXa55R4\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c0f4572039297ceabe33fa0ae\\\"]}\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "760"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:22 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Version": [
+        "1.2.948-nightly"
+      ]
+    },
+    "body": "{\"id\":\"\",\"session_id\":null,\"node_id\":\"\",\"state\":\"Failed\",\"session\":{\"database\":\"dbmeta\",\"txn_state\":\"Fail\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"CuqT7lnh1ZcXpeGKXa55R4\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c0f4572039297ceabe33fa0ae\\\"]}\"},\"error\":{\"code\":4003,\"message\":\"Transaction timeout: last_query_id 01a0ec4c0f4572039297ceabe33fa0ae not found on this server\"},\"warnings\":[],\"schema\":[],\"data\":[],\"affect\":null,\"result_timeout_secs\":null,\"stats\":{\"scan_progress\":{\"rows\":0,\"bytes\":0},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":0,\"bytes\":0},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":0},\"stats_uri\":null,\"final_uri\":null,\"next_uri\":null,\"kill_uri\":null}"
+  }
+}

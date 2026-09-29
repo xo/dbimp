@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "X-Databend-Query-Id": [
+        "dbimp-id-1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT 2 AS two\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Version": [
+        "1.2.948-nightly"
+      ],
+      "Content-Length": [
+        "90"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:22 GMT"
+      ]
+    },
+    "body": "{\"error\":{\"code\":400,\"message\":\"fail to start query: query_id dbimp-id-1 already exists\"}}"
+  }
+}

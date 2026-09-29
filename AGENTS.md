@@ -22,7 +22,8 @@ Couchbase driver that replaces `xo/n1ql` (D23). It was first released in
 third, in `neo4j/`, is in the tag `v0.3.0` (W9). The fourth, in `influxdb/`,
 was first released in `v0.4.0` (W11), which is the first GitHub release that
 holds the second and the third. The fifth, in
-`arangodb/`, is staged for review, and no release holds it yet (W13). The
+`arangodb/`, was first released in `v0.5.0` (W13). The sixth, in
+`databend/`, is staged for review, and no release holds it yet (W16). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -97,8 +98,9 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    wrap one column in an object. Each of these faults was found in a driver
    that `dbmeta` then had to replace. See D8.
 4. `context.Context` comes first, is named `ctx`, and is never stored in a
-   struct, except by a Couchbase, Neo4j or ArangoDB transaction, and by the
-   rows of an ArangoDB cursor (D45, D69, D90 and D91). The
+   struct, except by a Couchbase, Neo4j, ArangoDB or Databend transaction,
+   and by the rows of an ArangoDB cursor or of a Databend query (D45, D69,
+   D90, D91, D122 and D123). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

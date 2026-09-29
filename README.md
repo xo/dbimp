@@ -10,7 +10,8 @@ The drivers use the Go standard library, with
 The repository is new. It holds the drivers `couchbase`, which was first
 released in `v0.1.0`, `surrealdb` and `neo4j`, which the tags `v0.2.0` and
 `v0.3.0` hold, `influxdb`, which was first released in `v0.4.0` with the
-other three, and `arangodb`, which no release holds yet.
+other three, `arangodb`, which was first released in `v0.5.0`, and
+`databend`, which no release holds yet.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -53,7 +54,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/INFLUXDB.md](docs/INFLUXDB.md) | What InfluxDB 1, 2 and 3 answer, as measured on seven releases |
 | [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, and why it has no driver here |
 | [docs/ARANGODB.md](docs/ARANGODB.md) | What ArangoDB 3.12 answers, as measured |
-| [docs/DATABEND.md](docs/DATABEND.md) | What is known about Databend, before a server runs |
+| [docs/DATABEND.md](docs/DATABEND.md) | What Databend 1.2.881 and 1.2.948 answer, as measured |
 | [docs/TDENGINE.md](docs/TDENGINE.md) | What is known about TDengine, before a server runs |
 | [docs/PINOT.md](docs/PINOT.md) | What is known about Apache Pinot, before a server runs |
 | [docs/RQLITE.md](docs/RQLITE.md) | What is known about rqlite, before a server runs |

@@ -37,7 +37,8 @@ same day, who named Neo4j as the third. W10 came from the `dbmeta` session on
 came from Ken on 2026-09-27, who set the order of the drivers after Neo4j
 in D73. W12 came from that order, and D88 dropped it. W13 came from Ken on
 2026-09-29, who asked for the ArangoDB driver, W14 from D94 and D110, and W15
-from D109.
+from D109. W16 came from Ken on 2026-09-29, who named Databend as the next
+target at step 1, and W17 from D119.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -735,3 +736,81 @@ Each product document holds the measurements, and D109 holds what the work
 settled. The integration tests passed on Neo4j 5.26.31 and 2026.09.0,
 ArangoDB 3.12.12, SurrealDB 2.7.0 and 3.3.0, InfluxDB 1.13.1, 2.9.1 and
 3.11.5, and Couchbase 8.0.3.
+
+## W16. Write the Databend driver
+
+Databend is the next target, by D73 and D88. Ken named it at step 1 on
+2026-09-29. Follow [DRIVER.md](DRIVER.md). Step 3 is in
+[DATABEND.md](DATABEND.md), and D76 decides that this driver replaces the
+Go driver in `usql` and `dburl`.
+
+Step 2 went in on 2026-09-29. `dbrun` starts `databend-1.2.881` and
+`databend-1.2.948`, both in the Staged tier with the cadence `tested`, so
+step 14 runs both. `POST /v1/query` answered `SELECT version()` on both, as
+`root` and as `dbmeta_user`, so R, H and S hold.
+
+Steps 5a to 8 went in on 2026-09-29:
+
+- Step 5a: `testdata/databend/features.json`, from Gemini, DeepSeek,
+  databend-go and the Python driver of bendsql.
+- Step 6: the recordings of 1.2.881 and 1.2.948, as both principals. The
+  recorder gained `follow`, which reads each page by `next_uri`, and it
+  escapes a kept value inside a JSON body, for `session.internal`.
+- Step 7: DeepSeek gave seven leads, and each was tested. Gemini timed out
+  three times and gave no answer.
+- Step 8: DATABEND.md holds the measured facts. Each entry of
+  `features.json` has a verdict.
+
+Step 9 is D117 to D123, which Ken decided on 2026-09-29. D124, which he
+decided the same day, amends D120: a decimal argument goes as a string,
+because the server reads a JSON number with a fraction as a `Float64`.
+
+Steps 10 to 17a went in on 2026-09-29:
+
+- Steps 10 to 13: the package `databend/`, its tables, the contract, the
+  replay tests, the unit tests of the types and the options, and the DSN
+  tests. The fuzz test ran for 60 seconds and found nothing.
+- Steps 14 and 14a: the integration tests passed on 1.2.881 and 1.2.948, as
+  both principals, with the round trip of every type. They ran with the URL
+  of D117, which the entry of dbrun does not print yet (below).
+- Step 15: the workflow needs no change. It runs the releases once the pin
+  of dbmeta holds a `url` of the form of D117. The `dbmeta` session was asked
+  on 2026-09-29 to drop `?sslmode=disable` from the `url` of both
+  principals. The pin moves to the commit that holds it.
+- Step 16: `SELECT version();` gives the version to both principals. The
+  requests below wait for the release.
+- Step 17a: `## Compared with Couchbase` is in DATABEND.md, and Ken
+  reviewed it on 2026-09-29. He decided D125 for the one difference that no
+  decision explained: `RowsAffected` returns an error for a statement whose
+  result names no count, such as `REPLACE INTO`.
+
+The requests of step 16, which step 20 sends after the release that holds
+the driver:
+
+1. To `dburl`: dburl D39, staged, moves the scheme `databend` to
+   `github.com/xo/dbimp/databend`. Please check `GenDatabend` against the
+   release: the path is the database, the keys `tls`, `auth`, `cancel` and
+   `timezone` pass through, and the generator adds no port, because the
+   driver uses 8000 (D117).
+2. To `dbmeta`: dbmeta has no model for Databend, so nothing to measure
+   yet. The `url` of the entry has the form of D117 (step 15).
+3. To `usql`: change `drivers/databend/databend.go` to import
+   `github.com/xo/dbimp/databend`, which replaces
+   `github.com/datafuselabs/databend-go` (D76). It reads the version with
+   `SELECT version();`, which works for both principals. The metadata reads
+   `information_schema` with `?`, which the driver binds on the server
+   (D120).
+
+## W17. Read Databend in Arrow as well as JSON
+
+This item has the lowest priority of the backlog. Ken asked for it on
+2026-09-29, in D119. The Databend driver reads JSON only. Arrow is a binary
+encoding, so it needs Ken's approval before any code (D13), whether a
+package or a reader written here.
+
+- Measure what Arrow carries on each release in the range, from 1.2.899,
+  which the Go driver needs: the request with `arrow_result_version_max`
+  and `Accept: application/vnd.apache.arrow.stream`, and whether a `Bitmap`
+  arrives as bytes, which JSON never gives (D119).
+- Add the reader beside the JSON one, through the interface that D119
+  shapes after SurrealDB (D108), so the rows code does not change.

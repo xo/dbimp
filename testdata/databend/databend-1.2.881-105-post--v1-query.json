@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"INSERT INTO dbmeta.crud VALUES (1, 'a'), (2, 'b')\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databend-Version": [
+        "1.2.881"
+      ],
+      "Content-Length": [
+        "1148"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:40 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4c54277a22943d686464cf6c0b"
+      ],
+      "X-Databend-Query-State": [
+        "Succeeded"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "1"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c54277a22943d686464cf6c0b\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Succeeded\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"account_admin\",\"settings\":{},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c54277a22943d686464cf6c0b\\\"]}\"},\"error\":null,\"warnings\":[],\"has_result_set\":true,\"schema\":[{\"name\":\"number of rows inserted\",\"type\":\"UInt64\"}],\"data\":[[\"2\"]],\"affect\":null,\"result_timeout_secs\":60,\"settings\":{\"timezone\":\"UTC\",\"geometry_output_format\":\"GEOJSON\",\"binary_output_format\":\"HEX\",\"http_json_result_mode\":\"display\"},\"stats\":{\"scan_progress\":{\"rows\":2,\"bytes\":42},\"write_progress\":{\"rows\":2,\"bytes\":44},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":0,\"bytes\":0},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":30},\"stats_uri\":\"/v1/query/01a0ec4c54277a22943d686464cf6c0b\",\"final_uri\":\"/v1/query/01a0ec4c54277a22943d686464cf6c0b/final\",\"next_uri\":\"/v1/query/01a0ec4c54277a22943d686464cf6c0b/final\",\"kill_uri\":\"/v1/query/01a0ec4c54277a22943d686464cf6c0b/kill\"}"
+  }
+}

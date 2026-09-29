@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT 1 AS one\",\"session\":{\"database\":\"dbmeta\",\"txn_state\":\"Fail\",\"internal\":\"{\\\"last_node_id\\\":\\\"CuqT7lnh1ZcXpeGKXa55R4\\\",\\\"last_query_ids\\\":[\\\"01a0ec4bd7a676719ed8ba5049e5c1df\\\"]}\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databend-Query-State": [
+        "Failed"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "0"
+      ],
+      "X-Databend-Version": [
+        "1.2.948-nightly"
+      ],
+      "Content-Length": [
+        "1031"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:08 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4bd7a97300ba1c44d81af2a6b1"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4bd7a97300ba1c44d81af2a6b1\",\"session_id\":\"\",\"node_id\":\"CuqT7lnh1ZcXpeGKXa55R4\",\"state\":\"Failed\",\"session\":{\"catalog\":\"default\",\"database\":\"dbmeta\",\"role\":\"account_admin\",\"settings\":{},\"txn_state\":\"Fail\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"CuqT7lnh1ZcXpeGKXa55R4\\\",\\\"last_query_ids\\\":[\\\"01a0ec4bd7a97300ba1c44d81af2a6b1\\\"]}\"},\"error\":{\"code\":4002,\"message\":\"Current transaction is aborted, commands ignored until end of transaction block\"},\"warnings\":[],\"schema\":[],\"data\":[],\"affect\":null,\"result_timeout_secs\":60,\"stats\":{\"scan_progress\":{\"rows\":0,\"bytes\":0},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":0,\"bytes\":0},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":0},\"stats_uri\":\"/v1/query/01a0ec4bd7a97300ba1c44d81af2a6b1\",\"final_uri\":\"/v1/query/01a0ec4bd7a97300ba1c44d81af2a6b1/final\",\"next_uri\":\"/v1/query/01a0ec4bd7a97300ba1c44d81af2a6b1/final\",\"kill_uri\":\"/v1/query/01a0ec4bd7a97300ba1c44d81af2a6b1/kill\"}"
+  }
+}

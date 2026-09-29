@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT sum(number) FROM numbers(1000000000000)\",\"session\":{\"settings\":{\"max_execute_time_in_seconds\":\"2\"}},\"pagination\":{\"wait_time_secs\":1}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1216"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:50 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4c76fb7410891eb5eba6b973ac"
+      ],
+      "X-Databend-Query-State": [
+        "Running"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "0"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c76fb7410891eb5eba6b973ac\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Running\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"dbmeta_role\",\"settings\":{\"max_execute_time_in_seconds\":\"2\"},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c76fb7410891eb5eba6b973ac\\\"]}\"},\"error\":null,\"warnings\":[],\"has_result_set\":true,\"schema\":[{\"name\":\"sum(number)\",\"type\":\"Nullable(UInt64)\"}],\"data\":[],\"affect\":null,\"result_timeout_secs\":60,\"settings\":{\"timezone\":\"UTC\",\"geometry_output_format\":\"GEOJSON\",\"binary_output_format\":\"HEX\",\"http_json_result_mode\":\"display\"},\"stats\":{\"scan_progress\":{\"rows\":19776798720,\"bytes\":158214389760},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":1000000000000,\"bytes\":8000000000000},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":1001},\"stats_uri\":\"/v1/query/01a0ec4c76fb7410891eb5eba6b973ac\",\"final_uri\":\"/v1/query/01a0ec4c76fb7410891eb5eba6b973ac/final\",\"next_uri\":\"/v1/query/01a0ec4c76fb7410891eb5eba6b973ac/page/0\",\"kill_uri\":\"/v1/query/01a0ec4c76fb7410891eb5eba6b973ac/kill\"}"
+  }
+}

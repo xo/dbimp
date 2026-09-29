@@ -118,6 +118,7 @@ linters:
         - (*github.com/xo/dbimp/couchbase.rows).Close
         - (*github.com/xo/dbimp/surrealdb.rows).Close
         - (*github.com/xo/dbimp/neo4j.rows).Close
+        - (*github.com/xo/dbimp/databend.rows).Close
         - (database/sql/driver.Rows).Close
         # The stream of a body, closed after the part that matters was read.
         - (*github.com/xo/dbimp.Stream).Close
@@ -215,6 +216,11 @@ linters:
       # The tags of the InfluxDB driver are the names that the server sends,
       # such as column_name and statement_id, which the driver cannot rename.
       - path: influxdb/
+        linters:
+          - tagliatelle
+      # The tags of the Databend driver are the names that the server sends,
+      # such as final_uri and has_result_set, which the driver cannot rename.
+      - path: databend/
         linters:
           - tagliatelle
       # The contract reads rows in several shapes, and closes each one in a

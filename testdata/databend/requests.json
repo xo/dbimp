@@ -1,0 +1,2539 @@
+{
+ "driver": "databend",
+ "requests": [
+  {
+   "item": 1,
+   "name": "make the table of every type",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.types (id INT, b BOOLEAN, i8 TINYINT, i16 SMALLINT, i32 INT, i64 BIGINT, u8 UINT8, u16 UINT16, u32 UINT32, u64 UINT64, f FLOAT, d DOUBLE, d38 DECIMAL(38, 10), d76 DECIMAL(76, 20), dt DATE, ts TIMESTAMP, tz TIMESTAMP_TZ, iv INTERVAL, s STRING, bin BINARY, arr ARRAY(INT), m MAP(STRING, INT), tup TUPLE(INT, STRING), v VARIANT, bm BITMAP, vec VECTOR(3), g GEOMETRY, geo GEOGRAPHY)"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "fill the table of every type",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbmeta.types VALUES\n(1, true, -128, -32768, -2147483648, -9223372036854775808, 0, 0, 0, 0, 1.5, 0.1, 1234567890123456789012345678.0123456789, 12345678901234567890123456789012345678901234567890123456.12345678901234567890, '1000-01-01', '1000-01-01 00:00:00.000000', '2026-09-29 12:34:56.123456 +05:30', to_interval('1 day 2 hours 3 microseconds'), '\u00e9''\"\\\\ x', from_hex('00ff'), [1, NULL, 3], {'a': 1, 'b': NULL}, (1, 'x'), parse_json('{\"k\": [1, null, \"s\"], \"n\": 1.5}'), to_bitmap('1,3,5'), [1.5, -2, 3], 'POINT(1 2)', 'POINT(3 4)'),\n(2, false, 127, 32767, 2147483647, 9223372036854775807, 255, 65535, 4294967295, 18446744073709551615, -3.4e38, 1.7976931348623157e308, -9999999999999999999999999999.9999999999, -99999999999999999999999999999999999999999999999999999999.99999999999999999999, '9999-12-31', '9999-12-30 21:59:59.999999', '1970-01-01 00:00:00 +00:00', to_interval('-1 month'), '', from_hex(''), [], {}, (0, ''), parse_json('[]'), to_bitmap('0'), [0, 0, 0], 'LINESTRING(0 0, 1 1)', 'POINT(0 0)'),\n(3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, parse_json('null'), NULL, NULL, NULL, NULL)"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "make the table of CRUD",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.crud (k INT, v STRING)"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "make the table of transactions",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.tx (k INT)"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "let the ordinary user own the table of CRUD",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "GRANT OWNERSHIP ON dbmeta.crud TO ROLE dbmeta_role"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "a statement",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a login",
+   "method": "POST",
+   "path": "/v1/session/login",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {}
+  },
+  {
+   "item": 1,
+   "name": "a login with no body",
+   "method": "POST",
+   "path": "/v1/session/login",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "a statement as text",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "text/plain"
+    ]
+   },
+   "text": "SELECT 1 AS one"
+  },
+  {
+   "item": 1,
+   "name": "a statement with a database in the session",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT database() AS db",
+    "session": {
+     "database": "dbmeta"
+    }
+   }
+  },
+  {
+   "item": 2,
+   "name": "columns in the order of the statement",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 3 AS c, 1 AS a, 2 AS b"
+   }
+  },
+  {
+   "item": 2,
+   "name": "two columns with one name",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS a, 2 AS a"
+   }
+  },
+  {
+   "item": 2,
+   "name": "no rows",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, s FROM dbmeta.types WHERE false"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a column with no name",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 + 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "every type",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM dbmeta.types ORDER BY id"
+   }
+  },
+  {
+   "item": 3,
+   "name": "every type in the driver mode",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM dbmeta.types ORDER BY id",
+    "session": {
+     "settings": {
+      "http_json_result_mode": "driver"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "NULL as a string",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT id, i32, s FROM dbmeta.types ORDER BY id",
+    "session": {
+     "settings": {
+      "format_null_as_str": "1"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "the special floats",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 'inf'::DOUBLE AS pinf, '-inf'::DOUBLE AS ninf, 'nan'::DOUBLE AS nan, -0.0::DOUBLE AS nzero"
+   }
+  },
+  {
+   "item": 3,
+   "name": "the type of a literal",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS a, 300 AS b, 70000 AS c, 5000000000 AS d, 1.5 AS e, 'x' AS f, true AS g, NULL AS h, 1e10 AS i, 123456789012345678901234567890 AS j"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a timestamp in another timezone",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ts, tz FROM dbmeta.types WHERE id = 1",
+    "session": {
+     "settings": {
+      "timezone": "Asia/Kolkata"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a binary in base64",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT bin FROM dbmeta.types WHERE id = 1",
+    "session": {
+     "settings": {
+      "binary_output_format": "base64"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a geometry in WKT",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT g, geo FROM dbmeta.types WHERE id = 1",
+    "session": {
+     "settings": {
+      "geometry_output_format": "WKT"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a bitmap as a list",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT to_string(bm) AS s, bitmap_count(bm) AS n FROM dbmeta.types WHERE id = 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a bitmap as an array",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT bitmap_to_array(bm) AS a FROM dbmeta.types WHERE id = 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a setting of typed JSON, which the server ignores",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS a, [1, 2] AS b",
+    "session": {
+     "settings": {
+      "enable_http_handler_result_typed_json": "1"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a setting that does not exist",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS a",
+    "session": {
+     "settings": {
+      "dbimp_no_such_setting": "1"
+     }
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "a value beyond a type",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 18446744073709551615 + 1 AS big"
+   }
+  },
+  {
+   "item": 3,
+   "name": "the range of a timestamp",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT '0001-01-01 00:00:00'::TIMESTAMP AS lo, to_timestamp(253402300799999999) AS hi, '0001-01-01 00:00:00'::TIMESTAMP - INTERVAL 1 DAY AS below"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a timestamp beyond the range",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT '9999-12-31 00:00:00'::TIMESTAMP AS t"
+   }
+  },
+  {
+   "item": 3,
+   "name": "the range of a date",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT '0001-01-01'::DATE AS lo, '9999-12-31'::DATE AS hi"
+   }
+  },
+  {
+   "item": 4,
+   "name": "positional parameters",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ? AS a, ? AS b, ? AS c, ? AS d",
+    "params": [
+     1,
+     "x",
+     null,
+     true
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "named parameters",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT :a AS a, :b AS b",
+    "params": {
+     "a": 1.5,
+     "b": "12345678901234567890.123456789"
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a decimal as a string parameter",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ?::DECIMAL(38, 10) AS d",
+    "params": [
+     "12345678901234567890.0123456789"
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a large integer parameter",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ? AS a, ? AS b",
+    "params": [
+     9223372036854775807,
+     18446744073709551615
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "an array and an object parameter",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ? AS a, ? AS o",
+    "params": [
+     [
+      1,
+      2
+     ],
+     {
+      "k": "v"
+     }
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter with named values",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ? AS a",
+    "params": {
+     "a": 1
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "too few parameters",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ? AS a, ? AS b",
+    "params": [
+     1
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter in a string and a comment",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT '?' AS a, ? AS b -- ?",
+    "params": [
+     1
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter in an insert",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbmeta.crud VALUES (?, ?)",
+    "params": [
+     100,
+     "p"
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter of a timestamp",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT ?::TIMESTAMP AS t",
+    "params": [
+     "2026-09-29 12:34:56.123456"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "a result of three pages",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT number FROM numbers(25000)",
+    "pagination": {
+     "max_rows_per_page": 10000,
+     "wait_time_secs": 1
+    }
+   },
+   "follow": "next_uri"
+  },
+  {
+   "item": 5,
+   "name": "a result with the default pages",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT number FROM numbers(30000)"
+   },
+   "follow": "next_uri"
+  },
+  {
+   "item": 5,
+   "name": "the final uri",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one"
+   },
+   "capture": {
+    "final": "final_uri"
+   }
+  },
+  {
+   "item": 5,
+   "name": "the final uri",
+   "method": "GET",
+   "path": "{{final}}"
+  },
+  {
+   "item": 5,
+   "name": "the final uri again",
+   "method": "GET",
+   "path": "{{final}}"
+  },
+  {
+   "item": 6,
+   "name": "a syntax error",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELEC 1"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an unknown table",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM dbmeta.nosuch"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error after some rows",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT number AS n FROM numbers(20000) UNION ALL SELECT to_uint8(300 + sleep(2)) AS n",
+    "pagination": {
+     "max_rows_per_page": 10000,
+     "wait_time_secs": 1
+    }
+   },
+   "follow": "next_uri"
+  },
+  {
+   "item": 6,
+   "name": "an error of a function",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT to_uint8(300) AS n"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an unknown query",
+   "method": "GET",
+   "path": "/v1/query/nosuch/page/0"
+  },
+  {
+   "item": 7,
+   "name": "a long query",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT sum(number) FROM numbers(1000000000000)",
+    "pagination": {
+     "wait_time_secs": 1
+    }
+   },
+   "capture": {
+    "kill": "kill_uri",
+    "stats": "stats_uri"
+   }
+  },
+  {
+   "item": 7,
+   "name": "kill the long query",
+   "method": "GET",
+   "path": "{{kill}}"
+  },
+  {
+   "item": 7,
+   "name": "the state after the kill",
+   "method": "GET",
+   "path": "{{stats}}",
+   "wait": "1s"
+  },
+  {
+   "item": 7,
+   "name": "a kill of an unknown query",
+   "method": "GET",
+   "path": "/v1/query/nosuch/kill"
+  },
+  {
+   "item": 7,
+   "name": "a query with a limit of 2 seconds",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT sum(number) FROM numbers(1000000000000)",
+    "session": {
+     "settings": {
+      "max_execute_time_in_seconds": "2"
+     }
+    },
+    "pagination": {
+     "wait_time_secs": 1
+    }
+   },
+   "follow": "next_uri"
+  },
+  {
+   "item": 7,
+   "name": "a long query that the client leaves",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Databend-Query-Id": [
+     "dbimp-cancel-a"
+    ]
+   },
+   "body": {
+    "sql": "SELECT sum(number) FROM numbers(1000000000000)"
+   },
+   "timeout": "2s",
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 7,
+   "name": "the query that the client left",
+   "method": "GET",
+   "path": "/v1/query/dbimp-cancel-a",
+   "wait": "3s",
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 7,
+   "name": "kill the query that the client left",
+   "method": "GET",
+   "path": "/v1/query/dbimp-cancel-a/kill",
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 7,
+   "name": "a long query that the client leaves",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Databend-Query-Id": [
+     "dbimp-cancel-o"
+    ]
+   },
+   "body": {
+    "sql": "SELECT sum(number) FROM numbers(1000000000000)"
+   },
+   "timeout": "2s",
+   "principals": [
+    "ordinary"
+   ]
+  },
+  {
+   "item": 7,
+   "name": "the query that the client left",
+   "method": "GET",
+   "path": "/v1/query/dbimp-cancel-o",
+   "wait": "3s",
+   "principals": [
+    "ordinary"
+   ]
+  },
+  {
+   "item": 7,
+   "name": "kill the query that the client left",
+   "method": "GET",
+   "path": "/v1/query/dbimp-cancel-o/kill",
+   "principals": [
+    "ordinary"
+   ]
+  },
+  {
+   "item": 8,
+   "name": "a wrong password",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one"
+   },
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "a database that needs a privilege",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE DATABASE dbimp_probe"
+   }
+  },
+  {
+   "item": 8,
+   "name": "a table of the system",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT name FROM system.users ORDER BY name"
+   }
+  },
+  {
+   "item": 8,
+   "name": "a setting of the server",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT name FROM system.settings WHERE name = 'max_threads'"
+   }
+  },
+  {
+   "item": 9,
+   "name": "the version",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT version() AS v"
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1; SELECT 2"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a statement that ends with a semicolon",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one;"
+   }
+  },
+  {
+   "item": 10,
+   "name": "comments",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "-- a\nSELECT /* b */ 1 AS one -- c"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a hash comment",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one # c"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "BEGIN",
+    "session": {
+     "database": "dbmeta"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "insert in the transaction",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO tx VALUES (1)",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "read outside the transaction",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) AS n FROM dbmeta.tx"
+   }
+  },
+  {
+   "item": 11,
+   "name": "read in the transaction",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) AS n FROM tx",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "ROLLBACK",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "read after the rollback",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) AS n FROM dbmeta.tx"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin again",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "BEGIN",
+    "session": {
+     "database": "dbmeta"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "insert again",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO tx VALUES (2)",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "commit",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "COMMIT",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "read after the commit",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) AS n FROM dbmeta.tx"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin before a DDL",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "BEGIN",
+    "session": {
+     "database": "dbmeta"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "insert before a DDL",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO tx VALUES (3)",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a DDL in the transaction",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE tx_ddl (k INT)",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback after a DDL",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "ROLLBACK",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "read after the DDL",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) AS n FROM dbmeta.tx WHERE k = 3"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin before an error",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "BEGIN",
+    "session": {
+     "database": "dbmeta"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "an error in the transaction",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM nosuch",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active",
+     "internal": "{{internal}}"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a statement after an error",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Fail",
+     "internal": "{{internal}}"
+    }
+   },
+   "capture": {
+    "internal": "session.internal"
+   }
+  },
+  {
+   "item": 11,
+   "name": "commit after an error",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "COMMIT",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Fail",
+     "internal": "{{internal}}"
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "a transaction with no internal",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO tx VALUES (4)",
+    "session": {
+     "database": "dbmeta",
+     "txn_state": "Active"
+    }
+   }
+  },
+  {
+   "item": 12,
+   "name": "a gzip answer",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "Accept-Encoding": [
+     "gzip"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one"
+   }
+  },
+  {
+   "item": 12,
+   "name": "a query id of the client",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Databend-Query-Id": [
+     "dbimp-id-1"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 1 AS one"
+   }
+  },
+  {
+   "item": 12,
+   "name": "the same query id again",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Databend-Query-Id": [
+     "dbimp-id-1"
+    ]
+   },
+   "body": {
+    "sql": "SELECT 2 AS two"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: insert",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbmeta.crud VALUES (1, 'a'), (2, 'b')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: select",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, v FROM dbmeta.crud ORDER BY k"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: update",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "UPDATE dbmeta.crud SET v = 'c' WHERE k = 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: delete",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DELETE FROM dbmeta.crud WHERE k = 2"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: replace into",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "REPLACE INTO dbmeta.crud ON (k) VALUES (1, 'r')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: merge into",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "MERGE INTO dbmeta.crud AS t USING (SELECT 1 AS k, 'm' AS v UNION ALL SELECT 5, 'n') AS s ON t.k = s.k WHEN MATCHED THEN UPDATE SET t.v = s.v WHEN NOT MATCHED THEN INSERT (k, v) VALUES (s.k, s.v)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: insert overwrite",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT OVERWRITE dbmeta.crud VALUES (7, 'o')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: multi-table insert",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT ALL INTO dbmeta.crud VALUES (k, v) SELECT 8 AS k, 'x' AS v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "crud: the rows after",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, v FROM dbmeta.crud ORDER BY k"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: table",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_t (k INT)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: primary key",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_pk (k INT PRIMARY KEY)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: foreign key",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_fk (k INT REFERENCES dbmeta.s_t(k))"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: unique constraint",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_u (k INT UNIQUE)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: check constraint",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_c (k INT CHECK (k > 0))"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: check constraint enforced",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbmeta.s_c VALUES (-1)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: default value",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_d (k INT DEFAULT 7, v STRING)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: default value in use",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "INSERT INTO dbmeta.s_d (v) VALUES ('x')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: default value read",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT k, v FROM dbmeta.s_d"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: view",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE VIEW dbmeta.s_v AS SELECT 1 AS one"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: view read",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT one FROM dbmeta.s_v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: materialized view",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE MATERIALIZED VIEW dbmeta.s_mv AS SELECT 1 AS one"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: aggregating index",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE AGGREGATING INDEX s_agg AS SELECT k, count(*) FROM dbmeta.s_t GROUP BY k"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: inverted index",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE INVERTED INDEX s_inv ON dbmeta.s_d(v)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: ngram index",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE NGRAM INDEX s_ng ON dbmeta.s_d(v)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: vector index",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_vec (e VECTOR(3), VECTOR INDEX s_vi (e) distance = 'cosine')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: spatial index",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_geo (g GEOMETRY, SPATIAL INDEX s_si (g))"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: sequence",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE SEQUENCE IF NOT EXISTS dbimp_seq"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: sequence read",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT nextval(dbimp_seq) AS n"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: stream",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE STREAM dbmeta.s_st ON TABLE dbmeta.crud"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: stage",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE STAGE dbimp_stage"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: transient table",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TRANSIENT TABLE dbmeta.s_tr (k INT)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: temporary table",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TEMP TABLE s_tmp (k INT)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: external table",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_ext (k INT) 's3://dbimp/x/' CONNECTION = (ACCESS_KEY_ID = 'a' SECRET_ACCESS_KEY = 'b')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: virtual column",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_vc (v VARIANT)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: virtual column added",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "ALTER TABLE dbmeta.s_vc ADD VIRTUAL COLUMN (v['a'] AS va)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "schema: cluster by",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE OR REPLACE TABLE dbmeta.s_cl (k INT, v STRING) CLUSTER BY (k)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: flashback table, the snapshot",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT snapshot_id FROM fuse_snapshot('dbmeta', 'crud') ORDER BY timestamp LIMIT 1"
+   },
+   "capture": {
+    "snap": "data.0.0"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: flashback table, back to it",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "ALTER TABLE dbmeta.crud FLASHBACK TO (SNAPSHOT => '{{snap}}')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: time travel at",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) AS n FROM dbmeta.crud AT (OFFSET => -1)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: undrop table",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE dbmeta.s_tr"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: undrop table back",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "UNDROP TABLE dbmeta.s_tr"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: variant path",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT v:k[0] AS a, v['n'] AS b FROM dbmeta.types WHERE id = 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: qualify",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT number FROM numbers(5) QUALIFY row_number() OVER (ORDER BY number DESC) = 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: generate_series",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM generate_series(1, 3)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: flatten",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT value FROM FLATTEN(INPUT => parse_json('[1, 2]'))"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: result_scan",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT * FROM RESULT_SCAN(LAST_QUERY_ID())"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: task",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "CREATE TASK IF NOT EXISTS dbimp_task WAREHOUSE = 'x' SCHEDULE = 1 MINUTE AS SELECT 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: attach table",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "ATTACH TABLE dbmeta.s_att 's3://dbimp/x/' CONNECTION = (ACCESS_KEY_ID = 'a' SECRET_ACCESS_KEY = 'b')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: copy into a stage",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "COPY INTO @dbimp_stage FROM dbmeta.crud"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: query from a stage",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT count(*) AS n FROM @dbimp_stage"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: copy into",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "COPY INTO dbmeta.crud FROM @dbimp_stage FILE_FORMAT = (TYPE = PARQUET) FORCE = TRUE"
+   }
+  },
+  {
+   "item": 3,
+   "name": "feature: an array function",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "SELECT array_length([1, 2, 3]) AS n"
+   }
+  },
+  {
+   "item": 1,
+   "name": "drop types",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.types"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop crud",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.crud"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop tx",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.tx"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop tx_ddl",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.tx_ddl"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_t",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_t"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_pk",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_pk"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_fk",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_fk"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_u",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_u"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_c",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_c"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_d",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_d"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_vec",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_vec"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_geo",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_geo"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_tr",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_tr"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_ext",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_ext"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_vc",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_vc"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop s_cl",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP TABLE IF EXISTS dbmeta.s_cl"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop the view",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP VIEW IF EXISTS dbmeta.s_v"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop the stream",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP STREAM IF EXISTS dbmeta.s_st"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop the stage",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP STAGE IF EXISTS dbimp_stage"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop the sequence",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP SEQUENCE IF EXISTS dbimp_seq"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop the aggregating index",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP AGGREGATING INDEX IF EXISTS s_agg"
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop the database of item 8",
+   "method": "POST",
+   "path": "/v1/query",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "sql": "DROP DATABASE IF EXISTS dbimp_probe"
+   },
+   "phase": "teardown"
+  }
+ ]
+}

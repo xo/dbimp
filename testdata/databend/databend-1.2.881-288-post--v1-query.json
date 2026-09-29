@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"CREATE OR REPLACE TABLE dbmeta.s_ext (k INT) 's3://dbimp/x/' CONNECTION = (ACCESS_KEY_ID = 'a' SECRET_ACCESS_KEY = 'b')\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4c961477509600b573fc521761"
+      ],
+      "X-Databend-Query-State": [
+        "Failed"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "0"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ],
+      "Content-Length": [
+        "1927"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:59 GMT"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c961477509600b573fc521761\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Failed\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"dbmeta_role\",\"settings\":{},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c961477509600b573fc521761\\\"]}\"},\"error\":{\"code\":3901,\"message\":\"current configured storage is not valid: config: S3(StorageS3Config { endpoint_url: \\\"https://s3.amazonaws.com\\\", region: \\\"us-east-1\\\", bucket: \\\"dbimp\\\", storage_class: Standard, root: \\\"/x/\\\", disable_credential_loader: false, allow_credential_chain: None, enable_virtual_host_style: false, role_arn: \\\"\\\", external_id: \\\"\\\", access_key_id: \\\"a\\\", secret_access_key: \\\"b\\\", security_token: \\\"\\\", master_key: \\\"\\\" }), cause: PermissionDenied (persistent) at stat, context: { uri: https://s3.us-east-1.amazonaws.com/dbimp/x/databend_storage_checker, response: Parts { status: 403, version: HTTP/1.1, headers: {\\\"server\\\": \\\"AmazonS3\\\", \\\"x-amz-request-id\\\": \\\"CWKTM4CRJYPS58RE\\\", \\\"x-amz-id-2\\\": \\\"QG6QS17QtrvO2ycg+nZh7lme3T8g8o2xk38pPF2tBsjqM8nyA4KjvjqDjUKbADZBwCu+EpMTjhj9g8ZyxeYnWXvLM/0oo4hW\\\", \\\"content-type\\\": \\\"application/xml\\\", \\\"transfer-encoding\\\": \\\"chunked\\\", \\\"date\\\": \\\"Tue, 29 Sep 2026 08:33:58 GMT\\\"} }, service: s3, path: databend_storage_checker }\"},\"warnings\":[],\"schema\":[],\"data\":[],\"affect\":null,\"result_timeout_secs\":60,\"stats\":{\"scan_progress\":{\"rows\":0,\"bytes\":0},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":0,\"bytes\":0},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":1805},\"stats_uri\":\"/v1/query/01a0ec4c961477509600b573fc521761\",\"final_uri\":\"/v1/query/01a0ec4c961477509600b573fc521761/final\",\"next_uri\":\"/v1/query/01a0ec4c961477509600b573fc521761/final\",\"kill_uri\":\"/v1/query/01a0ec4c961477509600b573fc521761/kill\"}"
+  }
+}

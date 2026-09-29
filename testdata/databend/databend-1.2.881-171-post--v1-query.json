@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT ts, tz FROM dbmeta.types WHERE id = 1\",\"session\":{\"settings\":{\"timezone\":\"Asia/Kolkata\"}}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databend-Query-Id": [
+        "01a0ec4c657c7342a9622fa129555b75"
+      ],
+      "X-Databend-Query-State": [
+        "Succeeded"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "1"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ],
+      "Content-Length": [
+        "1279"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:44 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c657c7342a9622fa129555b75\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Succeeded\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"dbmeta_role\",\"settings\":{\"timezone\":\"Asia/Kolkata\"},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c657c7342a9622fa129555b75\\\"]}\"},\"error\":null,\"warnings\":[],\"has_result_set\":true,\"schema\":[{\"name\":\"ts\",\"type\":\"Nullable(Timestamp)\"},{\"name\":\"tz\",\"type\":\"Nullable(Timestamp_Tz)\"}],\"data\":[[\"1000-01-01 05:53:28.000000\",\"2026-09-29 12:34:56.123456 +0530\"]],\"affect\":null,\"result_timeout_secs\":60,\"settings\":{\"timezone\":\"Asia/Kolkata\",\"geometry_output_format\":\"GEOJSON\",\"binary_output_format\":\"HEX\",\"http_json_result_mode\":\"display\"},\"stats\":{\"scan_progress\":{\"rows\":1,\"bytes\":26},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":1,\"bytes\":26},\"total_scan\":{\"rows\":3,\"bytes\":102},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":4},\"stats_uri\":\"/v1/query/01a0ec4c657c7342a9622fa129555b75\",\"final_uri\":\"/v1/query/01a0ec4c657c7342a9622fa129555b75/final\",\"next_uri\":\"/v1/query/01a0ec4c657c7342a9622fa129555b75/final\",\"kill_uri\":\"/v1/query/01a0ec4c657c7342a9622fa129555b75/kill\"}"
+  }
+}

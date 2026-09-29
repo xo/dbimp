@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT count(*) AS n FROM tx\",\"session\":{\"database\":\"dbmeta\",\"txn_state\":\"Active\",\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c934170718b65022e346aa786\\\"]}\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1114"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:56 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4c93607293b471c1ae09e643a7"
+      ],
+      "X-Databend-Query-State": [
+        "Succeeded"
+      ],
+      "X-Databend-Query-Page-Rows": [
+        "1"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c93607293b471c1ae09e643a7\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Succeeded\",\"session\":{\"catalog\":\"default\",\"database\":\"dbmeta\",\"role\":\"dbmeta_role\",\"settings\":{},\"txn_state\":\"Active\",\"need_sticky\":true,\"need_keep_alive\":true,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c93607293b471c1ae09e643a7\\\"]}\"},\"error\":null,\"warnings\":[],\"has_result_set\":true,\"schema\":[{\"name\":\"n\",\"type\":\"UInt64\"}],\"data\":[[\"3\"]],\"affect\":null,\"result_timeout_secs\":60,\"settings\":{\"timezone\":\"UTC\",\"geometry_output_format\":\"GEOJSON\",\"binary_output_format\":\"HEX\",\"http_json_result_mode\":\"display\"},\"stats\":{\"scan_progress\":{\"rows\":1,\"bytes\":1},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":1,\"bytes\":8},\"total_scan\":{\"rows\":1,\"bytes\":1},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":3},\"stats_uri\":\"/v1/query/01a0ec4c93607293b471c1ae09e643a7\",\"final_uri\":\"/v1/query/01a0ec4c93607293b471c1ae09e643a7/final\",\"next_uri\":\"/v1/query/01a0ec4c93607293b471c1ae09e643a7/final\",\"kill_uri\":\"/v1/query/01a0ec4c93607293b471c1ae09e643a7/kill\"}"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"CREATE MATERIALIZED VIEW dbmeta.s_mv AS SELECT 1 AS one\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databend-Query-Page-Rows": [
+        "0"
+      ],
+      "X-Databend-Version": [
+        "1.2.881"
+      ],
+      "Content-Length": [
+        "1550"
+      ],
+      "Date": [
+        "Tue, 29 Sep 2026 08:33:57 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Databend-Query-Id": [
+        "01a0ec4c95bc7c72904bcbe1f3a52e07"
+      ],
+      "X-Databend-Query-State": [
+        "Failed"
+      ]
+    },
+    "body": "{\"id\":\"01a0ec4c95bc7c72904bcbe1f3a52e07\",\"session_id\":\"\",\"node_id\":\"JK3oKEAIUEbsL3GHz2yoy1\",\"state\":\"Failed\",\"session\":{\"catalog\":\"default\",\"database\":\"default\",\"role\":\"dbmeta_role\",\"settings\":{},\"txn_state\":\"AutoCommit\",\"need_sticky\":false,\"need_keep_alive\":false,\"internal\":\"{\\\"last_node_id\\\":\\\"JK3oKEAIUEbsL3GHz2yoy1\\\",\\\"last_query_ids\\\":[\\\"01a0ec4c95bc7c72904bcbe1f3a52e07\\\"]}\"},\"error\":{\"code\":1005,\"message\":\"error: \\n  --> SQL:1:8\\n  |\\n1 | CREATE MATERIALIZED VIEW dbmeta.s_mv AS SELECT 1 AS one\\n  |        ^^^^^^^^^^^^ unexpected `MATERIALIZED`. it's reserved keyword, you may avoid using it, expecting `SPATIAL`, `CATALOG`, `INVERTED`, `TEMPORARY`, `MASKING`, `PASSWORD`, `USER`, `WORKLOAD`, `DATABASE`, `TRANSIENT`, `WAREHOUSE`, `FILE`, `ROLE`, `TEMP`, `TABLE`, `AGGREGATING`, `NOTIFICATION`, `FUNCTION`, `SEQUENCE`, `STAGE`, `STREAM`, `OR`, `SCHEMA`, `VECTOR`, `ROW`, `NETWORK`, `DYNAMIC`, `DICTIONARY`, `ASYNC`, `PROCEDURE`, `CONNECTION`, `TAG`, `NGRAM`, `TASK`, `VIEW`, `PIPE`, or `WORKER`\\n\\n\"},\"warnings\":[],\"schema\":[],\"data\":[],\"affect\":null,\"result_timeout_secs\":60,\"stats\":{\"scan_progress\":{\"rows\":0,\"bytes\":0},\"write_progress\":{\"rows\":0,\"bytes\":0},\"result_progress\":{\"rows\":0,\"bytes\":0},\"total_scan\":{\"rows\":0,\"bytes\":0},\"spill_progress\":{\"file_nums\":0,\"bytes\":0},\"running_time_ms\":0},\"stats_uri\":\"/v1/query/01a0ec4c95bc7c72904bcbe1f3a52e07\",\"final_uri\":\"/v1/query/01a0ec4c95bc7c72904bcbe1f3a52e07/final\",\"next_uri\":\"/v1/query/01a0ec4c95bc7c72904bcbe1f3a52e07/final\",\"kill_uri\":\"/v1/query/01a0ec4c95bc7c72904bcbe1f3a52e07/kill\"}"
+  }
+}
