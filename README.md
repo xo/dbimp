@@ -55,7 +55,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, and why it has no driver here |
 | [docs/ARANGODB.md](docs/ARANGODB.md) | What ArangoDB 3.12 answers, as measured |
 | [docs/DATABEND.md](docs/DATABEND.md) | What Databend 1.2.881 and 1.2.948 answer, as measured |
-| [docs/TDENGINE.md](docs/TDENGINE.md) | What is known about TDengine, before a server runs |
+| [docs/TDENGINE.md](docs/TDENGINE.md) | What TDengine answers, as measured, and why it has no driver here |
 | [docs/PINOT.md](docs/PINOT.md) | What is known about Apache Pinot, before a server runs |
 | [docs/RQLITE.md](docs/RQLITE.md) | What is known about rqlite, before a server runs |
 | [docs/LIBSQL.md](docs/LIBSQL.md) | What is known about libSQL and Turso, before a server runs |

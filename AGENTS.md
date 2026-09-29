@@ -56,7 +56,7 @@ every other agent read the same rules. Edit this file, not that one.
 | asking why CrateDB has no driver here | [docs/CRATEDB.md](docs/CRATEDB.md), then D88 |
 | writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then W13 and D89 to D94 |
 | writing the Databend driver | [docs/DATABEND.md](docs/DATABEND.md), then D73 and D76 |
-| writing the TDengine driver | [docs/TDENGINE.md](docs/TDENGINE.md), then D73 |
+| asking why TDengine has no driver here | [docs/TDENGINE.md](docs/TDENGINE.md), then D127 |
 | writing the Apache Pinot driver | [docs/PINOT.md](docs/PINOT.md), then D73 |
 | writing the rqlite driver | [docs/RQLITE.md](docs/RQLITE.md), then D73 |
 | writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then D73 and D76 |

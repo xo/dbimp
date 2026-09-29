@@ -46,7 +46,8 @@ order:
 3. ArangoDB. Done, in `v0.5.0` (W13). See [ARANGODB.md](ARANGODB.md).
 4. Databend. Staged for review in `github.com/xo/dbimp/databend` (W16). See
    [DATABEND.md](DATABEND.md).
-5. TDengine. See [TDENGINE.md](TDENGINE.md).
+5. TDengine gets no driver here, because its REST interface cuts a result
+   short with no sign (D127). See [TDENGINE.md](TDENGINE.md).
 6. Apache Pinot. See [PINOT.md](PINOT.md).
 7. rqlite. See [RQLITE.md](RQLITE.md).
 8. libSQL, and Turso. See [LIBSQL.md](LIBSQL.md).
@@ -150,7 +151,6 @@ that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 | InfluxDB | First in the order after Neo4j (D73). The driver is `github.com/xo/dbimp/influxdb`. One driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later. Its dialect `influxdb` is SQL on InfluxDB 3 and later, and its dialect `influxql` is InfluxQL through `/query` on each release (D78). Flux meets S (D75), and the driver does not speak it. R: `dbrun` starts each release that D79 names, 1.11.8 to 3.11.5. SQL has an `information_schema`. A JSON result is an array of objects with no NULL keys, so the driver reads the columns from `DESCRIBE` (D80). See [INFLUXDB.md](INFLUXDB.md). |
 | rqlite | Seventh in the order after Neo4j (D73). SQLite over HTTP. Returns columns and types. The `dbmeta` model for sqlite3 can read it as a flavor. R: `dbrun` starts 9.4.5 and 10.3.6. See [RQLITE.md](RQLITE.md). |
 | libSQL | Eighth in the order after Neo4j (D73). Its driver is `libsql`, and `turso` is an alias in `dburl` (D76). The same as rqlite for `dbmeta`. R: `dbrun` starts the local `libsql-server` 0.24.33. Turso is the same protocol in the cloud, and the cloud service fails R. See [LIBSQL.md](LIBSQL.md). |
-| TDengine | Moves up from P2. Fifth in the order after Neo4j (D73). Its REST interface is `taosAdapter` on port 6041, and it returns column metadata. R: `dbrun` starts 3.3.8.8 and 3.4.2.8. See [TDENGINE.md](TDENGINE.md). |
 | Apache Drill | Moves up from P2. Its REST interface can cap the size of a result. |
 | Apache Pinot | Moves up from P2. Sixth in the order after Neo4j (D73). The QuickStart image runs every part in one container. A selection with no `LIMIT` returns ten rows. R: `dbrun` starts 1.4.0 and 1.5.1. See [PINOT.md](PINOT.md). |
 | Apache Solr | Moves up from P2. Parallel SQL needs SolrCloud mode, which runs in one container. |
@@ -231,6 +231,12 @@ nothing about these targets is measured:
   Atlas App Services. The target does not exist.
 - Fauna: the service shut down on 2025-05-30. Fauna said that it will release an
   open source version.
+- TDengine: no driver here (D127). Its REST interface ends a result that
+  failed as valid JSON with `code` 0, so a driver cannot tell a cut result
+  from a whole one (measured on 3.3.8.8 and 3.4.2.8). Its WebSocket
+  interface reports the failure, and needs a binary encoding and a transport
+  that is no request of HTTP for each statement. See
+  [TDENGINE.md](TDENGINE.md).
 
 Placed in P3 by Ken on 2026-09-27. These places are his opinion, and
 nothing about these targets is measured:

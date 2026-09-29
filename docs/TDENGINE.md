@@ -54,10 +54,10 @@ these:
 - R: yes. The dbmeta entry names the releases `3.3.8.8` and `3.4.2.8` of the
   image `docker.io/tdengine/tsdb`, both in the Tested tier, and each one
   passed `dbrun test` (below).
-- H: yes. `POST /rest/sql` takes a statement and returns JSON (the REST
-  reference). Not measured.
-- S: yes. The statement is the SQL of TDengine (the SQL reference). Not
-  measured.
+- H and S: yes. `POST /rest/sql` with `SELECT SERVER_VERSION(), 1 + 1` gave
+  HTTP 200 and one row, as root and as `dbmeta_user`, on 3.3.8.8 and
+  3.4.2.8. The version is `3.3.8.8` and `3.4.2.8.community` (measured with
+  `curl` on 2026-09-29).
 - The priority is P1 (D17 and [TARGETS.md](TARGETS.md)).
 - `dburl` has the provisional scheme `tdengine`, with the alias `td` and the
   default port 6041, the REST port. It passes the path and the query through
@@ -248,6 +248,27 @@ where it agrees:
 
 ## Errors
 
+Measured on 2026-09-29, with `curl`, as root:
+
+- A query that is killed while its result streams ends with a body that is
+  valid and looks complete. A `SELECT` of 1,000,000 rows, read at 500 KB/s
+  and killed with `KILL QUERY` after 3 seconds, ended with HTTP 200, `code`
+  0 and `"rows":311296` on 3.4.2.8, and `"rows":184320` on 3.3.8.8. Nothing
+  in the body says that rows are missing. So the adapter drops an error
+  after some rows, as the adapter code shows, and a client cannot tell a cut
+  result from a whole one (D21).
+- `DROP DATABASE` while a `SELECT` of 1,000,000 rows of that database
+  streams ends the same way: HTTP 200, `code` 0 and `"rows":339968` on
+  3.4.2.8, and `"rows":188416` on 3.3.8.8.
+- The WebSocket interface reports the same failure. A `query` on `/ws`,
+  then `fetch` and `fetch_block` for each block of 4096 rows, and
+  `DROP DATABASE` after the third block: the fourth `fetch` answered
+  `code` 24 "Conn is broken", after 12,288 rows, on both releases.
+- The conversion functions give no error for a bad value.
+  `TO_UNIXTIMESTAMP('bad')` gives NULL, `TO_TIMESTAMP('bad', 'yyyy-mm-dd')`
+  gives `0000-01-01T00:00:00.000Z`, and `CAST('bad' AS BIGINT)` gives 0, on
+  3.4.2.8.
+
 - An error is `{"code": <n>, "desc": "<text>"}` (the REST reference). The
   adapter code adds `timing`, in nanoseconds, to each error that it writes.
   The code is masked to 16 bits.
@@ -290,6 +311,9 @@ where it agrees:
   query on the server.
 - `SHOW QUERIES`, or `performance_schema.perf_queries`, lists the running
   queries with `kill_id`, `query_id`, `conn_id`, `user`, `app` and `sql`.
+  The `query_id` of a statement is the `req_id` of its request, and
+  `KILL QUERY '<kill_id>'` stops it, on 3.3.8.8 and 3.4.2.8 (measured with
+  `curl` as root on 2026-09-29).
   `KILL QUERY '<kill_id>'` stops one (the SQL reference). Not measured
   whether `query_id` is the `req_id` of the request.
 - In the Enterprise Edition from 3.4.0.0, `SHOW QUERIES` and `KILL QUERY`
@@ -358,7 +382,21 @@ where it agrees:
   entrypoint). The dbmeta entry turns off taosKeeper, taosExplorer and the
   reports to the vendor.
 - The WebSocket interface of taosAdapter is `GET /ws` on port 6041, and
-  `/rest/ws` for an older form (the adapter code). It runs SQL, binds
+  `/rest/ws` for an older form (the adapter code). Measured on 2026-09-29
+  with the Python package `websocket-client`, on both releases:
+  - `conn` with `user`, `password` and `db` answers with `version`, such as
+    `3.4.2.8.community`.
+  - `query` with `req_id` and `sql` answers with `id`, `fields_names`,
+    `fields_types` as numbers, such as 9 for `TIMESTAMP`, `fields_lengths`
+    and `precision`.
+  - `fetch` with the `id` answers in JSON with `code`, `completed` and
+    `rows`, 4096 rows for each block. `fetch_block` answers with the rows of
+    the block as a binary message in the raw block of taosd, 188,402 bytes
+    for 4096 rows of three columns. So the rows arrive in a binary encoding,
+    which needs Ken's approval for this database (D13).
+  - The `query_id` of a query of `/ws` is not its `req_id`. While its blocks
+    were fetched, `perf_queries` listed no query, so the query had ended on
+    the server, and `KILL QUERY` has nothing to stop. It runs SQL, binds
   parameters, writes without a schema and subscribes to data (the adapter
   reference). The Go connector reaches it through `taosWS`, which needs
   `gorilla/websocket`. It is a connection of WebSocket, and not a request
@@ -462,6 +500,10 @@ asked on 2026-09-27, with where each one disagrees with a source:
 - Gemini timed out on several questions and gave no answer to them.
 
 ## Open questions
+
+None. Ken decided on 2026-09-29 that dbimp writes no driver for TDengine
+(D127). The questions below were open until then, and the first one decided
+it.
 
 - An error after some rows is lost, and `restfulRowLimit` cuts a result
   with no sign (the adapter code). If step 6 shows either on the server, the

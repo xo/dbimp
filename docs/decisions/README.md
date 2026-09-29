@@ -93,8 +93,8 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D70](D070-a-surrealdb-recordid-writes-its-surrealql-form.md) | A SurrealDB RecordID writes its SurrealQL form as text | Amends D53 |
 | [D71](D071-every-xo-repository-is-set-up-for-coding-agents.md) | Every xo repository is set up for coding agents the same way | Amends D3 and D11 |
 | [D72](D072-the-decisions-are-one-file-each.md) | The decisions are one file each | Amends D3 |
-| [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74, D84 and D88 |
-| [D74](D074-avatica-and-its-flavors-come-after-libsql.md) | Avatica and its flavors come after libSQL | Amends D73, and amended by D88 |
+| [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74, D84, D88 and D127 |
+| [D74](D074-avatica-and-its-flavors-come-after-libsql.md) | Avatica and its flavors come after libSQL | Amends D73, and amended by D88 and D127 |
 | [D75](D075-aql-and-flux-meet-s.md) | AQL and Flux meet S | Amends D16 |
 | [D76](D076-the-names-of-the-databend-libsql-and-cratedb.md) | The names of the Databend, libSQL and CrateDB drivers | Amended by D88 |
 | [D77](D077-an-influxdb-result-is-an-array-of-objects-read.md) | An InfluxDB result is an array of objects, read by rule 2 of D18 | Amended by D80 |
@@ -147,3 +147,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D124](D124-a-databend-decimal-argument-is-a-json-string.md) | A Databend decimal argument is a JSON string | Amends D120 |
 | [D125](D125-databend-counts-the-rows-that-a-result-names.md) | Databend counts the rows that a result names | Decided |
 | [D126](D126-a-databend-connection-keeps-its-session-when-it.md) | A Databend connection keeps its session when it is reused | Amends D122 |
+| [D127](D127-tdengine-gets-no-driver-here.md) | TDengine gets no driver here | Amends D73 and D74 |
