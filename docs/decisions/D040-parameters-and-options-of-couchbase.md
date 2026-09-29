@@ -1,6 +1,6 @@
 # D40. Parameters and options of Couchbase
 
-Status: Amended by D43.
+Status: Amended by D43 and D109.
 
 Ken accepted this on 2026-09-27.
 

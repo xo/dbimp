@@ -387,8 +387,8 @@ Q12 in [PLAN.md](PLAN.md) asked what a result set with no columns gives,
 such as the empty array of `DELETE author`. tblfmt D31, in `tblfmt`
 `v0.19.1`, answers it, so D52 stands and the driver does not change.
 
-The review of D97 found the questions under "Compared with Couchbase"
-below, and each one waits for Ken.
+Ken decided the questions of the review of D97 on 2026-09-29, in D101,
+D109, D110 and D113.
 
 ## Compared with Couchbase
 
@@ -458,13 +458,12 @@ The differences that a caller sees:
   gives strings (D53).
 - Only Couchbase takes a `*jsontext.Value` destination, and gives the JSON
   text of an object or an array scanned into a `*[]byte` (D39).
-- These have no decision, and each one is a question for Ken:
-  - The driver takes no option for one statement, though SurrealQL has a
-    `TIMEOUT` clause. D48 leaves any other key to a decision of its own.
-  - `auth` means the level of the user (D51), and D94 gives the key `auth`
-    of every HTTP driver the values `basic` and `bearer`. D94 names
-    neither SurrealDB nor Couchbase.
-  - A CBOR integer outside the range of `int64` reads as an `*apd.Decimal`,
-    and D53 says that an integer is an `int64`.
-  - A `uuid.UUID` and a `time.Duration` scan into a string as their text of
-    SurrealQL. D53 and D70 name only `RecordID`.
+- Ken decided these on 2026-09-29:
+  - The driver takes no option for one statement yet, though SurrealQL has
+    a `TIMEOUT` clause. D109 gives every driver the options of Couchbase,
+    and W15 of [BACKLOG.md](BACKLOG.md) adds them.
+  - `auth` keeps its meaning, the level of the user (D51), as the one
+    exception to D94 (D110).
+  - A CBOR integer outside the range of `int64` reads as an
+    `*apd.Decimal`, and a `uuid.UUID` and a `time.Duration` scan into a
+    string as their text of SurrealQL (D113).

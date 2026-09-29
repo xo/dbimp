@@ -1,6 +1,6 @@
 # D53. The Go types of SurrealDB
 
-Status: Amended by D70.
+Status: Amended by D70 and D113.
 
 Ken accepted this on 2026-09-27. It decides item 4 of step 9 for SurrealDB. D70 gives a `RecordID` a
 text form. In CBOR, the driver decodes each value by its tag:

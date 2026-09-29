@@ -60,7 +60,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D37](D037-the-shared-test-helpers-are-the-package.md) | The shared test helpers are the package dbimptest | Decided |
 | [D38](D038-the-couchbase-dsn.md) | The Couchbase DSN | Amended by D43 and D46 |
 | [D39](D039-the-values-of-couchbase.md) | The values of Couchbase | Amended by D44 |
-| [D40](D040-parameters-and-options-of-couchbase.md) | Parameters and options of Couchbase | Amended by D43 |
+| [D40](D040-parameters-and-options-of-couchbase.md) | Parameters and options of Couchbase | Amended by D43 and D109 |
 | [D41](D041-the-first-couchbase-driver-has-transactions.md) | The first Couchbase driver has transactions | Decided |
 | [D42](D042-how-the-couchbase-driver-reads-a-result.md) | How the Couchbase driver reads a result | Amended by D107 |
 | [D43](D043-the-couchbase-driver-has-a-key-for-durability.md) | The Couchbase driver has a key for durability | Amends D38 and D40 |
@@ -73,7 +73,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D50](D050-the-surrealdb-driver-sends-each-statement-to.md) | The SurrealDB driver sends each statement to POST /rpc | Decided |
 | [D51](D051-the-surrealdb-dsn-has-the-key-auth-for-the-level.md) | The SurrealDB DSN has the key auth for the level of the user | Decided |
 | [D52](D052-each-surrealdb-statement-is-a-result-set-and-its.md) | Each SurrealDB statement is a result set, and its rows follow D18 | Amended by D101 |
-| [D53](D053-the-go-types-of-surrealdb.md) | The Go types of SurrealDB | Amended by D70 |
+| [D53](D053-the-go-types-of-surrealdb.md) | The Go types of SurrealDB | Amended by D70 and D113 |
 | [D54](D054-the-surrealdb-driver-has-no-transactions.md) | The SurrealDB driver has no transactions | Decided |
 | [D55](D055-the-errors-and-the-results-of-a-surrealdb-write.md) | The errors and the results of a SurrealDB write | Decided |
 | [D56](D056-a-surrealdb-query-stops-when-its-context-ends.md) | A SurrealDB query stops when its context ends | Decided |
@@ -114,7 +114,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D91](D091-an-arangodb-transaction-names-every-collection.md) | An ArangoDB transaction names every collection | Amends D45 |
 | [D92](D092-the-arangodb-driver-takes-ddl-of-its-own.md) | The ArangoDB driver takes DDL of its own | Decided |
 | [D93](D093-the-arangodb-dsn-names-the-database-in-its-path.md) | The ArangoDB DSN names the database in its path | Decided |
-| [D94](D094-every-http-driver-takes-its-secret-as-the.md) | Every HTTP driver takes its secret as the password | Decided |
+| [D94](D094-every-http-driver-takes-its-secret-as-the.md) | Every HTTP driver takes its secret as the password | Amended by D110 |
 | [D95](D095-the-neo4j-tag-ends-the-statement.md) | The Neo4j tag ends the statement | Amends D67 |
 | [D96](D096-the-first-influxql-column-is-measurement.md) | The first InfluxQL column is measurement | Amends D81 |
 | [D97](D097-every-driver-is-compared-with-the-first-before.md) | Every driver is compared with the first before its commit | Decided |
@@ -129,3 +129,10 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D106](D106-an-arangodb-geo-index-on-one-field-reads-geojson.md) | An ArangoDB geo index on one field reads GeoJSON | Decided |
 | [D107](D107-errincomplete-means-a-failure-after-a-row.md) | ErrIncomplete means a failure after a row | Amends D42 |
 | [D108](D108-every-wire-format-meets-the-driver-at-the-row.md) | Every wire format meets the driver at the row | Decided |
+| [D109](D109-every-driver-takes-the-same-options.md) | Every driver takes the same options | Amends D40 |
+| [D110](D110-d94-names-each-driver.md) | D94 names each driver | Amends D94 |
+| [D111](D111-three-facts-of-the-influxdb-driver.md) | Three facts of the InfluxDB driver | Decided |
+| [D112](D112-two-facts-of-the-neo4j-driver.md) | Two facts of the Neo4j driver | Decided |
+| [D113](D113-the-go-types-of-surrealdb-that-d53-left-out.md) | The Go types of SurrealDB that D53 left out | Amends D53 |
+| [D114](D114-only-couchbase-gives-json-text.md) | Only Couchbase gives JSON text | Decided |
+| [D115](D115-an-influxdb-query-stops-when-the-client-leaves.md) | An InfluxDB query stops when the client leaves | Decided |

@@ -504,13 +504,12 @@ func TestIntegrationParameters(t *testing.T) {
 		if v != 2.5 {
 			t.Errorf("the named parameters gave %v, want 2.5", v)
 		}
-		if d == SQL {
-			if err := db.QueryRowContext(t.Context(), `SELECT v FROM `+quoted(d, m)+` WHERE host = $1`, "a").Scan(&v); err != nil {
-				t.Fatal(err)
-			}
-			if v != 1.5 {
-				t.Errorf("the positional parameter gave %v, want 1.5", v)
-			}
+		// $1 takes the first positional argument in both dialects (D111).
+		if err := db.QueryRowContext(t.Context(), `SELECT v FROM `+quoted(d, m)+` WHERE host = $1`, "a").Scan(dests(&v)...); err != nil {
+			t.Fatal(err)
+		}
+		if v != 1.5 {
+			t.Errorf("the positional parameter gave %v, want 1.5", v)
 		}
 	})
 }

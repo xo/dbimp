@@ -457,11 +457,10 @@ Each lead was then sent to both releases.
 
 ## Open questions
 
-Ken accepted the decisions of step 9, D60 to D69 in
-[decisions/](decisions/README.md), on 2026-09-27, and D95 and D100 on 2026-09-29. The
-review of D97 found these, and each one waits for Ken:
-
-- The questions under "Compared with Couchbase" below.
+None. Ken accepted the decisions of step 9, D60 to D69 in
+[decisions/](decisions/README.md), on 2026-09-27, and D95 and D100 on
+2026-09-29. He decided the questions of the review of D97 on 2026-09-29, in
+D105, D109, D110, D112 and D114.
 
 ## Compared with Couchbase
 
@@ -533,17 +532,14 @@ The differences that a caller sees:
   `SHOW TRANSACTIONS` (D95).
 - An early `Close` in a transaction reads the rest of the answer, where
   Couchbase reads nothing more (D105).
-- These have no decision, and each one is a question for Ken:
-  - The driver takes no option for one statement, though the server takes
-    `accessMode`, `includeCounters` and `maxExecutionTime` in each request.
-  - The driver has no `IsValid`. The table of interfaces gives the reason,
-    and no decision does. Couchbase implements `IsValid`, which always
-    returns true, for the same reason. D102 says why it needs no
-    `ResetSession`.
-  - `CheckNamedValue` calls `Value` of a `driver.Valuer` itself, where
-    Couchbase leaves it to `database/sql` (D40). A struct is refused, where
-    Couchbase sends it as JSON. D63 names neither.
+- Ken decided these on 2026-09-29:
+  - The driver takes no option for one statement yet, though the server
+    takes `accessMode`, `includeCounters` and `maxExecutionTime` in each
+    request. D109 gives every driver the options of Couchbase, and W15 of
+    [BACKLOG.md](BACKLOG.md) adds them.
+  - The driver has no `IsValid`, and `CheckNamedValue` calls `Value` of a
+    `driver.Valuer` itself and refuses a struct (D112). It needs no
+    `ResetSession` (D102).
   - A list or a map scanned into a `*[]byte` or a `*jsontext.Value` does
-    not get its JSON text, as it does from Couchbase (D39).
-  - D94 gives every HTTP driver the key `auth`. The Neo4j driver has none,
-    and D94 does not name Neo4j.
+    not get its JSON text, which only Couchbase gives (D114).
+  - The driver gets the key `auth=basic|bearer` in W14 (D110).

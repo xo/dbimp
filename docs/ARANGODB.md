@@ -52,8 +52,7 @@ each read on 2026-09-28, are these:
   the driver uses 8529. `usql` has no driver for ArangoDB.
 - `dbmeta` has no model for ArangoDB, and its entry is in the tier Staged
   (dbmeta D119), with the cadence tested (dbmeta D120).
-- D89 to D94 settle step 9, with D99. D103 and D104, which cover items 4, 6,
-  and 10 to 12, wait for Ken.
+- D89 to D94 settle step 9, with D99, D103, D104 and D106.
 
 ## Requests
 
@@ -350,13 +349,8 @@ These leads of step 3 were then measured:
 
 ## Open questions
 
-Ken decided step 9 on 2026-09-29, in D89 to D94, and D99. The review of
-D97 found these, and each one waits for Ken:
-
-- D103 and D104, which propose the choices of the code for items 4, 6, and
-  10 to 12 of step 9.
-
-- The questions under "Compared with Couchbase" below.
+None. Ken decided step 9 on 2026-09-29, in D89 to D94, D99, D103, D104 and
+D106, and the questions of the review of D97 in D109 and D110.
 
 ## The test runs
 
@@ -425,9 +419,9 @@ The differences that a caller sees:
   and D103, proposed).
 - The DSN names the database in its path, and takes the keys `tls`,
   `cancel`, `batch` and `auth`, where Couchbase takes others (D93 and D94).
-- A caller of ArangoDB has no option for one statement. A timeout for one
-  query is the context of the call. No decision says why. This is a question
-  for Ken.
+- A caller of ArangoDB has no option for one statement yet. D109 gives
+  every driver the options of Couchbase, and W15 of
+  [BACKLOG.md](BACKLOG.md) adds them.
 - The driver has no `ResetSession`. A transaction comes only from `BeginTx`,
   because AQL has no statement that begins one, and `database/sql` always
   ends a transaction before it reuses the connection (D102).

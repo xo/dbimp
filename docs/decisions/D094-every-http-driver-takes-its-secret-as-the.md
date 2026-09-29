@@ -1,6 +1,9 @@
 # D94. Every HTTP driver takes its secret as the password
 
-Status: Decided.
+Status: Amended by D110.
+
+D110 says how this applies to each driver, and names SurrealDB as the one
+exception.
 
 Ken decided on 2026-09-29 one convention for the credentials of every
 driver here that speaks HTTP. Gemini and DeepSeek recommended it on the same

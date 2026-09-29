@@ -300,7 +300,9 @@ InfluxQL on every release:
   on every release (measured, 1.13.1-016). A time works as a string on every
   release (measured, 3.11.5-119). A time as an integer works on 1.13.1 and
   2.9.1, and is an error on 3.11.5 (measured). An array is an error on every
-  release (measured).
+  release (measured). `$1` takes the key `"1"` of `params` in InfluxQL, on
+  1.13.1, 2.9.1 and 3.11.5, as a name does (measured by hand on
+  2026-09-29, D111).
 - So the server binds every parameter, and the driver needs no parser for
   placeholders (D34). `INSERT` is the exception: the driver writes each
   argument into the line protocol itself (D85).
@@ -377,9 +379,19 @@ InfluxQL:
   administrator (measured, 1.13.1-021, 022 and 077). InfluxDB 2 answers
   `not implemented` to both (measured, 2.9.1-021). InfluxDB 3 does not parse
   them (measured, 3.11.5-046).
-- Whether InfluxDB 1 and 2 stop a query when the client disconnects is not
-  measured. `query-timeout` on InfluxDB 1 stops a query after a time, and
-  its default is `0s`, which is no limit (the v1 guides).
+- InfluxDB 1 and 2 stop a query when the client disconnects (measured by
+  hand on 2026-09-29). On 1.13.1, a query that took 3.3 seconds in full was
+  gone from `SHOW QUERIES` half a second after the client left at 1 second,
+  with and without chunks. On 2.9.1, which has no `SHOW QUERIES`, the same
+  query executed for 1.8 seconds in full and for 1.0 second when the
+  client left, by `influxql_service_executing_duration_seconds` of
+  `/metrics`. D115 relies on this. `query-timeout` on InfluxDB 1 stops a
+  query after a time, and its default is `0s`, which is no limit (the v1
+  guides).
+- A query with `GROUP BY time()` and no bound on `time` counts its groups
+  from 1970, and a group of one second made 1.13.1 stop with no answer
+  (measured by hand on 2026-09-29). With a bound on `time`, the same query
+  ran.
 
 ## Statements
 
@@ -525,8 +537,8 @@ on 1.13.1, 2.9.1 and 3.11.5:
 ## Open questions
 
 Ken settled each question of steps 6 and 9 on 2026-09-28 and 2026-09-29:
-D80 to D83, D85, D86 and D96. The questions under "Compared with Couchbase"
-below wait for Ken. These facts remain:
+D80 to D83, D85, D86 and D96. Ken decided the questions of the review of D97 on 2026-09-29, in D109,
+D111 and D115. These facts remain:
 
 - `features.json` holds one verdict for each entry, and several entries hold
   on some releases only. This document names the releases of each.
@@ -615,16 +627,11 @@ The differences that a caller sees:
   the JSON of the server writes all three as `null` (D80).
 - A whole float of InfluxQL reads as an `int64`, because the answer holds no
   types (D83).
-- These have no decision, and each one is a question for Ken:
-  - No decision says how the driver stops a query. It closes the body, as
-    Couchbase does. InfluxDB 3 then stops the query, and InfluxDB 1 and 2
-    are not measured. D36 asks for a decision where the server does not
-    stop.
-  - The driver takes no option for one statement, such as `rp`, `chunked`
-    or `describe` for one query.
-  - The port does not change with `tls=true`, where Couchbase moves to
-    18093. D82 names no port for TLS.
-  - `RowsAffected` returns an error for the reason in the table of
-    interfaces, and no decision gives it.
-  - InfluxQL is sent an ordinal as the key `"1"`, and no test or measurement
-    shows that InfluxQL binds `$1`.
+- Ken decided these on 2026-09-29:
+  - The driver closes the body, as Couchbase does, because every release
+    stops a query when the client leaves (D115).
+  - The driver takes no option for one statement yet, such as `rp`,
+    `chunked` or `describe` for one query. D109 gives every driver the
+    options of Couchbase, and W15 of [BACKLOG.md](BACKLOG.md) adds them.
+  - The port does not change with `tls=true`, `RowsAffected` returns an
+    error, and InfluxQL binds `$1` (D111).

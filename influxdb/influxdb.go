@@ -13,7 +13,7 @@
 //
 // The server binds each argument, except in INSERT, which the driver binds
 // (D85): sql.Named("k", v) fills $k, and a positional argument n fills $n,
-// such as $1, which is measured for SQL. SQL reads its columns and their
+// such as $1, in both dialects (D111). SQL reads its columns and their
 // types from DESCRIBE (D80). InfluxQL gives each series of a statement a
 // result set of its own. Its first columns are measurement, which holds the
 // name of the series, and its tags (D81, D83 and D96). InfluxDB has no
