@@ -35,7 +35,8 @@ on 2026-09-27, who named SurrealDB as the second target, and W9 from Ken the
 same day, who named Neo4j as the third. W10 came from the `dbmeta` session on
 2026-09-27, which found two faults of the SurrealDB driver through `usql`. W11
 came from Ken on 2026-09-27, who set the order of the drivers after Neo4j
-in D73.
+in D73. W12 came from that order, and D88 dropped it. W13 came from Ken on
+2026-09-29, who asked for the ArangoDB driver, and W14 from D94.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -83,7 +84,7 @@ Couchbase user (dbmeta D96), and `ec91128` gives each server an owner
 
 ## W4. Design the root package before the first driver. Done.
 
-Write `docs/DESIGN.md`, and add it to the tables in `CLAUDE.md` and
+Write `docs/DESIGN.md`, and add it to the tables in `AGENTS.md` and
 `README.md`. It holds the design of the code that every driver shares in the
 root package (D4). It follows D33 for decimals, D34 for placeholders and
 D36 for reading and closing a result. Cover each of these points, which the
@@ -206,7 +207,7 @@ output of the generator against `couchbase.ParseDSN` at `v0.1.0`. Ken
 then ruled that the generator writes the default port, as rule 7 of `dburl`
 says: 8093, or 18093 when `tls` is true by `strconv.ParseBool`, which is how
 the driver reads it. `dburl` released it as `v0.33.0` on 2026-09-27, as
-dburl D25.
+dburl D25. dburl D34 later removed that port, because the driver picks it.
 
 The `usql` session reported on 2026-09-27 that its change is staged for
 Ken. `drivers/couchbase` imports the driver at `v0.1.0`, reads the version
@@ -255,8 +256,8 @@ only that the file is current. The `dbmeta` session proposed the list, from
 what its own gate tests caught.
 
 The gates are in `gates_test.go`, and "The tests that tell you what you
-forgot" in [DRIVER.md](DRIVER.md) lists them. The repository has no driver
-yet, so each gate passes with nothing to read. `gates_self_test.go` makes
+forgot" in [DRIVER.md](DRIVER.md) lists them. When the gates went in, the
+repository had no driver, so each gate passed with nothing to read. `gates_self_test.go` makes
 sure that each gate passes a complete driver and fails an incomplete one.
 The code and the design of W4 went in with the gates, on 2026-09-27, staged
 for Ken to review. Ken committed them the same day as `f1dfe6d`.
@@ -316,9 +317,9 @@ release that holds the driver, and each names that tag:
 1. `dburl`: add a scheme whose `Driver` and `Dialect` are `surrealdb` (D47),
    with the `GoPackage` `github.com/xo/dbimp/surrealdb` and `RequiresCGO`
    false. Its generator writes
-   `surrealdb://user:pass@host:port/<namespace>/<database>`, with the default
-   port 8000, with TLS or without, and passes the keys `tls`, `auth` and
-   `encoding` through (D48, D49 and D51). Aliases such as `surreal` are for
+   `surrealdb://user:pass@host:port/<namespace>/<database>`, and passes the
+   keys `tls`, `auth` and `encoding` through (D48, D49 and D51). It adds no
+   port, because the driver uses 8000 (dburl D34). Aliases such as `surreal` are for
    `dburl` and Ken.
 2. `usql`: add `drivers/surrealdb`, which imports the driver. Its `Version`
    asserts `*sql.DB`, takes a `Conn`, and calls `surrealdb.Version` inside
@@ -330,7 +331,7 @@ release that holds the driver, and each names that tag:
 Ken committed steps 1 to 17 on 2026-09-27 as `bd0f165`, and the workflow
 passed on it, with 2.7.0 and 3.3.0 as both principals:
 https://github.com/xo/dbimp/actions/runs/36316196918. That is the gate of
-step 18. At Ken's request, `v0.2.0` was tagged on `82c1902` the same day. It holds the
+step 18. At Ken's request, the session tagged `v0.2.0` on `82c1902` the same day. It holds the
 driver, and `dburl` released the scheme `surrealdb` in `v0.34.0`, checked
 against `v0.2.0` (dburl D26). The `usql` session added `drivers/surrealdb` on
 `v0.2.0` before step 20, in its commit `54c12a4` (W10). The release notes
@@ -414,9 +415,9 @@ release that holds the driver, and each names that tag:
 1. `dburl`: add a scheme whose `Driver` and `Dialect` are `neo4j` (D60),
    with the aliases `nj`, `neo` and `n4j` that Ken chose, the `GoPackage`
    `github.com/xo/dbimp/neo4j` and `RequiresCGO` false. Its generator writes
-   `neo4j://user:pass@host:port/<database>`, with the default port 7474, or
-   7473 with `tls=true`, and passes the keys `tls` and `cancel` through
-   (D61 and D67). A path that is empty means the database `neo4j`. The tools
+   `neo4j://user:pass@host:port/<database>`, and passes the keys `tls` and
+   `cancel` through (D61 and D67). It adds no port, because the driver uses
+   7474, or 7473 with `tls=true` (dburl D34). A path that is empty means the database `neo4j`. The tools
    of Neo4j write `neo4j://host:7687` for Bolt, which this driver does not
    speak.
 2. `usql`: add `drivers/neo4j`, which imports the driver. Its `Version` runs
@@ -431,10 +432,10 @@ release that holds the driver, and each names that tag:
 Ken committed steps 1 to 17 on 2026-09-27 as `b475894`, and the workflow
 passed on it, on 5.26.31 and 2026.09.0:
 https://github.com/xo/dbimp/actions/runs/36330535630. That is the gate of
-step 18. No tag holds the driver yet. The tag, the release notes and the
-GitHub release of step 19, and the requests of step 20, wait for Ken. So
-this item stays open. On 2026-09-28, dburl D28 added the scheme `neo4j`,
-and no release of `dburl` held it yet.
+step 18. The tag `v0.3.0` is on `b475894`, and `v0.4.0` is the first GitHub
+release that holds the driver. The release notes of `v0.3.0`, and the
+requests of step 20, wait for Ken. So this item stays open. dburl D28 added
+the scheme `neo4j` on 2026-09-28, and dburl `v0.35.0` holds it.
 
 ## W10. Fix the faults that usql found in the SurrealDB driver. Done.
 
@@ -463,12 +464,12 @@ and from `tblfmt` run on a result set with no rows.
 
 A fix reaches `usql` only in a new release of `dbimp`, by steps 18 to 20 of
 [DRIVER.md](DRIVER.md). The first fault needs nothing more, and Ken accepted
-D70 on 2026-09-29, so this item is done. The fix of the second fault reaches
-`usql` with the next release of `dbimp`.
+D70 on 2026-09-29, so this item is done. The tag `v0.3.0` holds the fix of
+the second fault, and `usql` has it through `v0.4.0`.
 
 ## W11. Write the InfluxDB driver
 
-InfluxDB is the next target, by D73. Follow [DRIVER.md](DRIVER.md) from step
+InfluxDB was the next target, by D73. Follow [DRIVER.md](DRIVER.md) from step
 2. After InfluxDB come ArangoDB, Databend, TDengine, Apache Pinot,
 rqlite, libSQL and then Avatica (D73, D74 and D88). Each one gets a work
 item of its own when its turn comes.
@@ -495,11 +496,11 @@ Ken decided these on 2026-09-28, and they are staged for his review:
   1.11.8, 2.8.0 and 3.10.6 in the Nightly tier.
 
 On 2026-09-28, dburl D29 added the schemes `influxdb` and `influxql` of
-D78, committed on the `main` of `dburl` as `a2f1a3a` and not tagged.
+D78, as `a2f1a3a`, which dburl `v0.35.0` holds.
 
 On 2026-09-28, dbmeta D112 and dbmeta D114 added the `dbrun` entries for
-InfluxDB 3, and for InfluxDB 1 and 2, staged in `dbmeta` and not committed.
-So step 4 is done while those entries stay as they are.
+InfluxDB 3, and for InfluxDB 1 and 2. `dbmeta` committed them the same day,
+so step 4 is done.
 
 Steps 5 to 8 went in on 2026-09-28, staged for Ken to review:
 
@@ -518,8 +519,7 @@ Steps 5 to 8 went in on 2026-09-28, staged for Ken to review:
 Ken decided the rest of step 9 on the same day: D80 (the columns of SQL
 come from `DESCRIBE`), D81 (a series of InfluxQL is a result set with its
 name and its tags), D82 (the DSN), and D83 (chunks only on InfluxDB 1, the
-gaps in `statement_id`, and the numbers of InfluxQL). Steps 10 to 17 are
-next.
+gaps in `statement_id`, and the numbers of InfluxQL).
 
 Steps 10 to 17 went in on 2026-09-28, staged for Ken to review:
 
@@ -533,8 +533,8 @@ Steps 10 to 17 went in on 2026-09-28, staged for Ken to review:
   InfluxDB, and added the rule for the column time to D83.
 - Steps 14 and 14a: every integration test passed on all seven releases, one
   at a time, as both principals where the release has an ordinary user.
-- Step 15: the job `releases` selects a Staged release by its cadence
-  (dbmeta D120), and fails when a product has no release. It pins dbmeta
+- Step 15: the job `releases` selects a release of the Staged tier by its
+  cadence (dbmeta D120), and fails when a product has no release. It pins dbmeta
   `415e830`, which prints the `url` of D82 for each InfluxDB principal. The
   Test step of the workflow passed with that pin on 1.13.1, 2.9.1 and 3.11.5
   on 2026-09-29.
@@ -561,8 +561,8 @@ the driver:
 Ken committed steps 1 to 17 on 2026-09-29 as `8548135` and `e29bd29`. The
 workflow passed on `e29bd29`, on 1.13.1, 2.9.1, 3.9.13 and 3.11.5, which is
 the gate of step 18:
-https://github.com/xo/dbimp/actions/runs/36469657061. At Ken's request,
-`v0.4.0` was tagged on `e29bd29` and published the same day, which is the
+https://github.com/xo/dbimp/actions/runs/36469657061. At Ken's request, the
+session tagged `v0.4.0` on `e29bd29` and published it the same day, which is the
 gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.4.0. The
 requests of step 20 wait for Ken. So this item stays open.
 
@@ -575,3 +575,69 @@ on 6.4.5 that day, and `dbmeta` reads it through a dialect of its own. Ken
 asks the `dbmeta` session for the dialects of CrateDB and CockroachDB
 himself. Step 3 of the driver is in [CRATEDB.md](CRATEDB.md), which stays as
 the record of why. ArangoDB is the next driver.
+
+## W13. Write the ArangoDB driver
+
+ArangoDB is the next target, by D73 and D88. Follow [DRIVER.md](DRIVER.md).
+Step 1 is done by D73, and step 2 by D75 and the entry of dbmeta D112, which
+starts 3.12.12. Step 3 is in [ARANGODB.md](ARANGODB.md). Ken asked on
+2026-09-29 for the work to begin.
+
+Steps 4 to 17 went in on 2026-09-29, staged for Ken to review:
+
+- Step 5a and step 6: `testdata/arangodb/features.json` and the recordings of
+  3.12.12, as both principals. The recorder now writes a captured value into
+  a header too, for `x-arango-trx-id`.
+- Step 7: the leads of Gemini and DeepSeek were tested. In the second round,
+  on 2026-09-29, DeepSeek gave no answer.
+- Step 9: Ken decided D89 to D94, and D99 on 2026-09-29. D94 is the
+  convention of every HTTP driver: the secret is the password, and
+  `auth=basic|bearer`. D103 and D104 propose the choices of the code for
+  items 4, 6, and 10 to 12, and wait for Ken.
+- Steps 10 to 14a: the package `arangodb/`, its tables, the contract, the
+  replay tests, the DSN tests, and the integration tests, which passed on
+  3.12.12 as both principals.
+- Step 15: CI runs `arangodb-3.12.12`. dbmeta printed the `url` of D93 for
+  it from 29395a1, and the pin moved to 00d9f72, which holds it. The
+  integration tests passed against that commit on 2026-09-29, as both
+  principals. `actionlint` passes on the workflow.
+- Step 17a: `## Compared with Couchbase` is in ARANGODB.md, and D97 gave
+  SurrealDB, Neo4j and InfluxDB the same section. Ken reviews them before
+  step 18 (D97).
+
+The release that holds this driver also carries D95, D96, D100, D105 and
+D107, which change the drivers of `v0.4.0`, and the fixes of the review of
+D97, such as `BeginTx` of SurrealDB. Step 20 tells `usql` of each:
+
+- The tag of Neo4j now ends each statement (D95).
+- The first column of an InfluxQL result set is `measurement` (D96).
+- A Neo4j rollback now runs after its context ends (D100).
+- An early `Close` of Neo4j rows stops a statement that runs on, and in a
+  transaction reads the rest of the answer (D105).
+- A failure before the first row no longer wraps `dbimp.ErrIncomplete`,
+  which changes Couchbase (D107).
+
+The requests of step 16, which step 20 sends after the release that holds
+the driver:
+
+1. To `dburl`: the provisional scheme `arangodb` of dburl D32 matches D93.
+   Please check `GenArangoDB` against the release: the path is the
+   database, the query passes through, and the generator adds no port,
+   because the driver uses 8529 (dburl D34).
+2. To `dbmeta`: dbmeta has no model for ArangoDB, so nothing to measure yet.
+3. To `usql`: add `drivers/arangodb/arangodb.go`, which imports
+   `github.com/xo/dbimp/arangodb` for the scheme `arangodb`. It reads the
+   version with `RETURN VERSION()`. A document arrives as one column that
+   holds a map, and a projection as its columns (D89).
+
+## W14. Add the key auth to the InfluxDB driver
+
+D94 gives every HTTP driver the key `auth=basic|bearer`. The InfluxDB driver
+of `v0.4.0` sends basic authentication only (D82). Add the key, with `basic`
+as the default, and `bearer`, which sends the token as
+`Authorization: Bearer`. InfluxDB 3 takes it (measured, in "Requests" of
+[INFLUXDB.md](INFLUXDB.md)). Couchbase and Neo4j have no key `auth`, and the
+key `auth` of SurrealDB names the level of the user (D51). Ken decides how
+D94 applies to each of them. Measure it on
+InfluxDB 2, which took `Authorization: Token` in step 6. Record it in the
+next release.
