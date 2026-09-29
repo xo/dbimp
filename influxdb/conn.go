@@ -40,10 +40,14 @@ var (
 	_ driver.Pinger             = (*conn)(nil)
 )
 
-// CheckNamedValue satisfies driver.NamedValueChecker. It keeps a uint64 and
-// a decimal, which the default converter of database/sql refuses or turns
-// into text, and hands every other value to that converter.
+// CheckNamedValue satisfies driver.NamedValueChecker. It keeps an Option,
+// which the statement takes out (D109), and a uint64 and a decimal, which the
+// default converter of database/sql refuses or turns into text. It hands
+// every other value to that converter.
 func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
+	if dbimp.IsOption[options](nv.Value) {
+		return nil
+	}
 	switch v := nv.Value.(type) {
 	case uint64:
 		return nil
@@ -149,12 +153,16 @@ func quote(s string) (jsontext.Value, error) {
 
 // QueryContext satisfies driver.QueryerContext.
 func (c *conn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
+	o, args := resolve(ctx, &c.c.cfg, args)
+	if err := o.check(); err != nil {
+		return nil, err
+	}
 	ins, err := parseInsert(query)
 	switch {
 	case err != nil:
 		return nil, err
 	case ins != nil:
-		if err := c.write(ctx, ins, args); err != nil {
+		if err := c.write(ctx, o, ins, args); err != nil {
 			return nil, err
 		}
 		return noRows{}, nil
@@ -164,9 +172,9 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 		return nil, err
 	}
 	if c.dialect == SQL {
-		return c.querySQL(ctx, query, p)
+		return c.querySQL(ctx, o, query, p)
 	}
-	return c.queryInfluxQL(ctx, query, p)
+	return c.queryInfluxQL(ctx, o, query, p)
 }
 
 // ExecContext satisfies driver.ExecerContext. It reads every result to its

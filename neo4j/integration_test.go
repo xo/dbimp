@@ -1268,3 +1268,37 @@ func TestIntegrationVersion(t *testing.T) {
 		}
 	})
 }
+
+// TestIntegrationOptions holds the options of one statement and one
+// transaction on the server (D109).
+func TestIntegrationOptions(t *testing.T) {
+	forEach(t, func(t *testing.T, _ principal, db *sql.DB) {
+		l := label("options")
+		_, err := db.ExecContext(t.Context(), "CREATE (:"+l+")", WithReadonly(true))
+		refused(t, "a write with WithReadonly", err, "Neo.ClientError.Statement.AccessMode")
+		tx, err := db.BeginTx(WithOptions(t.Context(), WithReadonly(true)), nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_, err = tx.ExecContext(t.Context(), "CREATE (:"+l+")")
+		refused(t, "a write in a transaction with WithReadonly", err, "Neo.ClientError.Statement.AccessMode")
+		_ = tx.Rollback()
+		const info = "CALL db.info() YIELD name RETURN name"
+		equal(t, "the database of a statement", query(t, db, info), [][]any{{"dbmeta"}})
+		equal(t, "the database of a statement with WithDatabase", query(t, db, info, WithDatabase("system")), [][]any{{"system"}})
+		equal(t, "a statement with WithParameter", query(t, db, "RETURN 1 AS a", WithParameter("includeCounters", true)), [][]any{{int64(1)}})
+		const slow = "UNWIND range(1, 40000) AS a UNWIND range(1, 40000) AS b WITH a + b AS s WHERE s < 0 RETURN count(s) AS n"
+		start := time.Now()
+		_, err = db.ExecContext(t.Context(), slow, WithTimeout(500*time.Millisecond))
+		if v := release(t, db); !calendarAtLeast(v, 2026, 4) {
+			if !errors.Is(err, dbimp.ErrNotSupported) {
+				t.Errorf("WithTimeout on %s gave %v, want dbimp.ErrNotSupported", v, err)
+			}
+			return
+		}
+		refused(t, "the slow statement with WithTimeout", err, "Neo.ClientError.Transaction.TransactionTimedOutClientConfiguration")
+		if d := time.Since(start); d > 5*time.Second {
+			t.Errorf("the slow statement with WithTimeout of 500ms ended after %v", d)
+		}
+	})
+}

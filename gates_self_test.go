@@ -53,8 +53,12 @@ func completeDriver(t *testing.T) map[string]string {
 		"good/good.go": `package good
 
 import (
+	"context"
 	"database/sql"
 	"net/http"
+	"time"
+
+	"github.com/xo/dbimp"
 )
 
 const Name = "good"
@@ -66,6 +70,16 @@ var _ = client
 func init() {
 	sql.Register(Name, nil)
 }
+
+type options struct{}
+
+type Option = dbimp.Option[options]
+
+func WithOptions(ctx context.Context, opts ...Option) context.Context { return dbimp.WithOptions(ctx, opts...) }
+func WithTimeout(time.Duration) Option                                 { return nil }
+func WithReadonly(bool) Option                                         { return nil }
+func WithParameter(string, any) Option                                 { return nil }
+func WithDatabase(string) Option                                       { return nil }
 
 func use() {
 	client := &http.Client{}

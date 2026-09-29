@@ -20,9 +20,6 @@ type conn struct {
 	txid string
 	// txReadonly makes each statement of the transaction read only.
 	txReadonly bool
-	// argOpts are the options among the arguments of the next statement,
-	// which CheckNamedValue gathers.
-	argOpts []Option
 }
 
 // ensure the interfaces.
@@ -37,16 +34,15 @@ var (
 	_ driver.Pinger             = (*conn)(nil)
 )
 
-// CheckNamedValue satisfies driver.NamedValueChecker. It takes an Option out
-// of the arguments, and takes any other value, which send encodes with
-// json/v2. It returns driver.ErrSkip for a driver.Valuer, so that
-// database/sql calls it.
+// CheckNamedValue satisfies driver.NamedValueChecker. It keeps an Option,
+// which the statement takes out of its arguments (D109), and takes any other
+// value, which send encodes with json/v2. It returns driver.ErrSkip for a
+// driver.Valuer, so that database/sql calls it.
 func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
-	switch v := nv.Value.(type) {
-	case Option:
-		c.argOpts = append(c.argOpts, v)
-		return driver.ErrRemoveArgument
-	case driver.Valuer:
+	if dbimp.IsOption[options](nv.Value) {
+		return nil
+	}
+	if _, ok := nv.Value.(driver.Valuer); ok {
 		return driver.ErrSkip
 	}
 	return nil
@@ -54,7 +50,11 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 
 // QueryContext satisfies driver.QueryerContext.
 func (c *conn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
-	r, err := c.send(ctx, c.statement(ctx, query, args))
+	b, err := c.statement(ctx, query, args)
+	if err != nil {
+		return nil, err
+	}
+	r, err := c.send(ctx, b)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,11 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 // ExecContext satisfies driver.ExecerContext. It reads the result to its
 // end, and returns the count of mutations that the server reports.
 func (c *conn) ExecContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Result, error) {
-	r, err := c.send(ctx, c.statement(ctx, query, args))
+	b, err := c.statement(ctx, query, args)
+	if err != nil {
+		return nil, err
+	}
+	r, err := c.send(ctx, b)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +110,6 @@ func (c *conn) IsValid() bool {
 // database/sql drops the connection rather than hand the transaction to
 // another caller (D41).
 func (c *conn) ResetSession(ctx context.Context) error {
-	c.argOpts = nil
 	if c.txid == "" {
 		return nil
 	}
@@ -125,7 +128,11 @@ func (c *conn) Ping(ctx context.Context) error {
 
 // statement returns the body of a request for query, with its arguments and
 // its options.
-func (c *conn) statement(ctx context.Context, query string, args []driver.NamedValue) map[string]any {
+func (c *conn) statement(ctx context.Context, query string, args []driver.NamedValue) (map[string]any, error) {
+	o, args := resolve(ctx, &c.c.cfg, args)
+	if err := o.check(); err != nil {
+		return nil, err
+	}
 	b := map[string]any{"statement": query}
 	var positional []any
 	for _, arg := range args {
@@ -138,14 +145,12 @@ func (c *conn) statement(ctx context.Context, query string, args []driver.NamedV
 	if len(positional) > 0 {
 		b["args"] = positional
 	}
-	o := resolve(ctx, &c.c.cfg, c.argOpts)
-	c.argOpts = nil
 	if c.txid != "" {
 		b["txid"] = c.txid
 		o.readonly = o.readonly || c.txReadonly
 	}
 	o.body(b)
-	return b
+	return b, nil
 }
 
 // send sends one request, and reads the response up to its rows.

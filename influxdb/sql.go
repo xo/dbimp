@@ -33,17 +33,18 @@ type describeRow struct {
 	Nullable string `json:"is_nullable"`
 }
 
-// querySQL sends a statement of SQL. With describe=always, it sends DESCRIBE
-// first, and reads the columns and their types from it (D80).
-func (c *conn) querySQL(ctx context.Context, query string, p jsontext.Value) (*sqlRows, error) {
+// querySQL sends a statement of SQL with the options o. With
+// describe=always, it sends DESCRIBE first, and reads the columns and their
+// types from it (D80).
+func (c *conn) querySQL(ctx context.Context, o options, query string, p jsontext.Value) (*sqlRows, error) {
 	var types []*colType
-	if c.c.cfg.Describe == DescribeAlways {
+	if o.describe == DescribeAlways {
 		var err error
-		if types, err = c.describe(ctx, query, p); err != nil {
+		if types, err = c.describe(ctx, o, query, p); err != nil {
 			return nil, err
 		}
 	}
-	res, err := c.post(ctx, query, p)
+	res, err := c.post(ctx, o, query, p)
 	if err != nil {
 		return nil, err
 	}
@@ -63,9 +64,10 @@ func (c *conn) querySQL(ctx context.Context, query string, p jsontext.Value) (*s
 	return &sqlRows{s: s, obj: obj, types: types, vals: make([]jsontext.Value, len(obj.Columns()))}, nil
 }
 
-// post sends one statement of SQL.
-func (c *conn) post(ctx context.Context, query string, p jsontext.Value) (*http.Response, error) {
-	b, err := json.Marshal(sqlBody{DB: c.c.cfg.Database, Q: query, Format: "json", Params: p})
+// post sends one statement of SQL. A key of WithParameter replaces a key of
+// the body with the same name (D109).
+func (c *conn) post(ctx context.Context, o options, query string, p jsontext.Value) (*http.Response, error) {
+	b, err := dbimp.MarshalParams(sqlBody{DB: o.database, Q: query, Format: "json", Params: p}, o.params)
 	if err != nil {
 		return nil, fmt.Errorf("writing the request: %w", err)
 	}
@@ -77,8 +79,8 @@ func (c *conn) post(ctx context.Context, query string, p jsontext.Value) (*http.
 // of the context, because the server refuses DESCRIBE for a statement that is
 // not a SELECT, with a status that differs by release (D80). The statement
 // then runs alone, and a statement that is wrong fails with its own error.
-func (c *conn) describe(ctx context.Context, query string, p jsontext.Value) ([]*colType, error) {
-	res, err := c.post(ctx, "DESCRIBE "+query, p)
+func (c *conn) describe(ctx context.Context, o options, query string, p jsontext.Value) ([]*colType, error) {
+	res, err := c.post(ctx, o, "DESCRIBE "+query, p)
 	if err != nil {
 		if ctx.Err() != nil {
 			return nil, err

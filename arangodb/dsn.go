@@ -173,11 +173,17 @@ func (cfg *Config) FormatDSN() string {
 	return u.String()
 }
 
-// baseURL returns the URL of the API of the database of cfg.
+// baseURL returns the URL of the server of cfg.
 func (cfg *Config) baseURL() string {
 	scheme := "http"
 	if cfg.TLS {
 		scheme = "https"
 	}
-	return scheme + "://" + net.JoinHostPort(cfg.Host, strconv.Itoa(cfg.Port)) + "/_db/" + url.PathEscape(cfg.Database) + "/_api/"
+	return scheme + "://" + net.JoinHostPort(cfg.Host, strconv.Itoa(cfg.Port))
+}
+
+// api returns path under the API of the database db. Each request names its
+// database, which WithDatabase can change (D109).
+func api(db, path string) string {
+	return "/_db/" + url.PathEscape(db) + "/_api/" + path
 }

@@ -21,13 +21,17 @@ func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, e
 	if c.tx != nil {
 		return nil, fmt.Errorf("beginning a transaction: one is open: %w", dbimp.ErrNotSupported)
 	}
+	o, _ := resolve(ctx, &c.c.cfg, c.c.cfg.Database, nil)
+	if err := o.check(); err != nil {
+		return nil, err
+	}
 	var b body
-	if opts.ReadOnly {
+	if opts.ReadOnly || o.readonly {
 		b.AccessMode = "READ"
 	}
 	meta := false
-	if c.c.cfg.Cancel == CancelMetadata {
-		ok, err := c.c.takesMetadata(ctx)
+	if o.cancel == CancelMetadata {
+		ok, err := c.c.newRelease(ctx)
 		if err != nil {
 			return nil, fmt.Errorf("beginning a transaction: %w", err)
 		}
@@ -35,7 +39,7 @@ func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, e
 			meta, b.TxMetadata = true, c.metadata()
 		}
 	}
-	res, err := c.c.post(ctx, http.MethodPost, c.c.queryPath()+"/tx", b, version10)
+	res, err := c.c.post(ctx, http.MethodPost, c.c.queryPath(o.database)+"/tx", b, version10)
 	if err != nil {
 		return nil, fmt.Errorf("beginning a transaction: %w", err)
 	}
@@ -50,7 +54,7 @@ func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, e
 	if r.txID == "" {
 		return nil, fmt.Errorf("beginning a transaction: the server returned no id: %w", dbimp.ErrInvalidValue)
 	}
-	c.tx = &tx{c: c, id: r.txID, ctx: ctx, meta: meta}
+	c.tx = &tx{c: c, id: r.txID, ctx: ctx, meta: meta, database: o.database}
 	return c.tx, nil
 }
 
@@ -63,6 +67,9 @@ type tx struct {
 	ctx context.Context //nolint:containedctx // D69: database/sql gives Commit and Rollback no context of their own.
 	// meta is true if the transaction carries txMetadata (D67).
 	meta bool
+	// database is the database of the transaction, which each of its
+	// statements must name.
+	database string
 	// ended is the error that ended the transaction on the server, or nil.
 	ended error
 }
@@ -130,7 +137,7 @@ func (t *tx) Rollback() error {
 
 // path returns the path of the transaction.
 func (t *tx) path() string {
-	return t.c.c.queryPath() + "/tx/" + t.id
+	return t.c.c.queryPath(t.database) + "/tx/" + t.id
 }
 
 // readEmpty reads a body that is empty or holds one value that means

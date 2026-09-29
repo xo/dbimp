@@ -14,6 +14,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/xo/dbimp"
 )
 
 // These tests need a server. ARANGODB_DSN names it for the administrator,
@@ -148,7 +150,7 @@ func call(t *testing.T, p principal, method, path string, body any) error {
 	t.Helper()
 	c := NewConnector(config(t, p))
 	defer c.transport.CloseIdleConnections()
-	return c.call(t.Context(), method, path, body, nil, "")
+	return c.call(t.Context(), method, api(c.cfg.Database, path), body, nil, "")
 }
 
 func TestMain(m *testing.M) {
@@ -180,13 +182,13 @@ func cleanup() error {
 			Name string `json:"name"`
 		} `json:"result"`
 	}
-	if err := c.call(ctx, http.MethodGet, "collection?excludeSystem=true", nil, &list, ""); err != nil {
+	if err := c.call(ctx, http.MethodGet, api(c.cfg.Database, "collection?excludeSystem=true"), nil, &list, ""); err != nil {
 		return err
 	}
 	var errs []error
 	for _, col := range list.Result {
 		if strings.HasPrefix(col.Name, prefix) {
-			errs = append(errs, c.call(ctx, http.MethodDelete, "collection/"+url.PathEscape(col.Name), nil, nil, ""))
+			errs = append(errs, c.call(ctx, http.MethodDelete, api(c.cfg.Database, "collection/"+url.PathEscape(col.Name)), nil, nil, ""))
 		}
 	}
 	return errors.Join(errs...)
@@ -365,7 +367,7 @@ func cancelled(t *testing.T, p principal, db *sql.DB, q string) {
 		Query string `json:"query"`
 	}
 	for deadline := time.Now().Add(3 * time.Second); ; time.Sleep(100 * time.Millisecond) {
-		if err := c.call(t.Context(), http.MethodGet, "query/current", nil, &current, ""); err != nil {
+		if err := c.call(t.Context(), http.MethodGet, api(c.cfg.Database, "query/current"), nil, &current, ""); err != nil {
 			t.Fatal(err)
 		}
 		if !slices.ContainsFunc(current, func(q struct {
@@ -462,5 +464,43 @@ func TestIntegrationDDL(t *testing.T) {
 		exec(t, db, "CREATE COLLECTION "+ec+" EDGE")
 		exec(t, db, "INSERT {_from: 'a/1', _to: 'a/2'} INTO "+ec)
 		exec(t, db, "DROP COLLECTION "+ec)
+	})
+}
+
+// TestIntegrationOptions holds the options of one statement and one
+// transaction on the server (D109).
+func TestIntegrationOptions(t *testing.T) {
+	c := collection(t, "options")
+	forEach(t, func(t *testing.T, p principal, db *sql.DB) {
+		const current = "RETURN CURRENT_DATABASE()"
+		same(t, "the database", column(t, db, current), "dbmeta")
+		if p == admin {
+			same(t, "the database with WithDatabase", column(t, db, current, WithDatabase("_system")), "_system")
+		} else {
+			_, err := db.ExecContext(t.Context(), current, WithDatabase("_system"))
+			if e, ok := errors.AsType[*Error](err); !ok || e.HTTPStatus != http.StatusUnauthorized {
+				t.Errorf("the ordinary user in _system gave %v, want HTTP 401", err)
+			}
+		}
+		same(t, "a query with WithParameter", column(t, db, "RETURN 1", WithParameter("ttl", 30)), int64(1))
+		start := time.Now()
+		_, err := db.ExecContext(t.Context(), "FOR i IN 1..100000000 FILTER i < 0 RETURN i", WithTimeout(300*time.Millisecond))
+		if e, ok := errors.AsType[*Error](err); !ok || e.Num != 1500 {
+			t.Errorf("the slow query with WithTimeout gave %v, want the error 1500", err)
+		}
+		if d := time.Since(start); d > 5*time.Second {
+			t.Errorf("the slow query with WithTimeout of 300ms ended after %v", d)
+		}
+		if _, err := db.ExecContext(t.Context(), "RETURN 1", WithReadonly(true)); !errors.Is(err, dbimp.ErrNotSupported) {
+			t.Errorf("WithReadonly outside a transaction gave %v, want dbimp.ErrNotSupported", err)
+		}
+		tx, err := db.BeginTx(WithOptions(t.Context(), WithReadonly(true)), nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer tx.Rollback()
+		if _, err := tx.ExecContext(t.Context(), "INSERT {} INTO "+c); err == nil {
+			t.Error("a write in a transaction with WithReadonly gave no error")
+		}
 	})
 }

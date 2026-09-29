@@ -42,6 +42,7 @@ var gates = map[string]gate{
 	"TestTheWorkflowNamesNoRelease":         gateWorkflow,
 	"TestEveryDriverHasItsFeatures":         gateFeatures,
 	"TestEveryDriverIsComparedWithTheFirst": gateComparison,
+	"TestEveryDriverTakesTheCommonOptions":  gateOptions,
 }
 
 func runGate(t *testing.T, g gate) {
@@ -104,6 +105,56 @@ func TestEveryDriverHasItsFeatures(t *testing.T) {
 func TestEveryDriverIsComparedWithTheFirst(t *testing.T) {
 	t.Parallel()
 	runGate(t, gateComparison)
+}
+
+func TestEveryDriverTakesTheCommonOptions(t *testing.T) {
+	t.Parallel()
+	runGate(t, gateOptions)
+}
+
+// commonOptions are the functions of the options that every driver declares
+// (D109).
+var commonOptions = []string{"WithOptions", "WithTimeout", "WithReadonly", "WithParameter", "WithDatabase"}
+
+// gateOptions holds step 12: each driver declares Option as an alias of
+// dbimp.Option, and the functions of the options that every driver has
+// (D109).
+func gateOptions(root string) []string {
+	var problems []string
+	for _, d := range driverDirs(root) {
+		funcs := map[string]bool{}
+		alias := false
+		for _, f := range parseDir(root, d, false) {
+			pkg := importName(f, "github.com/xo/dbimp")
+			for _, decl := range f.Decls {
+				switch decl := decl.(type) {
+				case *ast.FuncDecl:
+					if decl.Recv == nil {
+						funcs[decl.Name.Name] = true
+					}
+				case *ast.GenDecl:
+					for _, spec := range decl.Specs {
+						ts, ok := spec.(*ast.TypeSpec)
+						if !ok || ts.Name.Name != "Option" || !ts.Assign.IsValid() {
+							continue
+						}
+						if ix, ok := ts.Type.(*ast.IndexExpr); ok && isSelector(ix.X, pkg, "Option") {
+							alias = true
+						}
+					}
+				}
+			}
+		}
+		if !alias {
+			problems = append(problems, fmt.Sprintf("step 12: %s declares no type Option = dbimp.Option[options] (D109)", d))
+		}
+		for _, name := range commonOptions {
+			if !funcs[name] {
+				problems = append(problems, fmt.Sprintf("step 12: %s declares no %s (D109)", d, name))
+			}
+		}
+	}
+	return problems
 }
 
 // crudNames are the statements of CRUD that every survey names.

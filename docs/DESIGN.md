@@ -21,6 +21,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `rows.go` | `ObjectRows`, `NewObjectRows`, `ContinueObjectRows`, `ArrayRows` and `NewArrayRows`, which read rows by D18 |
 | `values.go` | `IsNull`, `Int64`, `Float64`, `Bool`, `String`, `Decimal`, `Number` and `Any`, which turn a JSON value into a Go value, and `Assign` |
 | `placeholder.go` | `Syntax` and `Placeholder`, which find placeholders and bind arguments (D34) |
+| `options.go` | `Option`, `WithOptions`, `IsOption`, `Resolve`, `Unsupported` and `MarshalParams`, the machinery of the options of every driver (D109) |
 | `cbor.go` | `CBORDecoder`, `NewCBORDecoder`, `CBOREncoder`, `CBORHead`, and `CBORMajor` with its constants, which read and write CBOR (D49) |
 
 ### Errors
@@ -360,7 +361,8 @@ Each point of W4 is in the code or in a rule:
 7. `driver.NamedValueChecker` and `driver.ErrSkip`: a rule for each driver,
    in step 12 of [DRIVER.md](DRIVER.md).
 8. Options from the DSN, then the context, then an argument: `Query` reads
-   the DSN. The rest is a rule for each driver.
+   the DSN, and `Resolve` applies the context and the arguments (D109).
+   `MarshalParams` writes the keys of `WithParameter`.
 9. The error of the server before any rows: `CheckStatus`, and a rule for
    each driver, in step 12 of [DRIVER.md](DRIVER.md). `Send` never sends a
    request twice.

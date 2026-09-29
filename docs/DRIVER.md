@@ -432,9 +432,20 @@ these, and a unit test holds each one:
 - Two queries can run at the same time on one `sql.DB`.
 - A test makes sure that no goroutine is left running after each test, with
   `dbimptest.CheckGoroutines`.
+- The driver takes the options of D109 through the root package: it declares
+  `type Option = dbimp.Option[options]`, `WithOptions`, `WithTimeout`,
+  `WithReadonly`, `WithParameter` and `WithDatabase`, and an option for each
+  key of its DSN that can change for one statement. `CheckNamedValue` keeps
+  an `Option`, and each statement calls `dbimp.Resolve`. An option that the
+  server cannot honor fails with `dbimp.Unsupported`, and a value that the
+  DSN would refuse fails with `dbimp.ErrInvalidValue`. `WithParameter`
+  replaces a key of the driver, through `dbimp.MarshalParams` for a body of
+  JSON. Step 6 measures the setting of the server that each option sends,
+  and a test with a fake server holds each one.
 
-Gate: `TestNoDriverTouchesGlobalState` and `TestEveryDriverRegistersOneName`
-pass, and `go test -race -count=2 ./<driver>/...` passes.
+Gate: `TestNoDriverTouchesGlobalState`, `TestEveryDriverRegistersOneName`
+and `TestEveryDriverTakesTheCommonOptions` pass, and
+`go test -race -count=2 ./<driver>/...` passes.
 
 ### 13. Test the DSN
 

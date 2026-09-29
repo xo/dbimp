@@ -909,3 +909,29 @@ func TestIntegrationVersion(t *testing.T) {
 		t.Logf("the %s user reads the version %s", p.name, v)
 	})
 }
+
+// TestIntegrationOptions holds the options of one statement on the server
+// (D109).
+func TestIntegrationOptions(t *testing.T) {
+	forEach(t, func(t *testing.T, p principal, db *sql.DB) {
+		const current = "RETURN session::db()"
+		equal(t, "the database", query(t, db, current), [][][]any{{{"dbmeta"}}})
+		all, err := queryErr(t, db, current, WithDatabase("other"))
+		switch {
+		case p.name == "ordinary" && is3(t):
+			// 3.x refuses a user of dbmeta in another database, with HTTP
+			// 401 (measured by hand on 3.3.0).
+			refused(t, "the ordinary user in another database", err, "authentication")
+		case err != nil:
+			t.Errorf("%s with WithDatabase: %v", current, err)
+		default:
+			// 2.7.0 lets a user of dbmeta name another database (measured by
+			// hand on 2.7.0).
+			equal(t, "the database with WithDatabase", all, [][][]any{{{"other"}}})
+		}
+		equal(t, "a statement with WithParameter", query(t, db, "RETURN 1", WithParameter("id", int64(7))), [][][]any{{{int64(1)}}})
+		if _, err := db.ExecContext(t.Context(), "RETURN 1", WithTimeout(time.Second)); !errors.Is(err, dbimp.ErrNotSupported) {
+			t.Errorf("WithTimeout gave %v, want dbimp.ErrNotSupported", err)
+		}
+	})
+}

@@ -447,15 +447,16 @@ func timestampLiteral(v any) (string, error) {
 }
 
 // write sends an INSERT to /write, into the database and the retention
-// policy of INTO, or of the DSN (D85).
-func (c *conn) write(ctx context.Context, ins *insert, args []driver.NamedValue) error {
+// policy of INTO, or of the options o, which start from the DSN (D85 and
+// D109).
+func (c *conn) write(ctx context.Context, o options, ins *insert, args []driver.NamedValue) error {
 	body, err := ins.body(args)
 	if err != nil {
 		return fmt.Errorf("binding the INSERT: %w", err)
 	}
 	db, rp := ins.db, ins.rp
 	if db == "" {
-		db, rp = c.c.cfg.Database, c.c.cfg.RetentionPolicy
+		db, rp = o.database, o.rp
 	}
 	if db == "" {
 		return fmt.Errorf("running INSERT: no database: name it in the DSN or with INTO: %w", dbimp.ErrInvalidValue)

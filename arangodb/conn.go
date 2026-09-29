@@ -33,12 +33,16 @@ var (
 	_ driver.Pinger             = (*conn)(nil)
 )
 
-// CheckNamedValue satisfies driver.NamedValueChecker. It keeps a uint64, a
-// decimal, a slice, an array and a map with string keys, which AQL takes as
-// they are, and a []byte, which value refuses. A nil pointer that implements
-// driver.Valuer becomes nil. It hands every other value to the default
-// converter of database/sql.
+// CheckNamedValue satisfies driver.NamedValueChecker. It keeps an Option,
+// which the statement takes out (D109), a uint64, a decimal, a slice, an
+// array and a map with string keys, which AQL takes as they are, and a
+// []byte, which value refuses. A nil pointer that implements driver.Valuer
+// becomes nil. It hands every other value to the default converter of
+// database/sql.
 func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
+	if dbimp.IsOption[options](nv.Value) {
+		return nil
+	}
 	if v, ok := nv.Value.(driver.Valuer); ok {
 		if rv := reflect.ValueOf(v); rv.Kind() == reflect.Pointer && rv.IsNil() {
 			nv.Value = nil
@@ -54,6 +58,10 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 // QueryContext satisfies driver.QueryerContext. A statement of the DDL of the
 // driver runs its HTTP call (D92), and any other statement is AQL.
 func (c *conn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
+	o, args, err := c.options(ctx, args)
+	if err != nil {
+		return nil, err
+	}
 	d, err := parseDDL(query)
 	switch {
 	case err != nil:
@@ -62,12 +70,12 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 		if len(args) > 0 {
 			return nil, fmt.Errorf("running %s: it takes no arguments: %w", d.verb, dbimp.ErrArguments)
 		}
-		if err := d.run(ctx, c.c); err != nil {
+		if err := d.run(ctx, c.c, o.database); err != nil {
 			return nil, err
 		}
 		return &noRows{}, nil
 	}
-	return c.cursor(ctx, query, args)
+	return c.cursor(ctx, o, query, args)
 }
 
 // ExecContext satisfies driver.ExecerContext. It reads the result to its
@@ -118,7 +126,7 @@ func (c *conn) Close() error {
 // Ping satisfies driver.Pinger. It reads the version of the database, which
 // checks the credentials and the database (measured).
 func (c *conn) Ping(ctx context.Context) error {
-	return c.c.call(ctx, http.MethodGet, "version", nil, nil, "")
+	return c.c.call(ctx, http.MethodGet, api(c.c.cfg.Database, "version"), nil, nil, "")
 }
 
 // trx returns the id of the open transaction, or "".

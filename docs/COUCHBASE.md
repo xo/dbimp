@@ -88,6 +88,10 @@ lead, not a fact.
   driver registers one name (D28).
 - The other keys are `query_context`, `scan_consistency` and `timeout`
   (D38), `durability_level` (D43) and `txtimeout` (D46).
+- Each of these keys is also an option, for one statement or for
+  `BeginTx` (D40). `WithDatabase` sets `query_context`, as
+  `WithQueryContext` does, because the query service has no database, and
+  every driver has `WithDatabase` (D109).
 - `dbrun dsn --json couchbase-<release>` prints two forms: `dsn`, which is
   `http://Administrator:...@127.0.0.1:<port>` for `go_n1ql`, and `url`, which
   is `couchbase://Administrator:...@127.0.0.1:<port>/` (read on 2026-09-27).

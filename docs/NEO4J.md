@@ -115,6 +115,11 @@ not a fact.
   URL with no user and no password sends no authentication. With
   `auth=bearer`, it sends the password as a Bearer token, and no user
   (D110 and D116).
+- Each key of the DSN that can change for one statement is also an option
+  (D109). `WithDatabase` sets the database of the path, and `WithCancel`
+  sets `cancel`. A statement of a transaction runs in the database of the
+  transaction, and `WithDatabase` with another database fails with
+  `dbimp.ErrNotSupported`.
 - The tools of Neo4j write `neo4j://host:7687` for Bolt with routing. A URL
   copied from them names the port of Bolt, and the request fails (D60).
 
@@ -356,6 +361,15 @@ otherwise):
   2026.09.0, it stops the query with
   `Neo.ClientError.Transaction.TransactionTimedOutClientConfiguration` after
   the rows, with HTTP 202 (recorded).
+- `maxExecutionTime` counts whole seconds. On 2026.09.0, the value 1 stopped
+  the slow query after 1.1 seconds, and 2 stopped it after 3.9 seconds. The
+  value 3000 let it run to its end after 5.4 seconds. The server takes 0.5
+  and gives no error (measured by hand on 2026-09-29). So `WithTimeout`
+  rounds its time up to the next second, and the test of the driver stops a
+  statement with `WithTimeout(500*time.Millisecond)` (tested).
+- `CALL db.info() YIELD name` gives `system` in a request to
+  `/db/system/query/v2`, for both principals, on both releases (tested).
+  So `WithDatabase` reaches another database through the path.
 - `DELETE` of a transaction fails while a statement in it runs (measured by
   hand).
 
@@ -508,9 +522,9 @@ The differences that a caller sees:
 
 | | `couchbase` | `neo4j` |
 | --- | --- | --- |
-| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2600 lines in 10 files |
+| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2800 lines in 11 files |
 | `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Database`, `Cancel` |
-| Options for one statement | Five `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40 and D46). `WithParameter` sets any key of the body | None |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`, as `WithQueryContext` does. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase` and `WithCancel`, through `WithOptions` or an argument. `BeginTx` takes them through `WithOptions` only (D109). `WithParameter` sets any key of the body. `WithTimeout` gives `dbimp.ErrNotSupported` before 2026.04 |
 | Arguments | Sent to the server as `args` and `$name` | Sent in `parameters` as typed JSON. Ordinal n fills `$n` (D64). A struct, a node, a relationship, a path and an `apd.Decimal` are refused |
 | Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | `dbimp.ArrayRows` from the root package, over `values` |
 | Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | None |
@@ -521,7 +535,7 @@ The differences that a caller sees:
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | `cancel=tag`, `cancel=metadata` or `cancel=none` (D67 and D95). An early `Close` stops a statement that runs on, and in a transaction reads the rest of the answer (D105) |
 | Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code int, Msg}` | `*ResponseError`, with the HTTP status and a list of `Error{Code string, Message}` |
 | Authentication | Basic | `auth=basic`, or `auth=bearer`, which the server of dbrun refuses (D116) |
-| Other exports | The `With` options and `Option` | The Go types of D63, and `CancelTag`, `CancelMetadata` and `CancelNone` |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, the Go types of D63, and `CancelTag`, `CancelMetadata` and `CancelNone` |
 
 The differences that a caller sees:
 
@@ -539,10 +553,9 @@ The differences that a caller sees:
 - An early `Close` in a transaction reads the rest of the answer, where
   Couchbase reads nothing more (D105).
 - Ken decided these on 2026-09-29:
-  - The driver takes no option for one statement yet, though the server
-    takes `accessMode`, `includeCounters` and `maxExecutionTime` in each
-    request. D109 gives every driver the options of Couchbase, and W15 of
-    [BACKLOG.md](BACKLOG.md) adds them.
+  - The driver takes the four options that D109 gives every driver, and
+    `WithCancel` for the key `cancel`. W15 of [BACKLOG.md](BACKLOG.md)
+    added them.
   - The driver has no `IsValid`, and `CheckNamedValue` calls `Value` of a
     `driver.Valuer` itself and refuses a struct (D112). It needs no
     `ResetSession` (D102).

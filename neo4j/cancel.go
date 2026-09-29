@@ -130,7 +130,7 @@ func (c *Connector) column(ctx context.Context, statement, name, value string) (
 		return nil, err
 	}
 	b := body{Statement: statement, Parameters: map[string]jsontext.Value{name: arg}}
-	res, err := c.post(ctx, http.MethodPost, c.queryPath(), b, version10)
+	res, err := c.post(ctx, http.MethodPost, c.queryPath(c.cfg.Database), b, version10)
 	if err != nil {
 		return nil, err
 	}
@@ -161,9 +161,11 @@ func (c *Connector) column(ctx context.Context, statement, name, value string) (
 	}
 }
 
-// takesMetadata reports whether the server takes txMetadata, which arrived
-// in 2026.04 (D67). It reads the release from GET / once for the connector.
-func (c *Connector) takesMetadata(ctx context.Context) (bool, error) {
+// newRelease reports whether the release of the server is 2026.04 or later.
+// Such a release takes txMetadata (D67), and honors maxExecutionTime, which
+// 5.26.31 ignores (measured on 5.26.31 and 2026.09.0, D109). It reads the
+// release from GET / once for the connector.
+func (c *Connector) newRelease(ctx context.Context) (bool, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if c.metadata != nil {

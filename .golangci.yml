@@ -94,6 +94,16 @@ linters:
           msg: take the context from the caller, never make one here
         - pattern: ^\(\*database/sql\.(DB|Conn|Tx|Stmt)\)\.(Query|Exec|QueryRow|Prepare)$
           msg: use the Context form, such as QueryContext
+    # A function that returns its type parameter, such as dbimp.Resolve,
+    # returns the concrete type of the caller, and no interface. The rest is
+    # the default of ireturn.
+    ireturn:
+      allow:
+        - anon
+        - error
+        - empty
+        - stdlib
+        - generic
     # A deferred Close has nothing left to report after the code read Err. Wrapping the defer in a closure to discard it reads worse.
     errcheck:
       exclude-functions:

@@ -165,7 +165,7 @@ func undo(t *testing.T, p principal, path string) {
 	c := NewConnector(config(t, p))
 	t.Cleanup(func() {
 		defer c.transport.CloseIdleConnections()
-		if err := c.call(context.WithoutCancel(t.Context()), http.MethodDelete, path, nil, nil, ""); err != nil {
+		if err := c.call(context.WithoutCancel(t.Context()), http.MethodDelete, api(c.cfg.Database, path), nil, nil, ""); err != nil {
 			t.Errorf("deleting %s at the end of the test: %v", path, err)
 		}
 	})
@@ -178,7 +178,7 @@ func callIn(t *testing.T, p principal, db, method, path string, body any) error 
 	cfg.Database = db
 	c := NewConnector(cfg)
 	defer c.transport.CloseIdleConnections()
-	return c.call(t.Context(), method, path, body, nil, "")
+	return c.call(t.Context(), method, api(c.cfg.Database, path), body, nil, "")
 }
 
 func TestIntegrationFeatures(t *testing.T) {
@@ -259,7 +259,7 @@ func TestIntegrationFeatures(t *testing.T) {
 			}
 			c := NewConnector(config(t, p))
 			defer c.transport.CloseIdleConnections()
-			if err := c.call(t.Context(), http.MethodGet, "query-cache/properties", nil, &props, ""); err != nil {
+			if err := c.call(t.Context(), http.MethodGet, api(c.cfg.Database, "query-cache/properties"), nil, &props, ""); err != nil {
 				t.Fatal(err)
 			}
 			if props.Mode == "" {
@@ -283,7 +283,7 @@ func TestIntegrationFeatures(t *testing.T) {
 			var plan map[string]any
 			c := NewConnector(config(t, p))
 			defer c.transport.CloseIdleConnections()
-			if err := c.call(t.Context(), http.MethodPost, "explain", map[string]any{"query": "FOR d IN " + v + " RETURN d"}, &plan, ""); err != nil {
+			if err := c.call(t.Context(), http.MethodPost, api(c.cfg.Database, "explain"), map[string]any{"query": "FOR d IN " + v + " RETURN d"}, &plan, ""); err != nil {
 				t.Fatal(err)
 			}
 			if _, ok := plan["plan"]; !ok {
@@ -294,7 +294,7 @@ func TestIntegrationFeatures(t *testing.T) {
 			var res map[string]any
 			c := NewConnector(config(t, p))
 			defer c.transport.CloseIdleConnections()
-			if err := c.call(t.Context(), http.MethodPost, "cursor", map[string]any{"query": "RETURN 1", "options": map[string]any{"profile": true}}, &res, ""); err != nil {
+			if err := c.call(t.Context(), http.MethodPost, api(c.cfg.Database, "cursor"), map[string]any{"query": "RETURN 1", "options": map[string]any{"profile": true}}, &res, ""); err != nil {
 				t.Fatal(err)
 			}
 			b, err := json.Marshal(res["extra"])

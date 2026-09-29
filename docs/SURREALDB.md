@@ -50,7 +50,17 @@ measured" is a lead, not a fact.
   variable. 2.7.0 read `?x=5` as the number 5, and 3.x read it as the string
   `"5"` (recorded).
 - `Surreal-NS` and `Surreal-DB` name the namespace and the database of the
-  statement (recorded).
+  statement (recorded). With `Surreal-DB: other`, `session::db()` gives
+  `other` for the root user on 2.7.0 and 3.3.0. A user of the database
+  `dbmeta` gets `other` on 2.7.0, and HTTP 401 with "There was a problem
+  with authentication" on 3.3.0 (measured by hand on 2026-09-29, and
+  tested).
+- The body of `/rpc` can hold a key that the server does not know, and the
+  server ignores it. 3.3.0 sends the `id` of the request back, and 2.7.0
+  does not (measured by hand on 2026-09-29).
+- The RPC manual names no timeout and no read-only mode for one request.
+  The server has `--query-timeout` for every request (the RPC manual, read on
+  2026-09-29).
 - Authentication is basic. The root user sends only its name and its
   password. A user defined on a database also sends `Surreal-Auth-NS` and
   `Surreal-Auth-DB`, which name where the user is defined. Each form refuses
@@ -74,6 +84,9 @@ measured" is a lead, not a fact.
   server serves TLS on the port that it binds is not measured. Gemini and
   DeepSeek said that it does.
 - `encoding` is `cbor` or `json`, and the default is `cbor` (D49).
+- The path can change for one statement, so its two segments are options:
+  `WithNamespace` and `WithDatabase` set `Surreal-NS` and `Surreal-DB`
+  (D109). The headers of the credentials keep the path of the DSN.
 - `dbrun dsn --json` prints the URL of each principal in the field
   `principals`, and the URL of the ordinary user holds `?auth=database`
   (dbmeta D103, read on 2026-09-27).
@@ -431,9 +444,9 @@ The differences that a caller sees:
 
 | | `couchbase` | `surrealdb` |
 | --- | --- | --- |
-| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2300 lines in 10 files, and the CBOR code of the root package |
+| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2900 lines in 12 files, and the CBOR code of the root package |
 | `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Namespace`, `Database`, `Auth`, `Encoding` |
-| Options for one statement | Five `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40 and D46). `WithParameter` sets any key of the body | None |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`, as `WithQueryContext` does. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithNamespace` and `WithDatabase`, through `WithOptions` or an argument (D109). `WithParameter` sets any key of the body of `/rpc`. `WithTimeout` and `WithReadonly` give `dbimp.ErrNotSupported` |
 | Arguments | Sent to the server as `args` and `$name` | Named only, sent in `vars`. An argument with no name is refused with `dbimp.ErrArguments` |
 | Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | A concrete reader of the result sets for each format, `cborSets` and `jsonSets`, which walk the answer alike with their own decoders (D108). Each reads the first record ahead to learn the columns |
 | Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | None |
@@ -445,7 +458,7 @@ The differences that a caller sees:
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same (D56) |
 | Errors | `*ResponseError`, with a list of `Error{Code, Msg}`. A body that is not JSON is a `*dbimp.StatusError`. An error after a row wraps `dbimp.ErrIncomplete` (D107) | `*ResponseError`, with a list of `Error{Code, Kind, Msg}`. A body that is not JSON is a `*dbimp.StatusError` (D55). A failed statement sends no row, so it does not wrap `dbimp.ErrIncomplete` (D107) |
 | Authentication | Basic | Basic, with `auth=root`, `auth=namespace` or `auth=database` (D51) |
-| Other exports | The `With` options and `Option` | `Version` for `Conn.Raw` (D57), `RecordID` (D70), and the constants of `auth` and `encoding` |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Version` for `Conn.Raw` (D57), `RecordID` (D70), and the constants of `auth` and `encoding` |
 
 The differences that a caller sees:
 
@@ -459,9 +472,11 @@ The differences that a caller sees:
 - Only Couchbase takes a `*jsontext.Value` destination, and gives the JSON
   text of an object or an array scanned into a `*[]byte` (D39).
 - Ken decided these on 2026-09-29:
-  - The driver takes no option for one statement yet, though SurrealQL has
-    a `TIMEOUT` clause. D109 gives every driver the options of Couchbase,
-    and W15 of [BACKLOG.md](BACKLOG.md) adds them.
+  - The driver takes the four options that D109 gives every driver, and
+    `WithNamespace` for the first segment of the path. W15 of
+    [BACKLOG.md](BACKLOG.md) added them. `WithTimeout` and `WithReadonly`
+    give `dbimp.ErrNotSupported`, because a request has neither. The
+    `TIMEOUT` clause of SurrealQL limits one statement.
   - `auth` keeps its meaning, the level of the user (D51), as the one
     exception to D94 (D110).
   - A CBOR integer outside the range of `int64` reads as an

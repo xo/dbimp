@@ -137,6 +137,10 @@ with these keys:
 | `auth` | `basic`, `bearer` | `basic` | D94 and D116 |
 
 - The path is the database, which the driver sends as `db`.
+- Each key that can change for one statement is also an option (D109). The
+  path is `WithDatabase`, `rp` is `WithRetentionPolicy`, `chunked` is
+  `WithChunked`, and `describe` is `WithDescribe`. An INSERT without `INTO`
+  writes to the database and the retention policy of the options.
 - A token is the password. Without a port, the driver uses 8086 for `version`
   `1` or `2`, and 8181 otherwise.
 - Examples: `influxdb://_admin:apiv3_token@localhost:8181/dbmeta` for
@@ -395,7 +399,15 @@ InfluxQL:
   client left, by `influxql_service_executing_duration_seconds` of
   `/metrics`. D115 relies on this. `query-timeout` on InfluxDB 1 stops a
   query after a time, and its default is `0s`, which is no limit (the v1
-  guides).
+  guides). It holds for the whole server. The manual of InfluxDB 3 names no
+  timeout for one query in `/api/v3/query_sql` or `/query` (read on
+  2026-09-29). So `WithTimeout` gives `dbimp.ErrNotSupported` (D109).
+- `GET /query` runs a write on 1.13.1, with only the warning "deprecated
+  use of 'CREATE DATABASE ...' in a read only context, please use a POST
+  request instead". 2.9.1 and 3.11.5 answer `not implemented` to the same
+  statement over GET and POST alike (measured by hand on 2026-09-29). No
+  release has another read-only mode, so `WithReadonly` gives
+  `dbimp.ErrNotSupported` (D109).
 - A query with `GROUP BY time()` and no bound on `time` counts its groups
   from 1970, and a group of one second made 1.13.1 stop with no answer
   (measured by hand on 2026-09-29). With a bound on `time`, the same query
@@ -610,9 +622,9 @@ The differences that a caller sees:
 
 | | `couchbase` | `influxdb` |
 | --- | --- | --- |
-| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2600 lines in 10 files |
+| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2800 lines in 11 files |
 | `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Database`, `RetentionPolicy`, `SQLMode`, `Version`, `Describe`, `Chunked` |
-| Options for one statement | Five `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40 and D46). `WithParameter` sets any key of the body | None |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`, as `WithQueryContext` does. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithRetentionPolicy`, `WithChunked` and `WithDescribe`, through `WithOptions` or an argument (D109). `WithParameter` sets any key of the JSON body of SQL, or of the form of InfluxQL. `WithTimeout` and `WithReadonly` give `dbimp.ErrNotSupported` |
 | Arguments | Sent to the server as `args` and `$name`. Any value that JSON encodes | Sent in `params`, by name or by ordinal. A `[]byte`, a NaN, an infinity, a map and a slice are refused. `INSERT` writes each argument as a literal of line protocol (D85) |
 | Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | SQL: `dbimp.ObjectRows`, with the columns of `DESCRIBE`. InfluxQL: `dbimp.ArrayRows` for each series |
 | Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | SQL: the same three from `DESCRIBE`, and `ColumnTypePrecisionScale`. InfluxQL: none |
@@ -624,7 +636,7 @@ The differences that a caller sees:
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same (D36), with no decision of its own for InfluxDB |
 | Errors | `*ResponseError`, with a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Statement, Message}`, which unwraps to `*dbimp.StatusError` for a status that is not 2xx |
 | Authentication | Basic | `auth=basic`, or `auth=bearer`, which sends `Token` to InfluxDB 2 and `Bearer` to the other releases (D116) |
-| Other exports | The `With` options and `Option` | `Version` and `Dialect` for `Conn.Raw`, `SQL` and `InfluxQL`, and the constants of `sqlmode`, `describe` and `chunked` |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Version` and `Dialect` for `Conn.Raw`, `SQL` and `InfluxQL`, and the constants of `sqlmode`, `describe` and `chunked` |
 
 The differences that a caller sees:
 
@@ -638,8 +650,10 @@ The differences that a caller sees:
 - Ken decided these on 2026-09-29:
   - The driver closes the body, as Couchbase does, because every release
     stops a query when the client leaves (D115).
-  - The driver takes no option for one statement yet, such as `rp`,
-    `chunked` or `describe` for one query. D109 gives every driver the
-    options of Couchbase, and W15 of [BACKLOG.md](BACKLOG.md) adds them.
+  - The driver takes the four options that D109 gives every driver, and an
+    option for each of `rp`, `chunked` and `describe`. W15 of
+    [BACKLOG.md](BACKLOG.md) added them. `WithTimeout` and `WithReadonly`
+    give `dbimp.ErrNotSupported`, because no release has either for one
+    request.
   - The port does not change with `tls=true`, `RowsAffected` returns an
     error, and InfluxQL binds `$1` (D111).

@@ -22,7 +22,8 @@ func Version(ctx context.Context, dc any) (string, error) {
 	if !ok {
 		return "", fmt.Errorf("reading the version through a connection of %T, which is not of this driver: %w", dc, dbimp.ErrNotSupported)
 	}
-	r, err := c.send(ctx, rpcRequest{Method: "version", Params: []any{}})
+	o, _ := resolve(ctx, &c.c.cfg, nil)
+	r, err := c.send(ctx, o, rpcRequest{Method: "version", Params: []any{}})
 	if err != nil {
 		return "", fmt.Errorf("reading the version: %w", err)
 	}

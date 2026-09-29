@@ -79,7 +79,7 @@ func (c *Connector) auth(req *http.Request) {
 	dbimp.SetAuth(req, c.cfg.Auth, "Bearer", c.cfg.User, c.cfg.Password)
 }
 
-// do sends one request to path, under the API of the database, with body
+// do sends one request to path, which api makes, with body
 // written as JSON when it is not nil, and with the header x-arango-trx-id
 // when trx is not "". It returns a response of JSON with a 2xx status. Any
 // other response is an error, and its body is closed.

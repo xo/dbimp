@@ -47,6 +47,9 @@ type cursorBody struct {
 // (D90).
 type cursorOptions struct {
 	Stream bool `json:"stream"`
+	// MaxRuntime is the time that the server gives the query, in seconds,
+	// which can hold a fraction (measured by hand on 3.12.12).
+	MaxRuntime float64 `json:"maxRuntime,omitzero"`
 }
 
 // rows reads a cursor one batch at a time, and each batch one token at a
@@ -56,6 +59,8 @@ type rows struct {
 	// ctx is the context of QueryContext, which each fetch of a batch uses
 	// (D90). database/sql closes the rows when it ends.
 	ctx context.Context //nolint:containedctx // D90 keeps the context of QueryContext for the fetch of each batch.
+	// db is the database of the query, and trx its transaction or "".
+	db  string
 	trx string
 	// tag names the query in its comment, or is "" for cancel=none (D90 and
 	// D99).
@@ -83,25 +88,29 @@ type rows struct {
 // ensure the interfaces.
 var _ driver.RowsColumnScanner = (*rows)(nil)
 
-// cursor sends a query, and reads the result up to its first row, which
-// names the columns (D89).
-func (c *conn) cursor(ctx context.Context, query string, args []driver.NamedValue) (*rows, error) {
+// cursor sends a query with the options o, and reads the result up to its
+// first row, which names the columns (D89).
+func (c *conn) cursor(ctx context.Context, o options, query string, args []driver.NamedValue) (*rows, error) {
 	vars, err := bindVars(query, args)
 	if err != nil {
 		return nil, err
 	}
-	b := cursorBody{Query: query, BindVars: vars, BatchSize: c.c.cfg.Batch, Options: cursorOptions{Stream: true}}
+	b := cursorBody{Query: query, BindVars: vars, BatchSize: o.batch, Options: cursorOptions{Stream: true, MaxRuntime: o.timeout.Seconds()}}
 	var tag string
-	if c.c.cfg.Cancel == CancelTag {
+	if o.cancel == CancelTag {
 		tag = c.tag()
 		b.Query = tagged(query, tag)
 	}
-	w := c.watch(ctx, tag)
-	res, err := c.c.do(ctx, http.MethodPost, "cursor", b, c.trx())
+	body, err := dbimp.MarshalParams(b, o.params)
+	if err != nil {
+		return nil, fmt.Errorf("writing the request: %w", err)
+	}
+	w := c.watch(ctx, o.database, tag)
+	res, err := c.c.do(ctx, http.MethodPost, api(o.database, "cursor"), jsontext.Value(body), c.trx())
 	if _, serr := w.end(); err != nil {
 		return nil, errors.Join(err, serr)
 	}
-	r := &rows{c: c, ctx: ctx, trx: c.trx(), tag: tag}
+	r := &rows{c: c, ctx: ctx, db: o.database, trx: c.trx(), tag: tag}
 	if err := r.start(res); err != nil {
 		return nil, errors.Join(err, r.close(ctx))
 	}
@@ -207,11 +216,11 @@ func (r *rows) close(ctx context.Context) error {
 	defer cancel()
 	switch {
 	case r.inResult && r.id == "" && r.tag != "":
-		if kerr := r.c.c.kill(ctx, r.tag); kerr != nil {
+		if kerr := r.c.c.kill(ctx, r.db, r.tag); kerr != nil {
 			err = errors.Join(err, kerr)
 		}
 	case r.id != "" && (r.inResult || r.more):
-		derr := r.c.c.call(ctx, http.MethodDelete, "cursor/"+url.PathEscape(r.id), nil, nil, r.trx)
+		derr := r.c.c.call(ctx, http.MethodDelete, api(r.db, "cursor/"+url.PathEscape(r.id)), nil, nil, r.trx)
 		if derr != nil && !is(derr, numCursorNotFound) {
 			err = errors.Join(err, fmt.Errorf("deleting the cursor: %w", derr))
 		}
@@ -383,7 +392,7 @@ func (r *rows) next() (jsontext.Value, bool, error) {
 			r.ended = true
 			return nil, false, nil
 		}
-		res, err := r.c.c.do(r.ctx, http.MethodPost, "cursor/"+url.PathEscape(r.id), nil, r.trx)
+		res, err := r.c.c.do(r.ctx, http.MethodPost, api(r.db, "cursor/"+url.PathEscape(r.id)), nil, r.trx)
 		if err != nil {
 			// A failed batch ends the cursor on the server (measured).
 			r.ended = true

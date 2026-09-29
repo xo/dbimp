@@ -686,7 +686,7 @@ not a JWT, and on Neo4j 5.26.31 and 2026.09.0, where the server refuses the
 scheme. The accepting path of Neo4j is not measured, because dbrun runs no
 identity provider.
 
-## W15. Give every driver the same options
+## W15. Give every driver the same options. Done.
 
 D109 gives every driver options for one statement, through the machinery
 of the root package. Couchbase has them now (D40), and moves to that
@@ -716,3 +716,22 @@ machinery. For each driver:
 
 Record it in the next release. It adds to the API of every driver, and
 changes the type of `couchbase.Option`, which stays source compatible.
+
+It went in on 2026-09-29. The root package holds `options.go`, with
+`MarshalParams` for the keys of `WithParameter`. The gate
+`TestEveryDriverTakesTheCommonOptions` holds the five common functions and
+the alias `Option` in each driver, and step 12 of [DRIVER.md](DRIVER.md)
+holds the rest. The measurements settled the leads:
+
+| Driver | `WithTimeout` | `WithReadonly` | `WithDatabase` | Options of the DSN |
+| --- | --- | --- | --- | --- |
+| Couchbase | `timeout` | `readonly` | `query_context` | `WithQueryContext`, `WithScanConsistency`, `WithDurability`, `WithTransactionTimeout` |
+| Neo4j | `maxExecutionTime`, in whole seconds, on 2026.04 and later | `accessMode: READ` | the path | `WithCancel` |
+| ArangoDB | `options.maxRuntime`, in seconds with a fraction | a read-only transaction only | the path | `WithBatch`, `WithCancel` |
+| SurrealDB | `dbimp.ErrNotSupported` | `dbimp.ErrNotSupported` | `Surreal-DB` | `WithNamespace` |
+| InfluxDB | `dbimp.ErrNotSupported` | `dbimp.ErrNotSupported` | `db` | `WithRetentionPolicy`, `WithChunked`, `WithDescribe` |
+
+Each product document holds the measurements, and D109 holds what the work
+settled. The integration tests passed on Neo4j 5.26.31 and 2026.09.0,
+ArangoDB 3.12.12, SurrealDB 2.7.0 and 3.3.0, InfluxDB 1.13.1, 2.9.1 and
+3.11.5, and Couchbase 8.0.3.

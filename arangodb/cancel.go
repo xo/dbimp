@@ -53,16 +53,17 @@ type watch struct {
 	err  error
 }
 
-// watch returns a watch of ctx for the query that tag names. It returns nil
-// for cancel=none, and every method of a nil watch does nothing.
-func (c *conn) watch(ctx context.Context, tag string) *watch {
+// watch returns a watch of ctx for the query that tag names in the database
+// db. It returns nil for cancel=none, and every method of a nil watch does
+// nothing.
+func (c *conn) watch(ctx context.Context, db, tag string) *watch {
 	if tag == "" {
 		return nil
 	}
 	w := &watch{done: make(chan struct{})}
 	w.stop = context.AfterFunc(ctx, func() {
 		defer close(w.done)
-		w.err = c.c.kill(ctx, tag)
+		w.err = c.c.kill(ctx, db, tag)
 	})
 	return w
 }
@@ -82,19 +83,19 @@ func (w *watch) end() (bool, error) {
 	return w.ran, w.err
 }
 
-// kill finds the running query whose comment holds tag, and kills it
-// (measured). The
+// kill finds the running query of the database db whose comment holds tag,
+// and kills it (measured). The
 // cursor of a streaming query that is killed keeps its collections until the
 // next fetch or the end of its ttl (measured). It uses ctx without its end,
 // because ctx can have ended.
-func (c *Connector) kill(ctx context.Context, tag string) error {
+func (c *Connector) kill(ctx context.Context, db, tag string) error {
 	ctx, cancel := context.WithTimeout(context.WithoutCancel(ctx), stopTimeout)
 	defer cancel()
 	var current []struct {
 		ID    string `json:"id"`
 		Query string `json:"query"`
 	}
-	if err := c.call(ctx, http.MethodGet, "query/current", nil, &current, ""); err != nil {
+	if err := c.call(ctx, http.MethodGet, api(db, "query/current"), nil, &current, ""); err != nil {
 		return fmt.Errorf("finding the query to stop it on the server: %w", err)
 	}
 	var errs []error
@@ -102,7 +103,7 @@ func (c *Connector) kill(ctx context.Context, tag string) error {
 		if !isTagged(q.Query, tag) {
 			continue
 		}
-		if err := c.call(ctx, http.MethodDelete, "query/"+url.PathEscape(q.ID), nil, nil, ""); err != nil {
+		if err := c.call(ctx, http.MethodDelete, api(db, "query/"+url.PathEscape(q.ID)), nil, nil, ""); err != nil {
 			errs = append(errs, fmt.Errorf("stopping the query %s on the server: %w", q.ID, err))
 		}
 	}

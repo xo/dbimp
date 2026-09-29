@@ -2,16 +2,21 @@ package couchbase
 
 import (
 	"context"
+	"database/sql/driver"
+	"fmt"
 	"maps"
+	"slices"
 	"time"
+
+	"github.com/xo/dbimp"
 )
 
-// Option sets an option of one statement or one transaction (D40). An option
-// comes from the DSN, then from the context through WithOptions, then from
-// an argument of the statement, and a later one wins. BeginTx takes no
-// argument, so an option of a transaction comes from the DSN or through
-// WithOptions only.
-type Option func(*options)
+// Option sets an option of one statement or one transaction (D40 and D109).
+// An option comes from the DSN, then from the context through WithOptions,
+// then from an argument of the statement, and a later one wins. BeginTx
+// takes no argument, so an option of a transaction comes from the DSN or
+// through WithOptions only.
+type Option = dbimp.Option[options]
 
 // options are the options of one request.
 type options struct {
@@ -28,6 +33,14 @@ type options struct {
 // statement names alone, such as "default:dbmeta._default".
 func WithQueryContext(v string) Option {
 	return func(o *options) { o.queryContext = v }
+}
+
+// WithDatabase sets the bucket and the scope of a collection that a
+// statement names alone, as WithQueryContext does. It is the name that every
+// driver gives the option (D109). The query service has no database, and
+// query_context is the setting nearest to one.
+func WithDatabase(name string) Option {
+	return WithQueryContext(name)
 }
 
 // WithScanConsistency sets the scan consistency, "not_bounded" or
@@ -74,35 +87,24 @@ func WithParameter(name string, value any) Option {
 	}
 }
 
-// optionsKey is the key of the options in a context.
-type optionsKey struct{}
-
 // WithOptions returns a context that carries opts. Each statement and each
 // transaction started with the context applies them after the options of
 // the DSN.
 func WithOptions(ctx context.Context, opts ...Option) context.Context {
-	prev, _ := ctx.Value(optionsKey{}).([]Option)
-	return context.WithValue(ctx, optionsKey{}, append(append([]Option(nil), prev...), opts...))
+	return dbimp.WithOptions(ctx, opts...)
 }
 
-// resolve returns the options of one request: those of the DSN, then those of
-// the context, then extra.
-func resolve(ctx context.Context, cfg *Config, extra []Option) options {
-	o := options{
+// resolve returns the options of one request, those of the DSN, then those
+// of the context, then the Option arguments of args, and the other arguments
+// (D109).
+func resolve(ctx context.Context, cfg *Config, args []driver.NamedValue) (options, []driver.NamedValue) {
+	return dbimp.Resolve(ctx, options{
 		queryContext:    cfg.QueryContext,
 		scanConsistency: cfg.ScanConsistency,
 		timeout:         cfg.Timeout,
 		durability:      cfg.Durability,
 		txTimeout:       cfg.TxTimeout,
-	}
-	fromCtx, _ := ctx.Value(optionsKey{}).([]Option)
-	for _, opt := range fromCtx {
-		opt(&o)
-	}
-	for _, opt := range extra {
-		opt(&o)
-	}
-	return o
+	}, args)
 }
 
 // body adds the options that apply to a statement to a request body.
@@ -120,4 +122,19 @@ func (o options) body(b map[string]any) {
 		b["readonly"] = true
 	}
 	maps.Copy(b, o.params)
+}
+
+// check returns an error for an option whose value the DSN would refuse.
+func (o options) check() error {
+	switch {
+	case o.scanConsistency != "" && !slices.Contains(scanConsistencies, o.scanConsistency):
+		return fmt.Errorf("applying the option WithScanConsistency: %q: %w", o.scanConsistency, dbimp.ErrInvalidValue)
+	case o.durability != "" && !slices.Contains(durabilities, o.durability):
+		return fmt.Errorf("applying the option WithDurability: %q: %w", o.durability, dbimp.ErrInvalidValue)
+	case o.timeout < 0:
+		return fmt.Errorf("applying the option WithTimeout: %v: %w", o.timeout, dbimp.ErrInvalidValue)
+	case o.txTimeout < 0:
+		return fmt.Errorf("applying the option WithTransactionTimeout: %v: %w", o.txTimeout, dbimp.ErrInvalidValue)
+	}
+	return nil
 }

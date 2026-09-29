@@ -5,10 +5,10 @@ import (
 	"context"
 	"database/sql/driver"
 	"encoding/json/jsontext"
-	"encoding/json/v2"
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -58,12 +58,22 @@ type body struct {
 	Parameters map[string]jsontext.Value `json:"parameters,omitzero"`
 	AccessMode string                    `json:"accessMode,omitzero"`
 	TxMetadata map[string]jsontext.Value `json:"txMetadata,omitzero"`
+	// MaxExecutionTime is the time that the server gives the statement, in
+	// seconds (measured by hand on 2026.09.0).
+	MaxExecutionTime int64 `json:"maxExecutionTime,omitzero"`
+	// Extra holds the keys of WithParameter, which dbimp.MarshalParams
+	// writes (D109).
+	Extra map[string]any `json:"-"`
 }
 
 // CheckNamedValue satisfies driver.NamedValueChecker. It calls the Value
 // method of a driver.Valuer, and takes each value that the driver can encode
 // as typed JSON (D63), so that each keeps its type on the server.
 func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
+	if dbimp.IsOption[options](nv.Value) {
+		// The statement takes an Option out of its arguments (D109).
+		return nil
+	}
 	switch nv.Value.(type) {
 	case *apd.Decimal, apd.Decimal:
 		// A decimal has a Value method, which writes it as a string. Neo4j
@@ -166,8 +176,8 @@ func (c *conn) tag() string {
 
 // how returns how a statement of the connection is found on the server to
 // stop it: CancelTag, CancelMetadata or "" for none (D67).
-func (c *conn) how(ctx context.Context) (string, error) {
-	switch c.c.cfg.Cancel {
+func (c *conn) how(ctx context.Context, cancel string) (string, error) {
+	switch cancel {
 	case CancelNone:
 		return "", nil
 	case CancelMetadata:
@@ -177,7 +187,7 @@ func (c *conn) how(ctx context.Context) (string, error) {
 			}
 			return CancelTag, nil
 		}
-		ok, err := c.c.takesMetadata(ctx)
+		ok, err := c.c.newRelease(ctx)
 		if err != nil {
 			return "", err
 		}
@@ -194,7 +204,31 @@ func (c *conn) run(ctx context.Context, query string, args []driver.NamedValue) 
 	if t := c.tx; t != nil && t.ended != nil {
 		return nil, fmt.Errorf("running a statement: the transaction ended: %w", t.ended)
 	}
-	b := body{Statement: query}
+	database := c.c.cfg.Database
+	if c.tx != nil {
+		database = c.tx.database
+	}
+	o, args := resolve(ctx, &c.c.cfg, database, args)
+	if err := o.check(); err != nil {
+		return nil, err
+	}
+	b := body{Statement: query, Extra: o.params}
+	if o.readonly {
+		b.AccessMode = "READ"
+	}
+	if o.timeout > 0 {
+		ok, err := c.c.newRelease(ctx)
+		if err != nil {
+			return nil, err
+		}
+		if !ok {
+			return nil, dbimp.Unsupported("WithTimeout")
+		}
+		b.MaxExecutionTime = int64(math.Ceil(o.timeout.Seconds()))
+	}
+	if c.tx != nil && o.database != c.tx.database {
+		return nil, fmt.Errorf("running a statement in the database %q: the transaction is in %q: %w", o.database, c.tx.database, dbimp.ErrNotSupported)
+	}
 	version := version10
 	for _, arg := range args {
 		v, n, err := encode(arg.Value)
@@ -207,7 +241,7 @@ func (c *conn) run(ctx context.Context, query string, args []driver.NamedValue) 
 		b.Parameters[argName(arg)] = v
 		version = max(version, n)
 	}
-	how, err := c.how(ctx)
+	how, err := c.how(ctx, o.cancel)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +251,7 @@ func (c *conn) run(ctx context.Context, query string, args []driver.NamedValue) 
 	case how == CancelMetadata && c.tx == nil:
 		b.TxMetadata = c.metadata()
 	}
-	path := c.c.queryPath()
+	path := c.c.queryPath(o.database)
 	if c.tx != nil {
 		path += "/tx/" + c.tx.id
 	}
@@ -240,8 +274,8 @@ func (c *conn) run(ctx context.Context, query string, args []driver.NamedValue) 
 
 // queryPath returns the path of the Query API for the database of the
 // connector.
-func (c *Connector) queryPath() string {
-	return "/db/" + url.PathEscape(c.cfg.Database) + "/query/v2"
+func (c *Connector) queryPath(database string) string {
+	return "/db/" + url.PathEscape(database) + "/query/v2"
 }
 
 // post sends one request with the body b, whose arguments need the version
@@ -252,7 +286,7 @@ func (c *Connector) queryPath() string {
 func (c *Connector) post(ctx context.Context, method, path string, b body, version int) (*http.Response, error) {
 	var reader io.Reader
 	if method != http.MethodDelete {
-		buf, err := json.Marshal(b)
+		buf, err := dbimp.MarshalParams(b, b.Extra)
 		if err != nil {
 			return nil, fmt.Errorf("writing the request: %w", err)
 		}

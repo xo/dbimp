@@ -91,6 +91,12 @@ one. The keys are these, and any other key is refused:
 | `batch` | the `batchSize` of each cursor, 1 or more | `1000` |
 | `auth` | `basic`, `bearer` (D94) | `basic` |
 
+Each key that can change for one statement is also an option: `batch` is
+`WithBatch`, `cancel` is `WithCancel`, and the path is `WithDatabase`
+(D109). A statement of a transaction runs in the database of the
+transaction, and `WithDatabase` with another database fails with
+`dbimp.ErrNotSupported`.
+
 The dbmeta entry prints the `url`
 `arangodb://root:<password>@127.0.0.1:<port>/dbmeta` for the administrator
 and the same for `dbmeta_user`, from dbmeta commit 29395a1.
@@ -179,6 +185,10 @@ The type table is written from the code by `TestTables` (step 10).
   `errorNum` 1652, and a read works (measured, 079 and 080).
 - The ordinary user can run a transaction on its collections (measured, 184
   to 197). D91 says how `BeginTx` works.
+- The cursor has no option that refuses a write (the HTTP manual). So
+  `WithReadonly` holds only for `BeginTx`, which then names no collection
+  for write, and for a statement in such a transaction. A statement outside
+  one with `WithReadonly` fails with `dbimp.ErrNotSupported` (D109, tested).
 
 ## Errors
 
@@ -215,7 +225,13 @@ The type table is written from the code by `TestTables` (step 10).
   The next fetch answers HTTP 410 with 1500, and a drop of the collection
   then runs at once (measured with `curl` on 2026-09-29).
 - `maxRuntime` kills a query after that time, with HTTP 410 and 1500
-  (measured, 053). The driver does not send it.
+  (measured, 053). It counts seconds and takes a fraction: 1 stopped a slow
+  query after 1.0 seconds, and 0.3 after 0.31 seconds (measured with `curl`
+  on 2026-09-29). `WithTimeout` sends it (D109, tested).
+- `CURRENT_DATABASE()` gives `_system` in a request to
+  `/_db/_system/_api/cursor` for the administrator. The ordinary user gets
+  HTTP 401 with 11 there (measured with `curl` on 2026-09-29, and tested). So
+  `WithDatabase` reaches another database through the path.
 - D90 says how the driver stops a query.
 
 ## Statements
@@ -397,9 +413,9 @@ The differences that a caller sees:
 
 | | `couchbase` | `arangodb` |
 | --- | --- | --- |
-| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 1800 lines in 10 files |
+| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2000 lines in 11 files |
 | `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Database`, `Cancel`, `Batch`, `Auth` |
-| Options for one statement | Five `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40 and D46). `WithParameter` sets any key of the body | None |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`, as `WithQueryContext` does. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithBatch` and `WithCancel`, through `WithOptions` or an argument. `BeginTx` takes them through `WithOptions` only (D109). `WithParameter` sets any key of the body. `WithReadonly` gives `dbimp.ErrNotSupported` outside a read-only transaction |
 | Arguments | Sent to the server as `args` and `$name` | Sent in `bindVars`. `@@name` is sent under the key `@name` (`values.go`) |
 | Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | A cursor of its own (`rows.go`). It fetches each batch with the context of `QueryContext`. `Close` deletes the cursor, or in the first batch kills the query by its tag when more than 1 MiB of the batch is left (D90) |
 | Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | None |
@@ -410,7 +426,7 @@ The differences that a caller sees:
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | `cancel=tag` kills the query by its tag, or `cancel=none` (D90) |
 | Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Num, Message}`, which unwraps to `*dbimp.StatusError` |
 | Authentication | Basic | `auth=basic` or `auth=bearer` (D94) |
-| Other exports | The `With` options and `Option` | `CancelTag`, `CancelNone`, `AuthBasic` and `AuthBearer` |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, and `CancelTag`, `CancelNone`, `AuthBasic` and `AuthBearer` |
 
 The differences that a caller sees:
 
@@ -419,9 +435,8 @@ The differences that a caller sees:
   and D103, proposed).
 - The DSN names the database in its path, and takes the keys `tls`,
   `cancel`, `batch` and `auth`, where Couchbase takes others (D93 and D94).
-- A caller of ArangoDB has no option for one statement yet. D109 gives
-  every driver the options of Couchbase, and W15 of
-  [BACKLOG.md](BACKLOG.md) adds them.
+- `WithReadonly` holds only in a read-only transaction, because the cursor
+  has no read-only mode, where Couchbase sends `readonly` (D109).
 - The driver has no `ResetSession`. A transaction comes only from `BeginTx`,
   because AQL has no statement that begins one, and `database/sql` always
   ends a transaction before it reuses the connection (D102).

@@ -292,27 +292,27 @@ func (p *ddlParser) fieldList(d *ddl) error {
 }
 
 // run sends the HTTP call of the statement (D92).
-func (d *ddl) run(ctx context.Context, c *Connector) error {
+func (d *ddl) run(ctx context.Context, c *Connector, db string) error {
 	switch {
 	case !d.index && !d.drop:
 		typ := 2
 		if d.edge {
 			typ = 3
 		}
-		err := c.call(ctx, http.MethodPost, "collection", map[string]any{"name": d.name, "type": typ}, nil, "")
+		err := c.call(ctx, http.MethodPost, api(db, "collection"), map[string]any{"name": d.name, "type": typ}, nil, "")
 		if d.ifExists && is(err, numDuplicateName) {
 			return nil
 		}
 		return wrapDDL(err, "creating the collection", d.name)
 	case !d.index:
-		err := c.call(ctx, http.MethodDelete, "collection/"+url.PathEscape(d.name), nil, nil, "")
+		err := c.call(ctx, http.MethodDelete, api(db, "collection/"+url.PathEscape(d.name)), nil, nil, "")
 		if d.ifExists && is(err, numCollectionNotFound) {
 			return nil
 		}
 		return wrapDDL(err, "dropping the collection", d.name)
 	case !d.drop:
 		if d.ifExists {
-			if id, err := indexID(ctx, c, d.coll, d.name); err != nil || id != "" {
+			if id, err := indexID(ctx, c, db, d.coll, d.name); err != nil || id != "" {
 				return wrapDDL(err, "finding the index", d.name)
 			}
 		}
@@ -331,10 +331,10 @@ func (d *ddl) run(ctx context.Context, c *Connector) error {
 			// [longitude, latitude] (D106).
 			body["geoJson"] = len(d.fields) == 1
 		}
-		err := c.call(ctx, http.MethodPost, "index?collection="+url.QueryEscape(d.coll), body, nil, "")
+		err := c.call(ctx, http.MethodPost, api(db, "index?collection="+url.QueryEscape(d.coll)), body, nil, "")
 		return wrapDDL(err, "creating the index", d.name)
 	}
-	id, err := indexID(ctx, c, d.coll, d.name)
+	id, err := indexID(ctx, c, db, d.coll, d.name)
 	switch {
 	case err != nil:
 		return wrapDDL(err, "finding the index", d.name)
@@ -343,19 +343,19 @@ func (d *ddl) run(ctx context.Context, c *Connector) error {
 	case id == "":
 		return fmt.Errorf("dropping the index %q: %q has no such index: %w", d.name, d.coll, dbimp.ErrInvalidValue)
 	}
-	return wrapDDL(c.call(ctx, http.MethodDelete, "index/"+id, nil, nil, ""), "dropping the index", d.name)
+	return wrapDDL(c.call(ctx, http.MethodDelete, api(db, "index/"+id), nil, nil, ""), "dropping the index", d.name)
 }
 
-// indexID returns the id of the index name of the collection coll, such as
-// types/123, or "" when there is none.
-func indexID(ctx context.Context, c *Connector, coll, name string) (string, error) {
+// indexID returns the id of the index name of the collection coll of the
+// database db, such as types/123, or "" when there is none.
+func indexID(ctx context.Context, c *Connector, db, coll, name string) (string, error) {
 	var list struct {
 		Indexes []struct {
 			ID   string `json:"id"`
 			Name string `json:"name"`
 		} `json:"indexes"`
 	}
-	if err := c.call(ctx, http.MethodGet, "index?collection="+url.QueryEscape(coll), nil, &list, ""); err != nil {
+	if err := c.call(ctx, http.MethodGet, api(db, "index?collection="+url.QueryEscape(coll)), nil, &list, ""); err != nil {
 		return "", err
 	}
 	for _, ix := range list.Indexes {

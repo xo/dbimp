@@ -660,3 +660,39 @@ func TestIntegrationNotFinite(t *testing.T) {
 		t.Errorf("a NULL is %v, want NULL", null)
 	}
 }
+
+// TestIntegrationOptions holds the options of one statement on the server
+// (D109). The DSN names a database that does not exist, and WithDatabase
+// names dbmeta, where the rows are.
+func TestIntegrationOptions(t *testing.T) {
+	m := measurement("options")
+	write(t, m+" v=1i 1700000000000000000", m+" v=2i 1700000000000000001")
+	for _, p := range principals {
+		t.Run(p.name, func(t *testing.T) {
+			for _, d := range dialects(t, p) {
+				t.Run(d, func(t *testing.T) {
+					db := openDialect(t, p, d, func(cfg *Config) { cfg.Database = "dbimp_it_" + suffix + "_none" })
+					param := WithParameter("pretty", "true")
+					if d == SQL {
+						param = WithParameter("format", "json")
+					}
+					rows, err := db.QueryContext(t.Context(), "SELECT v FROM "+quoted(d, m), WithDatabase("dbmeta"), param)
+					if err != nil {
+						t.Fatal(err)
+					}
+					defer rows.Close()
+					n := 0
+					for rows.Next() {
+						n++
+					}
+					if err := rows.Err(); err != nil || n != 2 {
+						t.Errorf("the rows of dbmeta with WithDatabase are %d, %v, want 2", n, err)
+					}
+					if _, err := db.ExecContext(t.Context(), "SELECT v FROM "+quoted(d, m), WithDatabase("dbmeta"), WithTimeout(time.Second)); !errors.Is(err, dbimp.ErrNotSupported) {
+						t.Errorf("WithTimeout gave %v, want dbimp.ErrNotSupported", err)
+					}
+				})
+			}
+		})
+	}
+}

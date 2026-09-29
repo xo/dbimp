@@ -20,7 +20,10 @@ func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, e
 	if c.txid != "" {
 		return nil, fmt.Errorf("beginning a transaction: one is open: %w", dbimp.ErrNotSupported)
 	}
-	o := resolve(ctx, &c.c.cfg, nil)
+	o, _ := resolve(ctx, &c.c.cfg, nil)
+	if err := o.check(); err != nil {
+		return nil, err
+	}
 	body := map[string]any{"statement": "BEGIN WORK"}
 	if o.durability != "" {
 		body["durability_level"] = o.durability

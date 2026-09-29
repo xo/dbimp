@@ -34,3 +34,19 @@ Couchbase driver had them (D40). The rule:
 The Couchbase driver moves to the machinery of the root package, and keeps
 its options. W15 in [BACKLOG.md](../BACKLOG.md) is the work, with the option
 of each server that each driver maps to.
+
+Note of 2026-09-29: W15 settled these points of the rule, so that the
+drivers stay alike:
+
+- `WithParameter` replaces a key that the driver sets itself, in every
+  driver, as it does in Couchbase (D40). `dbimp.MarshalParams` writes the
+  keys for a body of JSON.
+- A statement of a transaction runs in the database of the transaction.
+  `WithDatabase` with another database fails with `dbimp.ErrNotSupported`,
+  on Neo4j and on ArangoDB.
+- Couchbase has no database, so its `WithDatabase` sets `query_context`, as
+  `WithQueryContext` does.
+- An option whose value the DSN would refuse, such as a negative timeout,
+  fails the statement with `dbimp.ErrInvalidValue`, and sends nothing.
+- `WithReadonly(false)` and a timeout of zero ask for nothing, so they never
+  fail with `dbimp.ErrNotSupported`.

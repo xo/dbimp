@@ -7,7 +7,9 @@ import (
 	"encoding/json/v2"
 	"errors"
 	"fmt"
+	"maps"
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/xo/dbimp"
@@ -30,12 +32,15 @@ var (
 	_ driver.Pinger             = (*conn)(nil)
 )
 
-// CheckNamedValue satisfies driver.NamedValueChecker. It refuses an argument
-// that has no name, because SurrealQL has named parameters only (D50). It
-// takes a value of any type, and the request encodes it by the rules of D53.
-// It returns driver.ErrSkip for a driver.Valuer, so that database/sql calls
-// it.
+// CheckNamedValue satisfies driver.NamedValueChecker. It keeps an Option,
+// which the statement takes out (D109). It refuses any other argument that
+// has no name, because SurrealQL has named parameters only (D50). It takes
+// a value of any type, and the request encodes it by the rules of D53. It
+// returns driver.ErrSkip for a driver.Valuer, so that database/sql calls it.
 func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
+	if dbimp.IsOption[options](nv.Value) {
+		return nil
+	}
 	if nv.Name == "" {
 		return fmt.Errorf("binding argument %d: SurrealQL has named parameters only, so pass sql.Named(name, value): %w", nv.Ordinal, dbimp.ErrArguments)
 	}
@@ -107,7 +112,8 @@ func (c *conn) IsValid() bool {
 // Ping satisfies driver.Pinger. It calls the RPC method ping, with the
 // credentials that every request sends.
 func (c *conn) Ping(ctx context.Context) error {
-	r, err := c.send(ctx, rpcRequest{Method: "ping", Params: []any{}})
+	o, _ := resolve(ctx, &c.c.cfg, nil)
+	r, err := c.send(ctx, o, rpcRequest{Method: "ping", Params: []any{}})
 	if err != nil {
 		return err
 	}
@@ -123,6 +129,10 @@ type rpcRequest struct {
 
 // query sends query with its arguments to the RPC method query (D50).
 func (c *conn) query(ctx context.Context, query string, args []driver.NamedValue) (*rows, error) {
+	o, args := resolve(ctx, &c.c.cfg, args)
+	if err := o.check(); err != nil {
+		return nil, err
+	}
 	params := []any{query}
 	if len(args) > 0 {
 		vars := make(map[string]any, len(args))
@@ -131,14 +141,14 @@ func (c *conn) query(ctx context.Context, query string, args []driver.NamedValue
 		}
 		params = append(params, vars)
 	}
-	return c.send(ctx, rpcRequest{Method: "query", Params: params})
+	return c.send(ctx, o, rpcRequest{Method: "query", Params: params})
 }
 
-// send sends one request to /rpc, and reads the response up to the rows of
-// its first statement.
-func (c *conn) send(ctx context.Context, body rpcRequest) (*rows, error) {
+// send sends one request to /rpc with the options o, and reads the response
+// up to the rows of its first statement.
+func (c *conn) send(ctx context.Context, o options, body rpcRequest) (*rows, error) {
 	cfg := &c.c.cfg
-	buf, contentType, err := c.encode(body)
+	buf, contentType, err := c.encode(body, o.params)
 	if err != nil {
 		return nil, err
 	}
@@ -150,8 +160,8 @@ func (c *conn) send(ctx context.Context, body rpcRequest) (*rows, error) {
 	// Surreal-Ns, and the server reads a header of any case.
 	req.Header.Set("Content-Type", contentType)
 	req.Header.Set("Accept", contentType)
-	req.Header.Set("Surreal-Ns", cfg.Namespace)
-	req.Header.Set("Surreal-Db", cfg.Database)
+	req.Header.Set("Surreal-Ns", o.namespace)
+	req.Header.Set("Surreal-Db", o.database)
 	switch cfg.Auth {
 	case AuthNamespace:
 		req.Header.Set("Surreal-Auth-Ns", cfg.Namespace)
@@ -219,27 +229,48 @@ const (
 )
 
 // encode returns the body of a request in the encoding of the connector, and
-// its content type.
-func (c *conn) encode(body rpcRequest) ([]byte, string, error) {
+// its content type. Each key of extra, which WithParameter sets, follows the
+// keys of body, and replaces a key of body with the same name (D109).
+func (c *conn) encode(body rpcRequest, extra map[string]any) ([]byte, string, error) {
 	if c.c.cfg.Encoding == EncodingJSON {
-		buf, err := json.Marshal(body)
+		buf, err := dbimp.MarshalParams(body, extra)
 		if err != nil {
 			return nil, "", fmt.Errorf("writing the request: %w", err)
 		}
 		return buf, contentJSON, nil
 	}
+	_, method := extra["method"]
+	_, params := extra["params"]
 	var e dbimp.CBOREncoder
-	e.Map(2)
-	e.Text("method")
-	e.Text(body.Method)
-	e.Text("params")
-	e.Array(len(body.Params))
-	for _, p := range body.Params {
-		if err := encodeCBOR(&e, p); err != nil {
-			return nil, "", fmt.Errorf("writing the request: %w", err)
+	e.Map(len(extra) + b2i(!method) + b2i(!params))
+	if !method {
+		e.Text("method")
+		e.Text(body.Method)
+	}
+	if !params {
+		e.Text("params")
+		e.Array(len(body.Params))
+		for _, p := range body.Params {
+			if err := encodeCBOR(&e, p); err != nil {
+				return nil, "", fmt.Errorf("writing the request: %w", err)
+			}
+		}
+	}
+	for _, k := range slices.Sorted(maps.Keys(extra)) {
+		e.Text(k)
+		if err := encodeCBOR(&e, extra[k]); err != nil {
+			return nil, "", fmt.Errorf("writing the parameter %q: %w", k, err)
 		}
 	}
 	return e.Bytes(), contentCBOR, nil
+}
+
+// b2i returns 1 for true and 0 for false.
+func b2i(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }
 
 // stmt is a prepared statement, which runs as its text each time.

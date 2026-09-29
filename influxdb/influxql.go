@@ -17,23 +17,31 @@ import (
 // pathInfluxQL is the endpoint of InfluxQL, which every release has.
 const pathInfluxQL = "/query"
 
-// queryInfluxQL sends a statement of InfluxQL, and reads the answer up to the
-// first result set. It asks InfluxDB 1 for chunks with chunked=prefer, and
-// every other release for one document (D83).
-func (c *conn) queryInfluxQL(ctx context.Context, query string, p jsontext.Value) (*qlRows, error) {
+// queryInfluxQL sends a statement of InfluxQL with the options o, and reads
+// the answer up to the first result set. It asks InfluxDB 1 for chunks with
+// chunked=prefer, and every other release for one document (D83). A key of
+// WithParameter goes in the form, and replaces a key of the driver there.
+func (c *conn) queryInfluxQL(ctx context.Context, o options, query string, p jsontext.Value) (*qlRows, error) {
 	q := url.Values{}
-	if db := c.c.cfg.Database; db != "" {
-		q.Set("db", db)
+	if o.database != "" {
+		q.Set("db", o.database)
 	}
-	if rp := c.c.cfg.RetentionPolicy; rp != "" {
-		q.Set("rp", rp)
+	if o.rp != "" {
+		q.Set("rp", o.rp)
 	}
-	if c.c.cfg.Chunked == ChunkedPrefer && c.major == 1 {
+	if o.chunked == ChunkedPrefer && c.major == 1 {
 		q.Set("chunked", "true")
 	}
 	form := url.Values{"q": {query}}
 	if p != nil {
 		form.Set("params", string(p))
+	}
+	for k, v := range o.params {
+		s, err := formValue(v)
+		if err != nil {
+			return nil, fmt.Errorf("writing the parameter %q: %w", k, err)
+		}
+		form.Set(k, s)
 	}
 	path := pathInfluxQL
 	if len(q) > 0 {
