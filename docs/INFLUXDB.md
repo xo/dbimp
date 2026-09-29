@@ -101,6 +101,13 @@ sources, each read on 2026-09-28, are these:
     as the password. `Authorization: Token <token>` works too.
   - InfluxDB 3 takes any user with the token as the password.
     `Authorization: Bearer <token>` works too.
+- A token in the header `Authorization`, as `auth=bearer` sends it
+  (measured by hand on 2026-09-29, D116):
+  - InfluxDB 1.13.1 answers `Bearer` with "bearer auth disabled", because
+    it takes a JWT only with a shared secret configured, and cannot parse
+    `Token`.
+  - InfluxDB 2.9.1 refuses `Bearer`, and takes `Token`.
+  - InfluxDB 3.11.5 takes both, for InfluxQL, SQL and the ping.
 - `GET /ping` answers HTTP 204 without credentials on InfluxDB 1 and 2, even
   with a wrong password (measured, 1.13.1-023 and 2.9.1-023). On InfluxDB 3
   it answers HTTP 401 without a token (measured, 3.11.5-048).
@@ -127,6 +134,7 @@ with these keys:
 | `chunked` | `prefer`, `disable` | `prefer` | D83 |
 | `rp` | a retention policy | none | D82 |
 | `tls` | `true`, `false` | `false` | D82 |
+| `auth` | `basic`, `bearer` | `basic` | D94 and D116 |
 
 - The path is the database, which the driver sends as `db`.
 - A token is the password. Without a port, the driver uses 8086 for `version`
@@ -615,7 +623,7 @@ The differences that a caller sees:
 | Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None |
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same (D36), with no decision of its own for InfluxDB |
 | Errors | `*ResponseError`, with a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Statement, Message}`, which unwraps to `*dbimp.StatusError` for a status that is not 2xx |
-| Authentication | Basic | Basic. W14 adds `auth` of D94 |
+| Authentication | Basic | `auth=basic`, or `auth=bearer`, which sends `Token` to InfluxDB 2 and `Bearer` to the other releases (D116) |
 | Other exports | The `With` options and `Option` | `Version` and `Dialect` for `Conn.Raw`, `SQL` and `InfluxQL`, and the constants of `sqlmode`, `describe` and `chunked` |
 
 The differences that a caller sees:

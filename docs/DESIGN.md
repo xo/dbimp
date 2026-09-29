@@ -16,6 +16,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `errors.go` | `Error`, the sentinel errors, and `StatusError` with `CheckStatus` |
 | `url.go` | `ParseURL`, `NewQuery` and `Query`, for the DSN |
 | `http.go` | `NewTransport`, `NewClient` and `Send` |
+| `auth.go` | `AuthBasic`, `AuthBearer`, `Query.Auth` and `SetAuth`, which send the secret of a DSN as the key auth says (D94 and D116) |
 | `stream.go` | `Stream` and `NewStream`, which read the body of a response |
 | `rows.go` | `ObjectRows`, `NewObjectRows`, `ContinueObjectRows`, `ArrayRows` and `NewArrayRows`, which read rows by D18 |
 | `values.go` | `IsNull`, `Int64`, `Float64`, `Bool`, `String`, `Decimal`, `Number` and `Any`, which turn a JSON value into a Go value, and `Assign` |

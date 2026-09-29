@@ -464,7 +464,7 @@ func (c *conn) write(ctx context.Context, ins *insert, args []driver.NamedValue)
 	if rp != "" {
 		q.Set("rp", rp)
 	}
-	res, err := c.c.send(ctx, pathWrite+"?"+q.Encode(), "text/plain; charset=utf-8", []byte(body))
+	res, err := c.c.send(ctx, c.major, pathWrite+"?"+q.Encode(), "text/plain; charset=utf-8", []byte(body))
 	if err != nil {
 		return err
 	}

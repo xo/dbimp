@@ -64,6 +64,10 @@ not a fact.
 - Authentication is basic. A wrong password is HTTP 401 with
   `Neo.ClientError.Security.Unauthorized` and the header
   `Www-Authenticate: Basic realm="Neo4j", Bearer realm="Neo4j"` (recorded).
+  A Bearer token is HTTP 401 with "Unsupported authentication token:
+  scheme='bearer'", on both releases, because Neo4j takes one only from an
+  identity provider of single sign on, which the server of dbrun has not
+  (measured by hand on 2026-09-29, and tested).
 - `Accept: application/json` gives plain JSON.
   `Accept: application/vnd.neo4j.query` gives typed JSON, in which each value
   is an object with a `$type` and a `_value` (recorded).
@@ -108,7 +112,9 @@ not a fact.
   puts the tag at the end of each statement. Every other key, and a key
   given twice, is refused (D61).
 - The driver sends the user and the password with basic authentication. A
-  URL with no user and no password sends no authentication.
+  URL with no user and no password sends no authentication. With
+  `auth=bearer`, it sends the password as a Bearer token, and no user
+  (D110 and D116).
 - The tools of Neo4j write `neo4j://host:7687` for Bolt with routing. A URL
   copied from them names the port of Bolt, and the request fails (D60).
 
@@ -514,7 +520,7 @@ The differences that a caller sees:
 | Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None |
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | `cancel=tag`, `cancel=metadata` or `cancel=none` (D67 and D95). An early `Close` stops a statement that runs on, and in a transaction reads the rest of the answer (D105) |
 | Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code int, Msg}` | `*ResponseError`, with the HTTP status and a list of `Error{Code string, Message}` |
-| Authentication | Basic | Basic |
+| Authentication | Basic | `auth=basic`, or `auth=bearer`, which the server of dbrun refuses (D116) |
 | Other exports | The `With` options and `Option` | The Go types of D63, and `CancelTag`, `CancelMetadata` and `CancelNone` |
 
 The differences that a caller sees:

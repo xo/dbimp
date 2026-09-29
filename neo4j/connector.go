@@ -41,6 +41,9 @@ func NewConnector(cfg Config) *Connector {
 	if cfg.Cancel == "" {
 		cfg.Cancel = CancelTag
 	}
+	if cfg.Auth == "" {
+		cfg.Auth = AuthBasic
+	}
 	t := dbimp.NewTransport(tlsCfg)
 	return &Connector{
 		cfg:       cfg,

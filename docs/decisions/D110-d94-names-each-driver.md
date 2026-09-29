@@ -1,6 +1,8 @@
 # D110. D94 names each driver
 
-Status: Amends D94.
+Status: Amends D94, and amended by D116.
+
+D116 says which scheme `auth=bearer` sends to each server.
 
 Ken decided on 2026-09-29 how D94 applies to the drivers that it did not
 name. D94 gave every HTTP driver the key `auth=basic|bearer`, and only the

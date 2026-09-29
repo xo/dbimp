@@ -14,7 +14,7 @@ import (
 // port.
 func cfg(host string, port int) influxdb.Config {
 	return influxdb.Config{
-		Host: host, Port: port, SQLMode: "prefer", Version: 3, Describe: "always", Chunked: "prefer",
+		Host: host, Port: port, Auth: "basic", SQLMode: "prefer", Version: 3, Describe: "always", Chunked: "prefer",
 	}
 }
 
@@ -55,6 +55,9 @@ func TestDSNRoundTrip(t *testing.T) {
 			}),
 		},
 		{"influxdb://u@h", with(cfg("h", 8181), func(c *influxdb.Config) { c.User = "u" })},
+		{"influxdb://:tok@h/db?auth=bearer", with(cfg("h", 8181), func(c *influxdb.Config) {
+			c.Password, c.Database, c.Auth = "tok", "db", influxdb.AuthBearer
+		})},
 	} {
 		got, err := influxdb.ParseDSN(tt.dsn)
 		if err != nil {
@@ -95,6 +98,7 @@ func TestParseDSNRefuses(t *testing.T) {
 		{"influxdb://localhost/?version=three", dbimp.ErrInvalidValue},
 		{"influxdb://localhost/?describe=csv", dbimp.ErrInvalidValue},
 		{"influxdb://localhost/?chunked=true", dbimp.ErrInvalidValue},
+		{"influxdb://localhost/?auth=jwt", dbimp.ErrInvalidValue},
 		{"influxdb://localhost:0/", dbimp.ErrInvalidValue},
 		{"influxdb:///", dbimp.ErrInvalidValue},
 		{"influxdb://::/", dbimp.ErrInvalidValue},

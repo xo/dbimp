@@ -39,7 +39,7 @@ func (c *conn) queryInfluxQL(ctx context.Context, query string, p jsontext.Value
 	if len(q) > 0 {
 		path += "?" + q.Encode()
 	}
-	res, err := c.c.send(ctx, path, "application/x-www-form-urlencoded", []byte(form.Encode()))
+	res, err := c.c.send(ctx, c.major, path, "application/x-www-form-urlencoded", []byte(form.Encode()))
 	if err != nil {
 		return nil, err
 	}

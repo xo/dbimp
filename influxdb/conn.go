@@ -249,14 +249,14 @@ func (c *conn) Ping(ctx context.Context) error {
 // send sends a request to path, with the credentials of the connector, and
 // returns a response of JSON with a 2xx status. Any other response is an
 // error, and its body is closed.
-func (c *Connector) send(ctx context.Context, path, contentType string, body []byte) (*http.Response, error) {
+func (c *Connector) send(ctx context.Context, major int, path, contentType string, body []byte) (*http.Response, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.base+path, bytes.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("making the request: %w", err)
 	}
 	req.Header.Set("Content-Type", contentType)
 	req.Header.Set("Accept", "application/json")
-	c.auth(req)
+	c.auth(req, major)
 	res, err := dbimp.Send(c.client, req)
 	if err != nil {
 		return nil, err

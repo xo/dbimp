@@ -177,7 +177,7 @@ func call(ctx context.Context, cfg Config, method, path, body string) error {
 	if strings.HasPrefix(body, "{") {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	c.auth(req)
+	c.auth(req, c.cfg.Version)
 	res, err := dbimp.Send(c.client, req)
 	if err != nil {
 		return err
@@ -250,6 +250,28 @@ func cleanup() error {
 // quoted returns a measurement quoted for the dialect d.
 func quoted(_, m string) string {
 	return `"` + m + `"`
+}
+
+// TestIntegrationBearer sends the secret of the administrator as a token,
+// with auth=bearer. InfluxDB 2 takes it as Token, and InfluxDB 3 as Bearer.
+// InfluxDB 1 takes Bearer only as a JWT, with a shared secret configured,
+// and refuses the password of a user (measured, D110).
+func TestIntegrationBearer(t *testing.T) {
+	n := release(t, admin)
+	db := openWith(t, admin, func(cfg *Config) { cfg.Auth = AuthBearer })
+	var one int64
+	err := db.QueryRowContext(t.Context(), "SHOW DATABASES").Scan(new(any), new(any))
+	if n == 3 {
+		err = db.QueryRowContext(t.Context(), "SELECT 1 AS a").Scan(&one)
+	}
+	switch {
+	case n == 1:
+		if e, ok := errors.AsType[*Error](err); !ok || e.HTTPStatus != http.StatusUnauthorized {
+			t.Errorf("auth=bearer on InfluxDB 1 gave %v, want the refusal of HTTP 401", err)
+		}
+	case err != nil:
+		t.Errorf("auth=bearer on InfluxDB %d: %v", n, err)
+	}
 }
 
 func TestIntegrationConnect(t *testing.T) {

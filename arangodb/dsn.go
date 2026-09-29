@@ -49,13 +49,10 @@ var cancels = []string{CancelTag, CancelNone}
 const (
 	// AuthBasic sends the user and the password with basic authentication.
 	// It is the default.
-	AuthBasic = "basic"
+	AuthBasic = dbimp.AuthBasic
 	// AuthBearer sends the password as a Bearer token, such as a JWT.
-	AuthBearer = "bearer"
+	AuthBearer = dbimp.AuthBearer
 )
-
-// auths are the values of the key auth.
-var auths = []string{AuthBasic, AuthBearer}
 
 // Config is the configuration of a connector, which the DSN holds. The caller
 // owns it (D7).
@@ -95,7 +92,6 @@ func ParseDSN(dsn string) (*Config, error) {
 		Host:   u.Hostname(),
 		Port:   defaultPort,
 		Cancel: q.String(keyCancel, CancelTag),
-		Auth:   q.String(keyAuth, AuthBasic),
 	}
 	if cfg.Host == "" {
 		return nil, fmt.Errorf("parsing the dsn: no host: %w", dbimp.ErrInvalidValue)
@@ -110,6 +106,9 @@ func ParseDSN(dsn string) (*Config, error) {
 	if cfg.TLS, err = q.Bool(keyTLS, false); err != nil {
 		return nil, err
 	}
+	if cfg.Auth, err = q.Auth(keyAuth); err != nil {
+		return nil, err
+	}
 	if cfg.Batch, err = q.Int(keyBatch, defaultBatch); err != nil {
 		return nil, err
 	}
@@ -118,8 +117,6 @@ func ParseDSN(dsn string) (*Config, error) {
 		return nil, fmt.Errorf("parsing key %q: %d: %w", keyBatch, cfg.Batch, dbimp.ErrInvalidValue)
 	case !slices.Contains(cancels, cfg.Cancel):
 		return nil, fmt.Errorf("parsing key %q: %q: %w", keyCancel, cfg.Cancel, dbimp.ErrInvalidValue)
-	case !slices.Contains(auths, cfg.Auth):
-		return nil, fmt.Errorf("parsing key %q: %q: %w", keyAuth, cfg.Auth, dbimp.ErrInvalidValue)
 	}
 	if p := u.Port(); p != "" {
 		if cfg.Port, err = strconv.Atoi(p); err != nil || cfg.Port < 1 || cfg.Port > 65535 {

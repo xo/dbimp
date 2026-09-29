@@ -41,6 +41,9 @@ func NewConnector(cfg Config) *Connector {
 	if cfg.Chunked == "" {
 		cfg.Chunked = ChunkedPrefer
 	}
+	if cfg.Auth == "" {
+		cfg.Auth = AuthBasic
+	}
 	if cfg.Port == 0 {
 		cfg.Port = cfg.defaultPort()
 	}
@@ -105,7 +108,9 @@ func (c *Connector) ping(ctx context.Context) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("making the ping: %w", err)
 	}
-	c.auth(req)
+	// The release is not known yet. InfluxDB 1 and 2 answer the ping with no
+	// credentials, and with any, so the ping sends Bearer (measured).
+	c.auth(req, 0)
 	res, err := dbimp.Send(c.client, req)
 	if err != nil {
 		return "", fmt.Errorf("sending the ping: %w", err)
@@ -122,11 +127,16 @@ func (c *Connector) ping(ctx context.Context) (string, error) {
 	return v, nil
 }
 
-// auth sets the credentials of the connector on req.
-func (c *Connector) auth(req *http.Request) {
-	if c.cfg.User != "" || c.cfg.Password != "" {
-		req.SetBasicAuth(c.cfg.User, c.cfg.Password)
+// auth sets the credentials of the connector on req, for the major release
+// major, or 0 when it is not known. A token goes as Token to InfluxDB 2,
+// which refuses Bearer, and as Bearer to every other release (measured,
+// D110).
+func (c *Connector) auth(req *http.Request, major int) {
+	scheme := "Bearer"
+	if major == 2 {
+		scheme = "Token"
 	}
+	dbimp.SetAuth(req, c.cfg.Auth, scheme, c.cfg.User, c.cfg.Password)
 }
 
 // major returns the major number of the release v, such as 2 for 2.9.1.

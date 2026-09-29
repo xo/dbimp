@@ -16,17 +16,18 @@ func TestDSNRoundTrip(t *testing.T) {
 		dsn  string
 		want neo4j.Config
 	}{
-		{"neo4j://localhost", neo4j.Config{Host: "localhost", Port: 7474, Database: "neo4j", Cancel: "tag"}},
-		{"neo4j://localhost/", neo4j.Config{Host: "localhost", Port: 7474, Database: "neo4j", Cancel: "tag"}},
+		{"neo4j://localhost", neo4j.Config{Auth: "basic", Host: "localhost", Port: 7474, Database: "neo4j", Cancel: "tag"}},
+		{"neo4j://localhost/", neo4j.Config{Auth: "basic", Host: "localhost", Port: 7474, Database: "neo4j", Cancel: "tag"}},
 		{
 			"neo4j://neo4j:P4ss%21x@127.0.0.1:55064/dbmeta",
-			neo4j.Config{Host: "127.0.0.1", Port: 55064, User: "neo4j", Password: "P4ss!x", Database: "dbmeta", Cancel: "tag"},
+			neo4j.Config{Auth: "basic", Host: "127.0.0.1", Port: 55064, User: "neo4j", Password: "P4ss!x", Database: "dbmeta", Cancel: "tag"},
 		},
-		{"neo4j://[::1]:9000/db?tls=true", neo4j.Config{Host: "::1", Port: 9000, TLS: true, Database: "db", Cancel: "tag"}},
-		{"neo4j://h?tls=true", neo4j.Config{Host: "h", Port: 7473, TLS: true, Database: "neo4j", Cancel: "tag"}},
-		{"neo4j://h/a%2Fb?cancel=metadata", neo4j.Config{Host: "h", Port: 7474, Database: "a/b", Cancel: "metadata"}},
-		{"neo4j://h/db?cancel=none", neo4j.Config{Host: "h", Port: 7474, Database: "db", Cancel: "none"}},
-		{"neo4j://u@h/db", neo4j.Config{Host: "h", Port: 7474, User: "u", Database: "db", Cancel: "tag"}},
+		{"neo4j://[::1]:9000/db?tls=true", neo4j.Config{Auth: "basic", Host: "::1", Port: 9000, TLS: true, Database: "db", Cancel: "tag"}},
+		{"neo4j://h?tls=true", neo4j.Config{Auth: "basic", Host: "h", Port: 7473, TLS: true, Database: "neo4j", Cancel: "tag"}},
+		{"neo4j://h/a%2Fb?cancel=metadata", neo4j.Config{Auth: "basic", Host: "h", Port: 7474, Database: "a/b", Cancel: "metadata"}},
+		{"neo4j://h/db?cancel=none", neo4j.Config{Auth: "basic", Host: "h", Port: 7474, Database: "db", Cancel: "none"}},
+		{"neo4j://u@h/db", neo4j.Config{Auth: "basic", Host: "h", Port: 7474, User: "u", Database: "db", Cancel: "tag"}},
+		{"neo4j://:tok@h/db?auth=bearer", neo4j.Config{Auth: "bearer", Host: "h", Port: 7474, Password: "tok", Database: "db", Cancel: "tag"}},
 	} {
 		cfg, err := neo4j.ParseDSN(tt.dsn)
 		if err != nil {
@@ -62,6 +63,7 @@ func TestParseDSNRefuses(t *testing.T) {
 		{"neo4j://localhost/?tls=true&tls=false", dbimp.ErrRepeatedKey},
 		{"neo4j://localhost/?tls=maybe", dbimp.ErrInvalidValue},
 		{"neo4j://localhost/?cancel=kill", dbimp.ErrInvalidValue},
+		{"neo4j://localhost/?auth=jwt", dbimp.ErrInvalidValue},
 		{"neo4j://localhost:0/", dbimp.ErrInvalidValue},
 		{"neo4j:///", dbimp.ErrInvalidValue},
 		{"neo4j://::/", dbimp.ErrInvalidValue},

@@ -130,9 +130,10 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D107](D107-errincomplete-means-a-failure-after-a-row.md) | ErrIncomplete means a failure after a row | Amends D42 |
 | [D108](D108-every-wire-format-meets-the-driver-at-the-row.md) | Every wire format meets the driver at the row | Decided |
 | [D109](D109-every-driver-takes-the-same-options.md) | Every driver takes the same options | Amends D40 |
-| [D110](D110-d94-names-each-driver.md) | D94 names each driver | Amends D94 |
+| [D110](D110-d94-names-each-driver.md) | D94 names each driver | Amends D94, and amended by D116 |
 | [D111](D111-three-facts-of-the-influxdb-driver.md) | Three facts of the InfluxDB driver | Decided |
 | [D112](D112-two-facts-of-the-neo4j-driver.md) | Two facts of the Neo4j driver | Decided |
 | [D113](D113-the-go-types-of-surrealdb-that-d53-left-out.md) | The Go types of SurrealDB that D53 left out | Amends D53 |
 | [D114](D114-only-couchbase-gives-json-text.md) | Only Couchbase gives JSON text | Decided |
 | [D115](D115-an-influxdb-query-stops-when-the-client-leaves.md) | An InfluxDB query stops when the client leaves | Decided |
+| [D116](D116-auth-bearer-sends-the-scheme-that-each-server-takes.md) | auth=bearer sends the scheme that each server takes | Amends D110 |

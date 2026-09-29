@@ -76,12 +76,7 @@ func (c *Connector) Close() error {
 
 // auth sets the credentials on req, as the key auth says (D94).
 func (c *Connector) auth(req *http.Request) {
-	switch {
-	case c.cfg.Auth == AuthBearer:
-		req.Header.Set("Authorization", "Bearer "+c.cfg.Password)
-	case c.cfg.User != "" || c.cfg.Password != "":
-		req.SetBasicAuth(c.cfg.User, c.cfg.Password)
-	}
+	dbimp.SetAuth(req, c.cfg.Auth, "Bearer", c.cfg.User, c.cfg.Password)
 }
 
 // do sends one request to path, under the API of the database, with body

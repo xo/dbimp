@@ -11,10 +11,23 @@ import (
 	"github.com/xo/dbimp"
 )
 
-// The keys of the query of a DSN (D61 and D67).
+// The keys of the query of a DSN (D61, D67 and D110).
 const (
 	keyTLS    = "tls"
 	keyCancel = "cancel"
+	keyAuth   = "auth"
+)
+
+// The values of the key auth, which say how the driver sends the password
+// (D94 and D110).
+const (
+	// AuthBasic sends the user and the password with basic authentication.
+	// It is the default.
+	AuthBasic = dbimp.AuthBasic
+	// AuthBearer sends the password as a Bearer token, and no user. Neo4j
+	// takes one only from an identity provider of single sign on, and
+	// refuses the scheme without one (measured).
+	AuthBearer = dbimp.AuthBearer
 )
 
 // The ports of the HTTP interface.
@@ -54,11 +67,13 @@ type Config struct {
 	Port int
 	// TLS is true to speak HTTPS.
 	TLS bool
-	// User and Password are the credentials, sent with basic authentication.
-	// With no user and no password, the driver sends no credentials, for a
-	// server that runs with authentication off.
+	// User and Password are the credentials, sent as Auth says. With no user
+	// and no password, the driver sends no credentials, for a server that
+	// runs with authentication off.
 	User     string
 	Password string
+	// Auth is AuthBasic or AuthBearer (D94 and D110).
+	Auth string
 	// Database is the database that each statement runs in, "neo4j" by
 	// default.
 	Database string
@@ -74,7 +89,7 @@ func ParseDSN(dsn string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	q, err := dbimp.NewQuery(u, keyTLS, keyCancel)
+	q, err := dbimp.NewQuery(u, keyTLS, keyCancel, keyAuth)
 	if err != nil {
 		return nil, err
 	}
@@ -93,6 +108,9 @@ func ParseDSN(dsn string) (*Config, error) {
 		cfg.Password, _ = u.User.Password()
 	}
 	if cfg.TLS, err = q.Bool(keyTLS, false); err != nil {
+		return nil, err
+	}
+	if cfg.Auth, err = q.Auth(keyAuth); err != nil {
 		return nil, err
 	}
 	if !slices.Contains(cancels, cfg.Cancel) {
@@ -146,6 +164,9 @@ func (cfg *Config) FormatDSN() string {
 	}
 	if cfg.Cancel != "" && cfg.Cancel != CancelTag {
 		q.Set(keyCancel, cfg.Cancel)
+	}
+	if cfg.Auth != "" && cfg.Auth != AuthBasic {
+		q.Set(keyAuth, cfg.Auth)
 	}
 	u.RawQuery = q.Encode()
 	return u.String()

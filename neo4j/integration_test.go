@@ -1111,6 +1111,25 @@ func TestIntegrationTypes(t *testing.T) {
 	})
 }
 
+// TestIntegrationBearer sends the password as a Bearer token, with
+// auth=bearer. The server takes a Bearer token only from an identity
+// provider of single sign on, which the server of dbrun has not, so the
+// refusal of the server reaches the caller (measured, D110).
+func TestIntegrationBearer(t *testing.T) {
+	cfg := config(t, admin)
+	cfg.Auth = AuthBearer
+	db := sql.OpenDB(NewConnector(cfg))
+	defer db.Close()
+	_, err := db.ExecContext(t.Context(), "RETURN 1 AS a")
+	var e *ResponseError
+	// The message names the scheme bearer, so the header was sent. With no
+	// header, the server says that none was supplied.
+	if !errors.As(err, &e) || e.HTTPStatus != http.StatusUnauthorized || code(err) != "Neo.ClientError.Security.Unauthorized" ||
+		!strings.Contains(err.Error(), "bearer") {
+		t.Errorf("auth=bearer gave %v, want the refusal of HTTP 401 of the scheme bearer", err)
+	}
+}
+
 // TestIntegrationEarlyClose closes the rows of a long statement after its
 // first row. The driver stops the statement on the server, so none runs a
 // moment later. In a transaction, it stops nothing, and the transaction goes

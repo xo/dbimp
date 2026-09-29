@@ -174,9 +174,7 @@ func (c *Connector) takesMetadata(ctx context.Context) (bool, error) {
 		return false, fmt.Errorf("making the request for the release: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	if c.cfg.User != "" || c.cfg.Password != "" {
-		req.SetBasicAuth(c.cfg.User, c.cfg.Password)
-	}
+	dbimp.SetAuth(req, c.cfg.Auth, "Bearer", c.cfg.User, c.cfg.Password)
 	res, err := dbimp.Send(c.client, req)
 	if err != nil {
 		return false, fmt.Errorf("reading the release: %w", err)

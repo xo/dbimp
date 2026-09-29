@@ -19,6 +19,19 @@ const (
 	keyChunked  = "chunked"
 	keyRP       = "rp"
 	keyTLS      = "tls"
+	keyAuth     = "auth"
+)
+
+// The values of the key auth, which say how the driver sends the password
+// (D94 and D110).
+const (
+	// AuthBasic sends the user and the password with basic authentication.
+	// It is the default, and every release takes a token as the password.
+	AuthBasic = dbimp.AuthBasic
+	// AuthBearer sends the password as a token, and no user: Bearer on
+	// InfluxDB 1, which takes it as a JWT, and on InfluxDB 3, and Token on
+	// InfluxDB 2, which refuses Bearer (measured).
+	AuthBearer = dbimp.AuthBearer
 )
 
 // The values of the key sqlmode, which say which dialect a connection speaks
@@ -88,11 +101,13 @@ type Config struct {
 	Port int
 	// TLS is true to speak HTTPS.
 	TLS bool
-	// User and Password are the credentials, sent with basic authentication
-	// on every request. A token is the password. With neither, the driver
-	// sends no credentials, for a server that runs with authentication off.
+	// User and Password are the credentials, sent on every request as Auth
+	// says. A token is the password. With neither, the driver sends no
+	// credentials, for a server that runs with authentication off.
 	User     string
 	Password string
+	// Auth is AuthBasic or AuthBearer (D94 and D110).
+	Auth string
 	// Database is the database, which the driver sends as db. It is empty
 	// for a DSN with no path, and then a statement names its database.
 	Database string
@@ -119,7 +134,7 @@ func ParseDSN(dsn string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	q, err := dbimp.NewQuery(u, keySQLMode, keyVersion, keyDescribe, keyChunked, keyRP, keyTLS)
+	q, err := dbimp.NewQuery(u, keySQLMode, keyVersion, keyDescribe, keyChunked, keyRP, keyTLS, keyAuth)
 	if err != nil {
 		return nil, err
 	}
@@ -141,6 +156,9 @@ func ParseDSN(dsn string) (*Config, error) {
 		cfg.Password, _ = u.User.Password()
 	}
 	if cfg.TLS, err = q.Bool(keyTLS, false); err != nil {
+		return nil, err
+	}
+	if cfg.Auth, err = q.Auth(keyAuth); err != nil {
 		return nil, err
 	}
 	if cfg.Version, err = q.Int(keyVersion, defaultVersion); err != nil {
@@ -219,6 +237,9 @@ func (cfg *Config) FormatDSN() string {
 	}
 	if cfg.TLS {
 		q.Set(keyTLS, "true")
+	}
+	if cfg.Auth != "" && cfg.Auth != AuthBasic {
+		q.Set(keyAuth, cfg.Auth)
 	}
 	u.RawQuery = q.Encode()
 	return u.String()

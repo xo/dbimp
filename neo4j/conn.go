@@ -266,9 +266,7 @@ func (c *Connector) post(ctx context.Context, method, path string, b body, versi
 	if reader != nil {
 		req.Header.Set("Content-Type", contentTypes[version])
 	}
-	if c.cfg.User != "" || c.cfg.Password != "" {
-		req.SetBasicAuth(c.cfg.User, c.cfg.Password)
-	}
+	dbimp.SetAuth(req, c.cfg.Auth, "Bearer", c.cfg.User, c.cfg.Password)
 	res, err := dbimp.Send(c.client, req)
 	if err != nil {
 		return nil, err

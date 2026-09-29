@@ -69,7 +69,7 @@ func (c *conn) post(ctx context.Context, query string, p jsontext.Value) (*http.
 	if err != nil {
 		return nil, fmt.Errorf("writing the request: %w", err)
 	}
-	return c.c.send(ctx, pathSQL, "application/json", b)
+	return c.c.send(ctx, c.major, pathSQL, "application/json", b)
 }
 
 // describe sends DESCRIBE and the statement, and returns the type of each
