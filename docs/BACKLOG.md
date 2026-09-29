@@ -773,10 +773,12 @@ Steps 10 to 17a went in on 2026-09-29:
 - Steps 14 and 14a: the integration tests passed on 1.2.881 and 1.2.948, as
   both principals, with the round trip of every type. They ran with the URL
   of D117, which the entry of dbrun does not print yet (below).
-- Step 15: the workflow needs no change. It runs the releases once the pin
-  of dbmeta holds a `url` of the form of D117. The `dbmeta` session was asked
-  on 2026-09-29 to drop `?sslmode=disable` from the `url` of both
-  principals. The pin moves to the commit that holds it.
+- Step 15: the workflow needs no change but its pin. The `dbmeta` session
+  dropped `?sslmode=disable` from the `url` of both principals in dbmeta
+  `7907cd9`, on 2026-09-29, and the pin moved there from `00d9f72`. The
+  integration tests passed with that `url`, as `dbrun` prints it, on both
+  releases, as both principals. The first push, `198a3ed`, ran before the
+  move, and its two Databend jobs failed on the key `sslmode`, as expected.
 - Step 16: `SELECT version();` gives the version to both principals. The
   requests below wait for the release.
 - Step 17a: `## Compared with Couchbase` is in DATABEND.md, and Ken
