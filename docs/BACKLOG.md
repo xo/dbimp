@@ -660,7 +660,7 @@ the driver:
    version with `RETURN VERSION()`. A document arrives as one column that
    holds a map, and a projection as its columns (D89).
 
-## W14. Add the key auth to the InfluxDB and Neo4j drivers
+## W14. Add the key auth to the InfluxDB and Neo4j drivers. Done.
 
 D94 gives every HTTP driver the key `auth=basic|bearer`, and D110 names the
 drivers that take it. The InfluxDB and Neo4j drivers of `v0.5.0` send basic
@@ -676,6 +676,15 @@ and sends no user.
 
 Couchbase stays with basic authentication, and SurrealDB keeps its key
 `auth` for the level of the user (D110). Record it in the next release.
+
+It went in on 2026-09-29. Ken decided D116: `auth=bearer` sends `Token` to
+InfluxDB 2, which refuses `Bearer`, and `Bearer` to every other release and
+to Neo4j. The root package holds `dbimp.SetAuth` and `Query.Auth`, which the
+ArangoDB, InfluxDB and Neo4j drivers share. `TestIntegrationBearer` passed on
+InfluxDB 1.13.1, 2.9.1 and 3.11.5, where InfluxDB 1 refuses a token that is
+not a JWT, and on Neo4j 5.26.31 and 2026.09.0, where the server refuses the
+scheme. The accepting path of Neo4j is not measured, because dbrun runs no
+identity provider.
 
 ## W15. Give every driver the same options
 
