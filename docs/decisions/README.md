@@ -153,5 +153,6 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D130](D130-the-go-types-of-pinot.md) | The Go types of Pinot, and NULL | Decided |
 | [D131](D131-pinot-runs-a-query-on-the-multi-stage-engine.md) | Pinot runs a query on the multi-stage engine | Decided |
 | [D132](D132-pinot-arguments-are-written-into-the-text.md) | Pinot arguments are written into the text | Decided |
-| [D133](D133-pinot-reads-one-answer-and-cancels-by-its-id.md) | Pinot reads one answer, and cancels a query by its id | Decided |
-| [D134](D134-pinot-cancels-only-a-query-whose-answer-has-not.md) | Pinot cancels only a query whose answer has not arrived | Proposed |
+| [D133](D133-pinot-reads-one-answer-and-cancels-by-its-id.md) | Pinot reads one answer, and cancels a query by its id | Amended by D134 |
+| [D134](D134-pinot-cancels-only-a-query-whose-answer-has-not.md) | Pinot cancels only a query whose answer has not arrived | Amends D133 |
+| [D135](D135-a-value-has-the-go-type-that-fits-the-type-that.md) | A value has the Go type that fits the type that its database names | Decided |

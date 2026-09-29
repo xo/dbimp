@@ -97,7 +97,9 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    keeps the column order of the statement, and each value is a decoded Go
    value. Never sort the columns, return JSON text in place of a value, or
    wrap one column in an object. Each of these faults was found in a driver
-   that `dbmeta` then had to replace. See D8.
+   that `dbmeta` then had to replace. A value has the Go type that fits the
+   type that the database names for its column, and a string column gives a
+   string. See D8 and D135.
 4. `context.Context` comes first, is named `ctx`, and is never stored in a
    struct, except by a Couchbase, Neo4j, ArangoDB or Databend transaction,
    and by the rows of an ArangoDB cursor or of a Databend query (D45, D69,

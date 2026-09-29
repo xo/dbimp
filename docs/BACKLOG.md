@@ -913,8 +913,9 @@ Steps 5a to 9 went in on 2026-09-30:
   recorder gained `-second` and `"server": "second"`, so that the setup of
   the script makes its tables and loads its rows through the Controller,
   which the `dbmeta` session publishes as the second port of the entry.
-- Step 9 is D128 to D133, which Ken decided on 2026-09-30. D134, which
-  would amend D133, is proposed, and waits for Ken.
+- Step 9 is D128 to D133, which Ken decided on 2026-09-30. He accepted
+  D134 the same day, after the commit. It amends D133: the driver cancels
+  only a query whose answer has not arrived.
 
 Steps 10 to 17a went in on 2026-09-30:
 
@@ -937,11 +938,12 @@ Steps 10 to 17a went in on 2026-09-30:
   principal. `SELECT version()` fails with 700, and `GET /version` of the
   Broker is HTTP 404. The Controller gives it with no user (PINOT.md,
   Principals). The requests below wait for the release.
-- Step 17a: `## Compared with Couchbase` is in PINOT.md. It waits for Ken's
-  review.
+- Step 17a: `## Compared with Couchbase` is in PINOT.md, and Ken
+  reviewed it on 2026-09-30.
 
-Two questions wait for Ken: D134, and the `JSON` column that the
-multi-stage engine names `STRING` (PINOT.md, Open questions).
+Ken committed steps 2 to 17a on 2026-09-30 as `7f29343`. He settled the
+`JSON` column that the multi-stage engine names `STRING` the same day with
+D135: a value has the Go type that fits the type that the server names.
 
 1. To `dburl`: dbimp D129 settles the provisional scheme `pinot` (dburl
    D36). Please set its `GoPackage` to `github.com/xo/dbimp/pinot` and

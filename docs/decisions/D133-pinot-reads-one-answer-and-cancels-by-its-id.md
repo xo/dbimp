@@ -1,6 +1,6 @@
 # D133. Pinot reads one answer, and cancels a query by its id
 
-Status: Decided.
+Status: Amended by D134.
 
 Ken decided this on 2026-09-30, at step 9 of the Apache Pinot driver.
 This is items 7 to 9 of step 9 of [DRIVER.md](../DRIVER.md) for Apache

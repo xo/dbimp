@@ -675,12 +675,10 @@ leads:
 
 ## Open questions
 
-- A `JSON` column arrives with the type `STRING` on the multi-stage engine,
-  the default of D131, and with the type `JSON` on the single-stage engine
-  (recorded, under Types). D130 decodes a `JSON` value. So by default a
-  caller gets the text of a `JSON` column, and with `engine=single` the
-  decoded value. Ken decides whether the driver keeps that, or returns the
-  text on both engines.
+None. Ken settled the `JSON` column that the multi-stage engine names
+`STRING` on 2026-09-30: the driver follows the type that the server names,
+so a caller gets the text of that column by default, and the decoded value
+with `engine=single` (D130 and D135).
 
 These were open at step 3, and step 9 settled them: the DSN (D129), the Go
 types and NULL (D130), the engine and its limit of 10 rows (D131), and the
@@ -720,8 +718,7 @@ The differences that a caller sees:
 - The driver writes each argument into the text as a literal, because the
   Broker binds none (D132).
 - The server does not stop a query when the client leaves, so the driver
-  cancels it when its context ends before the answer (D133, and D134 while
-  it waits for Ken).
+  cancels it when its context ends before the answer (D133 and D134).
 - An engine is chosen for each query, and the single-stage engine cuts a
   result with no `LIMIT` at 10 rows (D131).
 
@@ -749,8 +746,7 @@ The differences that a caller sees:
 - A value keeps its type, a time and a decimal too, where Couchbase gives
   JSON shapes (D130).
 - A `JSON` column is text on the multi-stage engine, and a decoded value on
-  the single-stage engine, because only the second names its type (Open
-  questions).
+  the single-stage engine, because only the second names its type (D135).
 - A `[]byte` argument is written as `hexToBytes`, where Couchbase sends it
   as base64 (D44 and D132).
 - `WithReadonly` succeeds and does nothing, where Couchbase sends

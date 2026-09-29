@@ -1,9 +1,8 @@
 # D134. Pinot cancels only a query whose answer has not arrived
 
-Status: Proposed.
+Status: Amends D133.
 
-This waits for Ken. It was written on 2026-09-30, at step 12 of the Apache
-Pinot driver, and it would amend D133.
+Ken decided this on 2026-09-30, at step 12 of the Apache Pinot driver.
 
 D133 says that the driver cancels a query when its context ends, or when its
 rows close before their end. The second case never finds a query to cancel.
@@ -14,7 +13,7 @@ that left a query after 2 seconds had no answer yet, and the query ran on
 `DELETE /query/<id>?client=true` answers HTTP 404, as it did for an id that
 the Broker does not know (recorded).
 
-The proposal:
+The decision:
 
 - The driver sends the cancel of D133 when the context ends before the
   answer arrives. It sends nothing when the context ends while it reads the
@@ -23,7 +22,5 @@ The proposal:
 - So the rows hold no context, and hard rule 4 of AGENTS.md needs no
   exception for Pinot, where Databend has one (D123).
 
-The staged driver does this, in `pinot/conn.go` and `pinot/rows.go`, and
-`TestCancel` and `TestIntegrationCancel` hold it. If Ken keeps D133 as it
-is, the driver sends the cancel from `Rows.Close` too, and the rows keep the
-context of the query, as the rows of Databend do.
+The driver does this, in `pinot/conn.go` and `pinot/rows.go`, and
+`TestCancel` and `TestIntegrationCancel` hold it.
