@@ -4,8 +4,9 @@
 driver. Read these documents before you change anything:
 
 - [`docs/decisions/`](docs/decisions/README.md) holds every decision, one
-  file each, with an index. [`docs/PLAN.md`](docs/PLAN.md) holds the open
-  questions. Do not decide an open question yourself. Ask Ken.
+  file each, with an index. [`docs/PLAN.md`](docs/PLAN.md) and the end of
+  each product document hold the open questions. Do not decide an open
+  question yourself. Ask Ken.
 - [`docs/BACKLOG.md`](docs/BACKLOG.md) holds the planned work, in order.
 
 [`AGENTS.md`](AGENTS.md) holds the rules. It is written for a coding agent,

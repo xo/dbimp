@@ -35,7 +35,8 @@ func decimal(t *testing.T, s string) *apd.Decimal {
 	return d
 }
 
-// These are the items that 3.3.0 sent, in the recordings of item 3.
+// Most of these are items that 3.3.0 sent, in the recordings of item 3 of
+// step 6. The forms as text, the tags 0, 9 and 13, come from D53.
 func TestDecodeCBOR(t *testing.T) {
 	t.Parallel()
 	id := uuid.MustParse("0192f1c4-3b5e-7a2c-9f00-000000000001")
@@ -305,8 +306,9 @@ func FuzzDecodeCBOR(f *testing.F) {
 		if err != nil {
 			return
 		}
-		// A value that decodes must encode, unless it holds a string that a
-		// tag made, which the driver never sends back as that tag.
+		// A value that decodes must not make the encoder panic. It can fail
+		// to encode, when it holds a string that a tag made, which the driver
+		// never sends back as that tag.
 		var e dbimp.CBOREncoder
 		_ = encodeCBOR(&e, v)
 	})

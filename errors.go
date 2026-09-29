@@ -37,8 +37,9 @@ const (
 	// ErrColumnCount is the error for a row that has the wrong number of
 	// columns.
 	ErrColumnCount Error = "wrong number of columns"
-	// ErrIncomplete is the error for a result that the server cut short
-	// (D21).
+	// ErrIncomplete is the error for a result set that failed, or that the
+	// server cut short, after at least one of its rows reached the caller
+	// (D21 and D107). A failure before the first row does not wrap it.
 	ErrIncomplete Error = "result is incomplete"
 	// ErrUnterminated is the error for a statement that ends inside a
 	// literal, a quoted identifier or a comment.

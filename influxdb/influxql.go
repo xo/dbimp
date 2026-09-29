@@ -63,7 +63,8 @@ type qlSet struct {
 	id int
 	// err is the error of the statement, or nil.
 	err error
-	// name is the name of the series, or nil for a series with no name.
+	// name is the name of the series, or nil for a series with no member
+	// name. A name that is null reads as "".
 	name any
 	// tagKeys and tagVals are the tags of the series, in the order of the
 	// object.
@@ -76,13 +77,14 @@ type qlSet struct {
 	arr *dbimp.ArrayRows
 }
 
-// columns returns the columns of the set: name, each tag, and the columns of
-// the series (D81). A statement with no series has none.
+// columns returns the columns of the set: measurement, which holds the name
+// of the series, each tag, and the columns of the series (D81 and D96). A
+// statement with no series has none.
 func (s *qlSet) columns() []string {
 	if s.cols == nil {
 		return []string{}
 	}
-	return slices.Concat([]string{"name"}, s.tagKeys, s.cols)
+	return slices.Concat([]string{"measurement"}, s.tagKeys, s.cols)
 }
 
 // continues reports whether next is the rest of the series s, which the

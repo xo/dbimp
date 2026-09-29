@@ -22,7 +22,7 @@ func series(cols, values string, partial bool) string {
 // RunContract counts the goroutines of the process, so this test must not
 // run in parallel with another. The contract runs InfluxQL on InfluxDB 1,
 // with sqlmode=disable, because a fake server answers every request with one
-// body, and SQL sends DESCRIBE first (D80). TestReplaySQL tests SQL.
+// body, and SQL sends DESCRIBE first (D80). The TestReplaySQL tests hold SQL.
 func TestContract(t *testing.T) { //nolint:paralleltest // RunContract counts the goroutines of the process.
 	dbimptest.RunContract(t, dbimptest.Contract{
 		Open: func(t *testing.T, url string) *sql.DB {
@@ -36,7 +36,7 @@ func TestContract(t *testing.T) { //nolint:paralleltest // RunContract counts th
 		Query: "SELECT * FROM m",
 		Columns: dbimptest.ColumnsCase{
 			Body: series(`["b","a","c"]`, `[[2,1,3]]`, false),
-			Want: []string{"name", "b", "a", "c"},
+			Want: []string{"measurement", "b", "a", "c"},
 		},
 		Null: dbimptest.NullCase{
 			Body:   series(`["a","b"]`, `[[1,null]]`, false),

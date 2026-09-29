@@ -45,6 +45,7 @@ func completeDriver(t *testing.T) map[string]string {
 	}
 	doc.WriteString(dbimptest.TypesBegin + "\n| Wire type | Go type | Scan type | Database type | Can be NULL |\n| --- | --- | --- | --- | --- |\n| number | `int64` | `int64` | `NUMBER` | yes |\n" + dbimptest.TypesEnd + "\n")
 	doc.WriteString(dbimptest.InterfacesBegin + "\n" + dbimptest.InterfacesEnd + "\n")
+	fmt.Fprintf(&doc, "%s\n\n%s\n\nText.\n\n%s\n\nText.\n", comparedHeading, serverHeading, driverHeading)
 
 	files := map[string]string{
 		"docs/TARGETS.md": "| Good | The driver is `github.com/xo/dbimp/good`. |\n",

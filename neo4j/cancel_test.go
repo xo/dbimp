@@ -92,7 +92,11 @@ func (s *cancelServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		reply(s.show)
 	case strings.HasPrefix(req.Statement, "TERMINATE TRANSACTION"):
 		reply(s.terminate)
-	case strings.HasSuffix(req.Statement, slow):
+	case strings.HasPrefix(req.Statement, few):
+		w.Header().Set("Content-Type", "application/vnd.neo4j.query")
+		w.WriteHeader(http.StatusAccepted)
+		_, _ = io.WriteString(w, `{"data":{"fields":["n"],"values":[[{"$type":"Integer","_value":"1"}],[{"$type":"Integer","_value":"2"}]]},"bookmarks":["b"]}`)
+	case strings.HasPrefix(req.Statement, slow):
 		if s.firstRow {
 			w.Header().Set("Content-Type", "application/vnd.neo4j.query")
 			w.WriteHeader(http.StatusAccepted)
@@ -152,9 +156,9 @@ func (s *cancelServer) shownID(t *testing.T) string {
 	return b.Data.Values[0][0].Value
 }
 
-// TestCancelTag holds cancel=tag, the default (D67): the statement starts
-// with the comment of the connection, and when the context ends, the driver
-// finds the statement by the comment and terminates it.
+// TestCancelTag holds cancel=tag, the default (D67 and D95): the statement
+// ends with the comment of the connection, and when the context ends, the driver finds the
+// statement by the comment and terminates it.
 func TestCancelTag(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
 	for _, firstRow := range []bool{false, true} {
 		s := newCancelServer(t, ceiling)
@@ -168,7 +172,7 @@ func TestCancelTag(t *testing.T) { //nolint:paralleltest // CheckGoroutines coun
 		}
 		tag := tagRE.FindString(reqs[0].Statement)
 		if tag == "" || reqs[0].TxMetadata != nil {
-			t.Errorf("the statement %q has no comment of the connection, or has txMetadata", reqs[0].Statement)
+			t.Errorf("the statement %q has no comment of the connection at its end, or has txMetadata", reqs[0].Statement)
 		}
 		if got := reqs[1].Parameters["tag"]; got != tag {
 			t.Errorf("SHOW TRANSACTIONS looked for %v, want %q", got, tag)
@@ -193,7 +197,7 @@ func TestCancelNone(t *testing.T) { //nolint:paralleltest // CheckGoroutines cou
 
 // TestCancelMetadata holds cancel=metadata: on 2026.09.0 the driver names the
 // connection in txMetadata and finds the transaction by it, and on 5.26.31,
-// which refuses txMetadata, it uses the comment (D67).
+// which refuses txMetadata, it uses the comment (D67 and D95).
 func TestCancelMetadata(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
 	s := newCancelServer(t, ceiling)
 	reqs, err := s.run(t, "?cancel=metadata")
@@ -220,10 +224,50 @@ func TestCancelMetadata(t *testing.T) { //nolint:paralleltest // CheckGoroutines
 	s = newCancelServer(t, floor)
 	reqs, _ = s.run(t, "?cancel=metadata")
 	for _, r := range reqs {
-		if r.Statement == slow || strings.HasSuffix(r.Statement, slow) {
+		if r.Statement == slow || strings.HasPrefix(r.Statement, slow) {
 			if !tagRE.MatchString(r.Statement) || r.TxMetadata != nil {
 				t.Errorf("on 5.26.31 the statement is %+v, want the comment and no txMetadata", r)
 			}
 		}
+	}
+}
+
+// few is a statement whose whole answer the fake server sends at once.
+const few = "UNWIND [1, 2] AS n RETURN n"
+
+// TestCancelEarlyClose holds D105: a Close before the end stops a statement
+// that still runs on the server, and sends nothing more for an answer that is
+// already in the buffer, as for QueryRow.
+func TestCancelEarlyClose(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	//nolint:paralleltest // The subtests count the goroutines of the process too.
+	for _, tt := range []struct {
+		name, statement string
+		want            int
+	}{
+		{"running", slow, 3},
+		{"complete", few, 1},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			dbimptest.CheckGoroutines(t)
+			s := newCancelServer(t, ceiling)
+			s.firstRow = true
+			srv := httptest.NewServer(s)
+			t.Cleanup(srv.Close)
+			db := open(t, srv.URL, "")
+			rows, err := db.QueryContext(t.Context(), tt.statement)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer rows.Close()
+			if !rows.Next() {
+				t.Fatalf("no first row: %v", rows.Err())
+			}
+			if err := rows.Close(); err != nil {
+				t.Errorf("closing the rows early: %v", err)
+			}
+			if reqs := s.requests(); len(reqs) != tt.want {
+				t.Errorf("the server received %d requests, want %d: %+v", len(reqs), tt.want, reqs)
+			}
+		})
 	}
 }

@@ -46,6 +46,9 @@ type rows struct {
 	obj   *dbimp.ObjectRows
 	vals  []jsontext.Value
 	done  bool
+	// read is true once a row has reached the caller, so that an error after
+	// it wraps dbimp.ErrIncomplete (D107).
+	read bool
 
 	httpStatus int
 	status     string
@@ -62,8 +65,10 @@ var (
 )
 
 // readResponse reads a response up to its rows. It returns the error of the
-// server when the server sent one before any row, or when the status of the
-// response is not 2xx, and then it reads the whole response, which is short.
+// server when the server sent one before the member results, or when the
+// status of the response is not 2xx, and then it reads the whole response,
+// which is short. A failure before any row, such as a syntax error, does not
+// wrap dbimp.ErrIncomplete, which is for a failure after a row (D107).
 func readResponse(res *http.Response) (*rows, error) {
 	s := dbimp.NewStream(res.Body)
 	r := &rows{s: s, dec: s.Decoder(), httpStatus: res.StatusCode, cols: []string{}}
@@ -106,6 +111,9 @@ func (r *rows) NextRow() error {
 	}
 	if isEOF(err) {
 		return r.finish()
+	}
+	if err == nil {
+		r.read = true
 	}
 	return err
 }
@@ -167,8 +175,8 @@ func (r *rows) ColumnTypeDatabaseTypeName(i int) string {
 }
 
 // ColumnTypeScanType satisfies driver.RowsColumnTypeScanType. A number can be
-// an int64 or a float64, and a column of the kind json can hold any value,
-// so both scan into any.
+// an int64, a float64 or an *apd.Decimal, and a column of the kind json can
+// hold any value, so both scan into any.
 func (r *rows) ColumnTypeScanType(i int) reflect.Type {
 	if i < len(r.kinds) {
 		if t, ok := scanTypes[r.kinds[i]]; ok {
@@ -342,15 +350,19 @@ func (r *rows) finish() error {
 		return err
 	}
 	r.done = true
-	if r.failed() {
+	switch {
+	case r.failed() && r.read:
 		return fmt.Errorf("reading the result: %w: %w", dbimp.ErrIncomplete, r.error())
+	case r.failed():
+		return fmt.Errorf("reading the result: %w", r.error())
 	}
 	return io.EOF
 }
 
 // failed reports whether the server reported an error or a status that is
 // not a success. A status of "stopped" is a failure, because the result was
-// cut short.
+// cut short. No recording holds "completed", and the driver takes it as a
+// success.
 func (r *rows) failed() bool {
 	return len(r.errs) > 0 || r.status != "" && r.status != "success" && r.status != "completed"
 }
@@ -457,7 +469,7 @@ func expect(dec *jsontext.Decoder, kind jsontext.Kind) error {
 	case err != nil:
 		return err
 	case tok.Kind() != kind:
-		return fmt.Errorf("%v where %v was expected: %w", tok.Kind(), kind, dbimp.ErrInvalidValue)
+		return fmt.Errorf("reading %v where %v was expected: %w", tok.Kind(), kind, dbimp.ErrInvalidValue)
 	}
 	return nil
 }

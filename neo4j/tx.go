@@ -90,17 +90,24 @@ func (t *tx) Commit() error {
 }
 
 // Rollback satisfies driver.Tx. If an error ended the transaction on the
-// server, or the context of BeginTx ended, it sends nothing, and the server
-// discards the transaction at its idle timeout (D65 and D69).
+// server, it sends nothing (D65). It sends the rollback with the context of
+// BeginTx, or, after that context ends, with the context without its end
+// and the limit of a stop. Without it, the server holds the locks of the
+// writes of the transaction until it is idle for 60 seconds (D100).
 func (t *tx) Rollback() error {
 	t.c.tx = nil
 	if t.ended != nil {
-		return nil //nolint:nilerr // D65: the error that ended the transaction rolled it back on the server.
+		// The error that ended the transaction rolled it back on the server
+		// (D65).
+		return nil
 	}
-	if t.ctx.Err() != nil {
-		return nil //nolint:nilerr // D69: a transaction whose context ended applies nothing, so the rollback is done.
+	ctx := t.ctx
+	if ctx.Err() != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(context.WithoutCancel(ctx), stopTimeout)
+		defer cancel()
 	}
-	res, err := t.c.c.post(t.ctx, http.MethodDelete, t.path(), body{}, version10)
+	res, err := t.c.c.post(ctx, http.MethodDelete, t.path(), body{}, version10)
 	if err != nil {
 		return fmt.Errorf("rolling back the transaction: %w", err)
 	}

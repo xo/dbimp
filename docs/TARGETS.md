@@ -14,11 +14,11 @@ measured against a server. Measure a fact before a driver depends on it.
 
 ## Priorities
 
-Ken set two priorities on 2026-09-27. A P1 target is in `targets.csv`, and a
-P2 target is in `targets-2.csv`. The tables at the end keep that split. A
-priority says how soon a target gets a driver. The word is "priority" and not
-"tier", because `dbmeta` uses tier for the Tested, Nightly, Verified and
-Archived releases in CI (D32).
+Ken set two priorities on 2026-09-27. He first placed each target of
+`targets.csv` in P1, and each target of `targets-2.csv` in P2, and the review
+moved some of them (D17). A priority says how soon a target gets a driver.
+The word is "priority" and not "tier", because `dbmeta` uses tier for the
+Tested, Nightly, Verified and Staged releases in CI (D32 and dbmeta D119).
 
 Ken also named the ideal target (D16). An ideal target meets three tests:
 
@@ -35,14 +35,15 @@ the end keep the split of the two lists that Ken wrote.
 
 ## The order
 
-Ken set the order of the work on 2026-09-27 (D73 and D74). After Couchbase,
-SurrealDB and Neo4j, the drivers are these, in order:
+Ken set the order of the work on 2026-09-27 (D73 and D74), and D88
+changed it. After Couchbase, SurrealDB and Neo4j, the targets are these, in
+order:
 
 1. InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later, in one driver (D78).
-   See [INFLUXDB.md](INFLUXDB.md).
+   Done, in `v0.4.0`. See [INFLUXDB.md](INFLUXDB.md).
 2. CrateDB gets no driver here, because `usql` reaches it with `pgx` on the
    PostgreSQL wire protocol (D88). See [CRATEDB.md](CRATEDB.md).
-3. ArangoDB. See [ARANGODB.md](ARANGODB.md).
+3. ArangoDB. Staged for review (W13). See [ARANGODB.md](ARANGODB.md).
 4. Databend. See [DATABEND.md](DATABEND.md).
 5. TDengine. See [TDENGINE.md](TDENGINE.md).
 6. Apache Pinot. See [PINOT.md](PINOT.md).
@@ -105,7 +106,8 @@ PostgREST, Neon, PlanetScale and Apache Solr.
 ## The review
 
 On 2026-09-27 the `dbmeta` and `cql` sessions and DeepSeek reviewed the list
-against D16. Gemini was asked three times and timed out each time. Unless a
+against D16. The session asked Gemini three times, and it timed out each
+time. Unless a
 line says otherwise, a fact below is not measured. Measure it before a
 driver depends on it.
 
@@ -117,12 +119,12 @@ cloud service fails R for good, unless an emulator exists. Every target that
 
 dbmeta D112 adds the entries for the targets from InfluxDB to libSQL in the
 order, and dbmeta D113 adds them for Avatica, the Phoenix Query Server
-and Druid. dbmeta D114 adds InfluxDB 1 and InfluxDB 2. Each is staged in
-`dbmeta` and not committed. The `dbmeta` session measured each entry
+and Druid. dbmeta D114 adds InfluxDB 1 and InfluxDB 2. `dbmeta` committed
+each one on 2026-09-28. The `dbmeta` session measured each entry
 through `dbrun`, and each Tested release of dbmeta D112 passed `dbrun test`
 on 2026-09-28. So each of these targets meets R by that measurement.
 
-dbmeta D118, staged and not committed, adds entries for most of the other
+dbmeta D118, committed on 2026-09-28, adds entries for most of the other
 targets. The `dbmeta` session measured each one through `dbrun` on
 2026-09-28, with an ordinary user that reads and is refused a write. The
 entries are Dgraph, QuestDB, CouchDB, MongoDB, Elasticsearch, OpenSearch,
@@ -138,11 +140,11 @@ that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 
 | Target | Notes |
 | --- | --- |
-| ClickHouse | `dbrun` starts it today (measured in `dbmeta`). `usql` already has a driver, so it is likely P2 (D24). 64-bit integers arrive quoted in JSON. |
-| Couchbase | `dbrun` starts it today (measured in `dbmeta`). The first driver (D23). The driver is `github.com/xo/dbimp/couchbase`. Couchbase Analytics is part of this target, and not a target of its own. See "Couchbase Analytics" in [COUCHBASE.md](COUCHBASE.md). |
-| Trino and Presto | `dbrun` starts both today (measured in `dbmeta`). `usql` already has drivers, so they are likely P2 (D24). Results page through `nextUri`, and an error can arrive on a later page. |
+| ClickHouse | `dbrun` starts it today (measured in `dbmeta`). `usql` already has a driver, so it is likely P2 (D24). 64-bit integers arrive quoted in JSON. `dburl` waits for a driver here before it settles the port and the TLS of ClickHouse over HTTP (dburl D34). |
+| Couchbase | `dbrun` starts it today (measured in `dbmeta`). The first driver (D23). The driver is `github.com/xo/dbimp/couchbase`. Couchbase Analytics is part of this target, and not a target of its own. See "Flavors" in [COUCHBASE.md](COUCHBASE.md). |
+| Trino and Presto | `dbrun` starts both today (measured in `dbmeta`). `usql` already has drivers, so they are likely P2 (D24). Results page through `nextUri`, and an error can arrive on a later page. `dburl` waits for a driver here before it settles their ports and their TLS (dburl D34). |
 | CrateDB | No driver here (D88). `usql` reaches it with `pgx` on the PostgreSQL wire protocol, which the `dbmeta` session measured on 6.4.5, and `dbmeta` reads it through a dialect of its own. The HTTP interface builds each whole result in the memory of the server, and has no paging. R: `dbrun` starts 6.3.7 and 6.4.5. See [CRATEDB.md](CRATEDB.md). |
-| ArangoDB | Third in the order after Neo4j (D73). R: `dbrun` starts 3.12.12. H: `POST /_api/cursor` on port 8529. S: yes, AQL, by D75. P1. See [ARANGODB.md](ARANGODB.md). |
+| ArangoDB | Next after InfluxDB, by D73 and D88. The driver is `github.com/xo/dbimp/arangodb`, from D89 to D94. R: `dbrun` starts 3.12.12. H: `POST /_api/cursor` on port 8529. S: yes, AQL, by D75. P1. See [ARANGODB.md](ARANGODB.md). |
 | QuestDB | Returns a column list. `/exec` binds no arguments. |
 | InfluxDB | First in the order after Neo4j (D73). The driver is `github.com/xo/dbimp/influxdb`. One driver, `influxdb`, serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later. Its dialect `influxdb` is SQL on InfluxDB 3 and later, and its dialect `influxql` is InfluxQL through `/query` on each release (D78). Flux meets S (D75), and the driver does not speak it. R: `dbrun` starts each release that D79 names, 1.11.8 to 3.11.5. SQL has an `information_schema`. A JSON result is an array of objects with no NULL keys, so the driver reads the columns from `DESCRIBE` (D80). See [INFLUXDB.md](INFLUXDB.md). |
 | rqlite | Seventh in the order after Neo4j (D73). SQLite over HTTP. Returns columns and types. The `dbmeta` model for sqlite3 can read it as a flavor. R: `dbrun` starts 9.4.5 and 10.3.6. See [RQLITE.md](RQLITE.md). |

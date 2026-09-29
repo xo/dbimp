@@ -51,8 +51,11 @@ these:
   `/db/execute` or `/db/request` (the API document).
 - S is likely, because the statement is the SQL of SQLite (the API
   document). TARGETS.md places rqlite in P1.
-- `dburl` has no scheme for rqlite. Its backlog says that dbimp settles the
-  name and the URL of the scheme in step 9.
+- `dburl` has the provisional scheme `rqlite`, with the alias `rq` and the
+  default port 4001, the HTTP port. It passes the path and the query through
+  (dburl D36, released in dburl `v0.36.0` as dburl D38, read on
+  2026-09-29). Nothing of it
+  is settled until step 9 decides the name and the URL.
 - `usql` has no driver for rqlite. Its backlog lists
   `github.com/rqlite/gorqlite/stdlib` at `v0.0.0-20260504155303` as a driver
   that it can add. So a driver here is new to `usql` (D24).

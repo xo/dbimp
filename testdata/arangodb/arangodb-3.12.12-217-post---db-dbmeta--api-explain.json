@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/explain",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"FOR u IN big FILTER u.n == 1 RETURN u\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Length": [
+        "1618"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ]
+    },
+    "body": "{\"plan\":{\"nodes\":[{\"type\":\"SingletonNode\",\"dependencies\":[],\"id\":1,\"estimatedCost\":1,\"estimatedNrItems\":1,\"bindParameterVariables\":{}},{\"type\":\"EnumerateCollectionNode\",\"dependencies\":[1],\"id\":2,\"estimatedCost\":3752,\"estimatedNrItems\":3000,\"isAsyncPrefetchEnabled\":true,\"random\":false,\"indexHint\":{\"forced\":false,\"lookahead\":1,\"type\":\"none\"},\"outVariable\":{\"id\":0,\"name\":\"u\",\"isFullDocumentFromCollection\":true},\"projections\":[],\"filter\":{\"type\":\"compare ==\",\"typeID\":25,\"excludesNull\":false,\"subNodes\":[{\"type\":\"attribute access\",\"typeID\":35,\"name\":\"n\",\"subNodes\":[{\"type\":\"reference\",\"typeID\":45,\"name\":\"u\",\"id\":0,\"subqueryReference\":false}]},{\"type\":\"value\",\"typeID\":40,\"value\":1,\"vTypeID\":2}]},\"filterProjections\":[{\"path\":[\"n\"]}],\"count\":false,\"producesResult\":true,\"readOwnWrites\":false,\"useCache\":true,\"maxProjections\":5,\"collection\":\"big\",\"satellite\":false,\"isSatellite\":false,\"isSatelliteOf\":null},{\"type\":\"ReturnNode\",\"dependencies\":[2],\"id\":5,\"estimatedCost\":6752,\"estimatedNrItems\":3000,\"inVariable\":{\"id\":0,\"name\":\"u\",\"isFullDocumentFromCollection\":true},\"count\":true}],\"rules\":[\"move-filters-into-enumerate\",\"optimize-projections\",\"async-prefetch\"],\"asyncPrefetchNodes\":1,\"estimatedCost\":6752,\"estimatedNrItems\":3000,\"collections\":[{\"name\":\"big\",\"type\":\"read\"}],\"variables\":[{\"id\":1,\"name\":\"1\",\"isFullDocumentFromCollection\":false},{\"id\":0,\"name\":\"u\",\"isFullDocumentFromCollection\":true}],\"isModificationQuery\":false},\"cacheable\":true,\"warnings\":[],\"stats\":{\"rulesExecuted\":59,\"rulesSkipped\":0,\"plansCreated\":1,\"rules\":{},\"peakMemoryUsage\":0,\"executionTime\":6.16100151091814e-5},\"error\":false,\"code\":200}"
+  }
+}

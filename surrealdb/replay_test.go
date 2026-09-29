@@ -146,7 +146,8 @@ func TestReplayTypesInJSON(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// JSON keeps no type of SurrealDB, so each one is a string (D49).
+	// JSON keeps no type of SurrealDB, so each value below is a string, the
+	// bytes are an array of numbers, and NONE is null (D49).
 	for i, want := range map[int]any{
 		4:  "1.2345678901234567890123456789",
 		6:  "2026-09-27T10:00:00.123456789Z",
@@ -366,8 +367,10 @@ func TestReplayTransactionInOneRequest(t *testing.T) {
 		}
 	}
 	db := replayDB(t, "surrealdb-3.3.0", "")
-	if _, err := db.BeginTx(t.Context(), nil); !errors.Is(err, dbimp.ErrNotSupported) {
-		t.Errorf("BeginTx gave %v, want ErrNotSupported (D54)", err)
+	for _, opts := range []*sql.TxOptions{nil, {ReadOnly: true}, {Isolation: sql.LevelSerializable}} {
+		if _, err := db.BeginTx(t.Context(), opts); !errors.Is(err, dbimp.ErrNotSupported) {
+			t.Errorf("BeginTx with %+v gave %v, want ErrNotSupported (D54)", opts, err)
+		}
 	}
 }
 

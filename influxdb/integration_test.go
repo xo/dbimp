@@ -150,7 +150,8 @@ func forEach(t *testing.T, f func(t *testing.T, p principal, d string, db *sql.D
 }
 
 // write writes lines of line protocol as the administrator, through /write,
-// which every release has (measured). The driver writes nothing.
+// which every release has (measured). This helper writes without the
+// driver.
 func write(t *testing.T, lines ...string) {
 	t.Helper()
 	if err := writeLines(t.Context(), config(t, admin), strings.Join(lines, "\n")); err != nil {
@@ -401,8 +402,8 @@ func TestIntegrationSeries(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if !slices.Equal(cols, []string{"name", "host", "time", "v"}) {
-				t.Errorf("a series has the columns %q, want name, host, time, v (D81)", cols)
+			if !slices.Equal(cols, []string{"measurement", "host", "time", "v"}) {
+				t.Errorf("a series has the columns %q, want measurement, host, time, v (D96)", cols)
 			}
 			for rows.Next() {
 				var (

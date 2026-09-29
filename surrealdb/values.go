@@ -464,8 +464,8 @@ func encodeCBOR(e *dbimp.CBOREncoder, v any) error {
 			}
 		}
 	case map[string]any:
-		// The keys are sorted, so that the same value is always the same
-		// bytes, as the server writes it.
+		// The driver sorts the keys, so that the same value is always the
+		// same bytes. The server sorts the keys of an object too.
 		e.Map(len(v))
 		for _, k := range slices.Sorted(maps.Keys(v)) {
 			e.Text(k)

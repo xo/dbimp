@@ -278,8 +278,8 @@ func TestReplayStopped(t *testing.T) {
 	defer db.Close()
 	_, _, err := rowsOf(t, db, "any statement")
 	var errs *couchbase.ResponseError
-	if !errors.Is(err, dbimp.ErrIncomplete) || !errors.As(err, &errs) || errs.Status != "stopped" {
-		t.Errorf("a stopped query gave %v, want an incomplete result with the status stopped (D42)", err)
+	if errors.Is(err, dbimp.ErrIncomplete) || !errors.As(err, &errs) || errs.Status != "stopped" {
+		t.Errorf("a stopped query with no row gave %v, want the status stopped, and not dbimp.ErrIncomplete (D42 and D107)", err)
 	}
 }
 

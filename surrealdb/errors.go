@@ -10,8 +10,9 @@ import (
 // failed, a parse error of the RPC call with code -32000, or a request that
 // the server refused with HTTP 400 (D55).
 type Error struct {
-	// Code is the code of the error: the code of a failed RPC call, the HTTP
-	// status of a refused request, or 0 for a statement that failed.
+	// Code is the code of the error: the code of a failed RPC call, -1 for an
+	// RPC error with no code, the HTTP status of a refused request, or 0 for
+	// a statement that failed.
 	Code int
 	// Kind is the kind of the error that 3.x names, such as "NotFound" or
 	// "Thrown", or "" when the server names none.

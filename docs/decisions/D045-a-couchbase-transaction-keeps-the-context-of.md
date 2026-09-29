@@ -1,6 +1,10 @@
 # D45. A Couchbase transaction keeps the context of BeginTx
 
-Status: Decided.
+Status: Amended by D69, D90 and D91.
+
+D69, D90 and D91 add three more exceptions: a Neo4j transaction, the rows of
+an ArangoDB cursor, and an ArangoDB transaction. Hard rule 4 of `AGENTS.md`
+lists all four.
 
 Ken decided this on 2026-09-27. It is the one exception to hard rule 4,
 which says that the library never stores a context. `driver.Tx.Commit` and

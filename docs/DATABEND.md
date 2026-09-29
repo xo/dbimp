@@ -40,7 +40,8 @@ these:
   v1.2.948-nightly, of 2026-09-21. A line of patches also exists, and its
   newest is v1.2.925-patch-13, of 2026-09-03, which GitHub marks as a
   prerelease (GitHub and Docker Hub).
-- `dburl` has the scheme with the `Driver` name `databend`, the aliases `dd`
+- `dburl` has the scheme with the `Driver` name `databend`, which dburl
+  `v0.36.0` calls `Name` (dburl D37), the aliases `dd`
   and `bend`, the generator `GenDatabend`, the `GoPackage`
   `github.com/datafuselabs/databend-go`, the `Deployment`
   `DeploymentServer` and the `Dialect` `databend` (`dburl/scheme.go`).

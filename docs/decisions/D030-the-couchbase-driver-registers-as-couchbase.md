@@ -22,3 +22,7 @@ the same release.
 The rule for every driver follows from D26 and D28: the registered name is
 the name of the package, which is the name of the database. Where `dburl`
 names a scheme differently, the `dburl` session renames it at the move.
+
+Note of 2026-09-29: the move is done. dburl `v0.33.0` made `couchbase` the
+name of the scheme, with the aliases `n1ql` and `n1`, for `v0.1.0` of the
+driver (dburl D25). dburl `v0.36.0` calls that field `Name` (dburl D37).

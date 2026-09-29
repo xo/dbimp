@@ -28,3 +28,12 @@ ceiling both run on a push. DeepSeek said that every floor and ceiling runs
 on a push. Ken chose Gemini's form. The `dbrun` entry of InfluxDB 3 Core
 already has 3.9.13 and 3.11.5 as Tested and 3.10.6 as Nightly
 (dbmeta D112). InfluxDB 1 and InfluxDB 2 need entries of their own.
+
+Note of 2026-09-29: dbmeta D114 added the entries of InfluxDB 1 and
+InfluxDB 2, with 1.13.1 and 2.9.1 in the tier Tested and 1.11.8 and 2.8.0 in
+the tier Nightly.
+
+Note of 2026-09-29, on the tiers: dbmeta D119 put every release that no
+model of `dbmeta` reads in the tier Staged. Tested and Nightly above are now
+the cadence of each Staged release (dbmeta D120), and CI selects a release
+by that cadence.

@@ -31,8 +31,7 @@ measured" is a lead, not a fact.
 - `dburl` has the scheme `surrealdb`, with the aliases `sr`, `sur` and
   `surreal`, from D47 and D48. dburl `v0.34.0` releases it. `usql` imports
   this driver in `usql/drivers/surrealdb`, from usql commit `54c12a4`, and
-  requires dbimp `v0.2.0`. No release of `usql` holds it yet (read on
-  2026-09-28).
+  requires dbimp `v0.4.0` (`usql/go.mod`, read on 2026-09-29).
 - The survey of step 5a is `testdata/surrealdb/features.json`. Each entry is
   settled against 3.3.0 and recorded on the four releases, as both
   principals, and each one names the integration test that holds it (step
@@ -131,8 +130,8 @@ each release):
 - A record id is tag 8 around `[table, key]`. The key is a string, an
   integer, an array, an object or a UUID.
 - A table name, such as `type::table('person')`, is tag 7 around its name.
-- A set is tag 56 around an array on 3.x, and a plain array on 2.7.0. The
-  server sorts the members of a set.
+- A set is tag 56 around an array on 3.x, and a plain array on 2.7.0. 3.x
+  sorts the members of a set, and 2.7.0 keeps their order (recorded).
 - A geometry is tags 88 to 94: 88 for a point `[x, y]`, 89 for a line, 90 for
   a polygon, 91 to 93 for the multiple forms, and 94 for a collection.
 - A range is tag 49 around `[begin, end]`. Each bound is tag 50 when it is
@@ -204,9 +203,13 @@ The type table comes from the code, in step 10.
 - 3.x returns an entry for `BEGIN` and for `COMMIT`. 2.7.0 returns none, so
   the same text has fewer entries on 2.7.0 (recorded).
 - A transaction cannot span two requests. The RPC method `begin` does not
-  exist over HTTP (recorded). `BEGIN` without `COMMIT` in the same request is
+  exist over HTTP (recorded). `BEGIN` alone is `OK` on 3.3.0, and gives no
+  entry on 2.7.0 (recorded). A later request does not join it (measured
+  with curl, through the header `Surreal-Session`).
+  `BEGIN` with more statements and no `COMMIT` in the same request was
   `ERR`, "Missing COMMIT statement", and a header `Surreal-Session` did not
-  join two requests (measured with curl). A `COMMIT` alone gave the error
+  join two requests (measured with curl, and the text of that request is
+  not kept). A `COMMIT` alone gave the error
   "unreachable logic" on 2.7.0, which is a fault of the server (measured
   with curl).
 - The Go SDK refuses an interactive transaction over HTTP too.
@@ -292,15 +295,15 @@ The interface table comes from the code, in step 10.
 | `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
 | `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
 | `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
-| `driver.Pinger` | yes | Ping calls the RPC method ping, which checks the credentials. |
+| `driver.Pinger` | yes | Ping calls the RPC method ping, with the credentials that every request sends. |
 | `driver.SessionResetter` | no | A connection holds no state on the server, so nothing needs a reset. |
 | `driver.Validator` | yes | A connection holds no state, so it is always valid. |
 | `driver.NamedValueChecker` | yes | An argument must have a name (D50), and it keeps its Go value for the encoding of D53. |
 | `driver.QueryerContext` | yes | The server binds each argument itself, through the vars of /rpc (D50). |
 | `driver.ExecerContext` | yes | Exec reads every result, and returns the first error (D55). |
 | `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, bound each time. |
-| `driver.ConnBeginTx` | no | A transaction of SurrealDB lives in one request, so the driver has none (D54). |
-| `driver.RowsColumnScanner` | yes | A value is decoded when it is scanned, and a record id scans into a string as text. |
+| `driver.ConnBeginTx` | yes | BeginTx returns dbimp.ErrNotSupported for every option, because a transaction of SurrealDB lives in one request (D54). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when it is scanned, and a record id, a UUID and a duration scan into a string as their text. |
 | `driver.RowsNextResultSet` | yes | Each statement of a request is a result set (D52). |
 | `driver.RowsColumnTypeScanType` | no | No type arrives for a column, and each record holds what it holds. |
 | `driver.RowsColumnTypeDatabaseTypeName` | no | No type arrives for a column, and each record holds what it holds. |
@@ -383,3 +386,85 @@ code holds it, and Ken accepted D70 on 2026-09-29.
 Q12 in [PLAN.md](PLAN.md) asked what a result set with no columns gives,
 such as the empty array of `DELETE author`. tblfmt D31, in `tblfmt`
 `v0.19.1`, answers it, so D52 stands and the driver does not change.
+
+The review of D97 found the questions under "Compared with Couchbase"
+below, and each one waits for Ken.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It
+was written on 2026-09-29 from the staged code that came after `v0.4.0`. A
+fact of Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and a
+fact of SurrealDB from the sections above.
+
+### The server
+
+| | Couchbase | SurrealDB |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /rpc`, with the method `query` and the parameters `[text, vars]` (D50) |
+| Database | The key `query_context` of the body | The headers `Surreal-NS` and `Surreal-DB`, from the path of the DSN (D48) |
+| Language | SQL++, which is close to SQL | SurrealQL |
+| DDL | In SQL++ | In SurrealQL, as `DEFINE` and `REMOVE` |
+| Parameters | `?`, `$1` and `$name` | `$name` only. `$1` is a parse error |
+| Framing | One body for the whole result, which does not page | One body, with one result for each statement |
+| Columns | `signature`, before the first row | No list. Each record has its own keys |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The server sorts the keys of every object |
+| Errors | Can come with HTTP 200, after some rows | A parse error and a failed statement both come with HTTP 200. The other statements still run |
+| Types | JSON. No date, decimal, UUID or binary | CBOR, with tags for a date, a decimal, a UUID, a duration and a record id, and a byte string |
+| Cancel | The server stops a query when the client leaves | The server stops a query when the client leaves. Nothing lists or stops a query |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | `BEGIN` and `COMMIT` only inside the text of one request |
+| Several statements | Refused | Taken, with one result for each |
+| Authentication | Basic, or `creds` in the body | Basic, with `Surreal-Auth-NS` and `Surreal-Auth-DB` for a user of a namespace or a database |
+| Default port | 8093, or 18093 with TLS | 8000, with or without TLS |
+
+The differences that a caller sees:
+
+- The columns come from the keys of the first record (D18), and the server
+  sorts them, so `SELECT b, a` gives `a, b`. A result whose first value is
+  not an object is one column (D101).
+- A request can hold several statements, so each one is a result set, and
+  `Rows.NextResultSet` moves to the next (D52).
+- A transaction cannot span requests, so `BeginTx` fails (D54).
+- The values keep their types through CBOR (D49 and D53).
+
+### The driver
+
+| | `couchbase` | `surrealdb` |
+| --- | --- | --- |
+| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2300 lines in 10 files, and the CBOR code of the root package |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Namespace`, `Database`, `Auth`, `Encoding` |
+| Options for one statement | Five `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40 and D46). `WithParameter` sets any key of the body | None |
+| Arguments | Sent to the server as `args` and `$name` | Named only, sent in `vars`. An argument with no name is refused with `dbimp.ErrArguments` |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | A concrete reader of the result sets for each format, `cborSets` and `jsonSets`, which walk the answer alike with their own decoders (D108). Each reads the first record ahead to learn the columns |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | None |
+| Result sets | One | One for each statement, through `RowsNextResultSet` |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44). A time and a UUID are strings | `int64`, `float64`, `*apd.Decimal`, `time.Time`, `time.Duration`, `uuid.UUID`, `RecordID` and `[]byte`. NONE and NULL are both nil |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported` (D55) |
+| Transactions | `BeginTx` sends `BEGIN WORK` | `BeginTx` returns `dbimp.ErrNotSupported` for every option (D54) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | `IsValid` only |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same (D56) |
+| Errors | `*ResponseError`, with a list of `Error{Code, Msg}`. A body that is not JSON is a `*dbimp.StatusError`. An error after a row wraps `dbimp.ErrIncomplete` (D107) | `*ResponseError`, with a list of `Error{Code, Kind, Msg}`. A body that is not JSON is a `*dbimp.StatusError` (D55). A failed statement sends no row, so it does not wrap `dbimp.ErrIncomplete` (D107) |
+| Authentication | Basic | Basic, with `auth=root`, `auth=namespace` or `auth=database` (D51) |
+| Other exports | The `With` options and `Option` | `Version` for `Conn.Raw` (D57), `RecordID` (D70), and the constants of `auth` and `encoding` |
+
+The differences that a caller sees:
+
+- A positional argument is refused. A caller must use `sql.Named`, because
+  SurrealQL has no positional parameter (D50).
+- The columns have no database type, and the scan type of each is `any`,
+  because no type arrives for a column (the table of interfaces above).
+- `RowsAffected` returns an error, because the server counts no rows (D55).
+- Times, UUIDs, durations and record ids arrive as Go types, where Couchbase
+  gives strings (D53).
+- Only Couchbase takes a `*jsontext.Value` destination, and gives the JSON
+  text of an object or an array scanned into a `*[]byte` (D39).
+- These have no decision, and each one is a question for Ken:
+  - The driver takes no option for one statement, though SurrealQL has a
+    `TIMEOUT` clause. D48 leaves any other key to a decision of its own.
+  - `auth` means the level of the user (D51), and D94 gives the key `auth`
+    of every HTTP driver the values `basic` and `bearer`. D94 names
+    neither SurrealDB nor Couchbase.
+  - A CBOR integer outside the range of `int64` reads as an `*apd.Decimal`,
+    and D53 says that an integer is an `int64`.
+  - A `uuid.UUID` and a `time.Duration` scan into a string as their text of
+    SurrealQL. D53 and D70 name only `RecordID`.

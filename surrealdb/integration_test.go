@@ -33,7 +33,7 @@ import (
 // make.
 var prefix = "dbimp_it_" + strconv.FormatInt(time.Now().UnixNano()%1e9, 36)
 
-// tbl returns the name of the table name of the tests.
+// tbl returns the name of a table of the tests.
 func tbl(name string) string {
 	return prefix + "_" + name
 }
@@ -112,13 +112,17 @@ func run(m *testing.M) (int, error) {
 			return 1, fmt.Errorf("removing what the tests left: %s: %w", stmt, err)
 		}
 	}
-	if left, err := leftovers(ctx, db); err != nil || len(left) > 0 {
-		return 1, fmt.Errorf("the tests left %q after the cleanup: %w", left, err)
+	left, err = leftovers(ctx, db)
+	if err != nil {
+		return 1, fmt.Errorf("listing what the tests left: %w", err)
+	}
+	if len(left) > 0 {
+		return 1, fmt.Errorf("removing what the tests made: %q is left after the cleanup", left)
 	}
 	return code, nil
 }
 
-// leftovers returns a statement that removes each table, function, param,
+// leftovers returns the statements that remove each table, function, param,
 // analyzer and sequence whose name starts with the prefix.
 func leftovers(ctx context.Context, db *sql.DB) ([]string, error) {
 	info, err := object(ctx, db, "INFO FOR DB")
@@ -157,7 +161,10 @@ func object(ctx context.Context, db *sql.DB, stmt string) (map[string]any, error
 		return nil, err
 	}
 	if !rows.Next() {
-		return nil, fmt.Errorf("%s returned no row: %w", stmt, rows.Err())
+		if err := rows.Err(); err != nil {
+			return nil, fmt.Errorf("reading %s: %w", stmt, err)
+		}
+		return nil, fmt.Errorf("reading %s: it returned no row", stmt)
 	}
 	vals := make([]any, len(cols))
 	dest := make([]any, len(cols))
@@ -621,8 +628,8 @@ func TestIntegrationFeatures(t *testing.T) {
 			if _, err := db.BeginTx(t.Context(), nil); !errors.Is(err, dbimp.ErrNotSupported) {
 				t.Errorf("BeginTx gave %v, want ErrNotSupported (D54)", err)
 			}
-			// BEGIN alone ends with its request, and never joins the next
-			// one (docs/SURREALDB.md).
+			// BEGIN alone runs, and ends with its request
+			// (docs/SURREALDB.md).
 			if _, err := queryErr(t, db, "BEGIN"); err != nil {
 				t.Errorf("BEGIN alone: %v", err)
 			}

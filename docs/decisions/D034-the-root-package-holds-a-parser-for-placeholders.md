@@ -9,7 +9,7 @@ identifiers and comments, so that a `?` inside a literal stays as it is. That
 fault is in `go_n1ql`. The driver then puts each argument into the statement
 as a literal, written by an escaper that the driver supplies for its product.
 The escaper is never shared, because each product quotes in its own way. Hive
-reads a doubled quote as two literals joined (dbmeta D78).
+reads a doubled quote as two literals joined (dbmeta D79).
 
 A driver whose server binds arguments sends them to the server, and does not
 use the parser for that.
@@ -18,3 +18,7 @@ An existing package can replace the parser if one fits D13. None was found on
 2026-09-27. The sanitizer of `pgx` is `pgx/v5/internal/sanitize`, which
 cannot be imported, and `interpolateParams` in `go-sql-driver/mysql` is not
 exported.
+
+Note of 2026-09-29: the ArangoDB driver uses the parser to learn which
+names a query uses, and binds nothing into the text (D104). For AQL, the
+`Syntax` gained `SlashComments`, `DoubleAt` and `DigitNames`.

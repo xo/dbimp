@@ -118,7 +118,7 @@ func run(m *testing.M) (int, error) {
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
-	return 1, fmt.Errorf("the scope %s is still there after the tests", scope)
+	return 1, fmt.Errorf("removing the scope %s: it is still there after the tests", scope)
 }
 
 // collections are the collections of the scope. INFER reads samples, which
@@ -397,7 +397,7 @@ func TestIntegrationTypes(t *testing.T) {
 		})
 	})
 	// Couchbase has no binary type for a document. A binary value made by
-	// BASE64_DECODE is written as a placeholder (D44).
+	// BASE64_DECODE is written as a placeholder (docs/COUCHBASE.md, Types).
 	t.Run("binary", func(t *testing.T) {
 		forEach(t, func(t *testing.T, p principal, db *sql.DB) {
 			rows := query(t, t.Context(), db, `SELECT TYPE(BASE64_DECODE("eA==")) AS type, BASE64_DECODE("eA==") AS v`)
@@ -584,8 +584,8 @@ func TestIntegrationFeatures(t *testing.T) {
 					}
 				case f.code < 0:
 					// The server refuses it with a code that depends on the
-					// principal, or returns rows: either answer is recorded,
-					// and an error here must be one of the server.
+					// principal, or returns rows. The survey takes either
+					// answer, and an error here must be one of the server.
 					if err != nil && code(err) == 0 {
 						t.Errorf("%s gave %v, which is not an error of the server", f.stmt, err)
 					}
@@ -601,10 +601,18 @@ func TestIntegrationFeatures(t *testing.T) {
 	}
 	t.Run("prepare and execute", func(t *testing.T) {
 		forEach(t, func(t *testing.T, p principal, db *sql.DB) {
-			name := "dbimp_it_" + p.name
+			// The name holds the run, and the statement is deleted at the
+			// end, so that a second run does not meet code 4060.
+			name := strings.TrimPrefix(scope, "dbmeta.") + "_" + p.name
 			if _, err := db.ExecContext(t.Context(), "PREPARE "+name+" FROM SELECT RAW $1"); err != nil {
 				t.Fatal(err)
 			}
+			t.Cleanup(func() {
+				ctx := context.WithoutCancel(t.Context())
+				if _, err := db.ExecContext(ctx, "DELETE FROM system:prepareds WHERE name = $1", name); err != nil {
+					t.Errorf("deleting the prepared statement %s: %v", name, err)
+				}
+			})
 			equal(t, "EXECUTE", query(t, t.Context(), db, "EXECUTE "+name, 7), [][]any{{int64(7)}})
 		})
 	})
@@ -764,7 +772,7 @@ func TestIntegrationTransactions(t *testing.T) {
 		time.Sleep(2 * time.Second)
 		_, err = tx.ExecContext(ctx, "SELECT RAW 1")
 		if code(err) != 17010 && code(err) != 17004 {
-			t.Errorf("a statement after the timeout of the transaction gave %v, want the code 17010", err)
+			t.Errorf("a statement after the timeout of the transaction gave %v, want the code 17010 or 17004", err)
 		}
 		_ = tx.Rollback()
 	})

@@ -10,9 +10,9 @@ import (
 // doc is the product document of the driver.
 const doc = "../docs/INFLUXDB.md"
 
-// TestTables writes the type table and the interface table of step 10 of
-// docs/DRIVER.md into doc, from the code. Run it with DBIMP_UPDATE=1 to
-// write them.
+// TestTables compares the type table and the interface table of step 10 of
+// docs/DRIVER.md in doc with the code. Run it with DBIMP_UPDATE=1 to write
+// them.
 func TestTables(t *testing.T) {
 	t.Parallel()
 	var types []dbimptest.TypeRow
@@ -41,7 +41,7 @@ func TestTables(t *testing.T) {
 		"driver.SessionResetter":                "A connection holds no state on the server, so nothing needs a reset.",
 		"driver.Validator":                      "A connection holds no state on the server, so it is always valid.",
 		"driver.NamedValueChecker":              "It keeps a uint64 and a decimal, which the default converter refuses or turns into text.",
-		"driver.QueryerContext":                 "The server binds each argument itself, from params.",
+		"driver.QueryerContext":                 "The server binds each argument itself, from params, except in INSERT, which the driver binds (D85).",
 		"driver.ExecerContext":                  "Exec reads every result to its end. InfluxDB counts no rows.",
 		"driver.ConnPrepareContext":             "A prepared statement runs as its text, bound each time.",
 		"driver.ConnBeginTx":                    "BeginTx returns dbimp.ErrNotSupported, because InfluxDB has no transactions (D20).",

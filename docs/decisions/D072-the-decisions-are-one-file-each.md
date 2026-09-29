@@ -31,3 +31,5 @@ its file, raised each heading inside it by two levels, and made each
 relative link one folder deeper. The words of the old decisions and the new
 files were counted, and the only words that changed are those of each
 status.
+
+Note of 2026-09-29: Ken accepted D70 on 2026-09-29.

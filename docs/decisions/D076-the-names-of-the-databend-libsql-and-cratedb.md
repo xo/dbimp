@@ -18,7 +18,8 @@ Each package registers its one name, and the scheme of its URL is that name
   what is known.
 - CrateDB: the package is `github.com/xo/dbimp/cratedb`, and its name is
   `cratedb`. D88 withdrew this driver, because `usql` reaches CrateDB with
-  `pgx`. [CRATEDB.md](../CRATEDB.md) holds what is known.
+  `pgx`. `dburl` has the scheme `cratedb` on `pgx`, with the dialect
+  `cratedb`, from dburl D30. [CRATEDB.md](../CRATEDB.md) holds what is known.
 
 The URL of each, its keys and its default port are still decisions of step
 9 of each driver.

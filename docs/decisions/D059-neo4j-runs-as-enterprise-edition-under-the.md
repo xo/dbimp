@@ -18,3 +18,6 @@ records the acceptance in its own decision, as dbmeta D76 does for SAP HANA.
 
 The image of 4.4 takes only `yes`, so 4.4 cannot run this way, and it is not
 tested.
+
+Note of 2026-09-29: the `dbmeta` session recorded the acceptance in
+dbmeta D106.

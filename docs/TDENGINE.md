@@ -59,9 +59,11 @@ these:
 - S: yes. The statement is the SQL of TDengine (the SQL reference). Not
   measured.
 - The priority is P1 (D17 and [TARGETS.md](TARGETS.md)).
-- `dburl` has no scheme for TDengine (`dburl/scheme.go`, which holds no
-  `taos` and no `tdengine`). Its backlog adds the scheme when the driver has
-  `ParseDSN` at a tag (`dburl/docs/BACKLOG.md`).
+- `dburl` has the provisional scheme `tdengine`, with the alias `td` and the
+  default port 6041, the REST port. It passes the path and the query through
+  (dburl D36, released in dburl `v0.36.0` as dburl D38, read on
+  2026-09-29). Nothing of it
+  is settled until step 9 decides the name and the URL.
 - `usql` has no driver for TDengine. Its backlog lists
   `github.com/taosdata/driver-go/v3` v3.8.2, from 2026-07-09, as a driver
   that it can add (`usql/docs/BACKLOG.md`, "Tier 3"). So this driver
@@ -126,9 +128,10 @@ these:
 
 ## The DSN
 
-- Step 9 decides the URL (D27 and D35). `dburl` has no scheme to read yet.
-  D26 names the package for its database, so the name is `tdengine`, and
-  `dburl` keeps any alias, such as `taos` (D5 and D28). Not decided.
+- Step 9 decides the URL (D27 and D35). `dburl` has the provisional scheme
+  `tdengine` (dburl D36). D26 names the package for its database, so the
+  name is `tdengine`, and `dburl` keeps any alias, such as `td` or `taos`
+  (D5 and D28). Not decided.
 - The Go connector takes the form of the MySQL driver:
   `user:password@http(host:port)/db?key=value` (`taosRestful/dsn.go`). Its
   keys are `interpolateParams`, `disableCompression`, `readBufferSize`,
@@ -138,7 +141,7 @@ these:
   not allow that form here.
 - The `dsn` field of the dbmeta entry is `http://<user>:<password>@127.0.0.1:<port>`,
   with no path. The `url` field in the form of `dburl` is not known until
-  `dburl` has the scheme.
+  step 9 decides the URL.
 
 ## Responses
 
@@ -476,4 +479,5 @@ asked on 2026-09-27, with where each one disagrees with a source:
 - None about the dbmeta entry: each Tested release passed `dbrun test`, and
   dbmeta D112 now exists, staged and not committed.
 - The name of the package, the URL of the DSN, and what its path names are
-  decisions of step 9, after `dburl` adds the scheme.
+  decisions of step 9. `dburl` holds a provisional scheme until then (dburl
+  D36).

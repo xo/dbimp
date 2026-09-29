@@ -35,8 +35,14 @@ type rows struct {
 	vals []jsontext.Value
 
 	httpStatus int
-	errs       []Error
-	txID       string
+	// length is the Content-Length of the answer, or -1 for an answer in
+	// chunks.
+	length int64
+	// read is true once a row has reached the caller, so that an error after
+	// it wraps dbimp.ErrIncomplete (D107).
+	read bool
+	errs []Error
+	txID string
 
 	// w watches the context of the statement, and stops the statement on
 	// the server when the context ends (D67). It is nil for cancel=none.
@@ -54,7 +60,7 @@ var _ driver.RowsColumnScanner = (*rows)(nil)
 // response is not 2xx, and then it reads the whole response, which is short.
 func readResponse(res *http.Response, t *tx) (*rows, error) {
 	s := dbimp.NewStream(res.Body)
-	r := &rows{s: s, dec: s.Decoder(), httpStatus: res.StatusCode, t: t}
+	r := &rows{s: s, dec: s.Decoder(), httpStatus: res.StatusCode, length: res.ContentLength, t: t}
 	if err := r.readHead(); err != nil {
 		_ = s.Close()
 		return nil, err
@@ -76,11 +82,30 @@ func (r *rows) Columns() []string {
 	return r.cols
 }
 
-// Close satisfies driver.Rows. It waits for a stop of the statement that
-// began, and closes the body, and reads nothing more (D36).
+// Close satisfies driver.Rows (D105). Outside a transaction, it closes the
+// body, and reads nothing more (D36). If the rows did not reach their end,
+// and the answer came in chunks, it also stops the statement on the server,
+// which runs on when the client leaves. An answer with a Content-Length needs
+// no stop, as for QueryRow. In a transaction, it reads the rest of the
+// answer first, because the server fails the next statement of the
+// transaction, or rolls it back, while the answer of the last one is unread
+// (tested). An error of the server in that rest ends the transaction, and
+// Commit returns it (D65). Close then waits for a stop that the end of the
+// context began.
 func (r *rows) Close() error {
+	var err error
+	if r.t != nil && r.state != stateDone {
+		if derr := r.drain(); derr != nil && !errors.As(derr, new(*ResponseError)) {
+			err = derr
+		}
+	}
+	early := r.state != stateDone && r.t == nil && !r.complete()
+	err = errors.Join(err, r.s.Close())
+	if early {
+		err = errors.Join(err, r.w.abandon())
+	}
 	_, _ = r.w.end()
-	return r.s.Close()
+	return err
 }
 
 // NextRow satisfies driver.RowsColumnScanner.
@@ -91,6 +116,7 @@ func (r *rows) NextRow() error {
 	err := r.arr.Next(r.vals)
 	switch {
 	case err == nil:
+		r.read = true
 		return nil
 	case errors.Is(err, io.EOF):
 		return r.end(r.finish())
@@ -131,6 +157,13 @@ func (r *rows) ScanColumn(scanCtx driver.ScanContext, i int, dest any) error {
 		return err
 	}
 	return dbimp.Assign(scanCtx, dest, v)
+}
+
+// complete reports whether the server finished the statement before it sent
+// the answer. It sends a small answer with a Content-Length, and a large one
+// in chunks with none (recorded).
+func (r *rows) complete() bool {
+	return r.length >= 0
 }
 
 // readHead reads the members of the response before its rows.
@@ -267,8 +300,11 @@ func (r *rows) finish() error {
 	if err := r.readEnd(); err != nil {
 		return err
 	}
-	if len(r.errs) > 0 {
+	switch {
+	case len(r.errs) > 0 && r.read:
 		return fmt.Errorf("reading the result: %w: %w", dbimp.ErrIncomplete, r.error())
+	case len(r.errs) > 0:
+		return fmt.Errorf("reading the result: %w", r.error())
 	}
 	return io.EOF
 }
@@ -291,8 +327,12 @@ func (r *rows) readEnd() error {
 func (r *rows) end(err error) error {
 	r.state = stateDone
 	ran, cerr := r.w.end()
-	if ran && r.t != nil {
-		r.t.ended = fmt.Errorf("stopping the statement ended the transaction: %w", err)
+	if ran && r.t != nil && r.t.ended == nil {
+		cause := err
+		if errors.Is(cause, io.EOF) {
+			cause = r.w.cause
+		}
+		r.t.ended = fmt.Errorf("stopping the statement ended the transaction: %w", cause)
 	}
 	r.endTx(err)
 	if cerr != nil && !errors.Is(err, io.EOF) {

@@ -1,7 +1,8 @@
 package dbimp_test
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"io/fs"
 	"maps"
 	"os"
@@ -24,7 +25,7 @@ func TestSkillsAreCopies(t *testing.T) {
 		t.Fatal(err)
 	}
 	var lock struct {
-		Skills map[string]json.RawMessage `json:"skills"`
+		Skills map[string]jsontext.Value `json:"skills"`
 	}
 	if err := json.Unmarshal(body, &lock); err != nil {
 		t.Fatalf("reading skills-lock.json: %v", err)

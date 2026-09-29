@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"RETURN (FOR i IN 1..100000 RETURN i)\",\"memoryLimit\":10000}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Length": [
+        "169"
+      ]
+    },
+    "body": "{\"code\":500,\"error\":true,\"errorMessage\":\"AQL: query would use more memory than allowed [node #9: SubqueryEndNode] [node #7: ReturnNode] (while executing)\",\"errorNum\":32}"
+  }
+}

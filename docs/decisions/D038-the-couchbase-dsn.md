@@ -23,4 +23,4 @@ The driver talks to the host of the URL only. It does not find the other
 nodes of a cluster, because `dbrun` cannot test that, and a cluster in a
 container answers with addresses that a client outside it cannot reach
 ([COUCHBASE.md](../COUCHBASE.md)). It follows no redirect, and none was seen.
-It asks Ken before it adds a key.
+An agent asks Ken before it adds a key.

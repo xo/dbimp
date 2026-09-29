@@ -1,6 +1,8 @@
 # D81. An InfluxQL series is a result set, with its name and its tags
 
-Status: Decided.
+Status: Amended by D96.
+
+D96 amends the first column: it is `measurement`, and not `name`.
 
 Ken decided on 2026-09-28 how the dialect `influxql` maps the answer of
 `/query` to result sets. Step 6 measured the answer on InfluxDB 1.13.1,

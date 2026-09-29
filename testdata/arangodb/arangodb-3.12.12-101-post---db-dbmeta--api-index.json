@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/index",
+    "query": "collection=dbimp_doc",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"type\":\"vector\",\"fields\":[\"vec\"],\"params\":{\"metric\":\"cosine\",\"dimension\":2,\"nLists\":1}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "144"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"code\":400,\"error\":true,\"errorMessage\":\"vector index feature is not enabled. Run ArangoDB with `--vector-index` flag turned on.\",\"errorNum\":10}"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"FOR v, e, p IN 1..3 OUTBOUND 'types/a' edges PRUNE v._key == 'b' RETURN v._key\"}"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Content-Length": [
+        "412"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ]
+    },
+    "body": "{\"result\":[\"b\"],\"hasMore\":false,\"cached\":false,\"extra\":{\"warnings\":[],\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"documentLookups\":0,\"seeks\":0,\"scannedFull\":0,\"scannedIndex\":4,\"searchParallelism\":1,\"cursorsCreated\":1,\"cursorsRearmed\":0,\"cacheHits\":1,\"cacheMisses\":0,\"filtered\":1,\"httpRequests\":0,\"executionTime\":1.7535101505927742e-4,\"peakMemoryUsage\":32768,\"intermediateCommits\":0}},\"error\":false,\"code\":201}"
+  }
+}

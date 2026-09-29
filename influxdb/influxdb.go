@@ -11,12 +11,14 @@
 // default, prefer, asks the server for its release (D78). Dialect and Version
 // tell a caller what a connection speaks and what it talks to.
 //
-// The server binds each argument: sql.Named("k", v) fills $k, and a
-// positional argument n fills $n, such as $1. SQL reads its columns and their
+// The server binds each argument, except in INSERT, which the driver binds
+// (D85): sql.Named("k", v) fills $k, and a positional argument n fills $n,
+// such as $1, which is measured for SQL. SQL reads its columns and their
 // types from DESCRIBE (D80). InfluxQL gives each series of a statement a
-// result set of its own, with its name and its tags as the first columns
-// (D81 and D83). InfluxDB has no transactions. docs/INFLUXDB.md holds what
-// the driver knows about the server.
+// result set of its own. Its first columns are measurement, which holds the
+// name of the series, and its tags (D81, D83 and D96). InfluxDB has no
+// transactions. docs/INFLUXDB.md holds what the driver knows about the
+// server.
 package influxdb
 
 import (

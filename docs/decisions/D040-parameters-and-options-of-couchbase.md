@@ -15,3 +15,7 @@ slice and a struct are arguments as well as a scalar. The driver implements
 An option of one query comes from the DSN, then from the context through
 `WithOptions`, then from an argument of the type `Option`, in that order, as
 cql D23 does. The options are the keys of D38 without `tls`, and `readonly`.
+
+Note of 2026-09-29: the option `WithParameter` sets any key of the body of
+the request, as the raw options of the SDKs of Couchbase do. D46 adds the
+option `WithTransactionTimeout`, which rides on this order too.

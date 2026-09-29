@@ -1,6 +1,10 @@
 # D20. A driver never fakes a transaction
 
-Status: Decided.
+Status: Amended by D102.
+
+D102 amends the last point: a driver needs no `ResetSession` for a
+transaction, because `database/sql` ends it before it reuses the
+connection.
 
 Ken accepted this on 2026-09-27. Most HTTP interfaces keep no state between
 requests and have no transactions. If the product has none, `BeginTx` returns a

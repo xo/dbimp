@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"FOR i IN 1..5 RETURN i\",\"batchSize\":2,\"options\":{\"stream\":true}}"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Expires": [
+        "0"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Content-Length": [
+        "100"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ]
+    },
+    "body": "{\"result\":[1,2],\"hasMore\":true,\"id\":\"260\",\"nextBatchId\":\"2\",\"cached\":false,\"error\":false,\"code\":201}"
+  }
+}

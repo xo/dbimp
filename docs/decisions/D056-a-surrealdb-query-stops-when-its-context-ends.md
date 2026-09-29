@@ -13,3 +13,7 @@ the URL. The server sent no redirect in any measurement.
 
 No other product speaks this interface, so the driver has no flavors (item
 11).
+
+Note of 2026-09-29: the request carries the context, so `net/http` stops
+the request and the read of the body when the context ends. The driver does
+not close the body itself then (D36).

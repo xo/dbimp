@@ -25,3 +25,5 @@ holds a NULL. Ken decides then whether that holds.
 
 Step 6 showed the first fact, and D80 settles it. The driver sends
 `DESCRIBE` first by default, and this decision holds with `describe=disable`.
+
+Note of 2026-09-29: step 6 measured all three facts, and D80 settles them.

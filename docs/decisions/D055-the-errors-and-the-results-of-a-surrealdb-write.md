@@ -27,3 +27,9 @@ value with `Code`, `Kind` and `Msg`. `Kind` is the kind that 3.x names,
 which Couchbase has no form for. A response that is neither JSON nor CBOR,
 such as the plain text of HTTP 401, is a `*dbimp.StatusError`, as in the
 Couchbase driver.
+
+Note of 2026-09-29: the first point and the second disagree for `/rpc`,
+which the driver speaks (D50). A parse error there is HTTP 200 with the
+code -32000, as the second point says. The HTTP 400 that the driver meets is
+a request that the server cannot read, such as a regex, which CBOR cannot
+hold.

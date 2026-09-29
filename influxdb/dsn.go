@@ -103,7 +103,8 @@ type Config struct {
 	// SQLModeRequire (D78).
 	SQLMode string
 	// Version is the major release, 1, 2 or 3, that the driver talks to when
-	// SQLMode is SQLModeDisable or SQLModeAllow (D78).
+	// SQLMode is SQLModeDisable or SQLModeAllow (D78). It also chooses the
+	// default port, under every SQLMode (D82).
 	Version int
 	// Describe is DescribeAlways or DescribeDisable (D80).
 	Describe string

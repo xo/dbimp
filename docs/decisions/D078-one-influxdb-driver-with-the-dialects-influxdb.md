@@ -88,3 +88,15 @@ DBRP (not measured), and the `Init` of its `dbrun` entry makes it.
 D79 names the releases that the tests run. D82 names the URL of the DSN and
 the authentication on each release. D80 and D81 say how each dialect reads
 its result.
+
+Note of 2026-09-29: step 6 measured the facts of
+[INFLUXDB.md](../INFLUXDB.md) after this decision, and the decisions under
+"What is still open" settled each point there. D82 settled the
+authentication: the driver sends basic authentication on every release, so
+the key `version` chooses the default port and not a form of
+authentication. `version` chooses the port under every `sqlmode` (D82).
+
+Note of 2026-09-29, on the two schemes: dburl `v0.36.0` dropped `GoDriver`.
+The scheme `influxql` now has the name and the dialect `influxql`, and its
+generator returns the driver `influxdb`, which `dburl` stores in
+`URL.Driver` (D98).

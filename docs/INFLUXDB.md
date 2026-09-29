@@ -76,7 +76,8 @@ sources, each read on 2026-09-28, are these:
   `GoPackage` `github.com/xo/dbimp/influxdb`.
 - `usql` has no driver for InfluxDB (`usql/docs/BACKLOG.md`).
 - The driver is `influxdb`, with the dialects `influxdb` and `influxql`
-  (D78). D80 to D83 settle the rest of step 9.
+  (D78). D80 to D83 settle the rest of step 9, and D96 names the first
+  column of InfluxQL.
 
 ## Requests
 
@@ -134,8 +135,9 @@ with these keys:
   InfluxDB 3, and
   `influxdb://admin:secret@localhost:8086/dbmeta?sqlmode=disable&version=1`
   for InfluxDB 1.
-- The dbmeta entry gives `http://` URLs with no path, such as
-  `http://_admin:<token>@127.0.0.1:<port>`. The tests add the path `dbmeta`.
+- From dbmeta `415e830`, the `url` of each principal is the DSN of D82, such
+  as `influxdb://_admin:<token>@127.0.0.1:<port>/dbmeta`, and the tests use
+  it as `dbrun` prints it.
 
 ## Responses
 
@@ -175,7 +177,8 @@ with these keys:
   series holds `name`, an optional `tags` object, `columns` and `values`,
   one array for each row, with `null` for a NULL (measured on every
   release). So the columns arrive before the rows, and rule 1 of D18
-  applies. D81 maps each series to a result set.
+  applies. D81 maps each series to a result set, and D96 names its first
+  column `measurement`.
 - `GROUP BY host` gives one series for each value of the tag, with the tag
   in `tags` and not in `columns` (measured, 1.13.1-010). A statement on two
   measurements gives one series for each, with different columns (measured,
@@ -299,7 +302,8 @@ InfluxQL on every release:
   2.9.1, and is an error on 3.11.5 (measured). An array is an error on every
   release (measured).
 - So the server binds every parameter, and the driver needs no parser for
-  placeholders (D34).
+  placeholders (D34). `INSERT` is the exception: the driver writes each
+  argument into the line protocol itself (D85).
 
 ## Transactions
 
@@ -445,7 +449,7 @@ The driver serves InfluxDB 1, InfluxDB 2, and InfluxDB 3 and later (D78).
 | `driver.SessionResetter` | no | A connection holds no state on the server, so nothing needs a reset. |
 | `driver.Validator` | no | A connection holds no state on the server, so it is always valid. |
 | `driver.NamedValueChecker` | yes | It keeps a uint64 and a decimal, which the default converter refuses or turns into text. |
-| `driver.QueryerContext` | yes | The server binds each argument itself, from params. |
+| `driver.QueryerContext` | yes | The server binds each argument itself, from params, except in INSERT, which the driver binds (D85). |
 | `driver.ExecerContext` | yes | Exec reads every result to its end. InfluxDB counts no rows. |
 | `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, bound each time. |
 | `driver.ConnBeginTx` | yes | BeginTx returns dbimp.ErrNotSupported, because InfluxDB has no transactions (D20). |
@@ -520,9 +524,9 @@ on 1.13.1, 2.9.1 and 3.11.5:
 
 ## Open questions
 
-[PLAN.md](PLAN.md) has no open question for InfluxDB. Ken settled each one
-of steps 6 and 9 on 2026-09-28 and 2026-09-29: D80 to D83, D85 and D86.
-These facts remain:
+Ken settled each question of steps 6 and 9 on 2026-09-28 and 2026-09-29:
+D80 to D83, D85, D86 and D96. The questions under "Compared with Couchbase"
+below wait for Ken. These facts remain:
 
 - `features.json` holds one verdict for each entry, and several entries hold
   on some releases only. This document names the releases of each.
@@ -540,3 +544,87 @@ the round trip of every type in each dialect (step 14a). The version, from
 `GET /ping`, reads the same for both principals on InfluxDB 1 and 2, because
 `/ping` needs no credentials there (measured, 1.13.1-061 and 2.9.1-061).
 InfluxDB 3 Core has no ordinary user.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It
+was written on 2026-09-29 from the staged code, which holds D96. A fact of
+Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and a fact of InfluxDB
+from the sections above.
+
+### The server
+
+| | Couchbase | InfluxDB |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | SQL: `POST /api/v3/query_sql`, on InfluxDB 3 only. InfluxQL: `POST /query`, with the form value `q` |
+| Database | The key `query_context` of the body | `db` in the request, from the path of the DSN (D82) |
+| Language | SQL++, which is close to SQL | SQL on InfluxDB 3, and InfluxQL on every release (D78) |
+| DDL | In SQL++ | Few statements. `DROP MEASUREMENT` and `DROP SERIES` work on InfluxDB 1, and InfluxDB 3 refuses each |
+| Writes | DML in SQL++ | Line protocol to `/write`. No server parses `INSERT` |
+| Parameters | `?`, `$1` and `$name` | `$name` and `$1`, from `params` |
+| Framing | One body for the whole result, which does not page | SQL: one array of objects. InfluxQL: one object of results, or a chunk for each 10,000 rows on InfluxDB 1 (D83) |
+| Columns | `signature`, before the first row | SQL: no list, and a NULL leaves out its key. InfluxQL: `columns`, before the rows of each series |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | SQL: the statement. InfluxQL: the columns of each series |
+| Errors | Can come with HTTP 200, after some rows | SQL: an error after some rows cuts the body with HTTP 200, and no text. InfluxQL: an error of a later statement comes with HTTP 200, after the earlier rows |
+| Types | JSON. No date, decimal, UUID or binary | SQL: the types of `DESCRIBE`, with a decimal, a time and binary. InfluxQL: JSON, and the time as text |
+| Cancel | The server stops a query when the client leaves | InfluxDB 3 stops a query when the client leaves. For InfluxDB 1 and 2 it is not measured |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None |
+| Several statements | Refused | SQL: refused. InfluxQL: taken, with a result for each |
+| Authentication | Basic, or `creds` in the body | Basic. A token is the password (D82) |
+| Default port | 8093, or 18093 with TLS | 8086 for InfluxDB 1 and 2, and 8181 for InfluxDB 3, with or without TLS |
+
+The differences that a caller sees:
+
+- The dialect depends on the release, and the key `sqlmode` chooses it.
+  Its default asks `GET /ping` for the release when the driver connects
+  (D78).
+- SQL learns its columns and their types from `DESCRIBE`, because the answer
+  leaves out every NULL (D80).
+- Each series of InfluxQL is a result set, whose first columns are
+  `measurement` and the tags (D81 and D96).
+- `INSERT` of line protocol is the work of the driver, which sends it to
+  `/write` (D85).
+- `BeginTx` fails, because InfluxDB has no transactions (D20).
+
+### The driver
+
+| | `couchbase` | `influxdb` |
+| --- | --- | --- |
+| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2600 lines in 10 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Database`, `RetentionPolicy`, `SQLMode`, `Version`, `Describe`, `Chunked` |
+| Options for one statement | Five `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40 and D46). `WithParameter` sets any key of the body | None |
+| Arguments | Sent to the server as `args` and `$name`. Any value that JSON encodes | Sent in `params`, by name or by ordinal. A `[]byte`, a NaN, an infinity, a map and a slice are refused. `INSERT` writes each argument as a literal of line protocol (D85) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | SQL: `dbimp.ObjectRows`, with the columns of `DESCRIBE`. InfluxQL: `dbimp.ArrayRows` for each series |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | SQL: the same three from `DESCRIBE`, and `ColumnTypePrecisionScale`. InfluxQL: none |
+| Result sets | One | SQL: one. InfluxQL: one for each series, through `RowsNextResultSet` |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44). A time is a string | SQL: by the type of `DESCRIBE`, with `uint64`, `*apd.Decimal`, `time.Time` and `[]byte`. A NaN or an infinity reads as `math.NaN()` (D80). InfluxQL: `int64`, `uint64` or `float64` by the text of the number, and `time` as a `time.Time` (D83) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported` |
+| Transactions | `BeginTx` sends `BEGIN WORK` | `BeginTx` returns `dbimp.ErrNotSupported` |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same (D36), with no decision of its own for InfluxDB |
+| Errors | `*ResponseError`, with a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Statement, Message}`, which unwraps to `*dbimp.StatusError` for a status that is not 2xx |
+| Authentication | Basic | Basic. W14 adds `auth` of D94 |
+| Other exports | The `With` options and `Option` | `Version` and `Dialect` for `Conn.Raw`, `SQL` and `InfluxQL`, and the constants of `sqlmode`, `describe` and `chunked` |
+
+The differences that a caller sees:
+
+- A connection can send `GET /ping` when it opens, for `sqlmode=prefer` and
+  `sqlmode=require` (D78).
+- `RowsAffected` returns an error. That is a question below.
+- A NaN, an infinity and a minus infinity of SQL all read as a NaN, because
+  the JSON of the server writes all three as `null` (D80).
+- A whole float of InfluxQL reads as an `int64`, because the answer holds no
+  types (D83).
+- These have no decision, and each one is a question for Ken:
+  - No decision says how the driver stops a query. It closes the body, as
+    Couchbase does. InfluxDB 3 then stops the query, and InfluxDB 1 and 2
+    are not measured. D36 asks for a decision where the server does not
+    stop.
+  - The driver takes no option for one statement, such as `rp`, `chunked`
+    or `describe` for one query.
+  - The port does not change with `tls=true`, where Couchbase moves to
+    18093. D82 names no port for TLS.
+  - `RowsAffected` returns an error for the reason in the table of
+    interfaces, and no decision gives it.
+  - InfluxQL is sent an ordinal as the key `"1"`, and no test or measurement
+    shows that InfluxQL binds `$1`.

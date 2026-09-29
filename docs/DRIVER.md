@@ -37,7 +37,10 @@ write that Ken accepted something that he did not say in the conversation:
 - A feature that the product has in a form that stretches the contract, such
   as a transaction that is not a transaction. Leave it unsupported and write
   down why.
-- Any open question at the end of [PLAN.md](PLAN.md).
+- Any open question at the end of [PLAN.md](PLAN.md) or of a
+  `docs/<PRODUCT>.md`.
+- The comparison with the first driver (step 17a), and each difference in it
+  that no decision explains.
 - A commit and a push (step 18), a tag and a release (step 19), and the
   requests to the consumers (step 20). Ken approves each one before you do
   it. His approval of one is not his approval of the next, and his approval
@@ -75,14 +78,14 @@ each test and the priority. If a test fails, stop and ask Ken.
 Read these before you start a server, in this order. Read them, and never
 import them (D29):
 
-1. The scheme in `dburl/scheme.go`. The `Driver` name, the aliases and the
-   DSN generator show the URL that `dburl` writes, before any code exists
+1. The scheme in `dburl/scheme.go`. The `Name`, the aliases and the DSN
+   generator show the URL that `dburl` writes, before any code exists
    (D27). The driver registers the name of its database whatever the scheme
    says, and a scheme with another name is renamed at the move (D28 and
    D30).
 
    ```bash
-   grep -n 'Driver: *"<name>"' -B2 -A12 ../dburl/scheme.go
+   grep -n 'Name: *"<name>"' -B2 -A12 ../dburl/scheme.go
    ```
 
 2. The driver that `usql` uses now, if one exists. Read its `GoPackage` in
@@ -238,8 +241,9 @@ Measure each of these:
 Also send at least one request for each entry of `features.json`, and
 record it with the item that it belongs to, such as item 3 for a type. Then
 set the verdict of the entry to `yes` or `no` from what the server answered.
-A verdict of `no` names the recorded file that shows the refusal. Never set
-`no` from the documentation or from a model alone.
+A verdict of `no` names the recorded file that shows that the server lacks
+it: a refusal, or an answer that ignores what was asked. Never set `no` from
+the documentation or from a model alone.
 
 List every recorded file in `testdata/<driver>/manifest.json`, with the item
 number, the principal, the release and the date. `Recorder.WriteManifest`
@@ -300,7 +304,8 @@ fact stays in `docs/<PRODUCT>.md`. Each driver decides these:
 3. The DSN, which is a standard URL that `net/url` parses (D27). Name the
    scheme, every query key with its default, and what the path means. Refuse
    a key that is unknown or repeated. Keep no form of DSN from an earlier
-   driver.
+   driver. The secret is the password of the URL, and never a key of the
+   query (D94).
 4. The Go type for each wire type (step 10).
 5. Whether NULL and a missing value are one value or two (D18).
 6. How parameters are bound. If the server binds none, the escaper for the
@@ -337,8 +342,9 @@ says whether the driver implements it, and says why. Cover at least these:
 `NamedValueChecker`, `QueryerContext`, `ExecerContext`, `ConnPrepareContext`,
 `ConnBeginTx`, `RowsColumnScanner`, `RowsNextResultSet`, and each
 `RowsColumnType` method. A `Pinger` sends a real request that costs little.
-A `SessionResetter` exists only if the connection holds state from the
-server, such as a transaction. A test passes the types of the driver and a
+A `SessionResetter` exists only if the connection can hold state on the
+server that `database/sql` does not end. A transaction is not such state,
+because `database/sql` ends it before it reuses the connection (D102). A test passes the types of the driver and a
 reason for each interface to `dbimptest.InterfaceTable`, which learns from
 the types whether each one is implemented, and writes the table between
 `<!-- dbimp:interfaces -->` and `<!-- /dbimp:interfaces -->`.
@@ -385,6 +391,9 @@ stays in its package. Follow D5 to D8, D25 and W4. The driver does all of
 these, and a unit test holds each one:
 
 - `init` registers the driver, and nothing else writes global state (D7).
+- If the connection implements `driver.NamedValueChecker`, it returns
+  `driver.ErrSkip` for a value that it does not take itself, so that
+  `database/sql` converts it (W4).
 - The `Connector` owns the `http.Client` and its transport, and its `Close`
   releases the idle connections. `Close` on a connection can run twice.
 - The driver reads the body with `jsontext.Decoder`, one token at a time, and
@@ -401,7 +410,8 @@ these, and a unit test holds each one:
 - `Rows.Close` before the end closes the body and reads nothing more. The
   connection then closes on HTTP/1.1, and a large result is never drained to
   save it. `Rows.Close` after the end closes a body that is at EOF, so that
-  the connection goes back to the pool (D36).
+  the connection goes back to the pool (D36). D90 is the one exception, for
+  the first batch of an ArangoDB cursor.
 - If step 6 showed that the server keeps running a query after the client
   disconnects, the driver follows the decision that Ken made for it in step 9
   (D36).
@@ -454,10 +464,13 @@ tests that do these:
   fail.
 
 Then run them against each release in the tier of the product in `dbmeta`,
-one at a time:
+one at a time. A release that no `dbmeta` model reads is in the Staged tier,
+and its cadence names the tier that it would have (dbmeta D119 and
+dbmeta D120). So list the releases of both, and run each release of the
+product whose tier or cadence is `tested`:
 
 ```bash
-(cd ../dbmeta/test && go run ./cmd/dbrun list --json --names tested)
+(cd ../dbmeta/test && go run ./cmd/dbrun list --json tested staged)
 (cd ../dbmeta/test && go run ./cmd/dbrun start <release>)
 export <DRIVER>_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json <release> | jq -r '.[0].url')
 go test -race -count=1 -run Integration -v ./<driver>/...
@@ -502,8 +515,9 @@ number.
 
 For each feature of the database that `features.json` marks `yes`, write a
 test that uses it and compares what it returns. For each entry marked `no`,
-write a test that sends the operation and expects the refusal of the server.
-If the server accepts it, the verdict was wrong, and the test fails.
+write a test that sends the operation and expects the refusal of the server,
+or shows that the server ignores it. If the server does it, the verdict was
+wrong, and the test fails.
 
 Run every test as the administrator and as the ordinary user. If the
 ordinary user cannot create a table, the administrator creates it and the
@@ -527,12 +541,15 @@ and every integration test passes on every release as both principals.
 
 ### 15. Add the CI job
 
-Add the jobs that W3 describes to `.github/workflows/test.yml`. The matrix
-comes from `dbrun list --json --names`, and never from names written in the
-workflow (dbmeta D69). A push runs the releases that `dbmeta` calls tested,
-and the nightly run adds the ones it calls nightly. The workflow checks out a
-pinned commit of `dbmeta` from its main branch, as in `cql` D20 and
-`n1ql` D28.
+The jobs of W3 are in `.github/workflows/test.yml`, and a new driver adds
+no job. The job `releases` reads the products from the folders under
+`testdata/`, and the releases from `dbrun list --json`, and never from names
+written in the workflow (dbmeta D69). A push runs the releases that `dbmeta`
+calls tested, and the nightly run adds the ones it calls nightly. A release
+in the Staged tier runs by its cadence (dbmeta D120). The workflow checks
+out a pinned commit of `dbmeta` from its main branch, as in `cql` D20 and
+`n1ql` D28. If the driver needs a change in `dbrun`, such as the `url` of
+its DSN, move the pin to the commit of `dbmeta` that holds it.
 
 Gate: `actionlint` passes on the workflow, and
 `TestTheWorkflowNamesNoRelease` passes. The run on a push is the gate of
@@ -556,15 +573,17 @@ it after step 19 publishes that release:
 
 1. The `dburl` session sets the `GoPackage` of the scheme to
    `github.com/xo/dbimp/<driver>`, sets `RequiresCGO` to false (D5 and D14),
-   and makes its generator write the URL of D27. If the `Driver` name of the
-   scheme differs from the name of the package, it renames the scheme and
-   keeps the old name as an alias (D30).
+   and makes its generator write the URL of D27. If the `Name` of the scheme
+   differs from the name of the package, it renames the scheme and keeps the
+   old name as an alias (D30). A second scheme for the driver, for a flavor
+   or a second dialect, keeps its own `Name` and `Dialect`, and its
+   generator returns the registered name of the package (D98).
 2. The `dbmeta` session measures its model on the new package, as dbmeta D93
    did when Cassandra moved to `xo/cql`. `dbmeta` passes before a release of
    `usql` uses the driver.
 3. The `usql` session changes `usql/drivers/<name>/<name>.go` to import the
    driver, and removes any code that worked around a fault of the old driver.
-   The `Version` function for Couchbase calls `strconv.Unquote`, which is one
+   The `Version` function for Couchbase called `strconv.Unquote`, which is one
    example.
 
 Gate: the document holds both answers for the version, and the work item
@@ -578,7 +597,44 @@ holds the text of each request.
 - Mark the work item done in [BACKLOG.md](BACKLOG.md) after step 20.
 
 Gate: `TestEveryDriverIsATarget`, the tests for the documents, and every
-test in the table at the end of this file pass.
+test in the table at the end of this file pass, except
+`TestEveryDriverIsComparedWithTheFirst`, which is the gate of step 17a.
+Stage the work.
+
+### 17a. Compare it with the first driver
+
+`couchbase` is the first driver, and every later driver is compared with it
+(D97). This is the last review before the commit of step 18. Write it after
+step 17, from the staged code and documents, and write it again when either
+one changes.
+
+Add the section `## Compared with Couchbase` at the end of
+`docs/<PRODUCT>.md`, with two parts:
+
+- `### The server`: a table of the interface of Couchbase against the
+  interface of the product. It has a row for each of these: the request, how
+  a database is chosen, the language, DDL, parameters, the framing of a
+  result, where the columns come from and their order, errors, types, cancel,
+  transactions, authentication and the default port.
+- `### The driver`: a table of the package `couchbase` against the new
+  package. It has a row for each of these: the size, rounded to the hundred
+  lines and dated, because no test keeps it current, `Config`, options for
+  one statement, arguments, rows, the types of the columns, values, the
+  result of `Exec`, transactions, the reset of a session, cancel, errors,
+  authentication, and anything else that the package exports.
+
+Under each table, list each difference that a caller of `database/sql` sees,
+and name the decision that gives its reason. A difference that no decision
+explains is a question for Ken. He decides whether the new driver changes,
+or a decision records why it differs. Cite a fact of the server by its
+measurement, as the rest of the document does, and a fact of the code by its
+file.
+
+Then show the comparison to Ken, with the list of the differences that no
+decision explains.
+
+Gate: `TestEveryDriverIsComparedWithTheFirst` passes, and Ken reviewed the
+comparison in the conversation. His review is not his approval of step 18.
 
 ## Before you call it done
 
@@ -588,7 +644,7 @@ golangci-lint run ./...
 ```
 
 `gofmt -l .` must print nothing. Then stage the work and stop. Ken reviews
-the staged changes. Steps 18 to 20 follow only when he approves each one.
+the staged changes, with the comparison of step 17a. Steps 18 to 20 follow only when he approves each one.
 
 ## Releasing it
 
@@ -673,6 +729,8 @@ change:
   every flavor runs in the matrix.
 - Steps 5a and 14a: `features.json` records a verdict for each flavor, and a
   feature that one flavor lacks has a test of its refusal on that flavor.
+- Step 16: a flavor that `dburl` names with a scheme of its own reaches the
+  one driver by its registered name, with its own `Dialect` (D98).
 
 ## The template for a product document
 
@@ -682,7 +740,7 @@ source.
 
 1. Summary: the product, the releases measured, their names in `dbrun`, the
    result of R, H and S with the priority, the scheme in `dburl` with its
-   `Driver` name, aliases and generator, and the driver that `usql` uses now.
+   `Name`, aliases and generator, and the driver that `usql` uses now.
 2. Requests: the endpoints, methods, content types and authentication, and
    how a statement is sent.
 3. The DSN: the URL that `dburl` writes (D27), every query key with its
@@ -708,7 +766,8 @@ source.
 14. Faults: the faults of the driver that `usql` uses now, which this driver
     must not repeat.
 15. Second opinions: each lead from step 7, and what the server said.
-16. Open questions: each one points at an entry in [PLAN.md](PLAN.md).
+16. Open questions: each one that waits for Ken, or a pointer to its entry
+    in [PLAN.md](PLAN.md).
 
 ## The tests that tell you what you forgot
 
@@ -728,8 +787,9 @@ gate finds nothing.
 | `TestEveryDriverGeneratesItsTables` | the document lacks the markers of a table, or the tests do not call `TypeTable` and `InterfaceTable` (step 10) |
 | `TestEveryDriverRunsTheContract` | the tests of a driver do not call `dbimptest.RunContract` (step 11) |
 | `TestNoDriverTouchesGlobalState` | a driver assigns to `http.DefaultTransport`, `http.DefaultClient` or a package variable outside `init`, or calls `io.ReadAll` (step 12) |
-| `TestEveryDriverRegistersOneName` | a driver calls `sql.Register` more than once, outside `init`, or with a name that is not its folder (step 9) |
+| `TestEveryDriverRegistersOneName` | a driver calls `sql.Register` more than once, outside `init`, or with a name that is not its folder (step 12) |
 | `TestEveryDriverTestsItsDSN` | a driver has no fuzz test, or no round trip test, for its DSN (step 13) |
+| `TestEveryDriverIsComparedWithTheFirst` | the document of a driver other than `couchbase` has no `## Compared with Couchbase`, or that section lacks `### The server` or `### The driver` (step 17a) |
 | `TestEveryDriverHasItsFeatures` | the survey asked fewer than two models or no other driver, lacks a statement of CRUD, leaves an entry not measured, marks one `no` with no recorded refusal, names a test that does not exist, has a type whose test does not call `RoundTrip`, or disagrees with the type table (steps 5a, 6, 10 and 14a) |
 | `TestTheWorkflowNamesNoRelease` | a workflow names a release, or runs the integration tests without reading the releases from `dbrun` (step 15) |
 | `TestEveryDocumentIsInTheTable` | a document in `docs/` is missing from `AGENTS.md` or `README.md` |
@@ -740,6 +800,7 @@ gate finds nothing.
 | `TestClaudeImportsAgents` | `CLAUDE.md` is a link, or holds anything but `@AGENTS.md` |
 | `TestEveryTestNameInTheDocsExists` | a document names a test that does not exist |
 | `TestEveryLinkResolves` | a link points at a file that does not exist |
+| `TestSkillsAreCopies` | a skill in `skills-lock.json` is a link, or its folders under `.agents/skills` and `.claude/skills` differ (D11) |
 
 `TestNoDriverTouchesGlobalState` finds an assignment to a package variable
 by a heuristic. It counts an assignment to a name that the function does not

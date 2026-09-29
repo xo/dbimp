@@ -14,13 +14,13 @@ The root package imports the standard library and `apd`, and nothing else
 | File | Holds |
 | --- | --- |
 | `errors.go` | `Error`, the sentinel errors, and `StatusError` with `CheckStatus` |
-| `url.go` | `ParseURL` and `Query`, for the DSN |
+| `url.go` | `ParseURL`, `NewQuery` and `Query`, for the DSN |
 | `http.go` | `NewTransport`, `NewClient` and `Send` |
-| `stream.go` | `Stream`, which reads the body of a response |
-| `rows.go` | `ObjectRows` and `ArrayRows`, which read rows by D18 |
-| `values.go` | The functions that turn a JSON value into a Go value, and `Assign` |
-| `placeholder.go` | `Syntax`, which finds placeholders and binds arguments (D34) |
-| `cbor.go` | `CBORDecoder` and `CBOREncoder`, which read and write CBOR (D49) |
+| `stream.go` | `Stream` and `NewStream`, which read the body of a response |
+| `rows.go` | `ObjectRows`, `NewObjectRows`, `ContinueObjectRows`, `ArrayRows` and `NewArrayRows`, which read rows by D18 |
+| `values.go` | `IsNull`, `Int64`, `Float64`, `Bool`, `String`, `Decimal`, `Number` and `Any`, which turn a JSON value into a Go value, and `Assign` |
+| `placeholder.go` | `Syntax` and `Placeholder`, which find placeholders and bind arguments (D34) |
+| `cbor.go` | `CBORDecoder`, `NewCBORDecoder`, `CBOREncoder`, `CBORHead`, and `CBORMajor` with its constants, which read and write CBOR (D49) |
 
 ### Errors
 
@@ -32,7 +32,8 @@ with `%w`, and a caller tests it with `errors.Is`:
 - `ErrScheme`, `ErrUnknownKey`, `ErrRepeatedKey` and `ErrInvalidValue` for a
   DSN (D27 and D35).
 - `ErrExtraColumn` and `ErrColumnCount` for a row (D18).
-- `ErrIncomplete` for a result that the server cut short (D21).
+- `ErrIncomplete` for a result set that failed, or that the server cut
+  short, after at least one of its rows reached the caller (D21 and D107).
 - `ErrUnterminated` and `ErrArguments` for placeholders (D34).
 
 `CheckStatus` turns a response whose status is not 2xx into a `StatusError`.
@@ -114,7 +115,8 @@ writes it in its own way.
 ### Values
 
 These functions read the text of one JSON value. None of them passes a
-number through float64 unless the driver asks for a float64 (D19):
+number through float64 unless the driver asks for a float64, or calls
+`Number` or `Any` on a number with a fraction or an exponent (D19):
 
 - `IsNull` is true for a missing value and for `null`.
 - `Int64`, `Float64`, `Bool` and `String` read a value of that kind.
@@ -167,6 +169,9 @@ The driver writes its tags with `Tag`.
 comments. `Placeholders` finds each `?` and each `@name` outside them. An
 `@` that another `@` follows, as in `@@version`, is not a placeholder. A
 statement that ends inside a literal or a comment is `ErrUnterminated`.
+For AQL, `SlashComments` skips a `//` comment, `DoubleAt` returns `@@name`
+as a placeholder whose `Double` is true, and `DigitNames` takes a name such
+as `@1` (D104).
 
 `Bind` writes each argument into the statement with a function that the
 driver supplies for the literals of its product (D34). A `?` takes the next
@@ -176,27 +181,27 @@ name. A missing argument and an argument left over are both
 
 ## The package dbimptest
 
-Only a test imports `dbimptest`. It imports `testing` and
+Only a test, and the command `dbimptest/cmd/record`, import `dbimptest`. It imports `testing` and
 `net/http/httptest`. Every driver imports the root package, so if the root
 package held these helpers, every consumer of a driver links both packages
 for code that only a test uses. So they are not in the root package (D37).
 
 | File | Holds |
 | --- | --- |
-| `exchange.go` | `Exchange`, `ReadExchange`, `Match`, `DefaultMatch`, `Replay` and `ReplayRelease` |
-| `manifest.go` | `Manifest`, `Entry`, `ReadManifest` and `WriteManifest` |
-| `record.go` | `Recorder` and `WithLabel`, which write the exchanges of step 6 |
+| `exchange.go` | `Exchange`, `Request`, `Response`, `ReadExchange`, `Match`, `DefaultMatch`, `Replay` and `ReplayRelease` |
+| `manifest.go` | `Manifest`, `Entry`, `ReadManifest`, `WriteManifest`, the file names `ManifestName` and `RequestsName`, and the principals `Administrator` and `Ordinary` |
+| `record.go` | `Recorder`, `NewRecorder` and `WithLabel`, which write the exchanges of step 6 |
 | `cmd/record/` | The command that records the requests of `requests.json` |
 | `goroutines.go` | `CheckGoroutines` |
-| `contract.go` | `Contract` and `RunContract` |
-| `tables.go` | `TypeTable` and `InterfaceTable` |
-| `features.go` | `Features`, the survey of step 5a, and `ReadFeatures` |
-| `roundtrip.go` | `RoundTrip`, the round trip of one type for step 14a |
+| `contract.go` | `Contract`, its cases `ColumnsCase`, `NullCase`, `ErrorCase` and `StreamCase`, and `RunContract` |
+| `tables.go` | `TypeTable`, `TypeRow`, `InterfaceTable`, `EnvUpdate` and the markers of the two tables |
+| `features.go` | `Features`, `Source` and `Feature`, the survey of step 5a, with `FeaturesName`, the constants of a kind, a source and a verdict, and `ReadFeatures` |
+| `roundtrip.go` | `RoundTrip`, `RoundTripCase` and `Value`, the round trip of one type for step 14a |
 
 ### Recorded exchanges
 
-Each file under `testdata/<driver>/`, except the manifest, is one
-`Exchange`: the method, the path, the query, the headers and the body of a
+Each file under `testdata/<driver>/`, except `manifest.json`,
+`requests.json` and `features.json`, is one `Exchange`: the method, the path, the query, the headers and the body of a
 request, and the status, the headers and the body of its response. A body
 that is text is in `body`. A binary body, such as one in CBOR, is in
 `binary`, which the file holds as base64, and `Content` returns either.
@@ -221,8 +226,8 @@ when its `encoding` is `cbor`, or its `text` as plain text. The script can
 name headers that every request of one principal sends, in `header`, such as
 the headers that say where a SurrealDB user is defined. A request keeps a
 value of its response with `capture`, such as the id of a transaction of
-Neo4j, and a later request of the same principal writes it into its body or
-its path as `{{name}}`. A request with `releases` runs only on a release
+Neo4j, and a later request of the same principal writes it into its body, its
+path or a header as `{{name}}`. A request with `releases` runs only on a release
 whose name starts with one of them, such as `influxdb-3`, as `principals`
 limits a request to some principals. It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
@@ -314,8 +319,9 @@ that binds named parameters only, `Named` passes the key and the value as
 the key into the argument that the statements take, such as a record id.
 It sends the teardown with a context that does not end with the test,
 because the context of a test ends before its cleanup runs. Its tests hold a
-store in memory with three faults: a value that changes its type, a delete
-that keeps the row, and a write that is late.
+store in memory with four faults: a value that changes its type, a delete
+that keeps the row, a write that is late, and an update to NULL that keeps
+the old value.
 
 Three fields serve a database that cannot do every step, such as InfluxDB
 (D86). `Column` names the column of the value, when the select returns other
@@ -327,9 +333,9 @@ row is gone. Each of the three keeps the old behaviour when it is not set.
 
 ### The two tables
 
-`TypeTable` writes the type table of step 10 between the markers
+`TypeTable` compares the type table of step 10 between the markers
 `<!-- dbimp:types -->` and `<!-- /dbimp:types -->` in `docs/<PRODUCT>.md`.
-`InterfaceTable` writes the interface table between
+`InterfaceTable` compares the interface table between
 `<!-- dbimp:interfaces -->` and `<!-- /dbimp:interfaces -->`. It learns
 whether each interface is implemented from the types of the driver, and it
 fails if a reason is missing. Each one fails when the document holds another

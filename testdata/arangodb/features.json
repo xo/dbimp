@@ -1,0 +1,650 @@
+{
+  "driver": "arangodb",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-09-29"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-09-29"
+    },
+    {
+      "source": "github.com/arangodb/go-driver/v2",
+      "kind": "driver",
+      "date": "2026-09-28"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-083-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-084-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-085-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-089-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "replace",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-086-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationCRUD/replace"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-087-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "overwrite mode",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-088-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationCRUD/overwrite_mode"
+    },
+    {
+      "kind": "schema",
+      "name": "create database",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-061-post---api-database.json",
+      "test": "TestIntegrationSchema/create_database"
+    },
+    {
+      "kind": "schema",
+      "name": "drop database",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-092-delete---api-database-dbimp-db.json",
+      "test": "TestIntegrationSchema/drop_database"
+    },
+    {
+      "kind": "schema",
+      "name": "document collection",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-093-post---db-dbmeta--api-collection.json",
+      "test": "TestIntegrationSchema/document_collection"
+    },
+    {
+      "kind": "schema",
+      "name": "edge collection",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-094-post---db-dbmeta--api-collection.json",
+      "test": "TestIntegrationSchema/edge_collection"
+    },
+    {
+      "kind": "schema",
+      "name": "persistent index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-095-post---db-dbmeta--api-index.json",
+      "test": "TestIntegrationSchema/persistent_index"
+    },
+    {
+      "kind": "schema",
+      "name": "geo index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-097-post---db-dbmeta--api-index.json",
+      "test": "TestIntegrationSchema/geo_index"
+    },
+    {
+      "kind": "schema",
+      "name": "fulltext index",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-098-post---db-dbmeta--api-index.json",
+      "test": "TestIntegrationSchema/fulltext_index"
+    },
+    {
+      "kind": "schema",
+      "name": "inverted index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-099-post---db-dbmeta--api-index.json",
+      "test": "TestIntegrationSchema/inverted_index"
+    },
+    {
+      "kind": "schema",
+      "name": "ttl index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-100-post---db-dbmeta--api-index.json",
+      "test": "TestIntegrationSchema/ttl_index"
+    },
+    {
+      "kind": "schema",
+      "name": "vector index",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-101-post---db-dbmeta--api-index.json",
+      "test": "TestIntegrationSchema/vector_index"
+    },
+    {
+      "kind": "schema",
+      "name": "arangosearch view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-108-post---db-dbmeta--api-view.json",
+      "test": "TestIntegrationSchema/arangosearch_view"
+    },
+    {
+      "kind": "schema",
+      "name": "search alias view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-109-post---db-dbmeta--api-view.json",
+      "test": "TestIntegrationSchema/search_alias_view"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-103-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-102-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-104-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-105-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "schema validation",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-107-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationSchema/schema_validation"
+    },
+    {
+      "kind": "schema",
+      "name": "named graph",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-110-post---db-dbmeta--api-gharial.json",
+      "test": "TestIntegrationSchema/named_graph"
+    },
+    {
+      "kind": "schema",
+      "name": "analyzer",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-111-post---db-dbmeta--api-analyzer.json",
+      "test": "TestIntegrationSchema/analyzer"
+    },
+    {
+      "kind": "feature",
+      "name": "traversal",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-112-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/traversal"
+    },
+    {
+      "kind": "feature",
+      "name": "shortest path",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-113-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/shortest_path"
+    },
+    {
+      "kind": "feature",
+      "name": "collect aggregate",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-115-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/collect_aggregate"
+    },
+    {
+      "kind": "feature",
+      "name": "collect with count",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-116-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/collect_with_count"
+    },
+    {
+      "kind": "feature",
+      "name": "prune",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-114-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/prune"
+    },
+    {
+      "kind": "feature",
+      "name": "window",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-117-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/window"
+    },
+    {
+      "kind": "feature",
+      "name": "subquery",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-118-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/subquery"
+    },
+    {
+      "kind": "feature",
+      "name": "array expansion",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-119-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/array_expansion"
+    },
+    {
+      "kind": "feature",
+      "name": "collection parameter",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-024-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/collection_parameter"
+    },
+    {
+      "kind": "feature",
+      "name": "full count",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-120-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/full_count"
+    },
+    {
+      "kind": "feature",
+      "name": "stream cursor",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-032-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/stream_cursor"
+    },
+    {
+      "kind": "feature",
+      "name": "max runtime",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-053-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/max_runtime"
+    },
+    {
+      "kind": "feature",
+      "name": "search",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-121-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/search"
+    },
+    {
+      "kind": "feature",
+      "name": "geo functions",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-122-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/geo_functions"
+    },
+    {
+      "kind": "feature",
+      "name": "query cache",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-123-get---db-dbmeta--api-query-cache-properties.json",
+      "test": "TestIntegrationFeatures/query_cache"
+    },
+    {
+      "kind": "feature",
+      "name": "stream transactions",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-075-put---db-dbmeta--api-transaction-374.json",
+      "test": "TestIntegrationFeatures/stream_transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-124-post---db-dbmeta--api-explain.json",
+      "test": "TestIntegrationFeatures/explain"
+    },
+    {
+      "kind": "feature",
+      "name": "profile",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash",
+        "github.com/arangodb/go-driver/v2"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-125-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationFeatures/profile"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationRoundTrip/null"
+    },
+    {
+      "kind": "type",
+      "name": "boolean",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationRoundTrip/boolean"
+    },
+    {
+      "kind": "type",
+      "name": "integer",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationRoundTrip/integer"
+    },
+    {
+      "kind": "type",
+      "name": "double",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationRoundTrip/double"
+    },
+    {
+      "kind": "type",
+      "name": "large integer",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestReplayTypes"
+    },
+    {
+      "kind": "type",
+      "name": "string",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationRoundTrip/string"
+    },
+    {
+      "kind": "type",
+      "name": "array",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationRoundTrip/array"
+    },
+    {
+      "kind": "type",
+      "name": "object",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestIntegrationRoundTrip/object"
+    },
+    {
+      "kind": "type",
+      "name": "date",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestReplayTypes"
+    },
+    {
+      "kind": "type",
+      "name": "binary",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestBindVars"
+    },
+    {
+      "kind": "type",
+      "name": "decimal",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestBindVars"
+    },
+    {
+      "kind": "type",
+      "name": "uuid",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "arangodb-3.12.12-019-post---db-dbmeta--api-cursor.json",
+      "test": "TestReplayTypes"
+    }
+  ]
+}

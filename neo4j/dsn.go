@@ -28,9 +28,9 @@ const (
 const defaultDatabase = "neo4j"
 
 // The values of the key cancel, which say how the driver stops a query on the
-// server when its context ends (D67).
+// server when its context ends (D67 and D95).
 const (
-	// CancelTag starts each statement with a comment that names the
+	// CancelTag ends each statement with a comment that names the
 	// connection, and stops the statement with TERMINATE TRANSACTION. It is
 	// the default.
 	CancelTag = "tag"
@@ -55,8 +55,8 @@ type Config struct {
 	// TLS is true to speak HTTPS.
 	TLS bool
 	// User and Password are the credentials, sent with basic authentication.
-	// With no user, the driver sends no credentials, for a server that runs
-	// with authentication off.
+	// With no user and no password, the driver sends no credentials, for a
+	// server that runs with authentication off.
 	User     string
 	Password string
 	// Database is the database that each statement runs in, "neo4j" by

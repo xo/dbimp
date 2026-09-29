@@ -50,3 +50,12 @@ Without a port, the driver uses 8086 when `version` is `1` or `2`, and 8181
 otherwise. These are the ports that `dburl` names (dburl D29). With
 `sqlmode` set to `prefer` or `require`, the release is not known before the
 ping, so the default of `version`, `3`, chooses the port.
+
+Note of 2026-09-29:
+
+- The driver sends `rp` to the server, as the table says. The sentence
+  before the table means that the driver sends no other key of the DSN.
+- A key that the server reads, such as `epoch`, is refused in the DSN, and
+  the driver decides whether to send it. It sends no `epoch` (D83).
+- dburl D34 removed the ports from the generator of `dburl`, because the
+  driver picks them.

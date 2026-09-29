@@ -18,9 +18,11 @@ replace a driver that `usql` imports now (D24).
 
 The repository is new. The first driver, in `couchbase/`, is a new
 Couchbase driver that replaces `xo/n1ql` (D23). It was first released in
-`v0.1.0`. The second, in `surrealdb/`, was first released in `v0.2.0`
-(W8). The third, in `neo4j/`, is in the tag `v0.3.0` (W9). The fourth, in
-`influxdb/`, is staged for review, and no release holds it yet (W11). The
+`v0.1.0`. The second, in `surrealdb/`, is in the tag `v0.2.0` (W8). The
+third, in `neo4j/`, is in the tag `v0.3.0` (W9). The fourth, in `influxdb/`,
+was first released in `v0.4.0` (W11), which is the first GitHub release that
+holds the second and the third. The fifth, in
+`arangodb/`, is staged for review, and no release holds it yet (W13). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -42,6 +44,7 @@ every other agent read the same rules. Edit this file, not that one.
 
 | If you are | Read |
 | --- | --- |
+| looking for an open question | the end of [docs/PLAN.md](docs/PLAN.md), and of each product document |
 | asking why something is the way it is | the index in [docs/decisions/README.md](docs/decisions/README.md) |
 | looking for the next piece of work | [docs/BACKLOG.md](docs/BACKLOG.md) |
 | writing the Couchbase driver | [docs/COUCHBASE.md](docs/COUCHBASE.md), then D23 and W5 |
@@ -50,7 +53,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Avatica driver | [docs/AVATICA.md](docs/AVATICA.md), then D74 |
 | writing the InfluxDB driver | [docs/INFLUXDB.md](docs/INFLUXDB.md), then W11 and D78 to D83 |
 | asking why CrateDB has no driver here | [docs/CRATEDB.md](docs/CRATEDB.md), then D88 |
-| writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then D73 and D75 |
+| writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then W13 and D89 to D94 |
 | writing the Databend driver | [docs/DATABEND.md](docs/DATABEND.md), then D73 and D76 |
 | writing the TDengine driver | [docs/TDENGINE.md](docs/TDENGINE.md), then D73 |
 | writing the Apache Pinot driver | [docs/PINOT.md](docs/PINOT.md), then D73 |
@@ -58,6 +61,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then D73 and D76 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
+| reviewing a driver before its commit | step 17a of [docs/DRIVER.md](docs/DRIVER.md), then D97 |
 | sharing code between two drivers | [docs/DESIGN.md](docs/DESIGN.md), then D4 in [docs/decisions/](docs/decisions/README.md). Shared code goes in the root package |
 | using or changing the root package or dbimptest | [docs/DESIGN.md](docs/DESIGN.md) |
 | testing against a server | "Before you commit" below, and D9 |
@@ -73,8 +77,8 @@ Each decision is a file in `docs/decisions/` (D72).
 
 A document that is not in this table does not exist. If you cannot find where
 something is written down, it is not written down. Do not decide an open
-question yourself. The open questions are at the end of `docs/PLAN.md`. Ask
-Ken.
+question yourself. The open questions are at the end of `docs/PLAN.md` and
+of each `docs/<PRODUCT>.md`. Ask Ken.
 
 ## Hard rules
 
@@ -93,7 +97,8 @@ Ken.
    wrap one column in an object. Each of these faults was found in a driver
    that `dbmeta` then had to replace. See D8.
 4. `context.Context` comes first, is named `ctx`, and is never stored in a
-   struct, except by a Couchbase or a Neo4j transaction (D45 and D69). The
+   struct, except by a Couchbase, Neo4j or ArangoDB transaction, and by the
+   rows of an ArangoDB cursor (D45, D69, D90 and D91). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.
@@ -130,7 +135,7 @@ Ken.
 | --- | --- |
 | `/` | The root package `dbimp`. It holds the code that the drivers share: the HTTP client, the adapters that encode and decode values, and other utilities. `doc.go` holds its package documentation. See D4. |
 | `<driver>/` | One driver, as the package `github.com/xo/dbimp/<driver>`, named for its database and not for its query language, such as `couchbase` (D26). It imports the root package. That path is the `GoPackage` of its scheme in `dburl`, and a consumer imports it directly. See D4. |
-| `dbimptest/` | The helpers for the tests of a driver: recorded exchanges, the contract, the test for goroutines, the two tables, the survey of step 5a and the round trip of a type. Only a test imports it (D37). `dbimptest/cmd/record` records the exchanges of step 6. |
+| `dbimptest/` | The helpers for the tests of a driver: recorded exchanges, the contract, the test for goroutines, the two tables, the survey of step 5a and the round trip of a type. Only a test, and the command `dbimptest/cmd/record`, import it (D37). `dbimptest/cmd/record` records the exchanges of step 6. |
 | `testdata/` | Golden files, and the recorded exchanges of each driver under `testdata/<driver>/`. |
 | `docs_test.go` | The rules for the documents, from D3, D71 and D72. |
 | `skills_test.go` | The rule for the agent skills, from D11. |

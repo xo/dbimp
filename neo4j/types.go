@@ -175,7 +175,7 @@ const (
 )
 
 // formatDate writes the date of t as Neo4j does: a year of four digits, a
-// sign before a year of more, and a minus sign before a year before 1.
+// sign before a year of more, and a minus sign before a negative year.
 func formatDate(t time.Time) string {
 	y, m, d := t.Date()
 	var year string

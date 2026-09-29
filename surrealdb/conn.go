@@ -24,6 +24,7 @@ var (
 	_ driver.QueryerContext     = (*conn)(nil)
 	_ driver.ExecerContext      = (*conn)(nil)
 	_ driver.ConnPrepareContext = (*conn)(nil)
+	_ driver.ConnBeginTx        = (*conn)(nil)
 	_ driver.NamedValueChecker  = (*conn)(nil)
 	_ driver.Validator          = (*conn)(nil)
 	_ driver.Pinger             = (*conn)(nil)
@@ -77,7 +78,20 @@ func (c *conn) Prepare(query string) (driver.Stmt, error) {
 // Begin satisfies driver.Conn. A transaction of SurrealDB lives in the text
 // of one request, so the driver has none (D54).
 func (c *conn) Begin() (driver.Tx, error) {
-	return nil, fmt.Errorf("beginning a transaction: a transaction of SurrealDB lives in one statement: %w", dbimp.ErrNotSupported)
+	return nil, errNoTx()
+}
+
+// BeginTx satisfies driver.ConnBeginTx. It returns dbimp.ErrNotSupported for
+// every option, so that a caller with ReadOnly or an isolation level gets the
+// same error as any other (D54).
+func (c *conn) BeginTx(context.Context, driver.TxOptions) (driver.Tx, error) {
+	return nil, errNoTx()
+}
+
+// errNoTx returns the error of a transaction, which SurrealDB keeps in the
+// text of one request (D54).
+func errNoTx() error {
+	return fmt.Errorf("beginning a transaction: a transaction of SurrealDB lives in one request: %w", dbimp.ErrNotSupported)
 }
 
 // Close satisfies driver.Conn. A connection holds nothing to close.
@@ -90,8 +104,8 @@ func (c *conn) IsValid() bool {
 	return true
 }
 
-// Ping satisfies driver.Pinger. It calls the RPC method ping, which checks
-// the credentials.
+// Ping satisfies driver.Pinger. It calls the RPC method ping, with the
+// credentials that every request sends.
 func (c *conn) Ping(ctx context.Context) error {
 	r, err := c.send(ctx, rpcRequest{Method: "ping", Params: []any{}})
 	if err != nil {
@@ -160,21 +174,23 @@ func (c *conn) send(ctx context.Context, body rpcRequest) (*rows, error) {
 	}
 	if got := res.Header.Get("Content-Type"); !strings.HasPrefix(got, contentType) {
 		// A response in another form, such as a page of HTML from a proxy,
-		// says only its status.
+		// becomes a *dbimp.StatusError with the start of its body. Its
+		// status is reported as HTTP 502, so that database/sql sees an error.
 		res.StatusCode = http.StatusBadGateway
 		return nil, fmt.Errorf("reading a response of the content type %q: %w", got, dbimp.CheckStatus(res))
 	}
-	var r reader
+	var sets setReader
 	if contentType == contentCBOR {
-		r = newCBORReader(res.Body)
+		sets = newCBORSets(res.Body)
 	} else {
-		r = newJSONReader(res.Body)
+		sets = newJSONSets(res.Body)
 	}
-	return readResponse(res.Body, r)
+	return readResponse(res.Body, sets)
 }
 
 // refusal returns the error of a request that the server refused with a
-// body of JSON, such as HTTP 400 for a parse error. The body holds a code,
+// body of JSON, such as HTTP 400 for a regex, which CBOR cannot hold. A parse
+// error in /rpc is HTTP 200, with the code -32000. The body holds a code,
 // and the message in information (recorded on each release). A body in
 // another form stays the *dbimp.StatusError that CheckStatus returns.
 func refusal(res *http.Response) error {

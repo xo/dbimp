@@ -1,6 +1,9 @@
 # D36. Rows read the body as a stream, and Close closes it
 
-Status: Decided.
+Status: Amended by D90.
+
+D90 amends item 4 for ArangoDB: `Rows.Close` in the first batch reads the
+rest of that batch when at most 1 MiB of it is left.
 
 This answers Q8, from Ken's first design and a consultation on 2026-09-27.
 Ken accepted it on 2026-09-27.

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"FOR d IN [{u: 1}, {u: 1}] INSERT d INTO dbimp_doc\"}"
+  },
+  "response": {
+    "status": 409,
+    "header": {
+      "Expires": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "Content-Length": [
+        "215"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"code\":409,\"error\":true,\"errorMessage\":\"AQL: unique constraint violated - in index idx_1877605281940111362 of type persistent over 'u'; conflicting key: 484 [node #4: InsertNode] (while executing)\",\"errorNum\":1210}"
+  }
+}

@@ -21,10 +21,11 @@ import (
 const stopTimeout = 5 * time.Second
 
 // The statements that find the transaction of a statement on the server, for
-// cancel=tag and cancel=metadata (D67). The ordinary user sees its own
+// cancel=tag and cancel=metadata (D67). The tag ends the statement, so
+// cancel=tag finds it with ENDS WITH (D95). The ordinary user sees its own
 // transactions, and can terminate them (measured).
 const (
-	showByTag      = "SHOW TRANSACTIONS YIELD transactionId, currentQuery WHERE currentQuery STARTS WITH $tag RETURN transactionId"
+	showByTag      = "SHOW TRANSACTIONS YIELD transactionId, currentQuery WHERE currentQuery ENDS WITH $tag RETURN transactionId"
 	showByMetadata = "SHOW TRANSACTIONS YIELD transactionId, metaData WHERE metaData.dbimp = $id RETURN transactionId"
 	terminate      = "TERMINATE TRANSACTION $id"
 )
@@ -38,6 +39,11 @@ type watch struct {
 	once sync.Once
 	ran  bool
 	err  error
+	// cause is the cause of the end of the context, once the stop ran.
+	cause error
+	// now stops the statement on the server at once, for an early Close
+	// (D105).
+	now func() error
 }
 
 // watch returns a watch of ctx for a statement of the connection, which
@@ -48,11 +54,33 @@ func (c *conn) watch(ctx context.Context, how string) *watch {
 		return nil
 	}
 	w := &watch{done: make(chan struct{})}
+	w.now = func() error { return c.stopStatement(ctx, how) }
 	w.stop = context.AfterFunc(ctx, func() {
 		defer close(w.done)
+		w.cause = context.Cause(ctx)
 		w.err = c.stopStatement(ctx, how)
 	})
 	return w
+}
+
+// abandon ends the watch, and stops the statement on the server at once,
+// because the caller closed its rows before their end (D105). If the context
+// ended first, the watch stops the statement itself, and abandon waits for
+// it.
+func (w *watch) abandon() error {
+	if w == nil {
+		return nil
+	}
+	var err error
+	w.once.Do(func() {
+		if !w.stop() {
+			<-w.done
+			w.ran = true
+			return
+		}
+		err = w.now()
+	})
+	return err
 }
 
 // end ends the watch. If the context ended first, it waits until the stop of

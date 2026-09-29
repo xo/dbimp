@@ -11,8 +11,9 @@ import (
 )
 
 // Error is an error that InfluxDB reported. It is the answer to a request
-// whose status is not 2xx, or the error of one InfluxQL statement in an
-// answer with HTTP 200 (measured).
+// whose status is not 2xx, the error of one InfluxQL statement or of the
+// whole InfluxQL answer with HTTP 200, or an answer with HTTP 200 that is not
+// JSON (measured).
 type Error struct {
 	// HTTPStatus is the status code of the response.
 	HTTPStatus int

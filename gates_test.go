@@ -31,16 +31,17 @@ type gate func(root string) []string
 
 // gates are every gate, by the name of the test that runs it.
 var gates = map[string]gate{
-	"TestEveryDriverIsATarget":          gateTargets,
-	"TestEveryDriverHasItsDocument":     gateDocument,
-	"TestEveryDriverHasItsManifest":     gateManifest,
-	"TestEveryDriverRunsTheContract":    gateContract,
-	"TestEveryDriverTestsItsDSN":        gateDSNTests,
-	"TestEveryDriverGeneratesItsTables": gateTables,
-	"TestNoDriverTouchesGlobalState":    gateGlobals,
-	"TestEveryDriverRegistersOneName":   gateRegister,
-	"TestTheWorkflowNamesNoRelease":     gateWorkflow,
-	"TestEveryDriverHasItsFeatures":     gateFeatures,
+	"TestEveryDriverIsATarget":              gateTargets,
+	"TestEveryDriverHasItsDocument":         gateDocument,
+	"TestEveryDriverHasItsManifest":         gateManifest,
+	"TestEveryDriverRunsTheContract":        gateContract,
+	"TestEveryDriverTestsItsDSN":            gateDSNTests,
+	"TestEveryDriverGeneratesItsTables":     gateTables,
+	"TestNoDriverTouchesGlobalState":        gateGlobals,
+	"TestEveryDriverRegistersOneName":       gateRegister,
+	"TestTheWorkflowNamesNoRelease":         gateWorkflow,
+	"TestEveryDriverHasItsFeatures":         gateFeatures,
+	"TestEveryDriverIsComparedWithTheFirst": gateComparison,
 }
 
 func runGate(t *testing.T, g gate) {
@@ -100,6 +101,11 @@ func TestEveryDriverHasItsFeatures(t *testing.T) {
 	runGate(t, gateFeatures)
 }
 
+func TestEveryDriverIsComparedWithTheFirst(t *testing.T) {
+	t.Parallel()
+	runGate(t, gateComparison)
+}
+
 // crudNames are the statements of CRUD that every survey names.
 var crudNames = []string{"insert", "select", "update", "delete"}
 
@@ -150,7 +156,7 @@ func gateFeatures(root string) []string {
 			}
 			if e.Verdict == dbimptest.No {
 				if _, err := os.Stat(filepath.Join(dir, e.Evidence)); e.Evidence == "" || err != nil {
-					problems = append(problems, fmt.Sprintf("step 6: the entry %s of %s is no, and names no recorded refusal", id, d))
+					problems = append(problems, fmt.Sprintf("step 6: the entry %s of %s is no, and names no recorded answer that shows the server lacks it", id, d))
 				}
 			}
 			fn, _, _ := strings.Cut(e.Test, "/")
@@ -261,7 +267,7 @@ func gateTargets(root string) []string {
 	return problems
 }
 
-// gateDocument holds steps 7 and 8: each driver has docs/<PRODUCT>.md with
+// gateDocument holds step 8: each driver has docs/<PRODUCT>.md with
 // every heading of the template.
 func gateDocument(root string) []string {
 	headings := templateHeadings(root)
@@ -276,6 +282,45 @@ func gateDocument(root string) []string {
 		for _, h := range headings {
 			if !regexp.MustCompile(`(?m)^## ` + regexp.QuoteMeta(h) + `$`).Match(body) {
 				problems = append(problems, fmt.Sprintf("step 8: %s has no heading %q from the template", name, "## "+h))
+			}
+		}
+	}
+	return problems
+}
+
+// firstDriver is the first driver, which every other driver is compared
+// with in step 17a (D97).
+const firstDriver = "couchbase"
+
+// The headings of the comparison of step 17a (D97).
+const (
+	comparedHeading = "## Compared with Couchbase"
+	serverHeading   = "### The server"
+	driverHeading   = "### The driver"
+)
+
+// gateComparison holds step 17a: the document of each driver other than the
+// first holds its comparison with the first, in two parts.
+func gateComparison(root string) []string {
+	var problems []string
+	for _, d := range driverDirs(root) {
+		if d == firstDriver {
+			continue
+		}
+		name := filepath.Join("docs", strings.ToUpper(d)+".md")
+		body, err := os.ReadFile(filepath.Join(root, name))
+		if err != nil {
+			problems = append(problems, fmt.Sprintf("step 17a: %s has no %s to hold its comparison with %s", d, name, firstDriver))
+			continue
+		}
+		compared := section(string(body), comparedHeading)
+		if compared == "" {
+			problems = append(problems, fmt.Sprintf("step 17a: %s has no heading %q", name, comparedHeading))
+			continue
+		}
+		for _, h := range []string{serverHeading, driverHeading} {
+			if !regexp.MustCompile(`(?m)^` + regexp.QuoteMeta(h) + `$`).MatchString(compared) {
+				problems = append(problems, fmt.Sprintf("step 17a: %s has no heading %q under %q", name, h, comparedHeading))
 			}
 		}
 	}
@@ -426,7 +471,7 @@ func gateGlobals(root string) []string {
 					switch n := n.(type) {
 					case *ast.CallExpr:
 						if isSelector(n.Fun, io, "ReadAll") {
-							problems = append(problems, fmt.Sprintf("step 12: %s calls io.ReadAll in %s, and must read the body one token at a time (D36)", d, fn.Name.Name))
+							problems = append(problems, fmt.Sprintf("step 12: %s calls io.ReadAll in %s, and must read the body one token at a time (D25 and D36)", d, fn.Name.Name))
 						}
 					case *ast.AssignStmt:
 						for _, lhs := range n.Lhs {
@@ -446,7 +491,7 @@ func gateGlobals(root string) []string {
 	return problems
 }
 
-// gateRegister holds step 9, D28 and D30: each driver calls sql.Register
+// gateRegister holds step 12, D28 and D30: each driver calls sql.Register
 // once, from init, with the name of its folder.
 func gateRegister(root string) []string {
 	var problems []string
@@ -488,12 +533,12 @@ func gateRegister(root string) []string {
 		}
 		switch {
 		case len(names) != 1:
-			problems = append(problems, fmt.Sprintf("step 9: %s calls sql.Register %d times, want once (D28)", d, len(names)))
+			problems = append(problems, fmt.Sprintf("step 12: %s calls sql.Register %d times, want once (D28)", d, len(names)))
 		case names[0] != d:
-			problems = append(problems, fmt.Sprintf("step 9: %s registers %q, want the name of its folder, %q (D30)", d, names[0], d))
+			problems = append(problems, fmt.Sprintf("step 12: %s registers %q, want the name of its folder, %q (D30)", d, names[0], d))
 		}
 		if outside {
-			problems = append(problems, fmt.Sprintf("step 9: %s calls sql.Register outside init", d))
+			problems = append(problems, fmt.Sprintf("step 12: %s calls sql.Register outside init", d))
 		}
 	}
 	return problems
@@ -577,8 +622,8 @@ func step6Items(root string) int {
 	return len(numberedItems(section(readFile(root, "docs", "DRIVER.md"), "### 6. "), false))
 }
 
-// section returns the text after the heading that starts with heading, up
-// to the next heading of the same level or higher.
+// section returns the text from the heading that starts with heading, and
+// the heading itself, up to the next heading of the same level or higher.
 func section(doc, heading string) string {
 	i := strings.Index(doc, "\n"+heading)
 	if i < 0 {

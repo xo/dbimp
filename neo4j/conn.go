@@ -35,8 +35,8 @@ var contentTypes = [...]string{
 // conn is one connection. It holds the transaction that is open, if any.
 type conn struct {
 	c *Connector
-	// id names the statements of the connection, in a comment or in
-	// txMetadata (D67).
+	// id names the statements of the connection, in a comment at the end of
+	// each or in txMetadata (D67 and D95).
 	id string
 	// tx is the open transaction, or nil.
 	tx *tx
@@ -69,7 +69,7 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 		// A decimal has a Value method, which writes it as a string. Neo4j
 		// has no decimal type, so it is refused, and never sent as a string
 		// (D63).
-		return fmt.Errorf("argument %s: Neo4j has no decimal type (D63): %w", argName(*nv), dbimp.ErrNotSupported)
+		return fmt.Errorf("binding the argument %s: Neo4j has no decimal type (D63): %w", argName(*nv), dbimp.ErrNotSupported)
 	}
 	if v, ok := nv.Value.(driver.Valuer); ok {
 		if rv := reflect.ValueOf(v); rv.Kind() == reflect.Pointer && rv.IsNil() {
@@ -83,7 +83,7 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 		}
 	}
 	if _, _, err := encode(nv.Value); err != nil {
-		return fmt.Errorf("argument %s: %w", argName(*nv), err)
+		return fmt.Errorf("binding the argument %s: %w", argName(*nv), err)
 	}
 	return nil
 }
@@ -156,10 +156,12 @@ func (c *conn) metadata() map[string]jsontext.Value {
 	return map[string]jsontext.Value{"dbimp": v}
 }
 
-// tag returns the comment that names the connection at the start of a
-// statement (D67).
+// tag returns the comment that names the connection, on a line of its own
+// at the end of a statement (D67 and D95). At the end, it leaves each error
+// position of the statement where the caller wrote it, except an error at
+// the end of the input, which points at the line of the comment (D95).
 func (c *conn) tag() string {
-	return "/* dbimp:" + c.id + " */ "
+	return "\n// dbimp:" + c.id
 }
 
 // how returns how a statement of the connection is found on the server to
@@ -197,7 +199,7 @@ func (c *conn) run(ctx context.Context, query string, args []driver.NamedValue) 
 	for _, arg := range args {
 		v, n, err := encode(arg.Value)
 		if err != nil {
-			return nil, fmt.Errorf("argument %s: %w", argName(arg), err)
+			return nil, fmt.Errorf("binding the argument %s: %w", argName(arg), err)
 		}
 		if b.Parameters == nil {
 			b.Parameters = map[string]jsontext.Value{}
@@ -211,7 +213,7 @@ func (c *conn) run(ctx context.Context, query string, args []driver.NamedValue) 
 	}
 	switch {
 	case how == CancelTag:
-		b.Statement = c.tag() + query
+		b.Statement = query + c.tag()
 	case how == CancelMetadata && c.tx == nil:
 		b.TxMetadata = c.metadata()
 	}
@@ -244,8 +246,9 @@ func (c *Connector) queryPath() string {
 
 // post sends one request with the body b, whose arguments need the version
 // version of typed JSON. It returns a response of JSON, with any status. A
-// response that is not JSON, such as a page of HTML from a proxy, is an
-// error with its status.
+// response that is not JSON, such as a page of HTML from a proxy, is a
+// *dbimp.StatusError with the start of its body. A status of 2xx is reported
+// as HTTP 502, so that such an answer is an error that database/sql sees.
 func (c *Connector) post(ctx context.Context, method, path string, b body, version int) (*http.Response, error) {
 	var reader io.Reader
 	if method != http.MethodDelete {
@@ -281,8 +284,10 @@ func (c *Connector) post(ctx context.Context, method, path string, b body, versi
 
 // isJSON reports whether a content type is JSON or typed JSON.
 func isJSON(contentType string) bool {
-	return strings.HasPrefix(contentType, "application/json") || strings.HasPrefix(contentType, "application/vnd.neo4j.query") &&
-		!strings.HasSuffix(contentType, "+jsonl")
+	media, _, _ := strings.Cut(contentType, ";")
+	media = strings.TrimSpace(media)
+	return media == "application/json" || strings.HasPrefix(media, "application/vnd.neo4j.query") &&
+		!strings.HasSuffix(media, "+jsonl")
 }
 
 // stmt is a prepared statement, which runs as its text each time.

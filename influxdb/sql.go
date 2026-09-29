@@ -58,7 +58,7 @@ func (c *conn) querySQL(ctx context.Context, query string, p jsontext.Value) (*s
 	obj, err := dbimp.NewObjectRows(s.Decoder(), cols)
 	if err != nil {
 		_ = s.Close()
-		return nil, incomplete(err)
+		return nil, incomplete(err, false)
 	}
 	return &sqlRows{s: s, obj: obj, types: types, vals: make([]jsontext.Value, len(obj.Columns()))}, nil
 }
@@ -104,9 +104,10 @@ func (c *conn) describe(ctx context.Context, query string, p jsontext.Value) ([]
 
 // incomplete wraps an error of the read of a result. The server closes the
 // body before its end when a statement fails after some rows, and sends no
-// text of the error (measured), so the end of the body is dbimp.ErrIncomplete.
-func incomplete(err error) error {
-	if errors.Is(err, io.ErrUnexpectedEOF) {
+// text of the error (measured), so the end of the body is dbimp.ErrIncomplete
+// when read says that a row reached the caller (D107).
+func incomplete(err error, read bool) error {
+	if read && errors.Is(err, io.ErrUnexpectedEOF) {
 		return fmt.Errorf("reading the result: the server closed it before its end: %w: %w", dbimp.ErrIncomplete, err)
 	}
 	return fmt.Errorf("reading the result: %w", err)
@@ -120,6 +121,9 @@ type sqlRows struct {
 	types []*colType
 	vals  []jsontext.Value
 	done  bool
+	// read is true once a row has reached the caller, so that an error after
+	// it wraps dbimp.ErrIncomplete (D107).
+	read bool
 }
 
 // ensure the interfaces.
@@ -150,6 +154,7 @@ func (r *sqlRows) NextRow() error {
 	err := r.obj.Next(r.vals)
 	switch {
 	case err == nil:
+		r.read = true
 		return nil
 	case errors.Is(err, io.EOF):
 		r.done = true
@@ -159,7 +164,7 @@ func (r *sqlRows) NextRow() error {
 		return io.EOF
 	}
 	r.done = true
-	return incomplete(err)
+	return incomplete(err, r.read)
 }
 
 // Next satisfies driver.Rows, for a caller that does not use

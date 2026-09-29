@@ -1,6 +1,9 @@
 # D67. The Neo4j DSN has the key cancel, for how a query stops
 
-Status: Decided.
+Status: Amended by D95.
+
+D95 amends the first point: the comment ends each statement, as
+`\n// dbimp:<id>`, and `SHOW TRANSACTIONS` finds it with `ENDS WITH`.
 
 Ken accepted this on 2026-09-27, and decided that day that the driver does all
 three, and that the caller chooses in the DSN. It decides items 9 and 10 of

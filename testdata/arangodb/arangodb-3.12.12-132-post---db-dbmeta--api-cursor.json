@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"FOR u IN types SORT u.n RETURN u\"}"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Content-Length": [
+        "747"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ]
+    },
+    "body": "{\"result\":[{\"_key\":\"a\",\"_id\":\"types/a\",\"_rev\":\"_mMk-zZ----\",\"n\":1,\"s\":\"text \\u00E9\",\"b\":true,\"f\":1.5,\"i\":9223372036854775807,\"nested\":{\"z\":1,\"a\":[1,\"x\"]}},{\"_key\":\"b\",\"_id\":\"types/b\",\"_rev\":\"_mMk-zZ---_\",\"n\":2,\"s\":\"\",\"b\":false,\"f\":-2.25,\"i\":-9223372036854775808,\"none\":null},{\"_key\":\"c\",\"_id\":\"types/c\",\"_rev\":\"_mMk-zZ---A\",\"n\":3,\"extra\":\"only here\"}],\"hasMore\":false,\"cached\":false,\"extra\":{\"warnings\":[],\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"documentLookups\":0,\"seeks\":0,\"scannedFull\":3,\"scannedIndex\":0,\"searchParallelism\":1,\"cursorsCreated\":0,\"cursorsRearmed\":0,\"cacheHits\":0,\"cacheMisses\":0,\"filtered\":0,\"httpRequests\":0,\"executionTime\":1.005409867502749e-4,\"peakMemoryUsage\":32768,\"intermediateCommits\":0}},\"error\":false,\"code\":201}"
+  }
+}

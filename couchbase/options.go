@@ -8,7 +8,9 @@ import (
 
 // Option sets an option of one statement or one transaction (D40). An option
 // comes from the DSN, then from the context through WithOptions, then from
-// an argument of the statement, and a later one wins.
+// an argument of the statement, and a later one wins. BeginTx takes no
+// argument, so an option of a transaction comes from the DSN or through
+// WithOptions only.
 type Option func(*options)
 
 // options are the options of one request.
@@ -29,8 +31,8 @@ func WithQueryContext(v string) Option {
 }
 
 // WithScanConsistency sets the scan consistency, "not_bounded" or
-// "request_plus". A read after a write sends "request_plus" to see the
-// write, because Couchbase updates an index after a write.
+// "request_plus". A read that must see an earlier write sends
+// "request_plus", because Couchbase updates an index after a write.
 func WithScanConsistency(v string) Option {
 	return func(o *options) { o.scanConsistency = v }
 }
@@ -46,14 +48,15 @@ func WithReadonly(v bool) Option {
 }
 
 // WithDurability sets the durability of a transaction, such as "none" or
-// "majority" (D43). It applies to BeginTx and to a statement that runs as a
-// transaction of its own.
+// "majority" (D43). It applies to BeginTx, through WithOptions. A statement
+// that runs as a transaction of its own takes
+// WithParameter("durability_level", v).
 func WithDurability(v string) Option {
 	return func(o *options) { o.durability = v }
 }
 
 // WithTransactionTimeout sets how long a transaction can last before the
-// server ends it. It applies to BeginTx.
+// server ends it. It applies to BeginTx, through WithOptions.
 func WithTransactionTimeout(d time.Duration) Option {
 	return func(o *options) { o.txTimeout = d }
 }

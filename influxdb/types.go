@@ -165,9 +165,10 @@ func decodeUint(v jsontext.Value) (any, error) {
 	return u, nil
 }
 
-// decodeFloat reads a float. A float that is not finite is text in some
-// forms of the answer, such as NaN, inf and -inf in CSV (measured), and the
-// text reads as its value (D80).
+// decodeFloat reads a float. The driver asks for JSON, where a float that is
+// not finite is null (D80). It also reads the text NaN, inf and -inf, which
+// other forms of the answer write, such as CSV (measured), in case a server
+// sends one.
 func decodeFloat(v jsontext.Value) (any, error) {
 	if v.Kind() == '"' {
 		s, err := dbimp.String(v)

@@ -10,9 +10,9 @@ import (
 // doc is the product document of the driver.
 const doc = "../docs/COUCHBASE.md"
 
-// TestTables writes the type table and the interface table of step 10 of
-// docs/DRIVER.md into doc, from the code. Run it with DBIMP_UPDATE=1 to
-// write them.
+// TestTables compares the type table and the interface table of step 10 of
+// docs/DRIVER.md in doc with the code. Run it with DBIMP_UPDATE=1 to write
+// them.
 func TestTables(t *testing.T) {
 	t.Parallel()
 	r := &rows{}
@@ -39,7 +39,7 @@ func TestTables(t *testing.T) {
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
 		"driver.Connector":                      "The connector owns the transport, which every connection shares.",
 		"io.Closer on the connector":            "Close closes the idle connections of the transport.",
-		"driver.Pinger":                         "Ping runs SELECT RAW 1, because /admin/ping needs no credentials.",
+		"driver.Pinger":                         "Ping runs SELECT RAW 1, because /admin/ping needs no credentials, so it would not check them.",
 		"driver.SessionResetter":                "ResetSession rolls back a transaction left open (D41).",
 		"driver.Validator":                      "A connection holds no state on the server outside a transaction.",
 		"driver.NamedValueChecker":              "An argument is any value that json/v2 encodes, and an Option is taken out (D40).",

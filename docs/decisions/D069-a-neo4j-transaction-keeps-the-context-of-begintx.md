@@ -1,6 +1,9 @@
 # D69. A Neo4j transaction keeps the context of BeginTx
 
-Status: Amends D65.
+Status: Amends D45 and D65, and amended by D100.
+
+D100 amends the rollback after the context ends: it sends its request with
+the context without its end.
 
 Ken decided this on 2026-09-27. It amends the last point of D65, which said
 that the transaction keeps no context. `Commit` and `Rollback` of

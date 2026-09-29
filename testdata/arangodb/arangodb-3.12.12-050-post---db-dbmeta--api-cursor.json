@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"FOR i IN 1..3 RETURN SLEEP(1)\",\"batchSize\":1,\"options\":{\"stream\":true}}"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Content-Length": [
+        "101"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "Pragma": [
+        "no-cache"
+      ]
+    },
+    "body": "{\"result\":[null],\"hasMore\":true,\"id\":\"295\",\"nextBatchId\":\"2\",\"cached\":false,\"error\":false,\"code\":201}"
+  }
+}

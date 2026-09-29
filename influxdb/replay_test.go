@@ -475,7 +475,7 @@ func TestReplayInfluxQLSeries(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			cols := []string{"name", "host", "time", "f"}
+			cols := []string{"measurement", "host", "time", "f"}
 			want := []set{
 				{cols: cols, rows: [][]any{{"types", "a", ts(t, "2023-11-14T22:13:20Z"), 1.5}}},
 				{cols: cols, rows: [][]any{{"types", "b", ts(t, "2023-11-14T22:13:21Z"), -2.25}}},
@@ -504,7 +504,7 @@ func TestReplayInfluxQLTypes(t *testing.T) {
 		t.Fatal(err)
 	}
 	check(t, got, []set{{
-		cols: []string{"name", "time", "b", "f", "host", "i", "region", "s", "u"},
+		cols: []string{"measurement", "time", "b", "f", "host", "i", "region", "s", "u"},
 		rows: [][]any{
 			{"types", ts(t, "2023-11-14T22:13:20Z"), true, 1.5, "a", int64(math.MaxInt64), nil, "text", nil},
 			{"types", ts(t, "2023-11-14T22:13:21Z"), false, -2.25, "b", int64(math.MinInt64), nil, "", nil},
@@ -543,7 +543,7 @@ func TestReplayInfluxQLStatements(t *testing.T) {
 		}
 		want := []set{
 			{cols: []string{}},
-			{cols: []string{"name", "time", "f"}, rows: [][]any{{"types", ts(t, "2023-11-14T22:13:20Z"), 1.5}}},
+			{cols: []string{"measurement", "time", "f"}, rows: [][]any{{"types", ts(t, "2023-11-14T22:13:20Z"), 1.5}}},
 			{cols: []string{}},
 		}
 		check(t, got, want)
@@ -557,7 +557,7 @@ func TestReplayInfluxQLStatements(t *testing.T) {
 		}
 		// InfluxDB 2 leaves out the results 0 and 2, and the driver gives an
 		// empty set for each (D83).
-		row := set{cols: []string{"name", "time", "f"}, rows: [][]any{{"types", ts(t, "2023-11-14T22:13:20Z"), 1.5}}}
+		row := set{cols: []string{"measurement", "time", "f"}, rows: [][]any{{"types", ts(t, "2023-11-14T22:13:20Z"), 1.5}}}
 		check(t, got, []set{{cols: []string{}}, row, {cols: []string{}}, row})
 	}
 }
@@ -595,7 +595,7 @@ func TestReplayInfluxQLParameters(t *testing.T) {
 		if err != nil {
 			t.Fatalf("%s: %v", release, err)
 		}
-		check(t, got, []set{{cols: []string{"name", "time", "f"}, rows: [][]any{{"types", ts(t, "2023-11-14T22:13:20Z"), 1.5}}}})
+		check(t, got, []set{{cols: []string{"measurement", "time", "f"}, rows: [][]any{{"types", ts(t, "2023-11-14T22:13:20Z"), 1.5}}}})
 	}
 }
 
@@ -658,7 +658,7 @@ func TestReplayTwoQueriesAtOnce(t *testing.T) {
 }
 
 func TestReplayLeavesNoGoroutine(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
-	//nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	//nolint:paralleltest // The subtests count the goroutines of the process too.
 	for _, release := range []string{"influxdb-1.13.1", "influxdb-2.9.1", "influxdb-3.11.5"} {
 		t.Run(release, func(t *testing.T) {
 			dbimptest.CheckGoroutines(t)

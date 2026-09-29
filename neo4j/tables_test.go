@@ -10,9 +10,9 @@ import (
 // doc is the product document of the driver.
 const doc = "../docs/NEO4J.md"
 
-// TestTables writes the type table and the interface table of step 10 of
-// docs/DRIVER.md into doc, from the code. Run it with DBIMP_UPDATE=1 to
-// write them.
+// TestTables compares the type table and the interface table of step 10 of
+// docs/DRIVER.md in doc with the code. Run it with DBIMP_UPDATE=1 to write
+// them.
 func TestTables(t *testing.T) {
 	t.Parallel()
 	var types []dbimptest.TypeRow

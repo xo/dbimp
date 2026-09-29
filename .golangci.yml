@@ -145,6 +145,12 @@ linters:
 
   exclusions:
     rules:
+      # SurrealDB walks an answer in CBOR and in JSON with the same text, each
+      # with its own decoder, and not through an interface of each token
+      # (D108). TestTheWalksAreAlike holds that the two stay the same.
+      - path: surrealdb/(cbor|json)sets\.go
+        linters:
+          - dupl
       # A test builds its own context and does not answer to the context
       # rule. Neither does the main function of a command, which is where the
       # context of a program starts.

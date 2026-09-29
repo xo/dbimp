@@ -20,8 +20,9 @@ func (err Error) Error() string {
 }
 
 // ResponseError holds the errors of one response, with its HTTP status. The
-// status is 202 for an error that follows some rows, and 4xx for a request
-// that the server refused. Use errors.As to read an Error of it.
+// status is 202 for an error that follows some rows, and 4xx or 5xx for a
+// request that the server refused, such as 500 for TransactionStartFailed on
+// 5.26.31. Use errors.As to read an Error of it.
 type ResponseError struct {
 	// HTTPStatus is the status code of the response.
 	HTTPStatus int

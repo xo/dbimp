@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"RETURN SLEEP(3)\",\"options\":{\"maxRuntime\":0.5}}"
+  },
+  "response": {
+    "status": 410,
+    "header": {
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Content-Length": [
+        "143"
+      ]
+    },
+    "body": "{\"code\":410,\"error\":true,\"errorMessage\":\"AQL: query killed [node #2: CalculationNode] [node #3: ReturnNode] (while executing)\",\"errorNum\":1500}"
+  }
+}

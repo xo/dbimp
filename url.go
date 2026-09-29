@@ -86,7 +86,7 @@ func (q Query) Bool(key string, def bool) (bool, error) {
 	}
 	v, err := strconv.ParseBool(q.values.Get(key))
 	if err != nil {
-		return false, fmt.Errorf("parsing key %q: %w", key, ErrInvalidValue)
+		return false, fmt.Errorf("parsing key %q: %w: %w", key, ErrInvalidValue, err)
 	}
 	return v, nil
 }
@@ -99,7 +99,7 @@ func (q Query) Int(key string, def int) (int, error) {
 	}
 	v, err := strconv.Atoi(q.values.Get(key))
 	if err != nil {
-		return 0, fmt.Errorf("parsing key %q: %w", key, ErrInvalidValue)
+		return 0, fmt.Errorf("parsing key %q: %w: %w", key, ErrInvalidValue, err)
 	}
 	return v, nil
 }
@@ -112,7 +112,7 @@ func (q Query) Duration(key string, def time.Duration) (time.Duration, error) {
 	}
 	v, err := time.ParseDuration(q.values.Get(key))
 	if err != nil {
-		return 0, fmt.Errorf("parsing key %q: %w", key, ErrInvalidValue)
+		return 0, fmt.Errorf("parsing key %q: %w: %w", key, ErrInvalidValue, err)
 	}
 	return v, nil
 }

@@ -147,7 +147,10 @@ lead, not a fact.
 - The signature names the kind of each column: `number`, `string`,
   `boolean`, `null`, `missing`, `array`, `object`, or `json` when the kind is
   not known (recorded). A field read from a document is `json`, and a
-  literal has its kind.
+  literal has its kind. A column of the kind `json` scans into `any`, its
+  database type is `JSON`, and it holds any value of the table below. So the
+  row of bytes, with the scan type `string`, holds for a literal, and a
+  field of a document that holds base64 has the kind `json`.
 - The number 9007199254740993 and the largest int64, 9223372036854775807,
   arrive exact (recorded). The driver converts the text of the token (D19).
 - The server holds a larger integer as a float64 itself: it sends
@@ -156,8 +159,8 @@ lead, not a fact.
 - The server writes a float64 that is a whole number as its digits, with no
   exponent. `-1.5e300` arrives as `-15` and 299 zeros, so the driver returns
   it as a `*apd.Decimal`, because it does not fit an int64 (tested). A
-  fraction such as `1.5e-300` arrives as a float64 (tested). D39 said that no
-  `*apd.Decimal` arrives from Couchbase, and this corrects it.
+  fraction such as `1.5e-300` arrives as a float64 (tested). D39 holds the
+  correction.
 - `0.1` arrives as `0.1` (recorded).
 - A field that is MISSING is absent from the result object, and the
   signature still names it. `SELECT d.x, d.y, d.z` over the document
@@ -274,8 +277,8 @@ The type table comes from the code, in step 10.
   one holds by itself. D45 relies on the first.
 - A transaction holds state on the server, so a `database/sql` transaction
   maps onto one connection that carries the txid (D20). The first release
-  supports it (D41). The DSN key and the option `durability_level` set the
-  durability, because the default cannot commit on a node alone (D43).
+  supports it (D41). The DSN key `durability_level` and the option
+  `WithDurability` set the durability, because the default cannot commit on a node alone (D43).
 
 ## Errors
 
@@ -291,8 +294,9 @@ The type table comes from the code, in step 10.
   signature and no results (recorded).
 - An error can arrive after rows. The `ABORT` statement returned HTTP 200,
   the results `[0,1,2]`, then code 5011 and `"status": "fatal"` (recorded).
-  The driver returns that error from `Rows.Next`, and never reports the
-  result as complete (D21).
+  The driver returns that error from `Rows.Next`, which a caller of
+  `database/sql` reads from `Rows.Err`, and never reports the result as
+  complete (D21).
 - A wrong password is HTTP 401 with code 2120 on 7.6.12 and 8.0.3
   (recorded). 7.2.9 accepted a wrong password for `SELECT 1 AS a`, and ran it
   (recorded). Gemini said that 7.2 checks credentials only for a statement
@@ -360,9 +364,9 @@ and 8.0.3:
   `query_delete` on the bucket `dbmeta`, and `query_system_catalog`.
 - It can `UPSERT`, `SELECT` and `DELETE` in `dbmeta`, and read
   `system:keyspaces`.
-- It is refused `system:user_info`, `CREATE INDEX`, and the creation of a
-  bucket through REST, with HTTP 403. The text of the refusal differs by
-  release. On 8.0 it names `user_admin_local`, and on 7.x it says "accessing
+- It is refused `system:user_info` and `CREATE INDEX`, with HTTP 401 and
+  code 13014 (recorded), and the creation of a bucket through REST, with
+  HTTP 403 (not recorded here). The text of the refusal differs by release. On 8.0 it names `user_admin_local`, and on 7.x it says "accessing
   user information".
 - `Init` makes a primary index on `dbmeta`. Without one, a `SELECT` over the
   bucket is refused on every release. 7.2 has no sequential scan, and on 8.0
@@ -403,7 +407,7 @@ The interface table comes from the code, in step 10.
 | `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
 | `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
 | `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
-| `driver.Pinger` | yes | Ping runs SELECT RAW 1, because /admin/ping needs no credentials. |
+| `driver.Pinger` | yes | Ping runs SELECT RAW 1, because /admin/ping needs no credentials, so it would not check them. |
 | `driver.SessionResetter` | yes | ResetSession rolls back a transaction left open (D41). |
 | `driver.Validator` | yes | A connection holds no state on the server outside a transaction. |
 | `driver.NamedValueChecker` | yes | An argument is any value that json/v2 encodes, and an Option is taken out (D40). |

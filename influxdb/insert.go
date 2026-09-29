@@ -451,7 +451,7 @@ func timestampLiteral(v any) (string, error) {
 func (c *conn) write(ctx context.Context, ins *insert, args []driver.NamedValue) error {
 	body, err := ins.body(args)
 	if err != nil {
-		return err
+		return fmt.Errorf("binding the INSERT: %w", err)
 	}
 	db, rp := ins.db, ins.rp
 	if db == "" {

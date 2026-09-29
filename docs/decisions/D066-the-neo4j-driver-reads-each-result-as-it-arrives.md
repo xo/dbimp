@@ -1,6 +1,9 @@
 # D66. The Neo4j driver reads each result as it arrives, and its errors at the end
 
-Status: Decided.
+Status: Amended by D105.
+
+D105 amends the rule of `Rows.Close`: outside a transaction it reads nothing
+more, and stops a statement that runs on. In a transaction it reads the rest.
 
 Ken accepted this on 2026-09-27. It decides item 8 of step 9 for Neo4j, with
 D21.

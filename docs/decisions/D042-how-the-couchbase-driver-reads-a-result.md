@@ -1,6 +1,8 @@
 # D42. How the Couchbase driver reads a result
 
-Status: Decided.
+Status: Amended by D107.
+
+D107 amends the error: it wraps `dbimp.ErrIncomplete` only after a row.
 
 Ken accepted this on 2026-09-27.
 
@@ -13,7 +15,11 @@ wraps `dbimp.ErrIncomplete` and holds each code and message (D21). A
 is cut short.
 
 The driver relies on the server to stop a query when the client
-disconnects, which it does on every release (D36). `Rows.Close` sends no
+disconnects, which it does on every release (measured, in "Cancellation
+and timeouts" of [COUCHBASE.md](../COUCHBASE.md)). `Rows.Close` sends no
 cancel. The driver uses no binary encoding, because the server offers none.
 Couchbase Analytics waits for a later work item, because `dbrun` does not
 publish its port.
+
+Note of 2026-09-29: the driver also takes the status `completed` as a
+success. No recording holds it (`rows.go`).

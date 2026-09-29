@@ -38,9 +38,10 @@ type TypeRow struct {
 	Nullable bool
 }
 
-// TypeTable writes rows as the type table between TypesBegin and TypesEnd in
-// the document at doc, and fails the test if the document holds another
-// table. If EnvUpdate is set, it writes the table into the document.
+// TypeTable compares rows, as the type table, with the table between
+// TypesBegin and TypesEnd in the document at doc, and fails the test if the
+// document holds another table. If EnvUpdate is set, it writes the table into
+// the document.
 func TypeTable(t *testing.T, doc string, rows []TypeRow) {
 	t.Helper()
 	var b strings.Builder
@@ -81,13 +82,14 @@ var interfaces = []struct {
 	{"driver.RowsColumnTypePrecisionScale", reflect.TypeFor[driver.RowsColumnTypePrecisionScale]()},
 }
 
-// InterfaceTable writes the interface table of step 10 of docs/DRIVER.md
-// between InterfacesBegin and InterfacesEnd in the document at doc. values
-// are the types of the driver, such as its driver, its connector, a
-// connection and its rows. An interface is implemented if one of values
-// implements it. reasons holds, for each interface, why the driver
-// implements it or does not, and the test fails if one is missing. The
-// connector is the only value that must implement io.Closer.
+// InterfaceTable compares the interface table of step 10 of docs/DRIVER.md
+// with the table between InterfacesBegin and InterfacesEnd in the document at
+// doc, and writes it there when EnvUpdate is set. values are the types of
+// the driver, such as its driver, its connector, a connection and its rows.
+// An interface is implemented if one of values implements it. reasons holds,
+// for each interface, why the driver implements it or does not, and the test
+// fails if one is missing. The connector is the only value that must
+// implement io.Closer.
 func InterfaceTable(t *testing.T, doc string, reasons map[string]string, connector driver.Connector, values ...any) {
 	t.Helper()
 	var b strings.Builder

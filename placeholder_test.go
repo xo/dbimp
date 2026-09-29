@@ -50,6 +50,25 @@ func TestPlaceholders(t *testing.T) {
 	}
 }
 
+// TestPlaceholdersAQL holds the forms of AQL: a // comment, @@name for a
+// collection, and a name that starts with a digit (D104).
+func TestPlaceholdersAQL(t *testing.T) {
+	t.Parallel()
+	aql := dbimp.Syntax{Quotes: "'\"`", Backslash: true, BlockComments: true, SlashComments: true, DoubleAt: true, DigitNames: true}
+	query := "FOR d IN @@c FILTER d.a == @1 AND d.s == '@@x and @y' // @@z @w\nRETURN /* @v */ @b"
+	ps, err := aql.Placeholders(query)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var got []string
+	for _, p := range ps {
+		got = append(got, fmt.Sprintf("%s %t", p.Name, p.Double))
+	}
+	if want := []string{"c true", "1 false", "b false"}; !slices.Equal(got, want) {
+		t.Errorf("Placeholders(%q) = %q, want %q", query, got, want)
+	}
+}
+
 func TestPlaceholdersUnterminated(t *testing.T) {
 	t.Parallel()
 	for _, query := range []string{"SELECT 'x", "SELECT /* x", "SELECT \"x"} {

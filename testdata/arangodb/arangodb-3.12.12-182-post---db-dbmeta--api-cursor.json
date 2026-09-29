@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"RETURN 1; RETURN 2\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Length": [
+        "162"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"code\":400,\"error\":true,\"errorMessage\":\"syntax error, unexpected invalid token, expecting end of query string near '; RETURN 2' at position 1:9\",\"errorNum\":1501}"
+  }
+}

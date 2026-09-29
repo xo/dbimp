@@ -8,7 +8,8 @@ consume the drivers, and `dburl` hands each driver its DSN (D35). A driver
 here can replace a driver that `usql` imports now, which reduces the
 dependencies of `usql` (D24).
 
-The drivers so far are Couchbase (D23), SurrealDB and Neo4j. The targets and
+The drivers so far are Couchbase (D23), SurrealDB, Neo4j, InfluxDB and
+ArangoDB. The targets and
 their order are in [TARGETS.md](TARGETS.md), and every step of a new driver
 is in [DRIVER.md](DRIVER.md).
 

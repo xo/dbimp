@@ -64,8 +64,8 @@ func (c *cbor) object(pairs ...pair) {
 	}
 }
 
-// entry writes the entry of one statement whose result rows writes, with
-// the status status.
+// entry writes the entry of one statement, with the status status, and a
+// result that the function rows writes.
 func (c *cbor) entry(status string, rows func(*cbor)) {
 	c.Map(2)
 	c.Text("result")

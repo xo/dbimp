@@ -15,7 +15,7 @@ func typed(typ, value string) string {
 // RunContract counts the goroutines of the process, so this test must not
 // run in parallel with another. The fake servers of the contract answer every
 // request with one body, so the driver sends nothing to stop a query when its
-// context ends (cancel=none). TestCancel tests that.
+// context ends (cancel=none). The TestCancel tests hold that.
 func TestContract(t *testing.T) { //nolint:paralleltest // RunContract counts the goroutines of the process.
 	one := typed("Integer", `"1"`)
 	dbimptest.RunContract(t, dbimptest.Contract{

@@ -74,11 +74,12 @@ type Feature struct {
 	// Verdict is NotMeasured, Yes or No.
 	Verdict string `json:"verdict"`
 	// Evidence is the recorded file under testdata/<driver>/ that shows what
-	// the server answered.
+	// the server answered: for the verdict No, that it lacks the entry.
 	Evidence string `json:"evidence,omitzero"`
 	// Test is the test that exercises it, as a function and a subtest, such
 	// as "TestIntegrationCRUD/update". For the verdict No, the test sends
-	// the operation and expects the refusal of the server.
+	// the operation and expects the refusal of the server, or shows that the
+	// server ignores it.
 	Test string `json:"test,omitzero"`
 }
 

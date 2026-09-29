@@ -17,10 +17,6 @@ import (
 	"time"
 )
 
-// EnvRecord is the environment variable that a driver test reads to decide
-// whether it records. A driver test that records runs only when it is set.
-const EnvRecord = "DBIMP_RECORD"
-
 // redacted replaces the value of a header that holds a credential.
 const redacted = "REDACTED"
 

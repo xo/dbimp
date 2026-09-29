@@ -1,6 +1,9 @@
 # D52. Each SurrealDB statement is a result set, and its rows follow D18
 
-Status: Decided.
+Status: Amended by D101.
+
+D101 amends the rule for an array of mixed kinds: it is one column only
+when its first value is not an object.
 
 Ken accepted this on 2026-09-27. It decides items 5 and 8 of step 9 for SurrealDB. The response holds one
 result for each statement of the request, in order. Each one is a result

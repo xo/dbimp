@@ -39,9 +39,9 @@ const (
 
 var releases = []string{floor, ceiling}
 
-// tagRE matches the comment that names the connection at the start of a
-// statement (D67).
-var tagRE = regexp.MustCompile(`^/\* dbimp:[A-Z2-7]+ \*/ `)
+// tagRE matches the comment that names the connection, at the end of a
+// statement (D95).
+var tagRE = regexp.MustCompile(`\n// dbimp:[A-Z2-7]+$`)
 
 // match matches a request of the driver with a recorded one. It removes the
 // comment of the connection and txMetadata, whose values change on each run,
@@ -511,8 +511,8 @@ func TestReplayVectorInTheFirstVersion(t *testing.T) {
 	if !strings.Contains(re.Errs[0].Message, "VECTOR") {
 		t.Errorf("the error is %v, want the error of the server about VECTOR", err)
 	}
-	if !errors.Is(err, dbimp.ErrIncomplete) {
-		t.Errorf("the error is %v, want dbimp.ErrIncomplete", err)
+	if errors.Is(err, dbimp.ErrIncomplete) {
+		t.Errorf("the error is %v, want no dbimp.ErrIncomplete, because no row came first (D107)", err)
 	}
 }
 

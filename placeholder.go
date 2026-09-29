@@ -23,6 +23,15 @@ type Syntax struct {
 	HashComments bool
 	// BlockComments is true if /* starts a comment that ends at */.
 	BlockComments bool
+	// SlashComments is true if // starts a comment that ends at a new line,
+	// as in AQL.
+	SlashComments bool
+	// DoubleAt is true if @@name is a placeholder of its own, whose Double is
+	// true, as a parameter that names a collection in AQL (D104). Without it,
+	// @@name is no placeholder, as @@version is not in MySQL.
+	DoubleAt bool
+	// DigitNames is true if a name can start with a digit, as @1 in AQL.
+	DigitNames bool
 }
 
 // Placeholder is one placeholder in a statement.
@@ -33,11 +42,14 @@ type Placeholder struct {
 	Len int
 	// Name is the name of an @name placeholder without the @, and "" for a ?.
 	Name string
+	// Double is true for an @@name placeholder, which only a Syntax with
+	// DoubleAt returns.
+	Double bool
 }
 
 // Placeholders returns each ? and each @name in query, in order. It skips
 // literals, quoted identifiers and comments. An @ that another @ follows, as
-// in @@version, is not a placeholder. It returns an error if query ends
+// in @@version, is not a placeholder, unless the Syntax has DoubleAt. It returns an error if query ends
 // inside a literal, a quoted identifier or a comment.
 func (s Syntax) Placeholders(query string) ([]Placeholder, error) {
 	var ps []Placeholder
@@ -51,7 +63,8 @@ func (s Syntax) Placeholders(query string) ([]Placeholder, error) {
 			}
 			i = end
 		case s.DashComments && strings.HasPrefix(query[i:], "--"),
-			s.HashComments && c == '#':
+			s.HashComments && c == '#',
+			s.SlashComments && strings.HasPrefix(query[i:], "//"):
 			end := strings.IndexByte(query[i:], '\n')
 			if end < 0 {
 				return ps, nil
@@ -67,10 +80,14 @@ func (s Syntax) Placeholders(query string) ([]Placeholder, error) {
 			ps = append(ps, Placeholder{Offset: i, Len: 1})
 			i++
 		case c == '@':
-			n := nameLen(query[i+1:])
+			n := s.nameLen(query[i+1:])
 			switch {
 			case strings.HasPrefix(query[i+1:], "@"):
-				i += 2 + nameLen(query[i+2:])
+				m := s.nameLen(query[i+2:])
+				if s.DoubleAt && m > 0 {
+					ps = append(ps, Placeholder{Offset: i, Len: 2 + m, Name: query[i+2 : i+2+m], Double: true})
+				}
+				i += 2 + m
 			case n == 0:
 				i++
 			default:
@@ -160,18 +177,18 @@ func (s Syntax) skipQuote(query string, i int) (int, error) {
 	return 0, fmt.Errorf("parsing a quote at offset %d: %w", i, ErrUnterminated)
 }
 
-// nameLen returns the length of the name at the start of s. A name starts
-// with a letter or an underscore, and goes on with letters, digits and
-// underscores.
-func nameLen(s string) int {
-	for i := range len(s) {
-		c := s[i]
+// nameLen returns the length of the name at the start of name. A name
+// starts with a letter or an underscore, or a digit with DigitNames, and goes
+// on with letters, digits and underscores.
+func (s Syntax) nameLen(name string) int {
+	for i := range len(name) {
+		c := name[i]
 		switch {
 		case c == '_', 'a' <= c && c <= 'z', 'A' <= c && c <= 'Z':
-		case '0' <= c && c <= '9' && i > 0:
+		case '0' <= c && c <= '9' && (i > 0 || s.DigitNames):
 		default:
 			return i
 		}
 	}
-	return len(s)
+	return len(name)
 }

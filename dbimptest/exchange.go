@@ -1,8 +1,8 @@
 // Package dbimptest holds the test helpers that every driver in
 // github.com/xo/dbimp shares. It replays and records the responses of a real
 // server, checks that a test leaves no goroutine behind, runs the contract
-// of docs/DRIVER.md against a driver, and writes the type table and the
-// interface table of a driver into its document.
+// of docs/DRIVER.md against a driver, and compares the type table and the
+// interface table of a driver with its document, or writes them.
 //
 // Only a test imports this package. It imports testing and
 // net/http/httptest, which a driver must not pull into the build of a

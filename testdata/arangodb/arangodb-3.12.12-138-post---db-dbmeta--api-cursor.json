@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"RETURN {nil: null, t: true, f: false, zero: 0, neg: -1, imax: 9223372036854775807, imin: -9223372036854775808, big: 18446744073709551615, twoTo53: 9007199254740993, twoTo60: 1152921504606846976, half: 1.5, max: 1.7976931348623157e308, tiny: 5e-324, s: 'é 日本 🙂', empty: '', arr: [], obj: {}, date: DATE_ISO8601(0), now: DATE_NOW()}\"}"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Content-Length": [
+        "771"
+      ],
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ]
+    },
+    "body": "{\"result\":[{\"nil\":null,\"t\":true,\"f\":false,\"zero\":0,\"neg\":-1,\"imax\":9223372036854775807,\"imin\":-9223372036854775808.0,\"big\":18446744073709552000,\"twoTo53\":9007199254740993,\"twoTo60\":1152921504606846976,\"half\":1.5,\"max\":1.7976931348623157e+308,\"tiny\":5e-324,\"s\":\"\\u00E9 \\u65E5\\u672C \\uD83D\\uDE42\",\"empty\":\"\",\"arr\":[],\"obj\":{},\"date\":\"1970-01-01T00:00:00.000Z\",\"now\":1790623933785}],\"hasMore\":false,\"cached\":false,\"extra\":{\"warnings\":[],\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"documentLookups\":0,\"seeks\":0,\"scannedFull\":0,\"scannedIndex\":0,\"searchParallelism\":1,\"cursorsCreated\":0,\"cursorsRearmed\":0,\"cacheHits\":0,\"cacheMisses\":0,\"filtered\":0,\"httpRequests\":0,\"executionTime\":6.848099292255938e-5,\"peakMemoryUsage\":0,\"intermediateCommits\":0}},\"error\":false,\"code\":201}"
+  }
+}

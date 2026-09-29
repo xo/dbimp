@@ -295,7 +295,7 @@ func (rt roundTrip) selectValue() (any, error) {
 		return nil, err
 	}
 	if rt.c.Column >= len(cols) {
-		return nil, fmt.Errorf("the select returns %d columns, and the value is in column %d", len(cols), rt.c.Column)
+		return nil, fmt.Errorf("selecting the value: the select returns %d columns, and the value is in column %d", len(cols), rt.c.Column)
 	}
 	vals := make([]any, len(cols))
 	ptrs := make([]any, len(cols))

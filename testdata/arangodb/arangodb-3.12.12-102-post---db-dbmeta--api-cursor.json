@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_db/dbmeta/_api/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"INSERT {_key: 'a'} INTO types\"}"
+  },
+  "response": {
+    "status": 409,
+    "header": {
+      "X-Arango-Queue-Time-Seconds": [
+        "0.000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000 ; includeSubDomains"
+      ],
+      "Expires": [
+        "0"
+      ],
+      "Cache-Control": [
+        "no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0, s-maxage=0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Pragma": [
+        "no-cache"
+      ],
+      "Content-Security-Policy": [
+        "frame-ancestors 'self'; form-action 'self';"
+      ],
+      "Server": [
+        "ArangoDB"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Content-Length": [
+        "197"
+      ]
+    },
+    "body": "{\"code\":409,\"error\":true,\"errorMessage\":\"AQL: unique constraint violated - in index primary of type primary over '_key'; conflicting key: a [node #3: InsertNode] (while executing)\",\"errorNum\":1210}"
+  }
+}

@@ -92,7 +92,7 @@ type Request struct {
 	Phase string `json:"phase,omitzero"`
 	// Capture names values of the response to keep, by a path such as
 	// "results.0.txid". A later request of the same principal writes a kept
-	// value into its body or its path as {{name}}.
+	// value into its body, its path or a header as {{name}}.
 	Capture map[string]string `json:"capture,omitzero"`
 }
 
@@ -119,7 +119,7 @@ func record() error {
 	flag.Parse()
 	if *dir == "" || *release == "" || *admin == "" {
 		flag.Usage()
-		return errors.New("the flags dir, release and admin are needed")
+		return errors.New("reading the flags: dir, release and admin are needed")
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -182,19 +182,19 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 			}
 			r.Body = expand(r.Body, kept)
 			r.Path = expandText(r.Path, kept)
-			r.Header = withHeader(r.Header, script.Header[p])
+			r.Header = expandHeader(withHeader(r.Header, script.Header[p]), kept)
 			if r.Background {
 				wg.Go(func() {
 					if err := send(ctx, client, base, p, r, nil); err != nil {
 						mu.Lock()
-						errs = append(errs, fmt.Errorf("item %d, %s, as the %s user: %w", r.Item, r.Name, p, err))
+						errs = append(errs, fmt.Errorf("recording item %d, %s, as the %s user: %w", r.Item, r.Name, p, err))
 						mu.Unlock()
 					}
 				})
 				continue
 			}
 			if err := send(ctx, client, base, p, r, kept); err != nil {
-				return fmt.Errorf("item %d, %s, as the %s user: %w", r.Item, r.Name, p, err)
+				return fmt.Errorf("recording item %d, %s, as the %s user: %w", r.Item, r.Name, p, err)
 			}
 		}
 		wg.Wait()
@@ -211,7 +211,6 @@ func run(ctx context.Context, dir, release string, principals map[string]string)
 	return addAbsent(dir, release, script.Absent)
 }
 
-// send sends one request. A request with a timeout is expected to fail.
 // runPhase sends the requests of a phase once, as the administrator.
 func runPhase(ctx context.Context, client *http.Client, admin *url.URL, script Script, phase string) error {
 	for _, r := range script.Requests {
@@ -220,7 +219,7 @@ func runPhase(ctx context.Context, client *http.Client, admin *url.URL, script S
 		}
 		r.Header = withHeader(r.Header, script.Header[dbimptest.Administrator])
 		if err := send(ctx, client, admin, dbimptest.Administrator, r, nil); err != nil {
-			return fmt.Errorf("the %s, item %d, %s: %w", phase, r.Item, r.Name, err)
+			return fmt.Errorf("running the %s, item %d, %s: %w", phase, r.Item, r.Name, err)
 		}
 	}
 	return nil
@@ -318,6 +317,21 @@ func expandText(s string, kept map[string]string) string {
 	return s
 }
 
+// expandHeader writes each kept value into the values of h where {{name}}
+// stands, such as the id of a transaction in a header.
+func expandHeader(h http.Header, kept map[string]string) http.Header {
+	if len(h) == 0 || len(kept) == 0 {
+		return h
+	}
+	out := make(http.Header, len(h))
+	for key, vals := range h {
+		for _, v := range vals {
+			out.Add(key, expandText(v, kept))
+		}
+	}
+	return out
+}
+
 // expand writes each kept value into body where {{name}} stands.
 func expand(body jsontext.Value, kept map[string]string) jsontext.Value {
 	if len(body) == 0 || len(kept) == 0 {
@@ -361,6 +375,7 @@ func capture(body []byte, paths map[string]string, kept map[string]string) error
 	return nil
 }
 
+// send sends one request. A request with a timeout is expected to fail.
 func send(ctx context.Context, client *http.Client, base *url.URL, p string, r Request, kept map[string]string) error {
 	if r.Wait != "" {
 		d, err := time.ParseDuration(r.Wait)
@@ -402,7 +417,7 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 	}
 	req, err := http.NewRequestWithContext(ctx, r.Method, u.String(), body)
 	if err != nil {
-		return err
+		return fmt.Errorf("building the request: %w", err)
 	}
 	for key, vals := range r.Header {
 		for _, val := range vals {
@@ -422,7 +437,7 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		fmt.Printf("item %d, %s: the client gave up after %s, as planned\n", r.Item, r.Name, r.Timeout)
 		return nil
 	case err != nil:
-		return err
+		return fmt.Errorf("sending the request: %w", err)
 	}
 	defer res.Body.Close()
 	resBody, err := io.ReadAll(res.Body)
@@ -431,7 +446,7 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		fmt.Printf("item %d, %s: %s, and the server closed the body early\n", r.Item, r.Name, res.Status)
 		return nil
 	case err != nil:
-		return err
+		return fmt.Errorf("reading the response: %w", err)
 	}
 	if len(r.Capture) > 0 && kept != nil {
 		if err := capture(resBody, r.Capture, kept); err != nil {
@@ -447,11 +462,11 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 func forget(dir, release string) error {
 	paths, err := filepath.Glob(filepath.Join(dir, release+"-*.json"))
 	if err != nil {
-		return err
+		return fmt.Errorf("finding the recordings of %s: %w", release, err)
 	}
 	for _, path := range paths {
 		if err := os.Remove(path); err != nil {
-			return err
+			return fmt.Errorf("removing a recording: %w", err)
 		}
 	}
 	path := filepath.Join(dir, dbimptest.ManifestName)

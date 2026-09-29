@@ -66,7 +66,8 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 }
 
 // paramName returns the name of the parameter of an argument: its name, or
-// its ordinal, so that the ordinal n fills $n (measured).
+// its ordinal, so that the ordinal n fills $n (measured for SQL, and not
+// measured for InfluxQL).
 func paramName(nv driver.NamedValue) string {
 	if nv.Name != "" {
 		return nv.Name
@@ -93,7 +94,7 @@ func params(args []driver.NamedValue) (jsontext.Value, error) {
 		}
 		v, err := value(arg.Value)
 		if err != nil {
-			return nil, fmt.Errorf("argument %s: %w", name, err)
+			return nil, fmt.Errorf("binding the argument %s: %w", name, err)
 		}
 		if err := enc.WriteValue(v); err != nil {
 			return nil, fmt.Errorf("writing argument %s: %w", name, err)

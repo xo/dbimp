@@ -38,8 +38,9 @@ var (
 )
 
 // CheckNamedValue satisfies driver.NamedValueChecker. It takes an Option out
-// of the arguments, and takes any other value that json/v2 can encode. It
-// returns driver.ErrSkip for a driver.Valuer, so that database/sql calls it.
+// of the arguments, and takes any other value, which send encodes with
+// json/v2. It returns driver.ErrSkip for a driver.Valuer, so that
+// database/sql calls it.
 func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 	switch v := nv.Value.(type) {
 	case Option:
@@ -116,7 +117,7 @@ func (c *conn) ResetSession(ctx context.Context) error {
 }
 
 // Ping satisfies driver.Pinger. It runs a statement, because the endpoint
-// /admin/ping answers without credentials.
+// /admin/ping answers without credentials, so it would not check them.
 func (c *conn) Ping(ctx context.Context) error {
 	_, err := c.ExecContext(ctx, "SELECT RAW 1", nil)
 	return err
@@ -167,14 +168,14 @@ func (c *conn) send(ctx context.Context, body map[string]any) (*rows, error) {
 	}
 	if res.Header.Get("Content-Type") != "" && !isJSON(res.Header.Get("Content-Type")) {
 		// A response that is not JSON, such as a page of HTML from a proxy,
-		// says only its status.
+		// becomes a *dbimp.StatusError with the start of its body.
 		return nil, dbimp.CheckStatus(forceError(res))
 	}
 	return readResponse(res)
 }
 
 // forceError makes a response that is not JSON an error, even with a status
-// of 2xx.
+// of 2xx, which it reports as HTTP 502, so that database/sql sees an error.
 func forceError(res *http.Response) *http.Response {
 	if res.StatusCode < 300 {
 		res.StatusCode = http.StatusBadGateway

@@ -1,0 +1,1900 @@
+{
+ "driver": "arangodb",
+ "requests": [
+  {
+   "item": 1,
+   "name": "create the collection types",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/collection",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "types"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "create the collection big",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/collection",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "big"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "create the collection edges",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/collection",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "edges",
+    "type": 3
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 3,
+   "name": "insert the documents of every type",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR d IN @docs INSERT d INTO types",
+    "bindVars": {
+     "docs": [
+      {
+       "_key": "a",
+       "n": 1,
+       "s": "text é",
+       "b": true,
+       "f": 1.5,
+       "i": 9223372036854775807,
+       "nested": {
+        "z": 1,
+        "a": [
+         1,
+         "x"
+        ]
+       }
+      },
+      {
+       "_key": "b",
+       "n": 2,
+       "s": "",
+       "b": false,
+       "f": -2.25,
+       "i": -9223372036854775808,
+       "none": null
+      },
+      {
+       "_key": "c",
+       "n": 3,
+       "extra": "only here"
+      }
+     ]
+    }
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 5,
+   "name": "insert 3000 documents",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR i IN 1..3000 INSERT {_key: TO_STRING(i), n: i} INTO big"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 3,
+   "name": "insert the edges",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR e IN [{_from: 'types/a', _to: 'types/b', w: 1}, {_from: 'types/b', _to: 'types/c', w: 2}] INSERT e INTO edges"
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "the version",
+   "method": "GET",
+   "path": "/_db/dbmeta/_api/version"
+  },
+  {
+   "item": 1,
+   "name": "the version of _system",
+   "method": "GET",
+   "path": "/_api/version"
+  },
+  {
+   "item": 1,
+   "name": "a query",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN 1"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a query as text",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "text": "{\"query\":\"RETURN 2\"}"
+  },
+  {
+   "item": 2,
+   "name": "an object keeps the order of the query",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN {b: 1, a: 2, c: null}"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a document",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types FILTER u._key == 'a' RETURN u"
+   }
+  },
+  {
+   "item": 2,
+   "name": "documents with different attributes",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types SORT u.n RETURN u"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a projection of a missing attribute",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types FILTER u._key == 'c' RETURN {n: u.n, s: u.s}"
+   }
+  },
+  {
+   "item": 2,
+   "name": "values of several shapes",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR x IN [1, {a: 1}, [2], 's', null] RETURN x"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a scalar",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types SORT u.n RETURN u.n"
+   }
+  },
+  {
+   "item": 2,
+   "name": "no rows",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types FILTER u.n > 100 RETURN u"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a write with no RETURN",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types FILTER u._key == 'nothere' UPDATE u WITH {x: 1} IN types"
+   }
+  },
+  {
+   "item": 3,
+   "name": "every type of a value",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN {nil: null, t: true, f: false, zero: 0, neg: -1, imax: 9223372036854775807, imin: -9223372036854775808, big: 18446744073709551615, twoTo53: 9007199254740993, twoTo60: 1152921504606846976, half: 1.5, max: 1.7976931348623157e308, tiny: 5e-324, s: 'é 日本 🙂', empty: '', arr: [], obj: {}, date: DATE_ISO8601(0), now: DATE_NOW()}"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a division by zero",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN 1 / 0"
+   }
+  },
+  {
+   "item": 3,
+   "name": "the types of a document",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types FILTER u._key == 'a' RETURN [TYPENAME(u.i), TYPENAME(u.f), TYPENAME(u.nested)]"
+   }
+  },
+  {
+   "item": 4,
+   "name": "named parameters",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN [@a, @b, @c]",
+    "bindVars": {
+     "a": 1,
+     "b": "x",
+     "c": null
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter named 1",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN @1",
+    "bindVars": {
+     "1": 5
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a collection parameter",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN @@c FILTER u._key == 'a' RETURN u.n",
+    "bindVars": {
+     "@c": "types"
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a missing parameter",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN @a",
+    "bindVars": {}
+   }
+  },
+  {
+   "item": 4,
+   "name": "an extra parameter",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN 1",
+    "bindVars": {
+     "a": 1
+    }
+   }
+  },
+  {
+   "item": 4,
+   "name": "a large integer parameter",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN @a",
+    "bindVars": {
+     "a": 9223372036854775807
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "a first batch of 2",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR i IN 1..5 RETURN i",
+    "batchSize": 2
+   },
+   "capture": {
+    "cursor": "id"
+   }
+  },
+  {
+   "item": 5,
+   "name": "the next batch",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{cursor}}"
+  },
+  {
+   "item": 5,
+   "name": "the last batch",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{cursor}}"
+  },
+  {
+   "item": 5,
+   "name": "a batch after the last",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{cursor}}"
+  },
+  {
+   "item": 5,
+   "name": "a stream of batches of 2",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR i IN 1..5 RETURN i",
+    "batchSize": 2,
+    "options": {
+     "stream": true
+    }
+   },
+   "capture": {
+    "stream": "id"
+   }
+  },
+  {
+   "item": 5,
+   "name": "the next batch of the stream",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{stream}}"
+  },
+  {
+   "item": 5,
+   "name": "the last batch of the stream",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{stream}}"
+  },
+  {
+   "item": 5,
+   "name": "3000 rows in the default batches",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big SORT u.n RETURN u.n"
+   },
+   "capture": {
+    "big": "id"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 5,
+   "name": "the next batch of 3000 rows",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{big}}",
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 5,
+   "name": "the last batch of 3000 rows",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{big}}",
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 5,
+   "name": "a count",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big RETURN u.n",
+    "batchSize": 1,
+    "count": true
+   },
+   "capture": {
+    "counted": "id"
+   }
+  },
+  {
+   "item": 5,
+   "name": "delete the counted cursor",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/cursor/{{counted}}"
+  },
+  {
+   "item": 6,
+   "name": "a statement that does not parse",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETUR 1"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a collection that does not exist",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN nothere RETURN u"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error before any rows",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR i IN 1..4 RETURN ASSERT(i < 3, 'too big')",
+    "batchSize": 1
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error after some rows",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR i IN 1..4 RETURN ASSERT(i < 3, 'too big')",
+    "batchSize": 1,
+    "options": {
+     "stream": true
+    }
+   },
+   "capture": {
+    "failing": "id"
+   }
+  },
+  {
+   "item": 6,
+   "name": "the batch that fails",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{failing}}"
+  },
+  {
+   "item": 6,
+   "name": "the batch after the failure",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor/{{failing}}"
+  },
+  {
+   "item": 6,
+   "name": "a warning",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN 1 / 0"
+   }
+  },
+  {
+   "item": 7,
+   "name": "a query that the client gives up on",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN SLEEP(3)"
+   },
+   "timeout": "500ms"
+  },
+  {
+   "item": 7,
+   "name": "the queries that run",
+   "method": "GET",
+   "path": "/_db/dbmeta/_api/query/current",
+   "wait": "200ms",
+   "capture": {
+    "running": "0.id"
+   }
+  },
+  {
+   "item": 7,
+   "name": "kill the query",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/query/{{running}}"
+  },
+  {
+   "item": 7,
+   "name": "kill a query that does not exist",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/query/999999999"
+  },
+  {
+   "item": 7,
+   "name": "a stream to delete",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR i IN 1..3 RETURN SLEEP(1)",
+    "batchSize": 1,
+    "options": {
+     "stream": true
+    }
+   },
+   "capture": {
+    "slow": "id"
+   }
+  },
+  {
+   "item": 7,
+   "name": "delete the stream",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/cursor/{{slow}}"
+  },
+  {
+   "item": 7,
+   "name": "the queries after the delete",
+   "method": "GET",
+   "path": "/_db/dbmeta/_api/query/current"
+  },
+  {
+   "item": 7,
+   "name": "a query with maxRuntime",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN SLEEP(3)",
+    "options": {
+     "maxRuntime": 0.5
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "a tagged query that the client gives up on",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "/* dbimp:TAG */ RETURN SLEEP(3)"
+   },
+   "timeout": "500ms"
+  },
+  {
+   "item": 7,
+   "name": "the tag in the queries that run",
+   "method": "GET",
+   "path": "/_db/dbmeta/_api/query/current",
+   "wait": "200ms",
+   "capture": {
+    "tagged": "0.id"
+   }
+  },
+  {
+   "item": 7,
+   "name": "kill the tagged query",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/query/{{tagged}}"
+  },
+  {
+   "item": 5,
+   "name": "a memory limit",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN (FOR i IN 1..100000 RETURN i)",
+    "memoryLimit": 10000
+   }
+  },
+  {
+   "item": 5,
+   "name": "a batch size above the result",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR i IN 1..5 RETURN i",
+    "batchSize": 100000000
+   }
+  },
+  {
+   "item": 8,
+   "name": "a wrong password",
+   "method": "GET",
+   "path": "/_db/dbmeta/_api/version",
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "a query with a wrong password",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN 1"
+   },
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "the collections of _system",
+   "method": "GET",
+   "path": "/_api/collection"
+  },
+  {
+   "item": 8,
+   "name": "create a database",
+   "method": "POST",
+   "path": "/_api/database",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_other"
+   }
+  },
+  {
+   "item": 8,
+   "name": "drop the database",
+   "method": "DELETE",
+   "path": "/_api/database/dbimp_other"
+  },
+  {
+   "item": 8,
+   "name": "create a collection",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/collection",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_made"
+   }
+  },
+  {
+   "item": 8,
+   "name": "drop the collection",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/collection/dbimp_made"
+  },
+  {
+   "item": 9,
+   "name": "the version in AQL",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN VERSION()"
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN 1; RETURN 2"
+   }
+  },
+  {
+   "item": 10,
+   "name": "comments",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "// a comment\nRETURN /* another */ 1"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin a transaction",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/transaction/begin",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "collections": {
+     "write": [
+      "types"
+     ]
+    }
+   },
+   "capture": {
+    "tx": "result.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a write in the transaction",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Arango-Trx-Id": [
+     "{{tx}}"
+    ]
+   },
+   "body": {
+    "query": "INSERT {_key: 'tx1', n: 99} INTO types RETURN NEW._key"
+   }
+  },
+  {
+   "item": 11,
+   "name": "the write is not seen outside",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN DOCUMENT('types/tx1')"
+   }
+  },
+  {
+   "item": 11,
+   "name": "abort the transaction",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/transaction/{{tx}}"
+  },
+  {
+   "item": 11,
+   "name": "the write is gone",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN DOCUMENT('types/tx1')"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin a transaction to commit",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/transaction/begin",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "collections": {
+     "write": [
+      "types"
+     ]
+    }
+   },
+   "capture": {
+    "tx2": "result.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a write to commit",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Arango-Trx-Id": [
+     "{{tx2}}"
+    ]
+   },
+   "body": {
+    "query": "INSERT {_key: 'tx2', n: 98} INTO types"
+   }
+  },
+  {
+   "item": 11,
+   "name": "commit the transaction",
+   "method": "PUT",
+   "path": "/_db/dbmeta/_api/transaction/{{tx2}}"
+  },
+  {
+   "item": 11,
+   "name": "the committed write",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN DOCUMENT('types/tx2').n"
+   }
+  },
+  {
+   "item": 11,
+   "name": "remove the committed write",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "REMOVE 'tx2' IN types"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin a transaction with no collections",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/transaction/begin",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "collections": {}
+   },
+   "capture": {
+    "tx3": "result.id"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a write to a collection that it did not name",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Arango-Trx-Id": [
+     "{{tx3}}"
+    ]
+   },
+   "body": {
+    "query": "INSERT {n: 97} INTO types"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a read in that transaction",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "X-Arango-Trx-Id": [
+     "{{tx3}}"
+    ]
+   },
+   "body": {
+    "query": "RETURN LENGTH(types)"
+   }
+  },
+  {
+   "item": 11,
+   "name": "abort that transaction",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/transaction/{{tx3}}"
+  },
+  {
+   "item": 12,
+   "name": "a compressed response",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "Accept-Encoding": [
+     "gzip"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big LIMIT 100 RETURN u"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "INSERT {_key: 'crud', v: 1} INTO types RETURN NEW.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN types FILTER u._key == 'crud' RETURN u.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "update",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "UPDATE 'crud' WITH {v: 2} IN types RETURN NEW.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "replace",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "REPLACE 'crud' WITH {w: 3} IN types RETURN NEW"
+   }
+  },
+  {
+   "item": 3,
+   "name": "upsert",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "UPSERT {_key: 'crud'} INSERT {_key: 'crud', v: 5} UPDATE {v: 6} IN types RETURN NEW.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "overwrite mode",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "INSERT {_key: 'crud', v: 7} INTO types OPTIONS {overwriteMode: 'update'} RETURN NEW.v"
+   }
+  },
+  {
+   "item": 3,
+   "name": "delete",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "REMOVE 'crud' IN types RETURN OLD._key"
+   }
+  },
+  {
+   "item": 3,
+   "name": "a collection in AQL",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "CREATE COLLECTION dbimp_c"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a database",
+   "method": "POST",
+   "path": "/_api/database",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_db"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "drop a database",
+   "method": "DELETE",
+   "path": "/_api/database/dbimp_db",
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a document collection",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/collection",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_doc"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create an edge collection",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/collection",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_edge",
+    "type": 3
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a persistent index",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/index?collection=dbimp_doc",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "type": "persistent",
+    "fields": [
+     "a"
+    ]
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a unique constraint",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/index?collection=dbimp_doc",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "type": "persistent",
+    "fields": [
+     "u"
+    ],
+    "unique": true
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a geo index",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/index?collection=dbimp_doc",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "type": "geo",
+    "fields": [
+     "loc"
+    ],
+    "geoJson": true
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a fulltext index",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/index?collection=dbimp_doc",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "type": "fulltext",
+    "fields": [
+     "t"
+    ]
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create an inverted index",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/index?collection=dbimp_doc",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "type": "inverted",
+    "fields": [
+     "t"
+    ]
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a ttl index",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/index?collection=dbimp_doc",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "type": "ttl",
+    "fields": [
+     "exp"
+    ],
+    "expireAfter": 3600
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a vector index",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/index?collection=dbimp_doc",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "type": "vector",
+    "fields": [
+     "vec"
+    ],
+    "params": {
+     "metric": "cosine",
+     "dimension": 2,
+     "nLists": 1
+    }
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "the primary key refuses a duplicate",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "INSERT {_key: 'a'} INTO types"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "the unique constraint refuses a duplicate",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR d IN [{u: 1}, {u: 1}] INSERT d INTO dbimp_doc"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "an edge to a document that does not exist",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "INSERT {_from: 'types/nothere', _to: 'types/a'} INTO dbimp_edge RETURN NEW._from"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "a document with no default value",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "INSERT {x: 1} INTO dbimp_doc RETURN NEW"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "set a schema",
+   "method": "PUT",
+   "path": "/_db/dbmeta/_api/collection/dbimp_doc/properties",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "schema": {
+     "rule": {
+      "type": "object",
+      "properties": {
+       "s": {
+        "type": "string"
+       }
+      }
+     },
+     "level": "moderate",
+     "message": "s is a string"
+    }
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "the schema refuses a document",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "INSERT {s: 1} INTO dbimp_doc"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create an arangosearch view",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/view",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_view",
+    "type": "arangosearch",
+    "links": {
+     "dbimp_doc": {
+      "includeAllFields": true
+     }
+    }
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a search alias view",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/view",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_alias",
+    "type": "search-alias"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create a named graph",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/gharial",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_graph",
+    "edgeDefinitions": [
+     {
+      "collection": "dbimp_edge",
+      "from": [
+       "dbimp_doc"
+      ],
+      "to": [
+       "dbimp_doc"
+      ]
+     }
+    ]
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "create an analyzer",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/analyzer",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "name": "dbimp_an",
+    "type": "identity"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "traversal",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR v IN 1..2 OUTBOUND 'types/a' edges RETURN v._key"
+   }
+  },
+  {
+   "item": 3,
+   "name": "shortest path",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR v IN OUTBOUND SHORTEST_PATH 'types/a' TO 'types/c' edges RETURN v._key"
+   }
+  },
+  {
+   "item": 3,
+   "name": "prune",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR v, e, p IN 1..3 OUTBOUND 'types/a' edges PRUNE v._key == 'b' RETURN v._key"
+   }
+  },
+  {
+   "item": 3,
+   "name": "collect aggregate",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big COLLECT m = u.n % 2 AGGREGATE total = SUM(u.n) SORT m RETURN {m, total}"
+   }
+  },
+  {
+   "item": 3,
+   "name": "collect with count",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big COLLECT WITH COUNT INTO c RETURN c"
+   }
+  },
+  {
+   "item": 3,
+   "name": "window",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big FILTER u.n <= 3 SORT u.n WINDOW {preceding: 1} AGGREGATE s = SUM(u.n) RETURN s"
+   }
+  },
+  {
+   "item": 3,
+   "name": "subquery",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "LET m = (FOR u IN big FILTER u.n <= 3 RETURN u.n) RETURN SUM(m)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "array expansion",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN [{a: 1}, {a: 2}][*].a"
+   }
+  },
+  {
+   "item": 3,
+   "name": "full count",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big LIMIT 2 RETURN u.n",
+    "options": {
+     "fullCount": true
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "search",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR d IN dbimp_view SEARCH d.x == 1 RETURN d.x"
+   },
+   "principals": [
+    "administrator"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "geo functions",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN GEO_DISTANCE([6.9, 50.9], [7.0, 51.0])"
+   }
+  },
+  {
+   "item": 3,
+   "name": "the query cache",
+   "method": "GET",
+   "path": "/_db/dbmeta/_api/query-cache/properties"
+  },
+  {
+   "item": 3,
+   "name": "explain",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/explain",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "FOR u IN big FILTER u.n == 1 RETURN u"
+   }
+  },
+  {
+   "item": 3,
+   "name": "profile",
+   "method": "POST",
+   "path": "/_db/dbmeta/_api/cursor",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ]
+   },
+   "body": {
+    "query": "RETURN 1",
+    "options": {
+     "profile": true
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "drop gharial/dbimp_graph",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/gharial/dbimp_graph",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop analyzer/dbimp_an",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/analyzer/dbimp_an",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop view/dbimp_view",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/view/dbimp_view",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop view/dbimp_alias",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/view/dbimp_alias",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop collection/dbimp_doc",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/collection/dbimp_doc",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop collection/dbimp_edge",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/collection/dbimp_edge",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop collection/types",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/collection/types",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop collection/big",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/collection/big",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "drop collection/edges",
+   "method": "DELETE",
+   "path": "/_db/dbmeta/_api/collection/edges",
+   "phase": "teardown"
+  }
+ ]
+}

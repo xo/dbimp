@@ -11,7 +11,7 @@ and as the ordinary user, recorded on 2026-09-27 from the script
 `testdata/neo4j/requests.json` with `dbimptest/cmd/record`. A fact that only
 one release or one principal shows names it. "Measured by hand" means that
 this session sent the request from a script on 5.26.31 and 2026.09.0 on
-2026-09-27, and no file holds it. "The manual" is the Query API manual of
+2026-09-27, or on the date that the fact names, and no file holds it. "The manual" is the Query API manual of
 Neo4j at `neo4j.com/docs/query-api/current/`, read on 2026-09-27. "The Go
 driver" is `github.com/neo4j/neo4j-go-driver/v6` v6.3.0, and "the Python
 driver" is the PyPI package `neo4j` 6.3.1, both read on 2026-09-27. Both
@@ -36,17 +36,17 @@ not a fact.
 - The Community Edition has no roles, so it has no ordinary user. The image
   of 4.4 takes only a commercial licence (dbmeta D106).
 - dburl D28 adds the scheme `neo4j`, with the aliases `nj`, `neo` and `n4j`,
-  which Ken chose on 2026-09-27. No release of `dburl` holds it yet (read on
-  2026-09-28). `usql` has no driver for Neo4j.
+  which Ken chose on 2026-09-27. dburl `v0.35.0` releases it. `usql` has no driver for Neo4j.
 - The survey of step 5a is `testdata/neo4j/features.json`. Each entry is
   settled against 2026.09.0 and recorded on both releases, as both
   principals, and each one names the integration test that holds it (step
   14a).
 - The integration tests passed on `neo4j-5.26.31` and `neo4j-2026.09.0`, as
-  both principals, on 2026-09-27. On 5.26.31, the entries that need a later
+  both principals, on 2026-09-27, and again on 2026-09-29 with D95. On 5.26.31, the entries that need a later
   release skip with the release that they need: Cypher 25, the clauses of
   GQL, a vector and a UUID.
-- The driver is `github.com/xo/dbimp/neo4j`, from D60 to D69.
+- The driver is `github.com/xo/dbimp/neo4j`, from D60 to D69, D95, D100 and
+  D105.
 
 ## Requests
 
@@ -103,9 +103,10 @@ not a fact.
   `neo4j://neo4j:pw@127.0.0.1:7474/dbmeta`. With no path, the database is
   `neo4j`. A path of more than one segment is refused.
 - The key `tls` is `false` by default, and `tls=true` makes the driver speak
-  HTTPS. The default port is 7474, and 7473 with `tls=true`. D67 decides the
-  key `cancel`, with `tag`, the default, `metadata` or `none`. Every other
-  key, and a key given twice, is refused (D61).
+  HTTPS. The default port is 7474, and 7473 with `tls=true`. D67 decides
+  the key `cancel`, with `tag`, the default, `metadata` or `none`, and D95
+  puts the tag at the end of each statement. Every other key, and a key
+  given twice, is refused (D61).
 - The driver sends the user and the password with basic authentication. A
   URL with no user and no password sends no authentication.
 - The tools of Neo4j write `neo4j://host:7687` for Bolt with routing. A URL
@@ -274,6 +275,11 @@ otherwise):
 - `expires` is 60 seconds after the `Date` of the response that opened the
   transaction (recorded). The manual names
   the setting `server.queryapi.transaction_idle_timeout`.
+- Until then, the server holds the locks of the writes of a transaction
+  that nobody rolled back, and a write of the same node from outside waits
+  (tested, by `TestIntegrationRollbackAfterTheContext`, on 2026-09-29). So
+  `Rollback` sends its request even after the context of `BeginTx` ends
+  (D100).
 - On a cluster, a transaction needs the header `neo4j-cluster-affinity`
   (the manual, not measured). `dbrun` runs one server.
 
@@ -300,12 +306,34 @@ otherwise):
   the client left after one second still showed `Running` in
   `SHOW TRANSACTIONS` a second later, on both releases (recorded). An
   earlier run showed it running for more than 9 seconds (measured by hand).
-- A statement that starts with a comment, such as `/* dbimp:c1 */`, keeps it
-  in `currentQuery`. The ordinary user finds its own transaction with
+- Under D67, before D95, the tag started the statement. A statement that
+  starts with a comment, such as `/* dbimp:c1 */`, keeps it in
+  `currentQuery`. The ordinary user finds its own transaction with
   `SHOW TRANSACTIONS YIELD transactionId, currentQuery WHERE currentQuery
   STARTS WITH $tag`, and stops it with `TERMINATE TRANSACTION $id`, on both
   releases (recorded). After that, `SHOW TRANSACTIONS` lists nothing for the
   tag (recorded).
+- A comment at the start moves each position of an error by its length, and
+  the message shows it (found by `usql` on `v0.4.0`). A line comment at the
+  end, as `\n// dbimp:c1`, is kept at the end of `currentQuery`, and
+  `ENDS WITH $tag` finds it. `TERMINATE TRANSACTION` stops it, on both
+  releases (measured by hand on 2026-09-29). An error in the text before it
+  keeps its position: `RETURN 1 AS a,, 2` fails at line 1, column 15, and
+  the message holds no comment (tested). An error at the end of the input,
+  as in `RETURN 1 +`, points at the line of the comment (measured by hand).
+  A statement that ends with a `//` comment of the caller still runs
+  (measured by hand). D95 moves the tag to the end.
+- After an early close, the server stops a statement by itself when it
+  cannot write the next row. A statement that sent 5000 rows and then
+  counted to 3000000000 still ran 2 seconds after the client left (measured
+  by hand on 2026-09-29). A smaller answer is held back until the statement
+  ends. In a transaction, the next statement fails with
+  `TransactionAccessedConcurrently`, or the transaction is rolled back,
+  while the answer of the last one is unread (tested). D105 says what
+  `Rows.Close` does.
+- `currentQuery` holds the whole text of a statement of 20,099 characters,
+  with the tag at its end, and `ENDS WITH $tag` finds it, on both releases
+  (measured by hand on 2026-09-29). So a long statement keeps its tag.
 - `txMetadata` is HTTP 400 on 5.26.31, and accepted on 2026.09.0 (recorded).
   In a body of typed JSON, each value of `txMetadata` is typed JSON too.
   2026.09.0 refuses a plain string there with HTTP 400, and takes
@@ -329,13 +357,17 @@ otherwise):
 
 - A request holds one statement. Two statements are HTTP 400 with "Expected
   exactly one statement per query but got: 2" (recorded).
-- One `;` at the end of a statement is accepted (recorded).
+- One `;` at the end of a statement is accepted (recorded). With the tag of
+  D95 on the line after it, it is accepted too (measured by hand on
+  2026-09-29, and tested).
 - A comment, `//` to the end of the line or `/* */`, is accepted. A `$` or a
   `;` in a string literal is text (recorded).
 - A line break in the statement, written as `\n` in the JSON string, is
   accepted (recorded).
 - A comment before `CYPHER 5`, `EXPLAIN`, `PROFILE`, `USE` or a command of
-  the system database leaves the statement working (recorded).
+  the system database leaves the statement working (recorded, with the
+  comment at the start). With the tag of D95 at the end, `CYPHER 5`,
+  `EXPLAIN` and `USE` work too (measured by hand on 2026-09-29).
 - The server keeps the plan of a statement by its exact text. On 2026.09.0,
   a statement that took 153 ms to plan took 1 ms when it ran again with the
   same text. With a new comment, or one more space at the end, it took 10 ms
@@ -425,5 +457,93 @@ Each lead was then sent to both releases.
 
 ## Open questions
 
-- None. Ken accepted the decisions of step 9, D60 to D69 in
-  [decisions/](decisions/README.md), on 2026-09-27.
+Ken accepted the decisions of step 9, D60 to D69 in
+[decisions/](decisions/README.md), on 2026-09-27, and D95 and D100 on 2026-09-29. The
+review of D97 found these, and each one waits for Ken:
+
+- The questions under "Compared with Couchbase" below.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It
+was written on 2026-09-29 from the staged code, which holds D95 and D100. A fact of
+Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and a fact of Neo4j from
+the sections above.
+
+### The server
+
+| | Couchbase | Neo4j |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /db/<database>/query/v2`, with `statement` and `parameters` |
+| Database | The key `query_context` of the body | The path of each request (D61) |
+| Language | SQL++, which is close to SQL | Cypher |
+| DDL | In SQL++ | In Cypher, for an index, a constraint and a database |
+| Parameters | `?`, `$1` and `$name` | `$name` only, where a name can be a number, such as `$1` |
+| Framing | One body for the whole result, which does not page | One body, `fields` and then `values`, sent in chunks for a large result |
+| Columns | `signature`, before the first row | `fields`, before the first row |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement |
+| Errors | Can come with HTTP 200, after some rows | Can come with HTTP 202, in `errors` after the rows |
+| Types | JSON. No date, decimal, UUID or binary | Typed JSON, with each temporal type, a point, bytes, a node, a relationship and a path, and a UUID on 2026.09.0 |
+| Cancel | The server stops a query when the client leaves | The query runs on when the client leaves. `TERMINATE TRANSACTION` stops it |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | The endpoints `/tx`, `/tx/<id>`, `/tx/<id>/commit`, and `DELETE` to roll back |
+| Several statements | Refused | Refused |
+| Authentication | Basic, or `creds` in the body | Basic |
+| Default port | 8093, or 18093 with TLS | 7474, or 7473 with TLS |
+
+The differences that a caller sees:
+
+- The columns and their order come from `fields`, as the statement names
+  them (D66).
+- An error after the rows arrives with HTTP 202, so the driver reads
+  `errors` at the end of each body (D66).
+- The server does not stop a query when the client leaves, so the driver
+  stops it as `cancel` says (D67 and D95).
+
+### The driver
+
+| | `couchbase` | `neo4j` |
+| --- | --- | --- |
+| Size, without tests, on 2026-09-29 | About 1300 lines in 8 files | About 2600 lines in 10 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Database`, `Cancel` |
+| Options for one statement | Five `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40 and D46). `WithParameter` sets any key of the body | None |
+| Arguments | Sent to the server as `args` and `$name` | Sent in `parameters` as typed JSON. Ordinal n fills `$n` (D64). A struct, a node, a relationship, a path and an `apd.Decimal` are refused |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | `dbimp.ArrayRows` from the root package, over `values` |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | None |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44). A time and a UUID are strings | `int64`, `float64`, `[]byte`, `uuid.UUID`, `time.Time`, and the types `Date`, `LocalTime`, `Time`, `LocalDateTime`, `Duration`, `Point`, `Node`, `Relationship`, `Path` and `Vector` (D63) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported` (D66) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` begins a transaction on the endpoints (D65). `ReadOnly` sends `accessMode: READ`. An error on the server ends the transaction, and `Commit` then returns that error. `Rollback` after the context ends still ends the transaction on the server (D100) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | `cancel=tag`, `cancel=metadata` or `cancel=none` (D67 and D95). An early `Close` stops a statement that runs on, and in a transaction reads the rest of the answer (D105) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code int, Msg}` | `*ResponseError`, with the HTTP status and a list of `Error{Code string, Message}` |
+| Authentication | Basic | Basic |
+| Other exports | The `With` options and `Option` | The Go types of D63, and `CancelTag`, `CancelMetadata` and `CancelNone` |
+
+The differences that a caller sees:
+
+- `Rollback` after the context of `BeginTx` ends still ends the
+  transaction on the server (D100), where Couchbase sends nothing (D45).
+- `RowsAffected` returns an error, because the counters of Neo4j count
+  nodes, relationships and properties, and none of them counts rows (D66).
+- The columns have no database type, and the scan type of each is `any`,
+  because no type arrives for a column, and each value names its own type
+  (the table of interfaces above).
+- A value keeps its type through typed JSON, where Couchbase gives JSON
+  shapes (D63).
+- `cancel=tag` changes the text of each statement, which shows in
+  `SHOW TRANSACTIONS` (D95).
+- An early `Close` in a transaction reads the rest of the answer, where
+  Couchbase reads nothing more (D105).
+- These have no decision, and each one is a question for Ken:
+  - The driver takes no option for one statement, though the server takes
+    `accessMode`, `includeCounters` and `maxExecutionTime` in each request.
+  - The driver has no `IsValid`. The table of interfaces gives the reason,
+    and no decision does. Couchbase implements `IsValid`, which always
+    returns true, for the same reason. D102 says why it needs no
+    `ResetSession`.
+  - `CheckNamedValue` calls `Value` of a `driver.Valuer` itself, where
+    Couchbase leaves it to `database/sql` (D40). A struct is refused, where
+    Couchbase sends it as JSON. D63 names neither.
+  - A list or a map scanned into a `*[]byte` or a `*jsontext.Value` does
+    not get its JSON text, as it does from Couchbase (D39).
+  - D94 gives every HTTP driver the key `auth`. The Neo4j driver has none,
+    and D94 does not name Neo4j.

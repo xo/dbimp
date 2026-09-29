@@ -314,6 +314,28 @@ func TestIntegrationFeatures(t *testing.T) {
 		if !has(column(t, db, 1, "SHOW DATABASES"), "dbmeta") {
 			t.Error("SHOW DATABASES has no dbmeta")
 		}
+		rows, err := db.QueryContext(t.Context(), "SHOW DATABASES")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer rows.Close()
+		// Each column has its own name, and the first holds the name of the
+		// series (D96).
+		if cols, err := rows.Columns(); err != nil || !slices.Equal(cols, []string{"measurement", "name"}) {
+			t.Errorf("SHOW DATABASES has the columns %q (%v), want measurement, name", cols, err)
+		}
+		for rows.Next() {
+			var series, name string
+			if err := rows.Scan(&series, &name); err != nil {
+				t.Fatal(err)
+			}
+			if series != "databases" {
+				t.Errorf("the database %s is in the series %q, want databases", name, series)
+			}
+		}
+		if err := rows.Err(); err != nil {
+			t.Error(err)
+		}
 		asOrdinary(t, func(t *testing.T, udb *sql.DB) {
 			same(t, "the ordinary user", column(t, udb, 1, "SHOW DATABASES"), "dbmeta")
 		})

@@ -50,8 +50,12 @@ fact that the source of 1.5.1 lacks says so.
 - The latest release is 1.5.1, from 2026-06-05, and 1.5.0 came on 2026-04-09
   (GitHub). The documents name 1.5.1 as the current stable release, with the
   image `apachepinot/pinot:1.5.1` (`basics/getting-started/pinot-versions.md`).
-- `dburl` has no scheme for Pinot. Its `docs/BACKLOG.md` says that it adds
-  the scheme when the driver here has `ParseDSN` at a tag.
+- `dburl` has the provisional scheme `pinot`, with the alias `pi` and the
+  default port 8000, the port of the broker in the dbmeta container. A
+  broker that runs alone listens on 8099. The scheme passes the path and the
+  query through (dburl D36, released in dburl `v0.36.0` as dburl D38, read on
+  2026-09-29).
+  Nothing of it is settled until step 9 decides the name and the URL.
 - `usql` has no driver for Pinot, and its `go.mod` names no Pinot package.
 - `dbmeta` has no model for Pinot. Its container entry is below.
 - R holds, because each Tested release passed `dbrun test` (below). The
@@ -113,8 +117,9 @@ fact that the source of 1.5.1 lacks says so.
 
 ## The DSN
 
-- Step 9 decides the URL (D27 and D35). `dburl` has no scheme yet, so no
-  generator exists.
+- Step 9 decides the URL (D27 and D35), and with it the default port, which
+  is 8000 in the dbmeta container and 8099 for a broker alone. `dburl` has
+  the provisional scheme `pinot` (dburl D36).
 - The Go client takes a list of Broker addresses, a Controller address, or
   a ZooKeeper path, through its own functions, and not through a DSN (the
   Go client).

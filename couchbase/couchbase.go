@@ -55,7 +55,7 @@ var (
 	_ driver.Connector     = (*Connector)(nil)
 )
 
-// connect is the Connect of a Connector, split out for the tests.
+// connect is the Connect of a Connector.
 func (c *Connector) connect(context.Context) *conn {
 	return &conn{c: c}
 }

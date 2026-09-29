@@ -174,7 +174,7 @@ func (r *fakeRows) NextRow() error {
 			if err != nil {
 				return err
 			}
-			return fmt.Errorf("the server failed after the rows: %s: %w", msg, dbimp.ErrIncomplete)
+			return fmt.Errorf("reading the end of the response: the server failed after the rows: %s: %w", msg, dbimp.ErrIncomplete)
 		}
 	}
 	if _, err := dec.ReadToken(); err != nil {

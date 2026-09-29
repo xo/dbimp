@@ -642,6 +642,19 @@ func TestIntegrationFeatures(t *testing.T) {
 			_, err := queryErr(t, db, "RETURN apoc.version() AS v")
 			refused(t, "APOC, which the image of dbrun does not hold", err, "Neo.ClientError.Statement.SyntaxError")
 		}},
+		{"trailing semicolon", func(t *testing.T, _ principal, db *sql.DB) {
+			// A ; ends the statement before the tag, on the line above it (D95).
+			equal(t, "a statement that ends with ;", query(t, db, "RETURN 1 AS a;"), [][]any{{int64(1)}})
+		}},
+		{"error position", func(t *testing.T, _ principal, db *sql.DB) {
+			// The tag at the end leaves the position where the caller wrote
+			// it, and keeps it out of the message (D95).
+			_, err := queryErr(t, db, "RETURN 1 AS a,, 2")
+			refused(t, "a syntax error", err, "Neo.ClientError.Statement.SyntaxError")
+			if err == nil || !strings.Contains(err.Error(), "line 1, column 15 (offset: 14)") || strings.Contains(err.Error(), "dbimp:") {
+				t.Errorf("the syntax error is %v, want line 1, column 15, and no comment of the connection", err)
+			}
+		}},
 		{"show databases", func(t *testing.T, p principal, db *sql.DB) {
 			equal(t, "the database of the DSN", query(t, db, "SHOW DATABASES YIELD name WHERE name = $1 RETURN DISTINCT name", config(t, p).Database), [][]any{{config(t, p).Database}})
 		}},
@@ -649,7 +662,9 @@ func TestIntegrationFeatures(t *testing.T) {
 			equal(t, "the index of the tests", query(t, db, "SHOW INDEXES YIELD name WHERE name = $1 RETURN count(*)", strings.Trim(named("people k"), "`")), [][]any{{int64(1)}})
 		}},
 		{"show transactions", func(t *testing.T, _ principal, db *sql.DB) {
-			rows := query(t, db, "SHOW TRANSACTIONS YIELD currentQuery WHERE currentQuery STARTS WITH '/* dbimp:' RETURN count(*) > 0")
+			// The text of this statement ends with the tag only if the driver
+			// sent it, so the match holds the tag and not the literal (D95).
+			rows := query(t, db, "SHOW TRANSACTIONS YIELD currentQuery WHERE currentQuery =~ '(?s).*\\n// dbimp:[A-Z2-7]+' RETURN count(*) > 0")
 			equal(t, "the transaction of the statement itself", rows, [][]any{{true}})
 		}},
 		{"terminate transaction", func(t *testing.T, _ principal, db *sql.DB) {
@@ -1096,8 +1111,97 @@ func TestIntegrationTypes(t *testing.T) {
 	})
 }
 
+// TestIntegrationEarlyClose closes the rows of a long statement after its
+// first row. The driver stops the statement on the server, so none runs a
+// moment later. In a transaction, it stops nothing, and the transaction goes
+// on (D105).
+func TestIntegrationEarlyClose(t *testing.T) {
+	// The first 5000 rows come at once, and the next one only after the
+	// server counts to 3000000000, so the statement runs on after a Close
+	// unless the driver stops it (measured). A statement that sends more rows
+	// at once stops by itself, when the server cannot write the next row, and
+	// the server holds back a smaller answer until the statement ends.
+	const long = "UNWIND range(1, 3000000000) AS x WITH x WHERE x <= 5000 OR x = 3000000000 RETURN x"
+	forEach(t, func(t *testing.T, _ principal, db *sql.DB) {
+		rows, err := db.QueryContext(t.Context(), long)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer rows.Close()
+		if !rows.Next() {
+			t.Fatalf("no first row: %v", rows.Err())
+		}
+		if err := rows.Close(); err != nil {
+			t.Errorf("closing the rows early: %v", err)
+		}
+		for deadline := time.Now().Add(2 * time.Second); ; time.Sleep(100 * time.Millisecond) {
+			left := query(t, db, "SHOW TRANSACTIONS YIELD currentQuery WHERE currentQuery STARTS WITH $1 RETURN count(*)", long)
+			if equalRows(left, [][]any{{int64(0)}}) {
+				break
+			}
+			if time.Now().After(deadline) {
+				t.Fatal("the statement still runs on the server 2 seconds after an early Close")
+			}
+		}
+		tx, err := db.BeginTx(t.Context(), nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer tx.Rollback()
+		trows, err := tx.QueryContext(t.Context(), "UNWIND range(1, 100000) AS x RETURN x")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer trows.Close()
+		if !trows.Next() {
+			t.Fatalf("no first row in the transaction: %v", trows.Err())
+		}
+		if err := trows.Close(); err != nil {
+			t.Errorf("closing the rows of the transaction early: %v", err)
+		}
+		var one int64
+		if err := tx.QueryRowContext(t.Context(), "RETURN 1").Scan(&one); err != nil || one != 1 {
+			t.Errorf("a statement after an early Close in the transaction gave %d, %v, want 1", one, err)
+		}
+	})
+}
+
+// equalRows reports whether got and want are deeply equal.
+func equalRows(got, want [][]any) bool {
+	return reflect.DeepEqual(got, want)
+}
+
+// TestIntegrationRollbackAfterTheContext ends the context of a transaction
+// that holds the lock of a node. database/sql then rolls it back, and the
+// driver sends the rollback, so a write from outside does not wait for the
+// idle timeout of the transaction (D100).
+func TestIntegrationRollbackAfterTheContext(t *testing.T) {
+	db := openAs(t, admin)
+	l := label("rollback")
+	if _, err := db.ExecContext(t.Context(), "CREATE (:"+l+" {k: 1, v: 0})"); err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithCancel(t.Context())
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := tx.ExecContext(ctx, "MATCH (n:"+l+" {k: 1}) SET n.v = 1"); err != nil {
+		t.Fatal(err)
+	}
+	cancel()
+	if err := tx.Rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
+		t.Errorf("rolling back after the context ended: %v", err)
+	}
+	wctx, wcancel := context.WithTimeout(t.Context(), 10*time.Second)
+	defer wcancel()
+	if _, err := db.ExecContext(wctx, "MATCH (n:"+l+" {k: 1}) SET n.v = 2"); err != nil {
+		t.Errorf("writing the node of the transaction: %v, want no wait for its idle timeout", err)
+	}
+}
+
 // TestIntegrationCancel holds that a statement whose context ends stops on
-// the server, for cancel=tag and cancel=metadata (D67).
+// the server, for cancel=tag and cancel=metadata (D67 and D95).
 func TestIntegrationCancel(t *testing.T) {
 	for _, how := range []string{CancelTag, CancelMetadata} {
 		t.Run(how, func(t *testing.T) {
