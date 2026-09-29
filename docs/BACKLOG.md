@@ -607,7 +607,24 @@ Steps 4 to 17a went in on 2026-09-29:
 Ken committed steps 4 to 17a on 2026-09-29 as `109da2c` and `611397c`. The
 workflow passed on `611397c`, on every release of every driver, with
 `arangodb-3.12.12` for the first time, which is the gate of step 18:
-https://github.com/xo/dbimp/actions/runs/36501952076.
+https://github.com/xo/dbimp/actions/runs/36501952076. At Ken's request, the
+session tagged `v0.5.0` on `c6167b3`, on which the workflow passed too, and
+published it the same day, which is the gate of step 19:
+https://github.com/xo/dbimp/releases/tag/v0.5.0.
+
+Step 20 sent the requests below on 2026-09-29, each naming `v0.5.0`:
+
+- `dburl` checked `GenArangoDB` of `v0.36.0` against `arangodb.ParseDSN`,
+  which needs no change, and staged dburl D32, where `arangodb` is no longer
+  provisional.
+- `usql` staged `drivers/arangodb` and the move to `v0.5.0`, and checked
+  each change to the drivers of `v0.4.0` on a server. The error positions of
+  Neo4j and the two columns named `name` of InfluxQL, which `usql` found in
+  `v0.4.0`, are fixed.
+- `dbmeta` has no model for ArangoDB, InfluxDB or Neo4j, and uses only the
+  Couchbase driver, at `v0.1.0`. It moves its test module to `v0.5.0`, and
+  runs the three releases of Couchbase, after Ken decides on the change that
+  it has staged. So this item stays open until `dbmeta` reports.
 
 The release that holds this driver also carries D95, D96, D100, D105 and
 D107, which change the drivers of `v0.4.0`, and the fixes of the review of
