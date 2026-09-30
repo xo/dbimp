@@ -1042,7 +1042,7 @@ Ken committed the work on 2026-09-30 as `25131b5`, and approved its
 release in `v0.7.0` the same day. The notes of the release say which Go type
 changes for a caller of each driver. That closed this item.
 
-## W22. Write the rqlite driver
+## W22. Write the rqlite driver. Done.
 
 rqlite is the next target, by D73. Ken named it at step 1 on 2026-09-30,
 after the release of `v0.7.0`. Follow [DRIVER.md](DRIVER.md). Step 3 is in
@@ -1117,7 +1117,30 @@ releases of rqlite for the first time, which is the gate of step 18:
 https://github.com/xo/dbimp/actions/runs/36701186227. At Ken's request, the
 session tagged `v0.8.0` on `af64706` and published it the same day, which
 is the gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.8.0.
-The requests below wait for Ken's word to send them.
+Step 20 sent the requests below on 2026-10-01, each naming `v0.8.0`. The
+request to `dburl` also asks it to make `GenRqlite` add no port, because it
+adds 4001. This item stays open until each session reports its change as
+staged.
+
+`dburl` reported the same day that dburl D44, staged, settles the scheme
+`rqlite` against `rqlite.ParseDSN` of `v0.8.0`, and that `GenRqlite` adds no
+port, so the driver uses 4001. That leaves no provisional scheme in `dburl`.
+
+`usql` staged `drivers/rqlite` on `v0.8.0` the same day. `\copy` inserts with
+no transaction, because `BeginTx` fails (D144), and the version comes from
+the rqlite model of `dbmeta`, which runs `SELECT sqlite_version()`. On
+10.3.6, through `usql`, each type of the type table printed as the driver
+documents, `INSERT`, `UPDATE` and `DELETE` gave their counts, `\copy` copied
+a quote, a NULL and a BLOB, `\dt`, `\d` and `\di` answered through the
+model of `dbmeta`, and a missing table and a wrong password gave their
+errors. It left no table and no `PRAGMA` on the server.
+
+`dbmeta` staged its move to `v0.8.0` the same day, as dbmeta D151, which
+amends dbmeta D148. Its tests and `dbrun` import this driver in place of
+gorqlite, and the entry of `dbrun` gives the `rqlite://` URL as its `dsn`
+too. The model reads a boolean of the `sqlite3` model directly again,
+because each integer is an `int64` (D140). Both releases passed on the
+driver, as both principals. That closed this item.
 
 1. To `dburl`: dbimp D141 settles the provisional scheme `rqlite` (dburl
    D36). Please set its `GoPackage` to `github.com/xo/dbimp/rqlite` and
