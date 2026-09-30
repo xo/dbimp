@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT ?, ?, typeof(?)\",\"args\":[{\"type\":\"integer\",\"value\":\"9223372036854775807\"},{\"type\":\"integer\",\"value\":\"-9223372036854775808\"},{\"type\":\"integer\",\"value\":\"9223372036854775807\"}]}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:08:59 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=249.471µs,libsql_query_exec;dur=31.8µs,connection-duration;dur=38.25µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[{\"name\":\"?\",\"decltype\":null},{\"name\":\"?\",\"decltype\":null},{\"name\":\"typeof(?)\",\"decltype\":null}],\"rows\":[[{\"type\":\"integer\",\"value\":\"9223372036854775807\"},{\"type\":\"integer\",\"value\":\"-9223372036854775808\"},{\"type\":\"text\",\"value\":\"integer\"}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"429\",\"rows_read\":0,\"rows_written\":0,\"query_duration_ms\":0.012}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

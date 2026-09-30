@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_crud VALUES (1, 'x') ON CONFLICT (k) DO UPDATE SET v = excluded.v || '!'\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:15 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=152.261µs,libsql_query_exec;dur=6.24µs,connection-duration;dur=17.77µs,"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ]
+    },
+    "body": "{\"error\":\"Authorization forbidden: Current session doesn't not have Write permission to namespace default\"}"
+  }
+}

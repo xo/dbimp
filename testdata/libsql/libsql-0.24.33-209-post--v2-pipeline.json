@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_s_parent (id, name) VALUES (2, 'a')\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=164.651µs,libsql_query_exec;dur=5.7µs,connection-duration;dur=11.64µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:15 GMT"
+      ]
+    },
+    "body": "{\"error\":\"Authorization forbidden: Current session doesn't not have Write permission to namespace default\"}"
+  }
+}

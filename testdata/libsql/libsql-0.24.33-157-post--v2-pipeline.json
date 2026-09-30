@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT ?\",\"args\":[{\"type\":\"integer\",\"value\":\"1\"},{\"type\":\"integer\",\"value\":\"2\"}]}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=166.481µs,libsql_query_exec;dur=23.35µs,connection-duration;dur=27.99µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:14 GMT"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"error\",\"error\":{\"message\":\"Arguments do not match SQL parameters: too many parameters, expected 1 found 2\",\"code\":\"ARGS_INVALID\"}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

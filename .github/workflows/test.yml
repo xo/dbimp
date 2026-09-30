@@ -24,7 +24,7 @@ permissions:
   contents: read
 
 env:
-  # f7e3cbb or later: 2b93710 holds the ordinary Couchbase user
+  # a59c0c1 or later: 2b93710 holds the ordinary Couchbase user
   # (dbmeta D96), ec91128 gives each server an owner (dbmeta D98), eb35c7c
   # prints the URL of each principal (dbmeta D102), 78f1e44 starts SurrealDB with its
   # ordinary user (dbmeta D103), e00d4e7 gives each Staged release its
@@ -32,8 +32,10 @@ env:
   # 29395a1 prints the URL of D93 for ArangoDB, 7907cd9 prints the URL of
   # D117 for Databend, 6b24b13 prints the URL of D129 for Pinot and the
   # address of its Controller as secondAddress, and f7e3cbb prints the URL
-  # of D141 for rqlite.
-  DBMETA_COMMIT: f7e3cbba90238bdecaf497ae827c05f155e1ad85
+  # of D141 for rqlite, 9b691b3 gives the InfluxDB 3 entry the URL of D82 as
+  # its dsn, b868c8d gives the libSQL entry an ordinary user through a JWT,
+  # and a59c0c1 prints the URL of D148 for libSQL.
+  DBMETA_COMMIT: a59c0c1e65002b3ec272c4945eba20b64a670e23
   DBMETA_OWNER: dbimp-ci
   DBMETA_RUNNER: docker
 

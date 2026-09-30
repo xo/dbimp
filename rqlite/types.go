@@ -6,82 +6,33 @@ import (
 	"fmt"
 	"math"
 	"reflect"
-	"strings"
 	"time"
 
 	"github.com/xo/dbimp"
 )
 
 // class is how the driver reads the values of a column, from its declared
-// type (D140).
-type class int
+// type (D140). The root package holds the rules, which libSQL shares.
+type class = dbimp.Affinity
 
-// The classes of a column. The first five are the affinities of SQLite. The
-// server writes a date, a time and a boolean in forms of its own for the
-// four declared types that follow them (measured).
+// The classes of a column.
 const (
-	// classNone is the class of a column with no type that the driver
-	// supports, such as ANY or the "" of an expression. Each value reads by
-	// its JSON form (D140).
-	classNone class = iota
-	classInteger
-	classReal
-	classText
-	classBlob
-	classNumeric
-	classBoolean
-	classDate
-	classDateTime
-	classTimestamp
-)
-
-// The canonical names of the classes, as ColumnTypeDatabaseTypeName names a
-// column whose declared type is the name alone.
-const (
-	typeInteger   = "INTEGER"
-	typeReal      = "REAL"
-	typeText      = "TEXT"
-	typeBlob      = "BLOB"
-	typeNumeric   = "NUMERIC"
-	typeBoolean   = "BOOLEAN"
-	typeDate      = "DATE"
-	typeDateTime  = "DATETIME"
-	typeTimestamp = "TIMESTAMP"
-	typeAny       = "ANY"
+	classNone      = dbimp.AffinityNone
+	classInteger   = dbimp.AffinityInteger
+	classReal      = dbimp.AffinityReal
+	classText      = dbimp.AffinityText
+	classBlob      = dbimp.AffinityBlob
+	classNumeric   = dbimp.AffinityNumeric
+	classBoolean   = dbimp.AffinityBoolean
+	classDate      = dbimp.AffinityDate
+	classDateTime  = dbimp.AffinityDateTime
+	classTimestamp = dbimp.AffinityTimestamp
 )
 
 // classOf returns the class of the declared type typ, as the server names it
-// in types, such as "bigint" or "varchar(10)" (D140). BOOLEAN, DATE,
-// DATETIME and TIMESTAMP are their own classes, because the server writes
-// them in forms of their own (measured). Every other name follows the rules
-// of affinity of SQLite, in their order: a name with INT, then CHAR, CLOB or
-// TEXT, then BLOB, then REAL, FLOA or DOUB, and NUMERIC for any other. ANY
-// and the "" of an expression have no class.
+// in types, such as "bigint" or "varchar(10)" (D140).
 func classOf(typ string) class {
-	t := strings.ToUpper(strings.TrimSpace(typ))
-	switch t {
-	case "", typeAny:
-		return classNone
-	case typeBoolean:
-		return classBoolean
-	case typeDate:
-		return classDate
-	case typeDateTime:
-		return classDateTime
-	case typeTimestamp:
-		return classTimestamp
-	}
-	switch {
-	case strings.Contains(t, "INT"):
-		return classInteger
-	case strings.Contains(t, "CHAR"), strings.Contains(t, "CLOB"), strings.Contains(t, "TEXT"):
-		return classText
-	case strings.Contains(t, "BLOB"):
-		return classBlob
-	case strings.Contains(t, "REAL"), strings.Contains(t, "FLOA"), strings.Contains(t, "DOUB"):
-		return classReal
-	}
-	return classNumeric
+	return dbimp.AffinityOf(typ)
 }
 
 // decode returns the value v of a column of the class c as its Go value

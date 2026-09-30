@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"ALTER TABLE dbimp_s_parent ALTER COLUMN name TO name TEXT NOT NULL\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Server-Timing": [
+        "query_total;dur=962.955µs,libsql_query_exec;dur=305.411µs,connection-duration;dur=329.251µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"error\",\"error\":{\"message\":\"SQLite error: error in adding name TEXT NOT NULL to dbimp_s_parent: UNIQUE constraint cannot be altered\",\"code\":\"SQLITE_UNKNOWN\"}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

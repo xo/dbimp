@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE IF EXISTS dbimp_vec\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE TABLE dbimp_vec (id INTEGER PRIMARY KEY, e F32_BLOB(3))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE INDEX dbimp_vec_idx ON dbimp_vec (libsql_vector_idx(e))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_vec VALUES (1, vector32('[1,0,0]')), (2, vector32('[0,1,0]'))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT id FROM vector_top_k('dbimp_vec_idx', vector32('[1,0.1,0]'), 1)\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT id, vector_distance_cos(e, vector32('[1,0,0]')) FROM dbimp_vec ORDER BY id\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE dbimp_vec\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=319.548922ms,libsql_query_exec;dur=103.716281ms,connection-duration;dur=319.11001ms,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:14 GMT"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"488\",\"rows_read\":0,\"rows_written\":0,\"query_duration_ms\":0.025}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"491\",\"rows_read\":1,\"rows_written\":2,\"query_duration_ms\":27.491}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"501\",\"rows_read\":2,\"rows_written\":1,\"query_duration_ms\":146.253}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":2,\"last_insert_rowid\":\"2\",\"replication_index\":\"504\",\"rows_read\":3,\"rows_written\":7,\"query_duration_ms\":40.912}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[{\"name\":\"id\",\"decltype\":null}],\"rows\":[[{\"type\":\"integer\",\"value\":\"1\"}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"504\",\"rows_read\":3,\"rows_written\":0,\"query_duration_ms\":0.147}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[{\"name\":\"id\",\"decltype\":\"INTEGER\"},{\"name\":\"vector_distance_cos(e, vector32('[1,0,0]'))\",\"decltype\":null}],\"rows\":[[{\"type\":\"integer\",\"value\":\"1\"},{\"type\":\"float\",\"value\":0.0}],[{\"type\":\"integer\",\"value\":\"2\"},{\"type\":\"float\",\"value\":1.0}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"504\",\"rows_read\":2,\"rows_written\":0,\"query_duration_ms\":0.062}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"513\",\"rows_read\":6,\"rows_written\":0,\"query_duration_ms\":103.643}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

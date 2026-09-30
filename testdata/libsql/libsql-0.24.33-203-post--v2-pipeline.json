@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE TABLE dbimp_s_child (id INTEGER PRIMARY KEY, parent INTEGER REFERENCES dbimp_s_parent (id))\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:15 GMT"
+      ],
+      "Server-Timing": [
+        "query_total;dur=150.301µs,libsql_query_exec;dur=6.55µs,connection-duration;dur=14.551µs,"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"error\":\"Authorization forbidden: Current session doesn't not have Write permission to namespace default\"}"
+  }
+}

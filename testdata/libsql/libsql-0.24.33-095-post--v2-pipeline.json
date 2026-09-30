@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE TABLE dbimp_s_child (id INTEGER PRIMARY KEY, parent INTEGER REFERENCES dbimp_s_parent (id))\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server-Timing": [
+        "query_total;dur=35.106083ms,libsql_query_exec;dur=34.728711ms,connection-duration;dur=34.747901ms,"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"465\",\"rows_read\":1,\"rows_written\":2,\"query_duration_ms\":34.681}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

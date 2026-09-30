@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v3/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"batch\":{\"steps\":[{\"stmt\":{\"sql\":\"SELECT * FROM dbimp_types ORDER BY id\"}}]}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "text/plain"
+      ],
+      "Server-Timing": [
+        "query_total;dur=136.04µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:14 GMT"
+      ]
+    },
+    "body": "{\"baton\":\"jfRmhFFuuRD5EjMdKMMwdgSP67xlCKcALJ4RrzJxTvZIfwvkYwA9hKnqjkKCcLjD\",\"base_url\":null}\n{\"type\":\"step_begin\",\"step\":0,\"cols\":[{\"name\":\"id\",\"decltype\":\"INTEGER\"},{\"name\":\"i\",\"decltype\":\"INTEGER\"},{\"name\":\"r\",\"decltype\":\"REAL\"},{\"name\":\"t\",\"decltype\":\"TEXT\"},{\"name\":\"b\",\"decltype\":\"BLOB\"},{\"name\":\"n\",\"decltype\":\"NUMERIC\"},{\"name\":\"bo\",\"decltype\":\"BOOLEAN\"},{\"name\":\"dt\",\"decltype\":\"DATE\"},{\"name\":\"dtm\",\"decltype\":\"DATETIME\"},{\"name\":\"ts\",\"decltype\":\"TIMESTAMP\"},{\"name\":\"j\",\"decltype\":\"JSON\"},{\"name\":\"x\",\"decltype\":null},{\"name\":\"v\",\"decltype\":\"F32_BLOB(3)\"}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"1\"},{\"type\":\"integer\",\"value\":\"-9223372036854775808\"},{\"type\":\"float\",\"value\":1.5},{\"type\":\"text\",\"value\":\"é'\\\"\\\\ x\"},{\"type\":\"blob\",\"base64\":\"AP8\"},{\"type\":\"float\",\"value\":1.25},{\"type\":\"integer\",\"value\":\"1\"},{\"type\":\"text\",\"value\":\"2026-10-01\"},{\"type\":\"text\",\"value\":\"2026-10-01 12:34:56.789\"},{\"type\":\"text\",\"value\":\"2026-10-01T12:34:56.123456789+05:30\"},{\"type\":\"text\",\"value\":\"{\\\"k\\\":[1,null]}\"},{\"type\":\"integer\",\"value\":\"7\"},{\"type\":\"blob\",\"base64\":\"AACAPwAAAEAAAEBA\"}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"2\"},{\"type\":\"integer\",\"value\":\"9223372036854775807\"},{\"type\":\"float\",\"value\":-1.7976931348623157e308},{\"type\":\"text\",\"value\":\"\"},{\"type\":\"blob\",\"base64\":\"\"},{\"type\":\"float\",\"value\":1.2345678901234567e19},{\"type\":\"integer\",\"value\":\"0\"},{\"type\":\"text\",\"value\":\"not a date\"},{\"type\":\"integer\",\"value\":\"1727699696\"},{\"type\":\"text\",\"value\":\"x\"},{\"type\":\"text\",\"value\":\"[]\"},{\"type\":\"text\",\"value\":\"text\"},{\"type\":\"blob\",\"base64\":\"AAAAAAAAAAAAAAAA\"}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"3\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"},{\"type\":\"null\"}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"4\"},{\"type\":\"float\",\"value\":1.5},{\"type\":\"text\",\"value\":\"abc\"},{\"type\":\"text\",\"value\":\"42\"},{\"type\":\"text\",\"value\":\"text in a blob\"},{\"type\":\"text\",\"value\":\"abc\"},{\"type\":\"integer\",\"value\":\"2\"},{\"type\":\"integer\",\"value\":\"42\"},{\"type\":\"text\",\"value\":\"yesterday\"},{\"type\":\"float\",\"value\":1.5},{\"type\":\"text\",\"value\":\"not json\"},{\"type\":\"blob\",\"base64\":\"AQ\"},{\"type\":\"null\"}]}\n{\"type\":\"step_end\",\"affected_row_count\":0,\"last_insert_rowid\":null}\n{\"type\":\"replication_index\",\"replication_index\":520}\n"
+  }
+}

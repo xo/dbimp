@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"EXPLAIN QUERY PLAN SELECT id FROM dbimp_s_parent WHERE n = 7\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=267.841µs,libsql_query_exec;dur=40.14µs,connection-duration;dur=54.14µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[{\"name\":\"id\",\"decltype\":null},{\"name\":\"parent\",\"decltype\":null},{\"name\":\"notused\",\"decltype\":null},{\"name\":\"detail\",\"decltype\":null}],\"rows\":[[{\"type\":\"integer\",\"value\":\"2\"},{\"type\":\"integer\",\"value\":\"0\"},{\"type\":\"integer\",\"value\":\"0\"},{\"type\":\"text\",\"value\":\"SEARCH dbimp_s_parent USING COVERING INDEX dbimp_s_idx (n=?)\"}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"468\",\"rows_read\":0,\"rows_written\":0,\"query_duration_ms\":0.015}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

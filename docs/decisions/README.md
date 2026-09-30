@@ -167,3 +167,9 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D144](D144-rqlite-has-no-transactions.md) | rqlite has no transactions | Decided |
 | [D145](D145-rqlite-bounds-each-statement-by-its-context.md) | rqlite bounds each statement by its context | Amended by D146 |
 | [D146](D146-rqlite-ends-a-request-at-its-timeout.md) | rqlite ends a request at its timeout | Amends D145 |
+| [D147](D147-the-go-types-of-libsql.md) | The Go types of libSQL | Decided |
+| [D148](D148-the-libsql-dsn-names-a-server.md) | The libSQL DSN names a server | Decided |
+| [D149](D149-libsql-reads-a-query-through-the-cursor.md) | libSQL reads a query through the cursor | Decided |
+| [D150](D150-libsql-transactions-live-on-a-stream.md) | libSQL transactions live on a stream | Decided |
+| [D151](D151-libsql-follows-a-base-url-on-its-own-host.md) | libSQL follows a base_url on its own host | Decided |
+| [D152](D152-libsql-binds-typed-arguments-on-the-server.md) | libSQL binds typed arguments on the server | Decided |

@@ -211,7 +211,7 @@ and replaces what an earlier run recorded for the same release. A request can
 wait, give up after a timeout, run in the background while a later one acts on
 it, or send a wrong password. It can send a body of plain text, or its JSON
 body as CBOR, and the script can name the headers that every request of one
-principal sends. A binary response is kept as base64. Every file comes from a real server, and never
+principal sends, and send each password as a Bearer token. A binary response is kept as base64. Every file comes from a real server, and never
 from your memory of the documentation. [DESIGN.md](DESIGN.md) holds the form of
 a file and of the manifest.
 

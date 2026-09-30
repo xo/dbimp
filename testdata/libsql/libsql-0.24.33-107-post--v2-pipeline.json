@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"ALTER TABLE dbimp_s_parent ALTER COLUMN n TO n INTEGER DEFAULT 8\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ],
+      "Server-Timing": [
+        "query_total;dur=36.548019ms,libsql_query_exec;dur=36.236248ms,connection-duration;dur=36.249278ms,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"477\",\"rows_read\":58,\"rows_written\":9,\"query_duration_ms\":36.186}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

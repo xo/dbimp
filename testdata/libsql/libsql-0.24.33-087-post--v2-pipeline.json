@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_crud VALUES (1, 'x') ON CONFLICT (k) DO UPDATE SET v = excluded.v || '!'\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=37.021461ms,libsql_query_exec;dur=36.409669ms,connection-duration;dur=36.433519ms,"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":1,\"last_insert_rowid\":\"0\",\"replication_index\":\"450\",\"rows_read\":1,\"rows_written\":1,\"query_duration_ms\":36.342}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

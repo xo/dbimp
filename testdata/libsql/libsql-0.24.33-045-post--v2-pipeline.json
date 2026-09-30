@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 500000) SELECT v, 'padding padding padding padding' FROM n\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "query_total;dur=30.506802ms,libsql_query_exec;dur=30.160771ms,connection-duration;dur=30.196241ms,"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:08:59 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"error\",\"error\":{\"message\":\"Response is too large\",\"code\":\"RESPONSE_TOO_LARGE\"}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

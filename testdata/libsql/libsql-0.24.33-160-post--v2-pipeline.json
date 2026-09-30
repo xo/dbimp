@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT ?\",\"args\":[{\"type\":\"float\",\"value\":\"Infinity\"}]}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain"
+      ],
+      "Server-Timing": [
+        "query_total;dur=63.15µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:14 GMT"
+      ]
+    },
+    "body": "Cannot deserialize client message from JSON: invalid type: string \"Infinity\", expected f64 at line 1 column 116"
+  }
+}

@@ -1,0 +1,521 @@
+{
+  "driver": "libsql",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/tursodatabase/libsql-client-go",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/tursodatabase/libsql-client-ts",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-083-post--v2-pipeline.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-084-post--v2-pipeline.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-085-post--v2-pipeline.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-086-post--v2-pipeline.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-087-post--v2-pipeline.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "replace",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-088-post--v2-pipeline.json",
+      "test": "TestIntegrationCRUD/replace"
+    },
+    {
+      "kind": "crud",
+      "name": "returning",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-089-post--v2-pipeline.json",
+      "test": "TestIntegrationCRUD/returning"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-093-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-093-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-096-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-100-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-101-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "check constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-102-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/check_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-104-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-099-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "trigger",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-105-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/trigger"
+    },
+    {
+      "kind": "schema",
+      "name": "strict table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-030-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/strict_table"
+    },
+    {
+      "kind": "schema",
+      "name": "generated column",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-099-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/generated_column"
+    },
+    {
+      "kind": "schema",
+      "name": "without rowid",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-105-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/without_rowid"
+    },
+    {
+      "kind": "schema",
+      "name": "alter column",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-108-post--v2-pipeline.json",
+      "test": "TestIntegrationSchema/alter_column"
+    },
+    {
+      "kind": "feature",
+      "name": "vector index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-111-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/vector_index"
+    },
+    {
+      "kind": "feature",
+      "name": "random rowid",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-112-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/random_rowid"
+    },
+    {
+      "kind": "feature",
+      "name": "attach",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "libsql-0.24.33-113-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/attach"
+    },
+    {
+      "kind": "feature",
+      "name": "user function in wasm",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "libsql-0.24.33-115-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/user_function_in_wasm"
+    },
+    {
+      "kind": "feature",
+      "name": "begin concurrent",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "libsql-0.24.33-116-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/begin_concurrent"
+    },
+    {
+      "kind": "feature",
+      "name": "namespaces",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "libsql-0.24.33-117-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/namespaces"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction over a stream",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-068-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/transaction_over_a_stream"
+    },
+    {
+      "kind": "feature",
+      "name": "batch conditions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-078-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/batch_conditions"
+    },
+    {
+      "kind": "feature",
+      "name": "read-only transaction",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "no",
+      "evidence": "libsql-0.24.33-077-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/read-only_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "cursor",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-118-post--v3-cursor.json",
+      "test": "TestIntegrationFeatures/cursor"
+    },
+    {
+      "kind": "feature",
+      "name": "stored statement",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-114-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/stored_statement"
+    },
+    {
+      "kind": "feature",
+      "name": "describe",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-017-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/describe"
+    },
+    {
+      "kind": "feature",
+      "name": "sequence",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-062-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/sequence"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-032-post--v2-pipeline.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/INTEGER"
+    },
+    {
+      "kind": "type",
+      "name": "REAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/REAL"
+    },
+    {
+      "kind": "type",
+      "name": "TEXT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/TEXT"
+    },
+    {
+      "kind": "type",
+      "name": "BLOB",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/tursodatabase/libsql-client-go",
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/BLOB"
+    },
+    {
+      "kind": "type",
+      "name": "NUMERIC",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/NUMERIC"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-ts"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "DATETIME",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/DATETIME"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "github.com/tursodatabase/libsql-client-go"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "F32_BLOB",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "libsql-0.24.33-018-post--v2-pipeline.json",
+      "test": "TestIntegrationRoundTrip/F32_BLOB"
+    }
+  ]
+}

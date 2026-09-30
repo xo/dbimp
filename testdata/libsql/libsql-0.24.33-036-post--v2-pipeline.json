@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT ?\",\"args\":[{\"type\":\"integer\",\"value\":1}]}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:00 GMT"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "Server-Timing": [
+        "query_total;dur=75.14µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "Cannot deserialize client message from JSON: invalid type: integer `1`, expected a borrowed string at line 1 column 109"
+  }
+}

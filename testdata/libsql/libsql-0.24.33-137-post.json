@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"SELECT * FROM dbimp_types ORDER BY id\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:14 GMT"
+      ],
+      "Server-Timing": [
+        "query_total;dur=211.981µs,libsql_query_exec;dur=55.52µs,connection-duration;dur=62.86µs,"
+      ]
+    },
+    "body": "[{\"results\":{\"columns\":[\"id\",\"i\",\"r\",\"t\",\"b\",\"n\",\"bo\",\"dt\",\"dtm\",\"ts\",\"j\",\"x\",\"v\"],\"rows\":[[1,-9223372036854775808,1.5,\"é'\\\"\\\\ x\",{\"base64\":\"AP8\"},1.25,1,\"2026-10-01\",\"2026-10-01 12:34:56.789\",\"2026-10-01T12:34:56.123456789+05:30\",\"{\\\"k\\\":[1,null]}\",7,{\"base64\":\"AACAPwAAAEAAAEBA\"}],[2,9223372036854775807,-1.7976931348623157e308,\"\",{\"base64\":\"\"},1.2345678901234567e19,0,\"not a date\",1727699696,\"x\",\"[]\",\"text\",{\"base64\":\"AAAAAAAAAAAAAAAA\"}],[3,null,null,null,null,null,null,null,null,null,null,null,null],[4,1.5,\"abc\",\"42\",\"text in a blob\",\"abc\",2,42,\"yesterday\",1.5,\"not json\",{\"base64\":\"AQ\"},null]],\"rows_read\":4,\"rows_written\":0,\"query_duration_ms\":0.032}}]"
+  }
+}

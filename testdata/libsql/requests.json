@@ -1,0 +1,3342 @@
+{
+  "driver": "libsql",
+  "auth": "bearer",
+  "requests": [
+    {
+      "item": 1,
+      "name": "make the table of every type",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_types"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_types (id INTEGER PRIMARY KEY, i INTEGER, r REAL, t TEXT, b BLOB, n NUMERIC, bo BOOLEAN, dt DATE, dtm DATETIME, ts TIMESTAMP, j JSON, x, v F32_BLOB(3))"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_types VALUES (1, -9223372036854775808, 1.5, 'é''\"\\ x', x'00ff', 1.25, 1, '2026-10-01', '2026-10-01 12:34:56.789', '2026-10-01T12:34:56.123456789+05:30', '{\"k\":[1,null]}', 7, vector32('[1,2,3]'))"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_types VALUES (2, 9223372036854775807, -1.7976931348623157e308, '', x'', 12345678901234567890, 0, 'not a date', 1727699696, 'x', '[]', 'text', vector32('[0,0,0]'))"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_types VALUES (3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_types VALUES (4, 1.5, 'abc', 42, 'text in a blob', 'abc', 2, 42, 'yesterday', 1.5, 'not json', x'01', NULL)"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a statement on v2",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1 AS one"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on v3",
+      "method": "POST",
+      "path": "/v3/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1 AS one"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on the cursor",
+      "method": "POST",
+      "path": "/v3/cursor",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "batch": {
+          "steps": [
+            {
+              "stmt": {
+                "sql": "SELECT 1 AS one"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on v1",
+      "method": "POST",
+      "path": "/v1/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "stmt": {
+          "sql": "SELECT 1 AS one"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on the first API",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statements": [
+          "SELECT 1 AS one"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "the version of v2",
+      "method": "GET",
+      "path": "/v2"
+    },
+    {
+      "item": 1,
+      "name": "the version of v3",
+      "method": "GET",
+      "path": "/v3"
+    },
+    {
+      "item": 1,
+      "name": "the health",
+      "method": "GET",
+      "path": "/health"
+    },
+    {
+      "item": 1,
+      "name": "a pipeline with no close",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1 AS one"
+            }
+          }
+        ]
+      },
+      "capture": {
+        "nb": "baton"
+      }
+    },
+    {
+      "item": 1,
+      "name": "close the stream of the pipeline",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "{{nb}}",
+        "requests": [
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns in the order of the statement",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 3 AS c, 1 AS a, 2 AS b"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1 AS a, 2 AS a"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "no rows",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT id, t FROM dbimp_types WHERE id < 0"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "a column with no name",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1 + 1, 'x' || 'y'"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the declared types",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT * FROM dbimp_types WHERE id = 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "describe a statement",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "describe",
+            "sql": "SELECT id, t FROM dbimp_types WHERE id = ?"
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT * FROM dbimp_types ORDER BY id"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type on the cursor",
+      "method": "POST",
+      "path": "/v3/cursor",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "batch": {
+          "steps": [
+            {
+              "stmt": {
+                "sql": "SELECT * FROM dbimp_types ORDER BY id"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type on the first API",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statements": [
+          "SELECT * FROM dbimp_types ORDER BY id"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type with the storage class",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT id, typeof(i), typeof(r), typeof(t), typeof(b), typeof(n), typeof(bo), typeof(dt), typeof(dtm), typeof(ts), typeof(j), typeof(x), typeof(v) FROM dbimp_types ORDER BY id"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "literals of each class",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1, 1.5, 'a', x'00ff', NULL, true, 1.0"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "an infinity",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1e999"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a negative infinity",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT -1e999"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a NaN",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 0.0 / 0"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "an integer beyond the range",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 9223372036854775808"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a blob that is not text",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT x'80ff'"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a vector",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT vector_extract(v), v FROM dbimp_types WHERE id = 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a strict table",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE IF NOT EXISTS dbimp_strict (i INTEGER, a ANY) STRICT"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a wrong type in the strict table",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_strict VALUES ('a', 1)"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE dbimp_strict"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "positional parameters",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?, ?, ?, ?, ?, typeof(?)",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "1"
+                },
+                {
+                  "type": "float",
+                  "value": 1.5
+                },
+                {
+                  "type": "text",
+                  "value": "a"
+                },
+                {
+                  "type": "blob",
+                  "base64": "AP8"
+                },
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "float",
+                  "value": 1.0
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "named parameters",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT :a, @b, $c",
+              "named_args": [
+                {
+                  "name": ":a",
+                  "value": {
+                    "type": "integer",
+                    "value": "1"
+                  }
+                },
+                {
+                  "name": "@b",
+                  "value": {
+                    "type": "text",
+                    "value": "x"
+                  }
+                },
+                {
+                  "name": "$c",
+                  "value": {
+                    "type": "float",
+                    "value": 2.5
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "named parameters with no prefix",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT :a, @b, $c",
+              "named_args": [
+                {
+                  "name": "a",
+                  "value": {
+                    "type": "integer",
+                    "value": "1"
+                  }
+                },
+                {
+                  "name": "b",
+                  "value": {
+                    "type": "text",
+                    "value": "x"
+                  }
+                },
+                {
+                  "name": "c",
+                  "value": {
+                    "type": "float",
+                    "value": 2.5
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a numbered parameter",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?2, ?1",
+              "args": [
+                {
+                  "type": "text",
+                  "value": "a"
+                },
+                {
+                  "type": "text",
+                  "value": "b"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "the largest integers",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?, ?, typeof(?)",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "9223372036854775807"
+                },
+                {
+                  "type": "integer",
+                  "value": "-9223372036854775808"
+                },
+                {
+                  "type": "integer",
+                  "value": "9223372036854775807"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "an integer as a number",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "an integer beyond the range",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "9223372036854775808"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a text that looks like hex",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?, typeof(?)",
+              "args": [
+                {
+                  "type": "text",
+                  "value": "x'41'"
+                },
+                {
+                  "type": "text",
+                  "value": "x'41'"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "too few parameters",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?, ?",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "too many parameters",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "1"
+                },
+                {
+                  "type": "integer",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a positional and a named parameter",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?, :b",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "1"
+                }
+              ],
+              "named_args": [
+                {
+                  "name": ":b",
+                  "value": {
+                    "type": "integer",
+                    "value": "2"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a string and a comment",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT '?', ? -- ?",
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a float parameter that is infinite",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT ?",
+              "args": [
+                {
+                  "type": "float",
+                  "value": "Infinity"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 20000 rows",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 20000) SELECT v, 'padding padding padding padding' FROM n"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 500000 rows",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 500000) SELECT v, 'padding padding padding padding' FROM n"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELEC 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown table",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT * FROM dbimp_nosuch"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error inside the rows",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 5) SELECT CASE WHEN v < 4 THEN v ELSE abs(-9223372036854775807 - 1) END FROM n"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error inside the rows on the cursor",
+      "method": "POST",
+      "path": "/v3/cursor",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "batch": {
+          "steps": [
+            {
+              "stmt": {
+                "sql": "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 5) SELECT CASE WHEN v < 4 THEN v ELSE abs(-9223372036854775807 - 1) END FROM n"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error and then a statement",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT * FROM dbimp_nosuch"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 2 AS b"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a body that is not JSON",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "text": "not json"
+    },
+    {
+      "item": 6,
+      "name": "a baton that is not valid",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "bogus",
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown path",
+      "method": "POST",
+      "path": "/v9/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": []
+      }
+    },
+    {
+      "item": 7,
+      "name": "a long query that the client leaves",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 300000000) SELECT count(*) FROM n"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "a query after the client left",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "auth": "wrong"
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "GET",
+      "path": "/version"
+    },
+    {
+      "item": 9,
+      "name": "the version of SQLite",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT sqlite_version()"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "two statements in one text",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1; SELECT 2"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement that ends with a semicolon",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1;"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "comments",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "-- a comment\nSELECT /* inner */ 1 -- after"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "an empty statement",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": ""
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "a sequence",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "sequence",
+            "sql": "CREATE TABLE IF NOT EXISTS dbimp_seq (a); INSERT INTO dbimp_seq VALUES (1); DROP TABLE dbimp_seq"
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "make the table of transactions",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_tx"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_tx (k INTEGER PRIMARY KEY)"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "BEGIN"
+            }
+          }
+        ]
+      },
+      "capture": {
+        "tx": "baton"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "insert in the transaction",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "{{tx}}",
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_tx VALUES (1)"
+            }
+          }
+        ]
+      },
+      "capture": {
+        "tx": "baton"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "the autocommit state in the transaction",
+      "method": "POST",
+      "path": "/v3/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "{{tx}}",
+        "requests": [
+          {
+            "type": "get_autocommit"
+          }
+        ]
+      },
+      "capture": {
+        "tx": "baton"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read outside the transaction",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT count(*) FROM dbimp_tx"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "read in the transaction",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "{{tx}}",
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT count(*) FROM dbimp_tx"
+            }
+          }
+        ]
+      },
+      "capture": {
+        "tx": "baton"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "rollback",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "{{tx}}",
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "ROLLBACK"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the rollback",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT count(*) FROM dbimp_tx"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin again",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "BEGIN"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_tx VALUES (2)"
+            }
+          }
+        ]
+      },
+      "capture": {
+        "tx": "baton"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "commit",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "{{tx}}",
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "COMMIT"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the commit",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT k FROM dbimp_tx"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin before the stream expires",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "BEGIN"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_tx VALUES (3)"
+            }
+          }
+        ]
+      },
+      "capture": {
+        "tx": "baton"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "a statement after the stream expired",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": "{{tx}}",
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "wait": "12s",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the stream expired",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT k FROM dbimp_tx ORDER BY k"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read-only transaction",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "BEGIN TRANSACTION READONLY"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_tx VALUES (4)"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "ROLLBACK"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "a batch with conditions",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "batch",
+            "batch": {
+              "steps": [
+                {
+                  "stmt": {
+                    "sql": "BEGIN"
+                  }
+                },
+                {
+                  "stmt": {
+                    "sql": "INSERT INTO dbimp_tx VALUES (2)"
+                  },
+                  "condition": {
+                    "type": "ok",
+                    "step": 0
+                  }
+                },
+                {
+                  "stmt": {
+                    "sql": "COMMIT"
+                  },
+                  "condition": {
+                    "type": "ok",
+                    "step": 1
+                  }
+                },
+                {
+                  "stmt": {
+                    "sql": "ROLLBACK"
+                  },
+                  "condition": {
+                    "type": "not",
+                    "cond": {
+                      "type": "ok",
+                      "step": 2
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "read after the batch",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT k FROM dbimp_tx ORDER BY k"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "drop the table of transactions",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_tx"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 12,
+      "name": "a gzip answer",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: make the table",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_crud"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_crud (k INTEGER PRIMARY KEY, v TEXT)"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: insert",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_crud VALUES (1, 'a'), (2, 'b'), (3, 'c')"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: select",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT k, v FROM dbimp_crud ORDER BY k"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: update",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "UPDATE dbimp_crud SET v = 'B' WHERE k = 2"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: delete",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DELETE FROM dbimp_crud WHERE k = 3"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: upsert",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_crud VALUES (1, 'x') ON CONFLICT (k) DO UPDATE SET v = excluded.v || '!'"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: replace",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "REPLACE INTO dbimp_crud VALUES (4, 'd')"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: returning",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_crud VALUES (5, 'e') RETURNING k, v"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: the rows after",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT k, v FROM dbimp_crud ORDER BY k"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: drop the table",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE dbimp_crud"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the tables",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP VIEW IF EXISTS dbimp_s_view"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_s_child"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_s_parent"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_s_other"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: table and primary key",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_s_parent (id INTEGER PRIMARY KEY, name TEXT UNIQUE, n INTEGER DEFAULT 7 CHECK (n > 0), g INTEGER GENERATED ALWAYS AS (n * 2) VIRTUAL)"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: index",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE INDEX dbimp_s_idx ON dbimp_s_parent (n)"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: foreign key",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_s_child (id INTEGER PRIMARY KEY, parent INTEGER REFERENCES dbimp_s_parent (id))"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: a foreign key that is broken",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_s_child VALUES (1, 99)"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: the pragma of foreign keys",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "PRAGMA foreign_keys"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: default value in use",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_s_parent (id, name) VALUES (1, 'a')"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: default value and generated column read",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT id, name, n, g FROM dbimp_s_parent"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: the plan uses the index",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "EXPLAIN QUERY PLAN SELECT id FROM dbimp_s_parent WHERE n = 7"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: unique constraint enforced",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_s_parent (id, name) VALUES (2, 'a')"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: check constraint enforced",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_s_parent (id, name, n) VALUES (3, 'c', 0)"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: view",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE VIEW dbimp_s_view AS SELECT id, name FROM dbimp_s_parent"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: view read",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT * FROM dbimp_s_view"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: trigger and without rowid",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_s_other (id INTEGER PRIMARY KEY, seen INTEGER) WITHOUT ROWID"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TRIGGER dbimp_s_trg AFTER INSERT ON dbimp_s_parent BEGIN INSERT INTO dbimp_s_other VALUES (new.id, 1); END"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_s_parent (id, name) VALUES (4, 'd')"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT id, seen FROM dbimp_s_other"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: alter column",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "ALTER TABLE dbimp_s_parent ALTER COLUMN name TO name TEXT NOT NULL"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: alter a column with no constraint",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "ALTER TABLE dbimp_s_parent ALTER COLUMN n TO n INTEGER DEFAULT 8"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: the default after the alter",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT dflt_value FROM pragma_table_info('dbimp_s_parent') WHERE name = 'n'"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: the table valued pragmas",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT name, type, pk, hidden FROM pragma_table_xinfo('dbimp_s_parent')"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the tables after",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP VIEW IF EXISTS dbimp_s_view"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_s_child"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_s_other"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_s_parent"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a vector index",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_vec"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_vec (id INTEGER PRIMARY KEY, e F32_BLOB(3))"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE INDEX dbimp_vec_idx ON dbimp_vec (libsql_vector_idx(e))"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_vec VALUES (1, vector32('[1,0,0]')), (2, vector32('[0,1,0]'))"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT id FROM vector_top_k('dbimp_vec_idx', vector32('[1,0.1,0]'), 1)"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT id, vector_distance_cos(e, vector32('[1,0,0]')) FROM dbimp_vec ORDER BY id"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE dbimp_vec"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a random rowid",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_rr"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE TABLE dbimp_rr (a) RANDOM ROWID"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_rr VALUES (1)"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT rowid > 1 FROM dbimp_rr"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE dbimp_rr"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: attach",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "ATTACH DATABASE 'other' AS other"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: store a statement",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "store_sql",
+            "sql_id": 1,
+            "sql": "SELECT ? + 1"
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql_id": 1,
+              "args": [
+                {
+                  "type": "integer",
+                  "value": "41"
+                }
+              ]
+            }
+          },
+          {
+            "type": "close_sql",
+            "sql_id": 1
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a user function in WASM",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "CREATE FUNCTION dbimp_f LANGUAGE wasm AS X'00'"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: begin concurrent",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "BEGIN CONCURRENT"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: another namespace",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "x-namespace": [
+          "dbimp_other"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "SELECT 1"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a cursor over two steps",
+      "method": "POST",
+      "path": "/v3/cursor",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "batch": {
+          "steps": [
+            {
+              "stmt": {
+                "sql": "SELECT 1 AS a"
+              }
+            },
+            {
+              "stmt": {
+                "sql": "SELECT 'x' AS b"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "drop the table of every type after",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "DROP TABLE IF EXISTS dbimp_types"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 11,
+      "name": "a write in a transaction as a user who can only read",
+      "method": "POST",
+      "path": "/v2/pipeline",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "baton": null,
+        "requests": [
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "BEGIN"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "INSERT INTO dbimp_types (id) VALUES (100)"
+            }
+          },
+          {
+            "type": "execute",
+            "stmt": {
+              "sql": "ROLLBACK"
+            }
+          },
+          {
+            "type": "close"
+          }
+        ]
+      },
+      "principals": [
+        "ordinary"
+      ]
+    }
+  ]
+}

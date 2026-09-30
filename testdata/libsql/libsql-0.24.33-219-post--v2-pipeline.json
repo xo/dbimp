@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE IF EXISTS dbimp_vec\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE TABLE dbimp_vec (id INTEGER PRIMARY KEY, e F32_BLOB(3))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE INDEX dbimp_vec_idx ON dbimp_vec (libsql_vector_idx(e))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_vec VALUES (1, vector32('[1,0,0]')), (2, vector32('[0,1,0]'))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT id FROM vector_top_k('dbimp_vec_idx', vector32('[1,0.1,0]'), 1)\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT id, vector_distance_cos(e, vector32('[1,0,0]')) FROM dbimp_vec ORDER BY id\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE dbimp_vec\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server-Timing": [
+        "query_total;dur=149.05µs,libsql_query_exec;dur=6.9µs,connection-duration;dur=11.72µs,"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:15 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"Authorization forbidden: Current session doesn't not have Write permission to namespace default\"}"
+  }
+}

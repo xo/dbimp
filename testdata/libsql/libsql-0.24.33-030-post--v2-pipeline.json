@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_strict VALUES ('a', 1)\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE dbimp_strict\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:00 GMT"
+      ],
+      "Server-Timing": [
+        "query_total;dur=37.844796ms,libsql_query_exec;dur=37.410554ms,connection-duration;dur=37.505265ms,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"error\",\"error\":{\"message\":\"SQLite error: cannot store TEXT value in INTEGER column dbimp_strict.i\",\"code\":\"SQLITE_CONSTRAINT\"}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"429\",\"rows_read\":4,\"rows_written\":0,\"query_duration_ms\":37.372}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

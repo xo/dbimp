@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_s_parent (id, name) VALUES (1, 'a')\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "query_total;dur=35.626035ms,libsql_query_exec;dur=35.443585ms,connection-duration;dur=35.452755ms,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":1,\"last_insert_rowid\":\"1\",\"replication_index\":\"468\",\"rows_read\":1,\"rows_written\":3,\"query_duration_ms\":35.404}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

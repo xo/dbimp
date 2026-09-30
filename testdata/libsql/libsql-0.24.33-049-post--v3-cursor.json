@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v3/cursor",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"batch\":{\"steps\":[{\"stmt\":{\"sql\":\"WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 5) SELECT CASE WHEN v < 4 THEN v ELSE abs(-9223372036854775807 - 1) END FROM n\"}}]}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:08:59 GMT"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "Server-Timing": [
+        "query_total;dur=194.961µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"baton\":\"AaDrf64w4XASTh/YkpViSbJlq5zcJtVpE72DVahoqHXPwUSqgTS8HVvZgKr+93VQ\",\"base_url\":null}\n{\"type\":\"step_begin\",\"step\":0,\"cols\":[{\"name\":\"CASE WHEN v < 4 THEN v ELSE abs(-9223372036854775807 - 1) END\",\"decltype\":null}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"1\"}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"2\"}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"3\"}]}\n{\"type\":\"step_error\",\"step\":0,\"error\":{\"message\":\"SQLite error: integer overflow\",\"code\":\"SQLITE_UNKNOWN\"}}\n{\"type\":\"replication_index\",\"replication_index\":429}\n"
+  }
+}

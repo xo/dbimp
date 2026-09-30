@@ -225,6 +225,11 @@ linters:
       - path: influxdb/
         linters:
           - tagliatelle
+      # The tags of the libSQL driver are the names that the server sends,
+      # such as base_url and last_insert_rowid, which the driver cannot rename.
+      - path: libsql/
+        linters:
+          - tagliatelle
       # The tags of the Databend driver are the names that the server sends,
       # such as final_uri and has_result_set, which the driver cannot rename.
       - path: databend/

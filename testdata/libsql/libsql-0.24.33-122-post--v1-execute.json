@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/execute",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"stmt\":{\"sql\":\"SELECT 1 AS one\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:14 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=199.861µs,libsql_query_exec;dur=23.98µs,connection-duration;dur=37.1µs,"
+      ]
+    },
+    "body": "{\"result\":{\"cols\":[{\"name\":\"one\",\"decltype\":null}],\"rows\":[[{\"type\":\"integer\",\"value\":\"1\"}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"520\",\"rows_read\":0,\"rows_written\":0,\"query_duration_ms\":0.004}}"
+  }
+}

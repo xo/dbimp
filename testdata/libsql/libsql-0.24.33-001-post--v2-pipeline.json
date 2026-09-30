@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE IF EXISTS dbimp_types\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE TABLE dbimp_types (id INTEGER PRIMARY KEY, i INTEGER, r REAL, t TEXT, b BLOB, n NUMERIC, bo BOOLEAN, dt DATE, dtm DATETIME, ts TIMESTAMP, j JSON, x, v F32_BLOB(3))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_types VALUES (1, -9223372036854775808, 1.5, 'é''\\\"\\\\ x', x'00ff', 1.25, 1, '2026-10-01', '2026-10-01 12:34:56.789', '2026-10-01T12:34:56.123456789+05:30', '{\\\"k\\\":[1,null]}', 7, vector32('[1,2,3]'))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_types VALUES (2, 9223372036854775807, -1.7976931348623157e308, '', x'', 12345678901234567890, 0, 'not a date', 1727699696, 'x', '[]', 'text', vector32('[0,0,0]'))\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_types VALUES (3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_types VALUES (4, 1.5, 'abc', 42, 'text in a blob', 'abc', 2, 42, 'yesterday', 1.5, 'not json', x'01', NULL)\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:08:59 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server-Timing": [
+        "query_total;dur=170.160184ms,libsql_query_exec;dur=33.496657ms,connection-duration;dur=169.472111ms,"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"416\",\"rows_read\":0,\"rows_written\":0,\"query_duration_ms\":0.023}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"419\",\"rows_read\":1,\"rows_written\":2,\"query_duration_ms\":35.458}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":1,\"last_insert_rowid\":\"1\",\"replication_index\":\"420\",\"rows_read\":1,\"rows_written\":1,\"query_duration_ms\":36.251}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":1,\"last_insert_rowid\":\"2\",\"replication_index\":\"421\",\"rows_read\":1,\"rows_written\":1,\"query_duration_ms\":28.9}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":1,\"last_insert_rowid\":\"3\",\"replication_index\":\"422\",\"rows_read\":1,\"rows_written\":1,\"query_duration_ms\":34.874}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":1,\"last_insert_rowid\":\"4\",\"replication_index\":\"423\",\"rows_read\":1,\"rows_written\":1,\"query_duration_ms\":33.44}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

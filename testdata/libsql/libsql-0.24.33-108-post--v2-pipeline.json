@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT dflt_value FROM pragma_table_info('dbimp_s_parent') WHERE name = 'n'\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Server-Timing": [
+        "query_total;dur=586.832µs,libsql_query_exec;dur=100.64µs,connection-duration;dur=129.23µs,"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[{\"name\":\"dflt_value\",\"decltype\":null}],\"rows\":[[{\"type\":\"text\",\"value\":\"8\"}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"477\",\"rows_read\":3,\"rows_written\":0,\"query_duration_ms\":0.053}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE TABLE dbimp_s_other (id INTEGER PRIMARY KEY, seen INTEGER) WITHOUT ROWID\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"CREATE TRIGGER dbimp_s_trg AFTER INSERT ON dbimp_s_parent BEGIN INSERT INTO dbimp_s_other VALUES (new.id, 1); END\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_s_parent (id, name) VALUES (4, 'd')\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT id, seen FROM dbimp_s_other\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Server-Timing": [
+        "query_total;dur=146.231µs,libsql_query_exec;dur=5.39µs,connection-duration;dur=11.57µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:15 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"Authorization forbidden: Current session doesn't not have Write permission to namespace default\"}"
+  }
+}

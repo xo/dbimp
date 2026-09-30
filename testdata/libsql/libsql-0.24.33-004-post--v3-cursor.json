@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v3/cursor",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"batch\":{\"steps\":[{\"stmt\":{\"sql\":\"SELECT 1 AS one\"}}]}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:08:59 GMT"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "Server-Timing": [
+        "query_total;dur=182.551µs,"
+      ]
+    },
+    "body": "{\"baton\":\"cn96XVaedEFSsHT1CfvW6QpzLK9lqknwP9LnAMf6iSHnVDzXQtzy4gFV/yRJSvtT\",\"base_url\":null}\n{\"type\":\"step_begin\",\"step\":0,\"cols\":[{\"name\":\"one\",\"decltype\":null}]}\n{\"type\":\"row\",\"row\":[{\"type\":\"integer\",\"value\":\"1\"}]}\n{\"type\":\"step_end\",\"affected_row_count\":0,\"last_insert_rowid\":null}\n{\"type\":\"replication_index\",\"replication_index\":423}\n"
+  }
+}

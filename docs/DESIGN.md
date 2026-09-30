@@ -262,7 +262,9 @@ whose name starts with one of them, such as `influxdb-3`, as `principals`
 limits a request to some principals. A request of the setup or the teardown
 with `"server": "second"` goes to the URL of the flag `-second`, such as the
 Controller of Pinot, through which the setup makes the tables that the
-Broker cannot. It replaces the files and the entries that an
+Broker cannot. A script with `"auth": "bearer"` sends the password of each
+URL as a Bearer token, for a server that takes a token and no user, such as
+libSQL with a JWT (D94). It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
 it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
 the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.

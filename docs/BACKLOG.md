@@ -43,7 +43,8 @@ named TDengine as the next target at step 1. W19 came from Ken on
 2026-09-30, who named Apache Pinot as the next target at step 1. W20 came
 from Ken on 2026-09-30, who asked for one table of every type of every
 driver after D135, and W21 from D138. W22 came from Ken on 2026-09-30,
-who named rqlite as the next target at step 1.
+who named rqlite as the next target at step 1. W23 came from Ken on 2026-10-01,
+who named libSQL and Turso as the next target at step 1.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -1157,3 +1158,75 @@ driver, as both principals. That closed this item.
    `drivers/rqlite/rqlite.go` imports `github.com/xo/dbimp/rqlite`. Its
    `Version` can run `SELECT sqlite_version()`, which gives the version of
    SQLite, for both principals. The driver has no transactions (D144).
+
+## W23. Write the libSQL and Turso driver
+
+libSQL and Turso are the next target, by D73. Ken named them at step 1 on
+2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 is in
+[LIBSQL.md](LIBSQL.md), and D76 names the package `libsql`, with `turso` as an
+alias in `dburl`. `usql` has no driver for libSQL, so this driver replaces
+none (D24).
+
+Step 2 went in on 2026-10-01. `dbrun` starts `libsql-0.24.33`, in the Staged
+tier with the cadence `tested`. `POST /v2/pipeline` answered
+`SELECT sqlite_version()` as the administrator, so R, H and S hold.
+
+Step 4: the entry has one user, by basic authentication. Ken decided on
+2026-10-01 that it gets an ordinary user through a JWT. The session asked
+the `dbmeta` session the same day for an entry that starts `sqld` with an
+Ed25519 key, and prints the administrator with a token that can write and
+`dbmeta_user` with a token that can only read.
+
+Steps 5a to 9 went in on 2026-10-01:
+
+- Step 5a: `testdata/libsql/features.json`, from Gemini, DeepSeek, the Go
+  client and the TypeScript client.
+- Step 6: the recordings of 0.24.33, as both principals. The recorder gained
+  `"auth": "bearer"`, which sends the password of each URL as a Bearer
+  token. The cursor of 500000 rows, 58MB, was measured with `curl` and not
+  recorded.
+- Step 7: both models were asked, and each lead was tested. Both were wrong
+  that a disconnect leaves a statement running.
+- Steps 8 and 8a: LIBSQL.md holds the measured facts and the type table,
+  which Ken reviewed. He decided D147 the same day.
+- Step 9 is D148 to D152, which Ken decided on 2026-10-01.
+- Step 15: the pin moved to dbmeta `a59c0c1`, which prints the URL of D148
+  for each principal, after dbmeta `b868c8d`, which holds the entry with
+  its two tokens (dbmeta D153), and dbmeta `9b691b3`.
+
+Steps 10 to 17a went in on 2026-10-01, staged for Ken's review:
+
+- The rules of affinity of SQLite moved from `rqlite` to the root package,
+  as `dbimp.Affinity` and `dbimp.AffinityOf`, because two drivers need them
+  (D4).
+- Steps 10 to 13: the package `libsql/`, its tables, the contract, the
+  replay tests, the unit tests of the values, the statements, the options
+  and the transaction, and the DSN tests. The fuzz test ran for 60 seconds
+  and found nothing.
+- Steps 14 and 14a: the integration tests passed on 0.24.33, 110 with none
+  skipped, with the URL that `dbrun` prints. The ordinary user can write
+  nothing, so the administrator makes and fills every table, the ordinary
+  user reads it and gets HTTP 403 for each write, and the round trip of
+  each type runs as the administrator.
+- Step 16: `SELECT sqlite_version()` gives the version of SQLite to both
+  principals, and `GET /version` gives the release of `sqld` with no
+  credentials. The requests below wait for the release.
+- Step 17a: `## Compared with Couchbase` is in LIBSQL.md. One difference
+  has no decision yet: `WithTimeout` ends the request and sets no timeout on
+  the server, because Hrana has none.
+
+1. To `dburl`: dbimp D148 settles the name `libsql`, with `turso` as an
+   alias (D76). Please add the scheme `libsql`, with the alias `turso`, the
+   `GoPackage` `github.com/xo/dbimp/libsql` and `RequiresCGO` false. The
+   URL is `libsql://user:token@host:port`, with no path. TLS is on by
+   default, and `tls=false` needs a port, so the generator adds no port. The
+   keys `tls`, `auth` and `namespace` pass through, and any other key is
+   refused.
+2. To `dbmeta`: `dbmeta` has no model for libSQL. The `url` of the entry has
+   the form of D148 (step 15).
+3. To `usql`: `usql` has no driver for libSQL, so this is a new driver:
+   `drivers/libsql/libsql.go` imports `github.com/xo/dbimp/libsql`. Its
+   `Version` can run `SELECT sqlite_version()`, which works for both
+   principals. The driver has transactions on a stream, which expires after
+   10 seconds with no statement (D150).
+

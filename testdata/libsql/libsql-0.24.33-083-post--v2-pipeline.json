@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_crud VALUES (1, 'a'), (2, 'b'), (3, 'c')\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ],
+      "Server-Timing": [
+        "query_total;dur=34.655492ms,libsql_query_exec;dur=33.969678ms,connection-duration;dur=33.995068ms,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":3,\"last_insert_rowid\":\"3\",\"replication_index\":\"447\",\"rows_read\":3,\"rows_written\":3,\"query_duration_ms\":33.884}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

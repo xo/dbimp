@@ -12,7 +12,8 @@ released in `v0.1.0`, `surrealdb` and `neo4j`, which the tags `v0.2.0` and
 `v0.3.0` hold, `influxdb`, which was first released in `v0.4.0` with the
 other three, `arangodb`, which was first released in `v0.5.0`, `databend`,
 which was first released in `v0.6.0`, `pinot`, which was first released in
-`v0.7.0`, and `rqlite`, which was first released in `v0.8.0`.
+`v0.7.0`, `rqlite`, which was first released in `v0.8.0`, and `libsql`,
+which no release holds yet.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -60,5 +61,5 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/TDENGINE.md](docs/TDENGINE.md) | What TDengine answers, as measured, and why it has no driver here |
 | [docs/PINOT.md](docs/PINOT.md) | What Apache Pinot 1.4.0 and 1.5.1 answer, as measured |
 | [docs/RQLITE.md](docs/RQLITE.md) | What is known about rqlite, measured for its driver |
-| [docs/LIBSQL.md](docs/LIBSQL.md) | What is known about libSQL and Turso, before a server runs |
+| [docs/LIBSQL.md](docs/LIBSQL.md) | What is known about libSQL and Turso, measured for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |

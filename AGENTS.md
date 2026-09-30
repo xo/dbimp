@@ -25,7 +25,8 @@ holds the second and the third. The fifth, in
 `arangodb/`, was first released in `v0.5.0` (W13). The sixth, in
 `databend/`, was first released in `v0.6.0` (W16). The seventh, in
 `pinot/`, was first released in `v0.7.0` (W19). The eighth, in
-`rqlite/`, was first released in `v0.8.0` (W22). The
+`rqlite/`, was first released in `v0.8.0` (W22). The ninth, in
+`libsql/`, is staged for review, and no release holds it yet (W23). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -61,7 +62,7 @@ every other agent read the same rules. Edit this file, not that one.
 | asking why TDengine has no driver here | [docs/TDENGINE.md](docs/TDENGINE.md), then D127 |
 | writing the Apache Pinot driver | [docs/PINOT.md](docs/PINOT.md), then W19 and D128 to D134 |
 | writing the rqlite driver | [docs/RQLITE.md](docs/RQLITE.md), then W22, D73 and D140 |
-| writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then D73 and D76 |
+| writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then W23, D76 and D147 to D152 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |
@@ -103,9 +104,9 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    type that the database names for its column, and a string column gives a
    string. See D8 and D135.
 4. `context.Context` comes first, is named `ctx`, and is never stored in a
-   struct, except by a Couchbase, Neo4j, ArangoDB or Databend transaction,
-   and by the rows of an ArangoDB cursor or of a Databend query (D45, D69,
-   D90, D91, D122 and D123). The
+   struct, except by a Couchbase, Neo4j, ArangoDB, Databend or libSQL
+   transaction, and by the rows of an ArangoDB cursor, of a Databend query
+   or of a libSQL cursor (D45, D69, D90, D91, D122, D123, D149 and D150). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

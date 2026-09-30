@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"describe\",\"sql\":\"SELECT id, t FROM dbimp_types WHERE id = ?\"},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=221.801µs,connection-duration;dur=46.561µs,"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:08:59 GMT"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"describe\",\"result\":{\"params\":[{\"name\":null}],\"cols\":[{\"name\":\"id\",\"decltype\":\"INTEGER\"},{\"name\":\"t\",\"decltype\":\"TEXT\"}],\"is_explain\":false,\"is_readonly\":true}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

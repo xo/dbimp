@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"BEGIN\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"INSERT INTO dbimp_tx VALUES (3)\"}}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:01 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Server-Timing": [
+        "query_total;dur=377.071µs,libsql_query_exec;dur=58.64µs,"
+      ]
+    },
+    "body": "{\"baton\":\"SsGVp6EfjFyEHaiO4QRqflRSTXGo8HBHkMvg2NsSwsvdnrvGEjcKvoO7cqmT+9Io\",\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"440\",\"rows_read\":0,\"rows_written\":0,\"query_duration_ms\":0.002}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":1,\"last_insert_rowid\":\"3\",\"replication_index\":\"440\",\"rows_read\":1,\"rows_written\":1,\"query_duration_ms\":0.016}}}]}"
+  }
+}

@@ -52,6 +52,10 @@ type Script struct {
 	// request of that principal sends, such as the headers that say where a
 	// SurrealDB user is defined.
 	Header map[string]http.Header `json:"header,omitzero"`
+	// Auth is "bearer" to send the password of each URL as a Bearer token,
+	// as for a server that takes a token and no user, such as libSQL with a
+	// JWT (D94). It is "" for basic authentication.
+	Auth string `json:"auth,omitzero"`
 }
 
 // Request is one request of the script.
@@ -109,6 +113,9 @@ type Request struct {
 	// "" to send it to the URL of the principal. Only a request of the setup
 	// or the teardown can name it.
 	Server string `json:"server,omitzero"`
+
+	// auth is the Auth of the script.
+	auth string
 }
 
 // maxFollow bounds the pages that one request follows.
@@ -156,6 +163,12 @@ func run(ctx context.Context, dir, release, second string, principals map[string
 	var script Script
 	if err := json.Unmarshal(b, &script, json.RejectUnknownMembers(true)); err != nil {
 		return fmt.Errorf("reading the script: %w", err)
+	}
+	if script.Auth != "" && script.Auth != dbimp.AuthBearer {
+		return fmt.Errorf("reading the script: the auth %q: %w", script.Auth, dbimp.ErrInvalidValue)
+	}
+	for i := range script.Requests {
+		script.Requests[i].auth = script.Auth
 	}
 	if err := forget(dir, release); err != nil {
 		return err
@@ -493,7 +506,11 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		if r.Auth == "wrong" {
 			pass += "-wrong"
 		}
-		req.SetBasicAuth(user.Username(), pass)
+		if r.auth == dbimp.AuthBearer {
+			req.Header.Set("Authorization", "Bearer "+pass)
+		} else {
+			req.SetBasicAuth(user.Username(), pass)
+		}
 	}
 	res, err := client.Do(req)
 	switch {

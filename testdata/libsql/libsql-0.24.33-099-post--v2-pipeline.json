@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT id, name, n, g FROM dbimp_s_parent\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=401.702µs,libsql_query_exec;dur=88.58µs,connection-duration;dur=120.6µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[{\"name\":\"id\",\"decltype\":\"INTEGER\"},{\"name\":\"name\",\"decltype\":\"TEXT\"},{\"name\":\"n\",\"decltype\":\"INTEGER\"},{\"name\":\"g\",\"decltype\":\"INTEGER\"}],\"rows\":[[{\"type\":\"integer\",\"value\":\"1\"},{\"type\":\"text\",\"value\":\"a\"},{\"type\":\"integer\",\"value\":\"7\"},{\"type\":\"integer\",\"value\":\"14\"}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"468\",\"rows_read\":1,\"rows_written\":0,\"query_duration_ms\":0.036}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

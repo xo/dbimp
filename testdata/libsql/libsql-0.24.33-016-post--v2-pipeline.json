@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT * FROM dbimp_types WHERE id = 1\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:08:59 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "query_total;dur=249.761µs,libsql_query_exec;dur=39.1µs,connection-duration;dur=52.31µs,"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[{\"name\":\"id\",\"decltype\":\"INTEGER\"},{\"name\":\"i\",\"decltype\":\"INTEGER\"},{\"name\":\"r\",\"decltype\":\"REAL\"},{\"name\":\"t\",\"decltype\":\"TEXT\"},{\"name\":\"b\",\"decltype\":\"BLOB\"},{\"name\":\"n\",\"decltype\":\"NUMERIC\"},{\"name\":\"bo\",\"decltype\":\"BOOLEAN\"},{\"name\":\"dt\",\"decltype\":\"DATE\"},{\"name\":\"dtm\",\"decltype\":\"DATETIME\"},{\"name\":\"ts\",\"decltype\":\"TIMESTAMP\"},{\"name\":\"j\",\"decltype\":\"JSON\"},{\"name\":\"x\",\"decltype\":null},{\"name\":\"v\",\"decltype\":\"F32_BLOB(3)\"}],\"rows\":[[{\"type\":\"integer\",\"value\":\"1\"},{\"type\":\"integer\",\"value\":\"-9223372036854775808\"},{\"type\":\"float\",\"value\":1.5},{\"type\":\"text\",\"value\":\"é'\\\"\\\\ x\"},{\"type\":\"blob\",\"base64\":\"AP8\"},{\"type\":\"float\",\"value\":1.25},{\"type\":\"integer\",\"value\":\"1\"},{\"type\":\"text\",\"value\":\"2026-10-01\"},{\"type\":\"text\",\"value\":\"2026-10-01 12:34:56.789\"},{\"type\":\"text\",\"value\":\"2026-10-01T12:34:56.123456789+05:30\"},{\"type\":\"text\",\"value\":\"{\\\"k\\\":[1,null]}\"},{\"type\":\"integer\",\"value\":\"7\"},{\"type\":\"blob\",\"base64\":\"AACAPwAAAEAAAEBA\"}]],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"423\",\"rows_read\":1,\"rows_written\":0,\"query_duration_ms\":0.018}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v2/pipeline",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP VIEW IF EXISTS dbimp_s_view\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE IF EXISTS dbimp_s_child\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE IF EXISTS dbimp_s_other\"}},{\"type\":\"execute\",\"stmt\":{\"sql\":\"DROP TABLE IF EXISTS dbimp_s_parent\"}},{\"type\":\"close\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "query_total;dur=135.939041ms,libsql_query_exec;dur=35.479345ms,connection-duration;dur=135.68269ms,"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 20:09:13 GMT"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Vary": [
+        "origin",
+        "access-control-request-method",
+        "access-control-request-headers"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"baton\":null,\"base_url\":null,\"results\":[{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"478\",\"rows_read\":9,\"rows_written\":0,\"query_duration_ms\":32.718}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"480\",\"rows_read\":9,\"rows_written\":0,\"query_duration_ms\":28.931}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"483\",\"rows_read\":8,\"rows_written\":0,\"query_duration_ms\":38.363}}},{\"type\":\"ok\",\"response\":{\"type\":\"execute\",\"result\":{\"cols\":[],\"rows\":[],\"affected_row_count\":0,\"last_insert_rowid\":null,\"replication_index\":\"488\",\"rows_read\":14,\"rows_written\":0,\"query_duration_ms\":35.434}}},{\"type\":\"ok\",\"response\":{\"type\":\"close\"}}]}"
+  }
+}
