@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"SELECT name, type, pk, hidden FROM pragma_table_xinfo('dbimp_s_parent')\",\"SELECT name, type FROM sqlite_schema WHERE name LIKE 'dbimp_s_%' ORDER BY name\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:50 GMT"
+      ],
+      "Content-Length": [
+        "407"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "038ed78e739a:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v9.4.5"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"name\",\"type\",\"pk\",\"hidden\"],\"types\":[\"text\",\"text\",\"integer\",\"integer\"],\"values\":[[\"id\",\"INTEGER\",1,0],[\"name\",\"TEXT\",0,0],[\"n\",\"INTEGER\",0,0],[\"g\",\"INTEGER\",0,2]]},{\"columns\":[\"name\",\"type\"],\"types\":[\"text\",\"text\"],\"values\":[[\"dbimp_s_child\",\"table\"],[\"dbimp_s_idx\",\"index\"],[\"dbimp_s_other\",\"table\"],[\"dbimp_s_parent\",\"table\"],[\"dbimp_s_trg\",\"trigger\"],[\"dbimp_s_view\",\"view\"]]}]}"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 20000) SELECT v FROM n LIMIT 3\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:33 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Length": [
+        "74"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"v\"],\"types\":[\"integer\"],\"values\":[[1],[2],[3]]}]}"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/status",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:37 GMT"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"build\":{\"build_time\":\"2026-09-22T11:14:28Z\",\"commit\":\"40be50ff5e823fb53c7780efb48099594cfaca6a\",\"compiler_command\":\"musl-gcc\",\"compiler_toolchain\":\"gc\",\"version\":\"v10.3.6\"},\"cluster\":{\"addr\":\"b51d18c8a60d:4002\",\"api_addr\":\"b51d18c8a60d:4001\",\"https\":\"false\"},\"extensions\":{\"dir\":\"/rqlite/file/data/extensions\",\"names\":[]},\"http\":{\"auth\":\"enabled\",\"bind_addr\":\"[::]:4001\",\"cluster\":{\"local_node_addr\":\"b51d18c8a60d:4002\",\"timeout\":\"30s\"},\"queue\":{\"_default\":{\"batch_size\":128,\"max_size\":1024,\"sequence_number\":1790757843604567712,\"timeout\":\"50ms\"}},\"tls\":{\"enabled\":\"false\"}},\"last_backup_time\":\"2026-09-30T08:56:39.64677973Z\",\"mux\":{\"addr\":\"b51d18c8a60d:4002\",\"handlers\":\"\\u0001\\u0002\",\"timeout\":\"30s\",\"tls\":\"disabled\"},\"network\":{\"interfaces\":{\"lo\":{\"flags\":\"up|loopback|running\",\"hardware_address\":\"\",\"addresses\":[{\"address\":\"127.0.0.1/8\"},{\"address\":\"::1/128\"}]},\"wlan0\":{\"flags\":\"up|broadcast|multicast|running\",\"hardware_address\":\"ca:9f:77:b1:bb:53\",\"addresses\":[{\"address\":\"192.168.1.5/24\"},{\"address\":\"fd7a:115c:a1e0::9/128\"},{\"address\":\"fe80::c89f:77ff:feb1:bb53/64\"}]}}},\"node\":{\"current_time\":\"2026-09-30T09:04:37.173660763Z\",\"start_time\":\"2026-09-30T08:44:03.60455287Z\",\"uptime\":\"20m33.569107973s\"},\"os\":{\"executable\":\"/bin/rqlited\",\"hostname\":\"b51d18c8a60d\",\"page_size\":4096,\"pid\":1,\"ppid\":0},\"runtime\":{\"GOARCH\":\"amd64\",\"GOMAXPROCS\":32,\"GOOS\":\"linux\",\"kubernetes_hint\":false,\"num_cpu\":32,\"num_goroutine\":23,\"version\":\"go1.27.1\"},\"store\":{\"addr\":\"b51d18c8a60d:4002\",\"apply_timeout\":\"10s\",\"cdc\":{\"enabled\":false,\"registered\":false},\"commit_timeout\":\"50ms\",\"db_applied_index\":1450,\"db_conf\":{\"fk_constraints\":false},\"dir\":\"/rqlite/file/data\",\"dir_size\":179852627,\"dir_size_friendly\":\"180 MB\",\"election_timeout\":\"1s\",\"fsm_index\":1450,\"fsm_term\":2,\"fsm_update_time\":\"2026-09-30T09:04:37.173016251Z\",\"heartbeat_timeout\":\"1s\",\"leader\":{\"addr\":\"b51d18c8a60d:4002\",\"node_id\":\"b51d18c8a60d\"},\"leader_appended_at_time\":\"2026-09-30T09:04:37.165489585Z\",\"no_freelist_sync\":false,\"node_id\":\"b51d18c8a60d\",\"nodes\":[{\"id\":\"b51d18c8a60d\",\"addr\":\"b51d18c8a60d:4002\",\"suffrage\":\"voter\"}],\"observer\":{\"dropped\":0,\"observed\":1},\"open\":{},\"raft\":{\"applied_index\":1450,\"bolt\":{\"TxStats\":{\"PageCount\":5915,\"PageAlloc\":24227840,\"CursorCount\":4967,\"NodeCount\":4344,\"NodeDeref\":20,\"Rebalance\":0,\"RebalanceTime\":0,\"Split\":127,\"Spill\":4455,\"SpillTime\":8736062,\"Write\":7375,\"WriteTime\":9953582999},\"FreePageN\":0,\"PendingPageN\":4,\"FreeAlloc\":16384,\"FreelistInuse\":48,\"TxN\":293,\"OpenTxN\":0},\"commit_index\":1450,\"config\":{\"LocalID\":\"b51d18c8a60d\",\"HeartbeatTimeout\":1000000000,\"ElectionTimeout\":1000000000,\"LeaderLeaseTimeout\":500000000,\"CommitTimeout\":50000000,\"SnapshotInterval\":10000000000,\"SnapshotThreshold\":8192,\"MaxAppendEntries\":64,\"ShutdownOnRemove\":false,\"LogLevel\":\"WARN\",\"NoSnapshotRestoreOnStart\":false},\"fsm_pending\":0,\"last_contact\":0,\"last_log_index\":1450,\"last_log_term\":2,\"last_snapshot_index\":1059,\"last_snapshot_term\":2,\"latest_configuration\":\"[{Suffrage:Voter ID:b51d18c8a60d Address:b51d18c8a60d:4002}]\",\"latest_configuration_index\":0,\"log_size\":1048576,\"log_size_friendly\":\"1.0 MB\",\"num_peers\":0,\"protocol_version\":3,\"protocol_version_max\":3,\"protocol_version_min\":0,\"snapshot_version_max\":1,\"snapshot_version_min\":0,\"state\":\"Leader\",\"term\":2,\"transport\":{\"command_commit_index\":0,\"compress_snap\":false,\"leader_commit_index\":0},\"voter\":true},\"ready\":true,\"reap_read_only_timeout\":\"0s\",\"reap_timeout\":\"0s\",\"request_marshaler\":{\"compression_batch\":512,\"compression_size\":4096,\"force_compression\":false},\"snapshot_cas\":{\"owner\":null},\"snapshot_interval\":\"10s\",\"snapshot_store\":{\"dir\":\"/rqlite/file/data/wsnapshots\",\"dir_size\":58249457,\"snapshots\":[\"2-1059-1790758616716\"]},\"snapshot_threshold\":8192,\"sqlite3\":{\"compile_options\":[\"ATOMIC_INTRINSICS=1\",\"COMPILER=gcc-15.2.0\",\"DEFAULT_AUTOVACUUM\",\"DEFAULT_CACHE_SIZE=-2000\",\"DEFAULT_FILE_FORMAT=4\",\"DEFAULT_JOURNAL_SIZE_LIMIT=-1\",\"DEFAULT_MMAP_SIZE=0\",\"DEFAULT_PAGE_SIZE=4096\",\"DEFAULT_PCACHE_INITSZ=20\",\"DEFAULT_RECURSIVE_TRIGGERS\",\"DEFAULT_SECTOR_SIZE=4096\",\"DEFAULT_SYNCHRONOUS=2\",\"DEFAULT_WAL_AUTOCHECKPOINT=1000\",\"DEFAULT_WAL_SYNCHRONOUS=1\",\"DEFAULT_WORKER_THREADS=0\",\"DIRECT_OVERFLOW_READ\",\"ENABLE_COLUMN_METADATA\",\"ENABLE_DBSTAT_VTAB\",\"ENABLE_FTS3\",\"ENABLE_FTS3_PARENTHESIS\",\"ENABLE_FTS5\",\"ENABLE_GEOPOLY\",\"ENABLE_PREUPDATE_HOOK\",\"ENABLE_RTREE\",\"ENABLE_SESSION\",\"ENABLE_UPDATE_DELETE_LIMIT\",\"MALLOC_SOFT_LIMIT=1024\",\"MAX_ATTACHED=10\",\"MAX_COLUMN=2000\",\"MAX_COMPOUND_SELECT=500\",\"MAX_DEFAULT_PAGE_SIZE=8192\",\"MAX_EXPR_DEPTH=1000\",\"MAX_FUNCTION_ARG=1000\",\"MAX_LENGTH=1000000000\",\"MAX_LIKE_PATTERN_LENGTH=50000\",\"MAX_MMAP_SIZE=0x7fff0000\",\"MAX_PAGE_COUNT=0xfffffffe\",\"MAX_PAGE_SIZE=65536\",\"MAX_SQL_LENGTH=1000000000\",\"MAX_TRIGGER_DEPTH=1000\",\"MAX_VARIABLE_NUMBER=32766\",\"MAX_VDBE_OP=250000000\",\"MAX_WORKER_THREADS=8\",\"MUTEX_PTHREADS\",\"OMIT_DEPRECATED\",\"OMIT_SHARED_CACHE\",\"SYSTEM_MALLOC\",\"TEMP_STORE=1\",\"THREADSAFE=1\"],\"conn_pool_stats\":{\"ro\":{\"max_open_connections\":256,\"open_connections\":1,\"in_use\":0,\"idle\":1,\"wait_count\":0,\"wait_duration\":0,\"max_idle_closed\":0,\"max_idle_time_closed\":9,\"max_lifetime_closed\":0},\"rw\":{\"max_open_connections\":1,\"open_connections\":1,\"in_use\":0,\"idle\":1,\"wait_count\":0,\"wait_duration\":0,\"max_idle_closed\":0,\"max_idle_time_closed\":0,\"max_lifetime_closed\":0}},\"db_size\":58249216,\"db_size_friendly\":\"58 MB\",\"extensions\":[],\"last_modified\":\"2026-09-30T09:04:37.172994121Z\",\"mem_stats\":{\"cache_size\":-2000,\"freelist_count\":14218,\"hard_heap_limit\":0,\"max_page_count\":4294967294,\"page_count\":14221,\"page_size\":4096,\"soft_heap_limit\":0},\"path\":\"/rqlite/file/data/db.sqlite\",\"pragmas\":{\"ro\":{\"busy_timeout\":\"5000\",\"foreign_keys\":\"0\",\"journal_mode\":\"wal\",\"synchronous\":\"0\",\"wal_autocheckpoint\":\"1000\"},\"rw\":{\"busy_timeout\":\"5000\",\"foreign_keys\":\"0\",\"journal_mode\":\"wal\",\"synchronous\":\"0\",\"wal_autocheckpoint\":\"0\"}},\"ro_dsn\":\"file:/rqlite/file/data/db.sqlite?_fk=false\\u0026_journal=WAL\\u0026_query_only=true\\u0026_sync=0\\u0026mode=ro\",\"rw_dsn\":\"file:/rqlite/file/data/db.sqlite?_fk=false\\u0026_journal=WAL\\u0026_sync=0\",\"size\":58249216,\"transaction\":{\"ro\":false,\"rw\":false},\"version\":\"3.53.4\",\"wal_size\":62043112},\"strong_read_term\":2,\"trailing_logs\":10240}}"
+  }
+}

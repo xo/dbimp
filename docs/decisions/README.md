@@ -160,3 +160,10 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D137](D137-the-types-are-mapped-before-a-driver-is-written.md) | The types are mapped before a driver is written | Decided |
 | [D138](D138-the-root-package-defines-the-types-that-go-lacks.md) | The root package defines the types that Go lacks | Amends D63, D118, D135 and D136, and amended by D139 |
 | [D139](D139-offsettime-and-vector-join-the-root-package.md) | OffsetTime and Vector join the root package | Amends D63 and D138 |
+| [D140](D140-a-value-of-sqlite-keeps-its-storage-class.md) | A value of SQLite keeps its storage class | Decided |
+| [D141](D141-the-rqlite-dsn-names-a-node.md) | The rqlite DSN names a node | Decided |
+| [D142](D142-rqlite-runs-one-statement-a-request.md) | rqlite runs one statement a request | Decided |
+| [D143](D143-rqlite-binds-each-argument-on-the-server.md) | rqlite binds each argument on the server | Decided |
+| [D144](D144-rqlite-has-no-transactions.md) | rqlite has no transactions | Decided |
+| [D145](D145-rqlite-bounds-each-statement-by-its-context.md) | rqlite bounds each statement by its context | Amended by D146 |
+| [D146](D146-rqlite-ends-a-request-at-its-timeout.md) | rqlite ends a request at its timeout | Amends D145 |

@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/execute",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[\"SAVEPOINT s\",\"INSERT INTO dbimp_tx VALUES (12)\",\"ROLLBACK TO s\",\"RELEASE s\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Content-Length": [
+        "173"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:37 GMT"
+      ]
+    },
+    "body": "{\"results\":[{\"last_insert_id\":11,\"rows_affected\":1},{\"last_insert_id\":12,\"rows_affected\":1},{\"last_insert_id\":12,\"rows_affected\":1},{\"last_insert_id\":12,\"rows_affected\":1}]}"
+  }
+}

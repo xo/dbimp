@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/execute",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"CREATE TABLE IF NOT EXISTS dbimp_e (a)\",\"INSERT INTO dbimp_nosuch VALUES (1)\",\"INSERT INTO dbimp_e VALUES (1)\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "038ed78e739a:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v9.4.5"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:46 GMT"
+      ],
+      "Content-Length": [
+        "132"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ]
+    },
+    "body": "{\"results\":[{\"last_insert_id\":10,\"rows_affected\":1},{\"error\":\"no such table: dbimp_nosuch\"},{\"last_insert_id\":1,\"rows_affected\":1}]}"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/execute",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"INSERT INTO dbimp_crud VALUES (5, 'e') RETURNING k, v\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:41 GMT"
+      ],
+      "Content-Length": [
+        "81"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"k\",\"v\"],\"types\":[\"integer\",\"text\"],\"values\":[[5,\"e\"]]}]}"
+  }
+}

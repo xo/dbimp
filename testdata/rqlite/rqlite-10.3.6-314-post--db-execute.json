@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/execute",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"CREATE TABLE dbimp_s_parent (id INTEGER PRIMARY KEY, name TEXT UNIQUE, n INTEGER DEFAULT 7, g INTEGER GENERATED ALWAYS AS (n * 2) VIRTUAL, CHECK (n > 0))\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Content-Length": [
+        "52"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:41 GMT"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ]
+    },
+    "body": "{\"results\":[{\"last_insert_id\":5,\"rows_affected\":1}]}"
+  }
+}

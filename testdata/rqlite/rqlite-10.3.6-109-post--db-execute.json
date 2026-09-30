@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/execute",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[\"UPDATE dbimp_tx SET k = k WHERE k = 10 RETURNING k\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:37 GMT"
+      ],
+      "Content-Length": [
+        "67"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"k\"],\"types\":[\"integer\"],\"values\":[[10]]}]}"
+  }
+}

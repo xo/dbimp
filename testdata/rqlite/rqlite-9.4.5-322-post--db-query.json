@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"EXPLAIN QUERY PLAN SELECT id FROM dbimp_s_parent WHERE n = 7\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:50 GMT"
+      ],
+      "Content-Length": [
+        "190"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "038ed78e739a:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v9.4.5"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"id\",\"parent\",\"notused\",\"detail\"],\"types\":[\"integer\",\"integer\",\"integer\",\"text\"],\"values\":[[2,0,53,\"SEARCH dbimp_s_parent USING COVERING INDEX dbimp_s_idx (n=?)\"]]}]}"
+  }
+}

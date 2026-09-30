@@ -1,0 +1,515 @@
+{
+  "driver": "rqlite",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-09-30"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-09-30"
+    },
+    {
+      "source": "github.com/rqlite/gorqlite",
+      "kind": "driver",
+      "date": "2026-09-30"
+    },
+    {
+      "source": "github.com/rqlite/pyrqlite",
+      "kind": "driver",
+      "date": "2026-09-30"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-130-post--db-execute.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-131-post--db-query.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-132-post--db-execute.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-133-post--db-execute.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-134-post--db-execute.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "replace",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-135-post--db-execute.json",
+      "test": "TestIntegrationCRUD/replace"
+    },
+    {
+      "kind": "crud",
+      "name": "returning",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-136-post--db-execute.json",
+      "test": "TestIntegrationCRUD/returning"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-142-post--db-execute.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-142-post--db-execute.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-145-post--db-execute.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-150-post--db-query.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-153-post--db-execute.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "check constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-154-post--db-execute.json",
+      "test": "TestIntegrationSchema/check_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-156-post--db-query.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-152-post--db-query.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "trigger",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-158-post--db-query.json",
+      "test": "TestIntegrationSchema/trigger"
+    },
+    {
+      "kind": "schema",
+      "name": "strict table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-041-post--db-execute.json",
+      "test": "TestIntegrationSchema/strict_table"
+    },
+    {
+      "kind": "schema",
+      "name": "generated column",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-152-post--db-query.json",
+      "test": "TestIntegrationSchema/generated_column"
+    },
+    {
+      "kind": "schema",
+      "name": "without rowid",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-158-post--db-query.json",
+      "test": "TestIntegrationSchema/without_rowid"
+    },
+    {
+      "kind": "feature",
+      "name": "read consistency level",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-164-post--db-query.json",
+      "test": "TestIntegrationFeatures/read_consistency_level"
+    },
+    {
+      "kind": "feature",
+      "name": "freshness",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-166-post--db-query.json",
+      "test": "TestIntegrationFeatures/freshness"
+    },
+    {
+      "kind": "feature",
+      "name": "queued write",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-124-post--db-query.json",
+      "test": "TestIntegrationFeatures/queued_write"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction of one request",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-104-post--db-query.json",
+      "test": "TestIntegrationFeatures/transaction_of_one_request"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction across requests",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-109-post--db-execute.json",
+      "test": "TestIntegrationFeatures/transaction_across_requests"
+    },
+    {
+      "kind": "feature",
+      "name": "rewrite of random and time",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-169-post--db-query.json",
+      "test": "TestIntegrationFeatures/rewrite_of_random_and_time"
+    },
+    {
+      "kind": "feature",
+      "name": "blob as an array",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-024-post--db-query.json",
+      "test": "TestIntegrationFeatures/blob_as_an_array"
+    },
+    {
+      "kind": "feature",
+      "name": "associative form",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-020-post--db-query.json",
+      "test": "TestIntegrationFeatures/associative_form"
+    },
+    {
+      "kind": "feature",
+      "name": "unified endpoint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-011-post--db-request.json",
+      "test": "TestIntegrationFeatures/unified_endpoint"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "github.com/rqlite/gorqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-045-post--db-query.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "time in the database",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-084-post--db-execute.json",
+      "test": "TestIntegrationFeatures/time_in_the_database"
+    },
+    {
+      "kind": "feature",
+      "name": "raft index",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-127-post--db-execute.json",
+      "test": "TestIntegrationFeatures/raft_index"
+    },
+    {
+      "kind": "feature",
+      "name": "backup",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-090-get--db-backup.json",
+      "test": "TestIntegrationFeatures/backup"
+    },
+    {
+      "kind": "feature",
+      "name": "rqlite functions",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "rqlite-10.3.6-093-post--db-query.json",
+      "test": "TestIntegrationFeatures/rqlite_functions"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/INTEGER"
+    },
+    {
+      "kind": "type",
+      "name": "REAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/REAL"
+    },
+    {
+      "kind": "type",
+      "name": "TEXT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/TEXT"
+    },
+    {
+      "kind": "type",
+      "name": "BLOB",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-024-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/BLOB"
+    },
+    {
+      "kind": "type",
+      "name": "NUMERIC",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/NUMERIC"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "DATETIME",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/gorqlite",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/DATETIME"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/rqlite/pyrqlite"
+      ],
+      "verdict": "yes",
+      "evidence": "rqlite-10.3.6-023-post--db-query.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    }
+  ]
+}

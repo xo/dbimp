@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "query": "blob_array",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"SELECT * FROM dbimp_types ORDER BY id\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "038ed78e739a:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v9.4.5"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:42 GMT"
+      ],
+      "Content-Length": [
+        "987"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"id\",\"i\",\"bi\",\"r\",\"d\",\"t\",\"vc\",\"b\",\"bo\",\"dt\",\"dtm\",\"ts\",\"n\",\"dec\",\"j\",\"u\",\"x\"],\"types\":[\"integer\",\"integer\",\"bigint\",\"real\",\"double\",\"text\",\"varchar(10)\",\"blob\",\"boolean\",\"date\",\"datetime\",\"timestamp\",\"numeric\",\"decimal(10,2)\",\"json\",\"uuid\",\"integer\"],\"values\":[[1,-9223372036854775808,9223372036854775807,1.5,0.1,\"é'\\\"\\\\ x\",\"abc\",[0,255],true,\"2026-09-30T00:00:00Z\",\"2026-09-30T12:34:56.789Z\",\"2026-09-30T12:34:56.123456789+05:30\",1.25,12.34,\"{\\\"k\\\":[1,null,\\\"s\\\"]}\",\"6ba7b810-9dad-11d1-80b4-00c04fd430c8\",7],[2,0,0,-1.7976931348623157e+308,5e-324,\"\",\"\",[],false,\"1000-01-01T00:00:00Z\",\"9999-12-31T23:59:59Z\",\"2024-09-30T12:34:56Z\",12345678901234567000,1000,\"[]\",[107,167,184,16],\"text\"],[3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[4,1.5,12,1.5,\"abc\",\"42\",\"longer than ten characters\",\"text in a blob\",true,\"0001-01-01T00:00:00Z\",\"0001-01-01T00:00:00Z\",\"0001-01-01T00:00:00Z\",\"abc\",\"abc\",\"not json\",\"not a uuid\",[1]]]}]}"
+  }
+}

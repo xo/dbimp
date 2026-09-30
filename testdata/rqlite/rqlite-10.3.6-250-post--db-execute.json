@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/execute",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"UPDATE dbimp_types SET i = i WHERE id <= 2\",\"CREATE TABLE IF NOT EXISTS dbimp_ddl (a)\",\"DROP TABLE dbimp_ddl\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:37 GMT"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Content-Length": [
+        "130"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ]
+    },
+    "body": "{\"results\":[{\"last_insert_id\":1,\"rows_affected\":2},{\"last_insert_id\":1,\"rows_affected\":2},{\"last_insert_id\":1,\"rows_affected\":2}]}"
+  }
+}

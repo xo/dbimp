@@ -60,39 +60,39 @@ with the start of its Go type. The product document holds the whole Go type,
 the scan type and the database type.
 
 <!-- dbimp:matrix -->
-| Kind | arangodb | couchbase | databend | influxdb | neo4j | pinot | surrealdb |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| null | null: `nil` | missing: `nil`<br>null: `nil` |  | null: `nil` | null: `nil` |  | none: `nil`<br>null: `nil` |
-| boolean | boolean: `bool` | boolean: `bool` | boolean: `bool` | boolean: `bool` | boolean: `bool` | BOOLEAN: `bool` | bool: `bool` |
-| integer |  |  | tinyint: `int64`<br>smallint: `int64`<br>int: `int64`<br>bigint: `int64`<br>uint8: `int64`<br>uint16: `int64`<br>uint32: `int64` | integer: `int64` | integer: `int64` | INT: `int64`<br>LONG: `int64` | int: `int64` |
-| unsigned integer |  |  | uint64: `uint64` | unsigned integer: `uint64` |  |  |  |
-| number | integer: `int64`<br>double: `float64` | number: `int64` |  |  |  |  |  |
-| float |  |  | float: `float64`<br>double: `float64` | float: `float64` | float: `float64` | FLOAT: `float64`<br>DOUBLE: `float64` | float: `float64` |
-| decimal |  |  | decimal: `*apd.Decimal` |  |  | BIG_DECIMAL: `*apd.Decimal` | decimal: `*apd.Decimal` |
-| string | string: `string` | string: `string` | string: `string` | string: `string`<br>tag: `string` | string: `string` | STRING: `string` | string: `string` |
-| binary |  | bytes as a base64 string: `[]byte` | binary: `[]byte` |  | byte array: `[]byte` | BYTES: `[]byte` | bytes: `[]byte` |
-| date |  |  | date: `dbimp.Date` |  | date: `dbimp.Date` |  |  |
-| time of day |  |  |  |  | local time: `dbimp.LocalTime` |  |  |
-| time of day with offset |  |  |  |  | zoned time: `dbimp.OffsetTime` |  |  |
-| local timestamp |  |  |  |  | local datetime: `dbimp.LocalDateTime` |  |  |
-| timestamp |  |  | timestamp: `time.Time`<br>timestamp_tz: `time.Time` | timestamp: `time.Time` | offset datetime: `time.Time`<br>zoned datetime: `time.Time` | TIMESTAMP: `time.Time` | datetime: `time.Time` |
-| duration |  |  |  |  |  |  | duration: `time.Duration` |
-| interval |  |  | interval: `dbimp.Interval` |  | duration: `dbimp.Interval` |  |  |
-| uuid |  |  |  |  | uuid: `uuid.UUID` |  | uuid: `uuid.UUID` |
-| json |  |  | variant: `the decoded JSON value` |  |  | JSON: `the decoded JSON value` |  |
-| array | array: `[]any` | array: `[]any` | array: `[]any` |  | list: `[]any` | INT_ARRAY: `[]any`<br>LONG_ARRAY: `[]any`<br>FLOAT_ARRAY: `[]any`<br>DOUBLE_ARRAY: `[]any`<br>BOOLEAN_ARRAY: `[]any`<br>STRING_ARRAY: `[]any`<br>TIMESTAMP_ARRAY: `[]any` | array: `[]any` |
-| set |  |  |  |  |  |  | set: `[]any` |
-| map | object: `map[string]any` | object: `map[string]any` | map: `map[string]any` |  | map: `map[string]any` | MAP: `map[string]any` | object: `map[string]any` |
-| tuple |  |  | tuple: `[]any` |  |  |  |  |
-| vector |  |  | vector: `dbimp.Vector[float32]` |  | vector: `dbimp.Vector of the Go type of its coordinates` |  |  |
-| geometry |  |  | geometry: `string`<br>geography: `string` |  | point: `neo4j.Point` |  | geometry: `map[string]any of GeoJSON` |
-| range |  |  |  |  |  |  | range: `string` |
-| record id |  |  |  |  |  |  | record: `RecordID` |
-| node |  |  |  |  | node: `neo4j.Node` |  |  |
-| relationship |  |  |  |  | relationship: `neo4j.Relationship` |  |  |
-| path |  |  |  |  | path: `neo4j.Path` |  |  |
-| bitmap |  |  | bitmap: `none` |  |  |  |  |
-| other |  |  |  |  |  |  | table: `string` |
+| Kind | arangodb | couchbase | databend | influxdb | neo4j | pinot | rqlite | surrealdb |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| null | null: `nil` | missing: `nil`<br>null: `nil` |  | null: `nil` | null: `nil` |  |  | none: `nil`<br>null: `nil` |
+| boolean | boolean: `bool` | boolean: `bool` | boolean: `bool` | boolean: `bool` | boolean: `bool` | BOOLEAN: `bool` | BOOLEAN: `bool` | bool: `bool` |
+| integer |  |  | tinyint: `int64`<br>smallint: `int64`<br>int: `int64`<br>bigint: `int64`<br>uint8: `int64`<br>uint16: `int64`<br>uint32: `int64` | integer: `int64` | integer: `int64` | INT: `int64`<br>LONG: `int64` | INTEGER: `int64` | int: `int64` |
+| unsigned integer |  |  | uint64: `uint64` | unsigned integer: `uint64` |  |  |  |  |
+| number | integer: `int64`<br>double: `float64` | number: `int64` |  |  |  |  | NUMERIC: `int64 for a number with no fraction that fits` |  |
+| float |  |  | float: `float64`<br>double: `float64` | float: `float64` | float: `float64` | FLOAT: `float64`<br>DOUBLE: `float64` | REAL: `float64` | float: `float64` |
+| decimal |  |  | decimal: `*apd.Decimal` |  |  | BIG_DECIMAL: `*apd.Decimal` |  | decimal: `*apd.Decimal` |
+| string | string: `string` | string: `string` | string: `string` | string: `string`<br>tag: `string` | string: `string` | STRING: `string` | TEXT: `string` | string: `string` |
+| binary |  | bytes as a base64 string: `[]byte` | binary: `[]byte` |  | byte array: `[]byte` | BYTES: `[]byte` | BLOB: `[]byte` | bytes: `[]byte` |
+| date |  |  | date: `dbimp.Date` |  | date: `dbimp.Date` |  | DATE: `dbimp.Date` |  |
+| time of day |  |  |  |  | local time: `dbimp.LocalTime` |  |  |  |
+| time of day with offset |  |  |  |  | zoned time: `dbimp.OffsetTime` |  |  |  |
+| local timestamp |  |  |  |  | local datetime: `dbimp.LocalDateTime` |  | DATETIME: `dbimp.LocalDateTime` |  |
+| timestamp |  |  | timestamp: `time.Time`<br>timestamp_tz: `time.Time` | timestamp: `time.Time` | offset datetime: `time.Time`<br>zoned datetime: `time.Time` | TIMESTAMP: `time.Time` | TIMESTAMP: `time.Time` | datetime: `time.Time` |
+| duration |  |  |  |  |  |  |  | duration: `time.Duration` |
+| interval |  |  | interval: `dbimp.Interval` |  | duration: `dbimp.Interval` |  |  |  |
+| uuid |  |  |  |  | uuid: `uuid.UUID` |  |  | uuid: `uuid.UUID` |
+| json |  |  | variant: `the decoded JSON value` |  |  | JSON: `the decoded JSON value` |  |  |
+| array | array: `[]any` | array: `[]any` | array: `[]any` |  | list: `[]any` | INT_ARRAY: `[]any`<br>LONG_ARRAY: `[]any`<br>FLOAT_ARRAY: `[]any`<br>DOUBLE_ARRAY: `[]any`<br>BOOLEAN_ARRAY: `[]any`<br>STRING_ARRAY: `[]any`<br>TIMESTAMP_ARRAY: `[]any` |  | array: `[]any` |
+| set |  |  |  |  |  |  |  | set: `[]any` |
+| map | object: `map[string]any` | object: `map[string]any` | map: `map[string]any` |  | map: `map[string]any` | MAP: `map[string]any` |  | object: `map[string]any` |
+| tuple |  |  | tuple: `[]any` |  |  |  |  |  |
+| vector |  |  | vector: `dbimp.Vector[float32]` |  | vector: `dbimp.Vector of the Go type of its coordinates` |  |  |  |
+| geometry |  |  | geometry: `string`<br>geography: `string` |  | point: `neo4j.Point` |  |  | geometry: `map[string]any of GeoJSON` |
+| range |  |  |  |  |  |  |  | range: `string` |
+| record id |  |  |  |  |  |  |  | record: `RecordID` |
+| node |  |  |  |  | node: `neo4j.Node` |  |  |  |
+| relationship |  |  |  |  | relationship: `neo4j.Relationship` |  |  |  |
+| path |  |  |  |  | path: `neo4j.Path` |  |  |  |
+| bitmap |  |  | bitmap: `none` |  |  |  |  |  |
+| other |  |  |  |  |  |  |  | table: `string` |
 <!-- /dbimp:matrix -->
 
 ## What W21 changed

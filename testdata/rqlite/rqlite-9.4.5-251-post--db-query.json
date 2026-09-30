@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "query": "db_timeout=1s",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 300000000) SELECT count(*) FROM n\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "038ed78e739a:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v9.4.5"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:47 GMT"
+      ],
+      "Content-Length": [
+        "39"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ]
+    },
+    "body": "{\"results\":[{\"error\":\"query timeout\"}]}"
+  }
+}

@@ -42,7 +42,8 @@ target at step 1, W17 from D119, and W18 from Ken on 2026-09-29, who
 named TDengine as the next target at step 1. W19 came from Ken on
 2026-09-30, who named Apache Pinot as the next target at step 1. W20 came
 from Ken on 2026-09-30, who asked for one table of every type of every
-driver after D135, and W21 from D138.
+driver after D135, and W21 from D138. W22 came from Ken on 2026-09-30,
+who named rqlite as the next target at step 1.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -888,7 +889,7 @@ Ken decided the same day that dbimp writes no driver for TDengine, and moved
 it to P3 (D127). TDENGINE.md stays as the record of why. Apache Pinot is the
 next target.
 
-## W19. Write the Apache Pinot driver
+## W19. Write the Apache Pinot driver. Done.
 
 Apache Pinot is the next target, by D73 and D127. Ken named it at step 1 on
 2026-09-30. Follow [DRIVER.md](DRIVER.md). Step 3 is in [PINOT.md](PINOT.md).
@@ -935,14 +936,38 @@ Steps 10 to 17a went in on 2026-09-30:
   `secondAddress`. The first push, `7f29343`, ran at the pin `7907cd9`, and
   its two Pinot jobs failed, as expected, because that entry of `dbrun` gave
   an `http` URL and no Controller. The `dbmeta` session committed both
-  changes as dbmeta `6b24b13` on 2026-09-30, and the pin moved there,
-  staged for Ken's review.
+  changes as dbmeta `6b24b13` on 2026-09-30, and the pin moved there.
 - Step 16: no statement on the Broker gives the version, for either
   principal. `SELECT version()` fails with 700, and `GET /version` of the
   Broker is HTTP 404. The Controller gives it with no user (PINOT.md,
   Principals). The requests below wait for the release.
 - Step 17a: `## Compared with Couchbase` is in PINOT.md, and Ken
   reviewed it on 2026-09-30.
+
+Ken committed the type work of W20 and W21 and the pin on 2026-09-30 as
+`25131b5`. The workflow passed on `25131b5`, on every release of every
+driver, with both releases of Pinot for the first time, which is the gate
+of step 18: https://github.com/xo/dbimp/actions/runs/36682954332. Its first
+attempt failed on `TestIntegrationErrors` of Databend 1.2.881 only, and a
+second attempt of that job passed. At Ken's request, the session tagged
+`v0.7.0` on `25131b5` and published it the same day, which is the gate of
+step 19: https://github.com/xo/dbimp/releases/tag/v0.7.0.
+
+Step 20 sent the requests below on 2026-09-30, each naming `v0.7.0`. The
+request to `dburl` also asks it to make `GenPinot` add no port, because it
+adds 8000, and the request to `usql` names the Go types that D136 to D139
+change.
+
+`dburl` reported the same day that dburl D43 settles the scheme `pinot`
+against `pinot.ParseDSN` of `v0.7.0`, and that `GenPinot` adds no port, so
+the driver uses 8099. The 8000 had come from the port of the Broker in the
+entry of `dbrun`. It released the change in dburl `v0.39.0`. `dbmeta`
+staged its move to `v0.7.0`, which named no type of `dbimp`, and its
+Databend and Couchbase models passed on it. `usql` staged `drivers/pinot`
+and its move to `v0.7.0` and dburl `v0.39.0`. Through its own binary, the
+types of D138 and D139 printed as ISO 8601 on Neo4j, Databend and InfluxDB,
+and nothing in `usql` named a type that `v0.7.0` removed. That closed this
+item.
 
 Ken committed steps 2 to 17a on 2026-09-30 as `7f29343`. He settled the
 `JSON` column that the multi-stage engine names `STRING` the same day with
@@ -963,7 +988,7 @@ D135: a value has the Go type that fits the type that the server names.
    statement gives the version, so its `Version` cannot run SQL. The driver
    takes no write, and a write fails with the error of the server (D128).
 
-## W20. Map the types of every driver onto one list of kinds
+## W20. Map the types of every driver onto one list of kinds. Done.
 
 Ken asked for this on 2026-09-30, after D135. He asked for a table of every
 type that every driver supports, with its Go type, for the types that the
@@ -983,14 +1008,16 @@ The first part went in on 2026-09-30:
   documents, and step 8a of [DRIVER.md](DRIVER.md). The type table of each
   product document has the column Kind, which `TestEveryTypeHasAKind` holds.
 
-This item stays open until Ken reviews the table of [TYPES.md](TYPES.md).
+Ken reviewed the staged changes, which held the table of
+[TYPES.md](TYPES.md), and committed them on 2026-09-30 as `25131b5`. That
+closed this item.
 
-## W21. Define the types of D138
+## W21. Define the types of D138. Done.
 
 Ken decided D138 on 2026-09-30, and D139, which adds `OffsetTime` and
 `Vector`, the same day. This item carries both out.
 
-The work went in on 2026-09-30, staged for Ken's review:
+The work went in on 2026-09-30:
 
 - `civil.go` in the root package holds `Date`, `LocalTime`, `OffsetTime`,
   `LocalDateTime`, `Interval` and `Vector[T]`, with ISO 8601 in both
@@ -1011,5 +1038,90 @@ The work went in on 2026-09-30, staged for Ken's review:
   1.2.881 and 1.2.948, and InfluxDB 1.13.1, 2.9.1, 3.9.13 and 3.11.5, before
   D139. They ran again on Neo4j and Databend after it.
 
-This item stays open until Ken approves the release, whose notes say which
-Go type changes for a caller of each driver.
+Ken committed the work on 2026-09-30 as `25131b5`, and approved its
+release in `v0.7.0` the same day. The notes of the release say which Go type
+changes for a caller of each driver. That closed this item.
+
+## W22. Write the rqlite driver
+
+rqlite is the next target, by D73. Ken named it at step 1 on 2026-09-30,
+after the release of `v0.7.0`. Follow [DRIVER.md](DRIVER.md). Step 3 is in
+[RQLITE.md](RQLITE.md). `usql` has no driver for rqlite, so this driver
+replaces none (D24), and `dburl` holds the provisional scheme `rqlite`
+(dburl D36). The `dbmeta` session staged a model for rqlite the same day
+(dbmeta D148), which runs through gorqlite until this driver exists.
+
+Steps 2 to 8a went in on 2026-09-30, staged for Ken's review:
+
+- Step 2: `dbrun` starts `rqlite-9.4.5` and `rqlite-10.3.6`, both in the
+  Staged tier with the cadence `tested`. `POST /db/query` answered
+  `SELECT sqlite_version()` on both, as `admin` and as `dbmeta_user`, so R,
+  H and S hold.
+- Step 5a: `testdata/rqlite/features.json`, from Gemini, DeepSeek, gorqlite
+  and pyrqlite.
+- Step 6: the recordings of 9.4.5 and 10.3.6, as both principals. rqlite has
+  one namespace, which the `dbmeta` session shares, so each request of the
+  script makes and drops its own tables with the prefix `dbimp_`. The first
+  run left `PRAGMA foreign_keys = ON` on the shared write connection of
+  10.3.6 for four minutes, and the session told `dbmeta`. The script now
+  turns it off.
+- Step 7: both models were asked twice. Four of their leads proved wrong on
+  the server, among them that a read runs on after the client leaves.
+- Step 8: RQLITE.md holds the measured facts, and each entry of
+  `features.json` has a verdict.
+- Step 8a: the type table of RQLITE.md, which both models reviewed. Ken
+  reviewed it on 2026-09-30 and decided D140: a column follows the rules of
+  affinity of SQLite, a value that does not fit its column keeps the Go type
+  of its JSON form, a `DATE` is a `dbimp.Date` and a `DATETIME` a
+  `dbimp.LocalDateTime`, and `ANY` is not a supported type.
+
+Step 9 is D141 to D145, which Ken decided on 2026-09-30: the DSN
+`rqlite://user:password@host:port` with the keys `tls`, `level` and
+`freshness` (D141), one statement a request, a query on `/db/request` and a
+count of 0 for a statement that changes no rows (D142), each argument bound
+on the server, with a string of the form `x'...'` written as a literal
+(D143), no transactions (D144), and `db_timeout` from the deadline of the
+context (D145).
+
+Steps 10 to 17a went in on 2026-09-30, staged for Ken's review:
+
+- Steps 10 to 13: the package `rqlite/`, its tables, the contract, the
+  replay tests, the unit tests of the types, the arguments and the options,
+  and the DSN tests. The fuzz test ran for 60 seconds and found nothing.
+- Steps 14 and 14a: the integration tests passed on 9.4.5 and 10.3.6, as
+  both principals, 127 on each with none skipped, with the round trip of
+  every type. They found that 9.4.5 ignores `db_timeout` for a read on
+  `/db/request`. Ken decided D146 the same day: `WithTimeout` ends the
+  request at that time too, which stops a read on both releases. They also
+  found that a BLOB in a column with no declared type is damaged when it is
+  in the first row, and that a read of a table hides a later index from the
+  plan, both in RQLITE.md.
+- Step 15: the workflow needs no change but its pin. The `url` of the entry
+  of `dbrun` is an `http` URL, which the driver refuses. The session asked
+  the `dbmeta` session on 2026-09-30 for the form of D141, and it staged
+  the change the same day, for Ken's review there. The integration tests
+  passed with the `url` that the staged `dbrun` prints, 127 on each release
+  with none skipped. The `dbmeta` session committed it as dbmeta `f7e3cbb`
+  on 2026-09-30, with its rqlite model, and the pin moved there from
+  `6b24b13`, staged for Ken's review.
+- Step 16: `SELECT sqlite_version()` gives the version of SQLite to both
+  principals, and the header `X-Rqlite-Version` gives the release of
+  rqlite on every answer. The requests below wait for the release.
+- Step 17a: `## Compared with Couchbase` is in RQLITE.md. Every difference
+  that a caller sees has a decision, or is a fact of the server.
+
+1. To `dburl`: dbimp D141 settles the provisional scheme `rqlite` (dburl
+   D36). Please set its `GoPackage` to `github.com/xo/dbimp/rqlite` and
+   `RequiresCGO` to false. The URL is `rqlite://user:password@host:port`,
+   with no path, and the driver refuses a path. With no port, the driver
+   uses 4001, so the generator adds none (dburl D34). The keys `tls`,
+   `level` and `freshness` pass through, and any other key is refused.
+2. To `dbmeta`: the rqlite model of dbmeta D148 runs through gorqlite.
+   Please move it to `github.com/xo/dbimp/rqlite`, as dbmeta D101 moved
+   Couchbase, and measure it. A number is an `int64` or a `float64` by the
+   affinity of its column (D140), where gorqlite gave a `float64`, and the
+   driver reads no `/status`.
+3. To `usql`: `usql` has no driver for rqlite, so this is a new driver:
+   `drivers/rqlite/rqlite.go` imports `github.com/xo/dbimp/rqlite`. Its
+   `Version` can run `SELECT sqlite_version()`, which gives the version of
+   SQLite, for both principals. The driver has no transactions (D144).

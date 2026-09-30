@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 5) SELECT CASE WHEN v < 4 THEN v ELSE abs(-9223372036854775807 - 1) END FROM n\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:46 GMT"
+      ],
+      "Content-Length": [
+        "42"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "038ed78e739a:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v9.4.5"
+      ]
+    },
+    "body": "{\"results\":[{\"error\":\"integer overflow\"}]}"
+  }
+}

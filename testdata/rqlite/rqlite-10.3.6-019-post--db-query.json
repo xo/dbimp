@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "query": "qualify_columns",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[\"SELECT id, t FROM dbimp_types WHERE id = 1\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:33 GMT"
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Content-Length": [
+        "114"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"dbimp_types.id\",\"dbimp_types.t\"],\"types\":[\"integer\",\"text\"],\"values\":[[1,\"é'\\\"\\\\ x\"]]}]}"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[\"SELECT v FROM (SELECT 1 AS v UNION ALL SELECT 'a' UNION ALL SELECT 1.5 UNION ALL SELECT x'00')\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "87"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:33 GMT"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"v\"],\"types\":[\"integer\"],\"values\":[[1],[\"a\"],[1.5],[\"AA==\"]]}]}"
+  }
+}

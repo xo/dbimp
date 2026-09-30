@@ -104,6 +104,11 @@ linters:
         - empty
         - stdlib
         - generic
+    # SQLite names the affinity of a type by the letters DOUB, which the
+    # rqlite driver and its document quote.
+    misspell:
+      ignore-rules:
+        - doub
     # A deferred Close has nothing left to report after the code read Err. Wrapping the defer in a closure to discard it reads worse.
     errcheck:
       exclude-functions:
@@ -120,6 +125,7 @@ linters:
         - (*github.com/xo/dbimp/neo4j.rows).Close
         - (*github.com/xo/dbimp/databend.rows).Close
         - (*github.com/xo/dbimp/pinot.rows).Close
+        - (*github.com/xo/dbimp/rqlite.rows).Close
         - (database/sql/driver.Rows).Close
         # The stream of a body, closed after the part that matters was read.
         - (*github.com/xo/dbimp.Stream).Close

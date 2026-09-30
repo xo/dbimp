@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"SELECT 1 AS a\",\"SELECT * FROM dbimp_nosuch\",\"SELECT 3 AS c\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "159"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ],
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:33 GMT"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"a\"],\"types\":[\"integer\"],\"values\":[[1]]},{\"error\":\"no such table: dbimp_nosuch\"},{\"columns\":[\"c\"],\"types\":[\"integer\"],\"values\":[[3]]}]}"
+  }
+}

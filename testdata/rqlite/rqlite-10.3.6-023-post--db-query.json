@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/db/query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "[\"SELECT * FROM dbimp_types ORDER BY id\"]"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ],
+      "Www-Authenticate": [
+        "Basic realm=\"rqlite\""
+      ],
+      "X-Rqlite-Served-By": [
+        "b51d18c8a60d:4001"
+      ],
+      "Access-Control-Allow-Methods": [
+        "OPTIONS, GET, POST"
+      ],
+      "X-Rqlite-Version": [
+        "v10.3.6"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 09:04:33 GMT"
+      ],
+      "Content-Length": [
+        "983"
+      ],
+      "Access-Control-Allow-Credentials": [
+        "true"
+      ],
+      "Access-Control-Allow-Headers": [
+        "Content-Type, Authorization"
+      ]
+    },
+    "body": "{\"results\":[{\"columns\":[\"id\",\"i\",\"bi\",\"r\",\"d\",\"t\",\"vc\",\"b\",\"bo\",\"dt\",\"dtm\",\"ts\",\"n\",\"dec\",\"j\",\"u\",\"x\"],\"types\":[\"integer\",\"integer\",\"bigint\",\"real\",\"double\",\"text\",\"varchar(10)\",\"blob\",\"boolean\",\"date\",\"datetime\",\"timestamp\",\"numeric\",\"decimal(10,2)\",\"json\",\"uuid\",\"integer\"],\"values\":[[1,-9223372036854775808,9223372036854775807,1.5,0.1,\"é'\\\"\\\\ x\",\"abc\",\"AP8=\",true,\"2026-09-30T00:00:00Z\",\"2026-09-30T12:34:56.789Z\",\"2026-09-30T12:34:56.123456789+05:30\",1.25,12.34,\"{\\\"k\\\":[1,null,\\\"s\\\"]}\",\"6ba7b810-9dad-11d1-80b4-00c04fd430c8\",7],[2,0,0,-1.7976931348623157e+308,5e-324,\"\",\"\",\"\",false,\"1000-01-01T00:00:00Z\",\"9999-12-31T23:59:59Z\",\"2024-09-30T12:34:56Z\",12345678901234567000,1000,\"[]\",\"a6e4EA==\",\"text\"],[3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[4,1.5,12,1.5,\"abc\",\"42\",\"longer than ten characters\",\"text in a blob\",true,\"0001-01-01T00:00:00Z\",\"0001-01-01T00:00:00Z\",\"0001-01-01T00:00:00Z\",\"abc\",\"abc\",\"not json\",\"not a uuid\",\"AQ==\"]]}]}"
+  }
+}

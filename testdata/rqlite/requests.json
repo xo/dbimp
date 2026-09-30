@@ -1,0 +1,2491 @@
+{
+  "driver": "rqlite",
+  "requests": [
+    {
+      "item": 1,
+      "name": "drop the table of every type",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_types"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "make the table of every type",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE dbimp_types (id INTEGER PRIMARY KEY, i INTEGER, bi BIGINT, r REAL, d DOUBLE, t TEXT, vc VARCHAR(10), b BLOB, bo BOOLEAN, dt DATE, dtm DATETIME, ts TIMESTAMP, n NUMERIC, dec DECIMAL(10,2), j JSON, u UUID, x)"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "fill the table of every type",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_types VALUES (1, -9223372036854775808, 9223372036854775807, 1.5, 0.1, 'é''\"\\ x', 'abc', x'00ff', 1, '2026-09-30', '2026-09-30 12:34:56.789', '2026-09-30T12:34:56.123456789+05:30', 1.25, 12.34, '{\"k\":[1,null,\"s\"]}', '6ba7b810-9dad-11d1-80b4-00c04fd430c8', 7)",
+        "INSERT INTO dbimp_types VALUES (2, 0, 0, -1.7976931348623157e308, 5e-324, '', '', x'', 0, '1000-01-01', '9999-12-31 23:59:59', 1727699696, 12345678901234567890, '1e3', '[]', x'6ba7b810', 'text')",
+        "INSERT INTO dbimp_types VALUES (3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)",
+        "INSERT INTO dbimp_types VALUES (4, 1.5, '12', '1.5', 'abc', 42, 'longer than ten characters', 'text in a blob', 2, 'not a date', 'yesterday', 'x', 'abc', 'abc', 'not json', 'not a uuid', x'01')"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a query in the body",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1 AS one"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a query in the URL",
+      "method": "GET",
+      "path": "/db/query?q=SELECT%201%20AS%20one"
+    },
+    {
+      "item": 1,
+      "name": "a query as text",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "text/plain"
+        ]
+      },
+      "text": "SELECT 1 AS one"
+    },
+    {
+      "item": 1,
+      "name": "a query with no content type",
+      "method": "POST",
+      "path": "/db/query",
+      "text": "[\"SELECT 1 AS one\"]"
+    },
+    {
+      "item": 1,
+      "name": "a query on the unified endpoint",
+      "method": "POST",
+      "path": "/db/request",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1 AS one"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a write on the query endpoint",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a write on the query endpoint, refused",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE dbimp_nope (a)"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a read and a write on the unified endpoint",
+      "method": "POST",
+      "path": "/db/request",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_u (a)",
+        "SELECT count(*) FROM dbimp_u",
+        "DROP TABLE dbimp_u"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "the root",
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "item": 1,
+      "name": "a GET of execute",
+      "method": "GET",
+      "path": "/db/execute"
+    },
+    {
+      "item": 1,
+      "name": "a GET of request",
+      "method": "GET",
+      "path": "/db/request"
+    },
+    {
+      "item": 2,
+      "name": "columns in the order of the statement",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 3 AS c, 1 AS a, 2 AS b"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1 AS a, 2 AS a"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "no rows",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT id, t FROM dbimp_types WHERE id < 0"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "a column with no name",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1 + 1, 'x' || 'y'"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "qualified columns",
+      "method": "POST",
+      "path": "/db/query?qualify_columns",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT id, t FROM dbimp_types WHERE id = 1"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "the associative form",
+      "method": "POST",
+      "path": "/db/query?associative",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 3 AS c, 1 AS a, 2 AS b"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "the associative form with no rows",
+      "method": "POST",
+      "path": "/db/query?associative",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT id FROM dbimp_types WHERE id < 0"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "the associative form with two columns of one name",
+      "method": "POST",
+      "path": "/db/query?associative",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1 AS a, 2 AS a"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT * FROM dbimp_types ORDER BY id"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "every type as arrays of bytes",
+      "method": "POST",
+      "path": "/db/query?blob_array",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT * FROM dbimp_types ORDER BY id"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "every type with the storage class",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT id, typeof(i), typeof(bi), typeof(r), typeof(t), typeof(b), typeof(bo), typeof(dt), typeof(dtm), typeof(ts), typeof(n), typeof(dec), typeof(j), typeof(u), typeof(x) FROM dbimp_types ORDER BY id"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "literals of each class",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1, 1.5, 'a', x'00ff', NULL, true"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "literals of each class as arrays of bytes",
+      "method": "POST",
+      "path": "/db/query?blob_array",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1, 1.5, 'a', x'00ff', NULL, true"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "an expression whose first row is NULL",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT v FROM (SELECT NULL AS v UNION ALL SELECT 1)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "an expression whose types differ by row",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT v FROM (SELECT 1 AS v UNION ALL SELECT 'a' UNION ALL SELECT 1.5 UNION ALL SELECT x'00')"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a cast",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT CAST(1 AS TEXT), CAST('1.5' AS REAL), CAST('a' AS BLOB), CAST(1.9 AS INTEGER)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "an infinity",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1e999"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a negative infinity",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT -1e999"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a NaN",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 0.0 / 0"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "an integer beyond the range",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 9223372036854775808, -9223372036854775809"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a text of the raw bytes of a blob",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT CAST(x'80ff' AS TEXT)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a blob that is not text",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT x'80ff'"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "the functions of time",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT date('2026-09-30'), datetime('2026-09-30 12:34:56'), unixepoch('2026-09-30'), julianday('2026-09-30')"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop the strict table",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_strict"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a strict table",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE dbimp_strict (i INTEGER, r REAL, t TEXT, b BLOB, a ANY, n INT) STRICT",
+        "INSERT INTO dbimp_strict VALUES (1, 1.5, 'a', x'00', 'any', NULL)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "read the strict table",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT * FROM dbimp_strict"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a wrong type in the strict table",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_strict VALUES ('a', 1.5, 'a', x'00', 1, 1)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop the strict table after",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE dbimp_strict"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a JSON function",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT json_object('a', 1, 'b', json_array(1, 2)), jsonb('[1]'), json_type('{}')"
+      ]
+    },
+    {
+      "item": 4,
+      "name": "positional parameters",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, ?, ?, ?, ?",
+          1,
+          1.5,
+          "a",
+          true,
+          null
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "named parameters",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT :a, :b, $c, @d",
+          {
+            "a": 1,
+            "b": "x",
+            "c": 2.5,
+            "d": null
+          }
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a large integer parameter",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          9223372036854775807,
+          9223372036854775807
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "an integer parameter beyond the range",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          9223372036854775808,
+          9223372036854775808
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a float parameter with no fraction",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a float parameter with an exponent",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          1e+300,
+          1e+300
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a blob parameter as bytes",
+      "method": "POST",
+      "path": "/db/query?blob_array",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          [
+            0,
+            255
+          ],
+          [
+            0,
+            255
+          ]
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a blob parameter as a hex literal",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          "x'41'",
+          "x'41'"
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a text parameter that looks like hex",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          "X'4142'",
+          "x'zz'"
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "an object parameter",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?",
+          {
+            "k": 1
+          }
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a plain and a parameterized statement",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1",
+        [
+          "SELECT ?",
+          2
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a positional and a named parameter",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, :b",
+          1,
+          {
+            "b": 2
+          }
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "too few parameters",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, ?",
+          1
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "too many parameters",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?",
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a string and a comment",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT '?', ? -- ?",
+          1
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a numbered parameter",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?2, ?1",
+          "a",
+          "b"
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "an empty text parameter",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a text parameter of a date",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "SELECT ?, typeof(?)",
+          "2026-09-30T12:34:56Z",
+          "2026-09-30T12:34:56Z"
+        ]
+      ]
+    },
+    {
+      "item": 4,
+      "name": "a parameter in an insert",
+      "method": "POST",
+      "path": "/db/execute?blob_array",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        [
+          "INSERT INTO dbimp_types (id, i, t, b) VALUES (?, ?, ?, ?)",
+          10,
+          5,
+          "p",
+          [
+            1,
+            2
+          ]
+        ],
+        [
+          "DELETE FROM dbimp_types WHERE id = ?",
+          10
+        ]
+      ]
+    },
+    {
+      "item": 5,
+      "name": "a result of 20000 rows",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 20000) SELECT v FROM n"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "a result of 20000 rows with a limit",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 20000) SELECT v FROM n LIMIT 3"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELEC 1"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "an unknown table",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT * FROM dbimp_nosuch"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "an error after the rows of a statement",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1 AS a",
+        "SELECT * FROM dbimp_nosuch",
+        "SELECT 3 AS c"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "an error inside the rows",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 5) SELECT CASE WHEN v < 4 THEN v ELSE abs(-9223372036854775807 - 1) END FROM n"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "an error of a function",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT abs(-9223372036854775807 - 1)"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "a body that is not JSON",
+      "method": "POST",
+      "path": "/db/query",
+      "text": "not json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "an empty array",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": []
+    },
+    {
+      "item": 6,
+      "name": "an unknown level",
+      "method": "POST",
+      "path": "/db/query?level=bogus",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "an error on a write",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_nosuch VALUES (1)"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "a write that fails after a write",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_e (a)",
+        "INSERT INTO dbimp_nosuch VALUES (1)",
+        "INSERT INTO dbimp_e VALUES (1)"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "what the failed writes left",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT count(*) FROM dbimp_e"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "drop the table of errors",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_e"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "an update that changes no rows",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "UPDATE dbimp_types SET i = i WHERE id < 0"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "a DDL after an update",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "UPDATE dbimp_types SET i = i WHERE id <= 2",
+        "CREATE TABLE IF NOT EXISTS dbimp_ddl (a)",
+        "DROP TABLE dbimp_ddl"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "a long query with a time in the database",
+      "method": "POST",
+      "path": "/db/query?db_timeout=1s",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 300000000) SELECT count(*) FROM n"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "a long query that the client leaves",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 300000000) SELECT count(*) FROM n"
+      ],
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "a query after the client left",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "a long write with a time in the database",
+      "method": "POST",
+      "path": "/db/execute?db_timeout=1s",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_long (v)",
+        "INSERT INTO dbimp_long WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 5000000) SELECT v FROM n"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "what the long write left",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT count(*) FROM dbimp_long"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "drop the table of the long write",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_long"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "a long computed write with a time in the database",
+      "method": "POST",
+      "path": "/db/execute?db_timeout=1s",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_lw (n)",
+        "INSERT INTO dbimp_lw WITH RECURSIVE n(v) AS (SELECT 1 UNION ALL SELECT v + 1 FROM n WHERE v < 100000000) SELECT count(*) FROM n"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "what the long computed write left",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT count(*) FROM dbimp_lw"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "drop the table of the long computed write",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_lw"
+      ]
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ],
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "the status",
+      "method": "GET",
+      "path": "/status"
+    },
+    {
+      "item": 8,
+      "name": "the nodes",
+      "method": "GET",
+      "path": "/nodes"
+    },
+    {
+      "item": 8,
+      "name": "a backup",
+      "method": "GET",
+      "path": "/db/backup?fmt=sql"
+    },
+    {
+      "item": 8,
+      "name": "the readiness",
+      "method": "GET",
+      "path": "/readyz"
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT sqlite_version()"
+      ]
+    },
+    {
+      "item": 9,
+      "name": "a function of rqlite for the version",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT rqlite_version()"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "two statements in one string",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1 AS a; SELECT 2 AS b"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "two writes in one string",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_two (a); INSERT INTO dbimp_two VALUES (1); INSERT INTO dbimp_two VALUES (2)"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "what the two writes left",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT count(*) FROM dbimp_two"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "drop the table of two writes",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_two"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "a statement that ends with a semicolon",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1;"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "comments",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "-- a comment\nSELECT /* inner */ 1 -- after"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "an empty statement",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        ""
+      ]
+    },
+    {
+      "item": 10,
+      "name": "a statement of only a comment",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "-- nothing"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "make the table of transactions",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_tx",
+        "CREATE TABLE dbimp_tx (k INTEGER PRIMARY KEY)"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "a request in a transaction that fails",
+      "method": "POST",
+      "path": "/db/execute?transaction",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_tx VALUES (1)",
+        "INSERT INTO dbimp_tx VALUES (1)"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "what the failed transaction left",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT count(*) FROM dbimp_tx"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "a request with no transaction that fails",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_tx VALUES (2)",
+        "INSERT INTO dbimp_tx VALUES (2)",
+        "INSERT INTO dbimp_tx VALUES (3)"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "what the request with no transaction left",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT k FROM dbimp_tx ORDER BY k"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "begin",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "BEGIN"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "insert after the begin",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_tx VALUES (10)"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "a later write request sees the begin",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "UPDATE dbimp_tx SET k = k WHERE k = 10 RETURNING k"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the begin",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT k FROM dbimp_tx ORDER BY k"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "rollback",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "ROLLBACK"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the rollback",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT k FROM dbimp_tx ORDER BY k"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "begin and rollback in one request",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "BEGIN",
+        "INSERT INTO dbimp_tx VALUES (11)",
+        "ROLLBACK"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after begin and rollback in one request",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT k FROM dbimp_tx ORDER BY k"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "a savepoint",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SAVEPOINT s",
+        "INSERT INTO dbimp_tx VALUES (12)",
+        "ROLLBACK TO s",
+        "RELEASE s"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the savepoint",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT k FROM dbimp_tx ORDER BY k"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "begin inside a transaction",
+      "method": "POST",
+      "path": "/db/execute?transaction",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "BEGIN"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "drop the table of transactions",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_tx"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "a gzip answer",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "a redirect to the leader",
+      "method": "POST",
+      "path": "/db/query?redirect",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "a queued write",
+      "method": "POST",
+      "path": "/db/execute?queue&wait&timeout=5s",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_q (a)"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "a queued insert",
+      "method": "POST",
+      "path": "/db/execute?queue",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_q VALUES (1)"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "a queued insert with a wait",
+      "method": "POST",
+      "path": "/db/execute?queue&wait&timeout=5s",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_q VALUES (2)"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "what the queue wrote",
+      "method": "POST",
+      "path": "/db/query?level=strong",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT count(*) FROM dbimp_q"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "drop the table of the queue",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_q"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "the timings",
+      "method": "POST",
+      "path": "/db/query?timings",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "the raft index",
+      "method": "POST",
+      "path": "/db/execute?raft_index",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_ri (a)",
+        "DROP TABLE dbimp_ri"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "a flag with the value false",
+      "method": "POST",
+      "path": "/db/query?timings=false",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: make the table",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_crud",
+        "CREATE TABLE dbimp_crud (k INTEGER PRIMARY KEY, v TEXT)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: insert",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_crud VALUES (1, 'a'), (2, 'b'), (3, 'c')"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: select",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT k, v FROM dbimp_crud ORDER BY k"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: update",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "UPDATE dbimp_crud SET v = 'B' WHERE k = 2"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: delete",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DELETE FROM dbimp_crud WHERE k = 3"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: upsert",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_crud VALUES (1, 'x') ON CONFLICT (k) DO UPDATE SET v = excluded.v || '!'"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: replace",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "REPLACE INTO dbimp_crud VALUES (4, 'd')"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: returning on execute",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_crud VALUES (5, 'e') RETURNING k, v"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: returning on request",
+      "method": "POST",
+      "path": "/db/request",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "UPDATE dbimp_crud SET v = 'E' WHERE k = 5 RETURNING k, v"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: returning on query",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DELETE FROM dbimp_crud WHERE k = 5 RETURNING k"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: the rows after",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT k, v FROM dbimp_crud ORDER BY k"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: drop the table",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE dbimp_crud"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the tables",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP VIEW IF EXISTS dbimp_s_view",
+        "DROP TABLE IF EXISTS dbimp_s_child",
+        "DROP TABLE IF EXISTS dbimp_s_parent",
+        "DROP TABLE IF EXISTS dbimp_s_other"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: table and primary key",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE dbimp_s_parent (id INTEGER PRIMARY KEY, name TEXT UNIQUE, n INTEGER DEFAULT 7, g INTEGER GENERATED ALWAYS AS (n * 2) VIRTUAL, CHECK (n > 0))"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: foreign key",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE dbimp_s_child (id INTEGER PRIMARY KEY, parent INTEGER REFERENCES dbimp_s_parent (id))"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: a foreign key that is broken",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_s_child VALUES (1, 99)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: a foreign key with the pragma",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "PRAGMA foreign_keys = ON",
+        "INSERT INTO dbimp_s_child VALUES (2, 98)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: the pragma of foreign keys on the read connection",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "PRAGMA foreign_keys"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: the pragma of foreign keys on the write connection",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_s_child VALUES (3, 97)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: turn the pragma off again",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "PRAGMA foreign_keys = OFF"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: index",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE INDEX dbimp_s_idx ON dbimp_s_parent (n)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: the plan uses the index",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "EXPLAIN QUERY PLAN SELECT id FROM dbimp_s_parent WHERE n = 7"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: default value in use",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_s_parent (id, name) VALUES (1, 'a')"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: default value and generated column read",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT id, name, n, g FROM dbimp_s_parent"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: unique constraint enforced",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_s_parent (id, name) VALUES (2, 'a')"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: check constraint enforced",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_s_parent (id, name, n) VALUES (3, 'c', 0)"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: view",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE VIEW dbimp_s_view AS SELECT id, name FROM dbimp_s_parent"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: view read",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT * FROM dbimp_s_view"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: trigger",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE dbimp_s_other (id INTEGER PRIMARY KEY, seen INTEGER) WITHOUT ROWID",
+        "CREATE TRIGGER dbimp_s_trg AFTER INSERT ON dbimp_s_parent BEGIN INSERT INTO dbimp_s_other VALUES (new.id, 1); END",
+        "INSERT INTO dbimp_s_parent (id, name) VALUES (4, 'd')"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: trigger and without rowid read",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT id, seen FROM dbimp_s_other"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: the table valued pragmas",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT name, type, pk, hidden FROM pragma_table_xinfo('dbimp_s_parent')",
+        "SELECT name, type FROM sqlite_schema WHERE name LIKE 'dbimp_s_%' ORDER BY name"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the tables after",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP VIEW IF EXISTS dbimp_s_view",
+        "DROP TABLE IF EXISTS dbimp_s_child",
+        "DROP TABLE IF EXISTS dbimp_s_other",
+        "DROP TABLE IF EXISTS dbimp_s_parent"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: level none",
+      "method": "POST",
+      "path": "/db/query?level=none",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: level weak",
+      "method": "POST",
+      "path": "/db/query?level=weak",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: level linearizable",
+      "method": "POST",
+      "path": "/db/query?level=linearizable",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: level strong",
+      "method": "POST",
+      "path": "/db/query?level=strong",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: level auto",
+      "method": "POST",
+      "path": "/db/query?level=auto",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: freshness",
+      "method": "POST",
+      "path": "/db/query?level=none&freshness=1s&freshness_strict",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT 1"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: random in a read",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT random() = random()"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: random and time in a write",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "CREATE TABLE IF NOT EXISTS dbimp_rw (r, t)",
+        "INSERT INTO dbimp_rw VALUES (random(), datetime('now'))"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: random and time read",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "SELECT typeof(r), typeof(t) FROM dbimp_rw"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: random with no rewrite",
+      "method": "POST",
+      "path": "/db/execute?norwrandom&norwtime",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "INSERT INTO dbimp_rw VALUES (random(), datetime('now'))",
+        "DROP TABLE dbimp_rw"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: a pragma that is refused",
+      "method": "POST",
+      "path": "/db/query",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "PRAGMA journal_mode"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "drop the table of every type after",
+      "method": "POST",
+      "path": "/db/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        "DROP TABLE IF EXISTS dbimp_types"
+      ]
+    }
+  ]
+}
