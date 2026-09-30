@@ -25,7 +25,7 @@ holds the second and the third. The fifth, in
 `arangodb/`, was first released in `v0.5.0` (W13). The sixth, in
 `databend/`, was first released in `v0.6.0` (W16). The seventh, in
 `pinot/`, was first released in `v0.7.0` (W19). The eighth, in
-`rqlite/`, is staged for review, and no release holds it yet (W22). The
+`rqlite/`, was first released in `v0.8.0` (W22). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

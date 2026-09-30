@@ -1103,12 +1103,21 @@ Steps 10 to 17a went in on 2026-09-30, staged for Ken's review:
   passed with the `url` that the staged `dbrun` prints, 127 on each release
   with none skipped. The `dbmeta` session committed it as dbmeta `f7e3cbb`
   on 2026-09-30, with its rqlite model, and the pin moved there from
-  `6b24b13`, staged for Ken's review.
+  `6b24b13`.
 - Step 16: `SELECT sqlite_version()` gives the version of SQLite to both
   principals, and the header `X-Rqlite-Version` gives the release of
   rqlite on every answer. The requests below wait for the release.
 - Step 17a: `## Compared with Couchbase` is in RQLITE.md. Every difference
-  that a caller sees has a decision, or is a fact of the server.
+  that a caller sees has a decision, or is a fact of the server. Ken
+  reviewed it on 2026-09-30.
+
+Ken committed steps 2 to 17a and the pin on 2026-09-30 as `af64706`. The
+workflow passed on `af64706`, on every release of every driver, with both
+releases of rqlite for the first time, which is the gate of step 18:
+https://github.com/xo/dbimp/actions/runs/36701186227. At Ken's request, the
+session tagged `v0.8.0` on `af64706` and published it the same day, which
+is the gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.8.0.
+The requests below wait for Ken's word to send them.
 
 1. To `dburl`: dbimp D141 settles the provisional scheme `rqlite` (dburl
    D36). Please set its `GoPackage` to `github.com/xo/dbimp/rqlite` and

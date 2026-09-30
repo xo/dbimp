@@ -12,7 +12,7 @@ released in `v0.1.0`, `surrealdb` and `neo4j`, which the tags `v0.2.0` and
 `v0.3.0` hold, `influxdb`, which was first released in `v0.4.0` with the
 other three, `arangodb`, which was first released in `v0.5.0`, `databend`,
 which was first released in `v0.6.0`, `pinot`, which was first released in
-`v0.7.0`, and `rqlite`, which no release holds yet.
+`v0.7.0`, and `rqlite`, which was first released in `v0.8.0`.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 

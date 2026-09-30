@@ -49,7 +49,7 @@ order:
    short with no sign (D127). See [TDENGINE.md](TDENGINE.md).
 6. Apache Pinot. Done, in `v0.7.0` (W19).
    See [PINOT.md](PINOT.md).
-7. rqlite. Staged for review in `github.com/xo/dbimp/rqlite` (W22). See
+7. rqlite. Done, in `v0.8.0` (W22). See
    [RQLITE.md](RQLITE.md).
 8. libSQL, and Turso. See [LIBSQL.md](LIBSQL.md).
 9. Apache Calcite Avatica, and the products that speak it: the standalone
