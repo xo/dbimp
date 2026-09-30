@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json/jsontext"
 	"encoding/json/v2"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -32,7 +33,9 @@ func (c *Connector) execute(ctx context.Context, s *stream, stmt map[string]any,
 }
 
 // closeStream sends close for s, with ctx without its end and the limit of
-// closeTimeout, because a cursor leaves its stream open (D149).
+// closeTimeout, because a cursor leaves its stream open (D149). A stream
+// that expired is closed already, as one does while a slow reader reads a
+// large cursor (measured in CI), so STREAM_EXPIRED is no error here.
 func (c *Connector) closeStream(ctx context.Context, s *stream) error {
 	if s.baton == "" {
 		return nil
@@ -40,6 +43,9 @@ func (c *Connector) closeStream(ctx context.Context, s *stream) error {
 	ctx, cancel := context.WithTimeout(context.WithoutCancel(ctx), closeTimeout)
 	defer cancel()
 	_, err := c.pipeline(ctx, s, []any{map[string]any{"type": "close"}})
+	if e, ok := errors.AsType[*Error](err); ok && e.Code == CodeStreamExpired {
+		return nil
+	}
 	return err
 }
 

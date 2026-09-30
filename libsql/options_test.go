@@ -296,3 +296,18 @@ func TestBaseURL(t *testing.T) {
 		t.Errorf("a base_url on another host gave %v, want %v", err, dbimp.ErrNotSupported)
 	}
 }
+
+// TestCursorOfAnExpiredStream holds D149: a cursor whose stream expired
+// while its rows were read ends with no error, because the stream is closed
+// already (measured in CI).
+func TestCursorOfAnExpiredStream(t *testing.T) {
+	t.Parallel()
+	s := &fakeServer{expire: true}
+	db, _ := s.open(t, "", "")
+	if err := query(t.Context(), t, db); err != nil {
+		t.Errorf("a cursor whose close found the stream expired gave %v, want nil", err)
+	}
+	if reqs := s.take(); len(reqs) != 2 || reqs[1].body["baton"] != "b1" {
+		t.Errorf("the query sent %+v, want the cursor and a close", reqs)
+	}
+}

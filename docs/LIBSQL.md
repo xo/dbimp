@@ -172,6 +172,10 @@ These facts were recorded as both principals:
   "a result of 20000 rows" and "a result of 500000 rows").
 - The cursor sent the 500000 rows, 58389239 bytes, with no cap (measured with
   `curl` on 2026-10-01).
+- A stream expires while its cursor sends rows. In the workflow of commit
+  `5397646`, a reader that took 20 seconds for 300000 rows got every row,
+  and the `close` after them got `STREAM_EXPIRED`. So the driver takes that
+  code as a stream that is closed already (D149).
 
 These facts come from the sources, and are not measured:
 
