@@ -138,16 +138,19 @@ and the same for `dbmeta_user`, from dbmeta commit 29395a1.
 
 The type table is written from the code by `TestTables` (step 10).
 
+The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
+maps every kind onto its Go type (D135 and D137).
+
 <!-- dbimp:types -->
-| Wire type | Go type | Scan type | Database type | Can be NULL |
-| --- | --- | --- | --- | --- |
-| null | `nil` | `interface {}` | `` | yes |
-| boolean | `bool` | `interface {}` | `` | yes |
-| integer | `int64, for a number with no fraction that fits` | `interface {}` | `` | yes |
-| double | `float64, and a number above the range of int64` | `interface {}` | `` | yes |
-| string | `string` | `interface {}` | `` | yes |
-| array | `[]any` | `interface {}` | `` | yes |
-| object | `map[string]any, and a document in one column (D89)` | `interface {}` | `` | yes |
+| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- | --- |
+| null | null | `nil` | `interface {}` | `` | yes |
+| boolean | boolean | `bool` | `interface {}` | `` | yes |
+| integer | number | `int64, for a number with no fraction that fits` | `interface {}` | `` | yes |
+| double | number | `float64, and a number above the range of int64` | `interface {}` | `` | yes |
+| string | string | `string` | `interface {}` | `` | yes |
+| array | array | `[]any` | `interface {}` | `` | yes |
+| object | map | `map[string]any, and a document in one column (D89)` | `interface {}` | `` | yes |
 <!-- /dbimp:types -->
 
 - A number with no fraction that fits `int64` arrives as that integer, such

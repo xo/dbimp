@@ -1,6 +1,6 @@
 # D118. The Go types of Databend
 
-Status: Decided.
+Status: Amended by D138.
 
 Ken decided this on 2026-09-29, at step 9 of the Databend driver.
 This is items 4 and 5 of step 9 of [DRIVER.md](../DRIVER.md) for Databend,

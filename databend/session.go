@@ -5,6 +5,7 @@ import (
 	"encoding/json/v2"
 	"fmt"
 	"maps"
+	"strings"
 	"time"
 )
 
@@ -112,7 +113,12 @@ func (s session) restore(prev session, database string, settings map[string]stri
 // none.
 func (s session) format(zone *time.Location) (*format, error) {
 	m := s.settings()
-	f := &format{driver: m["http_json_result_mode"] == "driver", binary: m["binary_output_format"], loc: zone}
+	f := &format{
+		driver:   m["http_json_result_mode"] == "driver",
+		binary:   strings.ToLower(m["binary_output_format"]),
+		geometry: strings.ToLower(m["geometry_output_format"]),
+		loc:      zone,
+	}
 	if tz := m["timezone"]; tz != "" {
 		loc, err := time.LoadLocation(tz)
 		if err != nil {

@@ -40,7 +40,9 @@ in D73. W12 came from that order, and D88 dropped it. W13 came from Ken on
 from D109. W16 came from Ken on 2026-09-29, who named Databend as the next
 target at step 1, W17 from D119, and W18 from Ken on 2026-09-29, who
 named TDengine as the next target at step 1. W19 came from Ken on
-2026-09-30, who named Apache Pinot as the next target at step 1.
+2026-09-30, who named Apache Pinot as the next target at step 1. W20 came
+from Ken on 2026-09-30, who asked for one table of every type of every
+driver after D135, and W21 from D138.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -930,10 +932,11 @@ Steps 10 to 17a went in on 2026-09-30:
   tables of the tests, and the administrator runs the rest. On 1.4.0 the
   test of the cancel skips, because its Broker has query cancellation off.
 - Step 15: the workflow exports `<PRODUCT>_SECOND_ADDRESS` from
-  `secondAddress`. The pin of `dbmeta` must move to the commit that holds
-  the second port of Pinot and its `url` of D129, which the `dbmeta` session
-  staged on 2026-09-30 and has not committed. Until then, a Pinot job of CI
-  gets an `http` URL, which the driver refuses.
+  `secondAddress`. The first push, `7f29343`, ran at the pin `7907cd9`, and
+  its two Pinot jobs failed, as expected, because that entry of `dbrun` gave
+  an `http` URL and no Controller. The `dbmeta` session committed both
+  changes as dbmeta `6b24b13` on 2026-09-30, and the pin moved there,
+  staged for Ken's review.
 - Step 16: no statement on the Broker gives the version, for either
   principal. `SELECT version()` fails with 700, and `GET /version` of the
   Broker is HTTP 404. The Controller gives it with no user (PINOT.md,
@@ -959,3 +962,54 @@ D135: a value has the Go type that fits the type that the server names.
    `drivers/pinot/pinot.go` imports `github.com/xo/dbimp/pinot`. No
    statement gives the version, so its `Version` cannot run SQL. The driver
    takes no write, and a write fails with the error of the server (D128).
+
+## W20. Map the types of every driver onto one list of kinds
+
+Ken asked for this on 2026-09-30, after D135. He asked for a table of every
+type that every driver supports, with its Go type, for the types that the
+root package would share, and for a step of [DRIVER.md](DRIVER.md) that maps
+the types of a new driver, with two models, before any code is written.
+
+The first part went in on 2026-09-30:
+
+- D136 fixed the five breaks of D135 that an audit found: the Databend
+  geometry follows `geometry_output_format`, the InfluxDB `Duration` is a
+  `time.Duration`, a Couchbase value that disagrees with its signature is an
+  error, a scan type is `T` for a nullable column, and a type with no Go type
+  keeps its text.
+- Gemini and DeepSeek reviewed the kinds and the shared types.
+- D137 made [TYPES.md](TYPES.md), with the list of kinds and the table of
+  every driver, which `TestTheTypeMatrixIsCurrent` writes from the product
+  documents, and step 8a of [DRIVER.md](DRIVER.md). The type table of each
+  product document has the column Kind, which `TestEveryTypeHasAKind` holds.
+
+This item stays open until Ken reviews the table of [TYPES.md](TYPES.md).
+
+## W21. Define the types of D138
+
+Ken decided D138 on 2026-09-30, and D139, which adds `OffsetTime` and
+`Vector`, the same day. This item carries both out.
+
+The work went in on 2026-09-30, staged for Ken's review:
+
+- `civil.go` in the root package holds `Date`, `LocalTime`, `OffsetTime`,
+  `LocalDateTime`, `Interval` and `Vector[T]`, with ISO 8601 in both
+  directions, and `Assign` converts each one for a `*string`, a `*time.Time`
+  and an `sql.Null` of either.
+- Neo4j reads and sends the six types, and `neo4j.Time`, `neo4j.Date`,
+  `neo4j.LocalTime`, `neo4j.LocalDateTime`, `neo4j.Duration` and
+  `neo4j.Vector` are gone.
+- Databend reads a `Date`, an `Interval`, a `UInt64` and a `Vector` as a
+  `dbimp.Date`, a `dbimp.Interval`, a `uint64` and a `dbimp.Vector[float32]`.
+  It sends an interval in the form of the server, because the server takes
+  no ISO 8601 part with a sign, and refuses an interval argument with a
+  fraction of a microsecond, which the server drops.
+- InfluxDB reads a `Date32` and a `Date64` as a `dbimp.Date`, a `Time32` and
+  a `Time64` as a `dbimp.LocalTime`, and an `Interval` as a
+  `dbimp.Interval`, and sends an interval in the form of the server.
+- The integration tests passed on Neo4j 2026.09.0 and 5.26.31, Databend
+  1.2.881 and 1.2.948, and InfluxDB 1.13.1, 2.9.1, 3.9.13 and 3.11.5, before
+  D139. They ran again on Neo4j and Databend after it.
+
+This item stays open until Ken approves the release, whose notes say which
+Go type changes for a caller of each driver.

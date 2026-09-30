@@ -33,18 +33,18 @@ var wireTypes = []struct {
 	{"byte array", "Base64", "[]byte"},
 	{"list", "List", "[]any"},
 	{"map", "Map", "map[string]any"},
-	{"date", "Date", "neo4j.Date"},
-	{"local time", "LocalTime", "neo4j.LocalTime"},
-	{"zoned time", "Time", "neo4j.Time"},
-	{"local datetime", "LocalDateTime", "neo4j.LocalDateTime"},
+	{"date", "Date", "dbimp.Date"},
+	{"local time", "LocalTime", "dbimp.LocalTime"},
+	{"zoned time", "Time", "dbimp.OffsetTime"},
+	{"local datetime", "LocalDateTime", "dbimp.LocalDateTime"},
 	{"offset datetime", "OffsetDateTime", "time.Time"},
 	{"zoned datetime", "ZonedDateTime", "time.Time, in the location that the zone names"},
-	{"duration", "Duration", "neo4j.Duration"},
+	{"duration", "Duration", "dbimp.Interval"},
 	{"point", "Point", "neo4j.Point"},
 	{"node", "Node", "neo4j.Node"},
 	{"relationship", "Relationship", "neo4j.Relationship"},
 	{"path", "Path", "neo4j.Path"},
-	{"vector", "Vector", "neo4j.Vector"},
+	{"vector", "Vector", "dbimp.Vector of the Go type of its coordinates, such as dbimp.Vector[float32]"},
 	{"uuid", "UUID", "uuid.UUID"},
 }
 
@@ -139,20 +139,20 @@ func parseText(typ, s string) (any, error) {
 		}
 		return u, nil
 	case "Date":
-		return parseDate(s)
+		return dbimp.ParseDate(s)
 	case "LocalTime":
-		return parseLocalTime(s)
+		return dbimp.ParseLocalTime(s)
 	case "Time":
-		return parseTime(s)
+		return dbimp.ParseOffsetTime(s)
 	case "LocalDateTime":
-		t, err := parseDateTime(typ, s, false, false)
-		return LocalDateTime(t), err
+		return dbimp.ParseLocalDateTime(s)
 	case "OffsetDateTime":
 		return parseDateTime(typ, s, true, false)
 	case "ZonedDateTime":
 		return parseDateTime(typ, s, true, true)
 	case "Duration":
-		return parseDuration(s)
+		// A duration beyond the range of an Interval is an error (D138).
+		return dbimp.ParseInterval(s)
 	case "Point":
 		return parsePoint(s)
 	}
@@ -270,31 +270,39 @@ func decodePath(raw jsontext.Value) (Path, error) {
 }
 
 // decodeVector reads a Vector, whose coordinates typed JSON writes as
-// strings.
-func decodeVector(raw jsontext.Value) (Vector, error) {
+// strings, as a dbimp.Vector of the type of its coordinates (D139).
+func decodeVector(raw jsontext.Value) (any, error) {
 	var v struct {
 		Type   string   `json:"coordinatesType"`
 		Coords []string `json:"coordinates"`
 	}
 	if err := json.Unmarshal(raw, &v); err != nil {
-		return Vector{}, fmt.Errorf("reading a Vector: %w", err)
+		return nil, fmt.Errorf("reading a Vector: %w", err)
 	}
-	var err error
+	var (
+		out any
+		err error
+	)
 	switch v.Type {
 	case coordsInt8:
-		return Vector{Coordinates: parseCoords[int8](v.Coords, 8, &err)}, err
+		out = dbimp.Vector[int8](parseCoords[int8](v.Coords, 8, &err))
 	case coordsInt16:
-		return Vector{Coordinates: parseCoords[int16](v.Coords, 16, &err)}, err
+		out = dbimp.Vector[int16](parseCoords[int16](v.Coords, 16, &err))
 	case coordsInt32:
-		return Vector{Coordinates: parseCoords[int32](v.Coords, 32, &err)}, err
+		out = dbimp.Vector[int32](parseCoords[int32](v.Coords, 32, &err))
 	case coordsInt64:
-		return Vector{Coordinates: parseCoords[int64](v.Coords, 64, &err)}, err
+		out = dbimp.Vector[int64](parseCoords[int64](v.Coords, 64, &err))
 	case coordsFloat32:
-		return Vector{Coordinates: parseFloatCoords[float32](v.Coords, 32, &err)}, err
+		out = dbimp.Vector[float32](parseFloatCoords[float32](v.Coords, 32, &err))
 	case coordsFloat64:
-		return Vector{Coordinates: parseFloatCoords[float64](v.Coords, 64, &err)}, err
+		out = dbimp.Vector[float64](parseFloatCoords[float64](v.Coords, 64, &err))
+	default:
+		return nil, fmt.Errorf("reading a Vector of the type %q: %w", v.Type, dbimp.ErrInvalidValue)
 	}
-	return Vector{}, fmt.Errorf("reading a Vector of the type %q: %w", v.Type, dbimp.ErrInvalidValue)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 // parseCoords reads the integer coordinates of a vector, of bits bits.
@@ -405,32 +413,28 @@ func (e *encoder) value(v any) error {
 			e.typed("OffsetDateTime", formatDateTime(x, false))
 		}
 		return nil
-	case Date:
+	case dbimp.Date:
 		e.typed("Date", x.String())
 		return nil
-	case LocalTime:
+	case dbimp.LocalTime:
 		e.typed("LocalTime", x.String())
 		return nil
-	case Time:
+	case dbimp.OffsetTime:
 		e.typed("Time", x.String())
 		return nil
-	case LocalDateTime:
+	case dbimp.LocalDateTime:
 		e.typed("LocalDateTime", x.String())
 		return nil
-	case Duration:
+	case dbimp.Interval:
 		e.typed("Duration", x.String())
 		return nil
 	case time.Duration:
-		d := Duration{Seconds: int64(x / time.Second), Nanos: int64(x % time.Second)}
-		if d.Nanos < 0 {
-			d.Seconds, d.Nanos = d.Seconds-1, d.Nanos+1e9
-		}
-		e.typed("Duration", d.String())
+		e.typed("Duration", dbimp.Interval{Nanoseconds: int64(x)}.String())
 		return nil
 	case Point:
 		e.typed("Point", x.String())
 		return nil
-	case Vector:
+	case dbimp.Vector[int8], dbimp.Vector[int16], dbimp.Vector[int32], dbimp.Vector[int64], dbimp.Vector[float32], dbimp.Vector[float64]:
 		return e.vector(x)
 	case uuid.UUID:
 		e.version = max(e.version, version12)
@@ -531,33 +535,34 @@ func (e *encoder) reflect(rv reflect.Value) error {
 	return fmt.Errorf("encoding a %s as an argument: %w", rv.Type(), dbimp.ErrInvalidValue)
 }
 
-// vector writes a Vector, which needs version 1.1 of typed JSON.
-func (e *encoder) vector(v Vector) error {
+// vector writes a dbimp.Vector, which needs version 1.1 of typed JSON (D139).
+// A plain slice is a list (D63).
+func (e *encoder) vector(v any) error {
 	var (
 		typ    string
 		coords []string
 	)
-	switch c := v.Coordinates.(type) {
-	case []int8:
+	switch c := v.(type) {
+	case dbimp.Vector[int8]:
 		typ, coords = coordsInt8, formatInts(c)
-	case []int16:
+	case dbimp.Vector[int16]:
 		typ, coords = coordsInt16, formatInts(c)
-	case []int32:
+	case dbimp.Vector[int32]:
 		typ, coords = coordsInt32, formatInts(c)
-	case []int64:
+	case dbimp.Vector[int64]:
 		typ, coords = coordsInt64, formatInts(c)
-	case []float32:
+	case dbimp.Vector[float32]:
 		typ = coordsFloat32
 		for _, f := range c {
 			coords = append(coords, formatFloat(float64(f), 32))
 		}
-	case []float64:
+	case dbimp.Vector[float64]:
 		typ = coordsFloat64
 		for _, f := range c {
 			coords = append(coords, formatFloat(f, 64))
 		}
 	default:
-		return fmt.Errorf("encoding a Vector of %T: %w", v.Coordinates, dbimp.ErrInvalidValue)
+		return fmt.Errorf("encoding a vector of %T: %w", v, dbimp.ErrInvalidValue)
 	}
 	e.version = max(e.version, version11)
 	e.open("Vector")

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cockroachdb/apd/v3"
 )
@@ -197,6 +198,10 @@ func Assign(scanCtx driver.ScanContext, dest, src any) error {
 	if d, ok := src.(*apd.Decimal); ok {
 		src = d.String()
 	}
+	if done, err := assignCivil(dest, src); done {
+		return err
+	}
+	src = civilSource(dest, src)
 	if err := sql.ConvertAssign(scanCtx, dest, src); err != nil {
 		return fmt.Errorf("assigning %T to %T: %w", src, dest, err)
 	}
@@ -208,4 +213,66 @@ func kindError(v jsontext.Value, want string) error {
 		return fmt.Errorf("reading a missing value as a %s: %w", want, ErrInvalidValue)
 	}
 	return fmt.Errorf("reading %s as a %s: %w", v.Kind(), want, ErrInvalidValue)
+}
+
+// assignCivil stores a Date, a LocalTime, a LocalDateTime or an Interval of
+// src in a destination of its own type, or in an sql.Null of it (D138). It
+// reports whether dest was such a destination.
+func assignCivil(dest, src any) (bool, error) {
+	switch s := src.(type) {
+	case Date:
+		return assignSame(dest, s)
+	case LocalTime:
+		return assignSame(dest, s)
+	case LocalDateTime:
+		return assignSame(dest, s)
+	case OffsetTime:
+		return assignSame(dest, s)
+	case Interval:
+		return assignSame(dest, s)
+	}
+	return false, nil
+}
+
+// assignSame stores v in a *T or an *sql.Null[T], and reports whether dest
+// was one.
+func assignSame[T any](dest any, v T) (bool, error) {
+	switch d := dest.(type) {
+	case *T:
+		*d = v
+		return true, nil
+	case *sql.Null[T]:
+		d.V, d.Valid = v, true
+		return true, nil
+	}
+	return false, nil
+}
+
+// civilSource returns src as sql.ConvertAssign takes it for dest (D138). A
+// Date, a LocalTime and a LocalDateTime are the time.Time of their value in
+// UTC for a destination of a time.Time, and the text of String for any
+// other destination. An OffsetTime is its time on 0000-01-01 in a zone of
+// its offset for a time.Time, and its text for any other. An Interval is
+// its text.
+func civilSource(dest, src any) any {
+	var t time.Time
+	switch s := src.(type) {
+	case Date:
+		t = s.In(time.UTC)
+	case LocalTime:
+		t = s.In(time.UTC)
+	case LocalDateTime:
+		t = s.In(time.UTC)
+	case OffsetTime:
+		t = s.ToTime()
+	case Interval:
+		return s.String()
+	default:
+		return src
+	}
+	switch dest.(type) {
+	case *time.Time, *sql.Null[time.Time], *sql.NullTime:
+		return t
+	}
+	return fmt.Sprint(src)
 }

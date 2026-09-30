@@ -24,17 +24,17 @@ func TestParseForms(t *testing.T) {
 		typ, text string
 		want      any
 	}{
-		{"Date", "2026-09-27", Date(time.Date(2026, 9, 27, 0, 0, 0, 0, time.UTC))},
-		{"Date", "+999999999-12-31", Date(time.Date(999999999, 12, 31, 0, 0, 0, 0, time.UTC))},
-		{"Date", "-0001-06-01", Date(time.Date(-1, 6, 1, 0, 0, 0, 0, time.UTC))},
-		{"LocalTime", "12:50:35.556123456", LocalTime(time.Date(0, 1, 1, 12, 50, 35, 556123456, time.UTC))},
-		{"LocalTime", "12:00", LocalTime(time.Date(0, 1, 1, 12, 0, 0, 0, time.UTC))},
-		{"LocalDateTime", "2026-09-27T10:00:00.1", LocalDateTime(time.Date(2026, 9, 27, 10, 0, 0, 1e8, time.UTC))},
+		{"Date", "2026-09-27", dbimp.Date{Year: 2026, Month: 9, Day: 27}},
+		{"Date", "+999999999-12-31", dbimp.Date{Year: 999999999, Month: 12, Day: 31}},
+		{"Date", "-0001-06-01", dbimp.Date{Year: -1, Month: 6, Day: 1}},
+		{"LocalTime", "12:50:35.556123456", dbimp.LocalTime{Hour: 12, Minute: 50, Second: 35, Nanosecond: 556123456}},
+		{"LocalTime", "12:00", dbimp.LocalTime{Hour: 12, Minute: 0, Second: 0, Nanosecond: 0}},
+		{"LocalDateTime", "2026-09-27T10:00:00.1", dbimp.LocalDateTime{Date: dbimp.Date{Year: 2026, Month: 9, Day: 27}, Time: dbimp.LocalTime{Hour: 10, Minute: 0, Second: 0, Nanosecond: 1e8}}},
 		{"OffsetDateTime", "1600-01-01T00:00:00Z", time.Date(1600, 1, 1, 0, 0, 0, 0, time.UTC)},
-		{"Duration", "P1Y2M3DT4H5M6.007S", Duration{Months: 14, Days: 3, Seconds: 14706, Nanos: 7e6}},
-		{"Duration", "P-1Y-2M-3DT-5.000000007S", Duration{Months: -14, Days: -3, Seconds: -6, Nanos: 999999993}},
-		{"Duration", "PT-0.5S", Duration{Seconds: -1, Nanos: 5e8}},
-		{"Duration", "P2W", Duration{Days: 14}},
+		{"Duration", "P1Y2M3DT4H5M6.007S", dbimp.Interval{Months: 14, Days: 3, Nanoseconds: 14706007000000}},
+		{"Duration", "P-1Y-2M-3DT-5.000000007S", dbimp.Interval{Months: -14, Days: -3, Nanoseconds: -5000000007}},
+		{"Duration", "PT-0.5S", dbimp.Interval{Nanoseconds: -500000000}},
+		{"Duration", "P2W", dbimp.Interval{Days: 14}},
 		{"Point", "SRID=7203;POINT (1.5 2.5)", Point{SRID: 7203, X: 1.5, Y: 2.5, Dims: 2}},
 		{"Point", "SRID=4979;POINT Z (10.7 59.9 3.0)", Point{SRID: 4979, X: 10.7, Y: 59.9, Z: 3, Dims: 3}},
 	} {
@@ -68,7 +68,6 @@ func TestParseRefusesForms(t *testing.T) {
 		{"LocalTime", "25:00:00"},
 		{"LocalTime", "12:00:00.1234567891"},
 		{"Time", "12:00:00"},
-		{"LocalDateTime", "2026-09-27 10:00:00"},
 		{"OffsetDateTime", "2026-09-27T10:00:00"},
 		{"ZonedDateTime", "2026-09-27T10:00:00+02:00"},
 		{"Duration", "P"},
@@ -112,18 +111,18 @@ func TestEncode(t *testing.T) {
 		{[]any{1, "a", nil}, `{"$type":"List","_value":[{"$type":"Integer","_value":"1"},{"$type":"String","_value":"a"},{"$type":"Null","_value":null}]}`, 0},
 		{[]float32{1.5}, `{"$type":"List","_value":[{"$type":"Float","_value":"1.5"}]}`, 0},
 		{map[string]int{"k": 1}, `{"$type":"Map","_value":{"k":{"$type":"Integer","_value":"1"}}}`, 0},
-		{Date(time.Date(2026, 9, 27, 0, 0, 0, 0, time.UTC)), `{"$type":"Date","_value":"2026-09-27"}`, 0},
-		{LocalTime(time.Date(0, 1, 1, 12, 0, 0, 5e8, time.UTC)), `{"$type":"LocalTime","_value":"12:00:00.5"}`, 0},
-		{Time(time.Date(0, 1, 1, 12, 0, 0, 0, time.FixedZone("", -5*3600-30*60))), `{"$type":"Time","_value":"12:00:00-05:30"}`, 0},
-		{LocalDateTime(time.Date(2026, 9, 27, 10, 0, 0, 0, time.UTC)), `{"$type":"LocalDateTime","_value":"2026-09-27T10:00:00"}`, 0},
+		{dbimp.Date{Year: 2026, Month: 9, Day: 27}, `{"$type":"Date","_value":"2026-09-27"}`, 0},
+		{dbimp.LocalTime{Hour: 12, Minute: 0, Second: 0, Nanosecond: 5e8}, `{"$type":"LocalTime","_value":"12:00:00.5"}`, 0},
+		{dbimp.OffsetTime{Time: dbimp.LocalTime{Hour: 12}, Offset: -5*3600 - 30*60}, `{"$type":"Time","_value":"12:00:00-05:30"}`, 0},
+		{dbimp.LocalDateTime{Date: dbimp.Date{Year: 2026, Month: 9, Day: 27}, Time: dbimp.LocalTime{Hour: 10, Minute: 0, Second: 0, Nanosecond: 0}}, `{"$type":"LocalDateTime","_value":"2026-09-27T10:00:00"}`, 0},
 		{time.Date(2026, 9, 27, 10, 0, 0, 0, time.UTC), `{"$type":"OffsetDateTime","_value":"2026-09-27T10:00:00Z"}`, 0},
 		{time.Date(2026, 9, 27, 10, 0, 0, 0, time.FixedZone("", 7200)), `{"$type":"OffsetDateTime","_value":"2026-09-27T10:00:00+02:00"}`, 0},
 		{time.Date(2026, 9, 27, 10, 0, 0, 0, oslo), `{"$type":"ZonedDateTime","_value":"2026-09-27T10:00:00+02:00[Europe/Oslo]"}`, 0},
-		{Duration{Months: 14, Days: 3, Seconds: 14706, Nanos: 7e6}, `{"$type":"Duration","_value":"P1Y2M3DT4H5M6.007S"}`, 0},
+		{dbimp.Interval{Months: 14, Days: 3, Nanoseconds: 14706007000000}, `{"$type":"Duration","_value":"P1Y2M3DT4H5M6.007S"}`, 0},
 		{90 * time.Minute, `{"$type":"Duration","_value":"PT1H30M"}`, 0},
 		{Point{SRID: 4979, X: 1, Y: 2, Z: 3, Dims: 3}, `{"$type":"Point","_value":"SRID=4979;POINT Z (1 2 3)"}`, 0},
-		{Vector{Coordinates: []float32{1.5, 2}}, `{"$type":"Vector","_value":{"coordinatesType":"FLOAT32","coordinates":["1.5","2"]}}`, 1},
-		{Vector{Coordinates: []int8{1, -2}}, `{"$type":"Vector","_value":{"coordinatesType":"INT8","coordinates":["1","-2"]}}`, 1},
+		{dbimp.Vector[float32]{1.5, 2}, `{"$type":"Vector","_value":{"coordinatesType":"FLOAT32","coordinates":["1.5","2"]}}`, 1},
+		{dbimp.Vector[int8]{1, -2}, `{"$type":"Vector","_value":{"coordinatesType":"INT8","coordinates":["1","-2"]}}`, 1},
 		{uuid.MustParse("550e8400-e29b-41d4-a716-446655440000"), `{"$type":"UUID","_value":"550e8400-e29b-41d4-a716-446655440000"}`, 2},
 		{[]any{uuid.UUID{}}, `{"$type":"List","_value":[{"$type":"UUID","_value":"00000000-0000-0000-0000-000000000000"}]}`, 2},
 	} {
@@ -142,7 +141,7 @@ func TestEncodeRefuses(t *testing.T) {
 	t.Parallel()
 	for _, in := range []any{
 		uint64(math.MaxUint64), Node{}, Relationship{}, Path{}, apd.New(1, 0), *apd.New(1, 0),
-		struct{}{}, map[int]int{1: 1}, Vector{Coordinates: []string{"a"}}, make(chan int),
+		struct{}{}, map[int]int{1: 1}, make(chan int),
 	} {
 		if _, _, err := encode(in); err == nil {
 			t.Errorf("encoding %T gave no error", in)
@@ -163,7 +162,7 @@ func TestDecode(t *testing.T) {
 		{`{"$type":"Base64","_value":"3q2+7w=="}`, []byte{0xde, 0xad, 0xbe, 0xef}},
 		{`{"$type":"List","_value":[]}`, []any{}},
 		{`{"$type":"Map","_value":{}}`, map[string]any{}},
-		{`{"$type":"Vector","_value":{"coordinatesType":"INT64","coordinates":["9223372036854775807"]}}`, Vector{Coordinates: []int64{math.MaxInt64}}},
+		{`{"$type":"Vector","_value":{"coordinatesType":"INT64","coordinates":["9223372036854775807"]}}`, dbimp.Vector[int64]{math.MaxInt64}},
 	} {
 		got, err := decode(jsontext.Value(tt.in))
 		if err != nil {
@@ -197,11 +196,11 @@ func FuzzParseDuration(f *testing.F) {
 		f.Add(s)
 	}
 	f.Fuzz(func(t *testing.T, s string) {
-		d, err := parseDuration(s)
+		d, err := dbimp.ParseInterval(s)
 		if err != nil {
 			return
 		}
-		again, err := parseDuration(d.String())
+		again, err := dbimp.ParseInterval(d.String())
 		if err != nil || again != d {
 			t.Fatalf("%q is %+v, which writes %q, which reads back as %+v and %v", s, d, d.String(), again, err)
 		}
@@ -240,14 +239,14 @@ func FuzzParseDate(f *testing.F) {
 // timeOf returns the time.Time of a temporal value.
 func timeOf(v any) time.Time {
 	switch x := v.(type) {
-	case Date:
-		return time.Time(x)
-	case LocalTime:
-		return time.Time(x)
-	case Time:
-		return time.Time(x)
-	case LocalDateTime:
-		return time.Time(x)
+	case dbimp.Date:
+		return x.In(time.UTC)
+	case dbimp.LocalTime:
+		return x.In(time.UTC)
+	case dbimp.OffsetTime:
+		return x.ToTime()
+	case dbimp.LocalDateTime:
+		return x.In(time.UTC)
 	case time.Time:
 		return x
 	}

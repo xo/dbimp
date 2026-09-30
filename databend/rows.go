@@ -94,7 +94,11 @@ func (r *rows) ColumnTypeDatabaseTypeName(i int) string {
 
 // ColumnTypeScanType satisfies driver.RowsColumnTypeScanType (D118).
 func (r *rows) ColumnTypeScanType(i int) reflect.Type {
-	return r.p.types[i].scanType()
+	t := r.p.types[i]
+	if (t.kind == kindGeometry || t.kind == kindGeography) && r.p.fmt != nil {
+		return r.p.fmt.geoType()
+	}
+	return t.scanType()
 }
 
 // ColumnTypeNullable satisfies driver.RowsColumnTypeNullable, by the Nullable

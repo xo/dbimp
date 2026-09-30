@@ -75,6 +75,11 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 		return nil
 	}
 	switch nv.Value.(type) {
+	case dbimp.Date, dbimp.LocalTime, dbimp.LocalDateTime, dbimp.OffsetTime, dbimp.Interval,
+		dbimp.Vector[int8], dbimp.Vector[int16], dbimp.Vector[int32], dbimp.Vector[int64], dbimp.Vector[float32], dbimp.Vector[float64]:
+		// Each has a Value method, which writes its text. Typed JSON has a
+		// type for each one, so the encoder writes it (D138).
+		return nil
 	case *apd.Decimal, apd.Decimal:
 		// A decimal has a Value method, which writes it as a string. Neo4j
 		// has no decimal type, so it is refused, and never sent as a string

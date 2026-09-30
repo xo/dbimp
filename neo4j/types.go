@@ -10,101 +10,10 @@ import (
 	"github.com/xo/dbimp"
 )
 
-// The temporal types of Neo4j that a time.Time does not name by itself (D63).
-// Each is a defined type of time.Time, so it scans into a *time.Time too. An
-// OffsetDateTime and a ZonedDateTime are a time.Time.
-type (
-	// Date is a date with no time and no zone, such as 2026-09-27. Its
-	// time.Time is at midnight in UTC.
-	Date time.Time
-	// LocalTime is a time of day with no zone, such as 12:50:35.556123456.
-	// Its time.Time is on 0000-01-01 in UTC.
-	LocalTime time.Time
-	// Time is a time of day with an offset, such as 12:50:35.556+01:00. Its
-	// time.Time is on 0000-01-01, in a fixed zone of the offset.
-	Time time.Time
-	// LocalDateTime is a date and a time with no zone, such as
-	// 2026-09-27T10:00:00.123456789. Its time.Time is in UTC.
-	LocalDateTime time.Time
-)
-
-// String returns the date in the form of Neo4j.
-func (d Date) String() string {
-	return formatDate(time.Time(d))
-}
-
-// String returns the time in the form of Neo4j.
-func (t LocalTime) String() string {
-	return formatClock(time.Time(t))
-}
-
-// String returns the time and its offset in the form of Neo4j.
-func (t Time) String() string {
-	return formatClock(time.Time(t)) + formatOffset(time.Time(t))
-}
-
-// String returns the date and the time in the form of Neo4j.
-func (t LocalDateTime) String() string {
-	return formatDate(time.Time(t)) + "T" + formatClock(time.Time(t))
-}
-
-// Duration is a duration of Neo4j (D63). It keeps months and days apart from
-// the seconds, because a month and a day have no fixed length, so a
-// time.Duration cannot hold it. Nanos is from 0 to 999999999, and Seconds
-// holds the sign of the time, as the server keeps them.
-type Duration struct {
-	Months  int64
-	Days    int64
-	Seconds int64
-	Nanos   int64
-}
-
-// String returns the duration in the form of Neo4j, such as
-// P1Y2M3DT4H5M6.007S, or PT0S for no time.
-func (d Duration) String() string {
-	var b strings.Builder
-	b.WriteString("P")
-	if y := d.Months / 12; y != 0 {
-		fmt.Fprintf(&b, "%dY", y)
-	}
-	if m := d.Months % 12; m != 0 {
-		fmt.Fprintf(&b, "%dM", m)
-	}
-	if d.Days != 0 {
-		fmt.Fprintf(&b, "%dD", d.Days)
-	}
-	secs, nanos, neg := d.Seconds, d.Nanos, false
-	if secs < 0 {
-		// The server writes the time with one sign for each part, so a
-		// negative time is written from its magnitude.
-		neg = true
-		secs = -secs
-		if nanos > 0 {
-			secs, nanos = secs-1, 1e9-nanos
-		}
-	}
-	if secs == 0 && nanos == 0 {
-		if b.Len() == 1 {
-			return "PT0S"
-		}
-		return b.String()
-	}
-	sign := ""
-	if neg {
-		sign = "-"
-	}
-	b.WriteString("T")
-	if h := secs / 3600; h != 0 {
-		fmt.Fprintf(&b, "%s%dH", sign, h)
-	}
-	if m := secs % 3600 / 60; m != 0 {
-		fmt.Fprintf(&b, "%s%dM", sign, m)
-	}
-	if s := secs % 60; s != 0 || nanos != 0 {
-		fmt.Fprintf(&b, "%s%d%sS", sign, s, fraction(nanos))
-	}
-	return b.String()
-}
+// The temporal types of typed JSON are the types of dbimp: a Date, a
+// LocalTime, a LocalDateTime, an OffsetTime for a Time (D138 and D139), and
+// an Interval for a Duration. An OffsetDateTime and a ZonedDateTime are a
+// time.Time.
 
 // Point is a point of Neo4j (D63), in the coordinate system that SRID names,
 // such as 7203 for a cartesian point or 4326 for WGS 84. Dims is 2 or 3, and
@@ -153,14 +62,6 @@ type Relationship struct {
 type Path struct {
 	Nodes         []Node
 	Relationships []Relationship
-}
-
-// Vector is a vector of Neo4j (D63). Coordinates is a []int8, an []int16, an
-// []int32, an []int64, a []float32 or a []float64, by the type of the
-// coordinates on the server. As an argument, a Vector is a vector, and a
-// slice by itself is a list.
-type Vector struct {
-	Coordinates any
 }
 
 // The Go types of the coordinates of a vector, by the name that the server
@@ -380,49 +281,6 @@ func makeTime(p parts, loc *time.Location) (time.Time, bool) {
 	return t, true
 }
 
-// parseDate reads a Date.
-func parseDate(s string) (Date, error) {
-	sc, p := scanner{s}, parts{}
-	if !sc.date(&p) || sc.s != "" {
-		return Date{}, errForm("Date", s)
-	}
-	t, ok := makeTime(p, time.UTC)
-	if !ok {
-		return Date{}, errForm("Date", s)
-	}
-	return Date(t), nil
-}
-
-// parseLocalTime reads a LocalTime.
-func parseLocalTime(s string) (LocalTime, error) {
-	sc, p := scanner{s}, parts{mo: 1, d: 1}
-	if !sc.clock(&p) || sc.s != "" {
-		return LocalTime{}, errForm("LocalTime", s)
-	}
-	t, ok := makeTime(p, time.UTC)
-	if !ok {
-		return LocalTime{}, errForm("LocalTime", s)
-	}
-	return LocalTime(t), nil
-}
-
-// parseTime reads a Time, a time of day with an offset.
-func parseTime(s string) (Time, error) {
-	sc, p := scanner{s}, parts{mo: 1, d: 1}
-	if !sc.clock(&p) {
-		return Time{}, errForm("Time", s)
-	}
-	off, ok := sc.offset()
-	if !ok || sc.s != "" {
-		return Time{}, errForm("Time", s)
-	}
-	t, ok := makeTime(p, fixedZone(off))
-	if !ok {
-		return Time{}, errForm("Time", s)
-	}
-	return Time(t), nil
-}
-
 // parseDateTime reads a date and a time, then what follows them: nothing for
 // a LocalDateTime, an offset for an OffsetDateTime, and an offset and a zone
 // for a ZonedDateTime.
@@ -482,89 +340,6 @@ func zone(name string, off int) *time.Location {
 		return loc
 	}
 	return time.FixedZone(name, off)
-}
-
-// parseDuration reads a Duration, such as P1Y2M3DT4H5M6.007S or
-// P-1Y-2M-3DT-5.000000007S. Each part can have a sign, and only the seconds
-// can have a fraction.
-func parseDuration(s string) (Duration, error) {
-	rest, ok := strings.CutPrefix(s, "P")
-	if !ok || rest == "" {
-		return Duration{}, errForm("Duration", s)
-	}
-	var (
-		d      Duration
-		inTime bool
-		nanos  int64
-		units  = "YMWD"
-	)
-	for rest != "" {
-		if rest[0] == 'T' {
-			if inTime {
-				return Duration{}, errForm("Duration", s)
-			}
-			inTime, units, rest = true, "HMS", rest[1:]
-			continue
-		}
-		i := 0
-		if i < len(rest) && (rest[i] == '-' || rest[i] == '+') {
-			i++
-		}
-		for i < len(rest) && (rest[i] >= '0' && rest[i] <= '9' || rest[i] == '.') {
-			i++
-		}
-		if i == len(rest) || i == 0 {
-			return Duration{}, errForm("Duration", s)
-		}
-		num, unit := rest[:i], rest[i]
-		rest = rest[i+1:]
-		u := strings.IndexByte(units, unit)
-		if u < 0 {
-			return Duration{}, errForm("Duration", s)
-		}
-		// Each unit can appear once, in its order.
-		units = units[u+1:]
-		whole, frac, hasFrac := strings.Cut(num, ".")
-		if hasFrac && (unit != 'S' || !inTime || len(frac) == 0 || len(frac) > 9) {
-			return Duration{}, errForm("Duration", s)
-		}
-		n, err := strconv.ParseInt(whole, 10, 64)
-		if err != nil {
-			return Duration{}, errForm("Duration", s)
-		}
-		neg := strings.HasPrefix(whole, "-")
-		switch {
-		case !inTime && unit == 'Y':
-			d.Months += n * 12
-		case !inTime && unit == 'M':
-			d.Months += n
-		case unit == 'W':
-			d.Days += n * 7
-		case unit == 'D':
-			d.Days += n
-		case unit == 'H':
-			d.Seconds += n * 3600
-		case unit == 'M':
-			d.Seconds += n * 60
-		case unit == 'S':
-			d.Seconds += n
-			if hasFrac {
-				f, _ := strconv.ParseInt(frac+strings.Repeat("0", 9-len(frac)), 10, 64)
-				if neg {
-					f = -f
-				}
-				nanos = f
-			}
-		}
-	}
-	// The server keeps the nanoseconds from 0 to 999999999, and the seconds
-	// hold the sign.
-	d.Seconds += nanos / 1e9
-	d.Nanos = nanos % 1e9
-	if d.Nanos < 0 {
-		d.Seconds, d.Nanos = d.Seconds-1, d.Nanos+1e9
-	}
-	return d, nil
 }
 
 // parsePoint reads a Point, such as SRID=7203;POINT (1.5 2.5) or

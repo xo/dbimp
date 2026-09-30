@@ -32,7 +32,7 @@ func TestTables(t *testing.T) {
 			Nullable:     ct.nullable,
 		})
 	}
-	dbimptest.TypeTable(t, doc, types)
+	dbimptest.TypeTable(t, doc, dbimptest.Kinds(t, types, typeKinds))
 	dbimptest.InterfaceTable(t, doc, map[string]string{
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
 		"driver.Connector":                      "The connector owns the transport, which every connection shares. Connect sends GET /ping for sqlmode prefer and require (D78).",
@@ -53,4 +53,17 @@ func TestTables(t *testing.T) {
 		"driver.RowsColumnTypeNullable":         "SQL gives is_nullable of DESCRIBE. InfluxQL names no types.",
 		"driver.RowsColumnTypePrecisionScale":   "SQL gives the precision and the scale of a decimal from DESCRIBE.",
 	}, NewConnector(Config{Host: "localhost"}), Driver{}, &conn{}, &sqlRows{}, &qlRows{}, &stmt{})
+}
+
+// typeKinds are the kinds of docs/TYPES.md of the types of the driver (step
+// 8a).
+var typeKinds = map[string]string{
+	"null":             "null",
+	"float":            "float",
+	"integer":          "integer",
+	"unsigned integer": "unsigned integer",
+	"string":           "string",
+	"boolean":          "boolean",
+	"tag":              "string",
+	"timestamp":        "timestamp",
 }

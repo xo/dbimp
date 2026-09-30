@@ -78,6 +78,9 @@ these:
   `dbmeta_user`, with `SYSINFO 0`, can make and drop users, because the
   Community Edition has no `GRANT`. So it has fewer rights than `root` only in
   that it cannot read the state of the server, such as `ins_dnodes`.
+- dbmeta `6b24b13`, of 2026-09-30, removed the entry from `dbrun` (dbmeta
+  D134), after D127. The releases above no longer start, and the
+  measurements of this file are the record of them.
 
 ## Requests
 

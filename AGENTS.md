@@ -63,6 +63,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then D73 and D76 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
+| mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |
 | reviewing a driver before its commit | step 17a of [docs/DRIVER.md](docs/DRIVER.md), then D97 |
 | sharing code between two drivers | [docs/DESIGN.md](docs/DESIGN.md), then D4 in [docs/decisions/](docs/decisions/README.md). Shared code goes in the root package |
 | using or changing the root package or dbimptest | [docs/DESIGN.md](docs/DESIGN.md) |

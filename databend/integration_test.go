@@ -231,7 +231,8 @@ func TestIntegrationConnect(t *testing.T) {
 func TestIntegrationPages(t *testing.T) {
 	forEach(t, func(t *testing.T, _ principal, db *sql.DB) {
 		got := column(t, db, "SELECT number FROM numbers(30000) ORDER BY number")
-		if len(got) != 30000 || got[0] != int64(0) || got[29999] != int64(29999) {
+		// numbers gives a UInt64, which is a uint64 (D138).
+		if len(got) != 30000 || got[0] != uint64(0) || got[29999] != uint64(29999) {
 			t.Errorf("read %d rows of the three pages, want 0 to 29999 in order", len(got))
 		}
 	})
@@ -348,12 +349,12 @@ func TestIntegrationTransactions(t *testing.T) {
 			t.Fatal(err)
 		}
 		exec(t, tx, "INSERT INTO "+tb+" VALUES (1)")
-		same(t, "the count in the transaction", column(t, tx, "SELECT count(*) FROM "+tb), int64(1))
-		same(t, "the count outside the transaction", column(t, db, "SELECT count(*) FROM "+tb), int64(0))
+		same(t, "the count in the transaction", column(t, tx, "SELECT count(*) FROM "+tb), uint64(1))
+		same(t, "the count outside the transaction", column(t, db, "SELECT count(*) FROM "+tb), uint64(0))
 		if err := tx.Rollback(); err != nil {
 			t.Fatal(err)
 		}
-		same(t, "the count after the rollback", column(t, db, "SELECT count(*) FROM "+tb), int64(0))
+		same(t, "the count after the rollback", column(t, db, "SELECT count(*) FROM "+tb), uint64(0))
 		tx, err = db.BeginTx(t.Context(), nil)
 		if err != nil {
 			t.Fatal(err)
@@ -362,7 +363,7 @@ func TestIntegrationTransactions(t *testing.T) {
 		if err := tx.Commit(); err != nil {
 			t.Fatal(err)
 		}
-		same(t, "the count after the commit", column(t, db, "SELECT count(*) FROM "+tb), int64(1))
+		same(t, "the count after the commit", column(t, db, "SELECT count(*) FROM "+tb), uint64(1))
 		tx, err = db.BeginTx(t.Context(), nil)
 		if err != nil {
 			t.Fatal(err)
@@ -393,7 +394,7 @@ func TestIntegrationTransactions(t *testing.T) {
 			if err := tx.Commit(); err == nil {
 				t.Errorf("a Commit after %s gave no error (D122)", stmt)
 			}
-			same(t, "the rows after the failed transaction", column(t, db, "SELECT count(*) FROM "+tb+" WHERE k = 6"), int64(0))
+			same(t, "the rows after the failed transaction", column(t, db, "SELECT count(*) FROM "+tb+" WHERE k = 6"), uint64(0))
 		}
 	})
 }
@@ -417,7 +418,7 @@ func TestIntegrationRollbackAfterTheContext(t *testing.T) {
 	if err := tx.Rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
 		t.Errorf("rolling back after the context ended: %v", err)
 	}
-	same(t, "the rows after the rollback", column(t, db, "SELECT count(*) FROM "+tb), int64(0))
+	same(t, "the rows after the rollback", column(t, db, "SELECT count(*) FROM "+tb), uint64(0))
 }
 
 // TestIntegrationOptions holds the options of one statement on the server

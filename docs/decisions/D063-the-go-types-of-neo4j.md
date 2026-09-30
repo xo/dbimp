@@ -1,6 +1,6 @@
 # D63. The Go types of Neo4j
 
-Status: Decided.
+Status: Amended by D138 and D139.
 
 Ken chose the temporal types and accepted this on 2026-09-27. It decides items
 4 and 5 of step 9 for Neo4j. The driver decodes each value by its `$type`:

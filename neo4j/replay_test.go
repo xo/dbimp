@@ -327,10 +327,10 @@ func TestReplayTypes(t *testing.T) {
 		"s": "héllo", "b": true, "n": nil,
 		"l":   []any{int64(1), "a", nil},
 		"m":   map[string]any{"k": int64(1), "a": []any{int64(2)}},
-		"d":   neo4j.Date(time.Date(2026, 9, 27, 0, 0, 0, 0, time.UTC)),
-		"lt":  neo4j.LocalTime(time.Date(0, 1, 1, 12, 50, 35, 556123456, time.UTC)),
-		"ldt": neo4j.LocalDateTime(time.Date(2026, 9, 27, 10, 0, 0, 123456789, time.UTC)),
-		"dur": neo4j.Duration{Months: 14, Days: 3, Seconds: 4*3600 + 5*60 + 6, Nanos: 7e6},
+		"d":   dbimp.Date{Year: 2026, Month: 9, Day: 27},
+		"lt":  dbimp.LocalTime{Hour: 12, Minute: 50, Second: 35, Nanosecond: 556123456},
+		"ldt": dbimp.LocalDateTime{Date: dbimp.Date{Year: 2026, Month: 9, Day: 27}, Time: dbimp.LocalTime{Hour: 10, Minute: 0, Second: 0, Nanosecond: 123456789}},
+		"dur": dbimp.Interval{Months: 14, Days: 3, Nanoseconds: 14706007000000},
 		"p2":  neo4j.Point{SRID: 7203, X: 1.5, Y: 2.5, Dims: 2},
 		"p3":  neo4j.Point{SRID: 4979, X: 10.7, Y: 59.9, Z: 3, Dims: 3},
 	}
@@ -346,8 +346,8 @@ func TestReplayTypes(t *testing.T) {
 		} {
 			var g time.Time
 			switch v := got[name].(type) {
-			case neo4j.Time:
-				g = time.Time(v)
+			case dbimp.OffsetTime:
+				g = v.ToTime()
 			case time.Time:
 				g = v
 			default:
@@ -360,8 +360,8 @@ func TestReplayTypes(t *testing.T) {
 				t.Errorf("%s: %s is %v, want %v", release, name, g, w)
 			}
 		}
-		if _, ok := got["zt"].(neo4j.Time); !ok {
-			t.Errorf("%s: zt is %T, want neo4j.Time (D63)", release, got["zt"])
+		if _, ok := got["zt"].(dbimp.OffsetTime); !ok {
+			t.Errorf("%s: zt is %T, want dbimp.OffsetTime (D139)", release, got["zt"])
 		}
 		if zdt, ok := got["zdt"].(time.Time); !ok || zdt.Location().String() != "Europe/Oslo" {
 			t.Errorf("%s: zdt is %#v, want a time.Time in Europe/Oslo (D63)", release, got["zdt"])
@@ -373,11 +373,11 @@ func TestReplayDatesAtTheirLimits(t *testing.T) {
 	t.Parallel()
 	got := row(t, replayDB(t, floor), "RETURN date('+999999999-12-31') AS dmax, date('-999999999-01-01') AS dmin, datetime('1600-01-01T00:00:00Z') AS old")
 	check(t, floor, got, map[string]any{
-		"dmax": neo4j.Date(time.Date(999999999, 12, 31, 0, 0, 0, 0, time.UTC)),
-		"dmin": neo4j.Date(time.Date(-999999999, 1, 1, 0, 0, 0, 0, time.UTC)),
+		"dmax": dbimp.Date{Year: 999999999, Month: 12, Day: 31},
+		"dmin": dbimp.Date{Year: -999999999, Month: 1, Day: 1},
 		"old":  time.Date(1600, 1, 1, 0, 0, 0, 0, time.UTC),
 	})
-	if d, ok := got["dmax"].(neo4j.Date); !ok || d.String() != "+999999999-12-31" {
+	if d, ok := got["dmax"].(dbimp.Date); !ok || d.String() != "+999999999-12-31" {
 		t.Errorf("dmax is %#v, want the Date whose String is the form of the server", got["dmax"])
 	}
 }
@@ -393,22 +393,22 @@ func TestReplayEdgeForms(t *testing.T) {
 	for _, release := range releases {
 		got := row(t, replayDB(t, release), query)
 		check(t, release, got, map[string]any{
-			"a": neo4j.LocalTime(time.Date(0, 1, 1, 12, 0, 0, 0, time.UTC)),
-			"b": neo4j.Time(time.Date(0, 1, 1, 12, 0, 0, 0, time.UTC)),
+			"a": dbimp.LocalTime{Hour: 12, Minute: 0, Second: 0, Nanosecond: 0},
+			"b": dbimp.OffsetTime{Time: dbimp.LocalTime{Hour: 12}},
 			"d": time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
-			"e": neo4j.LocalDateTime(time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)),
-			"f": neo4j.Duration{},
-			"g": neo4j.Duration{Months: -14, Days: -3, Seconds: -6, Nanos: 999999993},
-			"h": neo4j.Duration{Seconds: -1, Nanos: 5e8},
-			"i": neo4j.Date(time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)),
-			"j": neo4j.Date(time.Date(-1, 6, 1, 0, 0, 0, 0, time.UTC)),
-			"k": neo4j.Date(time.Date(10000, 1, 1, 0, 0, 0, 0, time.UTC)),
+			"e": dbimp.LocalDateTime{Date: dbimp.Date{Year: 2026, Month: 1, Day: 1}, Time: dbimp.LocalTime{Hour: 0, Minute: 0, Second: 0, Nanosecond: 0}},
+			"f": dbimp.Interval{},
+			"g": dbimp.Interval{Months: -14, Days: -3, Nanoseconds: -5000000007},
+			"h": dbimp.Interval{Nanoseconds: -500000000},
+			"i": dbimp.Date{Year: 1, Month: 1, Day: 1},
+			"j": dbimp.Date{Year: -1, Month: 6, Day: 1},
+			"k": dbimp.Date{Year: 10000, Month: 1, Day: 1},
 			"l": neo4j.Point{SRID: 9157, X: 1, Y: 2, Z: 3, Dims: 3},
 			"m": neo4j.Point{SRID: 4326, X: 1.5, Y: 2.5, Dims: 2},
-			"q": neo4j.Duration{Nanos: 999999999},
+			"q": dbimp.Interval{Nanoseconds: 999999999},
 			"r": neo4j.Point{SRID: 7203, X: 0.1, Y: 1e300, Dims: 2},
-			"s": neo4j.Duration{Days: 3},
-			"u": neo4j.Duration{Seconds: -3700},
+			"s": dbimp.Interval{Days: 3},
+			"u": dbimp.Interval{Nanoseconds: -3700000000000},
 		})
 		// Each value writes itself in the form that the server sent.
 		for name, want := range map[string]string{
@@ -487,15 +487,15 @@ func TestReplayVector(t *testing.T) {
 	got := row(t, db, "RETURN vector([1, 2], 2, INT8) AS i8, vector([1, 2], 2, INT16) AS i16, vector([1, 2], 2, INT32) AS i32, "+
 		"vector([1, 2], 2, INT64) AS i64, vector([1.5, 2.5], 2, FLOAT32) AS f32, vector([1.5, 2.5], 2, FLOAT64) AS f64")
 	check(t, ceiling, got, map[string]any{
-		"i8":  neo4j.Vector{Coordinates: []int8{1, 2}},
-		"i16": neo4j.Vector{Coordinates: []int16{1, 2}},
-		"i32": neo4j.Vector{Coordinates: []int32{1, 2}},
-		"i64": neo4j.Vector{Coordinates: []int64{1, 2}},
-		"f32": neo4j.Vector{Coordinates: []float32{1.5, 2.5}},
-		"f64": neo4j.Vector{Coordinates: []float64{1.5, 2.5}},
+		"i8":  dbimp.Vector[int8]{1, 2},
+		"i16": dbimp.Vector[int16]{1, 2},
+		"i32": dbimp.Vector[int32]{1, 2},
+		"i64": dbimp.Vector[int64]{1, 2},
+		"f32": dbimp.Vector[float32]{1.5, 2.5},
+		"f64": dbimp.Vector[float64]{1.5, 2.5},
 	})
-	got = row(t, db, "RETURN $v AS v, valueType($v) AS t", sql.Named("v", neo4j.Vector{Coordinates: []int8{1, -2}}))
-	check(t, ceiling, got, map[string]any{"v": neo4j.Vector{Coordinates: []int8{1, -2}}})
+	got = row(t, db, "RETURN $v AS v, valueType($v) AS t", sql.Named("v", dbimp.Vector[int8]{1, -2}))
+	check(t, ceiling, got, map[string]any{"v": dbimp.Vector[int8]{1, -2}})
 }
 
 // TestReplayVectorInTheFirstVersion replays a vector in typed JSON v1.0,
@@ -540,8 +540,8 @@ func TestReplayParameters(t *testing.T) {
 		// Each typed argument keeps its type on the server (D63).
 		dt := time.Date(2026, 9, 27, 10, 0, 0, 0, oslo(t))
 		got = row(t, db, "RETURN valueType($d) AS d, valueType($dur) AS dur, valueType($p) AS p, valueType($zdt) AS zdt, valueType($b) AS b, $zdt AS zv",
-			sql.Named("d", neo4j.Date(time.Date(2026, 9, 27, 0, 0, 0, 0, time.UTC))),
-			sql.Named("dur", neo4j.Duration{Months: 14, Days: 3, Seconds: 14706, Nanos: 7e6}),
+			sql.Named("d", dbimp.Date{Year: 2026, Month: 9, Day: 27}),
+			sql.Named("dur", dbimp.Interval{Months: 14, Days: 3, Nanoseconds: 14706007000000}),
 			sql.Named("p", neo4j.Point{SRID: 7203, X: 1.5, Y: 2.5, Dims: 2}),
 			sql.Named("zdt", dt), sql.Named("b", []byte{0xde, 0xad, 0xbe, 0xef}))
 		check(t, release, got, map[string]any{

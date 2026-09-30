@@ -215,18 +215,26 @@ lead, not a fact.
 
 The type table comes from the code, in step 10.
 
+The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
+maps every kind onto its Go type (D135 and D137).
+
 <!-- dbimp:types -->
-| Wire type | Go type | Scan type | Database type | Can be NULL |
-| --- | --- | --- | --- | --- |
-| missing | `nil` | `interface {}` | `MISSING` | yes |
-| null | `nil` | `interface {}` | `NULL` | yes |
-| boolean | `bool` | `bool` | `BOOLEAN` | yes |
-| number | `int64, float64, or *apd.Decimal for an integer too large for int64` | `interface {}` | `NUMBER` | yes |
-| string | `string` | `string` | `STRING` | yes |
-| array | `[]any` | `[]interface {}` | `ARRAY` | yes |
-| object | `map[string]any` | `map[string]interface {}` | `OBJECT` | yes |
-| bytes as a base64 string | `[]byte, decoded from base64 (D44)` | `string` | `STRING` | yes |
+| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- | --- |
+| missing | null | `nil` | `interface {}` | `MISSING` | yes |
+| null | null | `nil` | `interface {}` | `NULL` | yes |
+| boolean | boolean | `bool` | `bool` | `BOOLEAN` | yes |
+| number | number | `int64, float64, or *apd.Decimal for an integer too large for int64` | `interface {}` | `NUMBER` | yes |
+| string | string | `string` | `string` | `STRING` | yes |
+| array | array | `[]any` | `[]interface {}` | `ARRAY` | yes |
+| object | map | `map[string]any` | `map[string]interface {}` | `OBJECT` | yes |
+| bytes as a base64 string | binary | `[]byte, decoded from base64 (D44)` | `string` | `STRING` | yes |
 <!-- /dbimp:types -->
+
+A value whose JSON kind is not the kind that the signature names for its
+column is an error, so that its Go type is always the scan type (D136). No
+recording holds one: each of the 1,092 values of `testdata/couchbase/`
+has the kind of its signature, or the signature says `json`.
 
 ## Parameters
 

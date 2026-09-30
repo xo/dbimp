@@ -174,27 +174,30 @@ In JSON, the same values lose their types (recorded):
 
 The type table comes from the code, in step 10.
 
+The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
+maps every kind onto its Go type (D135 and D137).
+
 <!-- dbimp:types -->
-| Wire type | Go type | Scan type | Database type | Can be NULL |
-| --- | --- | --- | --- | --- |
-| none | `nil (tag 6)` | `interface {}` | `` | yes |
-| null | `nil` | `interface {}` | `` | yes |
-| bool | `bool` | `interface {}` | `` | yes |
-| int | `int64` | `interface {}` | `` | yes |
-| float | `float64` | `interface {}` | `` | yes |
-| decimal | `*apd.Decimal (tag 10)` | `interface {}` | `` | yes |
-| string | `string` | `interface {}` | `` | yes |
-| datetime | `time.Time in UTC (tags 0 and 12)` | `interface {}` | `` | yes |
-| duration | `time.Duration (tags 13 and 14)` | `interface {}` | `` | yes |
-| uuid | `uuid.UUID (tags 9 and 37)` | `interface {}` | `` | yes |
-| bytes | `[]byte` | `interface {}` | `` | yes |
-| array | `[]any` | `interface {}` | `` | yes |
-| set | `[]any (tag 56)` | `interface {}` | `` | yes |
-| object | `map[string]any` | `interface {}` | `` | yes |
-| record | `RecordID (tag 8)` | `interface {}` | `` | yes |
-| geometry | `map[string]any of GeoJSON (tags 88 to 94)` | `interface {}` | `` | yes |
-| range | `string, such as 1..5 (tags 49 to 51)` | `interface {}` | `` | yes |
-| table | `string (tag 7)` | `interface {}` | `` | yes |
+| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- | --- |
+| none | null | `nil (tag 6)` | `interface {}` | `` | yes |
+| null | null | `nil` | `interface {}` | `` | yes |
+| bool | boolean | `bool` | `interface {}` | `` | yes |
+| int | integer | `int64` | `interface {}` | `` | yes |
+| float | float | `float64` | `interface {}` | `` | yes |
+| decimal | decimal | `*apd.Decimal (tag 10)` | `interface {}` | `` | yes |
+| string | string | `string` | `interface {}` | `` | yes |
+| datetime | timestamp | `time.Time in UTC (tags 0 and 12)` | `interface {}` | `` | yes |
+| duration | duration | `time.Duration (tags 13 and 14)` | `interface {}` | `` | yes |
+| uuid | uuid | `uuid.UUID (tags 9 and 37)` | `interface {}` | `` | yes |
+| bytes | binary | `[]byte` | `interface {}` | `` | yes |
+| array | array | `[]any` | `interface {}` | `` | yes |
+| set | set | `[]any (tag 56)` | `interface {}` | `` | yes |
+| object | map | `map[string]any` | `interface {}` | `` | yes |
+| record | record id | `RecordID (tag 8)` | `interface {}` | `` | yes |
+| geometry | geometry | `map[string]any of GeoJSON (tags 88 to 94)` | `interface {}` | `` | yes |
+| range | range | `string, such as 1..5 (tags 49 to 51)` | `interface {}` | `` | yes |
+| table | other | `string (tag 7)` | `interface {}` | `` | yes |
 <!-- /dbimp:types -->
 
 ## Parameters

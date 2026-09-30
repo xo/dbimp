@@ -1,6 +1,6 @@
 # D39. The values of Couchbase
 
-Status: Amended by D44.
+Status: Amended by D44 and D136.
 
 Ken accepted this on 2026-09-27. D44 amends how a string scans into a byte
 slice.

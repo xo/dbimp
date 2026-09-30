@@ -14,7 +14,7 @@ const doc = "../docs/ARANGODB.md"
 // them.
 func TestTables(t *testing.T) {
 	t.Parallel()
-	dbimptest.TypeTable(t, doc, []dbimptest.TypeRow{
+	dbimptest.TypeTable(t, doc, dbimptest.Kinds(t, []dbimptest.TypeRow{
 		{Wire: "null", Go: "nil", ScanType: "interface {}", Nullable: true},
 		{Wire: "boolean", Go: "bool", ScanType: "interface {}", Nullable: true},
 		{Wire: "integer", Go: "int64, for a number with no fraction that fits", ScanType: "interface {}", Nullable: true},
@@ -22,7 +22,7 @@ func TestTables(t *testing.T) {
 		{Wire: "string", Go: "string", ScanType: "interface {}", Nullable: true},
 		{Wire: "array", Go: "[]any", ScanType: "interface {}", Nullable: true},
 		{Wire: "object", Go: "map[string]any, and a document in one column (D89)", ScanType: "interface {}", Nullable: true},
-	})
+	}, typeKinds))
 	dbimptest.InterfaceTable(t, doc, map[string]string{
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
 		"driver.Connector":                      "The connector owns the transport, which every connection shares.",
@@ -43,4 +43,16 @@ func TestTables(t *testing.T) {
 		"driver.RowsColumnTypeNullable":         "The cursor names no types, and any value can be null.",
 		"driver.RowsColumnTypePrecisionScale":   "The cursor names no types, so no column has a precision or a scale.",
 	}, NewConnector(Config{Host: "localhost"}), Driver{}, &conn{}, &rows{}, &tx{}, &stmt{})
+}
+
+// typeKinds are the kinds of docs/TYPES.md of the types of the driver (step
+// 8a).
+var typeKinds = map[string]string{
+	"null":    "null",
+	"boolean": "boolean",
+	"integer": "number",
+	"double":  "number",
+	"string":  "string",
+	"array":   "array",
+	"object":  "map",
 }

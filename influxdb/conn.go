@@ -49,7 +49,9 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 		return nil
 	}
 	switch v := nv.Value.(type) {
-	case uint64:
+	case uint64, dbimp.Date, dbimp.LocalTime, dbimp.LocalDateTime, dbimp.Interval:
+		// Each of the types of D138 has a Value method, which writes ISO
+		// 8601. value writes an Interval in the form of the server.
 		return nil
 	case *apd.Decimal:
 		if v == nil {
@@ -138,6 +140,13 @@ func value(v any) (jsontext.Value, error) {
 		return jsontext.Value(v.Text('f')), nil
 	case []byte:
 		return nil, fmt.Errorf("InfluxDB has no binary parameter: %w", dbimp.ErrNotSupported)
+	case dbimp.Date, dbimp.LocalTime, dbimp.LocalDateTime:
+		// The server casts the text of ISO 8601 (measured on 3.11.5).
+		return quote(fmt.Sprint(v))
+	case dbimp.Interval:
+		// The server takes no interval in ISO 8601, and casts its own form
+		// (measured on 3.11.5).
+		return quote(formatInterval(v))
 	}
 	return nil, fmt.Errorf("a parameter of %T: %w", v, dbimp.ErrNotSupported)
 }

@@ -24,7 +24,7 @@ func TestTables(t *testing.T) {
 		}
 		return dbimptest.TypeRow{Wire: wire, Go: goType, ScanType: ct.scanType().String(), DatabaseType: (&rows{p: &page{types: []*colType{ct}}}).ColumnTypeDatabaseTypeName(0), Nullable: ct.nullable}
 	}
-	dbimptest.TypeTable(t, doc, []dbimptest.TypeRow{
+	dbimptest.TypeTable(t, doc, dbimptest.Kinds(t, []dbimptest.TypeRow{
 		row("boolean", "Boolean", ""),
 		row("tinyint", "Int8", ""),
 		row("smallint", "Int16", ""),
@@ -33,25 +33,25 @@ func TestTables(t *testing.T) {
 		row("uint8", "UInt8", ""),
 		row("uint16", "UInt16", ""),
 		row("uint32", "UInt32", ""),
-		row("uint64", "UInt64", "int64, or *apd.Decimal above the range of int64"),
+		row("uint64", "UInt64", ""),
 		row("float", "Float32", ""),
 		row("double", "Float64", ""),
 		row("decimal", "Decimal(38, 10)", ""),
-		row("date", "Date", "time.Time, at midnight in UTC"),
+		row("date", "Date", ""),
 		row("timestamp", "Timestamp", "time.Time, in the timezone of the session"),
 		row("timestamp_tz", "Timestamp_Tz", "time.Time, with its offset"),
-		row("interval", "Interval", "string, as the server writes it"),
+		row("interval", "Interval", ""),
 		row("string", "String", ""),
-		row("binary", "Binary", ""),
+		row("binary", "Binary", "[]byte"),
 		row("array", "Array(Int32 NULL)", "[]any, of the Go types of its elements (D119)"),
 		row("map", "Map(String, Int32 NULL)", "map[string]any, or map[any]any for a key that is not a String (D119)"),
 		row("tuple", "Tuple(Int32 NULL, String NULL)", "[]any, of the Go types of its fields (D119)"),
 		row("variant", "Variant", "the decoded JSON value: nil, bool, string, int64, float64, *apd.Decimal, []any or map[string]any"),
 		row("bitmap", "Bitmap", "none: reading a value fails with dbimp.ErrNotSupported (D119)"),
 		row("vector", "Vector(3)", ""),
-		row("geometry", "Geometry", "string, in WKT"),
-		row("geography", "Geography", "string, in WKT"),
-	})
+		row("geometry", "Geometry", "string, in WKT, which the driver asks for. []byte for WKB, and the decoded value for GeoJSON (D136)"),
+		row("geography", "Geography", "string, in WKT, which the driver asks for. []byte for WKB, and the decoded value for GeoJSON (D136)"),
+	}, typeKinds))
 	dbimptest.InterfaceTable(t, doc, map[string]string{
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
 		"driver.Connector":                      "The connector owns the transport, which every connection shares.",
@@ -72,4 +72,35 @@ func TestTables(t *testing.T) {
 		"driver.RowsColumnTypeNullable":         "schema wraps a type that can be NULL in Nullable.",
 		"driver.RowsColumnTypePrecisionScale":   "A Decimal names its precision and its scale.",
 	}, NewConnector(Config{Host: "localhost"}), Driver{}, &conn{}, &rows{}, &tx{}, &stmt{})
+}
+
+// typeKinds are the kinds of docs/TYPES.md of the types of the driver (step
+// 8a).
+var typeKinds = map[string]string{
+	"boolean":      "boolean",
+	"tinyint":      "integer",
+	"smallint":     "integer",
+	"int":          "integer",
+	"bigint":       "integer",
+	"uint8":        "integer",
+	"uint16":       "integer",
+	"uint32":       "integer",
+	"uint64":       "unsigned integer",
+	"float":        "float",
+	"double":       "float",
+	"decimal":      "decimal",
+	"date":         "date",
+	"timestamp":    "timestamp",
+	"timestamp_tz": "timestamp",
+	"interval":     "interval",
+	"string":       "string",
+	"binary":       "binary",
+	"array":        "array",
+	"map":          "map",
+	"tuple":        "tuple",
+	"variant":      "json",
+	"bitmap":       "bitmap",
+	"vector":       "vector",
+	"geometry":     "geometry",
+	"geography":    "geometry",
 }

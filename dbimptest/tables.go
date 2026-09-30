@@ -23,10 +23,22 @@ const (
 	InterfacesEnd   = "<!-- /dbimp:interfaces -->"
 )
 
+// The markers around the list of kinds, and around the generated table of
+// every driver, in docs/TYPES.md (step 8a).
+const (
+	KindsBegin  = "<!-- dbimp:kinds -->"
+	KindsEnd    = "<!-- /dbimp:kinds -->"
+	MatrixBegin = "<!-- dbimp:matrix -->"
+	MatrixEnd   = "<!-- /dbimp:matrix -->"
+)
+
 // TypeRow is one row of the type table of step 10 of docs/DRIVER.md.
 type TypeRow struct {
 	// Wire is the name of the type on the wire, such as "number".
 	Wire string
+	// Kind is the kind of the type, one of the kinds of docs/TYPES.md, such
+	// as "integer" (step 8a of docs/DRIVER.md). Kinds sets it.
+	Kind string
 	// Go is the Go type of a value, such as "int64".
 	Go string
 	// ScanType is the type that ColumnTypeScanType returns.
@@ -45,15 +57,41 @@ type TypeRow struct {
 func TypeTable(t *testing.T, doc string, rows []TypeRow) {
 	t.Helper()
 	var b strings.Builder
-	b.WriteString("| Wire type | Go type | Scan type | Database type | Can be NULL |\n")
-	b.WriteString("| --- | --- | --- | --- | --- |\n")
+	b.WriteString("| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |\n")
+	b.WriteString("| --- | --- | --- | --- | --- | --- |\n")
 	for _, r := range rows {
 		if r.DatabaseType != strings.ToUpper(r.DatabaseType) {
 			t.Errorf("the database type %q of %q is not in upper case (step 10)", r.DatabaseType, r.Wire)
 		}
-		fmt.Fprintf(&b, "| %s | `%s` | `%s` | `%s` | %s |\n", r.Wire, r.Go, r.ScanType, r.DatabaseType, yesNo(r.Nullable))
+		if r.Kind == "" {
+			t.Errorf("the type %q has no kind (step 8a)", r.Wire)
+		}
+		fmt.Fprintf(&b, "| %s | %s | `%s` | `%s` | `%s` | %s |\n", r.Wire, r.Kind, r.Go, r.ScanType, r.DatabaseType, yesNo(r.Nullable))
 	}
 	writeBlock(t, doc, TypesBegin, TypesEnd, b.String())
+}
+
+// Kinds returns rows with the kind of each row set from kinds, by the name
+// of its wire type (step 8a). It fails the test for a row that kinds does
+// not name, and for a name of kinds that no row has.
+func Kinds(t *testing.T, rows []TypeRow, kinds map[string]string) []TypeRow {
+	t.Helper()
+	out := make([]TypeRow, len(rows))
+	used := map[string]bool{}
+	for i, r := range rows {
+		kind, ok := kinds[r.Wire]
+		if !ok {
+			t.Errorf("the type %q has no kind (step 8a)", r.Wire)
+		}
+		r.Kind, used[r.Wire] = kind, true
+		out[i] = r
+	}
+	for wire := range kinds {
+		if !used[wire] {
+			t.Errorf("the kinds name the type %q, which the table does not have", wire)
+		}
+	}
+	return out
 }
 
 // interfaces are the optional interfaces of database/sql/driver that the
@@ -128,6 +166,14 @@ func knownInterface(name string) bool {
 		}
 	}
 	return false
+}
+
+// WriteBlock compares the text between begin and end in the document at doc
+// with want, or writes want there if EnvUpdate is set, as TypeTable does for
+// its table. The table of docs/TYPES.md is one such block.
+func WriteBlock(t *testing.T, doc, begin, end, want string) {
+	t.Helper()
+	writeBlock(t, doc, begin, end, want)
 }
 
 // writeBlock compares the text between begin and end in the document at doc

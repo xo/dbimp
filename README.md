@@ -47,6 +47,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/decisions/README.md](docs/decisions/README.md) | Every decision, one file each, and their index |
 | [docs/TARGETS.md](docs/TARGETS.md) | Every target database, its priority, and the review of the list |
 | [docs/DRIVER.md](docs/DRIVER.md) | Every step to add a driver, in order |
+| [docs/TYPES.md](docs/TYPES.md) | The kinds of type, the Go type of each, and the types of every driver |
 | [docs/DESIGN.md](docs/DESIGN.md) | The design of the code that every driver shares |
 | [docs/COUCHBASE.md](docs/COUCHBASE.md) | What is measured about the Couchbase query service |
 | [docs/SURREALDB.md](docs/SURREALDB.md) | What is known about the HTTP interface of SurrealDB |

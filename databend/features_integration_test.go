@@ -74,7 +74,7 @@ func TestIntegrationCRUD(t *testing.T) {
 			}
 			exec(t, db, "COPY INTO @"+stage+" FROM "+tb)
 			exec(t, db, "COPY INTO "+tb+" FROM @"+stage+" FILE_FORMAT = (TYPE = PARQUET) FORCE = TRUE")
-			same(t, "the rows after the copy", column(t, db, "SELECT count(*) FROM "+tb), int64(8))
+			same(t, "the rows after the copy", column(t, db, "SELECT count(*) FROM "+tb), uint64(8))
 		})
 		t.Run("insert_overwrite", func(t *testing.T) {
 			exec(t, db, "INSERT OVERWRITE "+tb+" VALUES (7, 'o')")
@@ -85,7 +85,7 @@ func TestIntegrationCRUD(t *testing.T) {
 			if n, err := res.RowsAffected(); err != nil || n != 1 {
 				t.Errorf("the delete affected %d, %v, want 1", n, err)
 			}
-			same(t, "after the delete", column(t, db, "SELECT count(*) FROM "+tb), int64(0))
+			same(t, "after the delete", column(t, db, "SELECT count(*) FROM "+tb), uint64(0))
 		})
 	})
 }
@@ -153,7 +153,7 @@ func TestIntegrationSchema(t *testing.T) {
 		})
 		t.Run("sequence", func(t *testing.T) {
 			if super(t, p, db, "CREATE SEQUENCE IF NOT EXISTS "+prefix+"seq") {
-				same(t, "the sequence", column(t, db, "SELECT nextval("+prefix+"seq)"), int64(1))
+				same(t, "the sequence", column(t, db, "SELECT nextval("+prefix+"seq)"), uint64(1))
 			}
 		})
 		t.Run("stream", func(t *testing.T) {
@@ -193,7 +193,7 @@ func TestIntegrationFeatures(t *testing.T) {
 		exec(t, db, "INSERT INTO "+tb+" VALUES (2, parse_json('[]'))")
 		t.Run("time_travel_at", func(t *testing.T) {
 			snap := column(t, db, "SELECT snapshot_id FROM fuse_snapshot('dbmeta', ?) ORDER BY timestamp LIMIT 1", strings.TrimPrefix(tb, "dbmeta."))
-			same(t, "the table at its first snapshot", column(t, db, fmt.Sprintf("SELECT count(*) FROM %s AT (SNAPSHOT => '%s')", tb, snap[0])), int64(1))
+			same(t, "the table at its first snapshot", column(t, db, fmt.Sprintf("SELECT count(*) FROM %s AT (SNAPSHOT => '%s')", tb, snap[0])), uint64(1))
 		})
 		t.Run("flashback_table", func(t *testing.T) {
 			snap := column(t, db, "SELECT snapshot_id FROM fuse_snapshot('dbmeta', ?) ORDER BY timestamp LIMIT 1", strings.TrimPrefix(tb, "dbmeta."))
@@ -203,21 +203,21 @@ func TestIntegrationFeatures(t *testing.T) {
 				return
 			}
 			exec(t, db, stmt)
-			same(t, "the table after the flashback", column(t, db, "SELECT count(*) FROM "+tb), int64(1))
+			same(t, "the table after the flashback", column(t, db, "SELECT count(*) FROM "+tb), uint64(1))
 			exec(t, db, "INSERT INTO "+tb+" VALUES (2, parse_json('[]'))")
 		})
 		t.Run("undrop_table", func(t *testing.T) {
 			exec(t, db, "CREATE OR REPLACE TABLE "+tb+"_u (k INT)")
 			exec(t, db, "DROP TABLE "+tb+"_u")
 			exec(t, db, "UNDROP TABLE "+tb+"_u")
-			same(t, "the table after the undrop", column(t, db, "SELECT count(*) FROM "+tb+"_u"), int64(0))
+			same(t, "the table after the undrop", column(t, db, "SELECT count(*) FROM "+tb+"_u"), uint64(0))
 		})
 		t.Run("variant_path", func(t *testing.T) {
 			rows := column(t, db, "SELECT v:k[0] FROM "+tb+" WHERE k = 1")
 			same(t, "the path", rows, int64(1))
 		})
 		t.Run("qualify", func(t *testing.T) {
-			same(t, "qualify", column(t, db, "SELECT number FROM numbers(5) QUALIFY row_number() OVER (ORDER BY number DESC) = 1"), int64(4))
+			same(t, "qualify", column(t, db, "SELECT number FROM numbers(5) QUALIFY row_number() OVER (ORDER BY number DESC) = 1"), uint64(4))
 		})
 		t.Run("generate_series", func(t *testing.T) {
 			same(t, "generate_series", column(t, db, "SELECT * FROM generate_series(1, 3)"), int64(1), int64(2), int64(3))
@@ -249,7 +249,7 @@ func TestIntegrationFeatures(t *testing.T) {
 			}
 			defer exec(t, db, "DROP STAGE "+stage)
 			exec(t, db, "COPY INTO @"+stage+" FROM "+tb)
-			same(t, "the rows of the stage", column(t, db, "SELECT count(*) FROM @"+stage), int64(2))
+			same(t, "the rows of the stage", column(t, db, "SELECT count(*) FROM @"+stage), uint64(2))
 		})
 		t.Run("transactions", func(t *testing.T) {
 			tx, err := db.BeginTx(t.Context(), nil)
@@ -260,7 +260,7 @@ func TestIntegrationFeatures(t *testing.T) {
 			if err := tx.Commit(); err != nil {
 				t.Fatal(err)
 			}
-			same(t, "the rows after the commit", column(t, db, "SELECT count(*) FROM "+tb), int64(3))
+			same(t, "the rows after the commit", column(t, db, "SELECT count(*) FROM "+tb), uint64(3))
 		})
 		t.Run("kill_a_query", func(t *testing.T) {
 			text := fmt.Sprintf("SELECT number FROM numbers(1000000000000) WHERE number > %d", len(p.name)+int(time.Now().UnixNano()%1e6))
@@ -302,8 +302,14 @@ func literal(v any) (string, error) {
 		return "NULL", nil
 	case bool:
 		return strconv.FormatBool(v), nil
-	case int64, float64:
+	case int64, uint64, float64:
 		return fmt.Sprint(v), nil
+	case dbimp.Date:
+		return "'" + v.String() + "'", nil
+	case dbimp.Interval:
+		// The server takes no negative part in ISO 8601 (measured), so the
+		// literal is its own form, as the driver writes an argument.
+		return "to_interval('" + intervalText(v) + "')", nil
 	case string:
 		return "'" + strings.NewReplacer(`\`, `\\`, `'`, `''`).Replace(v) + "'", nil
 	case *apd.Decimal:
@@ -339,7 +345,7 @@ func decimal(t *testing.T, s string) *apd.Decimal {
 
 func TestIntegrationRoundTrip(t *testing.T) {
 	long := strings.Repeat("xé", 5000)
-	day := func(y int, m time.Month, d int) time.Time { return time.Date(y, m, d, 0, 0, 0, 0, time.UTC) }
+	day := func(y int, m time.Month, d int) dbimp.Date { return dbimp.Date{Year: y, Month: m, Day: d} }
 	ints := func(lo, hi int64) []dbimptest.Value {
 		return []dbimptest.Value{{Name: "null", In: nil}, {Name: "zero", In: int64(0)}, {Name: "smallest", In: lo}, {Name: "largest", In: hi}}
 	}
@@ -359,8 +365,9 @@ func TestIntegrationRoundTrip(t *testing.T) {
 		{"uint32", "UINT32", func(*testing.T) []dbimptest.Value { return ints(0, math.MaxUint32) }},
 		{"uint64", "UINT64", func(t *testing.T) []dbimptest.Value {
 			return []dbimptest.Value{
-				{Name: "null", In: nil}, {Name: "zero", In: int64(0)}, {Name: "int64", In: int64(math.MaxInt64)},
-				{Name: "largest", In: uint64(math.MaxUint64), Want: decimal(t, "18446744073709551615")},
+				// A UInt64 is a uint64, whatever its value (D138).
+				{Name: "null", In: nil}, {Name: "zero", In: uint64(0)}, {Name: "int64", In: uint64(math.MaxInt64)},
+				{Name: "largest", In: uint64(math.MaxUint64)},
 			}
 		}},
 		{"float", "FLOAT", func(*testing.T) []dbimptest.Value {
@@ -395,7 +402,12 @@ func TestIntegrationRoundTrip(t *testing.T) {
 			}
 		}},
 		{"interval", "INTERVAL", func(*testing.T) []dbimptest.Value {
-			return []dbimptest.Value{{Name: "null", In: nil}, {Name: "day", In: "1 day"}, {Name: "negative", In: "-1 month"}}
+			return []dbimptest.Value{
+				{Name: "null", In: nil}, {Name: "day", In: dbimp.Interval{Days: 1}},
+				{Name: "negative", In: dbimp.Interval{Months: -1}},
+				{Name: "parts", In: dbimp.Interval{Months: 14, Days: -3, Nanoseconds: -1000}},
+				{Name: "long clock", In: dbimp.Interval{Nanoseconds: 100 * 3600e9}},
+			}
 		}},
 		{"string", "STRING", func(*testing.T) []dbimptest.Value {
 			return []dbimptest.Value{
@@ -425,7 +437,7 @@ func TestIntegrationRoundTrip(t *testing.T) {
 			return []dbimptest.Value{{Name: "null", In: nil}, {Name: "values", In: "1,3,5", Want: "1,3,5"}, {Name: "empty", In: "0", Want: "0"}}
 		}},
 		{"vector", "VECTOR(3)", func(*testing.T) []dbimptest.Value {
-			return []dbimptest.Value{{Name: "null", In: nil}, {Name: "values", In: "[1.5, -2, 3]", Want: []float32{1.5, -2, 3}}, {Name: "zero", In: "[0, 0, 0]", Want: []float32{0, 0, 0}}}
+			return []dbimptest.Value{{Name: "null", In: nil}, {Name: "values", In: "[1.5, -2, 3]", Want: dbimp.Vector[float32]{1.5, -2, 3}}, {Name: "zero", In: "[0, 0, 0]", Want: dbimp.Vector[float32]{0, 0, 0}}}
 		}},
 		{"geometry", "GEOMETRY", func(*testing.T) []dbimptest.Value {
 			return []dbimptest.Value{{Name: "null", In: nil}, {Name: "point", In: "POINT(1 2)"}, {Name: "line", In: "LINESTRING(0 0,1 1)"}}
@@ -508,4 +520,16 @@ func cast(typ, arg, sqlType string) string {
 		return "CAST(parse_json(" + arg + ") AS " + sqlType + ")"
 	}
 	return "CAST(" + arg + " AS " + sqlType + ")"
+}
+
+// intervalText writes iv as the server reads an interval, as the driver does
+// for an argument (D138).
+func intervalText(iv dbimp.Interval) string {
+	sign, ns := "", iv.Nanoseconds
+	if ns < 0 {
+		sign, ns = "-", -ns
+	}
+	secs, micros := ns/1e9, ns%1e9/1000
+	clock := fmt.Sprintf("%s%d:%02d:%02d.%06d", sign, secs/3600, secs%3600/60, secs%60, micros)
+	return fmt.Sprintf("%d months %d days %s", iv.Months, iv.Days, clock)
 }

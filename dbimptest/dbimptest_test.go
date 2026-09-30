@@ -173,7 +173,7 @@ func TestTablesWriteThenCompare(t *testing.T) {
 		t.Fatal(err)
 	}
 	rows := []dbimptest.TypeRow{
-		{Wire: "number", Go: "int64", ScanType: "int64", DatabaseType: "NUMBER", Nullable: true},
+		{Wire: "number", Kind: "integer", Go: "int64", ScanType: "int64", DatabaseType: "NUMBER", Nullable: true},
 	}
 	c, err := fake{}.OpenConnector("fake://localhost:1")
 	if err != nil {
@@ -203,7 +203,7 @@ func TestTablesWriteThenCompare(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, want := range []string{
-		"| number | `int64` | `int64` | `NUMBER` | yes |",
+		"| number | integer | `int64` | `int64` | `NUMBER` | yes |",
 		"| `driver.RowsColumnScanner` | yes | a reason |",
 		"| `driver.Pinger` | no | a reason |",
 		"| `io.Closer on the connector` | yes | a reason |",
@@ -211,5 +211,14 @@ func TestTablesWriteThenCompare(t *testing.T) {
 		if !strings.Contains(string(b), want) {
 			t.Errorf("the document does not hold %q:\n%s", want, b)
 		}
+	}
+}
+
+// TestKinds holds that Kinds sets the kind of each row by its wire type.
+func TestKinds(t *testing.T) {
+	t.Parallel()
+	rows := dbimptest.Kinds(t, []dbimptest.TypeRow{{Wire: "number"}, {Wire: "text"}}, map[string]string{"number": "integer", "text": "string"})
+	if rows[0].Kind != "integer" || rows[1].Kind != "string" {
+		t.Errorf("the kinds are %q and %q, want integer and string", rows[0].Kind, rows[1].Kind)
 	}
 }

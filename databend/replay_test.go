@@ -222,7 +222,7 @@ func TestReplayValues(t *testing.T) {
 				t.Errorf("the geometries are %v, %v, want POINT(1 2) and POINT(3 4)", rows, err)
 			}
 			_, rows, err = readAll(t, db, "SELECT bitmap_to_array(bm) AS a FROM dbmeta.types WHERE id = 1")
-			if err != nil || !reflect.DeepEqual(rows, [][]any{{[]any{int64(1), int64(3), int64(5)}}}) {
+			if err != nil || !reflect.DeepEqual(rows, [][]any{{[]any{uint64(1), uint64(3), uint64(5)}}}) {
 				t.Errorf("bitmap_to_array gave %v, %v, want [1 3 5]", rows, err)
 			}
 		})
@@ -237,8 +237,9 @@ func TestReplayLiterals(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// The server types 1e10 as an integer (recorded).
-	want := []any{int64(1), int64(300), int64(70000), int64(5000000000), dec("1.5"), "x", true, nil, int64(1e10), dec("123456789012345678901234567890")}
+	// The server types 1e10 as an integer, and a positive literal above the
+	// range of an Int32 as a UInt64, which is a uint64 (recorded, D138).
+	want := []any{int64(1), int64(300), int64(70000), uint64(5000000000), dec("1.5"), "x", true, nil, uint64(1e10), dec("123456789012345678901234567890")}
 	if len(rows) != 1 || len(rows[0]) != len(want) {
 		t.Fatalf("the literals are %v, want one row of %d", rows, len(want))
 	}
@@ -267,9 +268,10 @@ func TestReplayPages(t *testing.T) {
 			if err != nil || len(rows) != 25000 {
 				t.Fatalf("read %d rows, %v, want 25000", len(rows), err)
 			}
-			seen := map[int64]bool{}
+			seen := map[uint64]bool{}
 			for _, r := range rows {
-				n, _ := r[0].(int64)
+				// numbers gives a UInt64 (D138).
+				n, _ := r[0].(uint64)
 				seen[n] = true
 			}
 			if len(seen) != 25000 {
@@ -333,8 +335,8 @@ func TestReplayParameters(t *testing.T) {
 		t.Errorf("the named arguments gave %v, %v", rows, err)
 	}
 	_, rows, err = readAll(t, db, "SELECT ? AS a, ? AS b", int64(9223372036854775807), uint64(18446744073709551615))
-	big, _ := rows[0][1].(*apd.Decimal)
-	if err != nil || len(rows) != 1 || rows[0][0] != int64(9223372036854775807) || big == nil || big.Cmp(dec("18446744073709551615")) != 0 {
+	// The server types both as a UInt64 (recorded).
+	if err != nil || len(rows) != 1 || rows[0][0] != uint64(9223372036854775807) || rows[0][1] != uint64(18446744073709551615) {
 		t.Errorf("the large integers gave %v, %v", rows, err)
 	}
 	if _, _, err := readAll(t, db, "SELECT ? AS a, ? AS b", int64(1), sql.Named("b", 2)); !errors.Is(err, dbimp.ErrArguments) {

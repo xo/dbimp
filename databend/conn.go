@@ -53,7 +53,10 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 		return nil
 	}
 	switch v := nv.Value.(type) {
-	case uint64:
+	case uint64, dbimp.Date, dbimp.LocalTime, dbimp.LocalDateTime, dbimp.OffsetTime, dbimp.Interval,
+		dbimp.Vector[int8], dbimp.Vector[int16], dbimp.Vector[int32], dbimp.Vector[int64], dbimp.Vector[float32], dbimp.Vector[float64]:
+		// Each of the types of D138 has a Value method, which writes ISO
+		// 8601. paramValue writes an Interval in the form of the server.
 		return nil
 	case *apd.Decimal:
 		if v == nil {
@@ -208,7 +211,18 @@ func (c *conn) exec(ctx context.Context, query string, args []driver.NamedValue)
 			continue
 		}
 		for i, name := range cols {
-			if n, ok := r.cur[i].(int64); ok && strings.HasPrefix(name, "number of rows") {
+			if !strings.HasPrefix(name, "number of rows") {
+				continue
+			}
+			// The count is a UInt64, which is a uint64 (D138).
+			switch n := r.cur[i].(type) {
+			case uint64:
+				if n > math.MaxInt64 {
+					return result{}, fmt.Errorf("reading the rows affected: %d is more than an int64: %w", n, dbimp.ErrInvalidValue)
+				}
+				res.affected += int64(n)
+				res.counted = true
+			case int64:
 				res.affected += n
 				res.counted = true
 			}
@@ -268,7 +282,8 @@ func argName(nv driver.NamedValue) string {
 }
 
 // paramValue returns the JSON of one argument (D120). A uint64 keeps every
-// digit as a number. A decimal is a string, which the server casts with every
+// digit as a number. A Date, a LocalTime and a LocalDateTime are the text of
+// ISO 8601, and an Interval is the text of the server (D138). A decimal is a string, which the server casts with every
 // digit, where it reads a number with a fraction as a Float64 (D124). A time
 // is a string that the server casts, in UTC, with its offset.
 func paramValue(v any) (jsontext.Value, error) {
@@ -297,6 +312,22 @@ func paramValue(v any) (jsontext.Value, error) {
 		return jsontext.AppendQuote(nil, v.Text('f'))
 	case []byte:
 		return nil, fmt.Errorf("params has no form for a binary value: %w", dbimp.ErrNotSupported)
+	case dbimp.Date, dbimp.LocalTime, dbimp.LocalDateTime, dbimp.OffsetTime:
+		// The server casts the text of ISO 8601 (measured).
+		return jsontext.AppendQuote(nil, fmt.Sprint(v))
+	case dbimp.Vector[int8], dbimp.Vector[int16], dbimp.Vector[int32], dbimp.Vector[int64], dbimp.Vector[float32], dbimp.Vector[float64]:
+		// A vector is a JSON array of its numbers, which the server casts to
+		// a Vector (measured on 1.2.948, D139). JSON has no NaN.
+		if !finite(v) {
+			return nil, fmt.Errorf("JSON has no NaN or infinity, which the vector %v holds: %w", v, dbimp.ErrInvalidValue)
+		}
+		return jsontext.Value(fmt.Sprint(v)), nil
+	case dbimp.Interval:
+		s, err := formatInterval(v)
+		if err != nil {
+			return nil, err
+		}
+		return jsontext.AppendQuote(nil, s)
 	}
 	return nil, fmt.Errorf("a parameter of %T: %w", v, dbimp.ErrNotSupported)
 }
@@ -350,4 +381,24 @@ func (r result) RowsAffected() (int64, error) {
 		return 0, fmt.Errorf("reading the rows affected: the server sent no count: %w", dbimp.ErrNotSupported)
 	}
 	return r.affected, nil
+}
+
+// finite reports whether every number of a vector of floats is finite. A
+// vector of integers always is.
+func finite(v any) bool {
+	var fs []float64
+	switch x := v.(type) {
+	case dbimp.Vector[float32]:
+		for _, f := range x {
+			fs = append(fs, float64(f))
+		}
+	case dbimp.Vector[float64]:
+		fs = x
+	}
+	for _, f := range fs {
+		if math.IsNaN(f) || math.IsInf(f, 0) {
+			return false
+		}
+	}
+	return true
 }

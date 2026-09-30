@@ -20,6 +20,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `stream.go` | `Stream` and `NewStream`, which read the body of a response |
 | `rows.go` | `ObjectRows`, `NewObjectRows`, `ContinueObjectRows`, `ArrayRows` and `NewArrayRows`, which read rows by D18 |
 | `values.go` | `IsNull`, `Int64`, `Float64`, `Bool`, `String`, `Decimal`, `Number` and `Any`, which turn a JSON value into a Go value, and `Assign` |
+| `civil.go` | `Date`, `LocalTime`, `OffsetTime`, `LocalDateTime`, `Interval` and `Vector`, the types of D138 and D139, with a `Parse` function for each of the first five |
 | `placeholder.go` | `Syntax` and `Placeholder`, which find placeholders and bind arguments (D34) |
 | `options.go` | `Option`, `WithOptions`, `IsOption`, `Resolve`, `Unsupported` and `MarshalParams`, the machinery of the options of every driver (D109) |
 | `cbor.go` | `CBORDecoder`, `NewCBORDecoder`, `CBOREncoder`, `CBORHead`, and `CBORMajor` with its constants, which read and write CBOR (D49) |
@@ -142,6 +143,33 @@ method of `apd.Decimal` take text. So `sql.Null[apd.Decimal]` works, a NULL
 in a `*string` is the error of `database/sql`, and a NULL in a
 `sql.Null[T]` is not valid.
 
+### The types that Go lacks
+
+`civil.go` holds the types of D138 and D139, for the kinds of
+[TYPES.md](TYPES.md) that Go has no type for. `Date`, `LocalTime` and
+`LocalDateTime` have no zone. `OffsetTime` is a `LocalTime` and an offset in
+seconds, with no date. `Interval` keeps months, days and nanoseconds apart,
+as `pgtype.Interval` of pgx and the Arrow type `Interval(MonthDayNano)` do.
+`Vector[T]` is a slice of `int8`, `int16`, `int32`, `int64`, `float32` or
+`float64`, which a driver sends as a vector, where a plain slice goes as a
+list.
+
+- `String` writes ISO 8601, and each `Parse` function reads it back. A year
+  of more than four digits has a sign, as Neo4j writes it. `ParseInterval`
+  takes a sign on each part, and on the whole, such as `P-1Y-2M` and
+  `-PT1.5S`, with each unit once and in its order.
+- `DateOf`, `LocalTimeOf` and `LocalDateTimeOf` take the parts of a
+  `time.Time`, and `In` gives the `time.Time` of a value in a location.
+- Each type is a `driver.Valuer` of its text, so a driver that does not name
+  the type sends the text. A driver that names it keeps it in
+  `CheckNamedValue`, and writes it in the form of its server.
+- `Assign` stores a value in a destination of its own type, or its
+  `sql.Null`. It gives a `*time.Time` or an `sql.Null[time.Time]` the value
+  in UTC, on 0000-01-01 for a `LocalTime`, and an `OffsetTime` on 0000-01-01
+  in a zone of its offset. Any other destination gets the text of `String`.
+  A `Vector` is a slice, so `database/sql` assigns it to a slice of its
+  elements.
+
 ### CBOR
 
 `cbor.go` reads and writes CBOR (RFC 8949), for a driver whose server speaks
@@ -196,7 +224,7 @@ for code that only a test uses. So they are not in the root package (D37).
 | `cmd/record/` | The command that records the requests of `requests.json` |
 | `goroutines.go` | `CheckGoroutines` |
 | `contract.go` | `Contract`, its cases `ColumnsCase`, `NullCase`, `ErrorCase` and `StreamCase`, and `RunContract` |
-| `tables.go` | `TypeTable`, `TypeRow`, `InterfaceTable`, `EnvUpdate` and the markers of the two tables |
+| `tables.go` | `TypeTable`, `TypeRow`, `Kinds`, `InterfaceTable`, `WriteBlock`, `EnvUpdate` and the markers of the tables |
 | `features.go` | `Features`, `Source` and `Feature`, the survey of step 5a, with `FeaturesName`, the constants of a kind, a source and a verdict, and `ReadFeatures` |
 | `roundtrip.go` | `RoundTrip`, `RoundTripCase` and `Value`, the round trip of one type for step 14a |
 
@@ -345,6 +373,12 @@ row is gone. Each of the three keeps the old behaviour when it is not set.
 whether each interface is implemented from the types of the driver, and it
 fails if a reason is missing. Each one fails when the document holds another
 table. With `DBIMP_UPDATE=1`, each writes its table into the document.
+
+Each row of the type table has the kind of its type, from the list of
+[TYPES.md](TYPES.md) (D137). `Kinds` sets it from a map of the wire types of
+the driver, and fails for a type with no kind. `WriteBlock` compares or
+writes any such block, and the root test `TestTheTypeMatrixIsCurrent` uses
+it to write the table of every driver into [TYPES.md](TYPES.md).
 
 ## The points of W4
 

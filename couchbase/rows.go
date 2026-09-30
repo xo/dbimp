@@ -404,11 +404,19 @@ func (r *rows) column(name string) int {
 	return slices.Index(r.cols, name)
 }
 
-// value returns the value of column i as a Go value (D39).
+// value returns the value of column i as a Go value (D39). A value whose
+// JSON kind is not the kind that the signature names for its column is an
+// error, so that it never has another Go type than ColumnTypeScanType
+// (D135). No recording holds one (D136).
 func (r *rows) value(i int) (any, error) {
 	v := r.vals[i]
 	if dbimp.IsNull(v) {
 		return nil, nil
+	}
+	if i < len(r.kinds) {
+		if want, ok := kindOf[r.kinds[i]]; ok && !sameKind(want, v.Kind()) {
+			return nil, fmt.Errorf("reading the column %s: the signature names the kind %s, and the value is %s: %w", r.cols[i], r.kinds[i], v.Kind(), dbimp.ErrInvalidValue)
+		}
 	}
 	switch v.Kind() {
 	case '"':
@@ -452,6 +460,22 @@ var kinds = []struct {
 	{"string", "string"},
 	{"array", "[]any"},
 	{"object", "map[string]any"},
+}
+
+// kindOf is the JSON kind of a value of each kind of a signature that names
+// one. A boolean is 't' or 'f'.
+var kindOf = map[string]jsontext.Kind{
+	"string":  '"',
+	"boolean": 't',
+	"number":  '0',
+	"array":   '[',
+	"object":  '{',
+}
+
+// sameKind reports whether a JSON value of the kind got is of the kind want,
+// for which a boolean is 't' and 'f' alike.
+func sameKind(want, got jsontext.Kind) bool {
+	return got == want || want == 't' && got == 'f'
 }
 
 // scanTypes are the scan types of the kinds of a signature.

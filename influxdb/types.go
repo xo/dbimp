@@ -2,7 +2,6 @@ package influxdb
 
 import (
 	"bytes"
-	"database/sql"
 	"encoding/hex"
 	"encoding/json/jsontext"
 	"fmt"
@@ -65,30 +64,13 @@ type colType struct {
 	float bool
 }
 
-// scanType returns the Go type that a value of the column scans into best:
-// sql.Null of the type when the column can hold a NULL.
+// scanType returns the Go type of a value of the column, which Rows.Next
+// returns, for a column that can hold a NULL too. ColumnTypeNullable says
+// whether it can (D136).
 func (t *colType) scanType() reflect.Type {
 	if t == nil || t.goes == nil {
 		return reflect.TypeFor[any]()
 	}
-	if !t.nullable {
-		return t.goes
-	}
-	switch t.goes {
-	case reflect.TypeFor[int64]():
-		return reflect.TypeFor[sql.Null[int64]]()
-	case reflect.TypeFor[uint64]():
-		return reflect.TypeFor[sql.Null[uint64]]()
-	case reflect.TypeFor[float64]():
-		return reflect.TypeFor[sql.Null[float64]]()
-	case reflect.TypeFor[string]():
-		return reflect.TypeFor[sql.Null[string]]()
-	case reflect.TypeFor[bool]():
-		return reflect.TypeFor[sql.Null[bool]]()
-	case reflect.TypeFor[time.Time]():
-		return reflect.TypeFor[sql.Null[time.Time]]()
-	}
-	// A pointer or a slice holds its NULL as nil.
 	return t.goes
 }
 
@@ -127,7 +109,13 @@ func columnType(arrow string, nullable bool) *colType {
 	case "Timestamp":
 		t.goes, t.decode = reflect.TypeFor[time.Time](), decodeTimestamp
 	case "Date32", "Date64":
-		t.goes, t.decode = reflect.TypeFor[time.Time](), decodeDate
+		t.goes, t.decode = reflect.TypeFor[dbimp.Date](), decodeDate
+	case "Time32", "Time64":
+		t.goes, t.decode = reflect.TypeFor[dbimp.LocalTime](), decodeLocalTime
+	case "Interval":
+		t.goes, t.decode = reflect.TypeFor[dbimp.Interval](), decodeInterval
+	case "Duration":
+		t.goes, t.decode = reflect.TypeFor[time.Duration](), decodeDuration
 	case "Binary", "LargeBinary", "BinaryView", "FixedSizeBinary":
 		// The server writes binary data in hex (measured).
 		t.goes, t.decode = reflect.TypeFor[[]byte](), decodeHex
@@ -226,17 +214,184 @@ func parseTime(s string) (time.Time, error) {
 	return t, nil
 }
 
-// decodeDate reads a date, such as 2024-01-02, at midnight in UTC. A date
-// with a time reads as a timestamp.
+// decodeDate reads a Date32, such as 2024-01-02, or a Date64, such as
+// 2024-01-02T00:00:00, as a Date (measured on 3.11.5, D138).
 func decodeDate(v jsontext.Value) (any, error) {
 	s, err := dbimp.String(v)
 	if err != nil {
 		return nil, err
 	}
-	if t, err := time.ParseInLocation(time.DateOnly, s, time.UTC); err == nil {
-		return t, nil
+	day, _, _ := strings.Cut(s, "T")
+	return dbimp.ParseDate(day)
+}
+
+// decodeLocalTime reads a Time32 or a Time64, such as 12:30:00.500, as a
+// LocalTime (measured on 3.11.5, D138).
+func decodeLocalTime(v jsontext.Value) (any, error) {
+	s, err := dbimp.String(v)
+	if err != nil {
+		return nil, err
 	}
-	return parseTime(s)
+	return dbimp.ParseLocalTime(s)
+}
+
+// decodeInterval reads an Interval, which the server writes as parts with
+// their units, each with its own sign, such as 14 mons 3 days 4 hours
+// 5 mins 6.500000000 secs and -1 mons -2 days, and zero as an empty string
+// (measured on 3.11.5, D138).
+func decodeInterval(v jsontext.Value) (any, error) {
+	s, err := dbimp.String(v)
+	if err != nil {
+		return nil, err
+	}
+	iv, ok := parseInterval(s)
+	if !ok {
+		return nil, fmt.Errorf("reading %q as an interval: %w", s, dbimp.ErrInvalidValue)
+	}
+	return iv, nil
+}
+
+// The nanoseconds of each unit of the time of an interval of the server.
+var intervalUnits = map[string]int64{
+	"hour": int64(time.Hour), "min": int64(time.Minute), "sec": int64(time.Second),
+	"millisecond": int64(time.Millisecond), "microsecond": int64(time.Microsecond), "nanosecond": 1,
+}
+
+// parseInterval reads the text of decodeInterval.
+func parseInterval(s string) (dbimp.Interval, bool) {
+	fields := strings.Fields(s)
+	if len(fields)%2 != 0 {
+		return dbimp.Interval{}, false
+	}
+	var months, days, nanos int64
+	for i := 0; i < len(fields); i += 2 {
+		num, unit := fields[i], strings.TrimSuffix(fields[i+1], "s")
+		switch unit {
+		case "year", "mon", "day":
+			n, err := strconv.ParseInt(num, 10, 64)
+			if err != nil {
+				return dbimp.Interval{}, false
+			}
+			switch unit {
+			case "year":
+				months += n * 12
+			case "mon":
+				months += n
+			default:
+				days += n
+			}
+			continue
+		}
+		per, ok := intervalUnits[unit]
+		if !ok {
+			return dbimp.Interval{}, false
+		}
+		n, ok := parseNanos(num, per)
+		if !ok || n > 0 && nanos > math.MaxInt64-n || n < 0 && nanos < math.MinInt64-n {
+			return dbimp.Interval{}, false
+		}
+		nanos += n
+	}
+	if months < math.MinInt32 || months > math.MaxInt32 || days < math.MinInt32 || days > math.MaxInt32 {
+		return dbimp.Interval{}, false
+	}
+	return dbimp.Interval{Months: int32(months), Days: int32(days), Nanoseconds: nanos}, true
+}
+
+// parseNanos reads a number of a unit of per nanoseconds, with a fraction for
+// a unit of a second or more, such as -0.500000000, as nanoseconds. A
+// negative number is built down from zero, so that the smallest int64 fits.
+func parseNanos(num string, per int64) (int64, bool) {
+	neg := strings.HasPrefix(num, "-")
+	whole, frac, _ := strings.Cut(num, ".")
+	w, err := strconv.ParseInt(whole, 10, 64)
+	if err != nil || len(frac) > 9 || frac != "" && per < int64(time.Second) || w > math.MaxInt64/per || w < math.MinInt64/per {
+		return 0, false
+	}
+	n := w * per
+	if frac == "" {
+		return n, true
+	}
+	f, err := strconv.ParseInt(frac+strings.Repeat("0", 9-len(frac)), 10, 64)
+	if err != nil {
+		return 0, false
+	}
+	f *= per / int64(time.Second)
+	if neg {
+		if n < math.MinInt64+f {
+			return 0, false
+		}
+		return n - f, true
+	}
+	if n > math.MaxInt64-f {
+		return 0, false
+	}
+	return n + f, true
+}
+
+// formatInterval writes iv as the server casts it, such as
+// 14 mons -3 days -0.000001000 secs (measured on 3.11.5).
+func formatInterval(iv dbimp.Interval) string {
+	sign, secs, nanos := "", iv.Nanoseconds/1e9, iv.Nanoseconds%1e9
+	if iv.Nanoseconds < 0 {
+		// Each part is negated after the division, so that the smallest
+		// int64 fits.
+		sign, secs, nanos = "-", -secs, -nanos
+	}
+	return fmt.Sprintf("%d mons %d days %s%d.%09d secs", iv.Months, iv.Days, sign, secs, nanos)
+}
+
+// decodeDuration reads a Duration, which the server writes in ISO 8601 as
+// seconds, such as PT1.5S, -PT2.5S and PT9223372036.854775807S, and zero as
+// P0D (measured on 3.11.5).
+func decodeDuration(v jsontext.Value) (any, error) {
+	s, err := dbimp.String(v)
+	if err != nil {
+		return nil, err
+	}
+	d, ok := parseDuration(s)
+	if !ok {
+		return nil, fmt.Errorf("reading %q as a duration: %w", s, dbimp.ErrInvalidValue)
+	}
+	return d, nil
+}
+
+// parseDuration parses the ISO 8601 text of decodeDuration.
+func parseDuration(s string) (time.Duration, bool) {
+	text, neg := strings.CutPrefix(s, "-")
+	if text == "P0D" {
+		return 0, true
+	}
+	text, ok := strings.CutPrefix(text, "PT")
+	if !ok {
+		return 0, false
+	}
+	if text, ok = strings.CutSuffix(text, "S"); !ok {
+		return 0, false
+	}
+	whole, frac, _ := strings.Cut(text, ".")
+	if whole == "" || len(frac) > 9 || strings.ContainsAny(whole+frac, "+-") {
+		return 0, false
+	}
+	sec, err := strconv.ParseInt(whole, 10, 64)
+	if err != nil || sec > math.MaxInt64/int64(time.Second) {
+		return 0, false
+	}
+	var ns int64
+	if frac != "" {
+		if ns, err = strconv.ParseInt(frac+strings.Repeat("0", 9-len(frac)), 10, 64); err != nil {
+			return 0, false
+		}
+	}
+	d := sec * int64(time.Second)
+	if d > math.MaxInt64-ns {
+		return 0, false
+	}
+	d += ns
+	if neg {
+		d = -d
+	}
+	return time.Duration(d), true
 }
 
 func decodeHex(v jsontext.Value) (any, error) {

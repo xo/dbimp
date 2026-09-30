@@ -335,8 +335,10 @@ func TestReplaySQLTypes(t *testing.T) {
 			}
 			instant := time.Date(2024, 1, 2, 3, 4, 5, 123456789, time.UTC)
 			for i, want := range map[int]any{
-				1: time.Date(2024, 1, 2, 0, 0, 0, 0, time.UTC),
-				2: "12:30:00", 3: "1 days 2 hours", 4: instant, 5: instant,
+				// A date, a time of day and an interval are the types of
+				// D138.
+				1: dbimp.Date{Year: 2024, Month: 1, Day: 2},
+				2: dbimp.LocalTime{Hour: 12, Minute: 30}, 3: dbimp.Interval{Days: 1, Nanoseconds: 2 * 3600e9}, 4: instant, 5: instant,
 				6: []byte("ab"), 7: []any{int64(1), int64(2), int64(3)}, 8: map[string]any{"a": int64(1)},
 				9: int64(1), 10: 1.5, 11: uint64(255), 12: int64(math.MaxInt64), 13: uint64(math.MaxUint64),
 				16: "é", 17: "", 18: true,
@@ -376,9 +378,9 @@ func TestReplaySQLTable(t *testing.T) {
 		names = append(names, ct.Name()+" "+ct.DatabaseTypeName()+" "+ct.ScanType().String())
 	}
 	want := []string{
-		"b BOOLEAN sql.Null[bool]", "f FLOAT64 sql.Null[float64]", "host DICTIONARY(INT32, UTF8) sql.Null[string]",
-		"i INT64 sql.Null[int64]", "region DICTIONARY(INT32, UTF8) sql.Null[string]", "s UTF8 sql.Null[string]",
-		"time TIMESTAMP(NS) time.Time", "u UINT64 sql.Null[uint64]",
+		"b BOOLEAN bool", "f FLOAT64 float64", "host DICTIONARY(INT32, UTF8) string",
+		"i INT64 int64", "region DICTIONARY(INT32, UTF8) string", "s UTF8 string",
+		"time TIMESTAMP(NS) time.Time", "u UINT64 uint64",
 	}
 	if !reflect.DeepEqual(names, want) {
 		t.Errorf("the columns are\n%q\nwant\n%q", names, want)

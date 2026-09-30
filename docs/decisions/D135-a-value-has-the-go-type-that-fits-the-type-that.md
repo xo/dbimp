@@ -1,6 +1,6 @@
 # D135. A value has the Go type that fits the type that its database names
 
-Status: Decided.
+Status: Amended by D138.
 
 Ken decided this on 2026-09-30, for every driver, when he kept D130 for the
 `JSON` column that Pinot names `STRING`. Gemini and DeepSeek reviewed the

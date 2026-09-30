@@ -67,10 +67,17 @@ func TestColumnType(t *testing.T) {
 		{"Boolean", `false`, false},
 		{"Timestamp(ns)", `"2024-01-02T03:04:05.1"`, time.Date(2024, 1, 2, 3, 4, 5, 1e8, time.UTC)},
 		{"Timestamp(ns, \"+09:00\")", `"2024-01-02T03:04:05+09:00"`, time.Date(2024, 1, 2, 3, 4, 5, 0, time.FixedZone("", 9*3600))},
-		{"Date32", `"2024-01-02"`, time.Date(2024, 1, 2, 0, 0, 0, 0, time.UTC)},
+		{"Date32", `"2024-01-02"`, dbimp.Date{Year: 2024, Month: 1, Day: 2}},
+		{"Date64", `"2024-01-02T00:00:00"`, dbimp.Date{Year: 2024, Month: 1, Day: 2}},
 		{"Binary", `"6162"`, []byte("ab")},
 		{"Null", `1`, int64(1)},
-		{"Time64(ns)", `"12:30:00"`, "12:30:00"},
+		{"Time64(ns)", `"12:30:00"`, dbimp.LocalTime{Hour: 12, Minute: 30}},
+		{"Time32(ms)", `"12:30:00.500"`, dbimp.LocalTime{Hour: 12, Minute: 30, Nanosecond: 5e8}},
+		{"Interval(MonthDayNano)", `"14 mons 3 days 4 hours 5 mins 6.500000000 secs"`, dbimp.Interval{Months: 14, Days: 3, Nanoseconds: 14706e9 + 5e8}},
+		{"Interval(MonthDayNano)", `"-1 mons -2 days"`, dbimp.Interval{Months: -1, Days: -2}},
+		{"Interval(MonthDayNano)", `"0.000000001 secs"`, dbimp.Interval{Nanoseconds: 1}},
+		{"Interval(MonthDayNano)", `""`, dbimp.Interval{}},
+		{"Interval(MonthDayNano)", `"-3 hours"`, dbimp.Interval{Nanoseconds: -3 * 3600e9}},
 		{"List(Int64)", `[1]`, []any{int64(1)}},
 	} {
 		got, err := columnType(tt.arrow, true).decode(jsontext.Value(tt.in))
@@ -150,6 +157,63 @@ func TestCheckNamedValue(t *testing.T) {
 		}
 		if !reflect.DeepEqual(nv.Value, tt.want) {
 			t.Errorf("CheckNamedValue(%#v) left %#v, want %#v", tt.in, nv.Value, tt.want)
+		}
+	}
+}
+
+// TestParseDuration holds D135 for a Duration, with the texts that the
+// server wrote (measured on 3.11.5).
+func TestParseDuration(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		in   string
+		want time.Duration
+	}{
+		{"PT1.5S", 1500 * time.Millisecond},
+		{"PT90S", 90 * time.Second},
+		{"-PT2.5S", -2500 * time.Millisecond},
+		{"PT0.000007S", 7 * time.Microsecond},
+		{"PT864000S", 240 * time.Hour},
+		{"P0D", 0},
+		{"PT9223372036.854775807S", math.MaxInt64},
+		{"-PT9223372036.854775807S", -math.MaxInt64},
+	} {
+		got, ok := parseDuration(tt.in)
+		if !ok || got != tt.want {
+			t.Errorf("parseDuration(%q) = %v, %v, want %v", tt.in, got, ok, tt.want)
+		}
+	}
+	for _, in := range []string{"", "PT", "PTS", "PT1", "P1D", "PT1.0000000001S", "PT9223372037S", "1s", "PT-1S"} {
+		if got, ok := parseDuration(in); ok {
+			t.Errorf("parseDuration(%q) = %v, want a failure", in, got)
+		}
+	}
+	d, err := columnType("Duration(ns)", true).decode(jsontext.Value(`"PT1.5S"`))
+	if err != nil || d != 1500*time.Millisecond {
+		t.Errorf("a Duration(ns) decoded as %#v, %v", d, err)
+	}
+	if st := columnType("Duration(s)", true).scanType(); st != reflect.TypeFor[time.Duration]() {
+		t.Errorf("the scan type of a Duration is %v", st)
+	}
+}
+
+// TestIntervalArgument holds that an Interval argument is the text that the
+// server casts, which the driver reads back as the same interval (measured
+// on 3.11.5).
+func TestIntervalArgument(t *testing.T) {
+	t.Parallel()
+	for _, iv := range []dbimp.Interval{
+		{}, {Months: 14, Days: -3, Nanoseconds: -1000}, {Months: 1, Days: 2, Nanoseconds: 3500e6},
+		{Nanoseconds: math.MaxInt64}, {Nanoseconds: math.MinInt64},
+	} {
+		text := formatInterval(iv)
+		if back, ok := parseInterval(text); !ok || back != iv {
+			t.Errorf("%v writes %q, which reads back as %v, %v", iv, text, back, ok)
+		}
+	}
+	for _, s := range []string{"1", "1 week", "1.5 days", "1.5 nanoseconds", "x secs"} {
+		if iv, ok := parseInterval(s); ok {
+			t.Errorf("parseInterval(%q) = %v, want a failure", s, iv)
 		}
 	}
 }

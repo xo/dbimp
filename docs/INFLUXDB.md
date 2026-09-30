@@ -221,23 +221,30 @@ The type table is written from the code by `TestTables` (step 10). It has
 one row for each type that a line of line protocol writes, which are the
 types of `features.json`.
 
+The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
+maps every kind onto its Go type (D135 and D137).
+
 <!-- dbimp:types -->
-| Wire type | Go type | Scan type | Database type | Can be NULL |
-| --- | --- | --- | --- | --- |
-| null | `nil in SQL, from the data_type Null. InfluxQL: nil` | `interface {}` | `NULL` | yes |
-| float | `float64 in SQL, from the data_type Float64. InfluxQL: float64, or int64 for a whole number` | `sql.Null[float64]` | `FLOAT64` | yes |
-| integer | `int64 in SQL, from the data_type Int64. InfluxQL: int64` | `sql.Null[int64]` | `INT64` | yes |
-| unsigned integer | `uint64 in SQL, from the data_type UInt64. InfluxQL: int64, or uint64 above the range of int64` | `sql.Null[uint64]` | `UINT64` | yes |
-| string | `string in SQL, from the data_type Utf8. InfluxQL: string` | `sql.Null[string]` | `UTF8` | yes |
-| boolean | `bool in SQL, from the data_type Boolean. InfluxQL: bool` | `sql.Null[bool]` | `BOOLEAN` | yes |
-| tag | `string in SQL, from the data_type Dictionary(Int32, Utf8). InfluxQL: string` | `sql.Null[string]` | `DICTIONARY(INT32, UTF8)` | yes |
-| timestamp | `time.Time in SQL, from the data_type Timestamp(ns). InfluxQL: time.Time, in the column time` | `time.Time` | `TIMESTAMP(NS)` | no |
+| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- | --- |
+| null | null | `nil in SQL, from the data_type Null. InfluxQL: nil` | `interface {}` | `NULL` | yes |
+| float | float | `float64 in SQL, from the data_type Float64. InfluxQL: float64, or int64 for a whole number` | `float64` | `FLOAT64` | yes |
+| integer | integer | `int64 in SQL, from the data_type Int64. InfluxQL: int64` | `int64` | `INT64` | yes |
+| unsigned integer | unsigned integer | `uint64 in SQL, from the data_type UInt64. InfluxQL: int64, or uint64 above the range of int64` | `uint64` | `UINT64` | yes |
+| string | string | `string in SQL, from the data_type Utf8. InfluxQL: string` | `string` | `UTF8` | yes |
+| boolean | boolean | `bool in SQL, from the data_type Boolean. InfluxQL: bool` | `bool` | `BOOLEAN` | yes |
+| tag | string | `string in SQL, from the data_type Dictionary(Int32, Utf8). InfluxQL: string` | `string` | `DICTIONARY(INT32, UTF8)` | yes |
+| timestamp | timestamp | `time.Time in SQL, from the data_type Timestamp(ns). InfluxQL: time.Time, in the column time` | `time.Time` | `TIMESTAMP(NS)` | no |
 <!-- /dbimp:types -->
 
 SQL can make other types in an expression, and the driver decodes each one
-by its `data_type`: a decimal as an `*apd.Decimal`, a date as a `time.Time`
-at midnight in UTC, binary data as a `[]byte`, and a list or a struct as it
-decodes JSON. A time of day and an interval stay the strings of the server.
+by its `data_type`: a decimal as an `*apd.Decimal`, a `Date32` or a
+`Date64` as a `dbimp.Date`, a `Time32` or a `Time64` as a `dbimp.LocalTime`,
+an `Interval` as a `dbimp.Interval` (D138), binary data as a `[]byte`, a
+`Duration` as a `time.Duration`, and a list or a struct as it decodes JSON.
+An argument of the types of D138 is the text that the server casts: ISO 8601
+for a date, a time of day and a date and time, and the form of the server for
+an interval, because the server takes no interval in ISO 8601.
 These are the facts that step 6 measured.
 
 SQL on InfluxDB 3, with the `data_type` that `DESCRIBE` gives and the JSON of
@@ -255,12 +262,21 @@ a value (measured on 3.9.13 and 3.11.5, 3.11.5-023 to 026):
 | `Timestamp(ns)` | a string with no zone, such as `"2024-01-02T03:04:05.123456789"` |
 | `Timestamp(ns, "UTC")` | a string with `Z` |
 | `Date32` | a string, such as `"2024-01-02"` |
-| `Time64(ns)` | a string, such as `"12:30:00"` |
-| `Interval(MonthDayNano)` | a string, such as `"1 days 2 hours"` |
+| `Date64` | a string with a time, such as `"2026-09-30T00:00:00"` (measured on 3.11.5 on 2026-09-30) |
+| `Time64(ns)` | a string, such as `"12:30:00"`, or `"12:30:00.500"` with a fraction, as `Time32(ms)` writes it too (measured on 3.11.5 on 2026-09-30) |
+| `Interval(MonthDayNano)` | a string, such as `"1 days 2 hours"` or `"14 mons 3 days 4 hours 5 mins 6.500000000 secs"`, with a sign on each part, and `""` for zero (measured on 3.11.5 on 2026-09-30) |
+| `Duration(s)`, `Duration(ms)`, `Duration(ns)` | a string in ISO 8601, such as `"PT1.5S"` or `"-PT2.5S"`, and `"P0D"` for zero (measured on 3.11.5 on 2026-09-30) |
 | `Binary` | a string of hex, such as `"6162"` |
 | `List(Int64)` | an array |
 | `Struct("a": Int64)` | an object |
 | `Null` | always a missing key |
+
+On 3.11.5, on 2026-09-30, the server cast no interval to `Interval(YearMonth)`
+or `Interval(DayTime)`, so neither form is recorded. It refused an interval
+in ISO 8601, such as `P1M2DT3.5S`, and cast its own form, such as `14 mons -3
+days -0.000001 secs`. A date given as a parameter, `CAST($a AS DATE)`, wrote
+back as the date, and compared as false with the same date as a literal, which
+is a fault of the server.
 
 - A NaN, +Inf or -Inf reaches the JSON as an explicit `null`, and a NULL
   leaves out its key (measured, 3.11.5-024, and on 3.11.5 on 2026-09-29).

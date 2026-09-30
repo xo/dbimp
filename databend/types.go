@@ -190,6 +190,8 @@ type format struct {
 	driver bool
 	// binary is the value of binary_output_format, in lower case.
 	binary string
+	// geometry is the value of geometry_output_format, in lower case.
+	geometry string
 	// loc is the timezone of a Timestamp.
 	loc *time.Location
 }
@@ -225,17 +227,12 @@ func (f *format) scalar(t *colType, text string) (any, error) {
 		}
 		return i, nil
 	case "uint64":
-		if i, err := strconv.ParseInt(text, 10, 64); err == nil {
-			return i, nil
-		}
-		if _, err := strconv.ParseUint(text, 10, 64); err != nil {
-			return nil, valueError(t, text)
-		}
-		d, _, err := apd.NewFromString(text)
+		// A UInt64 is a uint64, whatever its value (D138).
+		u, err := strconv.ParseUint(text, 10, 64)
 		if err != nil {
 			return nil, valueError(t, text)
 		}
-		return d, nil
+		return u, nil
 	case kindFloat32, kindFloat64:
 		// The server writes the shortest text of the value, and the driver
 		// reads it as the float64 of that text, so a Float32 reads as the
@@ -262,7 +259,17 @@ func (f *format) scalar(t *colType, text string) (any, error) {
 	case kindBinary:
 		return f.bytes(t, text)
 	case kindDate:
-		return f.date(t, text)
+		d, err := f.date(t, text)
+		if err != nil {
+			return nil, err
+		}
+		return dbimp.DateOf(d), nil
+	case kindInterval:
+		iv, err := parseInterval(text)
+		if err != nil {
+			return nil, valueError(t, text)
+		}
+		return iv, nil
 	case kindTimestamp:
 		return f.timestamp(t, text)
 	case kindTimeTZ:
@@ -271,10 +278,46 @@ func (f *format) scalar(t *colType, text string) (any, error) {
 		// JSON carries no bytes of a bitmap, whatever the settings say
 		// (D119).
 		return nil, fmt.Errorf("reading a %s: the server writes no bytes of a Bitmap in JSON: %w", t.name, dbimp.ErrNotSupported)
+	case kindGeometry, kindGeography:
+		return f.geo(t, text)
 	}
-	// A String, an Interval, a Geometry, a Geography and a kind that the
-	// driver does not know read as their text.
+	// A String and a kind that the driver does not know read as their text
+	// (D136).
 	return text, nil
+}
+
+// geo decodes a Geometry or a Geography as geometry_output_format writes it,
+// at the top of a value and inside an Array, a Map or a Tuple alike
+// (measured): WKT and EWKT as their text (D119), WKB and EWKB as the bytes
+// of their hex, and GeoJSON as the decoded JSON value (D135).
+func (f *format) geo(t *colType, text string) (any, error) {
+	switch f.geometry {
+	case "geojson":
+		v, err := dbimp.Any(jsontext.Value(text))
+		if err != nil {
+			return nil, valueError(t, text)
+		}
+		return v, nil
+	case "wkb", "ewkb":
+		b, err := hex.DecodeString(text)
+		if err != nil {
+			return nil, valueError(t, text)
+		}
+		return b, nil
+	}
+	return text, nil
+}
+
+// geoType returns the Go type of a Geometry or a Geography, by
+// geometry_output_format.
+func (f *format) geoType() reflect.Type {
+	switch f.geometry {
+	case "geojson":
+		return reflect.TypeFor[any]()
+	case "wkb", "ewkb":
+		return reflect.TypeFor[[]byte]()
+	}
+	return reflect.TypeFor[string]()
 }
 
 // bytes decodes a Binary as binary_output_format writes it.
@@ -394,10 +437,11 @@ func (f *format) nested(s *valueScanner, t *colType) (any, error) {
 			return nil, err
 		}
 		if t.kind == kindVector {
+			// A Vector is a dbimp.Vector (D139).
 			if vec == nil {
 				vec = []float32{}
 			}
-			return vec, nil
+			return dbimp.Vector[float32](vec), nil
 		}
 		if out == nil {
 			out = []any{}
@@ -458,24 +502,22 @@ func (f *format) nested(s *valueScanner, t *colType) (any, error) {
 		}
 		return ma, nil
 	case kindVariant, kindGeometry, kindGeography:
+		// A Variant, and a geometry in GeoJSON, is bare JSON. A geometry in
+		// another format is a quoted string (measured).
+		var text string
+		var err error
 		if s.peek() == '"' {
-			str, err := s.quoted()
-			if err != nil {
-				return nil, err
-			}
-			if t.kind == kindVariant {
-				return dbimp.Any(jsontext.Value(str))
-			}
-			return str, nil
+			text, err = s.quoted()
+		} else {
+			text, err = s.json()
 		}
-		raw, err := s.json()
 		if err != nil {
 			return nil, err
 		}
 		if t.kind == kindVariant {
-			return dbimp.Any(jsontext.Value(raw))
+			return dbimp.Any(jsontext.Value(text))
 		}
-		return raw, nil
+		return f.geo(t, text)
 	case kindNull, kindNothing:
 		return nil, fmt.Errorf("reading a %s: a value that is not NULL: %w", t.name, dbimp.ErrInvalidValue)
 	}
@@ -624,20 +666,20 @@ var scanTypes = map[string]reflect.Type{
 	"uint8":       reflect.TypeFor[int64](),
 	"uint16":      reflect.TypeFor[int64](),
 	"uint32":      reflect.TypeFor[int64](),
-	"uint64":      reflect.TypeFor[any](),
+	"uint64":      reflect.TypeFor[uint64](),
 	kindFloat32:   reflect.TypeFor[float64](),
 	kindFloat64:   reflect.TypeFor[float64](),
 	kindDecimal:   reflect.TypeFor[*apd.Decimal](),
 	kindBoolean:   reflect.TypeFor[bool](),
 	kindString:    reflect.TypeFor[string](),
 	kindBinary:    reflect.TypeFor[[]byte](),
-	kindDate:      reflect.TypeFor[time.Time](),
+	kindDate:      reflect.TypeFor[dbimp.Date](),
 	kindTimestamp: reflect.TypeFor[time.Time](),
 	kindTimeTZ:    reflect.TypeFor[time.Time](),
-	kindInterval:  reflect.TypeFor[string](),
+	kindInterval:  reflect.TypeFor[dbimp.Interval](),
 	kindVariant:   reflect.TypeFor[any](),
 	kindBitmap:    reflect.TypeFor[any](),
-	kindVector:    reflect.TypeFor[[]float32](),
+	kindVector:    reflect.TypeFor[dbimp.Vector[float32]](),
 	kindGeometry:  reflect.TypeFor[string](),
 	kindGeography: reflect.TypeFor[string](),
 	kindArray:     reflect.TypeFor[[]any](),
@@ -658,4 +700,113 @@ func (t *colType) scanType() reflect.Type {
 		return st
 	}
 	return reflect.TypeFor[string]()
+}
+
+// parseInterval reads an Interval as the server writes it: a number and a
+// unit for years, months and days, each with its own sign, then a clock, such
+// as 1 year 2 months 3 days 4:05:06.5, -1 month -2 days, -0:00:00.000001 and
+// 00:00:00 (measured on 1.2.948). The clock can pass 24 hours.
+func parseInterval(text string) (dbimp.Interval, error) {
+	fields := strings.Fields(text)
+	var months, days int64
+	var nanos int64
+	for i := 0; i < len(fields); i++ {
+		f := fields[i]
+		if strings.Contains(f, ":") {
+			if i != len(fields)-1 {
+				return dbimp.Interval{}, errInterval
+			}
+			n, ok := parseClock(f)
+			if !ok {
+				return dbimp.Interval{}, errInterval
+			}
+			nanos = n
+			continue
+		}
+		if i+1 >= len(fields) {
+			return dbimp.Interval{}, errInterval
+		}
+		n, err := strconv.ParseInt(f, 10, 64)
+		if err != nil {
+			return dbimp.Interval{}, errInterval
+		}
+		i++
+		switch strings.TrimSuffix(fields[i], "s") {
+		case "year":
+			months += n * 12
+		case "month":
+			months += n
+		case "day":
+			days += n
+		default:
+			return dbimp.Interval{}, errInterval
+		}
+	}
+	if len(fields) == 0 || months < math.MinInt32 || months > math.MaxInt32 || days < math.MinInt32 || days > math.MaxInt32 {
+		return dbimp.Interval{}, errInterval
+	}
+	return dbimp.Interval{Months: int32(months), Days: int32(days), Nanoseconds: nanos}, nil
+}
+
+// errInterval is the error of a text that is not an Interval of the server.
+const errInterval dbimp.Error = "not the text of an Interval"
+
+// parseClock reads the clock of an Interval, such as -100:00:00 or
+// 0:00:00.000001, as nanoseconds. It fails for a clock beyond the range of
+// an Interval, about 2562047 hours (D138).
+func parseClock(s string) (int64, bool) {
+	s, neg := strings.CutPrefix(s, "-")
+	parts := strings.Split(s, ":")
+	if len(parts) != 3 {
+		return 0, false
+	}
+	sec, frac, _ := strings.Cut(parts[2], ".")
+	h, err1 := strconv.ParseInt(parts[0], 10, 64)
+	m, err2 := strconv.ParseInt(parts[1], 10, 64)
+	sc, err3 := strconv.ParseInt(sec, 10, 64)
+	if err1 != nil || err2 != nil || err3 != nil || h < 0 || m < 0 || m > 59 || sc < 0 || sc > 59 || len(frac) > 9 {
+		return 0, false
+	}
+	var ns int64
+	if frac != "" {
+		f, err := strconv.ParseInt(frac+strings.Repeat("0", 9-len(frac)), 10, 64)
+		if err != nil {
+			return 0, false
+		}
+		ns = f
+	}
+	const maxHours = math.MaxInt64 / int64(time.Hour)
+	if h > maxHours {
+		return 0, false
+	}
+	total := h*int64(time.Hour) + m*int64(time.Minute) + sc*int64(time.Second)
+	if total > math.MaxInt64-ns {
+		return 0, false
+	}
+	total += ns
+	if neg {
+		total = -total
+	}
+	return total, true
+}
+
+// formatInterval writes iv as the server reads it, such as
+// -14 months -3 days -0:00:00.000001. The server takes no negative part in
+// ISO 8601, and keeps microseconds, so a fraction of a microsecond is an
+// error, and never a value cut short (measured on 1.2.948).
+func formatInterval(iv dbimp.Interval) (string, error) {
+	if iv.Nanoseconds%1000 != 0 {
+		return "", fmt.Errorf("writing the interval %s: the server keeps microseconds: %w", iv, dbimp.ErrInvalidValue)
+	}
+	sign, secs, micros := "", iv.Nanoseconds/1e9, iv.Nanoseconds%1e9/1000
+	if iv.Nanoseconds < 0 {
+		// Each part is negated after the division, so that the smallest
+		// int64 fits.
+		sign, secs, micros = "-", -secs, -micros
+	}
+	clock := fmt.Sprintf("%s%d:%02d:%02d", sign, secs/3600, secs%3600/60, secs%60)
+	if micros != 0 {
+		clock += "." + strings.TrimRight(fmt.Sprintf("%06d", micros), "0")
+	}
+	return fmt.Sprintf("%d months %d days %s", iv.Months, iv.Days, clock), nil
 }

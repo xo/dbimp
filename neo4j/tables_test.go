@@ -24,7 +24,7 @@ func TestTables(t *testing.T) {
 			Nullable: true,
 		})
 	}
-	dbimptest.TypeTable(t, doc, types)
+	dbimptest.TypeTable(t, doc, dbimptest.Kinds(t, types, typeKinds))
 	dbimptest.InterfaceTable(t, doc, map[string]string{
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
 		"driver.Connector":                      "The connector owns the transport, which every connection shares.",
@@ -45,4 +45,30 @@ func TestTables(t *testing.T) {
 		"driver.RowsColumnTypeNullable":         "No type arrives for a column, and any value can be NULL.",
 		"driver.RowsColumnTypePrecisionScale":   "No type arrives for a column, so no column has a precision or a scale.",
 	}, NewConnector(Config{Host: "localhost", Port: portHTTP}), Driver{}, &conn{}, &rows{}, &tx{}, &stmt{})
+}
+
+// typeKinds are the kinds of docs/TYPES.md of the types of the driver (step
+// 8a).
+var typeKinds = map[string]string{
+	"null":            "null",
+	"boolean":         "boolean",
+	"integer":         "integer",
+	"float":           "float",
+	"string":          "string",
+	"byte array":      "binary",
+	"list":            "array",
+	"map":             "map",
+	"date":            "date",
+	"local time":      "time of day",
+	"zoned time":      "time of day with offset",
+	"local datetime":  "local timestamp",
+	"offset datetime": "timestamp",
+	"zoned datetime":  "timestamp",
+	"duration":        "interval",
+	"point":           "geometry",
+	"node":            "node",
+	"relationship":    "relationship",
+	"path":            "path",
+	"vector":          "vector",
+	"uuid":            "uuid",
 }

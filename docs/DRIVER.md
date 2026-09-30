@@ -32,6 +32,7 @@ write that Ken accepted something that he did not say in the conversation:
 - An image that somebody other than the vendor built (step 4).
 - A target that meets a condition of "When it cannot be a driver" (step 6).
 - A server that refuses one of insert, select, update and delete (step 6).
+- The mapping of the types (step 8a), before any code is written.
 - Every decision of step 9, including any package that is not the standard
   library or `apd` (D13).
 - A feature that the product has in a form that stretches the contract, such
@@ -289,6 +290,41 @@ and the name before the colon, such as `## The DSN`.
 Gate: `TestEveryDriverHasItsDocument` passes, every fact in the document is
 marked, and the tests for the documents pass.
 
+### 8a. Map the types
+
+Map every type of the product onto the kinds of [TYPES.md](TYPES.md) before
+any code is written (D137). A kind is a family of types that means the same
+thing in any database, such as an integer or a date, and each kind has one Go
+type (D135).
+
+1. List each type that `features.json` marks `yes`, with its name on the wire
+   and what step 6 recorded for it: its text or its encoding, NULL, the
+   largest and the smallest value, and an empty value.
+2. Give each type a kind from [TYPES.md](TYPES.md), and the Go type of that
+   kind. A type whose Go type differs from the Go type of its kind needs a
+   reason: a type that Go does not have keeps the form that a decision of
+   step 9 names (D136). A type that fits no kind needs a new kind, which is a
+   decision of its own.
+3. Ask at least two models, such as Gemini and DeepSeek, in separate
+   conversations, to review the mapping against [TYPES.md](TYPES.md) and
+   D135. Give each one the list of step 1 and the kinds. Record each answer,
+   and what the server showed about it, under `## Second opinions` of the
+   product document.
+4. Write the mapping as the type table of `docs/<PRODUCT>.md`, between the
+   markers of step 10, in the form that `dbimptest.TypeTable` writes, with
+   the column Kind. Write the Go type, the scan type and the database type
+   that the code will give.
+5. Stop, and show the mapping to Ken, with each type whose Go type differs
+   from its kind and each new kind. His review of the mapping is the item 4
+   of step 9.
+
+Step 10 then generates the same table from the code. A difference between
+the two is a question for Ken, and never a change made to quiet the test.
+
+Gate: `TestEveryTypeHasAKind` passes on the written table, two models are
+recorded under `## Second opinions`, and Ken reviewed the mapping in the
+conversation.
+
 ## Deciding
 
 ### 9. Write the decisions
@@ -306,7 +342,8 @@ fact stays in `docs/<PRODUCT>.md`. Each driver decides these:
    a key that is unknown or repeated. Keep no form of DSN from an earlier
    driver. The secret is the password of the URL, and never a key of the
    query (D94).
-4. The Go type for each wire type (step 10).
+4. The Go type for each wire type, from the mapping of step 8a, which Ken
+   reviewed (D135 and D137).
 5. Whether NULL and a missing value are one value or two (D18).
 6. How parameters are bound. If the server binds none, the escaper for the
    literals of the product (D34).
@@ -329,7 +366,8 @@ The type table gives, for each wire type, the Go type, the scan type, the
 database type name in upper case, whether the column can be NULL, and the
 length, the precision and the scale where they apply. Use one Go type for
 each wire type in every place: a scan into `*any`, `Rows.Next`, and
-`ColumnTypeScanType`. A nullable value is `sql.Null[T]`, and a UUID is
+`ColumnTypeScanType`, for a column that can hold a NULL too (D135 and
+D136). A caller scans a nullable value into `sql.Null[T]`, and a UUID is
 `uuid.UUID` (D25), and a decimal is `*apd.Decimal` (D33). The table lives in
 the code, as the map of the driver. A test passes the map to
 `dbimptest.TypeTable`, which writes the table between the markers
@@ -351,6 +389,10 @@ the types whether each one is implemented, and writes the table between
 
 Run the tests with `DBIMP_UPDATE=1` to write both tables. Without it, each
 test fails when the document holds another table.
+
+The table that the code makes must be the table that step 8a wrote and Ken
+reviewed, with the kind of each type from `dbimptest.Kinds`. Run the
+test without `DBIMP_UPDATE` first, so that a difference shows.
 
 The type table has one row for each type that `features.json` marks `yes`,
 and no other row.
@@ -759,7 +801,8 @@ source.
 4. Responses: the framing, and whether it streams. Where the names of the
    columns and their order come from. How a row is encoded. Paging, and every
    cap or default limit. Compression and redirects.
-5. Types: the table from step 10. NULL, missing and empty values. The range
+5. Types: the table of step 8a, which step 10 generates, with the kind of
+   each type from [TYPES.md](TYPES.md). NULL, missing and empty values. The range
    of numbers. How a decimal, a time, a binary value and a UUID arrive.
 6. Parameters: positional, named or none, and the rule if there are none.
 7. Transactions: what exists, or the error that `BeginTx` returns.
@@ -795,6 +838,8 @@ gate finds nothing.
 | `TestEveryDriverIsATarget` | the row of a driver in `TARGETS.md` does not name its package, or `TARGETS.md` names a package that has no folder (step 17) |
 | `TestEveryDriverHasItsDocument` | a driver has no `docs/<PRODUCT>.md`, or it lacks a heading of the template (step 8) |
 | `TestEveryDriverHasItsManifest` | the manifest lacks an item or a principal, names a file that does not exist, or misses a file under `testdata/<driver>/` (step 6) |
+| `TestEveryTypeHasAKind` | a type table of a product document has a type whose kind `TYPES.md` does not name (step 8a) |
+| `TestTheTypeMatrixIsCurrent` | the table of every driver in `TYPES.md` is not the one that the type tables of the product documents make (step 8a) |
 | `TestEveryDriverGeneratesItsTables` | the document lacks the markers of a table, or the tests do not call `TypeTable` and `InterfaceTable` (step 10) |
 | `TestEveryDriverRunsTheContract` | the tests of a driver do not call `dbimptest.RunContract` (step 11) |
 | `TestNoDriverTouchesGlobalState` | a driver assigns to `http.DefaultTransport`, `http.DefaultClient` or a package variable outside `init`, or calls `io.ReadAll` (step 12) |

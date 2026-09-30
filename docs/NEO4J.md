@@ -154,30 +154,33 @@ not a fact.
 column can be NULL, and no type arrives for a column, so each scans into
 `any`.
 
+The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
+maps every kind onto its Go type (D135 and D137).
+
 <!-- dbimp:types -->
-| Wire type | Go type | Scan type | Database type | Can be NULL |
-| --- | --- | --- | --- | --- |
-| null | `nil, from the $type Null` | `interface {}` | `` | yes |
-| boolean | `bool, from the $type Boolean` | `interface {}` | `` | yes |
-| integer | `int64, from the $type Integer` | `interface {}` | `` | yes |
-| float | `float64, from the $type Float` | `interface {}` | `` | yes |
-| string | `string, from the $type String` | `interface {}` | `` | yes |
-| byte array | `[]byte, from the $type Base64` | `interface {}` | `` | yes |
-| list | `[]any, from the $type List` | `interface {}` | `` | yes |
-| map | `map[string]any, from the $type Map` | `interface {}` | `` | yes |
-| date | `neo4j.Date, from the $type Date` | `interface {}` | `` | yes |
-| local time | `neo4j.LocalTime, from the $type LocalTime` | `interface {}` | `` | yes |
-| zoned time | `neo4j.Time, from the $type Time` | `interface {}` | `` | yes |
-| local datetime | `neo4j.LocalDateTime, from the $type LocalDateTime` | `interface {}` | `` | yes |
-| offset datetime | `time.Time, from the $type OffsetDateTime` | `interface {}` | `` | yes |
-| zoned datetime | `time.Time, in the location that the zone names, from the $type ZonedDateTime` | `interface {}` | `` | yes |
-| duration | `neo4j.Duration, from the $type Duration` | `interface {}` | `` | yes |
-| point | `neo4j.Point, from the $type Point` | `interface {}` | `` | yes |
-| node | `neo4j.Node, from the $type Node` | `interface {}` | `` | yes |
-| relationship | `neo4j.Relationship, from the $type Relationship` | `interface {}` | `` | yes |
-| path | `neo4j.Path, from the $type Path` | `interface {}` | `` | yes |
-| vector | `neo4j.Vector, from the $type Vector` | `interface {}` | `` | yes |
-| uuid | `uuid.UUID, from the $type UUID` | `interface {}` | `` | yes |
+| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- | --- |
+| null | null | `nil, from the $type Null` | `interface {}` | `` | yes |
+| boolean | boolean | `bool, from the $type Boolean` | `interface {}` | `` | yes |
+| integer | integer | `int64, from the $type Integer` | `interface {}` | `` | yes |
+| float | float | `float64, from the $type Float` | `interface {}` | `` | yes |
+| string | string | `string, from the $type String` | `interface {}` | `` | yes |
+| byte array | binary | `[]byte, from the $type Base64` | `interface {}` | `` | yes |
+| list | array | `[]any, from the $type List` | `interface {}` | `` | yes |
+| map | map | `map[string]any, from the $type Map` | `interface {}` | `` | yes |
+| date | date | `dbimp.Date, from the $type Date` | `interface {}` | `` | yes |
+| local time | time of day | `dbimp.LocalTime, from the $type LocalTime` | `interface {}` | `` | yes |
+| zoned time | time of day with offset | `dbimp.OffsetTime, from the $type Time` | `interface {}` | `` | yes |
+| local datetime | local timestamp | `dbimp.LocalDateTime, from the $type LocalDateTime` | `interface {}` | `` | yes |
+| offset datetime | timestamp | `time.Time, from the $type OffsetDateTime` | `interface {}` | `` | yes |
+| zoned datetime | timestamp | `time.Time, in the location that the zone names, from the $type ZonedDateTime` | `interface {}` | `` | yes |
+| duration | interval | `dbimp.Interval, from the $type Duration` | `interface {}` | `` | yes |
+| point | geometry | `neo4j.Point, from the $type Point` | `interface {}` | `` | yes |
+| node | node | `neo4j.Node, from the $type Node` | `interface {}` | `` | yes |
+| relationship | relationship | `neo4j.Relationship, from the $type Relationship` | `interface {}` | `` | yes |
+| path | path | `neo4j.Path, from the $type Path` | `interface {}` | `` | yes |
+| vector | vector | `dbimp.Vector of the Go type of its coordinates, such as dbimp.Vector[float32], from the $type Vector` | `interface {}` | `` | yes |
+| uuid | uuid | `uuid.UUID, from the $type UUID` | `interface {}` | `` | yes |
 <!-- /dbimp:types -->
 
 These are the forms that the server sends (recorded, unless the fact says
@@ -219,6 +222,14 @@ otherwise):
   `datetime('1600-01-01T00:00:00Z')` is an `OffsetDateTime`.
 - A duration is `Duration`, such as `"P1Y2M3DT4H5M6.007S"`, with months and
   days apart from the seconds. A `time.Duration` holds no months.
+- The driver reads a `Date`, a `LocalTime`, a `Time` and a `LocalDateTime`
+  as `dbimp.Date`, `dbimp.LocalTime`, `dbimp.OffsetTime` and
+  `dbimp.LocalDateTime`, a `Duration` as a `dbimp.Interval`, and a `Vector`
+  as a `dbimp.Vector` of the type of its coordinates, such as
+  `dbimp.Vector[float32]` (D138 and D139). A duration whose time passes the
+  range of an `int64` of nanoseconds, about 292 years, is an error. A caller
+  sends a vector as a `dbimp.Vector`, and a plain slice goes as a list
+  (D63).
 - A point is `Point`, such as `"SRID=7203;POINT (1.5 2.5)"` or
   `"SRID=4979;POINT Z (10.7 59.9 3.0)"`, in both forms of JSON.
 - A node is `Node`, with `_element_id`, `_labels` and `_properties`. A
@@ -528,7 +539,7 @@ The differences that a caller sees:
 | Arguments | Sent to the server as `args` and `$name` | Sent in `parameters` as typed JSON. Ordinal n fills `$n` (D64). A struct, a node, a relationship, a path and an `apd.Decimal` are refused |
 | Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | `dbimp.ArrayRows` from the root package, over `values` |
 | Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | None |
-| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44). A time and a UUID are strings | `int64`, `float64`, `[]byte`, `uuid.UUID`, `time.Time`, and the types `Date`, `LocalTime`, `Time`, `LocalDateTime`, `Duration`, `Point`, `Node`, `Relationship`, `Path` and `Vector` (D63) |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44). A time and a UUID are strings | `int64`, `float64`, `[]byte`, `uuid.UUID`, `time.Time`, `dbimp.Date`, `dbimp.LocalTime`, `dbimp.OffsetTime`, `dbimp.LocalDateTime`, `dbimp.Interval` and `dbimp.Vector` (D138 and D139), and the types `Point`, `Node`, `Relationship` and `Path` (D63) |
 | Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported` (D66) |
 | Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` begins a transaction on the endpoints (D65). `ReadOnly` sends `accessMode: READ`. An error on the server ends the transaction, and `Commit` then returns that error. `Rollback` after the context ends still ends the transaction on the server (D100) |
 | Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None |

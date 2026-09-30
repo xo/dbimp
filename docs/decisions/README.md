@@ -59,7 +59,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D36](D036-rows-read-the-body-as-a-stream-and-close-closes.md) | Rows read the body as a stream, and Close closes it | Amended by D90 |
 | [D37](D037-the-shared-test-helpers-are-the-package.md) | The shared test helpers are the package dbimptest | Decided |
 | [D38](D038-the-couchbase-dsn.md) | The Couchbase DSN | Amended by D43 and D46 |
-| [D39](D039-the-values-of-couchbase.md) | The values of Couchbase | Amended by D44 |
+| [D39](D039-the-values-of-couchbase.md) | The values of Couchbase | Amended by D44 and D136 |
 | [D40](D040-parameters-and-options-of-couchbase.md) | Parameters and options of Couchbase | Amended by D43 and D109 |
 | [D41](D041-the-first-couchbase-driver-has-transactions.md) | The first Couchbase driver has transactions | Decided |
 | [D42](D042-how-the-couchbase-driver-reads-a-result.md) | How the Couchbase driver reads a result | Amended by D107 |
@@ -83,7 +83,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D60](D060-the-neo4j-driver-is-named-neo4j.md) | The Neo4j driver is named neo4j | Decided |
 | [D61](D061-the-neo4j-url-names-the-database-in-its-path.md) | The Neo4j URL names the database in its path | Decided |
 | [D62](D062-the-neo4j-driver-speaks-typed-json-and-asks-for.md) | The Neo4j driver speaks typed JSON, and asks for the best version | Decided |
-| [D63](D063-the-go-types-of-neo4j.md) | The Go types of Neo4j | Decided |
+| [D63](D063-the-go-types-of-neo4j.md) | The Go types of Neo4j | Amended by D138 and D139 |
 | [D64](D064-the-neo4j-driver-binds-ordinal-n-as-the.md) | The Neo4j driver binds ordinal n as the parameter $n | Decided |
 | [D65](D065-the-neo4j-driver-runs-a-transaction-through-the.md) | The Neo4j driver runs a transaction through the tx endpoints | Amended by D69 |
 | [D66](D066-the-neo4j-driver-reads-each-result-as-it-arrives.md) | The Neo4j driver reads each result as it arrives, and its errors at the end | Amended by D105 |
@@ -138,8 +138,8 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D115](D115-an-influxdb-query-stops-when-the-client-leaves.md) | An InfluxDB query stops when the client leaves | Decided |
 | [D116](D116-auth-bearer-sends-the-scheme-that-each-server-takes.md) | auth=bearer sends the scheme that each server takes | Amends D110 |
 | [D117](D117-the-databend-dsn-names-the-database-in-its-path.md) | The Databend DSN names the database in its path | Decided |
-| [D118](D118-the-go-types-of-databend.md) | The Go types of Databend | Decided |
-| [D119](D119-databend-reads-nested-values-by-the-schema-and.md) | Databend reads nested values by the schema, and speaks JSON only | Decided |
+| [D118](D118-the-go-types-of-databend.md) | The Go types of Databend | Amended by D138 |
+| [D119](D119-databend-reads-nested-values-by-the-schema-and.md) | Databend reads nested values by the schema, and speaks JSON only | Amended by D136 |
 | [D120](D120-databend-binds-parameters-on-the-server.md) | Databend binds parameters on the server | Amended by D124 |
 | [D121](D121-a-databend-transaction-is-carried-in-the-session.md) | A Databend transaction is carried in the session | Decided |
 | [D122](D122-a-databend-connection-keeps-its-session.md) | A Databend connection keeps its session | Amended by D126 |
@@ -155,4 +155,8 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D132](D132-pinot-arguments-are-written-into-the-text.md) | Pinot arguments are written into the text | Decided |
 | [D133](D133-pinot-reads-one-answer-and-cancels-by-its-id.md) | Pinot reads one answer, and cancels a query by its id | Amended by D134 |
 | [D134](D134-pinot-cancels-only-a-query-whose-answer-has-not.md) | Pinot cancels only a query whose answer has not arrived | Amends D133 |
-| [D135](D135-a-value-has-the-go-type-that-fits-the-type-that.md) | A value has the Go type that fits the type that its database names | Decided |
+| [D135](D135-a-value-has-the-go-type-that-fits-the-type-that.md) | A value has the Go type that fits the type that its database names | Amended by D138 |
+| [D136](D136-the-drivers-follow-d135.md) | The drivers follow D135 | Amends D39 and D119, and amended by D138 |
+| [D137](D137-the-types-are-mapped-before-a-driver-is-written.md) | The types are mapped before a driver is written | Decided |
+| [D138](D138-the-root-package-defines-the-types-that-go-lacks.md) | The root package defines the types that Go lacks | Amends D63, D118, D135 and D136, and amended by D139 |
+| [D139](D139-offsettime-and-vector-join-the-root-package.md) | OffsetTime and Vector join the root package | Amends D63 and D138 |

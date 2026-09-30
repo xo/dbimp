@@ -22,7 +22,7 @@ func TestTables(t *testing.T) {
 		}
 		return dbimptest.TypeRow{Wire: name, Go: goType, ScanType: r.ColumnTypeScanType(0).String(), DatabaseType: r.ColumnTypeDatabaseTypeName(0), Nullable: nullable}
 	}
-	dbimptest.TypeTable(t, doc, []dbimptest.TypeRow{
+	dbimptest.TypeTable(t, doc, dbimptest.Kinds(t, []dbimptest.TypeRow{
 		row("INT", ""),
 		row("LONG", ""),
 		row("FLOAT", "float64, with NaN and the infinities"),
@@ -41,7 +41,7 @@ func TestTables(t *testing.T) {
 		row("BOOLEAN_ARRAY", "[]any, of bool"),
 		row("STRING_ARRAY", "[]any, of string"),
 		row("TIMESTAMP_ARRAY", "[]any, of time.Time"),
-	})
+	}, typeKinds))
 	dbimptest.InterfaceTable(t, doc, map[string]string{
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
 		"driver.Connector":                      "The connector owns the transport, which every connection shares.",
@@ -62,4 +62,27 @@ func TestTables(t *testing.T) {
 		"driver.RowsColumnTypeNullable":         "Every column can be NULL, because each query sends enableNullHandling=true (D130).",
 		"driver.RowsColumnTypePrecisionScale":   "dataSchema names no precision and no scale, and a BIG_DECIMAL has any scale.",
 	}, NewConnector(Config{Host: "localhost"}), Driver{}, &conn{}, &rows{}, &stmt{})
+}
+
+// typeKinds are the kinds of docs/TYPES.md of the types of the driver (step
+// 8a).
+var typeKinds = map[string]string{
+	"INT":             "integer",
+	"LONG":            "integer",
+	"FLOAT":           "float",
+	"DOUBLE":          "float",
+	"BIG_DECIMAL":     "decimal",
+	"BOOLEAN":         "boolean",
+	"TIMESTAMP":       "timestamp",
+	"STRING":          "string",
+	"JSON":            "json",
+	"BYTES":           "binary",
+	"MAP":             "map",
+	"INT_ARRAY":       "array",
+	"LONG_ARRAY":      "array",
+	"FLOAT_ARRAY":     "array",
+	"DOUBLE_ARRAY":    "array",
+	"BOOLEAN_ARRAY":   "array",
+	"STRING_ARRAY":    "array",
+	"TIMESTAMP_ARRAY": "array",
 }

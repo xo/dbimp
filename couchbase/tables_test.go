@@ -34,7 +34,7 @@ func TestTables(t *testing.T) {
 		DatabaseType: strings.ToUpper("string"),
 		Nullable:     true,
 	})
-	dbimptest.TypeTable(t, doc, types)
+	dbimptest.TypeTable(t, doc, dbimptest.Kinds(t, types, typeKinds))
 	dbimptest.InterfaceTable(t, doc, map[string]string{
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
 		"driver.Connector":                      "The connector owns the transport, which every connection shares.",
@@ -55,4 +55,17 @@ func TestTables(t *testing.T) {
 		"driver.RowsColumnTypeNullable":         "Every column can be NULL or MISSING, because a document has no schema.",
 		"driver.RowsColumnTypePrecisionScale":   "A number is a JSON number, with no precision or scale.",
 	}, NewConnector(Config{Host: "localhost", Port: portHTTP}), Driver{}, &conn{}, r, &tx{}, &stmt{})
+}
+
+// typeKinds are the kinds of docs/TYPES.md of the types of the driver (step
+// 8a).
+var typeKinds = map[string]string{
+	"missing":                  "null",
+	"null":                     "null",
+	"boolean":                  "boolean",
+	"number":                   "number",
+	"string":                   "string",
+	"array":                    "array",
+	"object":                   "map",
+	"bytes as a base64 string": "binary",
 }

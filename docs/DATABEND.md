@@ -261,35 +261,38 @@ Measured on 2026-09-29:
 `databend/tables_test.go` writes this table from the code (step 10, D118
 and D119).
 
+The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
+maps every kind onto its Go type (D135 and D137).
+
 <!-- dbimp:types -->
-| Wire type | Go type | Scan type | Database type | Can be NULL |
-| --- | --- | --- | --- | --- |
-| boolean | `bool` | `bool` | `BOOLEAN` | yes |
-| tinyint | `int64` | `int64` | `INT8` | yes |
-| smallint | `int64` | `int64` | `INT16` | yes |
-| int | `int64` | `int64` | `INT32` | yes |
-| bigint | `int64` | `int64` | `INT64` | yes |
-| uint8 | `int64` | `int64` | `UINT8` | yes |
-| uint16 | `int64` | `int64` | `UINT16` | yes |
-| uint32 | `int64` | `int64` | `UINT32` | yes |
-| uint64 | `int64, or *apd.Decimal above the range of int64` | `interface {}` | `UINT64` | yes |
-| float | `float64` | `float64` | `FLOAT32` | yes |
-| double | `float64` | `float64` | `FLOAT64` | yes |
-| decimal | `*apd.Decimal` | `*apd.Decimal` | `DECIMAL(38, 10)` | yes |
-| date | `time.Time, at midnight in UTC` | `time.Time` | `DATE` | yes |
-| timestamp | `time.Time, in the timezone of the session` | `time.Time` | `TIMESTAMP` | yes |
-| timestamp_tz | `time.Time, with its offset` | `time.Time` | `TIMESTAMP_TZ` | yes |
-| interval | `string, as the server writes it` | `string` | `INTERVAL` | yes |
-| string | `string` | `string` | `STRING` | yes |
-| binary | `[]uint8` | `[]uint8` | `BINARY` | yes |
-| array | `[]any, of the Go types of its elements (D119)` | `[]interface {}` | `ARRAY(INT32 NULL)` | yes |
-| map | `map[string]any, or map[any]any for a key that is not a String (D119)` | `map[string]interface {}` | `MAP(STRING, INT32 NULL)` | yes |
-| tuple | `[]any, of the Go types of its fields (D119)` | `[]interface {}` | `TUPLE(INT32 NULL, STRING NULL)` | yes |
-| variant | `the decoded JSON value: nil, bool, string, int64, float64, *apd.Decimal, []any or map[string]any` | `interface {}` | `VARIANT` | yes |
-| bitmap | `none: reading a value fails with dbimp.ErrNotSupported (D119)` | `interface {}` | `BITMAP` | yes |
-| vector | `[]float32` | `[]float32` | `VECTOR(3)` | yes |
-| geometry | `string, in WKT` | `string` | `GEOMETRY` | yes |
-| geography | `string, in WKT` | `string` | `GEOGRAPHY` | yes |
+| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- | --- |
+| boolean | boolean | `bool` | `bool` | `BOOLEAN` | yes |
+| tinyint | integer | `int64` | `int64` | `INT8` | yes |
+| smallint | integer | `int64` | `int64` | `INT16` | yes |
+| int | integer | `int64` | `int64` | `INT32` | yes |
+| bigint | integer | `int64` | `int64` | `INT64` | yes |
+| uint8 | integer | `int64` | `int64` | `UINT8` | yes |
+| uint16 | integer | `int64` | `int64` | `UINT16` | yes |
+| uint32 | integer | `int64` | `int64` | `UINT32` | yes |
+| uint64 | unsigned integer | `uint64` | `uint64` | `UINT64` | yes |
+| float | float | `float64` | `float64` | `FLOAT32` | yes |
+| double | float | `float64` | `float64` | `FLOAT64` | yes |
+| decimal | decimal | `*apd.Decimal` | `*apd.Decimal` | `DECIMAL(38, 10)` | yes |
+| date | date | `dbimp.Date` | `dbimp.Date` | `DATE` | yes |
+| timestamp | timestamp | `time.Time, in the timezone of the session` | `time.Time` | `TIMESTAMP` | yes |
+| timestamp_tz | timestamp | `time.Time, with its offset` | `time.Time` | `TIMESTAMP_TZ` | yes |
+| interval | interval | `dbimp.Interval` | `dbimp.Interval` | `INTERVAL` | yes |
+| string | string | `string` | `string` | `STRING` | yes |
+| binary | binary | `[]byte` | `[]uint8` | `BINARY` | yes |
+| array | array | `[]any, of the Go types of its elements (D119)` | `[]interface {}` | `ARRAY(INT32 NULL)` | yes |
+| map | map | `map[string]any, or map[any]any for a key that is not a String (D119)` | `map[string]interface {}` | `MAP(STRING, INT32 NULL)` | yes |
+| tuple | tuple | `[]any, of the Go types of its fields (D119)` | `[]interface {}` | `TUPLE(INT32 NULL, STRING NULL)` | yes |
+| variant | json | `the decoded JSON value: nil, bool, string, int64, float64, *apd.Decimal, []any or map[string]any` | `interface {}` | `VARIANT` | yes |
+| bitmap | bitmap | `none: reading a value fails with dbimp.ErrNotSupported (D119)` | `interface {}` | `BITMAP` | yes |
+| vector | vector | `dbimp.Vector[float32]` | `dbimp.Vector[float32]` | `VECTOR(3)` | yes |
+| geometry | geometry | `string, in WKT, which the driver asks for. []byte for WKB, and the decoded value for GeoJSON (D136)` | `string` | `GEOMETRY` | yes |
+| geography | geometry | `string, in WKT, which the driver asks for. []byte for WKB, and the decoded value for GeoJSON (D136)` | `string` | `GEOGRAPHY` | yes |
 <!-- /dbimp:types -->
 
 Measured on 2026-09-29 (recorded, item 3):
@@ -307,13 +310,33 @@ Measured on 2026-09-29 (recorded, item 3):
   the days since 1970, a timestamp the microseconds, and a `Timestamp_Tz`
   the microseconds and the offset in seconds, such as
   `1790665496123456 19800`. The other types arrive the same in both modes.
+- An `Interval` is a number and a unit for years, months and days, each
+  with its own sign, then a clock, such as `1 year 2 months 3 days
+  4:05:06.5`, `-1 month -2 days`, `-0:00:00.000001` and `100 days 25:00:00`,
+  and zero is `00:00:00` (measured on 1.2.948 on 2026-09-30). The server
+  keeps microseconds. It reads its own form as an argument, and ISO 8601
+  through `to_interval` too, but not an ISO 8601 part with a sign. It drops a
+  fraction of a microsecond with no error, and `'6.5 seconds'` loses its
+  fraction where `'0:00:06.5'` keeps it. The driver reads an `Interval` as a
+  `dbimp.Interval`, writes an argument in the form of the server, and refuses
+  an argument with a fraction of a microsecond (D138).
+- A `Date` is a `dbimp.Date`, and a `UInt64` a `uint64`, whatever its value
+  (D138). The server gives a positive integer literal above the range of an
+  `Int32` the type `UInt64`, and `count(*)`, `numbers` and `nextval` return
+  one, so each of them is a `uint64`.
 - A `Binary` is hex, such as `00FF`, and base64 with
   `binary_output_format=base64`. A `Geometry` and a `Geography` are GeoJSON,
-  and WKT with `geometry_output_format=WKT`.
+  and WKT with `geometry_output_format=WKT`. The setting holds inside an
+  `Array`, a `Map` and a `Tuple` too: WKT, EWKT, WKB and EWKB there are
+  quoted strings, and GeoJSON is bare JSON. WKB and EWKB are hex (measured
+  on 1.2.948 on 2026-09-30). The driver decodes each one by D136.
 - An `Array`, a `Map` and a `Tuple` arrive as text of SQL, not JSON:
   `[1,NULL,3]`, `{"a":1,"b":NULL}` and `(1,"x")`. A `Variant` arrives as
   JSON text, so its JSON null is the string `null`, where an SQL NULL is
-  JSON `null`. A `Vector(3)` is `[1.5,-2.0,3.0]`.
+  JSON `null`. A `Vector(3)` is `[1.5,-2.0,3.0]`. The server casts a JSON
+  array argument, and its text, to a `Vector` (measured on 1.2.948 on
+  2026-09-30). The driver reads a `Vector` as a `dbimp.Vector[float32]`, and
+  sends a `dbimp.Vector` as a JSON array (D139).
 - A `Bitmap` arrives as the text `<bitmap binary>`, so its value is lost.
   `bitmap_to_array(bm)` gives `[1,3,5]`.
 - With `format_null_as_str=1`, a NULL is the string `NULL`, in an `Int32`

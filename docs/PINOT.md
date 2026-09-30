@@ -200,27 +200,30 @@ Recorded on 1.4.0 and 1.5.1:
 A NULL of every type is nil. A type that the table does not name, such as
 `UNKNOWN`, the type of a `NULL` literal, reads as the decoded JSON value.
 
+The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
+maps every kind onto its Go type (D135 and D137).
+
 <!-- dbimp:types -->
-| Wire type | Go type | Scan type | Database type | Can be NULL |
-| --- | --- | --- | --- | --- |
-| INT | `int64` | `int64` | `INT` | yes |
-| LONG | `int64` | `int64` | `LONG` | yes |
-| FLOAT | `float64, with NaN and the infinities` | `float64` | `FLOAT` | yes |
-| DOUBLE | `float64, with NaN and the infinities` | `float64` | `DOUBLE` | yes |
-| BIG_DECIMAL | `*apd.Decimal, with every digit` | `*apd.Decimal` | `BIG_DECIMAL` | yes |
-| BOOLEAN | `bool` | `bool` | `BOOLEAN` | yes |
-| TIMESTAMP | `time.Time, in UTC, to the millisecond` | `time.Time` | `TIMESTAMP` | yes |
-| STRING | `string` | `string` | `STRING` | yes |
-| JSON | `the decoded JSON value: nil, bool, string, int64, float64, *apd.Decimal, []any or map[string]any. The multi-stage engine names the type STRING, so the value is its text there` | `interface {}` | `JSON` | yes |
-| BYTES | `[]byte, from hex` | `[]uint8` | `BYTES` | yes |
-| MAP | `map[string]any, of the decoded JSON values` | `map[string]interface {}` | `MAP` | yes |
-| INT_ARRAY | `[]any, of int64` | `[]interface {}` | `INT_ARRAY` | yes |
-| LONG_ARRAY | `[]any, of int64` | `[]interface {}` | `LONG_ARRAY` | yes |
-| FLOAT_ARRAY | `[]any, of float64` | `[]interface {}` | `FLOAT_ARRAY` | yes |
-| DOUBLE_ARRAY | `[]any, of float64` | `[]interface {}` | `DOUBLE_ARRAY` | yes |
-| BOOLEAN_ARRAY | `[]any, of bool` | `[]interface {}` | `BOOLEAN_ARRAY` | yes |
-| STRING_ARRAY | `[]any, of string` | `[]interface {}` | `STRING_ARRAY` | yes |
-| TIMESTAMP_ARRAY | `[]any, of time.Time` | `[]interface {}` | `TIMESTAMP_ARRAY` | yes |
+| Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
+| --- | --- | --- | --- | --- | --- |
+| INT | integer | `int64` | `int64` | `INT` | yes |
+| LONG | integer | `int64` | `int64` | `LONG` | yes |
+| FLOAT | float | `float64, with NaN and the infinities` | `float64` | `FLOAT` | yes |
+| DOUBLE | float | `float64, with NaN and the infinities` | `float64` | `DOUBLE` | yes |
+| BIG_DECIMAL | decimal | `*apd.Decimal, with every digit` | `*apd.Decimal` | `BIG_DECIMAL` | yes |
+| BOOLEAN | boolean | `bool` | `bool` | `BOOLEAN` | yes |
+| TIMESTAMP | timestamp | `time.Time, in UTC, to the millisecond` | `time.Time` | `TIMESTAMP` | yes |
+| STRING | string | `string` | `string` | `STRING` | yes |
+| JSON | json | `the decoded JSON value: nil, bool, string, int64, float64, *apd.Decimal, []any or map[string]any. The multi-stage engine names the type STRING, so the value is its text there` | `interface {}` | `JSON` | yes |
+| BYTES | binary | `[]byte, from hex` | `[]uint8` | `BYTES` | yes |
+| MAP | map | `map[string]any, of the decoded JSON values` | `map[string]interface {}` | `MAP` | yes |
+| INT_ARRAY | array | `[]any, of int64` | `[]interface {}` | `INT_ARRAY` | yes |
+| LONG_ARRAY | array | `[]any, of int64` | `[]interface {}` | `LONG_ARRAY` | yes |
+| FLOAT_ARRAY | array | `[]any, of float64` | `[]interface {}` | `FLOAT_ARRAY` | yes |
+| DOUBLE_ARRAY | array | `[]any, of float64` | `[]interface {}` | `DOUBLE_ARRAY` | yes |
+| BOOLEAN_ARRAY | array | `[]any, of bool` | `[]interface {}` | `BOOLEAN_ARRAY` | yes |
+| STRING_ARRAY | array | `[]any, of string` | `[]interface {}` | `STRING_ARRAY` | yes |
+| TIMESTAMP_ARRAY | array | `[]any, of time.Time` | `[]interface {}` | `TIMESTAMP_ARRAY` | yes |
 <!-- /dbimp:types -->
 
 Recorded on 1.4.0 and 1.5.1, from the table `dbimp_types`, which has a

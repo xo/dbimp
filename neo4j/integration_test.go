@@ -744,7 +744,7 @@ func TestIntegrationFeatures(t *testing.T) {
 		}},
 		{"typed json", func(t *testing.T, _ principal, db *sql.DB) {
 			equal(t, "a date and a string", query(t, db, "RETURN date('2026-09-27') AS d, '2026-09-27' AS s"),
-				[][]any{{Date(time.Date(2026, 9, 27, 0, 0, 0, 0, time.UTC)), "2026-09-27"}})
+				[][]any{{dbimp.Date{Year: 2026, Month: 9, Day: 27}, "2026-09-27"}})
 		}},
 		{"bookmarks", func(t *testing.T, p principal, _ *sql.DB) {
 			status, res := post(t, p, map[string]any{"statement": "CREATE (a:" + g + " {bm: $k}) RETURN a.bm", "parameters": map[string]any{"k": p.name}})
@@ -826,13 +826,13 @@ func literal(v any) (string, error) {
 	case string:
 		r := strings.NewReplacer(`\`, `\\`, `'`, `\'`, "\n", `\n`)
 		return "'" + r.Replace(x) + "'", nil
-	case Date:
+	case dbimp.Date:
 		return "date('" + x.String() + "')", nil
-	case LocalTime:
+	case dbimp.LocalTime:
 		return "localtime('" + x.String() + "')", nil
-	case Time:
+	case dbimp.OffsetTime:
 		return "time('" + x.String() + "')", nil
-	case LocalDateTime:
+	case dbimp.LocalDateTime:
 		return "localdatetime('" + x.String() + "')", nil
 	case time.Time:
 		// The text form of datetime takes no seconds in an offset, and the
@@ -843,7 +843,7 @@ func literal(v any) (string, error) {
 			tz = name
 		}
 		return fmt.Sprintf("datetime({epochSeconds: %d, nanosecond: %d, timezone: '%s'})", x.Unix(), x.Nanosecond(), tz), nil
-	case Duration:
+	case dbimp.Interval:
 		return "duration('" + x.String() + "')", nil
 	case Point:
 		if x.Dims == 3 {
@@ -870,16 +870,16 @@ func literal(v any) (string, error) {
 			parts = append(parts, "`"+k+"`: "+s)
 		}
 		return "{" + strings.Join(parts, ", ") + "}", nil
-	case Vector:
+	case dbimp.Vector[float32], dbimp.Vector[int64]:
 		var coords []string
 		var typ string
-		switch c := x.Coordinates.(type) {
-		case []float32:
+		switch c := x.(type) {
+		case dbimp.Vector[float32]:
 			typ = coordsFloat32
 			for _, f := range c {
 				coords = append(coords, strconv.FormatFloat(float64(f), 'g', -1, 32))
 			}
-		case []int64:
+		case dbimp.Vector[int64]:
 			typ = coordsInt64
 			for _, n := range c {
 				coords = append(coords, strconv.FormatInt(n, 10))
@@ -995,9 +995,13 @@ func TestIntegrationTypes(t *testing.T) {
 	m2 := dbimptest.Value{Name: "two", In: map[string]any{"s": "x", "l": []any{int64(1), int64(2)}}}
 	long := strings.Repeat("0123456789", 1000)
 	u7 := uuid.MustParse("0192f1c4-3b5e-7a2c-9f00-000000000001")
-	date := func(y int, m time.Month, d int) Date { return Date(time.Date(y, m, d, 0, 0, 0, 0, time.UTC)) }
-	lt := func(h, m, s, ns int) LocalTime { return LocalTime(time.Date(0, 1, 1, h, m, s, ns, time.UTC)) }
-	zt := func(h, m, s, ns, off int) Time { return Time(time.Date(0, 1, 1, h, m, s, ns, fixedZone(off))) }
+	date := func(y int, m time.Month, d int) dbimp.Date { return dbimp.Date{Year: y, Month: m, Day: d} }
+	lt := func(h, m, s, ns int) dbimp.LocalTime {
+		return dbimp.LocalTime{Hour: h, Minute: m, Second: s, Nanosecond: ns}
+	}
+	zt := func(h, m, s, ns, off int) dbimp.OffsetTime {
+		return dbimp.OffsetTime{Time: dbimp.LocalTime{Hour: h, Minute: m, Second: s, Nanosecond: ns}, Offset: off}
+	}
 	cases := []struct {
 		rt    dbimptest.RoundTripCase
 		since [2]int
@@ -1047,8 +1051,8 @@ func TestIntegrationTypes(t *testing.T) {
 			dbimptest.Value{Name: "west", In: zt(23, 59, 59, 0, -5*3600-30*60)},
 		)},
 		{rt: c("local datetime",
-			dbimptest.Value{Name: "now", In: LocalDateTime(time.Date(2026, 9, 27, 10, 0, 0, 123456789, time.UTC))},
-			dbimptest.Value{Name: "max", In: LocalDateTime(time.Date(999999999, 12, 31, 23, 59, 59, 999999999, time.UTC))},
+			dbimptest.Value{Name: "now", In: dbimp.LocalDateTime{Date: dbimp.Date{Year: 2026, Month: 9, Day: 27}, Time: dbimp.LocalTime{Hour: 10, Minute: 0, Second: 0, Nanosecond: 123456789}}},
+			dbimptest.Value{Name: "max", In: dbimp.LocalDateTime{Date: dbimp.Date{Year: 999999999, Month: 12, Day: 31}, Time: dbimp.LocalTime{Hour: 23, Minute: 59, Second: 59, Nanosecond: 999999999}}},
 		)},
 		{rt: c("offset datetime",
 			dbimptest.Value{Name: "utc", In: time.Date(2026, 9, 27, 10, 0, 0, 1, time.UTC)},
@@ -1059,10 +1063,10 @@ func TestIntegrationTypes(t *testing.T) {
 			dbimptest.Value{Name: "new york", In: time.Date(2026, 1, 1, 23, 59, 59, 999999999, york)},
 		)},
 		{rt: c("duration",
-			dbimptest.Value{Name: "parts", In: Duration{Months: 14, Days: 3, Seconds: 14706, Nanos: 7e6}},
-			dbimptest.Value{Name: "zero", In: Duration{}},
-			dbimptest.Value{Name: "negative", In: Duration{Months: -14, Days: -3, Seconds: -6, Nanos: 999999993}},
-			dbimptest.Value{Name: "1ns", In: Duration{Nanos: 1}},
+			dbimptest.Value{Name: "parts", In: dbimp.Interval{Months: 14, Days: 3, Nanoseconds: 14706007000000}},
+			dbimptest.Value{Name: "zero", In: dbimp.Interval{}},
+			dbimptest.Value{Name: "negative", In: dbimp.Interval{Months: -14, Days: -3, Nanoseconds: -5000000007}},
+			dbimptest.Value{Name: "1ns", In: dbimp.Interval{Nanoseconds: 1}},
 		)},
 		{rt: c("point",
 			dbimptest.Value{Name: "cartesian", In: Point{SRID: 7203, X: 1.5, Y: -2.5, Dims: 2}},
@@ -1080,8 +1084,9 @@ func TestIntegrationTypes(t *testing.T) {
 			"MATCH (:$L {k: $2})-[r:REL]->() SET r = $1", "MATCH (n:$L {k: $1})-[:REL]->(e) DETACH DELETE n, e",
 			sameProps(reflect.TypeFor[Path]()), m1, m2)},
 		{rt: c("vector",
-			dbimptest.Value{Name: "float32", In: Vector{Coordinates: []float32{1.5, -2.5}}},
-			dbimptest.Value{Name: "int64", In: Vector{Coordinates: []int64{math.MaxInt64, math.MinInt64 + 1}}},
+			// A vector goes and returns as a dbimp.Vector (D139).
+			dbimptest.Value{Name: "float32", In: dbimp.Vector[float32]{1.5, -2.5}},
+			dbimptest.Value{Name: "int64", In: dbimp.Vector[int64]{math.MaxInt64, math.MinInt64 + 1}},
 		), since: [2]int{2025, 11}},
 		{rt: c("uuid", dbimptest.Value{Name: "v7", In: u7}, dbimptest.Value{Name: "zero", In: uuid.UUID{}}), since: [2]int{2026, 7}},
 	}

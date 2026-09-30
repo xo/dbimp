@@ -1,6 +1,6 @@
 # D119. Databend reads nested values by the schema, and speaks JSON only
 
-Status: Decided.
+Status: Amended by D136.
 
 Ken decided these on 2026-09-29, at step 9 of the Databend driver:
 
