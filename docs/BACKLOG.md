@@ -1341,3 +1341,16 @@ Steps 10 to 17a went in on 2026-10-01, staged for Ken's review:
    `VALUES (DATABASE_VERSION())` on HSQLDB. On Phoenix, the version is in
    `databaseProperties`, which the driver does not send.
 
+Ken committed steps 2 to 17a on 2026-10-01 as `bb7b044`, and the workflow
+change of D161 as `68b2e0d`. The session moved the pin to dbmeta `585a1f8`
+as `c010ab3`, after the `dbmeta` session committed D155 there. The
+workflow passed on `c010ab3`, on every release of every driver and on
+`phoenix-2.0-5.0` for the first time. At Ken's request, a review of the
+other drivers then found two faults in how a transaction ends, which
+`68425cf` fixes in `libsql` and `databend` (D150 and D122). The workflow
+passed on `68425cf`, which is the gate of step 18:
+https://github.com/xo/dbimp/actions/runs/36799423965. At Ken's request, the
+session tagged `v0.10.0` on `68425cf` and published it the same day, which
+is the gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.10.0.
+
+Step 20 waits for Ken. The requests above name `v0.10.0`.

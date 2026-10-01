@@ -1,3 +1,28 @@
+<div align="center">
+  <a href="#use" title="Use">Use</a> |
+  <a href="#documents" title="Documents">Documents</a> |
+  <a href="#related-projects" title="Related Projects">Related Projects</a> |
+  <a href="https://pkg.go.dev/github.com/xo/dbimp" title="Go Reference">Reference</a> |
+  <a href="https://github.com/xo/dbimp/releases" title="Releases">Releases</a> |
+  <a href="CONTRIBUTING.md" title="Contributing">Contributing</a>
+</div>
+
+<br/>
+
+[![Unit Tests][dbimp-ci-status]][dbimp-ci]
+[![Go Reference][goref-dbimp-status]][goref-dbimp]
+[![Releases][release-status]][releases]
+[![Discord Discussion][discord-status]][discord]
+
+[dbimp-ci]: https://github.com/xo/dbimp/actions/workflows/test.yml "Test CI"
+[dbimp-ci-status]: https://github.com/xo/dbimp/actions/workflows/test.yml/badge.svg "Test CI"
+[goref-dbimp]: https://pkg.go.dev/github.com/xo/dbimp "Go Reference"
+[goref-dbimp-status]: https://pkg.go.dev/badge/github.com/xo/dbimp.svg "Go Reference"
+[release-status]: https://img.shields.io/github/v/release/xo/dbimp?display_name=tag "Latest Release"
+[releases]: https://github.com/xo/dbimp/releases "Releases"
+[discord]: https://discord.gg/WDWAgXwJqN "Discord Discussion"
+[discord-status]: https://img.shields.io/discord/829150509658013727.svg?label=Discord&logo=Discord&colorB=7289da&style=flat-square "Discord Discussion"
+
 # dbimp
 
 `dbimp` holds Go `database/sql` drivers for databases that have no idiomatic
@@ -13,8 +38,8 @@ released in `v0.1.0`, `surrealdb` and `neo4j`, which the tags `v0.2.0` and
 other three, `arangodb`, which was first released in `v0.5.0`, `databend`,
 which was first released in `v0.6.0`, `pinot`, which was first released in
 `v0.7.0`, `rqlite`, which was first released in `v0.8.0`, and `libsql`,
-which was first released in `v0.9.0`. The driver `avatica` is staged for
-review, and no release holds it yet.
+which was first released in `v0.9.0`, and `avatica`, which was first
+released in `v0.10.0`.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -64,3 +89,20 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/RQLITE.md](docs/RQLITE.md) | What is known about rqlite, measured for its driver |
 | [docs/LIBSQL.md](docs/LIBSQL.md) | What is known about libSQL and Turso, measured for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
+
+## Related projects
+
+`dbimp` is one of the `xo` projects for databases. Each one is a separate
+repository:
+
+| Project | What it is |
+| --- | --- |
+| [usql](https://github.com/xo/usql) | A command line client for SQL and NoSQL databases, modeled on `psql`. It uses the drivers of `dbimp` |
+| [dburl](https://github.com/xo/dburl) | Parses the URL of a database, and names the driver that opens it. It gives each driver of `dbimp` its DSN |
+| [dbmeta](https://github.com/xo/dbmeta) | Reads the metadata of a database: its schemas, tables, columns and the rest. Its command `dbrun` starts the servers that the tests of `dbimp` use |
+| [dbtpl](https://github.com/xo/dbtpl) | Generates Go code from the schema of a database. It reads the schema through `dbmeta` |
+| [dbimp](https://github.com/xo/dbimp) | This repository: `database/sql` drivers for databases that have no idiomatic Go driver |
+| [cql](https://github.com/xo/cql) | The `database/sql` driver for Cassandra |
+| [tblfmt](https://github.com/xo/tblfmt) | Writes a result set as a text table, one row at a time. `usql` uses it |
+| [rline](https://github.com/xo/rline) | A readline package for Go, which reads a line of text that a person edits. `usql` uses it |
+| [transit](https://github.com/xo/transit) | A Go port of tree-sitter, a parser of source code. `rline` uses it to highlight syntax, and `usql` to complete statements |

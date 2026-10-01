@@ -27,7 +27,7 @@ holds the second and the third. The fifth, in
 `pinot/`, was first released in `v0.7.0` (W19). The eighth, in
 `rqlite/`, was first released in `v0.8.0` (W22). The ninth, in
 `libsql/`, was first released in `v0.9.0` (W23). The tenth, in
-`avatica/`, is staged for review, and no release holds it yet (W24). The
+`avatica/`, was first released in `v0.10.0` (W24). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

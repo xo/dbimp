@@ -54,8 +54,9 @@ order:
 8. libSQL, and Turso. Done, in `v0.9.0` (W23).
    See [LIBSQL.md](LIBSQL.md).
 9. Apache Calcite Avatica, and the products that speak it: the standalone
-   Avatica server and the Apache Phoenix Query Server (D74). Druid gets a
-   driver of its own (D154). See [AVATICA.md](AVATICA.md).
+   Avatica server and the Apache Phoenix Query Server (D74). Done, in
+   `v0.10.0` (W24). Druid gets a driver of its own (D154). See
+   [AVATICA.md](AVATICA.md).
 
 The other targets below keep their priority, and their place in the order
 is open.
