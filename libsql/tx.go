@@ -48,7 +48,18 @@ func (t *tx) end(stmt string) error {
 	if t.busy {
 		return fmt.Errorf("ending the transaction with %s while a statement still reads its rows", stmt)
 	}
-	_, err := t.c.c.execute(t.ctx, t.s, map[string]any{"sql": stmt}, true)
+	// database/sql rolls back a transaction whose context ended, and that
+	// context would stop the request before it reaches the server. The
+	// server would then keep the transaction, and the write lock of SQLite,
+	// until the stream expires. So the rollback takes the context without
+	// its end, and the limit of a close (D150, as D100 does for Neo4j).
+	ctx := t.ctx
+	if ctx.Err() != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(context.WithoutCancel(ctx), closeTimeout)
+		defer cancel()
+	}
+	_, err := t.c.c.execute(ctx, t.s, map[string]any{"sql": stmt}, true)
 	if e, ok := errors.AsType[*Error](err); ok && e.Code == CodeStreamExpired {
 		return fmt.Errorf("ending the transaction with %s: the stream expired, and the server rolled back the transaction: %w", stmt, err)
 	}

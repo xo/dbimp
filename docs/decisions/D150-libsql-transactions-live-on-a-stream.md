@@ -22,3 +22,10 @@ Ken decided this on 2026-10-01, at step 9 of the libSQL driver. This is item
 - One transaction runs one statement at a time, because the client waits
   for each answer before it sends the next request on a stream (the Hrana
   spec).
+- Ken added this on 2026-10-01: when the context of `BeginTx` ends,
+  `database/sql` rolls the transaction back, and that context would stop the
+  `ROLLBACK` before it reaches the server. The server would then keep the
+  transaction, and the write lock of SQLite, until the stream expires. So
+  the end of a transaction whose context ended sends its statement with the
+  context without its end, and with the limit of a close, as D100 does for
+  Neo4j.

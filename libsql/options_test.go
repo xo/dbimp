@@ -259,6 +259,43 @@ func TestTransaction(t *testing.T) {
 	}
 }
 
+// TestRollbackAfterTheContextEnds holds D150: when the context of BeginTx
+// ends, database/sql rolls the transaction back, and the ROLLBACK reaches the
+// server, so that the server does not keep the write lock of SQLite until the
+// stream expires.
+func TestRollbackAfterTheContextEnds(t *testing.T) {
+	t.Parallel()
+	s := &fakeServer{}
+	db, _ := s.open(t, "", "")
+	ctx, cancel := context.WithCancel(t.Context())
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := tx.ExecContext(ctx, "INSERT INTO t VALUES (1)"); err != nil {
+		t.Fatal(err)
+	}
+	cancel()
+	for deadline := time.Now().Add(5 * time.Second); ; time.Sleep(10 * time.Millisecond) {
+		s.mu.Lock()
+		var sent bool
+		for _, r := range s.reqs {
+			b, _ := json.Marshal(r.body)
+			sent = sent || strings.Contains(string(b), `"ROLLBACK"`)
+		}
+		s.mu.Unlock()
+		if sent {
+			break
+		}
+		if time.Now().After(deadline) {
+			t.Fatal("the server received no ROLLBACK after the context of the transaction ended")
+		}
+	}
+	if err := tx.Rollback(); !errors.Is(err, sql.ErrTxDone) {
+		t.Errorf("Rollback after database/sql rolled back gave %v, want sql.ErrTxDone", err)
+	}
+}
+
 // TestTransactionExpired holds D150: an expired stream is an error that says
 // that the server rolled back the transaction, and never driver.ErrBadConn.
 func TestTransactionExpired(t *testing.T) {

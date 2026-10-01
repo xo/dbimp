@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 
 	"github.com/xo/dbimp"
@@ -58,17 +59,23 @@ func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, e
 }
 
 // Commit satisfies driver.Tx. If the transaction ended on the server, it
-// returns why, and sends COMMIT only to end a transaction that failed, which
-// the server keeps until then (D121 and D122).
+// returns why. A transaction that failed stays on the server until a
+// ROLLBACK, so Commit sends one, with the context of BeginTx without its end
+// and with the limit of a stop, as Rollback does (D121 and D122).
 func (t *tx) Commit() error {
 	// The transaction leaves the connection first, so that the statement
 	// that ends it runs, even after the transaction ended.
 	t.c.tx = nil
 	if t.ended != nil {
+		err := fmt.Errorf("committing the transaction: %w", t.ended)
 		if t.failed {
-			_, _ = t.c.exec(context.WithoutCancel(t.ctx), "ROLLBACK", nil)
+			ctx, cancel := context.WithTimeout(context.WithoutCancel(t.ctx), stopTimeout)
+			defer cancel()
+			if _, rerr := t.c.exec(ctx, "ROLLBACK", nil); rerr != nil {
+				err = errors.Join(err, fmt.Errorf("rolling back the failed transaction: %w", rerr))
+			}
 		}
-		return fmt.Errorf("committing the transaction: %w", t.ended)
+		return err
 	}
 	if _, err := t.c.exec(t.ctx, "COMMIT", nil); err != nil {
 		return fmt.Errorf("committing the transaction: %w", err)

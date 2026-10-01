@@ -308,6 +308,10 @@ These facts come from the sources, and are not measured:
   and `TRANSACTION_BUSY` (the server source, `connection/mod.rs`).
 - A stream expires after 10 seconds with no request (the server source,
   `EXPIRATION` in `hrana/http/stream.rs`, and the Turso documents).
+- When the context of `BeginTx` ends, the driver still sends the
+  `ROLLBACK`, with the context without its end, so that the server does not
+  hold the write lock until the stream expires (D150, and
+  `TestRollbackAfterTheContextEnds`).
 
 ## Errors
 
