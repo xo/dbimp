@@ -1295,6 +1295,9 @@ Steps 4 to 9 went in on 2026-10-01:
 - Steps 8 and 8a: AVATICA.md holds the measured facts and the type table,
   which Ken reviewed. He decided D155 the same day.
 - Step 9 is D156 to D159, which Ken decided on 2026-10-01.
+- Step 15: the pin moved to dbmeta `585a1f8`, which starts the Avatica and
+  Phoenix entries with JSON and prints the URL of D156 for each principal
+  (dbmeta D155).
 
 Steps 10 to 17a went in on 2026-10-01, staged for Ken's review:
 
