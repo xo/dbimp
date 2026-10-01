@@ -181,3 +181,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D158](D158-avatica-binds-typed-parameters.md) | Avatica binds typed parameters | Decided |
 | [D159](D159-avatica-transactions-and-cancel.md) | Avatica transactions and cancel | Decided |
 | [D160](D160-avatica-keeps-the-calendar-and-binds-no-array.md) | Avatica keeps the calendar of the server and binds no array | Decided |
+| [D161](D161-a-driver-tests-each-product-it-recorded.md) | A driver tests each product that it recorded | Decided |

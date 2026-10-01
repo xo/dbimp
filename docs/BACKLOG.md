@@ -1315,10 +1315,13 @@ Steps 10 to 17a went in on 2026-10-01, staged for Ken's review:
   users. The requests below wait for the release.
 - Step 17a: `## Compared with Couchbase` is in AVATICA.md. Two differences
   have no decision yet: `WithTimeout` above zero fails, and `LastInsertId`
-  fails. AVATICA.md lists five more open questions. Ken answered three the
-  same day: the driver keeps the calendar of the server and binds no array
-  or interval (D160), and hard rule 4 takes the three contexts that the
-  driver keeps.
+  fails. AVATICA.md lists five more open questions, and Ken answered each
+  the same day. The driver keeps the calendar of the server and binds no
+  array or interval (D160). Hard rule 4 takes the three contexts that the
+  driver keeps. The end of a transaction sets `readOnly` and
+  `transactionIsolation` back (D159). The workflow tests each product that
+  the manifest of a driver recorded, so `phoenix-2.0-5.0` runs the tests of
+  `avatica` (D161).
 
 1. To `dburl`: the scheme `avatica`, with the alias `phoenix`, names the
    `GoPackage` `github.com/apache/calcite-avatica-go/v5`, and its generator

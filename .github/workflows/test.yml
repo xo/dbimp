@@ -78,7 +78,7 @@ jobs:
     name: Releases
     runs-on: ubuntu-latest
     outputs:
-      names: ${{ steps.list.outputs.names }}
+      releases: ${{ steps.list.outputs.releases }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/checkout@v7
@@ -91,11 +91,13 @@ jobs:
           go-version-file: dbmeta/test/go.mod
           cache-dependency-path: dbmeta/test/go.sum
       # A driver has the name of its product (D30), and each driver has a
-      # folder under testdata/, so the products come from there. A product
-      # that a dbmeta model reads is in the tiers tested and nightly, and any
-      # other is Staged, with the tier that it would have as its cadence
-      # (dbmeta D120). A product with no release fails the job, so that a
-      # change in dbmeta never drops the tests of a driver without a word.
+      # folder under testdata/. A driver also tests each other product of a
+      # release that its manifest recorded, such as phoenix for avatica,
+      # whose name is not the name of a driver (D161). A product that a
+      # dbmeta model reads is in the tiers tested and nightly, and any other
+      # is Staged, with the tier that it would have as its cadence (dbmeta
+      # D120). A driver with no release fails the job, so that a change in
+      # dbmeta never drops the tests of a driver without a word.
       - name: List
         id: list
         run: |
@@ -104,16 +106,24 @@ jobs:
             cadences='["tested","nightly"]'
           fi
           tiers=$(echo "$cadences" | jq -r 'join(" ")')
-          products=$(ls -d testdata/*/ | xargs -n1 basename | jq -R . | jq -sc .)
+          drivers=$(ls -d testdata/*/ | xargs -n1 basename | jq -R . | jq -sc .)
           list=$(cd dbmeta/test && go run ./cmd/dbrun list --json $tiers staged)
-          names=$(echo "$list" | jq -c --argjson products "$products" --argjson cadences "$cadences"             '[.[] | select(.product as $p | $products | index($p))
-              | select(.tier != "staged" or (.cadence as $c | $cadences | index($c))) | .name] | unique')
-          missing=$(echo "$names" | jq -r --argjson products "$products"             '. as $names | $products[] | select(. as $p | [$names[] | startswith($p + "-")] | any | not)')
+          recorded=$(for d in $(echo "$drivers" | jq -r '.[]'); do
+            jq -c --arg d "$d" '[.entries[].release | {release: ., driver: $d}]' "testdata/$d/manifest.json"
+          done | jq -sc 'add | unique')
+          owners=$(echo "$list" | jq -c --argjson drivers "$drivers" --argjson recorded "$recorded" \
+            '[$drivers[] | {product: ., driver: .}] + [.[] as $e | $recorded[] | select(.release == $e.name) | {product: $e.product, driver}] | unique')
+          releases=$(echo "$list" | jq -c --argjson owners "$owners" --argjson cadences "$cadences" \
+            '[.[] | . as $e | $owners[] | select(.product == $e.product)
+              | select($e.tier != "staged" or ($e.cadence as $c | $cadences | index($c)))
+              | {release: $e.name, driver}] | unique')
+          missing=$(echo "$releases" | jq -r --argjson drivers "$drivers" \
+            '. as $r | $drivers[] | select(. as $d | [$r[] | .driver == $d] | any | not)')
           if [ -n "$missing" ]; then
             echo "dbrun lists no release to test for: $missing"
             exit 1
           fi
-          echo "names=$names" >> "$GITHUB_OUTPUT"
+          echo "releases=$releases" >> "$GITHUB_OUTPUT"
 
   integration:
     name: ${{ matrix.release }}
@@ -122,7 +132,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: ${{ fromJSON(needs.releases.outputs.names) }}
+        include: ${{ fromJSON(needs.releases.outputs.releases) }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/checkout@v7
@@ -140,21 +150,23 @@ jobs:
         working-directory: dbmeta/test
         run: go run ./cmd/dbrun start ${{ matrix.release }}
       # The url field is the DSN of the driver, the scheme of which is the
-      # name of the driver (D27). <PRODUCT>_DSN is the administrator, and
-      # <PRODUCT>_ORDINARY_DSN is the ordinary user that dbmeta makes (D9),
+      # name of the driver (D27). <DRIVER>_DSN is the administrator, and
+      # <DRIVER>_ORDINARY_DSN is the ordinary user that dbmeta makes (D9),
       # which dbrun names with the role "user" (dbmeta D102).
-      # <PRODUCT>_SECOND_ADDRESS is the second port of the entry, as
+      # <DRIVER>_SECOND_ADDRESS is the second port of the entry, as
       # host:port, such as the Controller of Pinot, through which its tests
       # make their tables (D128), and empty for a product that has none.
+      # The prefix is the name of the driver and not of the product, so that
+      # the tests of avatica read AVATICA_DSN on phoenix too (D161).
       - name: Test
         run: |
           info=$(cd dbmeta/test && go run ./cmd/dbrun dsn --json ${{ matrix.release }})
-          product=$(echo "$info" | jq -r '.[0].product')
-          prefix=$(echo "$product" | tr '[:lower:]' '[:upper:]')
+          driver=${{ matrix.driver }}
+          prefix=$(echo "$driver" | tr '[:lower:]' '[:upper:]')
           export "${prefix}_DSN=$(echo "$info" | jq -r '.[0].url')"
           export "${prefix}_ORDINARY_DSN=$(echo "$info" | jq -r '[.[0].principals[]? | select(.role == "user") | .url][0] // empty')"
           export "${prefix}_SECOND_ADDRESS=$(echo "$info" | jq -r '.[0].secondAddress // empty')"
-          go test -race -count=1 -run Integration -v "./$product/..."
+          go test -race -count=1 -run Integration -v "./$driver/..."
       - name: Logs
         if: failure()
         working-directory: dbmeta/test

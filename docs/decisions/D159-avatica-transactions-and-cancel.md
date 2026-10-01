@@ -15,3 +15,9 @@ items 7, 9 and 12 of step 9 of [DRIVER.md](../DRIVER.md) for Avatica.
   driver stops its request and the read, and sends `closeStatement` with the
   context without its end and a limit of its own.
 - The driver speaks JSON only (D153).
+- Ken added this on 2026-10-01, after step 14: the `connectionSync` at the
+  end of a transaction also sets `readOnly` and `transactionIsolation` back
+  to their values before it, in the same request. Without it, a connection
+  that `database/sql` takes back into its pool stays read-only or
+  serializable on the server. If that request fails, the driver marks the
+  connection bad, and `database/sql` closes it.

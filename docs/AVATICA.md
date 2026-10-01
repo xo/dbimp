@@ -416,7 +416,7 @@ Step 8a asked both models on 2026-10-01 to review the mapping of the types:
 ## Open questions
 
 Ken decided D155 to D159 on 2026-10-01. Step 10 wrote the code and step 14
-ran the tests, and these questions came up. Ken answered three of them the
+ran the tests, and these questions came up. Ken answered each of them the
 same day:
 
 1. A `DATE` before 1582-10-15 arrives in the Julian calendar of Java. Ken
@@ -425,14 +425,15 @@ same day:
    not (D160).
 3. The workflow tests the releases whose product is the name of a folder of
    a driver. The product of `phoenix-2.0-5.0` in `dbmeta` is `phoenix`, so
-   CI does not test the driver on Phoenix. This is open.
+   CI did not test the driver on Phoenix. Ken decided that the workflow
+   tests each product that the manifest of a driver recorded (D161).
 4. A connection, a transaction and the rows of a query keep a context, for
    the requests that a method with no context sends. Ken accepted these
    exceptions to hard rule 4.
 5. The end of a transaction sets `readOnly` and `transactionIsolation`
    back to their values before it, where D159 names `autoCommit` only. If
    the driver did not, the next statement outside the transaction would be
-   read-only. This is open.
+   read-only. Ken added this to D159.
 
 ## Compared with Couchbase
 
