@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"prepareAndExecute\",\"connectionId\":\"dbimp-rec\",\"statementId\":\"15\",\"sql\":\"SELECT CAST(1E308 AS DOUBLE) * 10 FROM DBIMP_TYPES LIMIT 1\",\"maxRowCount\":-1,\"maxRowsInFirstFrame\":1000}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "4692"
+      ],
+      "Server": [
+        "Jetty(9.3.z-SNAPSHOT)"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 21:19:51 GMT"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"java.lang.NumberFormatException\\n\\tat java.math.BigDecimal.<init>(BigDecimal.java:497)\\n\\tat java.math.BigDecimal.<init>(BigDecimal.java:383)\\n\\tat java.math.BigDecimal.<init>(BigDecimal.java:809)\\n\\tat java.math.BigDecimal.valueOf(BigDecimal.java:1277)\\n\\tat org.apache.phoenix.schema.types.PDouble.getMaxLength(PDouble.java:79)\\n\\tat org.apache.phoenix.expression.LiteralExpression.newConstant(LiteralExpression.java:211)\\n\\tat org.apache.phoenix.expression.LiteralExpression.newConstant(LiteralExpression.java:174)\\n\\tat org.apache.phoenix.expression.LiteralExpression.newConstant(LiteralExpression.java:161)\\n\\tat org.apache.phoenix.expression.LiteralExpression.newConstant(LiteralExpression.java:153)\\n\\tat org.apache.phoenix.util.ExpressionUtil.getConstantExpression(ExpressionUtil.java:41)\\n\\tat org.apache.phoenix.compile.ExpressionCompiler.visitLeave(ExpressionCompiler.java:752)\\n\\tat org.apache.phoenix.compile.ExpressionCompiler.visitLeave(ExpressionCompiler.java:1035)\\n\\tat org.apache.phoenix.compile.ExpressionCompiler.visitLeave(ExpressionCompiler.java:146)\\n\\tat org.apache.phoenix.parse.MultiplyParseNode.accept(MultiplyParseNode.java:51)\\n\\tat org.apache.phoenix.compile.ProjectionCompiler.compile(ProjectionCompiler.java:412)\\n\\tat org.apache.phoenix.compile.QueryCompiler.compileSingleFlatQuery(QueryCompiler.java:561)\\n\\tat org.apache.phoenix.compile.QueryCompiler.compileSingleQuery(QueryCompiler.java:507)\\n\\tat org.apache.phoenix.compile.QueryCompiler.compileSelect(QueryCompiler.java:193)\\n\\tat org.apache.phoenix.compile.QueryCompiler.compile(QueryCompiler.java:153)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement$ExecutableSelectStatement.compilePlan(PhoenixStatement.java:490)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement$ExecutableSelectStatement.compilePlan(PhoenixStatement.java:456)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement$1.call(PhoenixStatement.java:302)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement$1.call(PhoenixStatement.java:291)\\n\\tat org.apache.phoenix.call.CallRunner.run(CallRunner.java:53)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement.executeQuery(PhoenixStatement.java:290)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement.executeQuery(PhoenixStatement.java:283)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement.execute(PhoenixStatement.java:1830)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.prepareAndExecute(JdbcMeta.java:747)\\n\\tat org.apache.calcite.avatica.remote.LocalService.apply(LocalService.java:206)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareAndExecuteRequest.accept(Service.java:927)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareAndExecuteRequest.accept(Service.java:879)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:94)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:130)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:134)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.Server.handle(Server.java:534)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:320)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:251)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:283)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:108)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)\\n\\tat java.lang.Thread.run(Thread.java:748)\\n\"],\"errorMessage\":\"NumberFormatException: (null exception message)\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"6cdf1f6dc5d6:8765\"}}\n"
+  }
+}

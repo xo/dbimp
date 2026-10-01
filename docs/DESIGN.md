@@ -256,8 +256,13 @@ when its `encoding` is `cbor`, or its `text` as plain text. The script can
 name headers that every request of one principal sends, in `header`, such as
 the headers that say where a SurrealDB user is defined. A request keeps a
 value of its response with `capture`, such as the id of a transaction of
-Neo4j, and a later request of the same principal writes it into its body, its
-path or a header as `{{name}}`. A request with `releases` runs only on a release
+Neo4j, or a number, such as the id of a statement of Avatica, and a later
+request of the same principal writes it into its body, its path or a header
+as `{{name}}`. A kept object, such as the statement handle of Avatica, takes
+the place of the whole string `"{{name}}"` in a body, as JSON. A body can name `{{user}}` and `{{password}}`, the credentials
+of the URL of the principal, for a server that takes them in the body, such
+as the `info` of `openConnection` of Avatica, and the recorder writes each
+password in a body as `REDACTED`. A request with `releases` runs only on a release
 whose name starts with one of them, such as `influxdb-3`, as `principals`
 limits a request to some principals. A request of the setup or the teardown
 with `"server": "second"` goes to the URL of the flag `-second`, such as the

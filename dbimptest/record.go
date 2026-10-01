@@ -35,6 +35,7 @@ type Recorder struct {
 	item      int
 	principal string
 	entries   []Entry
+	secrets   []string
 }
 
 // NewRecorder returns a Recorder that sends each request with next and
@@ -63,6 +64,18 @@ type labelKey struct{}
 // request that runs while others are sent keeps its own item.
 func WithLabel(ctx context.Context, item int, principal string) context.Context {
 	return context.WithValue(ctx, labelKey{}, label{item: item, principal: principal})
+}
+
+// Secret adds s to the texts that the Recorder writes as REDACTED in the body
+// of each request, for a server that takes a password in the body, such as
+// the info of openConnection of Avatica.
+func (r *Recorder) Secret(s string) {
+	if s == "" {
+		return
+	}
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.secrets = append(r.secrets, s)
 }
 
 // Label sets the item of step 6 and the principal of the exchanges that
@@ -119,7 +132,7 @@ func (r *Recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 			Truncated: truncated,
 		},
 	}
-	ex.Request.Body, ex.Request.Binary = body(reqBody)
+	ex.Request.Body, ex.Request.Binary = body(r.hide(reqBody))
 	ex.Response.Body, ex.Response.Binary = body(resBody)
 	l, _ := req.Context().Value(labelKey{}).(label)
 	if err := r.write(&ex, l); err != nil {
@@ -144,6 +157,16 @@ func (r *Recorder) WriteManifest(driver string) error {
 	m.Entries = append(m.Entries, r.entries...)
 	r.entries = nil
 	return WriteManifest(path, m)
+}
+
+// hide returns b with each secret written as REDACTED.
+func (r *Recorder) hide(b []byte) []byte {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	for _, s := range r.secrets {
+		b = bytes.ReplaceAll(b, []byte(s), []byte(redacted))
+	}
+	return b
 }
 
 func (r *Recorder) write(ex *Exchange, l label) error {

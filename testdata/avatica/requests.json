@@ -1,0 +1,3440 @@
+{
+  "driver": "avatica",
+  "requests": [
+    {
+      "item": 1,
+      "name": "open the connection of the setup",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "openConnection",
+        "connectionId": "dbimp-setup",
+        "info": {
+          "user": "{{user}}",
+          "password": "{{password}}"
+        }
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a statement of the setup",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "createStatement",
+        "connectionId": "dbimp-setup"
+      },
+      "phase": "setup",
+      "capture": {
+        "psid": "statementId"
+      }
+    },
+    {
+      "item": 1,
+      "name": "drop the table of every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "DROP TABLE PUBLIC.DBIMP_TYPES IF EXISTS",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "make the table of every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "CREATE TABLE PUBLIC.DBIMP_TYPES (ID INTEGER PRIMARY KEY, TI TINYINT, SI SMALLINT, N INTEGER, B BIGINT, D DECIMAL(38,10), F DOUBLE, R REAL, BO BOOLEAN, C CHAR(3), V VARCHAR(20), BIN VARBINARY(10), DT DATE, TM TIME(6), TS TIMESTAMP(9), IV INTERVAL DAY TO SECOND, A INTEGER ARRAY, U UUID, CL CLOB, BL BLOB, TZ TIMESTAMP(6) WITH TIME ZONE)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "fill the table of every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_TYPES VALUES (1, -128, -32768, -2147483648, -9223372036854775808, 1234567890123456789012345678.0123456789, 0.1, 1.5, TRUE, 'ab', 'é''\"\\ x', X'00FF', DATE '2026-10-01', TIME '12:34:56.123456', TIMESTAMP '2026-10-01 12:34:56.123456789', INTERVAL '1 02:03:04.5' DAY TO SECOND, ARRAY[1,NULL,3], CAST('6ba7b810-9dad-11d1-80b4-00c04fd430c8' AS UUID), 'clob text', X'0102', TIMESTAMP '2026-10-01 12:34:56.123456+05:30')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "fill the table of every type, the second row",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_TYPES VALUES (2, 127, 32767, 2147483647, 9223372036854775807, -9999999999999999999999999999.9999999999, 1.7976931348623157E308, -3.4E38, FALSE, '', '', X'', DATE '0001-01-01', TIME '00:00:00', TIMESTAMP '9999-12-31 23:59:59.999999999', INTERVAL '-0 00:00:00.000001' DAY TO SECOND, ARRAY[], CAST('00000000-0000-0000-0000-000000000000' AS UUID), '', X'', TIMESTAMP '1970-01-01 00:00:00+00:00')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "fill the table of every type, the row of NULL",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_TYPES (ID) VALUES (3)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "drop the table of every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_TYPES",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "phoenix-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "make the table of every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "CREATE TABLE DBIMP_TYPES (ID INTEGER NOT NULL PRIMARY KEY, TI TINYINT, SI SMALLINT, N INTEGER, B BIGINT, UI UNSIGNED_INT, UL UNSIGNED_LONG, D DECIMAL(38,10), F FLOAT, DB DOUBLE, BO BOOLEAN, C CHAR(3), V VARCHAR, BIN BINARY(2), VB VARBINARY, DT DATE, TM TIME, TS TIMESTAMP, A INTEGER ARRAY)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "phoenix-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "fill the table of every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "UPSERT INTO DBIMP_TYPES VALUES (1, -128, -32768, -2147483648, -9223372036854775808, 0, 0, 1234567890123456789012345678.0123456789, 1.5, 0.1, TRUE, 'ab', 'é''\"\\ x', 'ab', 'xyz', TO_DATE('2026-10-01', 'yyyy-MM-dd'), TO_TIME('1970-01-01 12:34:56.789'), TO_TIMESTAMP('2026-10-01 12:34:56.789'), ARRAY[1,2,3])",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "phoenix-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "fill the table of every type, the second row",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "UPSERT INTO DBIMP_TYPES VALUES (2, 127, 32767, 2147483647, 9223372036854775807, 2147483647, 9223372036854775807, -9999999999999999999999999999.9999999999, 3.4E38, 1.7976931348623157E308, FALSE, '', '', 'zz', '', TO_DATE('1970-01-01', 'yyyy-MM-dd'), TO_TIME('1970-01-01 00:00:00.000'), TO_TIMESTAMP('1970-01-01 00:00:00'), ARRAY[0])",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "phoenix-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "fill the table of every type, the row of NULL",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-setup",
+        "statementId": "{{psid}}",
+        "sql": "UPSERT INTO DBIMP_TYPES (ID) VALUES (3)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "phoenix-"
+      ],
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "commit the setup",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "commit",
+        "connectionId": "dbimp-setup"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "close the connection of the setup",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "closeConnection",
+        "connectionId": "dbimp-setup"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "open a connection",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "openConnection",
+        "connectionId": "dbimp-rec",
+        "info": {
+          "user": "{{user}}",
+          "password": "{{password}}"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "the properties of the connection",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "connectionSync",
+        "connectionId": "dbimp-rec",
+        "connProps": {
+          "connProps": "connPropsImpl"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "the properties of the database",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "databaseProperties",
+        "connectionId": "dbimp-rec"
+      }
+    },
+    {
+      "item": 1,
+      "name": "make a statement",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "createStatement",
+        "connectionId": "dbimp-rec"
+      },
+      "capture": {
+        "sid": "statementId"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (1)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a statement",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 1 AS ONE FROM SYSTEM.\"CATALOG\" LIMIT 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a statement with no first frame",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (1), (2), (3)",
+        "maxRowCount": -1
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "a statement with no first frame",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT TABLE_NAME FROM SYSTEM.\"CATALOG\" LIMIT 3",
+        "maxRowCount": -1
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "an unknown field",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "openConnection",
+        "connectionId": "dbimp-x",
+        "bogus": 1
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns in the order of the statement",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 3 AS C, 1 AS A, 2 AS B FROM (VALUES (0)) AS T(X)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 1 AS A, 2 AS A FROM (VALUES (0)) AS T(X)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "no rows",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT ID, V FROM PUBLIC.DBIMP_TYPES WHERE ID < 0",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "a column with no name",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 1 + 1, 'x' || 'y' FROM (VALUES (0)) AS T(X)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "columns in the order of the statement",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 3 AS C, 1 AS A, 2 AS B FROM DBIMP_TYPES LIMIT 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 1 AS A, 2 AS A FROM DBIMP_TYPES LIMIT 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "no rows",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT ID, V FROM DBIMP_TYPES WHERE ID < 0",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 2,
+      "name": "a column with no name",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 1 + 1, 'x' || 'y' FROM DBIMP_TYPES LIMIT 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT ID, TI, SI, N, B, D, F, R, BO, C, V, BIN, DT, TM, TS, IV, A, U FROM PUBLIC.DBIMP_TYPES ORDER BY ID",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a CLOB and a BLOB",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT CL, BL FROM PUBLIC.DBIMP_TYPES ORDER BY ID",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a timestamp with a zone",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT TZ FROM PUBLIC.DBIMP_TYPES ORDER BY ID",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a time with a zone",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (TIME '12:34:56+05:30')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "an infinity",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (CAST(1E308 AS DOUBLE) * 10)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a NaN",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (CAST(0 AS DOUBLE) / 0)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a readable table",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT ID FROM DBMETA.READABLE",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT * FROM DBIMP_TYPES ORDER BY ID",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "an infinity",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT CAST(1E308 AS DOUBLE) * 10 FROM DBIMP_TYPES LIMIT 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 4,
+      "name": "prepare a statement with parameters",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepare",
+        "connectionId": "dbimp-rec",
+        "sql": "VALUES (CAST(? AS INTEGER), CAST(? AS VARCHAR(10)), CAST(? AS DOUBLE), CAST(? AS BIGINT), CAST(? AS DECIMAL(38,10)), CAST(? AS DATE), CAST(? AS TIMESTAMP(9)), CAST(? AS VARBINARY(4)), CAST(? AS BOOLEAN), CAST(? AS TIME(6)))",
+        "maxRowCount": -1
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "capture": {
+        "stmt": "statement"
+      }
+    },
+    {
+      "item": 4,
+      "name": "prepare a statement with parameters",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepare",
+        "connectionId": "dbimp-rec",
+        "sql": "UPSERT INTO DBIMP_TYPES (ID, V, DB, B, D, DT, TS, VB, BO, TM) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "maxRowCount": -1
+      },
+      "releases": [
+        "phoenix-"
+      ],
+      "capture": {
+        "stmt": "statement"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a prepare that Phoenix cannot describe",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepare",
+        "connectionId": "dbimp-rec",
+        "sql": "SELECT CAST(? AS INTEGER) FROM DBIMP_TYPES LIMIT 1",
+        "maxRowCount": -1
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 4,
+      "name": "execute with typed parameters",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "execute",
+        "statementHandle": "{{stmt}}",
+        "parameterValues": [
+          {
+            "type": "INTEGER",
+            "value": 10
+          },
+          {
+            "type": "STRING",
+            "value": "é"
+          },
+          {
+            "type": "DOUBLE",
+            "value": 1.5
+          },
+          {
+            "type": "LONG",
+            "value": 9223372036854775807
+          },
+          {
+            "type": "NUMBER",
+            "value": 1.2345678901234569e+27
+          },
+          {
+            "type": "JAVA_SQL_DATE",
+            "value": 20727
+          },
+          {
+            "type": "JAVA_SQL_TIMESTAMP",
+            "value": 1790857696123
+          },
+          {
+            "type": "BYTE_STRING",
+            "value": "AP8="
+          },
+          {
+            "type": "BOOLEAN",
+            "value": true
+          },
+          {
+            "type": "JAVA_SQL_TIME",
+            "value": 45296123
+          }
+        ],
+        "maxRowCount": -1
+      }
+    },
+    {
+      "item": 4,
+      "name": "read the row of the typed parameters",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT ID, V, DB, B, D, DT, TS, VB, BO, TM FROM DBIMP_TYPES WHERE ID = 10",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 4,
+      "name": "delete the row of the typed parameters",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DELETE FROM DBIMP_TYPES WHERE ID = 10",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 4,
+      "name": "execute with NULL parameters",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "execute",
+        "statementHandle": "{{stmt}}",
+        "parameterValues": [
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          },
+          {
+            "type": "NULL",
+            "value": null
+          }
+        ],
+        "maxRowCount": -1
+      }
+    },
+    {
+      "item": 4,
+      "name": "execute with too few parameters",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "execute",
+        "statementHandle": "{{stmt}}",
+        "parameterValues": [
+          {
+            "type": "INTEGER",
+            "value": 10
+          },
+          {
+            "type": "STRING",
+            "value": "é"
+          }
+        ],
+        "maxRowCount": -1
+      }
+    },
+    {
+      "item": 4,
+      "name": "execute with a decimal in a string",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "execute",
+        "statementHandle": "{{stmt}}",
+        "parameterValues": [
+          {
+            "type": "INTEGER",
+            "value": 10
+          },
+          {
+            "type": "STRING",
+            "value": "é"
+          },
+          {
+            "type": "DOUBLE",
+            "value": 1.5
+          },
+          {
+            "type": "LONG",
+            "value": 9223372036854775807
+          },
+          {
+            "type": "NUMBER",
+            "value": "1.5"
+          },
+          {
+            "type": "JAVA_SQL_DATE",
+            "value": 20727
+          },
+          {
+            "type": "JAVA_SQL_TIMESTAMP",
+            "value": 1790857696123
+          },
+          {
+            "type": "BYTE_STRING",
+            "value": "AP8="
+          },
+          {
+            "type": "BOOLEAN",
+            "value": true
+          },
+          {
+            "type": "JAVA_SQL_TIME",
+            "value": 45296123
+          }
+        ],
+        "maxRowCount": -1
+      }
+    },
+    {
+      "item": 4,
+      "name": "execute with a string for an integer",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "execute",
+        "statementHandle": "{{stmt}}",
+        "parameterValues": [
+          {
+            "type": "STRING",
+            "value": "12"
+          },
+          {
+            "type": "STRING",
+            "value": "é"
+          },
+          {
+            "type": "DOUBLE",
+            "value": 1.5
+          },
+          {
+            "type": "LONG",
+            "value": 9223372036854775807
+          },
+          {
+            "type": "NUMBER",
+            "value": 1.2345678901234569e+27
+          },
+          {
+            "type": "JAVA_SQL_DATE",
+            "value": 20727
+          },
+          {
+            "type": "JAVA_SQL_TIMESTAMP",
+            "value": 1790857696123
+          },
+          {
+            "type": "BYTE_STRING",
+            "value": "AP8="
+          },
+          {
+            "type": "BOOLEAN",
+            "value": true
+          },
+          {
+            "type": "JAVA_SQL_TIME",
+            "value": 45296123
+          }
+        ],
+        "maxRowCount": -1
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 250 rows, 100 in the first frame",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT V, 'padding padding padding padding' FROM UNNEST(SEQUENCE_ARRAY(1, 250, 1)) AS T(V)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 100
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "fetch the second frame",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "fetch",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "offset": 100,
+        "fetchMaxRowCount": 100
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "fetch the last frame",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "fetch",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "offset": 200,
+        "fetchMaxRowCount": 100
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "fetch after the last frame",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "fetch",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "offset": 250,
+        "fetchMaxRowCount": 100
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "a result with a limit on the rows",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT V, 'padding padding padding padding' FROM UNNEST(SEQUENCE_ARRAY(1, 250, 1)) AS T(V)",
+        "maxRowCount": 10,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELEC 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown table",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT * FROM DBIMP_NOSUCH",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown connection",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "createStatement",
+        "connectionId": "dbimp-nosuch"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown statement",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "fetch",
+        "connectionId": "dbimp-rec",
+        "statementId": 987654,
+        "offset": 0,
+        "fetchMaxRowCount": 10
+      }
+    },
+    {
+      "item": 6,
+      "name": "a body that is not JSON",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": null,
+      "text": "not json"
+    },
+    {
+      "item": 6,
+      "name": "an error inside the rows",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT CASE WHEN V < 4 THEN V ELSE 1 / (V - 4) END FROM UNNEST(SEQUENCE_ARRAY(1, 5, 1)) AS T(V)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 2
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 6,
+      "name": "fetch after an error inside the rows",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "fetch",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "offset": 2,
+        "fetchMaxRowCount": 10
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "a long query that the client leaves",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT COUNT(*) FROM UNNEST(SEQUENCE_ARRAY(1, 3000, 1)) AS A(X), UNNEST(SEQUENCE_ARRAY(1, 3000, 1)) AS B(Y), UNNEST(SEQUENCE_ARRAY(1, 10, 1)) AS C(Z)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "a query after the client left",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (1)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "openConnection",
+        "connectionId": "dbimp-wrong",
+        "info": {
+          "user": "{{user}}",
+          "password": "{{password}}-wrong"
+        }
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 8,
+      "name": "a statement with the wrong password",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "createStatement",
+        "connectionId": "dbimp-wrong"
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 8,
+      "name": "close the connection with the wrong password",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "closeConnection",
+        "connectionId": "dbimp-wrong"
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 8,
+      "name": "a table that the user was not granted",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT ID FROM PUBLIC.DBIMP_TYPES",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (DATABASE_VERSION())",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "two statements in one text",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (1); VALUES (2)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "a statement that ends with a semicolon",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (1);",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "comments",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "-- a comment\nVALUES /* inner */ (1) -- after",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 10,
+      "name": "two statements in one text",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT 1 FROM SYSTEM.\"CATALOG\" LIMIT 1; SELECT 2 FROM SYSTEM.\"CATALOG\" LIMIT 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "make the table of transactions",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE PUBLIC.DBIMP_TX (K INTEGER PRIMARY KEY)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "make the table of transactions",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE DBIMP_TX (K INTEGER NOT NULL PRIMARY KEY)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "turn autocommit off",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "connectionSync",
+        "connectionId": "dbimp-rec",
+        "connProps": {
+          "connProps": "connPropsImpl",
+          "autoCommit": false,
+          "dirty": true
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "insert in the transaction",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_TX VALUES (1)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "insert in the transaction",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "UPSERT INTO DBIMP_TX VALUES (1)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read in the transaction",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT COUNT(*) FROM PUBLIC.DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read in the transaction",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT COUNT(*) FROM DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read in the transaction as the ordinary user",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT COUNT(*) FROM DBMETA.READABLE",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "ordinary"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "rollback",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "rollback",
+        "connectionId": "dbimp-rec"
+      }
+    },
+    {
+      "item": 11,
+      "name": "read after the rollback",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT COUNT(*) FROM PUBLIC.DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the rollback",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT COUNT(*) FROM DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "insert again",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_TX VALUES (2)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "insert again",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "UPSERT INTO DBIMP_TX VALUES (2)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "commit",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "commit",
+        "connectionId": "dbimp-rec"
+      }
+    },
+    {
+      "item": 11,
+      "name": "read after the commit",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT K FROM PUBLIC.DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "read after the commit",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT K FROM DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "turn autocommit on",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "connectionSync",
+        "connectionId": "dbimp-rec",
+        "connProps": {
+          "connProps": "connPropsImpl",
+          "autoCommit": true,
+          "dirty": true
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "turn read-only on",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "connectionSync",
+        "connectionId": "dbimp-rec",
+        "connProps": {
+          "connProps": "connPropsImpl",
+          "readOnly": true,
+          "dirty": true
+        }
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "a read-only connection",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_TX VALUES (3)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "turn read-only off",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "connectionSync",
+        "connectionId": "dbimp-rec",
+        "connProps": {
+          "connProps": "connPropsImpl",
+          "readOnly": false,
+          "dirty": true
+        }
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "drop the table of transactions",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE PUBLIC.DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "drop the table of transactions",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE DBIMP_TX",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 12,
+      "name": "a gzip answer",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": {
+        "request": "databaseProperties",
+        "connectionId": "dbimp-rec"
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: make the tables",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE PUBLIC.DBIMP_CRUD (K INTEGER PRIMARY KEY, V VARCHAR(10))",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: insert",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_CRUD VALUES (1, 'a'), (2, 'b'), (3, 'c')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: select",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT K, V FROM PUBLIC.DBIMP_CRUD ORDER BY K",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: update",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "UPDATE PUBLIC.DBIMP_CRUD SET V = 'B' WHERE K = 2",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: delete",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DELETE FROM PUBLIC.DBIMP_CRUD WHERE K = 3",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: merge",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "MERGE INTO PUBLIC.DBIMP_CRUD USING (VALUES (1, 'x')) AS S(K, V) ON DBIMP_CRUD.K = S.K WHEN MATCHED THEN UPDATE SET V = S.V WHEN NOT MATCHED THEN INSERT VALUES (S.K, S.V)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: the rows after",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT K, V FROM PUBLIC.DBIMP_CRUD ORDER BY K",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: make the tables",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE PUBLIC.DBIMP_S_PARENT (ID INTEGER PRIMARY KEY, NAME VARCHAR(10) UNIQUE, N INTEGER DEFAULT 7 CHECK (N > 0))",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: foreign key",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE PUBLIC.DBIMP_S_CHILD (ID INTEGER PRIMARY KEY, PARENT INTEGER REFERENCES PUBLIC.DBIMP_S_PARENT (ID))",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: a foreign key that is broken",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_S_CHILD VALUES (1, 99)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: index",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE INDEX DBIMP_S_IDX ON PUBLIC.DBIMP_S_PARENT (N)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: default value in use",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_S_PARENT (ID, NAME) VALUES (1, 'a')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: default value read",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT ID, NAME, N FROM PUBLIC.DBIMP_S_PARENT",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: unique constraint enforced",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_S_PARENT (ID, NAME) VALUES (2, 'a')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: check constraint enforced",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO PUBLIC.DBIMP_S_PARENT (ID, NAME, N) VALUES (3, 'c', 0)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: view",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE VIEW PUBLIC.DBIMP_S_VIEW AS SELECT ID, NAME FROM PUBLIC.DBIMP_S_PARENT",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: view read",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT * FROM PUBLIC.DBIMP_S_VIEW",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: sequence",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE SEQUENCE PUBLIC.DBIMP_S_SEQ START WITH 5",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: sequence read",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "VALUES (NEXT VALUE FOR PUBLIC.DBIMP_S_SEQ)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: make the tables",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE DBIMP_CRUD (K INTEGER NOT NULL PRIMARY KEY, V VARCHAR)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: upsert",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "UPSERT INTO DBIMP_CRUD VALUES (1, 'a')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: upsert more",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "UPSERT INTO DBIMP_CRUD VALUES (2, 'b')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: upsert a third",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "UPSERT INTO DBIMP_CRUD VALUES (3, 'c')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: insert",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "INSERT INTO DBIMP_CRUD VALUES (4, 'd')",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: update",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "UPDATE DBIMP_CRUD SET V = 'B' WHERE K = 2",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: select",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT K, V FROM DBIMP_CRUD ORDER BY K",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: delete",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DELETE FROM DBIMP_CRUD WHERE K = 3",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: the rows after",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT K, V FROM DBIMP_CRUD ORDER BY K",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: index",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE INDEX DBIMP_CRUD_IDX ON DBIMP_CRUD (V)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: view",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE VIEW DBIMP_CRUD_VIEW AS SELECT * FROM DBIMP_CRUD WHERE K > 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: view read",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT K FROM DBIMP_CRUD_VIEW ORDER BY K",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: sequence",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE SEQUENCE DBIMP_SEQ START WITH 5",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: sequence read",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "SELECT NEXT VALUE FOR DBIMP_SEQ FROM DBIMP_CRUD LIMIT 1",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: foreign key",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE DBIMP_S_CHILD (ID INTEGER NOT NULL PRIMARY KEY, PARENT INTEGER REFERENCES DBIMP_CRUD (K))",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: check constraint",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE DBIMP_S_CHECK (ID INTEGER NOT NULL PRIMARY KEY, N INTEGER CHECK (N > 0))",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: default value",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE DBIMP_S_DEF (ID INTEGER NOT NULL PRIMARY KEY, N INTEGER DEFAULT 7)",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: a salted table",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE DBIMP_SALT (K INTEGER NOT NULL PRIMARY KEY) SALT_BUCKETS = 2",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "feature: a row timestamp",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "CREATE TABLE DBIMP_RT (T TIMESTAMP NOT NULL, K INTEGER NOT NULL CONSTRAINT PK PRIMARY KEY (T ROW_TIMESTAMP, K))",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: drop the tables",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP VIEW IF EXISTS DBIMP_CRUD_VIEW",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop DBIMP_S_CHILD",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_S_CHILD",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop DBIMP_S_CHECK",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_S_CHECK",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop DBIMP_S_DEF",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_S_DEF",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop DBIMP_SALT",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_SALT",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop DBIMP_RT",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_RT",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop DBIMP_CRUD",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_CRUD",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop the sequence",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP SEQUENCE IF EXISTS DBIMP_SEQ",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "phoenix-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the view",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP VIEW PUBLIC.DBIMP_S_VIEW IF EXISTS",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the child",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE PUBLIC.DBIMP_S_CHILD IF EXISTS",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the parent",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE PUBLIC.DBIMP_S_PARENT IF EXISTS",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the sequence",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP SEQUENCE PUBLIC.DBIMP_S_SEQ IF EXISTS",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: drop the table",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-rec",
+        "statementId": "{{sid}}",
+        "sql": "DROP TABLE PUBLIC.DBIMP_CRUD IF EXISTS",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 1000
+      },
+      "releases": [
+        "avatica-"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "close the connection",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "closeConnection",
+        "connectionId": "dbimp-rec"
+      }
+    },
+    {
+      "item": 1,
+      "name": "open the connection of the teardown",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "openConnection",
+        "connectionId": "dbimp-teardown",
+        "info": {
+          "user": "{{user}}",
+          "password": "{{password}}"
+        }
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "a statement of the teardown",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "createStatement",
+        "connectionId": "dbimp-teardown"
+      },
+      "phase": "teardown",
+      "capture": {
+        "psid": "statementId"
+      }
+    },
+    {
+      "item": 1,
+      "name": "drop the table of every type after",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-teardown",
+        "statementId": "{{psid}}",
+        "sql": "DROP TABLE PUBLIC.DBIMP_TYPES IF EXISTS",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "avatica-"
+      ],
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "drop the table of every type after",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "prepareAndExecute",
+        "connectionId": "dbimp-teardown",
+        "statementId": "{{psid}}",
+        "sql": "DROP TABLE IF EXISTS DBIMP_TYPES",
+        "maxRowCount": -1,
+        "maxRowsInFirstFrame": 10
+      },
+      "releases": [
+        "phoenix-"
+      ],
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "close the connection of the teardown",
+      "method": "POST",
+      "path": "/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "request": "closeConnection",
+        "connectionId": "dbimp-teardown"
+      },
+      "phase": "teardown"
+    }
+  ]
+}

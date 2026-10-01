@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"fetch\",\"connectionId\":\"dbimp-rec\",\"statementId\":\"22\",\"offset\":250,\"fetchMaxRowCount\":100}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "3448"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 00:23:18 GMT"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"java.lang.RuntimeException: java.sql.SQLException: invalid cursor state: identified cursor is not open\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.propagate(JdbcMeta.java:777)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.fetch(JdbcMeta.java:906)\\n\\tat org.apache.calcite.avatica.remote.LocalService.apply(LocalService.java:245)\\n\\tat org.apache.calcite.avatica.remote.Service$FetchRequest.accept(Service.java:1395)\\n\\tat org.apache.calcite.avatica.remote.Service$FetchRequest.accept(Service.java:1362)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:94)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:133)\\n\\tat org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:59)\\n\\tat org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)\\n\\tat org.eclipse.jetty.server.Server.handle(Server.java:516)\\n\\tat org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:487)\\n\\tat org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:732)\\n\\tat org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:479)\\n\\tat org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:277)\\n\\tat org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)\\n\\tat org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)\\n\\tat org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:338)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:315)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:173)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:131)\\n\\tat org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:409)\\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:883)\\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1034)\\n\\tat java.lang.Thread.run(Thread.java:750)\\nCaused by: java.sql.SQLException: invalid cursor state: identified cursor is not open\\n\\tat org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCResultSet.checkClosed(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCResultSet.getMetaData(Unknown Source)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcResultSet.frame(JdbcResultSet.java:130)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.fetch(JdbcMeta.java:902)\\n\\t... 24 more\\nCaused by: org.hsqldb.HsqlException: invalid cursor state: identified cursor is not open\\n\\tat org.hsqldb.error.Error.error(Unknown Source)\\n\\tat org.hsqldb.error.Error.error(Unknown Source)\\n\\t... 29 more\\n\"],\"errorMessage\":\"RuntimeException: java.sql.SQLException: invalid cursor state: identified cursor is not open -> SQLException: invalid cursor state: identified cursor is not open -> HsqlException: invalid cursor state: identified cursor is not open\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"}}\n"
+  }
+}

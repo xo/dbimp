@@ -94,7 +94,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D71](D071-every-xo-repository-is-set-up-for-coding-agents.md) | Every xo repository is set up for coding agents the same way | Amends D3 and D11 |
 | [D72](D072-the-decisions-are-one-file-each.md) | The decisions are one file each | Amends D3 |
 | [D73](D073-the-targets-after-neo4j-in-order.md) | The targets after Neo4j, in order | Amended by D74, D84, D88 and D127 |
-| [D74](D074-avatica-and-its-flavors-come-after-libsql.md) | Avatica and its flavors come after libSQL | Amends D73, and amended by D88 and D127 |
+| [D74](D074-avatica-and-its-flavors-come-after-libsql.md) | Avatica and its flavors come after libSQL | Amends D73, and amended by D88, D127 and D154 |
 | [D75](D075-aql-and-flux-meet-s.md) | AQL and Flux meet S | Amends D16 |
 | [D76](D076-the-names-of-the-databend-libsql-and-cratedb.md) | The names of the Databend, libSQL and CrateDB drivers | Amended by D88 |
 | [D77](D077-an-influxdb-result-is-an-array-of-objects-read.md) | An InfluxDB result is an array of objects, read by rule 2 of D18 | Amended by D80 |
@@ -173,3 +173,11 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D150](D150-libsql-transactions-live-on-a-stream.md) | libSQL transactions live on a stream | Decided |
 | [D151](D151-libsql-follows-a-base-url-on-its-own-host.md) | libSQL follows a base_url on its own host | Decided |
 | [D152](D152-libsql-binds-typed-arguments-on-the-server.md) | libSQL binds typed arguments on the server | Decided |
+| [D153](D153-avatica-speaks-json-only.md) | Avatica speaks JSON only | Decided |
+| [D154](D154-druid-gets-a-driver-of-its-own.md) | Druid gets a driver of its own | Amends D74 |
+| [D155](D155-the-go-types-of-avatica.md) | The Go types of Avatica | Decided |
+| [D156](D156-the-avatica-dsn-names-a-server.md) | The Avatica DSN names a server | Decided |
+| [D157](D157-avatica-reads-a-result-in-frames.md) | Avatica reads a result in frames | Decided |
+| [D158](D158-avatica-binds-typed-parameters.md) | Avatica binds typed parameters | Decided |
+| [D159](D159-avatica-transactions-and-cancel.md) | Avatica transactions and cancel | Decided |
+| [D160](D160-avatica-keeps-the-calendar-and-binds-no-array.md) | Avatica keeps the calendar of the server and binds no array | Decided |

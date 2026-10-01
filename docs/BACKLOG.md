@@ -44,7 +44,8 @@ named TDengine as the next target at step 1. W19 came from Ken on
 from Ken on 2026-09-30, who asked for one table of every type of every
 driver after D135, and W21 from D138. W22 came from Ken on 2026-09-30,
 who named rqlite as the next target at step 1. W23 came from Ken on 2026-10-01,
-who named libSQL and Turso as the next target at step 1.
+who named libSQL and Turso as the next target at step 1. W24 came from Ken on
+2026-10-01, who named Avatica as the next driver at step 1.
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -1126,6 +1127,7 @@ staged.
 `dburl` reported the same day that dburl D44, staged, settles the scheme
 `rqlite` against `rqlite.ParseDSN` of `v0.8.0`, and that `GenRqlite` adds no
 port, so the driver uses 4001. That leaves no provisional scheme in `dburl`.
+It released the change in dburl `v0.40.0` on 2026-10-01.
 
 `usql` staged `drivers/rqlite` on `v0.8.0` the same day. `\copy` inserts with
 no transaction, because `BeginTx` fails (D144), and the version comes from
@@ -1229,4 +1231,107 @@ Steps 10 to 17a went in on 2026-10-01, staged for Ken's review:
    `Version` can run `SELECT sqlite_version()`, which works for both
    principals. The driver has transactions on a stream, which expires after
    10 seconds with no statement (D150).
+
+Ken committed steps 2 to 17a and the pin on 2026-10-01 as `5397646`. Its
+workflow failed on `TestIntegrationLargeResult` of libSQL only: the stream of
+a cursor of 300000 rows expired while CI read it slowly, and its close got
+`STREAM_EXPIRED`. At Ken's request, the session committed the fix as
+`c81d449`, which takes that code at the close as a stream that is closed
+already. The workflow passed on `c81d449`, on every release of every driver,
+which is the gate of step 18:
+https://github.com/xo/dbimp/actions/runs/36776177993. At Ken's request, the
+session tagged `v0.9.0` on `c81d449` and published it the same day, which is
+the gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.9.0.
+
+Step 20 sent the requests above on 2026-10-01, each naming `v0.9.0`. This
+item stays open until each session reports its change as staged.
+
+`dburl` reported the same day that dburl D45, staged, adds the scheme
+`libsql` with the aliases `ls` and `turso`, checked against `libsql.ParseDSN` of
+`v0.9.0`, and that its generator adds no port. It released the change in
+dburl `v0.40.0` the same day. `usql` waited for that release before it adds
+`drivers/libsql`.
+
+`usql` staged `drivers/libsql` on `v0.9.0` and dburl `v0.40.0` the same day.
+On 0.24.33, as both principals, each type of the type table printed as the
+driver documents, a write with the token that can only read was refused,
+`\begin` with `\commit` kept a row and with `\rollback` dropped it, and a
+transaction idle for 12 seconds failed with `STREAM_EXPIRED` and lost its
+row. `dbmeta` has no model for libSQL, so it has nothing to move.
+
+## W24. Write the Avatica driver
+
+Apache Calcite Avatica is the next target, by D74. Ken named it at step 1
+on 2026-10-01, as the next driver after libSQL. Follow [DRIVER.md](DRIVER.md).
+Step 3 is in [AVATICA.md](AVATICA.md). `usql` and `dburl` reach Avatica
+through `github.com/apache/calcite-avatica-go`, which this driver can
+replace (D24).
+
+Step 2 went in on 2026-10-01. `avatica-1.29.0` answered a body of JSON with
+an `ErrorResponse` in protobuf. Ken decided the same day that the driver
+speaks JSON only (D153), and that Druid gets a driver of its own and is no
+flavor of this one (D154). The session asked the `dbmeta` session the same
+day to start the Avatica and Phoenix entries with JSON, and it staged the
+change as dbmeta D155. Over JSON, `openConnection`, `createStatement`,
+`prepareAndExecute` and `closeConnection` answered on `avatica-1.28.0`,
+`avatica-1.29.0` and `phoenix-2.0-5.0`, so R, H and S hold on each.
+
+Steps 4 to 9 went in on 2026-10-01:
+
+- Step 4: the `dbmeta` session gave the standalone server the ordinary user
+  `dbmeta_user`, who reads `DBMETA.READABLE` only (dbmeta D155). Phoenix
+  checks users through Kerberos only, so it has none.
+- Step 5a: `testdata/avatica/features.json`, from Gemini, DeepSeek, the Go
+  driver and phoenixdb, with each entry of CRUD and of the schema named for
+  its flavor.
+- Step 6: the recordings of 1.28.0, 1.29.0 and Phoenix 2.0-5.0. The recorder
+  gained the kept values `{{user}}` and `{{password}}` in a body, which it
+  writes as `REDACTED`, and the capture of a number and of an object. A query
+  of `WITH RECURSIVE` stopped both standalone servers, which were the
+  `dbmeta` session's, and the recordings use `UNNEST(SEQUENCE_ARRAY(...))`
+  in its place.
+- Step 7: both models were asked, and each lead was tested. The server runs
+  a query to its end after the client leaves, and after `closeStatement`.
+- Steps 8 and 8a: AVATICA.md holds the measured facts and the type table,
+  which Ken reviewed. He decided D155 the same day.
+- Step 9 is D156 to D159, which Ken decided on 2026-10-01.
+
+Steps 10 to 17a went in on 2026-10-01, staged for Ken's review:
+
+- Steps 10 to 13: the package `avatica/`, its tables, the contract, the
+  replay tests, the unit tests of the values, the calls, the options and the
+  transaction, and the DSN tests. The contract answers the calls that open
+  and close a connection or a statement in a fake transport, because it
+  serves one body for every request. Each fuzz test ran for 60 seconds and
+  found nothing.
+- Steps 14 and 14a: the integration tests passed on 1.28.0 and 1.29.0, 55
+  each, and on Phoenix 2.0-5.0, 42. The other skip, because each holds for
+  the other flavor. The gate wanted item 11 of step 6 as the ordinary user,
+  so the requests of a transaction that need no table run as both users,
+  and 1.28.0 and 1.29.0 were recorded again. The CRUD entries of HSQLDB are
+  named `insert`, `select`, `update` and `delete`, as the gate wants.
+- Step 16: `databaseProperties` gives `GET_DATABASE_PRODUCT_VERSION` on
+  both flavors, and `VALUES (DATABASE_VERSION())` gives it on HSQLDB to both
+  users. The requests below wait for the release.
+- Step 17a: `## Compared with Couchbase` is in AVATICA.md. Two differences
+  have no decision yet: `WithTimeout` above zero fails, and `LastInsertId`
+  fails. AVATICA.md lists five more open questions. Ken answered three the
+  same day: the driver keeps the calendar of the server and binds no array
+  or interval (D160), and hard rule 4 takes the three contexts that the
+  driver keeps.
+
+1. To `dburl`: the scheme `avatica`, with the alias `phoenix`, names the
+   `GoPackage` `github.com/apache/calcite-avatica-go/v5`, and its generator
+   makes an `http` URL with a path. Please name the `GoPackage`
+   `github.com/xo/dbimp/avatica`, with `RequiresCGO` false, and generate
+   `avatica://user:password@host:port` with no path (D156). The keys `tls`
+   and `auth` pass through, and any other key is refused.
+2. To `dbmeta`: the `url` of each entry has the form of D156, which dbmeta
+   D155 prints. The product of `phoenix-2.0-5.0` is `phoenix`, so the
+   workflow of `dbimp` does not test it (AVATICA.md, open question 3).
+3. To `usql`: `drivers/avatica/avatica.go` imports
+   `github.com/xo/dbimp/avatica` in place of `calcite-avatica-go`. Its `Err`
+   reads `*avatica.Error`, with `Code` and `Message`. Its `Version` can send
+   `VALUES (DATABASE_VERSION())` on HSQLDB. On Phoenix, the version is in
+   `databaseProperties`, which the driver does not send.
 

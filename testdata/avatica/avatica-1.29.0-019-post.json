@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"prepareAndExecute\",\"connectionId\":\"dbimp-rec\",\"statementId\":\"20\",\"sql\":\"SELECT ID, V FROM PUBLIC.DBIMP_TYPES WHERE ID < 0\",\"maxRowCount\":-1,\"maxRowsInFirstFrame\":1000}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 00:23:17 GMT"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "1372"
+      ]
+    },
+    "body": "{\"response\":\"executeResults\",\"missingStatement\":false,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"},\"results\":[{\"response\":\"resultSet\",\"connectionId\":\"dbimp-rec\",\"statementId\":20,\"ownStatement\":true,\"signature\":{\"columns\":[{\"ordinal\":0,\"autoIncrement\":false,\"caseSensitive\":false,\"searchable\":true,\"currency\":false,\"nullable\":0,\"signed\":true,\"displaySize\":11,\"label\":\"ID\",\"columnName\":\"ID\",\"schemaName\":\"PUBLIC\",\"precision\":32,\"scale\":0,\"tableName\":\"DBIMP_TYPES\",\"catalogName\":\"PUBLIC\",\"type\":{\"type\":\"scalar\",\"id\":4,\"name\":\"INTEGER\",\"rep\":\"PRIMITIVE_INT\"},\"readOnly\":false,\"writable\":false,\"definitelyWritable\":false,\"columnClassName\":\"java.lang.Integer\"},{\"ordinal\":1,\"autoIncrement\":false,\"caseSensitive\":true,\"searchable\":true,\"currency\":false,\"nullable\":1,\"signed\":false,\"displaySize\":20,\"label\":\"V\",\"columnName\":\"V\",\"schemaName\":\"PUBLIC\",\"precision\":20,\"scale\":0,\"tableName\":\"DBIMP_TYPES\",\"catalogName\":\"PUBLIC\",\"type\":{\"type\":\"scalar\",\"id\":12,\"name\":\"VARCHAR\",\"rep\":\"STRING\"},\"readOnly\":false,\"writable\":false,\"definitelyWritable\":false,\"columnClassName\":\"java.lang.String\"}],\"sql\":null,\"parameters\":[],\"cursorFactory\":{\"style\":\"LIST\",\"clazz\":null,\"fieldNames\":null},\"statementType\":null},\"firstFrame\":{\"offset\":0,\"done\":true,\"rows\":[]},\"updateCount\":-1,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"}}]}\n"
+  }
+}

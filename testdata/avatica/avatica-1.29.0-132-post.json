@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"request\":\"openConnection\",\"connectionId\":\"dbimp-wrong\",\"info\":{\"user\":\"dbmeta_user\",\"password\":\"REDACTED-wrong\"}}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "3764"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 00:23:20 GMT"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"java.lang.RuntimeException: java.sql.SQLInvalidAuthorizationSpecException: invalid authorization specification\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.openConnection(JdbcMeta.java:710)\\n\\tat org.apache.calcite.avatica.remote.LocalService.apply(LocalService.java:291)\\n\\tat org.apache.calcite.avatica.remote.Service$OpenConnectionRequest.accept(Service.java:1795)\\n\\tat org.apache.calcite.avatica.remote.Service$OpenConnectionRequest.accept(Service.java:1775)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:94)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:133)\\n\\tat org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:59)\\n\\tat org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)\\n\\tat org.eclipse.jetty.server.Server.handle(Server.java:516)\\n\\tat org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:487)\\n\\tat org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:732)\\n\\tat org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:479)\\n\\tat org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:277)\\n\\tat org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)\\n\\tat org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)\\n\\tat org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:338)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:315)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:173)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:131)\\n\\tat org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:409)\\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:883)\\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1034)\\n\\tat java.lang.Thread.run(Thread.java:750)\\nCaused by: java.sql.SQLInvalidAuthorizationSpecException: invalid authorization specification\\n\\tat org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCConnection.<init>(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCDriver.getConnection(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCDriver.connect(Unknown Source)\\n\\tat java.sql.DriverManager.getConnection(DriverManager.java:664)\\n\\tat java.sql.DriverManager.getConnection(DriverManager.java:208)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.createConnection(JdbcMeta.java:717)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.openConnection(JdbcMeta.java:702)\\n\\t... 24 more\\nCaused by: org.hsqldb.HsqlException: invalid authorization specification\\n\\tat org.hsqldb.error.Error.error(Unknown Source)\\n\\tat org.hsqldb.error.Error.error(Unknown Source)\\n\\tat org.hsqldb.rights.User.checkPassword(Unknown Source)\\n\\tat org.hsqldb.rights.UserManager.getUser(Unknown Source)\\n\\tat org.hsqldb.Database.connect(Unknown Source)\\n\\tat org.hsqldb.DatabaseManager.newSession(Unknown Source)\\n\\t... 31 more\\n\"],\"errorMessage\":\"RuntimeException: java.sql.SQLInvalidAuthorizationSpecException: invalid authorization specification -> SQLInvalidAuthorizationSpecException: invalid authorization specification -> HsqlException: invalid authorization specification\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"}}\n"
+  }
+}

@@ -1,6 +1,6 @@
 # D74. Avatica and its flavors come after libSQL
 
-Status: Amends D73, and amended by D88 and D127.
+Status: Amends D73, and amended by D88, D127 and D154.
 
 Ken decided on 2026-09-27 to add Apache Calcite Avatica and its variants
 to the order of D73, after libSQL. So the order after Neo4j is InfluxDB,

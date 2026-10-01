@@ -174,6 +174,12 @@ func run(ctx context.Context, dir, release, second string, principals map[string
 		return err
 	}
 	rec := dbimptest.NewRecorder(dir, release, http.DefaultTransport)
+	for _, u := range principals {
+		if pu, err := url.Parse(u); err == nil && pu.User != nil {
+			pass, _ := pu.User.Password()
+			rec.Secret(pass)
+		}
+	}
 	client := &http.Client{
 		Transport: rec,
 		CheckRedirect: func(*http.Request, []*http.Request) error {
@@ -213,7 +219,7 @@ func run(ctx context.Context, dir, release, second string, principals map[string
 		if err != nil {
 			return fmt.Errorf("parsing the URL of the %s user: %w", p, err)
 		}
-		kept := map[string]string{}
+		kept := credentials(base)
 		for _, r := range script.Requests {
 			if r.Phase != "" || len(r.Principals) > 0 && !slices.Contains(r.Principals, p) {
 				continue
@@ -255,6 +261,9 @@ func run(ctx context.Context, dir, release, second string, principals map[string
 // runPhase sends the requests of a phase once, as the administrator, each
 // to the server that it names.
 func runPhase(ctx context.Context, client *http.Client, servers map[string]*url.URL, script Script, phase string) error {
+	// A request of the phase can keep a value for a later one, such as the
+	// id of a statement of Avatica, on each server.
+	keptOf := map[string]map[string]string{}
 	for _, r := range script.Requests {
 		if r.Phase != phase {
 			continue
@@ -264,11 +273,31 @@ func runPhase(ctx context.Context, client *http.Client, servers map[string]*url.
 			return fmt.Errorf("running the %s, item %d, %s: no URL for the server %q", phase, r.Item, r.Name, r.Server)
 		}
 		r.Header = withHeader(r.Header, script.Header[dbimptest.Administrator])
-		if err := send(ctx, client, base, dbimptest.Administrator, r, nil); err != nil {
+		kept := keptOf[r.Server]
+		if kept == nil {
+			kept = credentials(base)
+			keptOf[r.Server] = kept
+		}
+		r.Body = expand(r.Body, kept)
+		r.Path = expandText(r.Path, kept)
+		if err := send(ctx, client, base, dbimptest.Administrator, r, kept); err != nil {
 			return fmt.Errorf("running the %s, item %d, %s: %w", phase, r.Item, r.Name, err)
 		}
 	}
 	return nil
+}
+
+// credentials returns the kept values that a request starts with: {{user}}
+// and {{password}}, the credentials of the URL of the principal, for a server
+// that takes them in the body, such as Avatica. The Recorder writes the
+// password as REDACTED.
+func credentials(base *url.URL) map[string]string {
+	kept := map[string]string{}
+	if base.User != nil {
+		kept["user"] = base.User.Username()
+		kept["password"], _ = base.User.Password()
+	}
+	return kept
 }
 
 // withHeader returns h with the headers of extra added.
@@ -387,6 +416,12 @@ func expand(body jsontext.Value, kept map[string]string) jsontext.Value {
 	}
 	s := string(body)
 	for name, v := range kept {
+		// A kept object or array takes the place of the whole string that
+		// names it, such as "{{handle}}", as JSON.
+		if raw, ok := strings.CutPrefix(v, rawPrefix); ok {
+			s = strings.ReplaceAll(s, `"{{`+name+`}}"`, raw)
+			continue
+		}
 		q, err := jsontext.AppendQuote(nil, v)
 		if err != nil {
 			q = []byte(`"` + v + `"`)
@@ -395,6 +430,10 @@ func expand(body jsontext.Value, kept map[string]string) jsontext.Value {
 	}
 	return jsontext.Value(s)
 }
+
+// rawPrefix starts a kept value that is JSON, an object or an array, which
+// expand writes in place of the string that names it.
+const rawPrefix = "\x00json:"
 
 // capture keeps the values of body that the request names.
 func capture(body []byte, paths map[string]string, kept map[string]string) error {
@@ -407,11 +446,24 @@ func capture(body []byte, paths map[string]string, kept map[string]string) error
 		if err != nil {
 			return fmt.Errorf("capturing %s: %w", name, err)
 		}
-		s, ok := cur.(string)
-		if !ok {
-			return fmt.Errorf("capturing %s: %s is not a string", name, path)
+		switch c := cur.(type) {
+		case string:
+			kept[name] = c
+		case float64:
+			// A number, such as the statementId of Avatica, is kept as its
+			// text, which a server such as Avatica reads back from a string.
+			kept[name] = strconv.FormatFloat(c, 'f', -1, 64)
+		case map[string]any, []any:
+			// An object, such as the statement handle of Avatica, is kept as
+			// its JSON.
+			b, err := json.Marshal(c)
+			if err != nil {
+				return fmt.Errorf("capturing %s: %w", name, err)
+			}
+			kept[name] = rawPrefix + string(b)
+		default:
+			return fmt.Errorf("capturing %s: %s is not a string, a number or an object", name, path)
 		}
-		kept[name] = s
 	}
 	return nil
 }

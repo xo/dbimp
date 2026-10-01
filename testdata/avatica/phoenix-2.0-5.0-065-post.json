@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"prepareAndExecute\",\"connectionId\":\"dbimp-rec\",\"statementId\":\"15\",\"sql\":\"CREATE TABLE DBIMP_S_CHECK (ID INTEGER NOT NULL PRIMARY KEY, N INTEGER CHECK (N > 0))\",\"maxRowCount\":-1,\"maxRowsInFirstFrame\":1000}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Length": [
+        "4222"
+      ],
+      "Server": [
+        "Jetty(9.3.z-SNAPSHOT)"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 21:19:59 GMT"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"java.lang.RuntimeException: org.apache.phoenix.exception.PhoenixParserException: ERROR 602 (42P00): Syntax error. Missing \\\"RPAREN\\\" at line 1, column 72.\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.propagate(JdbcMeta.java:700)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.prepareAndExecute(JdbcMeta.java:765)\\n\\tat org.apache.calcite.avatica.remote.LocalService.apply(LocalService.java:206)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareAndExecuteRequest.accept(Service.java:927)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareAndExecuteRequest.accept(Service.java:879)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:94)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:130)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:134)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.Server.handle(Server.java:534)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:320)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:251)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:283)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:108)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)\\n\\tat java.lang.Thread.run(Thread.java:748)\\nCaused by: org.apache.phoenix.exception.PhoenixParserException: ERROR 602 (42P00): Syntax error. Missing \\\"RPAREN\\\" at line 1, column 72.\\n\\tat org.apache.phoenix.exception.PhoenixParserException.newException(PhoenixParserException.java:33)\\n\\tat org.apache.phoenix.parse.SQLParser.parseStatement(SQLParser.java:111)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement$PhoenixStatementParser.parseStatement(PhoenixStatement.java:1644)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement.parseStatement(PhoenixStatement.java:1727)\\n\\tat org.apache.phoenix.jdbc.PhoenixStatement.execute(PhoenixStatement.java:1819)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.prepareAndExecute(JdbcMeta.java:747)\\n\\t... 20 more\\nCaused by: MissingTokenException(inserted [@-1,0:0='<missing RPAREN>',<140>,1:71] at CHECK)\\n\\tat org.apache.phoenix.parse.PhoenixSQLParser.recoverFromMismatchedToken(PhoenixSQLParser.java:374)\\n\\tat org.apache.phoenix.shaded.org.antlr.runtime.BaseRecognizer.match(BaseRecognizer.java:115)\\n\\tat org.apache.phoenix.parse.PhoenixSQLParser.create_table_node(PhoenixSQLParser.java:1258)\\n\\tat org.apache.phoenix.parse.PhoenixSQLParser.oneStatement(PhoenixSQLParser.java:868)\\n\\tat org.apache.phoenix.parse.PhoenixSQLParser.statement(PhoenixSQLParser.java:524)\\n\\tat org.apache.phoenix.parse.SQLParser.parseStatement(SQLParser.java:108)\\n\\t... 24 more\\n\"],\"errorMessage\":\"RuntimeException: org.apache.phoenix.exception.PhoenixParserException: ERROR 602 (42P00): Syntax error. Missing \\\"RPAREN\\\" at line 1, column 72. -> PhoenixParserException: ERROR 602 (42P00): Syntax error. Missing \\\"RPAREN\\\" at line 1, column 72. -> MissingTokenException: (null exception message)\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"6cdf1f6dc5d6:8765\"}}\n"
+  }
+}

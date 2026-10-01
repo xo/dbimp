@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"request\":\"prepareAndExecute\",\"connectionId\":\"dbimp-setup\",\"statementId\":\"19\",\"sql\":\"INSERT INTO PUBLIC.DBIMP_TYPES VALUES (1, -128, -32768, -2147483648, -9223372036854775808, 1234567890123456789012345678.0123456789, 0.1, 1.5, TRUE, 'ab', 'é''\\\"\\\\ x', X'00FF', DATE '2026-10-01', TIME '12:34:56.123456', TIMESTAMP '2026-10-01 12:34:56.123456789', INTERVAL '1 02:03:04.5' DAY TO SECOND, ARRAY[1,NULL,3], CAST('6ba7b810-9dad-11d1-80b4-00c04fd430c8' AS UUID), 'clob text', X'0102', TIMESTAMP '2026-10-01 12:34:56.123456+05:30')\",\"maxRowCount\":-1,\"maxRowsInFirstFrame\":10}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 00:23:17 GMT"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "364"
+      ]
+    },
+    "body": "{\"response\":\"executeResults\",\"missingStatement\":false,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"},\"results\":[{\"response\":\"resultSet\",\"connectionId\":\"dbimp-setup\",\"statementId\":19,\"ownStatement\":false,\"signature\":null,\"firstFrame\":null,\"updateCount\":1,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"}}]}\n"
+  }
+}

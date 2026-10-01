@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "not json"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Date": [
+        "Wed, 30 Sep 2026 21:19:51 GMT"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "3739"
+      ],
+      "Server": [
+        "Jetty(9.3.z-SNAPSHOT)"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"org.apache.calcite.avatica.com.fasterxml.jackson.core.JsonParseException: Unrecognized token 'not': was expecting 'null', 'true', 'false' or NaN\\n at [Source: (String)\\\"not json\\\"; line: 1, column: 4]\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.core.JsonParser._constructError(JsonParser.java:1804)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.core.base.ParserMinimalBase._reportError(ParserMinimalBase.java:673)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.core.json.ReaderBasedJsonParser._reportInvalidToken(ReaderBasedJsonParser.java:2835)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.core.json.ReaderBasedJsonParser._reportInvalidToken(ReaderBasedJsonParser.java:2813)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.core.json.ReaderBasedJsonParser._matchToken(ReaderBasedJsonParser.java:2604)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.core.json.ReaderBasedJsonParser._matchNull(ReaderBasedJsonParser.java:2588)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.core.json.ReaderBasedJsonParser.nextToken(ReaderBasedJsonParser.java:723)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.ObjectMapper._initForReading(ObjectMapper.java:4129)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:3988)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:2992)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.decode(JsonHandler.java:57)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.decode(JsonHandler.java:37)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:93)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:130)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:134)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.Server.handle(Server.java:534)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:320)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:251)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:283)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:108)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)\\n\\tat java.lang.Thread.run(Thread.java:748)\\n\"],\"errorMessage\":\"JsonParseException: Unrecognized token 'not': was expecting 'null', 'true', 'false' or NaN\\n at [Source: (String)\\\"not json\\\"; line: 1, column: 4]\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"6cdf1f6dc5d6:8765\"}}\n"
+  }
+}

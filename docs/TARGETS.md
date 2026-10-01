@@ -51,11 +51,11 @@ order:
    See [PINOT.md](PINOT.md).
 7. rqlite. Done, in `v0.8.0` (W22). See
    [RQLITE.md](RQLITE.md).
-8. libSQL, and Turso. Staged for review in `github.com/xo/dbimp/libsql` (W23).
+8. libSQL, and Turso. Done, in `v0.9.0` (W23).
    See [LIBSQL.md](LIBSQL.md).
 9. Apache Calcite Avatica, and the products that speak it: the standalone
-   Avatica server, the Apache Phoenix Query Server and Apache Druid (D74).
-   See [AVATICA.md](AVATICA.md).
+   Avatica server and the Apache Phoenix Query Server (D74). Druid gets a
+   driver of its own (D154). See [AVATICA.md](AVATICA.md).
 
 The other targets below keep their priority, and their place in the order
 is open.
@@ -156,14 +156,14 @@ that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 | Apache Drill | Moves up from P2. Its REST interface can cap the size of a result. |
 | Apache Pinot | Moves up from P2. Sixth in the order after Neo4j (D73). The QuickStart image runs every part in one container. A selection with no `LIMIT` returns ten rows on the single-stage engine. The driver is `github.com/xo/dbimp/pinot`, and it takes no write, because the Broker takes none (W19 and D128). R: `dbrun` starts 1.4.0 and 1.5.1. H and S: `POST /query/sql` answered SQL on both, as both principals (measured on 2026-09-30, W19). See [PINOT.md](PINOT.md). |
 | Apache Solr | Moves up from P2. Parallel SQL needs SolrCloud mode, which runs in one container. |
-| Apache Druid | R: `dbrun` starts 36.0.0 and 37.0.0 in one container, with 2.7 GB at most, inside the 4 GB limit of `dbmeta` (dbmeta D113). It is also a flavor of Avatica (D74). |
+| Apache Druid | R: `dbrun` starts 36.0.0 and 37.0.0 in one container, with 2.7 GB at most, inside the 4 GB limit of `dbmeta` (dbmeta D113). It gets a driver of its own, and is not a flavor of Avatica (D154). |
 | Elasticsearch and OpenSearch | Only through `_sql`, which pages with a cursor. The Query DSL and ES\|QL fail S. |
 | SurrealDB | The second target (W8). The driver is `github.com/xo/dbimp/surrealdb`. R: yes, `dbrun` starts 2.7.0, 3.1.6, 3.2.4 and 3.3.0 (dbmeta D103). H: yes, `POST /rpc` on port 8000. S: yes, SurrealQL. P1. Returns objects and no column list, with the keys sorted by name. See [SURREALDB.md](SURREALDB.md). |
 | Neo4j | The third target (W9). The driver is `github.com/xo/dbimp/neo4j`. R: yes, `dbrun` starts 5.26.31 and 2026.09.0 (dbmeta D106). H: yes, the Query API, `POST /db/{database}/query/v2` on port 7474. S: yes, Cypher, by D58. P1. `dbrun` runs the Enterprise Edition under the evaluation agreement (D59). Returns the columns before the rows, in the order of the statement, with typed JSON (D62). See [NEO4J.md](NEO4J.md). |
 | Amazon DynamoDB | PartiQL, on `amazon/dynamodb-local`, which supports `ExecuteStatement` (not measured). Needs SigV4. An item is a map with no column order, and a number can have 38 digits. `usql` already has a driver, so it is likely P2 (D24). |
 | Databend | New. Fourth in the order after Neo4j (D73). SQL on `/v1/query`. `usql` has a driver, and dbmeta D66 names it. Its driver is `databend`, and it replaces the driver of `usql` (D76). The driver is `github.com/xo/dbimp/databend` (W16). R: `dbrun` starts 1.2.881 and 1.2.948. H and S: `POST /v1/query` answered SQL on both, as both principals (measured on 2026-09-29, W16). See [DATABEND.md](DATABEND.md). |
 | GreptimeDB | New. SQL on `/v1/sql`. |
-| Apache Phoenix Query Server and Apache Calcite Avatica | A reviewer named it, and Ken placed it ninth in the order on 2026-09-27 (D74). It speaks the Avatica protocol, with JSON or protobuf over HTTP, so one driver serves the standalone Avatica server, the Phoenix Query Server and Druid as flavors. R: `dbrun` starts Avatica 1.28.0 and 1.29.0, the Phoenix Query Server 2.0-5.0, and Druid 36.0.0 and 37.0.0 (dbmeta D113). H and S are not measured here. `usql` has a driver for Avatica (D24). See [AVATICA.md](AVATICA.md). |
+| Apache Phoenix Query Server and Apache Calcite Avatica | A reviewer named it, and Ken placed it ninth in the order on 2026-09-27 (D74). The driver is `github.com/xo/dbimp/avatica` (W24). It speaks the Avatica protocol in JSON only (D153), and serves the standalone Avatica server and the Phoenix Query Server. Druid gets a driver of its own (D154). R: `dbrun` starts Avatica 1.28.0 and 1.29.0, the Phoenix Query Server 2.0-5.0, and Druid 36.0.0 and 37.0.0 (dbmeta D113). H: `POST /` on port 8765. S: SQL of HSQLDB or of Phoenix. `usql` has a driver for Avatica (D24). See [AVATICA.md](AVATICA.md). |
 | Apache Kylin | New. A reviewer named it. DeepSeek placed it in P1. SQL over HTTP. |
 | OrientDB | New. A reviewer named it. DeepSeek placed it in P1 or P2, and named it among the best additions to P1. It has a dialect like SQL over HTTP. DeepSeek was not sure of the licence. |
 

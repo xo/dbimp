@@ -1,0 +1,713 @@
+{
+  "driver": "avatica",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/apache/calcite-avatica-go",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/lalinsky/python-phoenixdb",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go",
+        "github.com/lalinsky/python-phoenixdb"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-071-post.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go",
+        "github.com/lalinsky/python-phoenixdb"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-072-post.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go",
+        "github.com/lalinsky/python-phoenixdb"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-073-post.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go",
+        "github.com/lalinsky/python-phoenixdb"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-074-post.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "hsqldb merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-075-post.json",
+      "test": "TestIntegrationCRUD/hsqldb_merge"
+    },
+    {
+      "kind": "crud",
+      "name": "phoenix upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-051-post.json",
+      "test": "TestIntegrationCRUD/phoenix_upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "phoenix select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-056-post.json",
+      "test": "TestIntegrationCRUD/phoenix_select"
+    },
+    {
+      "kind": "crud",
+      "name": "phoenix delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-057-post.json",
+      "test": "TestIntegrationCRUD/phoenix_delete"
+    },
+    {
+      "kind": "crud",
+      "name": "phoenix insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "phoenix-2.0-5.0-054-post.json",
+      "test": "TestIntegrationCRUD/phoenix_insert"
+    },
+    {
+      "kind": "crud",
+      "name": "phoenix update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "phoenix-2.0-5.0-055-post.json",
+      "test": "TestIntegrationCRUD/phoenix_update"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-077-post.json",
+      "test": "TestIntegrationSchema/hsqldb_table"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-077-post.json",
+      "test": "TestIntegrationSchema/hsqldb_primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-079-post.json",
+      "test": "TestIntegrationSchema/hsqldb_foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-080-post.json",
+      "test": "TestIntegrationSchema/hsqldb_index"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-083-post.json",
+      "test": "TestIntegrationSchema/hsqldb_unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb check constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-084-post.json",
+      "test": "TestIntegrationSchema/hsqldb_check_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-086-post.json",
+      "test": "TestIntegrationSchema/hsqldb_view"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-082-post.json",
+      "test": "TestIntegrationSchema/hsqldb_default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "hsqldb sequence",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-088-post.json",
+      "test": "TestIntegrationSchema/hsqldb_sequence"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-050-post.json",
+      "test": "TestIntegrationSchema/phoenix_table"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-050-post.json",
+      "test": "TestIntegrationSchema/phoenix_primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-059-post.json",
+      "test": "TestIntegrationSchema/phoenix_index"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-061-post.json",
+      "test": "TestIntegrationSchema/phoenix_view"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix sequence",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-063-post.json",
+      "test": "TestIntegrationSchema/phoenix_sequence"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-066-post.json",
+      "test": "TestIntegrationSchema/phoenix_default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "phoenix-2.0-5.0-064-post.json",
+      "test": "TestIntegrationSchema/phoenix_foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "phoenix check constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "phoenix-2.0-5.0-065-post.json",
+      "test": "TestIntegrationSchema/phoenix_check_constraint"
+    },
+    {
+      "kind": "feature",
+      "name": "frames and fetch",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go",
+        "github.com/lalinsky/python-phoenixdb"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-035-post.json",
+      "test": "TestIntegrationFeatures/frames_and_fetch"
+    },
+    {
+      "kind": "feature",
+      "name": "max row count",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-038-post.json",
+      "test": "TestIntegrationFeatures/max_row_count"
+    },
+    {
+      "kind": "feature",
+      "name": "prepare and execute",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go",
+        "github.com/lalinsky/python-phoenixdb"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-029-post.json",
+      "test": "TestIntegrationFeatures/prepare_and_execute"
+    },
+    {
+      "kind": "feature",
+      "name": "commit and rollback",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go",
+        "github.com/lalinsky/python-phoenixdb"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-060-post.json",
+      "test": "TestIntegrationFeatures/commit_and_rollback"
+    },
+    {
+      "kind": "feature",
+      "name": "read-only connection",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-066-post.json",
+      "test": "TestIntegrationFeatures/read-only_connection"
+    },
+    {
+      "kind": "feature",
+      "name": "metadata of the database",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-012-post.json",
+      "test": "TestIntegrationFeatures/metadata_of_the_database"
+    },
+    {
+      "kind": "feature",
+      "name": "phoenix salted table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-067-post.json",
+      "test": "TestIntegrationFeatures/phoenix_salted_table"
+    },
+    {
+      "kind": "feature",
+      "name": "phoenix row timestamp",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-068-post.json",
+      "test": "TestIntegrationFeatures/phoenix_row_timestamp"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/TINYINT"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/SMALLINT"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/INTEGER"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/BIGINT"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/DOUBLE"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/FLOAT"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "CHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/CHAR"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/VARCHAR"
+    },
+    {
+      "kind": "type",
+      "name": "BINARY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/BINARY"
+    },
+    {
+      "kind": "type",
+      "name": "VARBINARY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/VARBINARY"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "TIME",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/TIME"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "UUID",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/UUID"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "avatica-1.29.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/INTERVAL"
+    },
+    {
+      "kind": "type",
+      "name": "UNSIGNED_INT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/UNSIGNED_INT"
+    },
+    {
+      "kind": "type",
+      "name": "UNSIGNED_LONG",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/calcite-avatica-go"
+      ],
+      "verdict": "yes",
+      "evidence": "phoenix-2.0-5.0-021-post.json",
+      "test": "TestIntegrationRoundTrip/UNSIGNED_LONG"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP WITH TIME ZONE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "avatica-1.29.0-023-post.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP_WITH_TIME_ZONE"
+    },
+    {
+      "kind": "type",
+      "name": "TIME WITH TIME ZONE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "avatica-1.29.0-024-post.json",
+      "test": "TestIntegrationRoundTrip/TIME_WITH_TIME_ZONE"
+    },
+    {
+      "kind": "type",
+      "name": "CLOB",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "avatica-1.29.0-022-post.json",
+      "test": "TestIntegrationRoundTrip/CLOB"
+    },
+    {
+      "kind": "type",
+      "name": "BLOB",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "avatica-1.29.0-022-post.json",
+      "test": "TestIntegrationRoundTrip/BLOB"
+    }
+  ]
+}

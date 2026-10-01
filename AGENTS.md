@@ -26,7 +26,8 @@ holds the second and the third. The fifth, in
 `databend/`, was first released in `v0.6.0` (W16). The seventh, in
 `pinot/`, was first released in `v0.7.0` (W19). The eighth, in
 `rqlite/`, was first released in `v0.8.0` (W22). The ninth, in
-`libsql/`, is staged for review, and no release holds it yet (W23). The
+`libsql/`, was first released in `v0.9.0` (W23). The tenth, in
+`avatica/`, is staged for review, and no release holds it yet (W24). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -54,7 +55,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Couchbase driver | [docs/COUCHBASE.md](docs/COUCHBASE.md), then D23 and W5 |
 | writing the SurrealDB driver | [docs/SURREALDB.md](docs/SURREALDB.md), then W8 |
 | writing the Neo4j driver | [docs/NEO4J.md](docs/NEO4J.md), then W9 |
-| writing the Avatica driver | [docs/AVATICA.md](docs/AVATICA.md), then D74 |
+| writing the Avatica driver | [docs/AVATICA.md](docs/AVATICA.md), then W24, D74 and D153 to D159 |
 | writing the InfluxDB driver | [docs/INFLUXDB.md](docs/INFLUXDB.md), then W11 and D78 to D83 |
 | asking why CrateDB has no driver here | [docs/CRATEDB.md](docs/CRATEDB.md), then D88 |
 | writing the ArangoDB driver | [docs/ARANGODB.md](docs/ARANGODB.md), then W13 and D89 to D94 |
@@ -104,9 +105,10 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    type that the database names for its column, and a string column gives a
    string. See D8 and D135.
 4. `context.Context` comes first, is named `ctx`, and is never stored in a
-   struct, except by a Couchbase, Neo4j, ArangoDB, Databend or libSQL
-   transaction, and by the rows of an ArangoDB cursor, of a Databend query
-   or of a libSQL cursor (D45, D69, D90, D91, D122, D123, D149 and D150). The
+   struct, except by a Couchbase, Neo4j, ArangoDB, Databend, libSQL or
+   Avatica transaction, by an Avatica connection, and by the rows of an
+   ArangoDB cursor, of a Databend query, of a libSQL cursor or of an Avatica
+   query (D45, D69, D90, D91, D122, D123, D149, D150, D157 and D159). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

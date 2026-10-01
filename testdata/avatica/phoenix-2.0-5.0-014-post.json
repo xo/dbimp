@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"prepareAndExecute\",\"connectionId\":\"dbimp-rec\",\"statementId\":\"15\",\"sql\":\"SELECT 1 AS ONE FROM SYSTEM.\\\"CATALOG\\\" LIMIT 1\",\"maxRowCount\":-1,\"maxRowsInFirstFrame\":1000}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "942"
+      ],
+      "Server": [
+        "Jetty(9.3.z-SNAPSHOT)"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 21:19:51 GMT"
+      ]
+    },
+    "body": "{\"response\":\"executeResults\",\"missingStatement\":false,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"6cdf1f6dc5d6:8765\"},\"results\":[{\"response\":\"resultSet\",\"connectionId\":\"dbimp-rec\",\"statementId\":15,\"ownStatement\":true,\"signature\":{\"columns\":[{\"ordinal\":0,\"autoIncrement\":false,\"caseSensitive\":false,\"searchable\":true,\"currency\":false,\"nullable\":0,\"signed\":true,\"displaySize\":10,\"label\":\"ONE\",\"columnName\":\"ONE\",\"schemaName\":\"\",\"precision\":10,\"scale\":0,\"tableName\":\"SYSTEM.CATALOG\",\"catalogName\":\"\",\"type\":{\"type\":\"scalar\",\"id\":4,\"name\":\"INTEGER\",\"rep\":\"PRIMITIVE_INT\"},\"readOnly\":true,\"writable\":false,\"definitelyWritable\":false,\"columnClassName\":\"java.lang.Integer\"}],\"sql\":null,\"parameters\":[],\"cursorFactory\":{\"style\":\"LIST\",\"clazz\":null,\"fieldNames\":null},\"statementType\":null},\"firstFrame\":{\"offset\":0,\"done\":true,\"rows\":[[1]]},\"updateCount\":-1,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"6cdf1f6dc5d6:8765\"}}]}\n"
+  }
+}

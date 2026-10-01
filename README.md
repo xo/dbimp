@@ -13,7 +13,8 @@ released in `v0.1.0`, `surrealdb` and `neo4j`, which the tags `v0.2.0` and
 other three, `arangodb`, which was first released in `v0.5.0`, `databend`,
 which was first released in `v0.6.0`, `pinot`, which was first released in
 `v0.7.0`, `rqlite`, which was first released in `v0.8.0`, and `libsql`,
-which no release holds yet.
+which was first released in `v0.9.0`. The driver `avatica` is staged for
+review, and no release holds it yet.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -53,7 +54,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/COUCHBASE.md](docs/COUCHBASE.md) | What is measured about the Couchbase query service |
 | [docs/SURREALDB.md](docs/SURREALDB.md) | What is known about the HTTP interface of SurrealDB |
 | [docs/NEO4J.md](docs/NEO4J.md) | What is known about the HTTP interface of Neo4j |
-| [docs/AVATICA.md](docs/AVATICA.md) | What is known about Apache Calcite Avatica and the products that speak it |
+| [docs/AVATICA.md](docs/AVATICA.md) | What is known about Apache Calcite Avatica and the Phoenix Query Server, measured for its driver |
 | [docs/INFLUXDB.md](docs/INFLUXDB.md) | What InfluxDB 1, 2 and 3 answer, as measured on seven releases |
 | [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, and why it has no driver here |
 | [docs/ARANGODB.md](docs/ARANGODB.md) | What ArangoDB 3.12 answers, as measured |

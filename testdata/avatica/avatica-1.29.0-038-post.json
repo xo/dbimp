@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"prepareAndExecute\",\"connectionId\":\"dbimp-rec\",\"statementId\":\"20\",\"sql\":\"SELECT V, 'padding padding padding padding' FROM UNNEST(SEQUENCE_ARRAY(1, 250, 1)) AS T(V)\",\"maxRowCount\":10,\"maxRowsInFirstFrame\":1000}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "1713"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 00:23:17 GMT"
+      ]
+    },
+    "body": "{\"response\":\"executeResults\",\"missingStatement\":false,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"},\"results\":[{\"response\":\"resultSet\",\"connectionId\":\"dbimp-rec\",\"statementId\":20,\"ownStatement\":true,\"signature\":{\"columns\":[{\"ordinal\":0,\"autoIncrement\":false,\"caseSensitive\":false,\"searchable\":true,\"currency\":false,\"nullable\":1,\"signed\":true,\"displaySize\":11,\"label\":\"V\",\"columnName\":\"C1\",\"schemaName\":\"\",\"precision\":32,\"scale\":0,\"tableName\":\"\",\"catalogName\":\"PUBLIC\",\"type\":{\"type\":\"scalar\",\"id\":4,\"name\":\"INTEGER\",\"rep\":\"PRIMITIVE_INT\"},\"readOnly\":true,\"writable\":false,\"definitelyWritable\":false,\"columnClassName\":\"java.lang.Integer\"},{\"ordinal\":1,\"autoIncrement\":false,\"caseSensitive\":true,\"searchable\":false,\"currency\":false,\"nullable\":0,\"signed\":false,\"displaySize\":31,\"label\":\"C2\",\"columnName\":\"C2\",\"schemaName\":\"\",\"precision\":31,\"scale\":0,\"tableName\":\"\",\"catalogName\":\"\",\"type\":{\"type\":\"scalar\",\"id\":1,\"name\":\"CHARACTER\",\"rep\":\"STRING\"},\"readOnly\":true,\"writable\":false,\"definitelyWritable\":false,\"columnClassName\":\"java.lang.String\"}],\"sql\":null,\"parameters\":[],\"cursorFactory\":{\"style\":\"LIST\",\"clazz\":null,\"fieldNames\":null},\"statementType\":null},\"firstFrame\":{\"offset\":0,\"done\":true,\"rows\":[[1,\"padding padding padding padding\"],[2,\"padding padding padding padding\"],[3,\"padding padding padding padding\"],[4,\"padding padding padding padding\"],[5,\"padding padding padding padding\"],[6,\"padding padding padding padding\"],[7,\"padding padding padding padding\"],[8,\"padding padding padding padding\"],[9,\"padding padding padding padding\"],[10,\"padding padding padding padding\"]]},\"updateCount\":-1,\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"}}]}\n"
+  }
+}

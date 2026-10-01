@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"request\":\"prepare\",\"connectionId\":\"dbimp-rec\",\"sql\":\"SELECT CAST(? AS INTEGER) FROM DBIMP_TYPES LIMIT 1\",\"maxRowCount\":-1}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Server": [
+        "Jetty(9.3.z-SNAPSHOT)"
+      ],
+      "Date": [
+        "Wed, 30 Sep 2026 21:19:51 GMT"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "2644"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"java.lang.NullPointerException\\n\\tat org.apache.phoenix.jdbc.PhoenixParameterMetaData.isSigned(PhoenixParameterMetaData.java:138)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.parameters(JdbcMeta.java:276)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.signature(JdbcMeta.java:288)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.prepare(JdbcMeta.java:721)\\n\\tat org.apache.calcite.avatica.remote.LocalService.apply(LocalService.java:195)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareRequest.accept(Service.java:1215)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareRequest.accept(Service.java:1186)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:94)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:130)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:134)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.Server.handle(Server.java:534)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:320)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:251)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:283)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:108)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)\\n\\tat java.lang.Thread.run(Thread.java:748)\\n\"],\"errorMessage\":\"NullPointerException: (null exception message)\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"6cdf1f6dc5d6:8765\"}}\n"
+  }
+}

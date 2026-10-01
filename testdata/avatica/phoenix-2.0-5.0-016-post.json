@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"openConnection\",\"connectionId\":\"dbimp-x\",\"bogus\":1}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Date": [
+        "Wed, 30 Sep 2026 21:19:51 GMT"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "5326"
+      ],
+      "Server": [
+        "Jetty(9.3.z-SNAPSHOT)"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"org.apache.calcite.avatica.com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field \\\"bogus\\\" (class org.apache.calcite.avatica.remote.Service$OpenConnectionRequest), not marked as ignorable (2 known properties: \\\"connectionId\\\", \\\"info\\\"])\\n at [Source: (String)\\\"{\\\"request\\\":\\\"openConnection\\\",\\\"connectionId\\\":\\\"dbimp-x\\\",\\\"bogus\\\":1}\\\"; line: 1, column: 64] (through reference chain: org.apache.calcite.avatica.remote.Service$OpenConnectionRequest[\\\"bogus\\\"])\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:60)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:822)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:1152)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1582)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperties(BeanDeserializerBase.java:1536)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:504)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1280)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:326)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:194)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:161)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer._deserializeTypedForId(AsPropertyTypeDeserializer.java:130)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer.deserializeTypedFromObject(AsPropertyTypeDeserializer.java:97)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.AbstractDeserializer.deserializeWithType(AbstractDeserializer.java:254)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.deser.impl.TypeWrappedDeserializer.deserialize(TypeWrappedDeserializer.java:68)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4001)\\n\\tat org.apache.calcite.avatica.com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:2992)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.decode(JsonHandler.java:57)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.decode(JsonHandler.java:37)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:93)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:130)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:52)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:134)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.Server.handle(Server.java:534)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:320)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:251)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:283)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:108)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:93)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.executeProduceConsume(ExecuteProduceConsume.java:303)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceConsume(ExecuteProduceConsume.java:148)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:136)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:671)\\n\\tat org.apache.phoenix.shaded.org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:589)\\n\\tat java.lang.Thread.run(Thread.java:748)\\n\"],\"errorMessage\":\"UnrecognizedPropertyException: Unrecognized field \\\"bogus\\\" (class org.apache.calcite.avatica.remote.Service$OpenConnectionRequest), not marked as ignorable (2 known properties: \\\"connectionId\\\", \\\"info\\\"])\\n at [Source: (String)\\\"{\\\"request\\\":\\\"openConnection\\\",\\\"connectionId\\\":\\\"dbimp-x\\\",\\\"bogus\\\":1}\\\"; line: 1, column: 64] (through reference chain: org.apache.calcite.avatica.remote.Service$OpenConnectionRequest[\\\"bogus\\\"])\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"6cdf1f6dc5d6:8765\"}}\n"
+  }
+}

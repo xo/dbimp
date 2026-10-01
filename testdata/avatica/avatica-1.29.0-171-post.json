@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"request\":\"prepareAndExecute\",\"connectionId\":\"dbimp-rec\",\"statementId\":\"22\",\"sql\":\"DROP TABLE PUBLIC.DBIMP_CRUD IF EXISTS\",\"maxRowCount\":-1,\"maxRowsInFirstFrame\":1000}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 00:23:20 GMT"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "4044"
+      ]
+    },
+    "body": "{\"response\":\"error\",\"exceptions\":[\"java.lang.RuntimeException: java.sql.SQLSyntaxErrorException: user lacks privilege or object not found: PUBLIC in statement [DROP TABLE PUBLIC.DBIMP_CRUD IF EXISTS]\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.propagate(JdbcMeta.java:777)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.prepareAndExecute(JdbcMeta.java:842)\\n\\tat org.apache.calcite.avatica.remote.LocalService.apply(LocalService.java:212)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareAndExecuteRequest.accept(Service.java:952)\\n\\tat org.apache.calcite.avatica.remote.Service$PrepareAndExecuteRequest.accept(Service.java:904)\\n\\tat org.apache.calcite.avatica.remote.AbstractHandler.apply(AbstractHandler.java:94)\\n\\tat org.apache.calcite.avatica.remote.JsonHandler.apply(JsonHandler.java:52)\\n\\tat org.apache.calcite.avatica.server.AvaticaJsonHandler.handle(AvaticaJsonHandler.java:133)\\n\\tat org.eclipse.jetty.server.handler.HandlerList.handle(HandlerList.java:59)\\n\\tat org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)\\n\\tat org.eclipse.jetty.server.Server.handle(Server.java:516)\\n\\tat org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:487)\\n\\tat org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:732)\\n\\tat org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:479)\\n\\tat org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:277)\\n\\tat org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)\\n\\tat org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)\\n\\tat org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:338)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:315)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:173)\\n\\tat org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:131)\\n\\tat org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:409)\\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:883)\\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1034)\\n\\tat java.lang.Thread.run(Thread.java:750)\\nCaused by: java.sql.SQLSyntaxErrorException: user lacks privilege or object not found: PUBLIC in statement [DROP TABLE PUBLIC.DBIMP_CRUD IF EXISTS]\\n\\tat org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCStatement.fetchResult(Unknown Source)\\n\\tat org.hsqldb.jdbc.JDBCStatement.execute(Unknown Source)\\n\\tat org.apache.calcite.avatica.jdbc.JdbcMeta.prepareAndExecute(JdbcMeta.java:824)\\n\\t... 24 more\\nCaused by: org.hsqldb.HsqlException: user lacks privilege or object not found: PUBLIC\\n\\tat org.hsqldb.error.Error.error(Unknown Source)\\n\\tat org.hsqldb.error.Error.error(Unknown Source)\\n\\tat org.hsqldb.rights.Grantee.checkSchemaUpdateOrGrantRights(Unknown Source)\\n\\tat org.hsqldb.StatementSchema.checkSchemaUpdateAuthorisation(Unknown Source)\\n\\tat org.hsqldb.StatementSchema.getResult(Unknown Source)\\n\\tat org.hsqldb.StatementSchema.execute(Unknown Source)\\n\\tat org.hsqldb.Session.executeCompiledStatement(Unknown Source)\\n\\tat org.hsqldb.Session.executeDirectStatement(Unknown Source)\\n\\tat org.hsqldb.Session.execute(Unknown Source)\\n\\t... 27 more\\n\"],\"errorMessage\":\"RuntimeException: java.sql.SQLSyntaxErrorException: user lacks privilege or object not found: PUBLIC in statement [DROP TABLE PUBLIC.DBIMP_CRUD IF EXISTS] -> SQLSyntaxErrorException: user lacks privilege or object not found: PUBLIC in statement [DROP TABLE PUBLIC.DBIMP_CRUD IF EXISTS] -> HsqlException: user lacks privilege or object not found: PUBLIC\",\"errorCode\":-1,\"sqlState\":\"00000\",\"severity\":\"UNKNOWN\",\"rpcMetadata\":{\"response\":\"rpcMetadata\",\"serverAddress\":\"1d0aa1ae2e4e:8765\"}}\n"
+  }
+}
