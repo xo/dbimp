@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ? AS a, ? AS b, ? AS c, ? AS d, ? AS e, ? AS f\",\"params\":[9223372036854775807,18446744073709551615,true,null,1.5,\"it's\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "596874"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"a\",\"type\":\"long\"},{\"name\":\"b\",\"type\":\"long\"},{\"name\":\"c\",\"type\":\"boolean\"},{\"name\":\"d\",\"type\":\"null\"},{\"name\":\"e\",\"type\":\"double\"},{\"name\":\"f\",\"type\":\"keyword\"}],\"rows\":[[9223372036854775807,9223372036854775807,true,null,1.5,\"it's\"]]}"
+  }
+}

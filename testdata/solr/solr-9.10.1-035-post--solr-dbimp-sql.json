@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "stmt=CREATE+TABLE+t+%28id+VARCHAR+PRIMARY+KEY%2C+p+VARCHAR+REFERENCES+u+%28id%29%2C+UNIQUE+%28p%29%29"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"EXCEPTION\":\"Failed to execute sqlQuery 'CREATE TABLE t (id VARCHAR PRIMARY KEY, p VARCHAR REFERENCES u (id), UNIQUE (p))' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"CREATE TABLE t (id VARCHAR PRIMARY KEY, p VARCHAR REFERENCES u (id), UNIQUE (p))\\\": parse failed: Incorrect syntax near the keyword 'CREATE' at line 1, column 1.\\nWas expecting one of:\\n    \\\"ABS\\\" ...\\n    \\\"ALTER\\\" ...\\n    \\\"ARRAY\\\" ...\\n    \\\"AVG\\\" ...\\n    \\\"CALL\\\" ...\\n    \\\"CARDINALITY\\\" ...\\n    \\\"CASE\\\" ...\\n    \\\"CAST\\\" ...\\n    \\\"CEIL\\\" ...\\n    \\\"CEILING\\\" ...\\n    \\\"CHAR\\\" ...\\n    \\\"CHAR_LENGTH\\\" ...\\n    \\\"CHARACTER_LENGTH\\\" ...\\n    \\\"CLASSIFIER\\\" ...\\n    \\\"COALESCE\\\" ...\\n    \\\"COLLECT\\\" ...\\n    \\\"CONVERT\\\" ...\\n    \\\"COUNT\\\" ...\\n    \\\"COVAR_POP\\\" ...\\n    \\\"COVAR_SAMP\\\" ...\\n    \\\"CUME_DIST\\\" ...\\n    \\\"CURRENT\\\" ...\\n    \\\"CURRENT_CATALOG\\\" ...\\n    \\\"CURRENT_DATE\\\" ...\\n    \\\"CURRENT_DEFAULT_TRANSFORM_GROUP\\\" ...\\n    \\\"CURRENT_PATH\\\" ...\\n    \\\"CURRENT_ROLE\\\" ...\\n    \\\"CURRENT_SCHEMA\\\" ...\\n    \\\"CURRENT_TIME\\\" ...\\n    \\\"CURRENT_TIMESTAMP\\\" ...\\n    \\\"CURRENT_USER\\\" ...\\n    \\\"CURSOR\\\" ...\\n    \\\"DATE\\\" ...\\n    \\\"DATETIME\\\" ...\\n    \\\"DECIMAL\\\" ...\\n    \\\"DELETE\\\" ...\\n    \\\"DENSE_RANK\\\" ...\\n    \\\"DESCRIBE\\\" ...\\n    \\\"ELEMENT\\\" ...\\n    \\\"EVERY\\\" ...\\n    \\\"EXISTS\\\" ...\\n    \\\"EXP\\\" ...\\n    \\\"EXPLAIN\\\" ...\\n    \\\"EXTRACT\\\" ...\\n    \\\"FALSE\\\" ...\\n    \\\"FIRST_VALUE\\\" ...\\n    \\\"FLOOR\\\" ...\\n    \\\"FUSION\\\" ...\\n    \\\"GROUPING\\\" ...\\n    \\\"HOUR\\\" ...\\n    \\\"INSERT\\\" ...\\n    \\\"INTERSECTION\\\" ...\\n    \\\"INTERVAL\\\" ...\\n    \\\"JSON_ARRAY\\\" ...\\n    \\\"JSON_ARRAYAGG\\\" ...\\n    \\\"JSON_EXISTS\\\" ...\\n    \\\"JSON_OBJECT\\\" ...\\n    \\\"JSON_OBJECTAGG\\\" ...\\n    \\\"JSON_QUERY\\\" ...\\n    \\\"JSON_VALUE\\\" ...\\n    \\\"LAG\\\" ...\\n    \\\"LAST_VALUE\\\" ...\\n    \\\"LEAD\\\" ...\\n    \\\"LEFT\\\" ...\\n    \\\"LN\\\" ...\\n    \\\"LOCALTIME\\\" ...\\n    \\\"LOCALTIMESTAMP\\\" ...\\n    \\\"LOWER\\\" ...\\n    \\\"MATCH_NUMBER\\\" ...\\n    \\\"MAX\\\" ...\\n    \\\"MERGE\\\" ...\\n    \\\"MIN\\\" ...\\n    \\\"MINUTE\\\" ...\\n    \\\"MOD\\\" ...\\n    \\\"MONTH\\\" ...\\n    \\\"MULTISET\\\" ...\\n    \\\"NEW\\\" ...\\n    \\\"NEXT\\\" ...\\n    \\\"NOT\\\" ...\\n    \\\"NTH_VALUE\\\" ...\\n    \\\"NTILE\\\" ...\\n    \\\"NULL\\\" ...\\n    \\\"NULLIF\\\" ...\\n    \\\"OCTET_LENGTH\\\" ...\\n    \\\"OVERLAY\\\" ...\\n    \\\"PERCENTILE_CONT\\\" ...\\n    \\\"PERCENTILE_DISC\\\" ...\\n    \\\"PERCENT_RANK\\\" ...\\n    \\\"PERIOD\\\" ...\\n    \\\"POSITION\\\" ...\\n    \\\"POWER\\\" ...\\n    \\\"PREV\\\" ...\\n    \\\"RANK\\\" ...\\n    \\\"REGR_COUNT\\\" ...\\n    \\\"REGR_SXX\\\" ...\\n    \\\"REGR_SYY\\\" ...\\n    \\\"RESET\\\" ...\\n    \\\"RIGHT\\\" ...\\n    \\\"ROW\\\" ...\\n    \\\"ROW_NUMBER\\\" ...\\n    \\\"RUNNING\\\" ...\\n    \\\"SAFE_CAST\\\" ...\\n    \\\"SECOND\\\" ...\\n    \\\"SELECT\\\" ...\\n    \\\"SESSION_USER\\\" ...\\n    \\\"SET\\\" ...\\n    \\\"SOME\\\" ...\\n    \\\"SPECIFIC\\\" ...\\n    \\\"SQRT\\\" ...\\n    \\\"STDDEV_POP\\\" ...\\n    \\\"STDDEV_SAMP\\\" ...\\n    \\\"SUBSTRING\\\" ...\\n    \\\"SUM\\\" ...\\n    \\\"SYSTEM_USER\\\" ...\\n    \\\"TABLE\\\" ...\\n    \\\"TIME\\\" ...\\n    \\\"TIMESTAMP\\\" ...\\n    \\\"TRANSLATE\\\" ...\\n    \\\"TRIM\\\" ...\\n    \\\"TRUE\\\" ...\\n    \\\"TRUNCATE\\\" ...\\n    \\\"TRY_CAST\\\" ...\\n    \\\"UNIQUE\\\" ...\\n    \\\"UNKNOWN\\\" ...\\n    \\\"UPDATE\\\" ...\\n    \\\"UPPER\\\" ...\\n    \\\"UPSERT\\\" ...\\n    \\\"USER\\\" ...\\n    \\\"VALUE\\\" ...\\n    \\\"VALUES\\\" ...\\n    \\\"VAR_POP\\\" ...\\n    \\\"VAR_SAMP\\\" ...\\n    \\\"WITH\\\" ...\\n    \\\"YEAR\\\" ...\\n    <UNSIGNED_INTEGER_LITERAL> ...\\n    <APPROX_NUMERIC_LITERAL> ...\\n    <DECIMAL_NUMERIC_LITERAL> ...\\n    <BINARY_STRING_LITERAL> ...\\n    <QUOTED_STRING> ...\\n    <PREFIXED_STRING_LITERAL> ...\\n    <UNICODE_STRING_LITERAL> ...\\n    <C_STYLE_ESCAPED_STRING_LITERAL> ...\\n    <BIG_QUERY_DOUBLE_QUOTED_STRING> ...\\n    <BIG_QUERY_QUOTED_STRING> ...\\n    \\\"(\\\" ...\\n    <LBRACE_D> ...\\n    <LBRACE_T> ...\\n    <LBRACE_TS> ...\\n    <LBRACE_FN> ...\\n    \\\"?\\\" ...\\n    \\\"+\\\" ...\\n    \\\"-\\\" ...\\n    <BRACKET_QUOTED_IDENTIFIER> ...\\n    <QUOTED_IDENTIFIER> ...\\n    <BACK_QUOTED_IDENTIFIER> ...\\n    <BIG_QUERY_BACK_QUOTED_IDENTIFIER> ...\\n    <HYPHENATED_IDENTIFIER> ...\\n    <IDENTIFIER> ...\\n    <UNICODE_QUOTED_IDENTIFIER> ...\\n    \",\n      \"EOF\":true,\n      \"RESPONSE_TIME\":3\n    }]\n  }\n}"
+  }
+}

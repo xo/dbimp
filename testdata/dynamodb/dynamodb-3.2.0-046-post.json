@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"INSERT INTO dbimp_types VALUE {'pk': 'e3', 'ss': <<1, 'a'>>}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "310853b8-e15e-43cb-9eb8-1c4d6c8114bd"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "157"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Unsupported data type in Bag. DynamoDB only supports either numbers or strings in bags\"}"
+  }
+}

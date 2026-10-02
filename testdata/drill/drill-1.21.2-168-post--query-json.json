@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT b, a FROM (VALUES(1, 2)) AS t(a, b)\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "175"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:15 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a0c-76a3-3f99-74da-415e433889dd\"\n,\"columns\":[\"b\",\"a\"]\n,\"metadata\":[\"INT\",\"INT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"b\":2,\"a\":1}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

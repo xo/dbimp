@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+id%2C+n_t+FROM+dbimp"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "473"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"EXCEPTION\":\"Failed to execute sqlQuery 'SELECT id, n_t FROM dbimp' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"SELECT id, n_t FROM dbimp\\\": java.io.IOException: java.io.IOException: --> http://192.168.1.5:8983/solr:n_t{type=text_general,properties=indexed,tokenized,stored,useDocValuesAsStored} must have DocValues to use this feature.\",\n      \"EOF\":true,\n      \"RESPONSE_TIME\":9\n    }]\n  }\n}"
+  }
+}

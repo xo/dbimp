@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE FROM INFORMATION_SCHEMA.`COLUMNS` WHERE TABLE_SCHEMA = 'dfs.tmp' AND TABLE_NAME = 'dbimp_v'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "346"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:16 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a0a-83ed-d97c-4765-4965f5dadcdf\"\n,\"columns\":[\"COLUMN_NAME\",\"DATA_TYPE\",\"IS_NULLABLE\"]\n,\"metadata\":[\"VARCHAR\",\"VARCHAR\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"COLUMN_NAME\":\"employee_id\",\"DATA_TYPE\":\"ANY\",\"IS_NULLABLE\":\"YES\"}\n,{\"COLUMN_NAME\":\"full_name\",\"DATA_TYPE\":\"ANY\",\"IS_NULLABLE\":\"YES\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

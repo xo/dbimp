@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteTransaction"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"TransactStatements\":[{\"Statement\":\"UPDATE dbimp_tx SET v = 15 WHERE pk = 'b'\"}],\"ClientRequestToken\":\"dbimp-token-1\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "194"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "62a5f0e2-ea11-4f84-a047-c5a7850ced68"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazonaws.dynamodb.v20120810#IdempotentParameterMismatchException\",\"Message\":\"Specified idempotent token was used with different request parameters within the idempotency window\"}"
+  }
+}

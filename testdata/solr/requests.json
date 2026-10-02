@@ -1,0 +1,2949 @@
+{
+  "driver": "solr",
+  "requests": [
+    {
+      "item": 1,
+      "name": "remove the alias of an earlier run",
+      "method": "GET",
+      "path": "/solr/admin/collections?action=DELETEALIAS&name=dbimp_alias",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "remove the collection of an earlier run",
+      "method": "GET",
+      "path": "/solr/admin/collections?action=DELETE&name=dbimp",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "remove the configuration set of an earlier run",
+      "method": "GET",
+      "path": "/solr/admin/configs?action=DELETE&name=dbimp",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "make the configuration set",
+      "method": "GET",
+      "path": "/solr/admin/configs?action=CREATE&name=dbimp&baseConfigSet=_default",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "unload a core that an earlier run left",
+      "method": "GET",
+      "path": "/solr/admin/cores?action=UNLOAD&core=dbimp_shard1_replica_n1&deleteInstanceDir=true",
+      "phase": "setup",
+      "wait": "1s"
+    },
+    {
+      "item": 1,
+      "name": "make the collection",
+      "method": "GET",
+      "path": "/solr/admin/collections?action=CREATE&name=dbimp&numShards=1&replicationFactor=1&collection.configName=dbimp",
+      "phase": "setup"
+    },
+    {
+      "item": 3,
+      "name": "add the field types",
+      "method": "POST",
+      "path": "/solr/dbimp/schema",
+      "phase": "setup",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "add-field-type": [
+          {
+            "name": "uuid",
+            "class": "solr.UUIDField"
+          },
+          {
+            "name": "daterange",
+            "class": "solr.DateRangeField"
+          },
+          {
+            "name": "knn",
+            "class": "solr.DenseVectorField",
+            "vectorDimension": 3,
+            "similarityFunction": "cosine"
+          },
+          {
+            "name": "sortabletext",
+            "class": "solr.SortableTextField"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "add the fields",
+      "method": "POST",
+      "path": "/solr/dbimp/schema",
+      "phase": "setup",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "add-field": [
+          {
+            "name": "n_i",
+            "type": "pint"
+          },
+          {
+            "name": "n_l",
+            "type": "plong"
+          },
+          {
+            "name": "n_f",
+            "type": "pfloat"
+          },
+          {
+            "name": "n_d",
+            "type": "pdouble"
+          },
+          {
+            "name": "n_b",
+            "type": "boolean"
+          },
+          {
+            "name": "n_s",
+            "type": "string"
+          },
+          {
+            "name": "n_t",
+            "type": "text_general",
+            "multiValued": false
+          },
+          {
+            "name": "n_st",
+            "type": "sortabletext"
+          },
+          {
+            "name": "n_dt",
+            "type": "pdate"
+          },
+          {
+            "name": "n_bin",
+            "type": "binary"
+          },
+          {
+            "name": "n_u",
+            "type": "uuid"
+          },
+          {
+            "name": "n_loc",
+            "type": "location"
+          },
+          {
+            "name": "n_is",
+            "type": "pints"
+          },
+          {
+            "name": "n_ls",
+            "type": "plongs"
+          },
+          {
+            "name": "n_ds",
+            "type": "pdoubles"
+          },
+          {
+            "name": "n_ss",
+            "type": "strings"
+          },
+          {
+            "name": "n_bs",
+            "type": "booleans"
+          },
+          {
+            "name": "n_dts",
+            "type": "pdates"
+          },
+          {
+            "name": "n_v",
+            "type": "knn"
+          },
+          {
+            "name": "n_dr",
+            "type": "daterange"
+          },
+          {
+            "name": "n_def",
+            "type": "string",
+            "default": "the default"
+          },
+          {
+            "name": "n_cp",
+            "type": "strings"
+          }
+        ],
+        "add-copy-field": {
+          "source": "n_s",
+          "dest": "n_cp"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "add an enum type with no configuration file",
+      "method": "POST",
+      "path": "/solr/dbimp/schema",
+      "phase": "setup",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "add-field-type": {
+          "name": "enum",
+          "class": "solr.EnumFieldType",
+          "enumsConfig": "enumsConfig.xml",
+          "enumName": "severity"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "add the documents of every type",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "phase": "setup",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        {
+          "id": "1",
+          "n_i": 2147483647,
+          "n_l": 9223372036854775807,
+          "n_f": 3.4028235e+38,
+          "n_d": 1.7976931348623157e+308,
+          "n_b": true,
+          "n_s": "héllo wörld 日本 🙂",
+          "n_t": "the quick brown fox",
+          "n_st": "Sortable Text",
+          "n_dt": "9999-12-31T23:59:59.999Z",
+          "n_bin": "AAEC/w==",
+          "n_u": "8a3f1c2e-0b7d-4f6e-9a1b-2c3d4e5f6a7b",
+          "n_loc": "45.5,-122.6",
+          "n_is": [
+            1,
+            2,
+            3
+          ],
+          "n_ls": [
+            9223372036854775807,
+            -1
+          ],
+          "n_ds": [
+            0.5,
+            -0.25
+          ],
+          "n_ss": [
+            "a",
+            "b"
+          ],
+          "n_bs": [
+            true,
+            false
+          ],
+          "n_dts": [
+            "2026-10-01T00:00:00Z"
+          ],
+          "n_x_s": "a dynamic field"
+        },
+        {
+          "id": "2",
+          "n_i": -2147483648,
+          "n_l": -9223372036854775808,
+          "n_f": 0.1,
+          "n_d": 2.0,
+          "n_b": false,
+          "n_s": "",
+          "n_t": "",
+          "n_dt": "0001-01-01T00:00:00Z",
+          "n_is": [],
+          "n_ss": [
+            ""
+          ]
+        },
+        {
+          "id": "3",
+          "n_dt": "2026-10-01T12:34:56.123456789Z",
+          "n_v": [
+            0.1,
+            0.2,
+            0.3
+          ],
+          "n_dr": "[2026-01-01 TO 2026-12-31]"
+        }
+      ]
+    },
+    {
+      "item": 5,
+      "name": "add 300 documents",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "phase": "setup",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        {
+          "id": "p000",
+          "n_i": 0
+        },
+        {
+          "id": "p001",
+          "n_i": 1
+        },
+        {
+          "id": "p002",
+          "n_i": 2
+        },
+        {
+          "id": "p003",
+          "n_i": 3
+        },
+        {
+          "id": "p004",
+          "n_i": 4
+        },
+        {
+          "id": "p005",
+          "n_i": 5
+        },
+        {
+          "id": "p006",
+          "n_i": 6
+        },
+        {
+          "id": "p007",
+          "n_i": 7
+        },
+        {
+          "id": "p008",
+          "n_i": 8
+        },
+        {
+          "id": "p009",
+          "n_i": 9
+        },
+        {
+          "id": "p010",
+          "n_i": 10
+        },
+        {
+          "id": "p011",
+          "n_i": 11
+        },
+        {
+          "id": "p012",
+          "n_i": 12
+        },
+        {
+          "id": "p013",
+          "n_i": 13
+        },
+        {
+          "id": "p014",
+          "n_i": 14
+        },
+        {
+          "id": "p015",
+          "n_i": 15
+        },
+        {
+          "id": "p016",
+          "n_i": 16
+        },
+        {
+          "id": "p017",
+          "n_i": 17
+        },
+        {
+          "id": "p018",
+          "n_i": 18
+        },
+        {
+          "id": "p019",
+          "n_i": 19
+        },
+        {
+          "id": "p020",
+          "n_i": 20
+        },
+        {
+          "id": "p021",
+          "n_i": 21
+        },
+        {
+          "id": "p022",
+          "n_i": 22
+        },
+        {
+          "id": "p023",
+          "n_i": 23
+        },
+        {
+          "id": "p024",
+          "n_i": 24
+        },
+        {
+          "id": "p025",
+          "n_i": 25
+        },
+        {
+          "id": "p026",
+          "n_i": 26
+        },
+        {
+          "id": "p027",
+          "n_i": 27
+        },
+        {
+          "id": "p028",
+          "n_i": 28
+        },
+        {
+          "id": "p029",
+          "n_i": 29
+        },
+        {
+          "id": "p030",
+          "n_i": 30
+        },
+        {
+          "id": "p031",
+          "n_i": 31
+        },
+        {
+          "id": "p032",
+          "n_i": 32
+        },
+        {
+          "id": "p033",
+          "n_i": 33
+        },
+        {
+          "id": "p034",
+          "n_i": 34
+        },
+        {
+          "id": "p035",
+          "n_i": 35
+        },
+        {
+          "id": "p036",
+          "n_i": 36
+        },
+        {
+          "id": "p037",
+          "n_i": 37
+        },
+        {
+          "id": "p038",
+          "n_i": 38
+        },
+        {
+          "id": "p039",
+          "n_i": 39
+        },
+        {
+          "id": "p040",
+          "n_i": 40
+        },
+        {
+          "id": "p041",
+          "n_i": 41
+        },
+        {
+          "id": "p042",
+          "n_i": 42
+        },
+        {
+          "id": "p043",
+          "n_i": 43
+        },
+        {
+          "id": "p044",
+          "n_i": 44
+        },
+        {
+          "id": "p045",
+          "n_i": 45
+        },
+        {
+          "id": "p046",
+          "n_i": 46
+        },
+        {
+          "id": "p047",
+          "n_i": 47
+        },
+        {
+          "id": "p048",
+          "n_i": 48
+        },
+        {
+          "id": "p049",
+          "n_i": 49
+        },
+        {
+          "id": "p050",
+          "n_i": 50
+        },
+        {
+          "id": "p051",
+          "n_i": 51
+        },
+        {
+          "id": "p052",
+          "n_i": 52
+        },
+        {
+          "id": "p053",
+          "n_i": 53
+        },
+        {
+          "id": "p054",
+          "n_i": 54
+        },
+        {
+          "id": "p055",
+          "n_i": 55
+        },
+        {
+          "id": "p056",
+          "n_i": 56
+        },
+        {
+          "id": "p057",
+          "n_i": 57
+        },
+        {
+          "id": "p058",
+          "n_i": 58
+        },
+        {
+          "id": "p059",
+          "n_i": 59
+        },
+        {
+          "id": "p060",
+          "n_i": 60
+        },
+        {
+          "id": "p061",
+          "n_i": 61
+        },
+        {
+          "id": "p062",
+          "n_i": 62
+        },
+        {
+          "id": "p063",
+          "n_i": 63
+        },
+        {
+          "id": "p064",
+          "n_i": 64
+        },
+        {
+          "id": "p065",
+          "n_i": 65
+        },
+        {
+          "id": "p066",
+          "n_i": 66
+        },
+        {
+          "id": "p067",
+          "n_i": 67
+        },
+        {
+          "id": "p068",
+          "n_i": 68
+        },
+        {
+          "id": "p069",
+          "n_i": 69
+        },
+        {
+          "id": "p070",
+          "n_i": 70
+        },
+        {
+          "id": "p071",
+          "n_i": 71
+        },
+        {
+          "id": "p072",
+          "n_i": 72
+        },
+        {
+          "id": "p073",
+          "n_i": 73
+        },
+        {
+          "id": "p074",
+          "n_i": 74
+        },
+        {
+          "id": "p075",
+          "n_i": 75
+        },
+        {
+          "id": "p076",
+          "n_i": 76
+        },
+        {
+          "id": "p077",
+          "n_i": 77
+        },
+        {
+          "id": "p078",
+          "n_i": 78
+        },
+        {
+          "id": "p079",
+          "n_i": 79
+        },
+        {
+          "id": "p080",
+          "n_i": 80
+        },
+        {
+          "id": "p081",
+          "n_i": 81
+        },
+        {
+          "id": "p082",
+          "n_i": 82
+        },
+        {
+          "id": "p083",
+          "n_i": 83
+        },
+        {
+          "id": "p084",
+          "n_i": 84
+        },
+        {
+          "id": "p085",
+          "n_i": 85
+        },
+        {
+          "id": "p086",
+          "n_i": 86
+        },
+        {
+          "id": "p087",
+          "n_i": 87
+        },
+        {
+          "id": "p088",
+          "n_i": 88
+        },
+        {
+          "id": "p089",
+          "n_i": 89
+        },
+        {
+          "id": "p090",
+          "n_i": 90
+        },
+        {
+          "id": "p091",
+          "n_i": 91
+        },
+        {
+          "id": "p092",
+          "n_i": 92
+        },
+        {
+          "id": "p093",
+          "n_i": 93
+        },
+        {
+          "id": "p094",
+          "n_i": 94
+        },
+        {
+          "id": "p095",
+          "n_i": 95
+        },
+        {
+          "id": "p096",
+          "n_i": 96
+        },
+        {
+          "id": "p097",
+          "n_i": 97
+        },
+        {
+          "id": "p098",
+          "n_i": 98
+        },
+        {
+          "id": "p099",
+          "n_i": 99
+        },
+        {
+          "id": "p100",
+          "n_i": 100
+        },
+        {
+          "id": "p101",
+          "n_i": 101
+        },
+        {
+          "id": "p102",
+          "n_i": 102
+        },
+        {
+          "id": "p103",
+          "n_i": 103
+        },
+        {
+          "id": "p104",
+          "n_i": 104
+        },
+        {
+          "id": "p105",
+          "n_i": 105
+        },
+        {
+          "id": "p106",
+          "n_i": 106
+        },
+        {
+          "id": "p107",
+          "n_i": 107
+        },
+        {
+          "id": "p108",
+          "n_i": 108
+        },
+        {
+          "id": "p109",
+          "n_i": 109
+        },
+        {
+          "id": "p110",
+          "n_i": 110
+        },
+        {
+          "id": "p111",
+          "n_i": 111
+        },
+        {
+          "id": "p112",
+          "n_i": 112
+        },
+        {
+          "id": "p113",
+          "n_i": 113
+        },
+        {
+          "id": "p114",
+          "n_i": 114
+        },
+        {
+          "id": "p115",
+          "n_i": 115
+        },
+        {
+          "id": "p116",
+          "n_i": 116
+        },
+        {
+          "id": "p117",
+          "n_i": 117
+        },
+        {
+          "id": "p118",
+          "n_i": 118
+        },
+        {
+          "id": "p119",
+          "n_i": 119
+        },
+        {
+          "id": "p120",
+          "n_i": 120
+        },
+        {
+          "id": "p121",
+          "n_i": 121
+        },
+        {
+          "id": "p122",
+          "n_i": 122
+        },
+        {
+          "id": "p123",
+          "n_i": 123
+        },
+        {
+          "id": "p124",
+          "n_i": 124
+        },
+        {
+          "id": "p125",
+          "n_i": 125
+        },
+        {
+          "id": "p126",
+          "n_i": 126
+        },
+        {
+          "id": "p127",
+          "n_i": 127
+        },
+        {
+          "id": "p128",
+          "n_i": 128
+        },
+        {
+          "id": "p129",
+          "n_i": 129
+        },
+        {
+          "id": "p130",
+          "n_i": 130
+        },
+        {
+          "id": "p131",
+          "n_i": 131
+        },
+        {
+          "id": "p132",
+          "n_i": 132
+        },
+        {
+          "id": "p133",
+          "n_i": 133
+        },
+        {
+          "id": "p134",
+          "n_i": 134
+        },
+        {
+          "id": "p135",
+          "n_i": 135
+        },
+        {
+          "id": "p136",
+          "n_i": 136
+        },
+        {
+          "id": "p137",
+          "n_i": 137
+        },
+        {
+          "id": "p138",
+          "n_i": 138
+        },
+        {
+          "id": "p139",
+          "n_i": 139
+        },
+        {
+          "id": "p140",
+          "n_i": 140
+        },
+        {
+          "id": "p141",
+          "n_i": 141
+        },
+        {
+          "id": "p142",
+          "n_i": 142
+        },
+        {
+          "id": "p143",
+          "n_i": 143
+        },
+        {
+          "id": "p144",
+          "n_i": 144
+        },
+        {
+          "id": "p145",
+          "n_i": 145
+        },
+        {
+          "id": "p146",
+          "n_i": 146
+        },
+        {
+          "id": "p147",
+          "n_i": 147
+        },
+        {
+          "id": "p148",
+          "n_i": 148
+        },
+        {
+          "id": "p149",
+          "n_i": 149
+        },
+        {
+          "id": "p150",
+          "n_i": 150
+        },
+        {
+          "id": "p151",
+          "n_i": 151
+        },
+        {
+          "id": "p152",
+          "n_i": 152
+        },
+        {
+          "id": "p153",
+          "n_i": 153
+        },
+        {
+          "id": "p154",
+          "n_i": 154
+        },
+        {
+          "id": "p155",
+          "n_i": 155
+        },
+        {
+          "id": "p156",
+          "n_i": 156
+        },
+        {
+          "id": "p157",
+          "n_i": 157
+        },
+        {
+          "id": "p158",
+          "n_i": 158
+        },
+        {
+          "id": "p159",
+          "n_i": 159
+        },
+        {
+          "id": "p160",
+          "n_i": 160
+        },
+        {
+          "id": "p161",
+          "n_i": 161
+        },
+        {
+          "id": "p162",
+          "n_i": 162
+        },
+        {
+          "id": "p163",
+          "n_i": 163
+        },
+        {
+          "id": "p164",
+          "n_i": 164
+        },
+        {
+          "id": "p165",
+          "n_i": 165
+        },
+        {
+          "id": "p166",
+          "n_i": 166
+        },
+        {
+          "id": "p167",
+          "n_i": 167
+        },
+        {
+          "id": "p168",
+          "n_i": 168
+        },
+        {
+          "id": "p169",
+          "n_i": 169
+        },
+        {
+          "id": "p170",
+          "n_i": 170
+        },
+        {
+          "id": "p171",
+          "n_i": 171
+        },
+        {
+          "id": "p172",
+          "n_i": 172
+        },
+        {
+          "id": "p173",
+          "n_i": 173
+        },
+        {
+          "id": "p174",
+          "n_i": 174
+        },
+        {
+          "id": "p175",
+          "n_i": 175
+        },
+        {
+          "id": "p176",
+          "n_i": 176
+        },
+        {
+          "id": "p177",
+          "n_i": 177
+        },
+        {
+          "id": "p178",
+          "n_i": 178
+        },
+        {
+          "id": "p179",
+          "n_i": 179
+        },
+        {
+          "id": "p180",
+          "n_i": 180
+        },
+        {
+          "id": "p181",
+          "n_i": 181
+        },
+        {
+          "id": "p182",
+          "n_i": 182
+        },
+        {
+          "id": "p183",
+          "n_i": 183
+        },
+        {
+          "id": "p184",
+          "n_i": 184
+        },
+        {
+          "id": "p185",
+          "n_i": 185
+        },
+        {
+          "id": "p186",
+          "n_i": 186
+        },
+        {
+          "id": "p187",
+          "n_i": 187
+        },
+        {
+          "id": "p188",
+          "n_i": 188
+        },
+        {
+          "id": "p189",
+          "n_i": 189
+        },
+        {
+          "id": "p190",
+          "n_i": 190
+        },
+        {
+          "id": "p191",
+          "n_i": 191
+        },
+        {
+          "id": "p192",
+          "n_i": 192
+        },
+        {
+          "id": "p193",
+          "n_i": 193
+        },
+        {
+          "id": "p194",
+          "n_i": 194
+        },
+        {
+          "id": "p195",
+          "n_i": 195
+        },
+        {
+          "id": "p196",
+          "n_i": 196
+        },
+        {
+          "id": "p197",
+          "n_i": 197
+        },
+        {
+          "id": "p198",
+          "n_i": 198
+        },
+        {
+          "id": "p199",
+          "n_i": 199
+        },
+        {
+          "id": "p200",
+          "n_i": 200
+        },
+        {
+          "id": "p201",
+          "n_i": 201
+        },
+        {
+          "id": "p202",
+          "n_i": 202
+        },
+        {
+          "id": "p203",
+          "n_i": 203
+        },
+        {
+          "id": "p204",
+          "n_i": 204
+        },
+        {
+          "id": "p205",
+          "n_i": 205
+        },
+        {
+          "id": "p206",
+          "n_i": 206
+        },
+        {
+          "id": "p207",
+          "n_i": 207
+        },
+        {
+          "id": "p208",
+          "n_i": 208
+        },
+        {
+          "id": "p209",
+          "n_i": 209
+        },
+        {
+          "id": "p210",
+          "n_i": 210
+        },
+        {
+          "id": "p211",
+          "n_i": 211
+        },
+        {
+          "id": "p212",
+          "n_i": 212
+        },
+        {
+          "id": "p213",
+          "n_i": 213
+        },
+        {
+          "id": "p214",
+          "n_i": 214
+        },
+        {
+          "id": "p215",
+          "n_i": 215
+        },
+        {
+          "id": "p216",
+          "n_i": 216
+        },
+        {
+          "id": "p217",
+          "n_i": 217
+        },
+        {
+          "id": "p218",
+          "n_i": 218
+        },
+        {
+          "id": "p219",
+          "n_i": 219
+        },
+        {
+          "id": "p220",
+          "n_i": 220
+        },
+        {
+          "id": "p221",
+          "n_i": 221
+        },
+        {
+          "id": "p222",
+          "n_i": 222
+        },
+        {
+          "id": "p223",
+          "n_i": 223
+        },
+        {
+          "id": "p224",
+          "n_i": 224
+        },
+        {
+          "id": "p225",
+          "n_i": 225
+        },
+        {
+          "id": "p226",
+          "n_i": 226
+        },
+        {
+          "id": "p227",
+          "n_i": 227
+        },
+        {
+          "id": "p228",
+          "n_i": 228
+        },
+        {
+          "id": "p229",
+          "n_i": 229
+        },
+        {
+          "id": "p230",
+          "n_i": 230
+        },
+        {
+          "id": "p231",
+          "n_i": 231
+        },
+        {
+          "id": "p232",
+          "n_i": 232
+        },
+        {
+          "id": "p233",
+          "n_i": 233
+        },
+        {
+          "id": "p234",
+          "n_i": 234
+        },
+        {
+          "id": "p235",
+          "n_i": 235
+        },
+        {
+          "id": "p236",
+          "n_i": 236
+        },
+        {
+          "id": "p237",
+          "n_i": 237
+        },
+        {
+          "id": "p238",
+          "n_i": 238
+        },
+        {
+          "id": "p239",
+          "n_i": 239
+        },
+        {
+          "id": "p240",
+          "n_i": 240
+        },
+        {
+          "id": "p241",
+          "n_i": 241
+        },
+        {
+          "id": "p242",
+          "n_i": 242
+        },
+        {
+          "id": "p243",
+          "n_i": 243
+        },
+        {
+          "id": "p244",
+          "n_i": 244
+        },
+        {
+          "id": "p245",
+          "n_i": 245
+        },
+        {
+          "id": "p246",
+          "n_i": 246
+        },
+        {
+          "id": "p247",
+          "n_i": 247
+        },
+        {
+          "id": "p248",
+          "n_i": 248
+        },
+        {
+          "id": "p249",
+          "n_i": 249
+        },
+        {
+          "id": "p250",
+          "n_i": 250
+        },
+        {
+          "id": "p251",
+          "n_i": 251
+        },
+        {
+          "id": "p252",
+          "n_i": 252
+        },
+        {
+          "id": "p253",
+          "n_i": 253
+        },
+        {
+          "id": "p254",
+          "n_i": 254
+        },
+        {
+          "id": "p255",
+          "n_i": 255
+        },
+        {
+          "id": "p256",
+          "n_i": 256
+        },
+        {
+          "id": "p257",
+          "n_i": 257
+        },
+        {
+          "id": "p258",
+          "n_i": 258
+        },
+        {
+          "id": "p259",
+          "n_i": 259
+        },
+        {
+          "id": "p260",
+          "n_i": 260
+        },
+        {
+          "id": "p261",
+          "n_i": 261
+        },
+        {
+          "id": "p262",
+          "n_i": 262
+        },
+        {
+          "id": "p263",
+          "n_i": 263
+        },
+        {
+          "id": "p264",
+          "n_i": 264
+        },
+        {
+          "id": "p265",
+          "n_i": 265
+        },
+        {
+          "id": "p266",
+          "n_i": 266
+        },
+        {
+          "id": "p267",
+          "n_i": 267
+        },
+        {
+          "id": "p268",
+          "n_i": 268
+        },
+        {
+          "id": "p269",
+          "n_i": 269
+        },
+        {
+          "id": "p270",
+          "n_i": 270
+        },
+        {
+          "id": "p271",
+          "n_i": 271
+        },
+        {
+          "id": "p272",
+          "n_i": 272
+        },
+        {
+          "id": "p273",
+          "n_i": 273
+        },
+        {
+          "id": "p274",
+          "n_i": 274
+        },
+        {
+          "id": "p275",
+          "n_i": 275
+        },
+        {
+          "id": "p276",
+          "n_i": 276
+        },
+        {
+          "id": "p277",
+          "n_i": 277
+        },
+        {
+          "id": "p278",
+          "n_i": 278
+        },
+        {
+          "id": "p279",
+          "n_i": 279
+        },
+        {
+          "id": "p280",
+          "n_i": 280
+        },
+        {
+          "id": "p281",
+          "n_i": 281
+        },
+        {
+          "id": "p282",
+          "n_i": 282
+        },
+        {
+          "id": "p283",
+          "n_i": 283
+        },
+        {
+          "id": "p284",
+          "n_i": 284
+        },
+        {
+          "id": "p285",
+          "n_i": 285
+        },
+        {
+          "id": "p286",
+          "n_i": 286
+        },
+        {
+          "id": "p287",
+          "n_i": 287
+        },
+        {
+          "id": "p288",
+          "n_i": 288
+        },
+        {
+          "id": "p289",
+          "n_i": 289
+        },
+        {
+          "id": "p290",
+          "n_i": 290
+        },
+        {
+          "id": "p291",
+          "n_i": 291
+        },
+        {
+          "id": "p292",
+          "n_i": 292
+        },
+        {
+          "id": "p293",
+          "n_i": 293
+        },
+        {
+          "id": "p294",
+          "n_i": 294
+        },
+        {
+          "id": "p295",
+          "n_i": 295
+        },
+        {
+          "id": "p296",
+          "n_i": 296
+        },
+        {
+          "id": "p297",
+          "n_i": 297
+        },
+        {
+          "id": "p298",
+          "n_i": 298
+        },
+        {
+          "id": "p299",
+          "n_i": 299
+        }
+      ]
+    },
+    {
+      "item": 1,
+      "name": "make an alias",
+      "method": "GET",
+      "path": "/solr/admin/collections?action=CREATEALIAS&name=dbimp_alias&collections=dbimp",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a statement",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement by GET",
+      "method": "GET",
+      "path": "/solr/dbimp/sql?stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+3"
+    },
+    {
+      "item": 1,
+      "name": "a statement sent to another collection",
+      "method": "POST",
+      "path": "/solr/dbmeta/sql",
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement in a body of JSON",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "params": {
+          "stmt": "SELECT id FROM dbimp LIMIT 1"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement sent to a collection that does not exist",
+      "method": "POST",
+      "path": "/solr/nothere/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on an alias",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+count%28%2A%29+AS+n+FROM+dbimp_alias",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: sql insert",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=INSERT+INTO+dbimp+%28id%2C+n_s%29+VALUES+%28%27c1%27%2C+%27inserted%27%29",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: sql update",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=UPDATE+dbimp+SET+n_s+%3D+%27updated%27+WHERE+id+%3D+%27c1%27",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: sql delete",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=DELETE+FROM+dbimp+WHERE+id+%3D+%27c1%27",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: insert",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        {
+          "id": "c1",
+          "n_s": "inserted",
+          "n_i": 1
+        }
+      ]
+    },
+    {
+      "item": 1,
+      "name": "crud: select",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_s%2C+n_i+FROM+dbimp+WHERE+id+%3D+%27c1%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: update",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        {
+          "id": "c1",
+          "n_s": {
+            "set": "updated"
+          },
+          "n_i": {
+            "inc": 1
+          },
+          "n_is": {
+            "add": [
+              7
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "item": 1,
+      "name": "crud: select after the update",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_s%2C+n_i%2C+n_is+FROM+dbimp+WHERE+id+%3D+%27c1%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: replace",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        {
+          "id": "c1",
+          "n_s": "replaced"
+        }
+      ]
+    },
+    {
+      "item": 1,
+      "name": "crud: select after the replace",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_s%2C+n_i+FROM+dbimp+WHERE+id+%3D+%27c1%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: delete",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "delete": {
+          "id": "c1"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: insert two",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": [
+        {
+          "id": "c2",
+          "n_s": "by query"
+        },
+        {
+          "id": "c3",
+          "n_s": "by query"
+        }
+      ]
+    },
+    {
+      "item": 1,
+      "name": "crud: delete by query",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "delete": {
+          "query": "n_s:\"by query\""
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: select after the delete",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%27c1%27+OR+id+%3D+%27c2%27+OR+id+%3D+%27c3%27+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: the unique key",
+      "method": "GET",
+      "path": "/solr/dbimp/schema/uniquekey"
+    },
+    {
+      "item": 1,
+      "name": "schema: the fields",
+      "method": "GET",
+      "path": "/solr/dbimp/schema/fields"
+    },
+    {
+      "item": 1,
+      "name": "schema: a default, a copy field and a dynamic field",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_def%2C+n_cp%2C+n_x_s+FROM+dbimp+WHERE+id+%3D+%271%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: create table",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=CREATE+TABLE+t+%28id+VARCHAR+PRIMARY+KEY%2C+p+VARCHAR+REFERENCES+u+%28id%29%2C+UNIQUE+%28p%29%29",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: create index",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=CREATE+INDEX+i+ON+dbimp+%28n_s%29",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: create view",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=CREATE+VIEW+v+AS+SELECT+id+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the order of the columns",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_l%2C+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the metadata of the columns",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_l%2C+id+AS+x%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+3&includeMetadata=true",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "no rows, with the metadata",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_l%2C+id+AS+x+FROM+dbimp+WHERE+id+%3D+%27none%27+LIMIT+3&includeMetadata=true",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "no rows, without the metadata",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_l%2C+id+AS+x+FROM+dbimp+WHERE+id+%3D+%27none%27+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+AS+a%2C+id+AS+b%2C+n_i+AS+b+FROM+dbimp+ORDER+BY+id+LIMIT+2&includeMetadata=true",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "every field",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+%2A+FROM+dbimp+ORDER+BY+id+LIMIT+2&includeMetadata=true",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "an aggregate with no name",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+count%28%2A%29%2C+min%28n_i%29+FROM+dbimp&includeMetadata=true",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the types of the columns",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+columnName%2C+dataType%2C+typeName+FROM+metadata.COLUMNS+WHERE+tableName+%3D+%27dbimp%27",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the tables",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+tableSchem%2C+tableName%2C+tableType+FROM+metadata.TABLES",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i%2C+n_l%2C+n_f%2C+n_d%2C+n_b%2C+n_s%2C+n_t%2C+n_st%2C+n_dt%2C+n_bin%2C+n_u%2C+n_loc%2C+n_is%2C+n_ls%2C+n_ds%2C+n_ss%2C+n_bs%2C+n_dts+FROM+dbimp+WHERE+id+%3D+%271%27+OR+id+%3D+%272%27+OR+id+%3D+%273%27+ORDER+BY+id+LIMIT+3&includeMetadata=true",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type with docValues, with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i%2C+n_l%2C+n_f%2C+n_d%2C+n_b%2C+n_s%2C+n_dt%2C+n_is%2C+n_ls%2C+n_ds%2C+n_ss%2C+n_bs%2C+n_dts+FROM+dbimp+WHERE+id+%3D+%271%27+OR+id+%3D+%272%27+OR+id+%3D+%273%27",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a uuid and a location with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_u%2C+n_loc+FROM+dbimp+WHERE+id+%3D+%271%27",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a vector",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_v+FROM+dbimp+ORDER+BY+id+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a date range",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_dr+FROM+dbimp+ORDER+BY+id+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "the average of integers",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+avg%28n_i%29+AS+a%2C+sum%28n_i%29+AS+s%2C+count%28%2A%29+AS+c%2C+avg%28n_d%29+AS+ad+FROM+dbimp+WHERE+id+%3D+%271%27+OR+id+%3D+%272%27",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a filter on a boolean",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_b+FROM+dbimp+WHERE+n_b+%3D+true+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a filter on a date",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_dt+FROM+dbimp+WHERE+n_dt+%3E+%272026-01-01T00%3A00%3A00Z%27+ORDER+BY+id+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a filter on NULL",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+n_s+IS+NULL+AND+%28id+%3D+%271%27+OR+id+%3D+%272%27+OR+id+%3D+%273%27%29+ORDER+BY+id+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "an expression in the projection",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_i+%2A+2+AS+twice%2C+CAST%28n_i+AS+DECIMAL%2810%2C2%29%29+AS+d+FROM+dbimp+WHERE+id+%3D+%271%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "a literal in the projection",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+1+AS+one+FROM+dbimp+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type through the select handler",
+      "method": "GET",
+      "path": "/solr/dbimp/select?q=id%3A1+OR+id%3A2+OR+id%3A3&sort=id+asc&fl=id%2C+n_i%2C+n_l%2C+n_f%2C+n_d%2C+n_b%2C+n_s%2C+n_t%2C+n_st%2C+n_dt%2C+n_bin%2C+n_u%2C+n_loc%2C+n_is%2C+n_ls%2C+n_ds%2C+n_ss%2C+n_bs%2C+n_dts%2C+n_v%2C+n_dr"
+    },
+    {
+      "item": 4,
+      "name": "a placeholder",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%3F+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a named parameter",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%3Aid+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a quote in a literal",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+n_s+%3D+%27it%27%27s%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result with no limit, sorted",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+n_i+DESC",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a limit above the rows",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+1000",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a limit and an offset",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+ORDER+BY+id+LIMIT+5+OFFSET+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "fetch next rows",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+ORDER+BY+id+OFFSET+5+ROWS+FETCH+NEXT+5+ROWS+ONLY",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "an offset with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+OFFSET+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a text field with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_t+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "score with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+score+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a group of each value",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_i%2C+count%28%2A%29+AS+c+FROM+dbimp+GROUP+BY+n_i",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "distinct values",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+DISTINCT+n_i+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELEC+id+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a table that does not exist",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+nothere+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a column that does not exist",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+nothere+FROM+dbimp+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "no statement",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "aggregationMode=facet"
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_dr+FROM+dbimp+ORDER+BY+id+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows of a group",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_i%2C+count%28%2A%29+AS+c+FROM+dbimp+WHERE+id+%3D+%272%27+OR+id+%3D+%273%27+GROUP+BY+n_i&aggregationMode=map_reduce",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 7,
+      "name": "a query that the client leaves",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+n_i",
+      "timeout": "1ms",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 7,
+      "name": "a query after the client left",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+count%28%2A%29+AS+n+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 7,
+      "name": "the tasks that run",
+      "method": "GET",
+      "path": "/solr/dbimp/tasks/list"
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+LIMIT+1",
+      "auth": "wrong",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 8,
+      "name": "the list of collections",
+      "method": "GET",
+      "path": "/solr/admin/collections?action=LIST"
+    },
+    {
+      "item": 8,
+      "name": "the luke handler",
+      "method": "GET",
+      "path": "/solr/dbimp/admin/luke?numTerms=0&show=schema"
+    },
+    {
+      "item": 8,
+      "name": "a streaming expression",
+      "method": "POST",
+      "path": "/solr/dbimp/stream",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "expr=search%28dbimp%2Cq%3D%22id%3A1%22%2Cfl%3D%22id%2Cn_i%22%2Csort%3D%22id+asc%22%29"
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "GET",
+      "path": "/solr/admin/info/system?wt=json"
+    },
+    {
+      "item": 9,
+      "name": "the version through the v2 API",
+      "method": "GET",
+      "path": "/api/node/system"
+    },
+    {
+      "item": 10,
+      "name": "two statements in one request",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%271%27+LIMIT+1%3B+SELECT+id+FROM+dbimp+WHERE+id+%3D+%272%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement that ends with a semicolon",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%271%27+LIMIT+1%3B",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "comments",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=--+a+comment%0ASELECT+id+%2F%2A+another+%2A%2F+FROM+dbimp+WHERE+id+%3D+%271%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "quoted names",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+%60id%60%2C+%60n_i%60+FROM+%60dbimp%60+WHERE+%60id%60+%3D+%271%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "a string in double quotes",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%221%22+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "names in another case",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+ID%2C+N_I+FROM+DBIMP+WHERE+ID+%3D+%271%27+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 10,
+      "name": "explain",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=EXPLAIN+PLAN+FOR+SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+1",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=BEGIN",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=COMMIT",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 12,
+      "name": "a gzip answer",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+300",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      }
+    },
+    {
+      "item": 12,
+      "name": "a path with no slash",
+      "method": "GET",
+      "path": "/solr"
+    },
+    {
+      "item": 3,
+      "name": "feature: full text search",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_t+FROM+dbimp+WHERE+n_t+%3D+%27quick%27+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a lucene query",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+_query_+%3D+%27n_t%3Afox%27+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a lucene query with spaces",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+_query_+%3D+%27n_t%3Afox+AND+n_i%3A%5B0+TO+%2A%5D%27+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a sortable text field with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_st+FROM+dbimp",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: score",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+score+FROM+dbimp+WHERE+n_t+%3D+%27quick%27+ORDER+BY+score+DESC+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a wildcard in equality",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+n_s+%3D+%27h%2A%27+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a group by facet",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_s%2C+count%28%2A%29+AS+c+FROM+dbimp+WHERE+id+%3D+%271%27+OR+id+%3D+%272%27+OR+id+%3D+%273%27+GROUP+BY+n_s",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a group by map reduce",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_s%2C+count%28%2A%29+AS+c+FROM+dbimp+WHERE+id+%3D+%271%27+OR+id+%3D+%272%27+OR+id+%3D+%273%27+GROUP+BY+n_s&aggregationMode=map_reduce",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: having and an order of an aggregate",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+n_i%2C+count%28%2A%29+AS+c+FROM+dbimp+GROUP+BY+n_i+HAVING+count%28%2A%29+%3E+0+ORDER+BY+n_i+DESC+LIMIT+3",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: join",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+a.id+FROM+dbimp+a+JOIN+dbmeta+b+ON+a.id+%3D+b.id+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: array contains",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+ARRAY_CONTAINS%28n_ss%2C+%27a%27%29+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a multi-valued field in a filter",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id%2C+n_ss+FROM+dbimp+WHERE+n_ss+%3D+%27a%27+LIMIT+5",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: union",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "text": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%271%27+UNION+SELECT+id+FROM+dbimp+WHERE+id+%3D+%272%27",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "lead: a group ordered by its count, with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+n_i%2C+count%28%2A%29+AS+c+FROM+dbimp+GROUP+BY+n_i+ORDER+BY+count%28%2A%29+DESC"
+    },
+    {
+      "item": 5,
+      "name": "lead: a group ordered by its count, map reduce",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+n_i%2C+count%28%2A%29+AS+c+FROM+dbimp+WHERE+n_i+%3E%3D+0+GROUP+BY+n_i+ORDER+BY+count%28%2A%29+DESC&aggregationMode=map_reduce"
+    },
+    {
+      "item": 5,
+      "name": "lead: distinct ordered by another column, with no limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+n_i%2C+max%28id%29+AS+m+FROM+dbimp+GROUP+BY+n_i+ORDER+BY+max%28id%29+DESC"
+    },
+    {
+      "item": 5,
+      "name": "lead: a time limit",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+300&timeAllowed=1"
+    },
+    {
+      "item": 3,
+      "name": "lead: two workers",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+n_s%2C+count%28%2A%29+AS+c+FROM+dbimp+WHERE+id+%3D+%271%27+GROUP+BY+n_s&aggregationMode=map_reduce&numWorkers=2"
+    },
+    {
+      "item": 7,
+      "name": "lead: a query that can be cancelled",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+id+FROM+dbimp+ORDER+BY+id+LIMIT+3&canCancel=true&queryUUID=dbimp-lead"
+    },
+    {
+      "item": 7,
+      "name": "lead: cancel a query by its id",
+      "method": "GET",
+      "path": "/solr/dbimp/tasks/cancel?queryUUID=dbimp-lead"
+    },
+    {
+      "item": 11,
+      "name": "lead: roll back the update handler",
+      "method": "POST",
+      "path": "/solr/dbimp/update?rollback=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {}
+    },
+    {
+      "item": 3,
+      "name": "lead: add spatial fields",
+      "method": "POST",
+      "path": "/solr/dbimp/schema",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "releases": [
+        "solr-10.0.0"
+      ],
+      "phase": "teardown",
+      "body": {
+        "add-field-type": {
+          "name": "bbox",
+          "class": "solr.BBoxField",
+          "geo": "true",
+          "numberType": "pdouble",
+          "distanceUnits": "kilometers"
+        },
+        "add-field": [
+          {
+            "name": "n_rpt",
+            "type": "location_rpt"
+          },
+          {
+            "name": "n_bbox",
+            "type": "bbox"
+          },
+          {
+            "name": "n_pt",
+            "type": "point"
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "lead: add a document of spatial fields and infinities",
+      "method": "POST",
+      "path": "/solr/dbimp/update?commit=true",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "releases": [
+        "solr-10.0.0"
+      ],
+      "phase": "teardown",
+      "body": [
+        {
+          "id": "x1",
+          "n_rpt": "POINT(-122.6 45.5)",
+          "n_bbox": "ENVELOPE(-10, 20, 15, 10)",
+          "n_pt": "1.5,2.5",
+          "n_d": "Infinity",
+          "n_f": "NaN",
+          "n_ds": [
+            "-Infinity"
+          ]
+        }
+      ]
+    },
+    {
+      "item": 3,
+      "name": "lead: spatial fields",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+id%2C+n_rpt%2C+n_bbox%2C+n_pt+FROM+dbimp+WHERE+id+%3D+%27x1%27+LIMIT+1",
+      "releases": [
+        "solr-10.0.0"
+      ],
+      "phase": "teardown"
+    },
+    {
+      "item": 3,
+      "name": "lead: infinities",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+id%2C+n_d%2C+n_f%2C+n_ds+FROM+dbimp+WHERE+id+%3D+%27x1%27+LIMIT+1",
+      "releases": [
+        "solr-10.0.0"
+      ],
+      "phase": "teardown"
+    },
+    {
+      "item": 3,
+      "name": "lead: the types of the spatial fields",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+columnName%2C+dataType%2C+typeName+FROM+metadata.COLUMNS+WHERE+tableName+%3D+%27dbimp%27+AND+%28columnName+%3D+%27n_rpt%27+OR+columnName+%3D+%27n_bbox%27+OR+columnName+%3D+%27n_pt%27%29",
+      "releases": [
+        "solr-10.0.0"
+      ],
+      "phase": "teardown"
+    },
+    {
+      "item": 3,
+      "name": "lead: a join of a collection with itself",
+      "method": "POST",
+      "path": "/solr/dbimp/sql",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "stmt=SELECT+a.id%2C+b.n_i+FROM+dbimp+a+JOIN+dbimp+b+ON+a.id+%3D+b.id+WHERE+a.id+%3D+%271%27+LIMIT+5",
+      "releases": [
+        "solr-10.0.0"
+      ],
+      "phase": "teardown"
+    },
+    {
+      "item": 3,
+      "name": "add a currency type with no configuration file",
+      "method": "POST",
+      "path": "/solr/dbimp/schema",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "add-field-type": {
+          "name": "currency",
+          "class": "solr.CurrencyFieldType",
+          "amountLongSuffix": "_l",
+          "codeStrSuffix": "_s",
+          "defaultCurrency": "USD",
+          "currencyConfig": "currency.xml"
+        }
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "remove the alias",
+      "method": "GET",
+      "path": "/solr/admin/collections?action=DELETEALIAS&name=dbimp_alias",
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "remove the collection",
+      "method": "GET",
+      "path": "/solr/admin/collections?action=DELETE&name=dbimp",
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "remove the configuration set",
+      "method": "GET",
+      "path": "/solr/admin/configs?action=DELETE&name=dbimp",
+      "phase": "teardown"
+    }
+  ],
+  "absent": [
+    {
+      "item": 11,
+      "reason": "Solr has no transactions. SQL is read only, and a write through the update handler is kept at its commit, which nothing can undo. BEGIN and COMMIT are syntax errors (recorded)."
+    }
+  ]
+}

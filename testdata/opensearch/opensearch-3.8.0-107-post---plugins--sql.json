@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT TIMESTAMP '0001-01-01 00:00:00', TIMESTAMP '9999-12-31 23:59:59.999999999', DATE '0001-01-01', DATE '9999-12-31', TIME '00:00:00', TIME '23:59:59.999999999'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"TIMESTAMP '0001-01-01 00:00:00'\",\n      \"type\": \"timestamp\"\n    },\n    {\n      \"name\": \"TIMESTAMP '9999-12-31 23:59:59.999999999'\",\n      \"type\": \"timestamp\"\n    },\n    {\n      \"name\": \"DATE '0001-01-01'\",\n      \"type\": \"date\"\n    },\n    {\n      \"name\": \"DATE '9999-12-31'\",\n      \"type\": \"date\"\n    },\n    {\n      \"name\": \"TIME '00:00:00'\",\n      \"type\": \"time\"\n    },\n    {\n      \"name\": \"TIME '23:59:59.999999999'\",\n      \"type\": \"time\"\n    }\n  ],\n  \"datarows\": [\n    [\n      \"0001-01-01 00:00:00\",\n      \"9999-12-31 23:59:59.999999999\",\n      \"0001-01-01\",\n      \"9999-12-31\",\n      \"00:00:00\",\n      \"23:59:59.999999999\"\n    ]\n  ],\n  \"total\": 1,\n  \"size\": 1,\n  \"status\": 200\n}"
+  }
+}

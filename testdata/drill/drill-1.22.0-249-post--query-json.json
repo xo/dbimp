@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT ? AS p FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "3562"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:07 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a4f-fb6d-3860-f9b0-2f1e53656f98\"\n,\"exception\":\"org.apache.calcite.runtime.CalciteContextException\"\n,\"errorMessage\":\"At line 1, column 8: Illegal use of dynamic parameter: Illegal use of dynamic parameter\"\n,\"stackTrace\":[\"org.apache.calcite.runtime.CalciteContextException: At line 1, column 8: Illegal use of dynamic parameter: Illegal use of dynamic parameter\",\"\\tat jdk.internal.reflect.GeneratedConstructorAccessor101.newInstance()\",\"\\tat jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:945)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:930)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.newValidationError(SqlValidatorImpl.java:5464)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.inferUnknownTypes(SqlValidatorImpl.java:2010)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.inferUnknownTypes(SqlValidatorImpl.java:2072)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.expandSelectItem(SqlValidatorImpl.java:487)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateSelectList(SqlValidatorImpl.java:4608)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateSelect(SqlValidatorImpl.java:3780)\",\"\\tat org.apache.calcite.sql.validate.SelectNamespace.validateImpl(SelectNamespace.java:61)\",\"\\tat org.apache.calcite.sql.validate.AbstractNamespace.validate(AbstractNamespace.java:88)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateNamespace(SqlValidatorImpl.java:1135)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateQuery(SqlValidatorImpl.java:1106)\",\"\\tat org.apache.calcite.sql.SqlSelect.validate(SqlSelect.java:282)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateScopedExpression(SqlValidatorImpl.java:1081)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validate(SqlValidatorImpl.java:787)\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.validate(SqlConverter.java:212)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateNode(DefaultSqlHandler.java:662)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateAndConvert(DefaultSqlHandler.java:198)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:172)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\",\"Caused by: org.apache.calcite.sql.validate.SqlValidatorException: Illegal use of dynamic parameter\",\"\\tat jdk.internal.reflect.GeneratedConstructorAccessor100.newInstance()\",\"\\tat jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.runtime.Resources$ExInst.ex(Resources.java:599)\",\"\\t... 26 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

@@ -1,0 +1,800 @@
+{
+  "driver": "druid",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/IfanTsai/godruid",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/kaplanmaxe/go-druid",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/druid-io/pydruid",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-022-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid",
+        "github.com/druid-io/pydruid",
+        "github.com/kaplanmaxe/go-druid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-024-post--druid-v2-sql.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-025-post--druid-v2-sql.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-029-post--druid-v2-sql.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "replace",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-027-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationCRUD/replace"
+    },
+    {
+      "kind": "crud",
+      "name": "replace a time range with no rows",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-030-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationCRUD/replace_a_time_range_with_no_rows"
+    },
+    {
+      "kind": "crud",
+      "name": "insert through the SQL API",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-021-post--druid-v2-sql.json",
+      "test": "TestIntegrationCRUD/insert_through_the_SQL_API"
+    },
+    {
+      "kind": "crud",
+      "name": "update through the task API",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-026-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationCRUD/update_through_the_task_API"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-36.0.0-118-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "schema",
+      "name": "datasource made by a write",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-003-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationSchema/datasource_made_by_a_write"
+    },
+    {
+      "kind": "schema",
+      "name": "create table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-032-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/create_table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-032-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-032-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-032-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-033-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-034-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-035-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-036-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/alter_table"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-037-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/drop_table"
+    },
+    {
+      "kind": "schema",
+      "name": "drop a datasource through the Coordinator",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-224-delete--druid-coordinator-v1-datasources-dbimp-crud.json",
+      "test": "TestIntegrationSchema/drop_a_datasource_through_the_Coordinator"
+    },
+    {
+      "kind": "schema",
+      "name": "partitioned by",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-003-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationSchema/partitioned_by"
+    },
+    {
+      "kind": "schema",
+      "name": "clustered by",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-003-post--druid-v2-sql-task.json",
+      "test": "TestIntegrationSchema/clustered_by"
+    },
+    {
+      "kind": "schema",
+      "name": "information schema",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-039-post--druid-v2-sql.json",
+      "test": "TestIntegrationSchema/information_schema"
+    },
+    {
+      "kind": "feature",
+      "name": "time column",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-041-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/time_column"
+    },
+    {
+      "kind": "feature",
+      "name": "extern",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-042-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/extern"
+    },
+    {
+      "kind": "feature",
+      "name": "query context",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid",
+        "github.com/druid-io/pydruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-054-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/query_context"
+    },
+    {
+      "kind": "feature",
+      "name": "query id",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-053-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/query_id"
+    },
+    {
+      "kind": "feature",
+      "name": "result format object",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid",
+        "github.com/druid-io/pydruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-012-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/result_format_object"
+    },
+    {
+      "kind": "feature",
+      "name": "result format array",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/kaplanmaxe/go-druid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-010-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/result_format_array"
+    },
+    {
+      "kind": "feature",
+      "name": "result format objectLines",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-013-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/result_format_objectLines"
+    },
+    {
+      "kind": "feature",
+      "name": "result format arrayLines",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-014-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/result_format_arrayLines"
+    },
+    {
+      "kind": "feature",
+      "name": "result format csv",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-015-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/result_format_csv"
+    },
+    {
+      "kind": "feature",
+      "name": "result format tsv",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-016-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/result_format_tsv"
+    },
+    {
+      "kind": "feature",
+      "name": "header",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid",
+        "github.com/druid-io/pydruid",
+        "github.com/kaplanmaxe/go-druid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-064-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/header"
+    },
+    {
+      "kind": "feature",
+      "name": "typesHeader",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-010-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/typesHeader"
+    },
+    {
+      "kind": "feature",
+      "name": "sqlTypesHeader",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-010-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/sqlTypesHeader"
+    },
+    {
+      "kind": "feature",
+      "name": "lookup function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-049-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/lookup_function"
+    },
+    {
+      "kind": "feature",
+      "name": "lookup table",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-050-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/lookup_table"
+    },
+    {
+      "kind": "feature",
+      "name": "approximate functions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-043-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/approximate_functions"
+    },
+    {
+      "kind": "feature",
+      "name": "sketch",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-044-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/sketch"
+    },
+    {
+      "kind": "feature",
+      "name": "multi-value strings",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-045-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/multi-value_strings"
+    },
+    {
+      "kind": "feature",
+      "name": "sys schema",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-051-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/sys_schema"
+    },
+    {
+      "kind": "feature",
+      "name": "dynamic parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-080-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/dynamic_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-089-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "sqlStringifyArrays",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-066-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/sqlStringifyArrays"
+    },
+    {
+      "kind": "feature",
+      "name": "query timeout",
+      "sources": [
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-102-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/query_timeout"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel by query id",
+      "sources": [
+        "github.com/IfanTsai/godruid",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-103-delete--druid-v2-sql-dbimp-cancel.json",
+      "test": "TestIntegrationFeatures/cancel_by_query_id"
+    },
+    {
+      "kind": "feature",
+      "name": "transactions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-114-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "statements API",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-36.0.0-122-get--druid-v2-sql-statements-query-e83221ad-bd18-4c00-ba59-42ffcc665000-results.json",
+      "test": "TestIntegrationFeatures/statements_API"
+    },
+    {
+      "kind": "feature",
+      "name": "pages of the statements API",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-36.0.0-123-get--druid-v2-sql-statements-query-e83221ad-bd18-4c00-ba59-42ffcc665000-results.json",
+      "test": "TestIntegrationFeatures/pages_of_the_statements_API"
+    },
+    {
+      "kind": "feature",
+      "name": "durable storage for results",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-36.0.0-124-post--druid-v2-sql-statements.json",
+      "test": "TestIntegrationFeatures/durable_storage_for_results"
+    },
+    {
+      "kind": "feature",
+      "name": "multi-value string as an array",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-36.0.0-119-post--druid-v2-sql.json",
+      "test": "TestIntegrationFeatures/multi-value_string_as_an_array"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-065-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/BIGINT"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-069-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/INTEGER"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-075-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/SMALLINT"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "druid-37.0.0-074-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/TINYINT"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-065-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/FLOAT"
+    },
+    {
+      "kind": "type",
+      "name": "REAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-069-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/REAL"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-065-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/DOUBLE"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-069-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-070-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-065-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/VARCHAR"
+    },
+    {
+      "kind": "type",
+      "name": "CHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-071-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/CHAR"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/IfanTsai/godruid"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-065-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-069-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-065-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "COMPLEX<json>",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-065-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/COMPLEX<json>"
+    },
+    {
+      "kind": "type",
+      "name": "COMPLEX<HLLSketch>",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-044-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/COMPLEX<HLLSketch>"
+    },
+    {
+      "kind": "type",
+      "name": "NULL",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "druid-37.0.0-071-post--druid-v2-sql.json",
+      "test": "TestIntegrationRoundTrip/NULL"
+    }
+  ]
+}

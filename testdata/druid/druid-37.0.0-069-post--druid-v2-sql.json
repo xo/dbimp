@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST(id AS INTEGER) AS i, CAST(d AS DECIMAL(38, 10)) AS dc, CAST(__time AS DATE) AS dt, CAST(f AS REAL) AS r, CAST(l AS VARCHAR) AS lv, id = 1 AS bo, CAST(NULL AS VARCHAR) AS nv FROM dbimp_types ORDER BY __time\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "80210041-122d-416a-bda3-f172d12c8bde"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Query-Id": [
+        "80210041-122d-416a-bda3-f172d12c8bde"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ]
+    },
+    "body": "[[\"i\",\"dc\",\"dt\",\"r\",\"lv\",\"bo\",\"nv\"],[\"LONG\",\"DOUBLE\",\"LONG\",\"DOUBLE\",\"STRING\",\"LONG\",\"STRING\"],[\"INTEGER\",\"DECIMAL\",\"DATE\",\"REAL\",\"VARCHAR\",\"BOOLEAN\",\"VARCHAR\"],[3,null,\"1970-01-01T00:00:00.000Z\",null,null,false,null],[2,-0.1,\"2026-10-01T00:00:00.000Z\",-1.5,\"-9223372036854775808\",false,null],[1,1.7976931348623157E308,\"2026-10-01T00:00:00.000Z\",3.3999999521443642E38,\"9223372036854775807\",true,null]]\n"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT '?' AS a, ? AS b\",\"params\":[1]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "647224"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"a\",\"type\":\"keyword\"},{\"name\":\"b\",\"type\":\"integer\"}],\"rows\":[[\"?\",1]]}"
+  }
+}

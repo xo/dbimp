@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT a FROM dbimp_secret\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"verification_exception\",\"reason\":\"Found 1 problem\\nline 1:15: Unknown index [dbimp_secret]\"}],\"type\":\"verification_exception\",\"reason\":\"Found 1 problem\\nline 1:15: Unknown index [dbimp_secret]\"},\"status\":400}"
+  }
+}

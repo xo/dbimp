@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"CREATE INDEX dbimp_idx ON dbimp_crud (v)\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "57ecc4cc-9930-4d47-aa73-6b85a8b87441"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "161"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Statement wasn't well formed, can't be processed: CREATE INDEX dbimp_idx ON dbimp_crud (v)\"}"
+  }
+}

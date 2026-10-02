@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteTransaction"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"TransactStatements\":[{\"Statement\":\"SELECT * FROM dbimp_tx WHERE pk = 'a'\"},{\"Statement\":\"INSERT INTO dbimp_tx VALUE {'pk': 'd'}\"}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "97e1be76-0f1b-4452-b7b5-82dbcdfa66dd"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "162"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"ExecuteTransaction API does not support both read and write operations in the same request.\"}"
+  }
+}

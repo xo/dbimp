@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"UPDATE dbimp_crud SET v = 'x' WHERE pk = 'a'\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "79373510-0c51-440c-b98d-c090e70fbb3f"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "143"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Where clause does not contain a mandatory equality on all key attributes\"}"
+  }
+}

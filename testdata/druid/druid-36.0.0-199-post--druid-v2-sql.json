@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ? AS arr FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true,\"parameters\":[{\"type\":\"ARRAY\",\"value\":[\"a\",\"b\"]}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Sql-Query-Id": [
+        "1db49f74-0e9c-43cb-b937-bfe4631f01ad"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "X-Druid-Query-Id": [
+        "1db49f74-0e9c-43cb-b937-bfe4631f01ad"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "[[\"arr\"],[\"ARRAY<STRING>\"],[\"ARRAY\"],[\"[\\\"a\\\",\\\"b\\\"]\"]]\n"
+  }
+}

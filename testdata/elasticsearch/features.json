@@ -1,0 +1,1389 @@
+{
+  "driver": "elasticsearch",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/elastic/go-elasticsearch",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/preset-io/elasticsearch-dbapi",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-027-post---sql.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-031-post---sql.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-028-post---sql.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-029-post---sql.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-027-post---sql.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-027-post---sql.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "crud",
+      "name": "select into",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-027-post---sql.json",
+      "test": "TestIntegrationCRUD/select_into"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-038-post---sql.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-038-post---sql.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-038-post---sql.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-038-post---sql.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-038-post---sql.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-039-post---sql.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-038-post---sql.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "alias with a filter",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-045-post---sql.json",
+      "test": "TestIntegrationSchema/alias_with_a_filter"
+    },
+    {
+      "kind": "schema",
+      "name": "show tables",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-040-post---sql.json",
+      "test": "TestIntegrationSchema/show_tables"
+    },
+    {
+      "kind": "schema",
+      "name": "describe",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-041-post---sql.json",
+      "test": "TestIntegrationSchema/describe"
+    },
+    {
+      "kind": "schema",
+      "name": "show columns",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-042-post---sql.json",
+      "test": "TestIntegrationSchema/show_columns"
+    },
+    {
+      "kind": "schema",
+      "name": "sys columns",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-043-post---sql.json",
+      "test": "TestIntegrationSchema/sys_columns"
+    },
+    {
+      "kind": "schema",
+      "name": "sys types",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-162-post---sql.json",
+      "test": "TestIntegrationSchema/sys_types"
+    },
+    {
+      "kind": "schema",
+      "name": "information_schema",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-044-post---sql.json",
+      "test": "TestIntegrationSchema/information_schema"
+    },
+    {
+      "kind": "schema",
+      "name": "show functions",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-046-post---sql.json",
+      "test": "TestIntegrationSchema/show_functions"
+    },
+    {
+      "kind": "schema",
+      "name": "show catalogs",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-047-post---sql.json",
+      "test": "TestIntegrationSchema/show_catalogs"
+    },
+    {
+      "kind": "schema",
+      "name": "index pattern",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-169-post---sql.json",
+      "test": "TestIntegrationSchema/index_pattern"
+    },
+    {
+      "kind": "feature",
+      "name": "cursor",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-094-post---sql.json",
+      "test": "TestIntegrationFeatures/cursor"
+    },
+    {
+      "kind": "feature",
+      "name": "fetch_size",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-093-post---sql.json",
+      "test": "TestIntegrationFeatures/fetch_size"
+    },
+    {
+      "kind": "feature",
+      "name": "close a cursor",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-099-post---sql-close.json",
+      "test": "TestIntegrationFeatures/close_a_cursor"
+    },
+    {
+      "kind": "feature",
+      "name": "page_timeout",
+      "sources": [
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-110-post---sql.json",
+      "test": "TestIntegrationFeatures/page_timeout"
+    },
+    {
+      "kind": "feature",
+      "name": "keep_alive",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-170-post---sql.json",
+      "test": "TestIntegrationFeatures/keep_alive"
+    },
+    {
+      "kind": "feature",
+      "name": "request_timeout",
+      "sources": [
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-147-post---sql.json",
+      "test": "TestIntegrationFeatures/request_timeout"
+    },
+    {
+      "kind": "feature",
+      "name": "columnar",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-023-post---sql.json",
+      "test": "TestIntegrationFeatures/columnar"
+    },
+    {
+      "kind": "feature",
+      "name": "positional parameters",
+      "sources": [
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-080-post---sql.json",
+      "test": "TestIntegrationFeatures/positional_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-083-post---sql.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "typed parameters",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-082-post---sql.json",
+      "test": "TestIntegrationFeatures/typed_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "parameter in LIMIT",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-090-post---sql.json",
+      "test": "TestIntegrationFeatures/parameter_in_LIMIT"
+    },
+    {
+      "kind": "feature",
+      "name": "field_multi_value_leniency",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-054-post---sql.json",
+      "test": "TestIntegrationFeatures/field_multi_value_leniency"
+    },
+    {
+      "kind": "feature",
+      "name": "multi-valued field as an array",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-053-post---sql.json",
+      "test": "TestIntegrationFeatures/multi-valued_field_as_an_array"
+    },
+    {
+      "kind": "feature",
+      "name": "object subfields",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-056-post---sql.json",
+      "test": "TestIntegrationFeatures/object_subfields"
+    },
+    {
+      "kind": "feature",
+      "name": "object as a column",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-055-post---sql.json",
+      "test": "TestIntegrationFeatures/object_as_a_column"
+    },
+    {
+      "kind": "feature",
+      "name": "nested subfields",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-058-post---sql.json",
+      "test": "TestIntegrationFeatures/nested_subfields"
+    },
+    {
+      "kind": "feature",
+      "name": "nested as a column",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-057-post---sql.json",
+      "test": "TestIntegrationFeatures/nested_as_a_column"
+    },
+    {
+      "kind": "feature",
+      "name": "filter",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-345-post---sql.json",
+      "test": "TestIntegrationFeatures/filter"
+    },
+    {
+      "kind": "feature",
+      "name": "runtime_mappings",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-166-post---sql.json",
+      "test": "TestIntegrationFeatures/runtime_mappings"
+    },
+    {
+      "kind": "feature",
+      "name": "time_zone",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-074-post---sql.json",
+      "test": "TestIntegrationFeatures/time_zone"
+    },
+    {
+      "kind": "feature",
+      "name": "catalog",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-167-post---sql.json",
+      "test": "TestIntegrationFeatures/catalog"
+    },
+    {
+      "kind": "feature",
+      "name": "remote catalog",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-168-post---sql.json",
+      "test": "TestIntegrationFeatures/remote_catalog"
+    },
+    {
+      "kind": "feature",
+      "name": "index_using_frozen",
+      "sources": [
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-173-post---sql.json",
+      "test": "TestIntegrationFeatures/index_using_frozen"
+    },
+    {
+      "kind": "feature",
+      "name": "allow_partial_search_results",
+      "sources": [
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-174-post---sql.json",
+      "test": "TestIntegrationFeatures/allow_partial_search_results"
+    },
+    {
+      "kind": "feature",
+      "name": "project_routing",
+      "sources": [
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-175-post---sql.json",
+      "test": "TestIntegrationFeatures/project_routing"
+    },
+    {
+      "kind": "feature",
+      "name": "async search",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-119-post---sql.json",
+      "test": "TestIntegrationFeatures/async_search"
+    },
+    {
+      "kind": "feature",
+      "name": "async result",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-120-get---sql-async-fmdrwnzlzuzmvhn5dfo5vtbimw1itmcarzl5vks2rujtbgfbqufvwdhyludoqto5odi.json",
+      "test": "TestIntegrationFeatures/async_result"
+    },
+    {
+      "kind": "feature",
+      "name": "async status",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-121-get---sql-async-status-fmdrwnzlzuzmvhn5dfo5vtbimw1itmcarzl5vks2rujtbgfbqufvwdhyludoqto5odi.json",
+      "test": "TestIntegrationFeatures/async_status"
+    },
+    {
+      "kind": "feature",
+      "name": "async delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-122-delete---sql-async-delete-fmdrwnzlzuzmvhn5dfo5vtbimw1itmcarzl5vks2rujtbgfbqufvwdhyludoqto5odi.json",
+      "test": "TestIntegrationFeatures/async_delete"
+    },
+    {
+      "kind": "feature",
+      "name": "async execute path",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-025-post---sql-async-execute.json",
+      "test": "TestIntegrationFeatures/async_execute_path"
+    },
+    {
+      "kind": "feature",
+      "name": "translate",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/elastic/go-elasticsearch"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-026-post---sql-translate.json",
+      "test": "TestIntegrationFeatures/translate"
+    },
+    {
+      "kind": "feature",
+      "name": "jdbc mode",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-024-post---sql.json",
+      "test": "TestIntegrationFeatures/jdbc_mode"
+    },
+    {
+      "kind": "feature",
+      "name": "pivot",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-106-post---sql.json",
+      "test": "TestIntegrationFeatures/pivot"
+    },
+    {
+      "kind": "feature",
+      "name": "histogram",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-078-post---sql.json",
+      "test": "TestIntegrationFeatures/histogram"
+    },
+    {
+      "kind": "feature",
+      "name": "match and score",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-068-post---sql.json",
+      "test": "TestIntegrationFeatures/match_and_score"
+    },
+    {
+      "kind": "feature",
+      "name": "join",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-163-post---sql.json",
+      "test": "TestIntegrationFeatures/join"
+    },
+    {
+      "kind": "feature",
+      "name": "common table expression",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-164-post---sql.json",
+      "test": "TestIntegrationFeatures/common_table_expression"
+    },
+    {
+      "kind": "feature",
+      "name": "subquery in from",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-165-post---sql.json",
+      "test": "TestIntegrationFeatures/subquery_in_from"
+    },
+    {
+      "kind": "feature",
+      "name": "limit",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-105-post---sql.json",
+      "test": "TestIntegrationFeatures/limit"
+    },
+    {
+      "kind": "feature",
+      "name": "top",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-109-post---sql.json",
+      "test": "TestIntegrationFeatures/top"
+    },
+    {
+      "kind": "feature",
+      "name": "offset",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-108-post---sql.json",
+      "test": "TestIntegrationFeatures/offset"
+    },
+    {
+      "kind": "feature",
+      "name": "odbc escapes",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-069-post---sql.json",
+      "test": "TestIntegrationFeatures/odbc_escapes"
+    },
+    {
+      "kind": "feature",
+      "name": "geo functions",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-066-post---sql.json",
+      "test": "TestIntegrationFeatures/geo_functions"
+    },
+    {
+      "kind": "feature",
+      "name": "document id",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-064-post---sql.json",
+      "test": "TestIntegrationFeatures/document_id"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel a task",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-144-post---tasks--cancel.json",
+      "test": "TestIntegrationFeatures/cancel_a_task"
+    },
+    {
+      "kind": "feature",
+      "name": "csv format",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-016-post---sql.json",
+      "test": "TestIntegrationFeatures/csv_format"
+    },
+    {
+      "kind": "feature",
+      "name": "tsv format",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-017-post---sql.json",
+      "test": "TestIntegrationFeatures/tsv_format"
+    },
+    {
+      "kind": "feature",
+      "name": "txt format",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-014-post---sql.json",
+      "test": "TestIntegrationFeatures/txt_format"
+    },
+    {
+      "kind": "feature",
+      "name": "yaml format",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-018-post---sql.json",
+      "test": "TestIntegrationFeatures/yaml_format"
+    },
+    {
+      "kind": "feature",
+      "name": "cbor format",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-015-post---sql.json",
+      "test": "TestIntegrationFeatures/cbor_format"
+    },
+    {
+      "kind": "feature",
+      "name": "smile format",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-019-post---sql.json",
+      "test": "TestIntegrationFeatures/smile_format"
+    },
+    {
+      "kind": "feature",
+      "name": "transactions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-156-post---sql.json",
+      "test": "TestIntegrationFeatures/transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "constant_keyword as keyword",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationFeatures/constant_keyword_as_keyword"
+    },
+    {
+      "kind": "feature",
+      "name": "wildcard as keyword",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationFeatures/wildcard_as_keyword"
+    },
+    {
+      "kind": "feature",
+      "name": "match_only_text as text",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationFeatures/match_only_text_as_text"
+    },
+    {
+      "kind": "feature",
+      "name": "date_nanos as datetime",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationFeatures/date_nanos_as_datetime"
+    },
+    {
+      "kind": "feature",
+      "name": "date as datetime",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationFeatures/date_as_datetime"
+    },
+    {
+      "kind": "feature",
+      "name": "alias field",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-060-post---sql.json",
+      "test": "TestIntegrationFeatures/alias_field"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-070-post---sql.json",
+      "test": "TestIntegrationRoundTrip/null"
+    },
+    {
+      "kind": "type",
+      "name": "boolean",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/boolean"
+    },
+    {
+      "kind": "type",
+      "name": "byte",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/byte"
+    },
+    {
+      "kind": "type",
+      "name": "short",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/short"
+    },
+    {
+      "kind": "type",
+      "name": "integer",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/integer"
+    },
+    {
+      "kind": "type",
+      "name": "long",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/long"
+    },
+    {
+      "kind": "type",
+      "name": "unsigned_long",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/unsigned_long"
+    },
+    {
+      "kind": "type",
+      "name": "half_float",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/half_float"
+    },
+    {
+      "kind": "type",
+      "name": "float",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/float"
+    },
+    {
+      "kind": "type",
+      "name": "double",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/double"
+    },
+    {
+      "kind": "type",
+      "name": "scaled_float",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/scaled_float"
+    },
+    {
+      "kind": "type",
+      "name": "keyword",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/keyword"
+    },
+    {
+      "kind": "type",
+      "name": "text",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/text"
+    },
+    {
+      "kind": "type",
+      "name": "binary",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/binary"
+    },
+    {
+      "kind": "type",
+      "name": "ip",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/ip"
+    },
+    {
+      "kind": "type",
+      "name": "version",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/version"
+    },
+    {
+      "kind": "type",
+      "name": "datetime",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/datetime"
+    },
+    {
+      "kind": "type",
+      "name": "date",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-070-post---sql.json",
+      "test": "TestIntegrationRoundTrip/date"
+    },
+    {
+      "kind": "type",
+      "name": "time",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-070-post---sql.json",
+      "test": "TestIntegrationRoundTrip/time"
+    },
+    {
+      "kind": "type",
+      "name": "geo_point",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/geo_point"
+    },
+    {
+      "kind": "type",
+      "name": "geo_shape",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/geo_shape"
+    },
+    {
+      "kind": "type",
+      "name": "shape",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-052-post---sql.json",
+      "test": "TestIntegrationRoundTrip/shape"
+    },
+    {
+      "kind": "type",
+      "name": "interval_year",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_year"
+    },
+    {
+      "kind": "type",
+      "name": "interval_month",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_month"
+    },
+    {
+      "kind": "type",
+      "name": "interval_day",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_day"
+    },
+    {
+      "kind": "type",
+      "name": "interval_hour",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_hour"
+    },
+    {
+      "kind": "type",
+      "name": "interval_minute",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_minute"
+    },
+    {
+      "kind": "type",
+      "name": "interval_second",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_second"
+    },
+    {
+      "kind": "type",
+      "name": "interval_year_to_month",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_year_to_month"
+    },
+    {
+      "kind": "type",
+      "name": "interval_day_to_hour",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_day_to_hour"
+    },
+    {
+      "kind": "type",
+      "name": "interval_day_to_minute",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_day_to_minute"
+    },
+    {
+      "kind": "type",
+      "name": "interval_day_to_second",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_day_to_second"
+    },
+    {
+      "kind": "type",
+      "name": "interval_hour_to_minute",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_hour_to_minute"
+    },
+    {
+      "kind": "type",
+      "name": "interval_hour_to_second",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_hour_to_second"
+    },
+    {
+      "kind": "type",
+      "name": "interval_minute_to_second",
+      "sources": [
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "yes",
+      "evidence": "elasticsearch-9.5.3-071-post---sql.json",
+      "test": "TestIntegrationRoundTrip/interval_minute_to_second"
+    },
+    {
+      "kind": "type",
+      "name": "decimal",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-161-post---sql.json",
+      "test": "TestIntegrationRoundTrip/decimal"
+    },
+    {
+      "kind": "type",
+      "name": "dense_vector",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-061-post---sql.json",
+      "test": "TestIntegrationRoundTrip/dense_vector"
+    },
+    {
+      "kind": "type",
+      "name": "flattened",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-062-post---sql.json",
+      "test": "TestIntegrationRoundTrip/flattened"
+    },
+    {
+      "kind": "type",
+      "name": "integer_range",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-063-post---sql.json",
+      "test": "TestIntegrationRoundTrip/integer_range"
+    },
+    {
+      "kind": "type",
+      "name": "point",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-063-post---sql.json",
+      "test": "TestIntegrationRoundTrip/point"
+    },
+    {
+      "kind": "type",
+      "name": "aggregate_metric_double",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-065-post---sql.json",
+      "test": "TestIntegrationRoundTrip/aggregate_metric_double"
+    },
+    {
+      "kind": "type",
+      "name": "object",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-055-post---sql.json",
+      "test": "TestIntegrationRoundTrip/object"
+    },
+    {
+      "kind": "type",
+      "name": "nested",
+      "sources": [
+        "deepseek-flash",
+        "github.com/preset-io/elasticsearch-dbapi"
+      ],
+      "verdict": "no",
+      "evidence": "elasticsearch-9.5.3-057-post---sql.json",
+      "test": "TestIntegrationRoundTrip/nested"
+    }
+  ]
+}

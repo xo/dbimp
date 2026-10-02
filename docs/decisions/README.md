@@ -182,3 +182,11 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D159](D159-avatica-transactions-and-cancel.md) | Avatica transactions and cancel | Decided |
 | [D160](D160-avatica-keeps-the-calendar-and-binds-no-array.md) | Avatica keeps the calendar of the server and binds no array | Decided |
 | [D161](D161-a-driver-tests-each-product-it-recorded.md) | A driver tests each product that it recorded | Decided |
+| [D162](D162-six-http-targets-after-avatica.md) | Six HTTP targets after Avatica | Decided |
+| [D163](D163-read-only-targets-and-dynamodb-columns.md) | Read-only targets, the caps of OpenSearch, and DynamoDB columns | Decided |
+| [D164](D164-the-druid-driver.md) | The Druid driver | Decided |
+| [D165](D165-the-drill-driver.md) | The Drill driver | Decided |
+| [D166](D166-the-solr-driver.md) | The Solr driver | Decided |
+| [D167](D167-the-elasticsearch-driver.md) | The Elasticsearch driver | Decided |
+| [D168](D168-the-opensearch-driver.md) | The OpenSearch driver | Decided |
+| [D169](D169-the-dynamodb-driver.md) | The DynamoDB driver | Decided |

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1\",\"nope\":1}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"x_content_parse_exception\",\"reason\":\"[1:21] [sql/query] unknown field [nope]\"}],\"type\":\"x_content_parse_exception\",\"reason\":\"[1:21] [sql/query] unknown field [nope]\"},\"status\":400}"
+  }
+}

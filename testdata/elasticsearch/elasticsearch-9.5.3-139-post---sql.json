@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_paging ORDER BY s DESC\",\"fetch_size\":10,\"filter\":{\"script\":{\"script\":{\"source\":\"double x = doc[\\\"n\\\"].value; for (int i = 0; i < 900000; i++) { x = Math.sin(x) + Math.sqrt(i); } return x != 12345.0;\"}}},\"wait_for_completion_timeout\":\"0s\",\"keep_on_completion\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "402624"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"id\":\"FmRjbnEtS1JDVFpPQTh3aUVxOHBGOWcbRzl5Vks2RUJTbGFBQUFVWDhYLUdOQToxMTE2\",\"is_partial\":true,\"is_running\":true,\"rows\":[]}"
+  }
+}

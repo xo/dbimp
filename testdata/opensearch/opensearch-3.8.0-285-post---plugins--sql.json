@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT INTERVAL 1 DAY\"}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"There was internal problem at backend\",\n    \"details\": \"Unable to make field private final int java.time.Period.years accessible: module java.base does not \\\"opens java.time\\\" to unnamed module @31311a5\",\n    \"type\": \"InaccessibleObjectException\"\n  },\n  \"status\": 500\n}"
+  }
+}

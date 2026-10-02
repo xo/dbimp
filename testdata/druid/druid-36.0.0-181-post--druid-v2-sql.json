@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM dbimp_types ORDER BY __time\",\"resultFormat\":\"object\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "1aa2c141-ac24-46eb-98d9-e1eeaca4d17b"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "1aa2c141-ac24-46eb-98d9-e1eeaca4d17b"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ]
+    },
+    "body": "[{\"__time\":{\"type\":\"LONG\",\"sqlType\":\"TIMESTAMP\"},\"id\":{\"type\":\"LONG\",\"sqlType\":\"BIGINT\"},\"s\":{\"type\":\"STRING\",\"sqlType\":\"VARCHAR\"},\"l\":{\"type\":\"LONG\",\"sqlType\":\"BIGINT\"},\"f\":{\"type\":\"FLOAT\",\"sqlType\":\"FLOAT\"},\"d\":{\"type\":\"DOUBLE\",\"sqlType\":\"DOUBLE\"},\"j\":{\"type\":\"COMPLEX<json>\",\"sqlType\":\"OTHER\"},\"sa\":{\"type\":\"ARRAY<STRING>\",\"sqlType\":\"ARRAY\"},\"la\":{\"type\":\"ARRAY<LONG>\",\"sqlType\":\"ARRAY\"},\"da\":{\"type\":\"ARRAY<DOUBLE>\",\"sqlType\":\"ARRAY\"},\"mv\":{\"type\":\"STRING\",\"sqlType\":\"VARCHAR\"},\"b\":{\"type\":\"LONG\",\"sqlType\":\"BIGINT\"}},{\"__time\":\"1970-01-01T00:00:00.000Z\",\"id\":3,\"s\":null,\"l\":null,\"f\":null,\"d\":null,\"j\":null,\"sa\":null,\"la\":null,\"da\":null,\"mv\":null,\"b\":null},{\"__time\":\"2026-10-01T00:00:00.000Z\",\"id\":2,\"s\":\"\",\"l\":-9223372036854775808,\"f\":-1.5,\"d\":-0.1,\"j\":\"[]\",\"sa\":null,\"la\":null,\"da\":null,\"mv\":\"z\",\"b\":0},{\"__time\":\"2026-10-01T12:34:56.789Z\",\"id\":1,\"s\":\"é'\\\"\\\\ x\",\"l\":9223372036854775807,\"f\":3.4E38,\"d\":1.7976931348623157E308,\"j\":\"{\\\"k\\\":[1,\\\"two\\\",null,{\\\"n\\\":1.5}]}\",\"sa\":\"[\\\"a\\\",null,\\\"c\\\"]\",\"la\":\"[-9223372036854775808,9223372036854775807]\",\"da\":\"[0.1,1.5E300]\",\"mv\":\"[\\\"x\\\",\\\"y\\\"]\",\"b\":1}]\n"
+  }
+}

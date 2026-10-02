@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"REPLACE INTO dbimp_crud OVERWRITE ALL SELECT 1 AS id PARTITIONED BY DAY\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "419"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"taskId\":\"fae028e4-7a6e-4c35-99e4-0def7ebbc899\",\"state\":\"FAILED\",\"error\":{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"The granularity [{type=period, period=P1D, timeZone=UTC, origin=null}] specified in the PARTITIONED BY clause of the INSERT query is different from ALL. Therefore, the query must specify a time column (named __time).\",\"context\":{}}}"
+  }
+}

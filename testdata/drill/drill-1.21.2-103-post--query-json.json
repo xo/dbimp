@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT name, val FROM sys.options WHERE name = 'exec.query.max_rows'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "215"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:48 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a26-8e3b-5b1e-f6a9-b2f04dc24ea8\"\n,\"columns\":[\"name\",\"val\"]\n,\"metadata\":[\"VARCHAR\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"name\":\"exec.query.max_rows\",\"val\":\"0\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

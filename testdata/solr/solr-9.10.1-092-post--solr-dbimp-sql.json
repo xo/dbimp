@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "stmt=EXPLAIN+PLAN+FOR+SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+1"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "278"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"PLAN\":\"SolrToEnumerableConverter\\n  SolrProject(id=[$4], n_i=[$16])\\n    SolrSort(sort0=[$4], dir0=[ASC], fetch=[1])\\n      SolrTableScan(table=[[192.168.1.5:9983, dbimp]])\\n\"\n    },{\n      \"EOF\":true,\n      \"RESPONSE_TIME\":7\n    }]\n  }\n}"
+  }
+}

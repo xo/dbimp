@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135220Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"SELECT pk FROM dbimp_types WHERE pk = :p\",\"ExpressionAttributeValues\":{\":p\":{\"S\":\"t1\"}}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "161"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:20 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "5ff05286-8526-4600-a376-aeb25518a8e6"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Statement wasn't well formed, can't be processed: SELECT pk FROM dbimp_types WHERE pk = :p\"}"
+  }
+}

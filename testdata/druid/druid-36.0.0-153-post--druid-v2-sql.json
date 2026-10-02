@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT COLUMN_NAME, ORDINAL_POSITION, DATA_TYPE, IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'dbimp_types' ORDER BY ORDINAL_POSITION\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{}"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:01 GMT",
+        "Thu, 01 Oct 2026 20:28:01 GMT"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "2fa9d733-3afa-4a9d-b9cd-b01a36a92fd0"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "2fa9d733-3afa-4a9d-b9cd-b01a36a92fd0"
+      ]
+    },
+    "body": "[[\"COLUMN_NAME\",\"ORDINAL_POSITION\",\"DATA_TYPE\",\"IS_NULLABLE\"],[\"STRING\",\"LONG\",\"STRING\",\"STRING\"],[\"VARCHAR\",\"BIGINT\",\"VARCHAR\",\"VARCHAR\"],[\"__time\",1,\"TIMESTAMP\",\"NO\"],[\"id\",2,\"BIGINT\",\"YES\"],[\"s\",3,\"VARCHAR\",\"YES\"],[\"l\",4,\"BIGINT\",\"YES\"],[\"f\",5,\"FLOAT\",\"YES\"],[\"d\",6,\"DOUBLE\",\"YES\"],[\"j\",7,\"COMPLEX<json>\",\"YES\"],[\"sa\",8,\"ARRAY\",\"YES\"],[\"la\",9,\"ARRAY\",\"YES\"],[\"da\",10,\"ARRAY\",\"YES\"],[\"mv\",11,\"VARCHAR\",\"YES\"],[\"b\",12,\"BIGINT\",\"YES\"]]\n"
+  }
+}

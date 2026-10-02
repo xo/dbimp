@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135245Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"SELECT * FROM dbimp_crud WHERE pk = 'a'\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:45 GMT"
+      ],
+      "Server": [
+        "Seastar httpd"
+      ],
+      "Content-Length": [
+        "122"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazonaws.dynamodb.v20120810#UnknownOperationException\",\"message\":\"Unsupported operation ExecuteStatement\"}"
+  }
+}

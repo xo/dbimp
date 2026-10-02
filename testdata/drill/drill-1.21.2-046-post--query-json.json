@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT typeof(x) AS t, x FROM dfs.tmp.`dbimp_change/a`\",\"options\":{\"exec.enable_union_type\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "189"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:44 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2a-8600-1a3e-676a-9f035f1aa7ba\"\n,\"columns\":[\"t\",\"x\"]\n,\"metadata\":[\"VARCHAR\",\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"t\":\"BIGINT\",\"x\":1}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

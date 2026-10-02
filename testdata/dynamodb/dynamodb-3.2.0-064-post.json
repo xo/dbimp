@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"INSERT INTO dbimp_crud VALUE {'pk': 'a', 'sk': 1}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "7d68e88f-694a-477f-b934-f1b763f3c7f9"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "109"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazonaws.dynamodb.v20120810#DuplicateItem\",\"Message\":\"Duplicate primary key exists in table\"}"
+  }
+}

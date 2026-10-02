@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST(1 AS INT) AS i, CAST(9223372036854775807 AS BIGINT) AS b, CAST(1.5 AS FLOAT) AS f4, CAST(1.5 AS DOUBLE) AS f8, CAST('12345678901234567890.123456789' AS DECIMAL(38, 9)) AS d, 1.25 AS dl, TRUE AS bo, 'x' AS s, CAST('ab' AS CHAR(3)) AS c, CAST('ab' AS VARBINARY) AS vb, DATE '2026-10-01' AS dt, TIME '12:34:56.789' AS t, TIMESTAMP '2026-10-01 12:34:56.789123' AS ts, INTERVAL '1 2:03:04.5' DAY TO SECOND AS idy, INTERVAL '1-2' YEAR TO MONTH AS iy, CAST(NULL AS INT) AS n, NULL AS untyped FROM (VALUES(1))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "652"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:33:34 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a70-fa9a-5c12-1a13-47fd6b9b1229\"\n,\"columns\":[\"i\",\"b\",\"f4\",\"f8\",\"d\",\"dl\",\"bo\",\"s\",\"c\",\"vb\",\"dt\",\"t\",\"ts\",\"idy\",\"iy\",\"n\",\"untyped\"]\n,\"metadata\":[\"INT\",\"BIGINT\",\"FLOAT4\",\"FLOAT8\",\"VARDECIMAL(38, 9)\",\"VARDECIMAL(3, 2)\",\"BIT\",\"VARCHAR(1)\",\"VARCHAR(2)\",\"VARBINARY\",\"DATE\",\"TIME\",\"TIMESTAMP\",\"INTERVALDAY\",\"INTERVALYEAR\",\"INT\",\"INT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"i\":1,\"b\":9223372036854775807,\"f4\":1.5,\"f8\":1.5,\"d\":12345678901234567890.123456789,\"dl\":1.25,\"bo\":true,\"s\":\"x\",\"c\":\"ab\",\"vb\":\"YWI=\",\"dt\":1790812800000,\"t\":45296789,\"ts\":1790858096789,\"idy\":\"P1DT7384.500S\",\"iy\":\"P1Y2M\",\"n\":null,\"untyped\":null}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

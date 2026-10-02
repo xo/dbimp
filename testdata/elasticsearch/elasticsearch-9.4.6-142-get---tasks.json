@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/_tasks",
+    "query": "actions=*sql*,*search*&detailed=true",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"nodes\":{\"s6zgd8llQ0WzOLqFxNjQJQ\":{\"name\":\"4b2f0bce5bc6\",\"transport_address\":\"192.168.1.5:9300\",\"host\":\"192.168.1.5\",\"ip\":\"192.168.1.5:9300\",\"roles\":[\"data\",\"data_cold\",\"data_content\",\"data_frozen\",\"data_hot\",\"data_warm\",\"ingest\",\"master\",\"ml\",\"remote_cluster_client\",\"transform\"],\"attributes\":{\"ml.config_version\":\"12.0.0\",\"xpack.installed\":\"true\",\"transform.config_version\":\"10.0.0\"},\"tasks\":{\"s6zgd8llQ0WzOLqFxNjQJQ:787\":{\"node\":\"s6zgd8llQ0WzOLqFxNjQJQ\",\"id\":787,\"type\":\"transport\",\"action\":\"indices:data/read/sql\",\"description\":\"SQL [SELECT n FROM dbmeta_paging ORDER BY s DESC][{\\n  \\\"script\\\" : {\\n    \\\"script\\\" : {\\n      \\\"source\\\" : \\\"double x = doc[\\\\\\\"n\\\\\\\"].value; for (int i = 0; i < 900000; i++) { x = Math.sin(x) + Math.sqrt(i); } return x != 12345.0;\\\",\\n      \\\"lang\\\" : \\\"painless\\\"\\n    },\\n    \\\"boost\\\" : 1.0\\n  }\\n}]\",\"start_time_in_millis\":1790879700840,\"running_time_in_nanos\":933454348,\"cancellable\":true,\"cancelled\":true,\"headers\":{}},\"s6zgd8llQ0WzOLqFxNjQJQ:792\":{\"node\":\"s6zgd8llQ0WzOLqFxNjQJQ\",\"id\":792,\"type\":\"transport\",\"action\":\"indices:data/read/search\",\"description\":\"indices[], search_type[QUERY_THEN_FETCH], source[{\\\"size\\\":10,\\\"timeout\\\":\\\"90s\\\",\\\"query\\\":{\\\"bool\\\":{\\\"filter\\\":[{\\\"script\\\":{\\\"script\\\":{\\\"source\\\":\\\"double x = doc[\\\\\\\"n\\\\\\\"].value; for (int i = 0; i < 900000; i++) { x = Math.sin(x) + Math.sqrt(i); } return x != 12345.0;\\\",\\\"lang\\\":\\\"painless\\\"},\\\"boost\\\":1.0}}],\\\"boost\\\":1.0}},\\\"_source\\\":false,\\\"fields\\\":[{\\\"field\\\":\\\"n\\\"}],\\\"sort\\\":[{\\\"s\\\":{\\\"order\\\":\\\"desc\\\",\\\"missing\\\":\\\"_first\\\",\\\"unmapped_type\\\":\\\"keyword\\\"}}],\\\"track_total_hits\\\":-1,\\\"pit\\\":{\\\"id\\\":\\\"rce6BAENZGJtZXRhX3BhZ2luZxZzazhZSHdOd1NQNm5oOFhwS3o4WVBRAAEWczZ6Z2Q4bGxRMFd6T0xxRnhOalFKUQABAAAAAAAAADEWRGRUdUFDMDlRV3lVMG5oRWVxdHNFQQABFnNrOFlId053U1A2bmg4WHBLejhZUFEAAA==\\\"}}]\",\"start_time_in_millis\":1790879700843,\"running_time_in_nanos\":930705829,\"cancellable\":true,\"cancelled\":true,\"parent_task_id\":\"s6zgd8llQ0WzOLqFxNjQJQ:787\",\"headers\":{}},\"s6zgd8llQ0WzOLqFxNjQJQ:793\":{\"node\":\"s6zgd8llQ0WzOLqFxNjQJQ\",\"id\":793,\"type\":\"transport\",\"action\":\"indices:data/read/search[phase/query]\",\"description\":\"shardId[[dbmeta_paging][0]]\",\"start_time_in_millis\":1790879700843,\"running_time_in_nanos\":930494908,\"cancellable\":true,\"cancelled\":true,\"parent_task_id\":\"s6zgd8llQ0WzOLqFxNjQJQ:792\",\"headers\":{}}}}}}"
+  }
+}

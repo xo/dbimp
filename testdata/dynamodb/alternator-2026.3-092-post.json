@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261001T181408Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.CreateTable"
+      ]
+    },
+    "body": "{\"TableName\":\"dbimp_user\",\"AttributeDefinitions\":[{\"AttributeName\":\"pk\",\"AttributeType\":\"S\"}],\"KeySchema\":[{\"AttributeName\":\"pk\",\"KeyType\":\"HASH\"}],\"BillingMode\":\"PAY_PER_REQUEST\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "140"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 18:14:07 GMT"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazonaws.dynamodb.v20120810#AccessDeniedException\",\"message\":\"CREATE access on ALL KEYSPACES is denied to role dbmeta_user\"}"
+  }
+}

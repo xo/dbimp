@@ -57,6 +57,12 @@ order:
    Avatica server and the Apache Phoenix Query Server (D74). Done, in
    `v0.10.0` (W24). Druid gets a driver of its own (D154). See
    [AVATICA.md](AVATICA.md).
+10. Apache Druid (W25 and D162).
+11. Apache Drill (W26).
+12. Apache Solr (W27).
+13. Elasticsearch (W28). OpenSearch gets a driver of its own (D162).
+14. OpenSearch (W29).
+15. Amazon DynamoDB, with ScyllaDB Alternator as a flavor (W30).
 
 The other targets below keep their priority, and their place in the order
 is open.
@@ -161,7 +167,7 @@ that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 | Elasticsearch and OpenSearch | Only through `_sql`, which pages with a cursor. The Query DSL and ES\|QL fail S. |
 | SurrealDB | The second target (W8). The driver is `github.com/xo/dbimp/surrealdb`. R: yes, `dbrun` starts 2.7.0, 3.1.6, 3.2.4 and 3.3.0 (dbmeta D103). H: yes, `POST /rpc` on port 8000. S: yes, SurrealQL. P1. Returns objects and no column list, with the keys sorted by name. See [SURREALDB.md](SURREALDB.md). |
 | Neo4j | The third target (W9). The driver is `github.com/xo/dbimp/neo4j`. R: yes, `dbrun` starts 5.26.31 and 2026.09.0 (dbmeta D106). H: yes, the Query API, `POST /db/{database}/query/v2` on port 7474. S: yes, Cypher, by D58. P1. `dbrun` runs the Enterprise Edition under the evaluation agreement (D59). Returns the columns before the rows, in the order of the statement, with typed JSON (D62). See [NEO4J.md](NEO4J.md). |
-| Amazon DynamoDB | PartiQL, on `amazon/dynamodb-local`, which supports `ExecuteStatement` (not measured). Needs SigV4. An item is a map with no column order, and a number can have 38 digits. `usql` already has a driver, so it is likely P2 (D24). |
+| Amazon DynamoDB | Fifteenth in the order (D162). The driver is `dynamodb` (W30 and D169). R: `dbrun` starts DynamoDB Local 3.2.0 and 3.3.1, which stand in for the cloud service. H: `POST /` with JSON, signed with AWS Signature Version 4. S: PartiQL through `ExecuteStatement`. ScyllaDB Alternator speaks the same API with no PartiQL, so it fails S, and the driver does not serve it (D163). An item is a map with no column order, and a number can have 38 digits. `usql` reaches it through `btnguyen2k/godynamo`, which this driver can replace (D24). See [DYNAMODB.md](DYNAMODB.md). |
 | Databend | New. Fourth in the order after Neo4j (D73). SQL on `/v1/query`. `usql` has a driver, and dbmeta D66 names it. Its driver is `databend`, and it replaces the driver of `usql` (D76). The driver is `github.com/xo/dbimp/databend` (W16). R: `dbrun` starts 1.2.881 and 1.2.948. H and S: `POST /v1/query` answered SQL on both, as both principals (measured on 2026-09-29, W16). See [DATABEND.md](DATABEND.md). |
 | GreptimeDB | New. SQL on `/v1/sql`. |
 | Apache Phoenix Query Server and Apache Calcite Avatica | A reviewer named it, and Ken placed it ninth in the order on 2026-09-27 (D74). The driver is `github.com/xo/dbimp/avatica` (W24). It speaks the Avatica protocol in JSON only (D153), and serves the standalone Avatica server and the Phoenix Query Server. Druid gets a driver of its own (D154). R: `dbrun` starts Avatica 1.28.0 and 1.29.0, the Phoenix Query Server 2.0-5.0, and Druid 36.0.0 and 37.0.0 (dbmeta D113). H: `POST /` on port 8765. S: SQL of HSQLDB or of Phoenix. `usql` has a driver for Avatica (D24). See [AVATICA.md](AVATICA.md). |

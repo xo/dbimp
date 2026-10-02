@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "stmt=SELECT+n_i%2C+max%28id%29+AS+m+FROM+dbimp+GROUP+BY+n_i+ORDER+BY+max%28id%29+DESC"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "568"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"EXCEPTION\":\"Failed to execute sqlQuery 'SELECT n_i, max(id) AS m FROM dbimp GROUP BY n_i ORDER BY max(id) DESC' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"SELECT n_i, max(id) AS m FROM dbimp GROUP BY n_i ORDER BY max(id) DESC\\\": java.io.IOException: java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Number (java.lang.String and java.lang.Number are in module java.base of loader 'bootstrap')\",\n      \"EOF\":true,\n      \"RESPONSE_TIME\":9\n    }]\n  }\n}"
+  }
+}

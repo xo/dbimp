@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST('true' AS BOOLEAN) AS bo, CAST(1 AS INTEGER) AS i, CAST(1 AS DOUBLE) AS d, CAST(1 AS REAL) AS r, CAST(1 AS DECIMAL(9, 2)) AS d9 FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "1489"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:05 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a52-506a-e9d1-dab7-eb83ba83555b\"\n,\"exception\":\"org.apache.drill.exec.work.foreman.UnsupportedDataTypeException\"\n,\"errorMessage\":\"REAL is not supported\\nSee Apache Drill JIRA: DRILL-1959\"\n,\"stackTrace\":[\"org.apache.drill.exec.work.foreman.UnsupportedDataTypeException: REAL is not supported\",\"See Apache Drill JIRA: DRILL-1959\",\"\\tat org.apache.drill.exec.exception.UnsupportedOperatorCollector.convertException(UnsupportedOperatorCollector.java:40)\",\"\\tat org.apache.drill.exec.planner.sql.parser.UnsupportedOperatorsVisitor.convertException(UnsupportedOperatorsVisitor.java:77)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateNode(DefaultSqlHandler.java:672)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateAndConvert(DefaultSqlHandler.java:198)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:172)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

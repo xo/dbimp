@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a FROM dbimp_types LIMIT 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true,\"dbimpUnknown\":1}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:22:28 GMT",
+        "Thu, 01 Oct 2026 20:22:28 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "5711c9f2-979a-4991-bd19-de58abcdb5b9"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "5711c9f2-979a-4991-bd19-de58abcdb5b9"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ]
+    },
+    "body": "[[\"a\"],[\"LONG\"],[\"INTEGER\"],[1]]\n"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"REPLACE INTO dbimp_big OVERWRITE ALL\\nSELECT TIMESTAMPADD(SECOND, a.x * 20 + b.y + 1 + CASE WHEN a.x * 20 + b.y + 1 = 400 THEN 86400 ELSE 0 END, TIMESTAMP '2026-10-01 00:00:00') AS __time,\\n  a.x * 20 + b.y + 1 AS n,\\n  400 - (a.x * 20 + b.y + 1) AS z,\\n  RPAD('row', 100, 'x') AS s\\nFROM UNNEST(ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]) AS a(x) CROSS JOIN UNNEST(ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]) AS b(y)\\nPARTITIONED BY DAY\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:19:37 GMT",
+        "Thu, 01 Oct 2026 20:19:37 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"taskId\":\"query-8d6ec087-9e6e-4f0a-8d77-55af965f3acf\",\"state\":\"RUNNING\"}"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELEC 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "197"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Query-Id": [
+        "c054d906-4757-4773-a6ae-de1296bca190"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "c054d906-4757-4773-a6ae-de1296bca190"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Non-query expression encountered in illegal context\",\"context\":{\"sourceType\":\"sql\"}}"
+  }
+}

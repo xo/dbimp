@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE TABLE dfs.tmp.`dbimp_multi/b` AS SELECT employee_id + 10000 AS id, 'x' AS s FROM cp.`employee.json` LIMIT 3\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "248"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:43 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2c-7e60-207f-02f7-5cb48397130e\"\n,\"columns\":[\"Fragment\",\"Number of records written\"]\n,\"metadata\":[\"VARCHAR\",\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"Fragment\":\"0_0\",\"Number of records written\":3}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbimp_big ORDER BY __time LIMIT 3 OFFSET 397\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:19 GMT",
+        "Thu, 01 Oct 2026 20:26:19 GMT"
+      ],
+      "X-Druid-Query-Id": [
+        "d3973b71-6508-4934-aba2-5281e6a167ff"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "d3973b71-6508-4934-aba2-5281e6a167ff"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ]
+    },
+    "body": "[[\"n\"],[\"LONG\"],[\"BIGINT\"],[398],[399],[400]]\n"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT employee_id FROM `employee.json`\",\"autoLimit\":\"10\",\"defaultSchema\":\"cp\",\"options\":{\"exec.query.max_rows\":\"20\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:15 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "356"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a0c-255f-d5ca-a986-ee6c327346c7\"\n,\"columns\":[\"employee_id\"]\n,\"metadata\":[\"BIGINT\"]\n,\"attemptedAutoLimit\":10\n,\"rows\":[\n{\"employee_id\":1}\n,{\"employee_id\":2}\n,{\"employee_id\":4}\n,{\"employee_id\":5}\n,{\"employee_id\":6}\n,{\"employee_id\":7}\n,{\"employee_id\":8}\n,{\"employee_id\":9}\n,{\"employee_id\":10}\n,{\"employee_id\":11}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

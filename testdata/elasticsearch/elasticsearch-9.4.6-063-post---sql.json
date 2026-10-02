@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ir, pt FROM dbmeta_types\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"verification_exception\",\"reason\":\"Found 2 problems\\nline 1:8: Cannot use field [ir] with unsupported type [integer_range]\\nline 1:12: Cannot use field [pt] with unsupported type [point]\"}],\"type\":\"verification_exception\",\"reason\":\"Found 2 problems\\nline 1:8: Cannot use field [ir] with unsupported type [integer_range]\\nline 1:12: Cannot use field [pt] with unsupported type [point]\"},\"status\":400}"
+  }
+}

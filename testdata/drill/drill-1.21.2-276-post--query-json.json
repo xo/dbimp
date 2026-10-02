@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"ALTER SYSTEM SET `exec.query.max_rows` = 0\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "1249"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:44 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"154149ee-997d-745a-6f42-0cca64326c06\"\n,\"exception\":\"java.lang.Exception\"\n,\"errorMessage\":\"PERMISSION ERROR: Not authorized to change SYSTEM options.\\n\\n\\n[Error Id: b35f260a-4699-4e1f-868a-60664e911c18 ]\"\n,\"stackTrace\":[\"java.lang.Exception: PERMISSION ERROR: Not authorized to change SYSTEM options.\",\"[Error Id: b35f260a-4699-4e1f-868a-60664e911c18 ]\",\"\\tat org.apache.drill.common.exceptions.UserException$Builder.build(UserException.java:688)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.AbstractSqlSetHandler.checkAdminPrivileges(AbstractSqlSetHandler.java:86)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.SetOptionHandler.getPlan(SetOptionHandler.java:75)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

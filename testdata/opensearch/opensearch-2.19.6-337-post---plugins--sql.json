@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST(s AS INT) FROM dbmeta_rows\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"For input string: \\\"row 1\\\"\",\n    \"type\": \"NumberFormatException\"\n  },\n  \"status\": 400\n}"
+  }
+}

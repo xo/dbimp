@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"ALTER SYSTEM SET `exec.query.max_rows` = 0\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "225"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:04 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a52-f27d-de25-9388-3f951c73274f\"\n,\"columns\":[\"ok\",\"summary\"]\n,\"metadata\":[\"BIT\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"ok\":true,\"summary\":\"exec.query.max_rows updated.\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

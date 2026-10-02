@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n, s FROM dbmeta_paging WHERE n = ? AND s = ?\",\"params\":[5,\"row 5\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "4410450"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"n\",\"type\":\"integer\"},{\"name\":\"s\",\"type\":\"keyword\"}],\"rows\":[[5,\"row 5\"]]}"
+  }
+}

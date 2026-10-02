@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"CREATE TABLE dbimp_ddl (pk VARCHAR PRIMARY KEY, v VARCHAR DEFAULT 'x')\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "191"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "7ff86ab4-28cf-4d63-bcf5-c907c61a472f"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Statement wasn't well formed, can't be processed: CREATE TABLE dbimp_ddl (pk VARCHAR PRIMARY KEY, v VARCHAR DEFAULT 'x')\"}"
+  }
+}

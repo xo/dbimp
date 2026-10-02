@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST('ab' AS BINARY(2)) AS b FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "170"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:45 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a29-8c8c-6fd5-686f-3208c74a7ef4\"\n,\"columns\":[\"b\"]\n,\"metadata\":[\"VARBINARY\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"b\":\"YWI=\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

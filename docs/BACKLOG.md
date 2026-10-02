@@ -45,7 +45,9 @@ from Ken on 2026-09-30, who asked for one table of every type of every
 driver after D135, and W21 from D138. W22 came from Ken on 2026-09-30,
 who named rqlite as the next target at step 1. W23 came from Ken on 2026-10-01,
 who named libSQL and Turso as the next target at step 1. W24 came from Ken on
-2026-10-01, who named Avatica as the next driver at step 1.
+2026-10-01, who named Avatica as the next driver at step 1. W25 to W30 came
+from Ken on 2026-10-01, who named Druid, Drill, Solr, Elasticsearch,
+OpenSearch and DynamoDB as the next six at step 1 (D162).
 
 ## W1. Set up the repository in the xo layout. Done.
 
@@ -1354,3 +1356,45 @@ session tagged `v0.10.0` on `68425cf` and published it the same day, which
 is the gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.10.0.
 
 Step 20 waits for Ken. The requests above name `v0.10.0`.
+
+## W25. Write the Apache Druid driver
+
+Apache Druid is a target after Avatica, by D162. Ken named it at step 1 on
+2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[DRUID.md](DRUID.md), and the package is `druid`. `dbrun` starts `druid-36.0.0` and `druid-37.0.0`. D154 gave it a driver of its own. `dburl` has no scheme for it, and `usql` has no driver.
+The six drivers of D162 go through step 9 together, before step 10 of any.
+
+## W26. Write the Apache Drill driver
+
+Apache Drill is a target after Avatica, by D162. Ken named it at step 1 on
+2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[DRILL.md](DRILL.md), and the package is `drill`. `dbrun` starts `drill-1.21.2` and `drill-1.22.0`. `dburl` has no scheme for it, and `usql` has no driver.
+The six drivers of D162 go through step 9 together, before step 10 of any.
+
+## W27. Write the Apache Solr driver
+
+Apache Solr is a target after Avatica, by D162. Ken named it at step 1 on
+2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[SOLR.md](SOLR.md), and the package is `solr`. `dbrun` starts `solr-9.9.0`, `solr-9.10.1` and `solr-10.0.0`. `dburl` has no scheme for it, and `usql` has no driver.
+The six drivers of D162 go through step 9 together, before step 10 of any.
+
+## W28. Write the Elasticsearch driver
+
+Elasticsearch is a target after Avatica, by D162. Ken named it at step 1 on
+2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[ELASTICSEARCH.md](ELASTICSEARCH.md), and the package is `elasticsearch`. `dbrun` starts `elasticsearch-8.19.22`, `elasticsearch-9.4.6` and `elasticsearch-9.5.3`. The driver reads SQL through `_sql`. `dburl` has no scheme for it, and `usql` has no driver.
+The six drivers of D162 go through step 9 together, before step 10 of any.
+
+## W29. Write the OpenSearch driver
+
+OpenSearch is a target after Avatica, by D162. Ken named it at step 1 on
+2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[OPENSEARCH.md](OPENSEARCH.md), and the package is `opensearch`. `dbrun` starts `opensearch-2.19.6` and `opensearch-3.8.0`. `dburl` has no scheme for it, and `usql` has no driver.
+The six drivers of D162 go through step 9 together, before step 10 of any.
+
+## W30. Write the Amazon DynamoDB driver
+
+Amazon DynamoDB is a target after Avatica, by D162. Ken named it at step 1 on
+2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[DYNAMODB.md](DYNAMODB.md), and the package is `dynamodb`. `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, and ScyllaDB Alternator as `alternator-2025.1` and `alternator-2026.3`, which is a flavor. DynamoDB Local checks no key, so it has no ordinary user, and Alternator has one. `usql` reaches DynamoDB through `btnguyen2k/godynamo`, under the `dburl` scheme `godynamo`, and this driver can replace it (D24).
+The six drivers of D162 go through step 9 together, before step 10 of any.

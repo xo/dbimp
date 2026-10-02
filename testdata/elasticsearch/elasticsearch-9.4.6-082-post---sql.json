@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ? AS a\",\"params\":[{\"type\":\"integer\",\"value\":1}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"x_content_parse_exception\",\"reason\":\"[1:36] [params] must be an array where each entry is a single field (no objects supported)\"}],\"type\":\"x_content_parse_exception\",\"reason\":\"[1:36] [params] must be an array where each entry is a single field (no objects supported)\"},\"status\":400}"
+  }
+}

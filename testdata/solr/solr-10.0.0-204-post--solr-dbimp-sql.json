@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ]
+    },
+    "body": "stmt=SELECT+id+FROM+dbimp+WHERE+_query_+%3D+%27n_t%3Afox+AND+n_i%3A%5B0+TO+%2A%5D%27+LIMIT+5"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "604"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[\n      {\n        \"EXCEPTION\":\"Failed to execute sqlQuery 'SELECT id FROM dbimp WHERE _query_ = 'n_t:fox AND n_i:[0 TO *]' LIMIT 5' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"SELECT id FROM dbimp WHERE _query_ = 'n_t:fox AND n_i:[0 TO *]' LIMIT 5\\\": java.io.IOException: java.io.IOException: --> http://192.168.1.5:8983/solr:org.apache.solr.search.SyntaxError: Cannot parse 'n_i:[0': Encountered \\\"<EOF>\\\" at line 1, column 6.\\nWas expecting:\\n    \\\"TO\\\" ...\\n    \",\n        \"EOF\":true,\n        \"RESPONSE_TIME\":9\n      }\n    ]\n  }\n}"
+  }
+}

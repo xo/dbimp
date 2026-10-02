@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id = 1 AS bo, id > 5 AS bf, s IS NULL AS bn FROM dbimp_types ORDER BY __time\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Query-Id": [
+        "8c1e9624-f9de-41f1-8501-e627d3e5f75c"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "8c1e9624-f9de-41f1-8501-e627d3e5f75c"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ]
+    },
+    "body": "[[\"bo\",\"bf\",\"bn\"],[\"LONG\",\"LONG\",\"LONG\"],[\"BOOLEAN\",\"BOOLEAN\",\"BOOLEAN\"],[false,false,true],[false,false,false],[true,false,false]]\n"
+  }
+}

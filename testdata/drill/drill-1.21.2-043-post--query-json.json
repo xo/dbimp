@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST('2026-10-01 12:34:56' AS TIMESTAMP WITH LOCAL TIME ZONE) AS z FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "4226"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:44 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2a-d55d-26a7-ddf9-f16f7d491776\"\n,\"exception\":\"org.apache.drill.exec.work.foreman.ForemanException\"\n,\"errorMessage\":\"Unexpected exception during fragment initialization: Error while applying rule ReduceAndSimplifyProjectRule, args [rel#3176:LogicalProject.NONE.ANY([]).[](input=RelSubset#3175,exprs=[CAST('2026-10-01 12:34:56'):TIMESTAMP_WITH_LOCAL_TIME_ZONE(0) NOT NULL])]\"\n,\"stackTrace\":[\"org.apache.drill.exec.work.foreman.ForemanException: Unexpected exception during fragment initialization: Error while applying rule ReduceAndSimplifyProjectRule, args [rel#3176:LogicalProject.NONE.ANY([]).[](input=RelSubset#3175,exprs=[CAST('2026-10-01 12:34:56'):TIMESTAMP_WITH_LOCAL_TIME_ZONE(0) NOT NULL])]\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:301)\",\"\\tat .......(:0)\",\"Caused by: java.lang.RuntimeException: Error while applying rule ReduceAndSimplifyProjectRule, args [rel#3176:LogicalProject.NONE.ANY([]).[](input=RelSubset#3175,exprs=[CAST('2026-10-01 12:34:56'):TIMESTAMP_WITH_LOCAL_TIME_ZONE(0) NOT NULL])]\",\"\\tat org.apache.calcite.plan.volcano.VolcanoRuleCall.onMatch(VolcanoRuleCall.java:250)\",\"\\tat org.apache.calcite.plan.volcano.IterativeRuleDriver.drive(IterativeRuleDriver.java:59)\",\"\\tat org.apache.calcite.plan.volcano.VolcanoPlanner.findBestExp(VolcanoPlanner.java:523)\",\"\\tat org.apache.calcite.tools.Programs$RuleSetProgram.run(Programs.java:317)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.transform(DefaultSqlHandler.java:405)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.transform(DefaultSqlHandler.java:351)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.convertToRawDrel(DefaultSqlHandler.java:245)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.convertToDrel(DefaultSqlHandler.java:308)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:176)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\t... 1 more\",\"Caused by: java.lang.IllegalArgumentException: No enum constant org.apache.drill.common.types.TypeProtos.MinorType.TIMESTAMP_WITH_LOCAL_TIME_ZONE\",\"\\tat .......(:0)\",\"\\tat org.apache.drill.common.types.TypeProtos$MinorType.valueOf(TypeProtos.java:37)\",\"\\tat org.apache.drill.exec.planner.logical.DrillOptiq$RexToDrill.getDrillCastFunctionFromOptiq(DrillOptiq.java:546)\",\"\\tat org.apache.drill.exec.planner.logical.DrillOptiq$RexToDrill.visitCall(DrillOptiq.java:228)\",\"\\tat org.apache.drill.exec.planner.logical.DrillOptiq$RexToDrill.visitCall(DrillOptiq.java:120)\",\"\\tat org.apache.calcite.rex.RexCall.accept(RexCall.java:189)\",\"\\tat org.apache.drill.exec.planner.logical.DrillOptiq.toDrill(DrillOptiq.java:112)\",\"\\tat org.apache.drill.exec.planner.logical.DrillOptiq.toDrill(DrillOptiq.java:99)\",\"\\tat org.apache.drill.exec.planner.logical.DrillConstExecutor.reduce(DrillConstExecutor.java:138)\",\"\\tat org.apache.calcite.rex.RexSimplify.simplifyCast(RexSimplify.java:2225)\",\"\\tat org.apache.calcite.rex.RexSimplify.simplify(RexSimplify.java:289)\",\"\\tat org.apache.calcite.rex.RexSimplify.simplifyUnknownAs(RexSimplify.java:248)\",\"\\tat org.apache.calcite.rex.RexSimplify.simplifyPreservingType(RexSimplify.java:187)\",\"\\tat org.apache.calcite.rel.rules.ReduceExpressionsRule.reduceExpressions(ReduceExpressionsRule.java:717)\",\"\\tat org.apache.calcite.rel.rules.ReduceExpressionsRule$ProjectReduceExpressionsRule.onMatch(ReduceExpressionsRule.java:310)\",\"\\tat org.apache.drill.exec.planner.logical.ReduceAndSimplifyExpressionsRules$ReduceAndSimplifyProjectRule.onMatch(ReduceAndSimplifyExpressionsRules.java:121)\",\"\\tat org.apache.calcite.plan.volcano.VolcanoRuleCall.onMatch(VolcanoRuleCall.java:223)\",\"\\t... 15 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

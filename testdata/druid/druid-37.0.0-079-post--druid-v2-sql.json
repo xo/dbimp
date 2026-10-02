@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT TIMESTAMP '1900-01-01 00:00:00' AS ts, TIME_PARSE('0001-01-01T00:00:00Z') AS early FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Query-Id": [
+        "bda96663-510f-4f06-bb9e-85fce6bc9266"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "bda96663-510f-4f06-bb9e-85fce6bc9266"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ]
+    },
+    "body": "[[\"ts\",\"early\"],[\"LONG\",\"LONG\"],[\"TIMESTAMP\",\"TIMESTAMP\"],[\"1900-01-01T00:00:00.000Z\",\"0001-01-01T00:00:00.000Z\"]]\n"
+  }
+}

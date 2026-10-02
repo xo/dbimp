@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT e1.employee_id, e2.employee_id FROM cp.`employee.json` e1 JOIN cp.`employee.json` e2 ON e1.employee_id = e2.employee_id LIMIT 2\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:43 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "259"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2b-c0ac-0ea6-6154-a1819feed91e\"\n,\"columns\":[\"employee_id\",\"employee_id0\"]\n,\"metadata\":[\"BIGINT\",\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"employee_id\":1,\"employee_id0\":1}\n,{\"employee_id\":2,\"employee_id0\":2}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

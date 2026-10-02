@@ -1,0 +1,1450 @@
+{
+  "driver": "opensearch",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/opensearch-project/opensearch-go",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/opensearch-project/sql-jdbc",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-217-post---plugins--sql.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-071-post---plugins--sql.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-218-post---plugins--sql.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-219-post---plugins--sql.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-217-post---plugins--sql.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-217-post---plugins--sql.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "crud",
+      "name": "a write through the document API",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-005-post--dbmeta-types--bulk.json",
+      "test": "TestIntegrationCRUD/a_write_through_the_document_API"
+    },
+    {
+      "kind": "schema",
+      "name": "create table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-220-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/create_table"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-221-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/drop_table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-220-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-220-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-220-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-220-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-220-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-220-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "show tables",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-088-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/show_tables"
+    },
+    {
+      "kind": "schema",
+      "name": "describe tables",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-089-post---plugins--sql.json",
+      "test": "TestIntegrationSchema/describe_tables"
+    },
+    {
+      "kind": "schema",
+      "name": "an index with a mapping made by the administrator",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-004-put--dbmeta-types.json",
+      "test": "TestIntegrationSchema/an_index_with_a_mapping_made_by_the_administrator"
+    },
+    {
+      "kind": "feature",
+      "name": "cursor paging with fetch_size",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-161-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/cursor_paging_with_fetch_size"
+    },
+    {
+      "kind": "feature",
+      "name": "close a cursor",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/opensearch-project/opensearch-go"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-168-post---plugins--sql-close.json",
+      "test": "TestIntegrationFeatures/close_a_cursor"
+    },
+    {
+      "kind": "feature",
+      "name": "the jdbc format",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-072-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_jdbc_format"
+    },
+    {
+      "kind": "feature",
+      "name": "the json format on 2.19",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-2.19.6-073-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_json_format_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "the json format on 3",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-073-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_json_format_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "the csv format",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-074-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_csv_format"
+    },
+    {
+      "kind": "feature",
+      "name": "the csv format with no sanitizing",
+      "sources": [
+        "github.com/opensearch-project/opensearch-go"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-075-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_csv_format_with_no_sanitizing"
+    },
+    {
+      "kind": "feature",
+      "name": "the raw format",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-076-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_raw_format"
+    },
+    {
+      "kind": "feature",
+      "name": "the tsv format",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-236-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_tsv_format"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-078-post---plugins--sql--explain.json",
+      "test": "TestIntegrationFeatures/explain"
+    },
+    {
+      "kind": "feature",
+      "name": "a filter of the query DSL",
+      "sources": [
+        "github.com/opensearch-project/opensearch-go"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-080-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_filter_of_the_query_DSL"
+    },
+    {
+      "kind": "feature",
+      "name": "parameters with a type and a value",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-141-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/parameters_with_a_type_and_a_value"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-153-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "a timestamp parameter",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-144-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_timestamp_parameter"
+    },
+    {
+      "kind": "feature",
+      "name": "a time parameter",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-149-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_time_parameter"
+    },
+    {
+      "kind": "feature",
+      "name": "a byte parameter",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-151-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_byte_parameter"
+    },
+    {
+      "kind": "feature",
+      "name": "a string parameter with a quote on 2.19",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-2.19.6-141-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_string_parameter_with_a_quote_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "a string parameter with a quote on 3",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-141-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_string_parameter_with_a_quote_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "match",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-223-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/match"
+    },
+    {
+      "kind": "feature",
+      "name": "match phrase",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-229-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/match_phrase"
+    },
+    {
+      "kind": "feature",
+      "name": "multi match",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-230-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/multi_match"
+    },
+    {
+      "kind": "feature",
+      "name": "query string",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-231-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/query_string"
+    },
+    {
+      "kind": "feature",
+      "name": "simple query string",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-232-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/simple_query_string"
+    },
+    {
+      "kind": "feature",
+      "name": "wildcard query",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-233-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/wildcard_query"
+    },
+    {
+      "kind": "feature",
+      "name": "score",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-224-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/score"
+    },
+    {
+      "kind": "feature",
+      "name": "the nested function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-104-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_nested_function"
+    },
+    {
+      "kind": "feature",
+      "name": "a path into an object",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-102-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_path_into_an_object"
+    },
+    {
+      "kind": "feature",
+      "name": "a path into a nested field",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-103-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_path_into_a_nested_field"
+    },
+    {
+      "kind": "feature",
+      "name": "a multi-valued field",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-105-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_multi-valued_field"
+    },
+    {
+      "kind": "feature",
+      "name": "the function multi_value",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-234-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_function_multi_value"
+    },
+    {
+      "kind": "feature",
+      "name": "an index pattern",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-225-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/an_index_pattern"
+    },
+    {
+      "kind": "feature",
+      "name": "the metadata fields",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-090-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_metadata_fields"
+    },
+    {
+      "kind": "feature",
+      "name": "a join",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-222-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_join"
+    },
+    {
+      "kind": "feature",
+      "name": "a subquery",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-227-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_subquery"
+    },
+    {
+      "kind": "feature",
+      "name": "a union",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-228-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_union"
+    },
+    {
+      "kind": "feature",
+      "name": "a window function",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-226-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_window_function"
+    },
+    {
+      "kind": "feature",
+      "name": "a user function",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-235-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_user_function"
+    },
+    {
+      "kind": "feature",
+      "name": "the legacy engine",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-101-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/the_legacy_engine"
+    },
+    {
+      "kind": "feature",
+      "name": "a group by of more than 1000 groups on 2.19",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-2.19.6-157-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_group_by_of_more_than_1000_groups_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "a group by of more than 1000 groups on 3",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-157-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_group_by_of_more_than_1000_groups_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "a group by in pages",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-174-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_group_by_in_pages"
+    },
+    {
+      "kind": "feature",
+      "name": "a setting for the size of a group by",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-239-put---cluster-settings.json",
+      "test": "TestIntegrationFeatures/a_setting_for_the_size_of_a_group_by"
+    },
+    {
+      "kind": "feature",
+      "name": "a setting for the limit of a group by",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-240-put---cluster-settings.json",
+      "test": "TestIntegrationFeatures/a_setting_for_the_limit_of_a_group_by"
+    },
+    {
+      "kind": "feature",
+      "name": "an error on a later page",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-200-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/an_error_on_a_later_page"
+    },
+    {
+      "kind": "feature",
+      "name": "a cancel endpoint",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-204-post---plugins--sql--cancel.json",
+      "test": "TestIntegrationFeatures/a_cancel_endpoint"
+    },
+    {
+      "kind": "feature",
+      "name": "an async query",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-238-post---plugins--async-query.json",
+      "test": "TestIntegrationFeatures/an_async_query"
+    },
+    {
+      "kind": "feature",
+      "name": "a time to wait for completion",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-237-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_time_to_wait_for_completion"
+    },
+    {
+      "kind": "feature",
+      "name": "transactions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-241-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "PPL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-079-post---plugins--ppl.json",
+      "test": "TestIntegrationFeatures/PPL"
+    },
+    {
+      "kind": "feature",
+      "name": "the path of Open Distro on 2.19",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-2.19.6-240-post---opendistro--sql.json",
+      "test": "TestIntegrationFeatures/the_path_of_Open_Distro_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "the path of Open Distro on 3",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-245-post---opendistro--sql.json",
+      "test": "TestIntegrationFeatures/the_path_of_Open_Distro_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "a cursor as the ordinary user on 2.19",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-2.19.6-330-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_cursor_as_the_ordinary_user_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "a cursor as the ordinary user on 3",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-335-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_cursor_as_the_ordinary_user_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "a half_float field reads as float",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_half_float_field_reads_as_float"
+    },
+    {
+      "kind": "feature",
+      "name": "a scaled_float field reads as double",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_scaled_float_field_reads_as_double"
+    },
+    {
+      "kind": "feature",
+      "name": "a date_nanos field reads as timestamp",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_date_nanos_field_reads_as_timestamp"
+    },
+    {
+      "kind": "feature",
+      "name": "a date field with a format of a day reads as date",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_date_field_with_a_format_of_a_day_reads_as_date"
+    },
+    {
+      "kind": "feature",
+      "name": "a date field with a format of a time reads as time",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_date_field_with_a_format_of_a_time_reads_as_time"
+    },
+    {
+      "kind": "feature",
+      "name": "a match_only_text field on 2.19",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-2.19.6-099-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_match_only_text_field_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "a match_only_text field reads as text on 3",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-099-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_match_only_text_field_reads_as_text_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "a constant_keyword field on 2.19",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-2.19.6-117-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_constant_keyword_field_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "a constant_keyword field reads as keyword on 3",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-117-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_constant_keyword_field_reads_as_keyword_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "an alias field on 2.19",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-2.19.6-098-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/an_alias_field_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "an alias field reads as its target on 3",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-098-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/an_alias_field_reads_as_its_target_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "a knn_vector field on 2.19",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-2.19.6-097-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_knn_vector_field_on_2.19"
+    },
+    {
+      "kind": "feature",
+      "name": "a knn_vector field reads as nested on 3",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-097-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_knn_vector_field_reads_as_nested_on_3"
+    },
+    {
+      "kind": "feature",
+      "name": "a subfield of a text",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-100-post---plugins--sql.json",
+      "test": "TestIntegrationFeatures/a_subfield_of_a_text"
+    },
+    {
+      "kind": "type",
+      "name": "undefined",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-106-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/undefined"
+    },
+    {
+      "kind": "type",
+      "name": "boolean",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/boolean"
+    },
+    {
+      "kind": "type",
+      "name": "byte",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/byte"
+    },
+    {
+      "kind": "type",
+      "name": "short",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/short"
+    },
+    {
+      "kind": "type",
+      "name": "integer",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/integer"
+    },
+    {
+      "kind": "type",
+      "name": "long",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/long"
+    },
+    {
+      "kind": "type",
+      "name": "float",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/float"
+    },
+    {
+      "kind": "type",
+      "name": "double",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/double"
+    },
+    {
+      "kind": "type",
+      "name": "keyword",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/keyword"
+    },
+    {
+      "kind": "type",
+      "name": "text",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/text"
+    },
+    {
+      "kind": "type",
+      "name": "binary",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/binary"
+    },
+    {
+      "kind": "type",
+      "name": "ip",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/ip"
+    },
+    {
+      "kind": "type",
+      "name": "date",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/date"
+    },
+    {
+      "kind": "type",
+      "name": "time",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/time"
+    },
+    {
+      "kind": "type",
+      "name": "timestamp",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/timestamp"
+    },
+    {
+      "kind": "type",
+      "name": "datetime",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-2.19.6-112-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/datetime"
+    },
+    {
+      "kind": "type",
+      "name": "geo_point",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/geo_point"
+    },
+    {
+      "kind": "type",
+      "name": "object",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/object"
+    },
+    {
+      "kind": "type",
+      "name": "nested",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/opensearch-project/opensearch-go",
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-091-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/nested"
+    },
+    {
+      "kind": "type",
+      "name": "half_float",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-2.19.6-101-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/half_float"
+    },
+    {
+      "kind": "type",
+      "name": "scaled_float",
+      "sources": [
+        "github.com/opensearch-project/sql-jdbc"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-2.19.6-101-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/scaled_float"
+    },
+    {
+      "kind": "type",
+      "name": "integer_range",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "opensearch-3.8.0-101-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/integer_range"
+    },
+    {
+      "kind": "type",
+      "name": "interval",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-110-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/interval"
+    },
+    {
+      "kind": "type",
+      "name": "unsigned_long",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-092-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/unsigned_long"
+    },
+    {
+      "kind": "type",
+      "name": "wildcard",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-093-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/wildcard"
+    },
+    {
+      "kind": "type",
+      "name": "geo_shape",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-094-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/geo_shape"
+    },
+    {
+      "kind": "type",
+      "name": "flat_object",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-096-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/flat_object"
+    },
+    {
+      "kind": "type",
+      "name": "token_count",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-118-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/token_count"
+    },
+    {
+      "kind": "type",
+      "name": "completion",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-119-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/completion"
+    },
+    {
+      "kind": "type",
+      "name": "search_as_you_type",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-120-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/search_as_you_type"
+    },
+    {
+      "kind": "type",
+      "name": "percolator",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-121-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/percolator"
+    },
+    {
+      "kind": "type",
+      "name": "join",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-122-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/join"
+    },
+    {
+      "kind": "type",
+      "name": "rank_feature",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-123-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/rank_feature"
+    },
+    {
+      "kind": "type",
+      "name": "rank_features",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-124-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/rank_features"
+    },
+    {
+      "kind": "type",
+      "name": "long_range",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-125-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/long_range"
+    },
+    {
+      "kind": "type",
+      "name": "double_range",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-126-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/double_range"
+    },
+    {
+      "kind": "type",
+      "name": "date_range",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-127-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/date_range"
+    },
+    {
+      "kind": "type",
+      "name": "ip_range",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-128-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/ip_range"
+    },
+    {
+      "kind": "type",
+      "name": "xy_point",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-134-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/xy_point"
+    },
+    {
+      "kind": "type",
+      "name": "version",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-132-post---plugins--sql.json",
+      "test": "TestIntegrationRoundTrip/version"
+    },
+    {
+      "kind": "type",
+      "name": "flattened",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-049-put--dbmeta-t-flattened.json",
+      "test": "TestIntegrationRoundTrip/flattened"
+    },
+    {
+      "kind": "type",
+      "name": "dense_vector",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-052-put--dbmeta-t-dense-vector.json",
+      "test": "TestIntegrationRoundTrip/dense_vector"
+    },
+    {
+      "kind": "type",
+      "name": "histogram",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-055-put--dbmeta-t-histogram.json",
+      "test": "TestIntegrationRoundTrip/histogram"
+    },
+    {
+      "kind": "type",
+      "name": "sparse_vector",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-067-put--dbmeta-t-sparse-vector.json",
+      "test": "TestIntegrationRoundTrip/sparse_vector"
+    },
+    {
+      "kind": "type",
+      "name": "semantic",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "opensearch-3.8.0-061-put--dbmeta-t-semantic.json",
+      "test": "TestIntegrationRoundTrip/semantic"
+    }
+  ]
+}

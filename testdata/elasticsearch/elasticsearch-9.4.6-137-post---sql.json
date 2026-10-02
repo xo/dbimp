@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=nope",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"illegal_argument_exception\",\"reason\":\"Invalid request content type: Accept=[null], Content-Type=[application/json], format=[nope]\"}],\"type\":\"illegal_argument_exception\",\"reason\":\"Invalid request content type: Accept=[null], Content-Type=[application/json], format=[nope]\"},\"status\":400}"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ul + 1 AS a FROM dbmeta_types WHERE id = 1\"}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"arithmetic_exception\",\"reason\":\"unsigned_long overflow\"}],\"type\":\"arithmetic_exception\",\"reason\":\"unsigned_long overflow\"},\"status\":500}"
+  }
+}

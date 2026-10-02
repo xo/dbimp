@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, v FROM dbmeta_t_sparse_vector\"}"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Error occurred in OpenSearch engine: no such index [dbmeta_t_sparse_vector]\",\n    \"details\": \"[dbmeta_t_sparse_vector] IndexNotFoundException[no such index [dbmeta_t_sparse_vector]]\\nFor more details, please send request for Json format to see the raw response from OpenSearch engine.\",\n    \"type\": \"IndexNotFoundException\"\n  },\n  \"status\": 404\n}"
+  }
+}

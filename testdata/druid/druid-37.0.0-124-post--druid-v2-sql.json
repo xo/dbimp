@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, s FROM dbimp_types ORDER BY __time\",\"resultFormat\":\"arrayLines\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:18 GMT",
+        "Thu, 01 Oct 2026 20:10:18 GMT"
+      ],
+      "X-Druid-Query-Id": [
+        "c91b573d-0627-485d-b02b-9b062338201c"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "c91b573d-0627-485d-b02b-9b062338201c"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "[\"id\",\"s\"]\n[\"LONG\",\"STRING\"]\n[\"BIGINT\",\"VARCHAR\"]\n[3,null]\n[2,\"\"]\n[1,\"é'\\\"\\\\ x\"]\n\n"
+  }
+}

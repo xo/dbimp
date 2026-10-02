@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"-- a comment\\nSELECT /* inline */ 1 AS one -- the end\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "595976"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"one\",\"type\":\"integer\"}],\"rows\":[[1]]}"
+  }
+}

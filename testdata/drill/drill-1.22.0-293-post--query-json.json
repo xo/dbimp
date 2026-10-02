@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT modeof(l) AS mode, typeof(l) AS t, sqlTypeOf(l) AS s, drillTypeOf(l) AS d, sqlTypeOf(m) AS sm, modeof(id) AS mid FROM dfs.tmp.dbimp_complex\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "318"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:33 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a36-3707-3d06-82c5-45a4b27159b6\"\n,\"columns\":[\"mode\",\"t\",\"s\",\"d\",\"sm\",\"mid\"]\n,\"metadata\":[\"VARCHAR\",\"VARCHAR\",\"VARCHAR\",\"VARCHAR\",\"VARCHAR\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"mode\":\"ARRAY\",\"t\":\"BIGINT\",\"s\":\"BIGINT\",\"d\":\"BIGINT\",\"sm\":\"STRUCT\",\"mid\":\"NULLABLE\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ? AS x\",\"parameters\":[{\"type\":\"string\",\"value\":\"it's\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"'it\\\\'s'\",\n      \"alias\": \"x\",\n      \"type\": \"keyword\"\n    }\n  ],\n  \"datarows\": [\n    [\n      \"it's\"\n    ]\n  ],\n  \"total\": 1,\n  \"size\": 1,\n  \"status\": 200\n}"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT __time, v FROM dbimp_extern ORDER BY __time\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Sql-Query-Id": [
+        "38038ad6-f870-42b4-9ffd-72e6b5f4a706"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:18 GMT",
+        "Thu, 01 Oct 2026 20:11:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "38038ad6-f870-42b4-9ffd-72e6b5f4a706"
+      ]
+    },
+    "body": "[[\"__time\",\"v\"],[\"LONG\",\"LONG\"],[\"TIMESTAMP\",\"BIGINT\"],[\"2026-10-01T00:00:00.000Z\",1],[\"2026-10-01T01:00:00.000Z\",2]]\n"
+  }
+}

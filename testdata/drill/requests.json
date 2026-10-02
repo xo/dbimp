@@ -1,0 +1,2609 @@
+{
+  "driver": "drill",
+  "requests": [
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_types",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_types"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_complex",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_complex"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_multi",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_multi"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_change",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_change"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: make the table of every type",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_types AS SELECT id,\nCASE id WHEN 1 THEN CAST(-2147483648 AS INT) WHEN 2 THEN CAST(2147483647 AS INT) END AS i,\nCASE id WHEN 1 THEN CAST(-9223372036854775808 AS BIGINT) WHEN 2 THEN CAST(9223372036854775807 AS BIGINT) END AS b,\nCASE id WHEN 1 THEN CAST(-3.4028235E38 AS FLOAT) WHEN 2 THEN CAST(1.4E-45 AS FLOAT) END AS f4,\nCASE id WHEN 1 THEN CAST(-1.7976931348623157E308 AS DOUBLE) WHEN 2 THEN CAST(1.7976931348623157E308 AS DOUBLE) END AS f8,\nCASE id WHEN 1 THEN CAST('-12345678901234567890.123456789012345678' AS DECIMAL(38,18)) WHEN 2 THEN CAST('0.000000000000000001' AS DECIMAL(38,18)) END AS d,\nCASE id WHEN 1 THEN TRUE WHEN 2 THEN FALSE END AS bo,\nCASE id WHEN 1 THEN 'é''\"\\ x' WHEN 2 THEN '' END AS s,\nCASE id WHEN 1 THEN CAST('ab' AS VARBINARY) WHEN 2 THEN CAST('' AS VARBINARY) END AS vb,\nCASE id WHEN 1 THEN DATE '0001-01-01' WHEN 2 THEN DATE '9999-12-31' END AS dt,\nCASE id WHEN 1 THEN TIME '00:00:00' WHEN 2 THEN TIME '23:59:59.999' END AS t,\nCASE id WHEN 1 THEN TIMESTAMP '1969-12-31 23:59:59.999' WHEN 2 THEN TIMESTAMP '9999-12-31 23:59:59.999' END AS ts,\nCASE id WHEN 1 THEN INTERVAL '-1-2' YEAR TO MONTH WHEN 2 THEN INTERVAL '0' MONTH END AS iy,\nCASE id WHEN 1 THEN INTERVAL '-1 02:03:04.5' DAY TO SECOND WHEN 2 THEN INTERVAL '0' SECOND END AS idy\nFROM (VALUES (1), (2), (3)) AS v(id)"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: make the table of complex values",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_complex AS SELECT 1 AS id, convert_from('{\"k\":[1,2,3],\"o\":{\"s\":\"x\"}}', 'JSON') AS m, convert_from('[1,2,3]', 'JSON') AS l, convert_from('[[1,2],[3]]', 'JSON') AS ll, convert_from('[{\"a\":1},{\"a\":2}]', 'JSON') AS lm, convert_from('[]', 'JSON') AS le FROM (VALUES(1))"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: make the first file of two",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.`dbimp_multi/a` AS SELECT employee_id AS id, '1' AS s FROM cp.`employee.json` LIMIT 300"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: make the second file of two",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.`dbimp_multi/b` AS SELECT employee_id + 10000 AS id, 'x' AS s FROM cp.`employee.json` LIMIT 3"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: make a JSON file with a number",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.`dbimp_change/a` AS SELECT CAST(1 AS BIGINT) AS x, convert_from('{\"k\":1}', 'JSON') AS m FROM (VALUES(1))",
+        "options": {
+          "store.format": "json"
+        }
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: make a JSON file with a string",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.`dbimp_change/b` AS SELECT 'text' AS x, convert_from('{\"k\":2}', 'JSON') AS m FROM (VALUES(1))",
+        "options": {
+          "store.format": "json"
+        }
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a statement",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id, full_name FROM cp.`employee.json` LIMIT 3"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with every key of the body",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM `employee.json`",
+        "autoLimit": "10",
+        "defaultSchema": "cp",
+        "options": {
+          "exec.query.max_rows": "20"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "the query type in lower case",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "sql",
+        "query": "SELECT 1 AS one FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 1,
+      "name": "no query type",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT 1 AS one FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an unknown key",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS one FROM (VALUES(1))",
+        "parameters": [
+          1
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a body that is not JSON",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "text": "{\"queryType\":\"SQL\","
+    },
+    {
+      "item": 1,
+      "name": "a body of plain text",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "text/plain"
+        ]
+      },
+      "text": "{\"queryType\":\"SQL\",\"query\":\"SELECT 1 AS one FROM (VALUES(1))\"}"
+    },
+    {
+      "item": 1,
+      "name": "a form login",
+      "method": "POST",
+      "path": "/j_security_check",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "j_username=admin&j_password=wrong"
+    },
+    {
+      "item": 1,
+      "name": "a user to impersonate",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS one FROM (VALUES(1))",
+        "userName": "dbmeta_user"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an unknown default schema",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS one FROM (VALUES(1))",
+        "defaultSchema": "nope"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the default schema dfs.tmp",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT id, i FROM dbimp_types ORDER BY id",
+        "defaultSchema": "dfs.tmp"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a physical plan as the query type",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "PHYSICAL",
+        "query": "SELECT 1"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns in the order of the statement",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT b, a FROM (VALUES(1, 2)) AS t(a, b)"
+      }
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS a, 2 AS a FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a column with no name",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1, 2 FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 2,
+      "name": "two columns of a join with one name",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT e1.employee_id, e2.employee_id FROM cp.`employee.json` e1 JOIN cp.`employee.json` e2 ON e1.employee_id = e2.employee_id LIMIT 2"
+      }
+    },
+    {
+      "item": 2,
+      "name": "no rows",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT * FROM dfs.tmp.dbimp_types WHERE 1 = 0"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a type that changes between files",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT x, m, filename FROM dfs.tmp.dbimp_change"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the type of each value of a type that changes",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT x, typeof(x) AS t FROM dfs.tmp.dbimp_change"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a type that changes, with the union type",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT x FROM dfs.tmp.dbimp_change",
+        "options": {
+          "exec.enable_union_type": "true",
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 2,
+      "name": "a type that changes, sorted",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT x, m FROM dfs.tmp.dbimp_change ORDER BY filename DESC",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 2,
+      "name": "the second file alone",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT x FROM dfs.tmp.`dbimp_change/b`"
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT * FROM dfs.tmp.dbimp_types ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type as a literal",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1 AS INT) AS i, CAST(9223372036854775807 AS BIGINT) AS b, CAST(1.5 AS FLOAT) AS f4, CAST(1.5 AS DOUBLE) AS f8, CAST('12345678901234567890.123456789' AS DECIMAL(38, 9)) AS d, 1.25 AS dl, TRUE AS bo, 'x' AS s, CAST('ab' AS CHAR(3)) AS c, CAST('ab' AS VARBINARY) AS vb, DATE '2026-10-01' AS dt, TIME '12:34:56.789' AS t, TIMESTAMP '2026-10-01 12:34:56.789123' AS ts, INTERVAL '1 2:03:04.5' DAY TO SECOND AS idy, INTERVAL '1-2' YEAR TO MONTH AS iy, CAST(NULL AS INT) AS n, NULL AS untyped FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 3,
+      "name": "an infinity and NaN",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1e308 AS DOUBLE) * 10 AS inf, CAST(-1e308 AS DOUBLE) * 10 AS ninf, CAST('NaN' AS DOUBLE) AS nan, CAST(-0.0 AS DOUBLE) AS nz FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a CHAR column",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(s AS CHAR(5)) AS c, CAST(s AS VARCHAR(3)) AS v FROM dfs.tmp.dbimp_types ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a decimal of 38 digits",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST('12345678901234567890123456789012345678' AS DECIMAL(38, 0)) AS d, CAST('-0.00000000000000000000000000000000000001' AS DECIMAL(38, 38)) AS s FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 3,
+      "name": "complex values",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT * FROM dfs.tmp.dbimp_complex"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a list with a null",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT convert_from('[1,null]', 'JSON') AS l FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a list of strings",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT convert_from('[\"a\",\"b\"]', 'JSON') AS l FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 3,
+      "name": "SMALLINT",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1 AS SMALLINT) AS n FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "TINYINT",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1 AS TINYINT) AS n FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a timestamp with a zone",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST('2026-10-01 12:34:56' AS TIMESTAMP WITH LOCAL TIME ZONE) AS z FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a time with a zone",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST('12:34:56' AS TIME WITH TIME ZONE) AS z FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "the zone of the server",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT NOW() AS n, LOCALTIMESTAMP AS l, TIMEOFDAY() AS t FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the union type",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT typeof(x) AS t, x FROM dfs.tmp.`dbimp_change/a`",
+        "options": {
+          "exec.enable_union_type": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a dict from a provided schema",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE OR REPLACE SCHEMA (m MAP<VARCHAR, BIGINT>) FOR TABLE dfs.tmp.`dbimp_change`"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "read the dict of the provided schema",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT m FROM dfs.tmp.dbimp_change"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "drop the provided schema",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP SCHEMA FOR TABLE dfs.tmp.`dbimp_change`"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "a 64-bit unsigned integer",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1 AS UINT8) AS u FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a 32-bit unsigned integer",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1 AS UINT4) AS u FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a 16-bit unsigned integer",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1 AS UINT2) AS u FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "an 8-bit unsigned integer",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST(1 AS UINT1) AS u FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "BINARY",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST('ab' AS BINARY(2)) AS b FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "the names BOOLEAN, INTEGER, DOUBLE and REAL",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT CAST('true' AS BOOLEAN) AS bo, CAST(1 AS INTEGER) AS i, CAST(1 AS DOUBLE) AS d, CAST(1 AS REAL) AS r, CAST(1 AS DECIMAL(9, 2)) AS d9 FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: drop the table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_crud"
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: create table as",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_crud AS SELECT employee_id, full_name FROM cp.`employee.json` LIMIT 3"
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: insert",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "INSERT INTO dfs.tmp.dbimp_crud (employee_id, full_name) VALUES (9, 'x')",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: insert a select",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "INSERT INTO dfs.tmp.dbimp_crud SELECT employee_id, full_name FROM cp.`employee.json` LIMIT 1",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: select",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id, full_name FROM dfs.tmp.dbimp_crud ORDER BY employee_id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: update",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "UPDATE dfs.tmp.dbimp_crud SET full_name = 'y' WHERE employee_id = 1",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: delete",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DELETE FROM dfs.tmp.dbimp_crud WHERE employee_id = 1",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: merge",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "MERGE INTO dfs.tmp.dbimp_crud t USING dfs.tmp.dbimp_crud s ON t.employee_id = s.employee_id WHEN MATCHED THEN UPDATE SET full_name = 'x'",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: the rows after",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id, full_name FROM dfs.tmp.dbimp_crud ORDER BY employee_id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "crud: drop the table again",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE dfs.tmp.dbimp_crud"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: create table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_pk (id INT)",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: primary key",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_pk (id INT PRIMARY KEY)",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: foreign key",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_fk (id INT REFERENCES dfs.tmp.dbimp_pk (id))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: unique constraint",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_u (id INT UNIQUE)",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: index",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE INDEX dbimp_i ON dfs.tmp.dbimp_types (id)",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: view",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE OR REPLACE VIEW dfs.tmp.dbimp_v AS SELECT employee_id, full_name FROM cp.`employee.json` LIMIT 2"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: view read",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT * FROM dfs.tmp.dbimp_v"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: the columns of a view",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE FROM INFORMATION_SCHEMA.`COLUMNS` WHERE TABLE_SCHEMA = 'dfs.tmp' AND TABLE_NAME = 'dbimp_v'"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the view",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP VIEW dfs.tmp.dbimp_v"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: temporary table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TEMPORARY TABLE dbimp_tmp AS SELECT 1 AS a FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: temporary table read in the next request",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT a FROM dbimp_tmp",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: drop a table that does not exist",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_nope"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the JSON table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_json"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: make a JSON table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_json AS SELECT employee_id FROM cp.`employee.json` LIMIT 2",
+        "options": {
+          "store.format": "json"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: default value",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE OR REPLACE SCHEMA (employee_id BIGINT, extra VARCHAR NOT NULL DEFAULT 'z') FOR TABLE dfs.tmp.dbimp_json",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: default value read",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id, extra FROM dfs.tmp.dbimp_json ORDER BY employee_id",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the JSON table again",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE dfs.tmp.dbimp_json"
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: partition by",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "CREATE TABLE dfs.tmp.dbimp_part PARTITION BY (store_id) AS SELECT employee_id, store_id FROM cp.`employee.json` WHERE store_id < 3",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: partition by read",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT COUNT(*) AS n FROM dfs.tmp.dbimp_part",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the partitioned table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_part"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a file by its path",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json` LIMIT 1"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: implicit columns",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT filename, fqn, dir0 FROM dfs.tmp.dbimp_multi ORDER BY id LIMIT 1"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: flatten",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT FLATTEN(l) AS f FROM dfs.tmp.dbimp_complex"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: kvgen",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT KVGEN(m) AS k FROM (SELECT convert_from('{\"a\":1,\"b\":2}', 'JSON') AS m FROM (VALUES(1)))"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a member of a map and a list",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT t.m.o.s AS s, t.l[1] AS l1, t.lm[0].a AS a FROM dfs.tmp.dbimp_complex t"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: repeated_count",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT REPEATED_COUNT(l) AS n FROM dfs.tmp.dbimp_complex"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: show schemas",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SHOW SCHEMAS"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: show files",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SHOW FILES IN dfs.tmp"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: use",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "USE dfs.tmp"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: describe",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DESCRIBE dfs.tmp.dbimp_types"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: explain",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "EXPLAIN PLAN FOR SELECT employee_id FROM cp.`employee.json` LIMIT 1"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a table function",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM table(cp.`employee.json`(type => 'json')) LIMIT 1",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: alter session",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "ALTER SESSION SET `exec.query.max_rows` = 2",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: a session option in the next request",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json` LIMIT 5"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: reset session",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "ALTER SESSION RESET `exec.query.max_rows`",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: analyze table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "ANALYZE TABLE dfs.tmp.dbimp_types COMPUTE STATISTICS",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: refresh table metadata",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "REFRESH TABLE METADATA dfs.tmp.dbimp_types",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: the sys tables",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT name, val FROM sys.options WHERE name = 'exec.query.max_rows'"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: information_schema",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT SCHEMA_NAME, TYPE, IS_MUTABLE FROM INFORMATION_SCHEMA.SCHEMATA ORDER BY SCHEMA_NAME"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: the columns of a table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE FROM INFORMATION_SCHEMA.`COLUMNS` WHERE TABLE_SCHEMA = 'dfs.tmp' AND TABLE_NAME = 'dbimp_types'"
+      }
+    },
+    {
+      "item": 3,
+      "name": "feature: convert_to",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT convert_from(convert_to(m, 'JSON'), 'UTF8') AS j FROM dfs.tmp.dbimp_complex"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a placeholder",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT ? AS p FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a named placeholder",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT :p AS p FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a numbered placeholder",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT $1 AS p FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 1155 rows",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id, full_name FROM cp.`employee.json`"
+      }
+    },
+    {
+      "item": 5,
+      "name": "autoLimit of 100",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json`",
+        "autoLimit": "100"
+      }
+    },
+    {
+      "item": 5,
+      "name": "autoLimit as a number",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json`",
+        "autoLimit": 5
+      }
+    },
+    {
+      "item": 5,
+      "name": "autoLimit of -1",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json` LIMIT 3",
+        "autoLimit": "-1"
+      }
+    },
+    {
+      "item": 5,
+      "name": "autoLimit that is not a number",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json` LIMIT 3",
+        "autoLimit": "x"
+      }
+    },
+    {
+      "item": 5,
+      "name": "the option exec.query.max_rows of 7",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json`",
+        "options": {
+          "exec.query.max_rows": "7"
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "autoLimit and exec.query.max_rows",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json`",
+        "autoLimit": "4",
+        "options": {
+          "exec.query.max_rows": "7"
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "autoLimit above a LIMIT",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json` LIMIT 3",
+        "autoLimit": "10"
+      }
+    },
+    {
+      "item": 5,
+      "name": "an unknown option",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS one FROM (VALUES(1))",
+        "options": {
+          "no.such.option": "1"
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELEC 1"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error, verbose",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELEC 1",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown table",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT * FROM dfs.tmp.dbimp_nope",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 / 0 AS n FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT id, CAST(s AS INT) AS v FROM dfs.tmp.dbimp_multi"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows, verbose",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT id, CAST(s AS INT) AS v FROM dfs.tmp.dbimp_multi",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      },
+      "capture": {
+        "failed": "queryId"
+      }
+    },
+    {
+      "item": 6,
+      "name": "the profile of the query that failed after some rows",
+      "method": "GET",
+      "path": "/profiles/{{failed}}.json"
+    },
+    {
+      "item": 6,
+      "name": "a profile that does not exist",
+      "method": "GET",
+      "path": "/profiles/00000000-0000-0000-0000-000000000000.json"
+    },
+    {
+      "item": 7,
+      "name": "a long query to cancel",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT COUNT(*) AS n FROM cp.`employee.json` a, cp.`employee.json` b, cp.`tpch/nation.parquet` c, cp.`tpch/region.parquet` d, cp.`tpch/region.parquet` e WHERE a.employee_id + b.employee_id + c.n_nationkey + d.r_regionkey + e.r_regionkey > 0",
+        "options": {
+          "planner.enable_nljoin_for_scalar_only": "false"
+        }
+      },
+      "background": true
+    },
+    {
+      "item": 7,
+      "name": "the running queries",
+      "method": "GET",
+      "path": "/profiles.json",
+      "wait": "1500ms",
+      "capture": {
+        "running": "runningQueries.0.queryId"
+      }
+    },
+    {
+      "item": 7,
+      "name": "cancel the running query",
+      "method": "GET",
+      "path": "/profiles/cancel/{{running}}"
+    },
+    {
+      "item": 7,
+      "name": "a long query that the client leaves",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT COUNT(*) AS n FROM cp.`employee.json` a, cp.`employee.json` b, cp.`tpch/nation.parquet` c, cp.`tpch/region.parquet` d, cp.`tpch/region.parquet` e WHERE a.employee_id + b.employee_id + c.n_nationkey + d.r_regionkey + e.r_regionkey > 0",
+        "options": {
+          "planner.enable_nljoin_for_scalar_only": "false"
+        }
+      },
+      "wait": "2s",
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "the running queries after the client left",
+      "method": "GET",
+      "path": "/profiles.json",
+      "wait": "2s"
+    },
+    {
+      "item": 7,
+      "name": "the running queries after the left query ended",
+      "method": "GET",
+      "path": "/profiles.json",
+      "wait": "20s"
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "auth": "wrong",
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS one FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 8,
+      "name": "the storage plugins",
+      "method": "GET",
+      "path": "/storage.json"
+    },
+    {
+      "item": 8,
+      "name": "alter system",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "ALTER SYSTEM SET `exec.query.max_rows` = 0",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 8,
+      "name": "reset a system option",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "ALTER SYSTEM RESET `exec.query.max_rows`",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 8,
+      "name": "the options",
+      "method": "GET",
+      "path": "/options.json"
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT version FROM sys.version"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the version as the Python driver reads it",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT MIN(version) AS version FROM sys.drillbits"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the cluster",
+      "method": "GET",
+      "path": "/cluster.json"
+    },
+    {
+      "item": 9,
+      "name": "the status",
+      "method": "GET",
+      "path": "/status.json"
+    },
+    {
+      "item": 10,
+      "name": "two statements",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS a FROM (VALUES(1)); SELECT 2 AS b FROM (VALUES(1))",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement that ends with a semicolon",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS a FROM (VALUES(1));",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 10,
+      "name": "comments",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "-- a comment\nSELECT /* inside */ 1 AS a FROM (VALUES(1)) -- at the end"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a transaction",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "START TRANSACTION",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 10,
+      "name": "a commit",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "COMMIT",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 10,
+      "name": "an empty statement",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 12,
+      "name": "a gzip answer",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id, full_name FROM cp.`employee.json` LIMIT 20"
+      }
+    },
+    {
+      "item": 4,
+      "name": "lead: a body key for parameters",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT 1 AS one FROM (VALUES(1))",
+        "params": [
+          1
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "lead: a prepared statement as the query type",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "PREPARED_STATEMENT",
+        "query": "SELECT ? AS p FROM (VALUES(1))"
+      }
+    },
+    {
+      "item": 5,
+      "name": "lead: a page with OFFSET",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT employee_id FROM cp.`employee.json` ORDER BY employee_id LIMIT 5 OFFSET 5"
+      }
+    },
+    {
+      "item": 3,
+      "name": "lead: the mode and the type of a list",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT modeof(l) AS mode, typeof(l) AS t, sqlTypeOf(l) AS s, drillTypeOf(l) AS d, sqlTypeOf(m) AS sm, modeof(id) AS mid FROM dfs.tmp.dbimp_complex",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "lead: the SQL type of every column",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "SELECT sqlTypeOf(i) AS i, sqlTypeOf(d) AS d, sqlTypeOf(iy) AS iy, sqlTypeOf(idy) AS idy, sqlTypeOf(ts) AS ts, modeof(i) AS mi FROM dfs.tmp.dbimp_types WHERE id = 1",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "lead: begin",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "BEGIN",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "lead: rollback",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "ROLLBACK",
+        "options": {
+          "drill.exec.http.rest.errors.verbose": "true"
+        }
+      }
+    },
+    {
+      "item": 7,
+      "name": "lead: another endpoint to cancel",
+      "method": "GET",
+      "path": "/query/00000000-0000-0000-0000-000000000000/cancel"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_types",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_types"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_complex",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_complex"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_multi",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_multi"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_change",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_change"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_crud",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_crud"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_json",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_json"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_part",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP TABLE IF EXISTS dfs.tmp.dbimp_part"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the view",
+      "method": "POST",
+      "path": "/query.json",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "queryType": "SQL",
+        "query": "DROP VIEW IF EXISTS dfs.tmp.dbimp_v"
+      },
+      "phase": "teardown"
+    }
+  ],
+  "absent": [
+    {
+      "item": 11,
+      "reason": "Drill has no transactions. BEGIN, START TRANSACTION, COMMIT and ROLLBACK each fail as a statement that Drill cannot parse or run."
+    }
+  ]
+}

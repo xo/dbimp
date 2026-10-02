@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT f, CAST(f AS DOUBLE) AS fd FROM dbimp_types ORDER BY __time\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:18 GMT",
+        "Thu, 01 Oct 2026 20:11:18 GMT"
+      ],
+      "X-Druid-Query-Id": [
+        "6f45ca62-0c5b-4f0f-adc5-edad5fb4e886"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "6f45ca62-0c5b-4f0f-adc5-edad5fb4e886"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ]
+    },
+    "body": "[[\"f\",\"fd\"],[\"FLOAT\",\"DOUBLE\"],[\"FLOAT\",\"DOUBLE\"],[null,null],[-1.5,-1.5],[3.4E38,3.3999999521443642E38]]\n"
+  }
+}

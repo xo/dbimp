@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.CreateTable"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"TableName\":\"dbimp_fk\",\"AttributeDefinitions\":[{\"AttributeName\":\"pk\",\"AttributeType\":\"S\"}],\"KeySchema\":[{\"AttributeName\":\"pk\",\"KeyType\":\"HASH\"}],\"BillingMode\":\"PAY_PER_REQUEST\",\"ForeignKeys\":[{\"AttributeName\":\"pk\",\"References\":\"dbimp_types\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "d43161f3-acd6-42ad-bb48-b149e3144a70"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "3304085135"
+      ],
+      "Content-Length": [
+        "620"
+      ]
+    },
+    "body": "{\"TableDescription\":{\"AttributeDefinitions\":[{\"AttributeName\":\"pk\",\"AttributeType\":\"S\"}],\"TableName\":\"dbimp_fk\",\"KeySchema\":[{\"AttributeName\":\"pk\",\"KeyType\":\"HASH\"}],\"TableStatus\":\"ACTIVE\",\"CreationDateTime\":1790862739.436,\"ProvisionedThroughput\":{\"LastIncreaseDateTime\":0.000,\"LastDecreaseDateTime\":0.000,\"NumberOfDecreasesToday\":0,\"ReadCapacityUnits\":0,\"WriteCapacityUnits\":0},\"TableSizeBytes\":0,\"ItemCount\":0,\"TableArn\":\"arn:aws:dynamodb:ddblocal:000000000000:table/dbimp_fk\",\"BillingModeSummary\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"LastUpdateToPayPerRequestDateTime\":1790862739.436},\"DeletionProtectionEnabled\":false}}"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql/_explain",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT s, COUNT(*) FROM dbmeta_groups GROUP BY s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"root\": {\n    \"name\": \"ProjectOperator\",\n    \"description\": {\n      \"fields\": \"[s, COUNT(*)]\"\n    },\n    \"children\": [\n      {\n        \"name\": \"OpenSearchIndexScan\",\n        \"description\": {\n          \"request\": \"OpenSearchQueryRequest(indexName=dbmeta_groups, sourceBuilder={\\\"from\\\":0,\\\"size\\\":0,\\\"timeout\\\":\\\"1m\\\",\\\"aggregations\\\":{\\\"composite_buckets\\\":{\\\"composite\\\":{\\\"size\\\":1000,\\\"sources\\\":[{\\\"s\\\":{\\\"terms\\\":{\\\"field\\\":\\\"s\\\",\\\"missing_bucket\\\":true,\\\"missing_order\\\":\\\"first\\\",\\\"order\\\":\\\"asc\\\"}}}]},\\\"aggregations\\\":{\\\"COUNT(*)\\\":{\\\"value_count\\\":{\\\"field\\\":\\\"_index\\\"}}}}}}, pitId=null, cursorKeepAlive=null, searchAfter=null, searchResponse=null)\"\n        },\n        \"children\": []\n      }\n    ]\n  }\n}"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+columnName%2C+dataType%2C+typeName+FROM+metadata.COLUMNS+WHERE+tableName+%3D+%27dbimp%27+AND+%28columnName+%3D+%27n_rpt%27+OR+columnName+%3D+%27n_bbox%27+OR+columnName+%3D+%27n_pt%27%29"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "478"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[\n      {\n        \"columnName\":\"n_bbox\",\n        \"dataType\":12,\n        \"typeName\":\"JavaType(class java.lang.String)\"\n      },\n      {\n        \"columnName\":\"n_pt\",\n        \"dataType\":12,\n        \"typeName\":\"JavaType(class java.lang.String)\"\n      },\n      {\n        \"columnName\":\"n_rpt\",\n        \"dataType\":12,\n        \"typeName\":\"JavaType(class java.lang.String)\"\n      },\n      {\n        \"EOF\":true,\n        \"RESPONSE_TIME\":26\n      }\n    ]\n  }\n}"
+  }
+}

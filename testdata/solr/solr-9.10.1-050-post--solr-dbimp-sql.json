@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+id%2C+n_v+FROM+dbimp+ORDER+BY+id+LIMIT+3"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "347"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"id\":\"1\",\n      \"n_v\":null\n    },{\n      \"id\":\"2\",\n      \"n_v\":null\n    },{\n      \"EXCEPTION\":\"class java.util.ArrayList cannot be cast to class java.lang.Double (java.util.ArrayList and java.lang.Double are in module java.base of loader 'bootstrap')\",\n      \"EOF\":true,\n      \"RESPONSE_TIME\":13\n    }]\n  }\n}"
+  }
+}

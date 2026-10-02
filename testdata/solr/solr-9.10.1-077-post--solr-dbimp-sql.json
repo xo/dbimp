@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+n_i%2C+count%28%2A%29+AS+c+FROM+dbimp+WHERE+id+%3D+%272%27+OR+id+%3D+%273%27+GROUP+BY+n_i&aggregationMode=map_reduce"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "300"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"n_i\":-2147483648,\n      \"c\":1\n    },{\n      \"EXCEPTION\":\"class java.lang.String cannot be cast to class java.lang.Long (java.lang.String and java.lang.Long are in module java.base of loader 'bootstrap')\",\n      \"EOF\":true,\n      \"RESPONSE_TIME\":26\n    }]\n  }\n}"
+  }
+}

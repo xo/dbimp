@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"UPDATE dbimp_crud SET v = 'uno' WHERE id = 1\",\"resultFormat\":\"array\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:23:48 GMT",
+        "Thu, 01 Oct 2026 20:23:48 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "703a82dd-ff0b-4734-80bc-9ea9e66c7595"
+      ],
+      "X-Druid-Query-Id": [
+        "703a82dd-ff0b-4734-80bc-9ea9e66c7595"
+      ],
+      "Content-Length": [
+        "180"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Unsupported SQL statement [UPDATE]\",\"context\":{\"sourceType\":\"sql\"}}"
+  }
+}

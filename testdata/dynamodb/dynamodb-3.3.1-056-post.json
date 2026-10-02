@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"UPDATE dbimp_types SET nint = 'text' WHERE pk = 'par' RETURNING ALL NEW *\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "242"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "a567f17a-1fc6-45f5-bcab-81b93ff748f8"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "770894906"
+      ]
+    },
+    "body": "{\"Items\":[{\"ss\":{\"SS\":[\"a\"]},\"bs\":{\"BS\":[\"AQ==\"]},\"b\":{\"BOOL\":true},\"nint\":{\"S\":\"text\"},\"s\":{\"S\":\"s\"},\"nul\":{\"NULL\":true},\"ns\":{\"NS\":[\"1\"]},\"bin\":{\"B\":\"AP8=\"},\"pk\":{\"S\":\"par\"},\"l\":{\"L\":[{\"S\":\"a\"}]},\"m\":{\"M\":{\"k\":{\"N\":\"1\"}}},\"n\":{\"N\":\"1.5\"}}]}"
+  }
+}

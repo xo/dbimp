@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"INSERT INTO dfs.tmp.dbimp_crud SELECT employee_id, full_name FROM cp.`employee.json` LIMIT 1\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "3248"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:05 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a51-d6e2-9cbe-51c6-2cd9bfb01314\"\n,\"exception\":\"org.apache.calcite.runtime.CalciteContextException\"\n,\"errorMessage\":\"From line 1, column 13 to line 1, column 30: Number of INSERT target columns (1) does not equal number of source items (2): Number of INSERT target columns (1) does not equal number of source items (2)\"\n,\"stackTrace\":[\"org.apache.calcite.runtime.CalciteContextException: From line 1, column 13 to line 1, column 30: Number of INSERT target columns (1) does not equal number of source items (2): Number of INSERT target columns (1) does not equal number of source items (2)\",\"\\tat jdk.internal.reflect.GeneratedConstructorAccessor101.newInstance()\",\"\\tat jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:945)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:930)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.newValidationError(SqlValidatorImpl.java:5464)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.checkFieldCount(SqlValidatorImpl.java:4971)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateInsert(SqlValidatorImpl.java:4827)\",\"\\tat org.apache.calcite.sql.SqlInsert.validate(SqlInsert.java:166)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateScopedExpression(SqlValidatorImpl.java:1081)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validate(SqlValidatorImpl.java:787)\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.validate(SqlConverter.java:212)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateNode(DefaultSqlHandler.java:662)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateAndConvert(DefaultSqlHandler.java:198)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.InsertHandler.validateAndConvert(InsertHandler.java:44)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:172)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\",\"Caused by: org.apache.calcite.sql.validate.SqlValidatorException: Number of INSERT target columns (1) does not equal number of source items (2)\",\"\\tat jdk.internal.reflect.GeneratedConstructorAccessor100.newInstance()\",\"\\tat jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.runtime.Resources$ExInst.ex(Resources.java:599)\",\"\\t... 20 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

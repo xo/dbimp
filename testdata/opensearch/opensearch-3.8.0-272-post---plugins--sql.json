@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, kv FROM dbmeta_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"id\",\n      \"type\": \"integer\"\n    },\n    {\n      \"name\": \"kv\",\n      \"type\": \"nested\"\n    }\n  ],\n  \"datarows\": [\n    [\n      1,\n      [\n        1.0,\n        2.0,\n        3.0\n      ]\n    ],\n    [\n      2,\n      null\n    ],\n    [\n      3,\n      null\n    ],\n    [\n      4,\n      null\n    ],\n    [\n      5,\n      null\n    ]\n  ],\n  \"total\": 5,\n  \"size\": 5,\n  \"status\": 200\n}"
+  }
+}

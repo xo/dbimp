@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, s FROM dbimp_types WHERE id = 99\",\"resultFormat\":\"arrayLines\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Sql-Query-Id": [
+        "d7deae90-92de-4b8b-8860-54d0923e0912"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "X-Druid-Query-Id": [
+        "d7deae90-92de-4b8b-8860-54d0923e0912"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "[\"id\",\"s\"]\n[\"LONG\",\"STRING\"]\n[\"BIGINT\",\"VARCHAR\"]\n\n"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 123456789012345678901234567890 AS x\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"parsing_exception\",\"reason\":\"line 1:9: Number [123456789012345678901234567890] is too large\"}],\"type\":\"parsing_exception\",\"reason\":\"line 1:9: Number [123456789012345678901234567890] is too large\"},\"status\":400}"
+  }
+}

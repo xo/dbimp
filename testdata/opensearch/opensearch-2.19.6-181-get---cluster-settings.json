@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/_cluster/settings",
+    "query": "include_defaults=true&filter_path=defaults.plugins.sql,defaults.plugins.query.size_limit,defaults.plugins.query.buckets,defaults.plugins.calcite.enabled,defaults.opendistro.sql,defaults.opendistro.query",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"defaults\":{\"opendistro\":{\"query\":{\"size_limit\":\"200\"},\"sql\":{\"cursor\":{\"enabled\":\"true\",\"fetch_size\":\"1000\",\"keep_alive\":\"1m\"},\"metrics\":{\"rollinginterval\":\"60\",\"rollingwindow\":\"3600\"},\"engine\":{\"new\":{\"enabled\":\"true\"}},\"enabled\":\"true\",\"query\":{\"analysis\":{\"semantic\":{\"threshold\":\"200\",\"suggestion\":\"false\"},\"enabled\":\"false\"},\"slowlog\":\"2\",\"response\":{\"format\":\"jdbc\"}}}},\"plugins\":{\"query\":{\"size_limit\":\"10000\"},\"sql\":{\"cursor\":{\"keep_alive\":\"1m\"},\"slowlog\":\"2\",\"pagination\":{\"api\":\"true\"},\"delete\":{\"enabled\":\"false\"},\"enabled\":\"true\"}}}}"
+  }
+}

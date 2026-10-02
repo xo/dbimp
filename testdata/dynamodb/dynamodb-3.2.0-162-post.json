@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteTransaction"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"TransactStatements\":[{\"Statement\":\"UPDATE dbimp_tx SET v = 12 WHERE pk = 'b'\"},{\"Statement\":\"UPDATE dbimp_tx SET v = 13 WHERE pk = 'b'\"}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "137"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "6b7c3e3a-be28-4e1a-822a-4fe4022f8c7e"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Transaction request cannot include multiple operations on one item\"}"
+  }
+}

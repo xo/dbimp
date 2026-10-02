@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, k, i, o FROM dbmeta_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"took\":8,\"timed_out\":false,\"_shards\":{\"total\":1,\"successful\":1,\"skipped\":0,\"failed\":0},\"hits\":{\"total\":{\"value\":5,\"relation\":\"eq\"},\"max_score\":null,\"hits\":[{\"_index\":\"dbmeta_types\",\"_id\":\"1\",\"_score\":null,\"_source\":{\"i\":-2147483648,\"id\":1,\"k\":\"é'\\\"\\\\ x\",\"o\":{\"a\":1,\"b\":\"x\"}},\"sort\":[1]},{\"_index\":\"dbmeta_types\",\"_id\":\"2\",\"_score\":null,\"_source\":{\"i\":null,\"id\":2,\"k\":null,\"o\":null},\"sort\":[2]},{\"_index\":\"dbmeta_types\",\"_id\":\"3\",\"_score\":null,\"_source\":{\"id\":3},\"sort\":[3]},{\"_index\":\"dbmeta_types\",\"_id\":\"4\",\"_score\":null,\"_source\":{\"i\":[1,2,3],\"k\":[\"a\",\"b\"],\"id\":4,\"o\":[{\"a\":1,\"b\":\"x\"},{\"a\":2,\"b\":\"y\"}]},\"sort\":[4]},{\"_index\":\"dbmeta_types\",\"_id\":\"5\",\"_score\":null,\"_source\":{\"i\":\"42\",\"id\":5,\"k\":\"\"},\"sort\":[5]}]}}"
+  }
+}

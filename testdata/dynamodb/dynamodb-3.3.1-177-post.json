@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"INSERT INTO dbimp_types VALUE {'pk': 'date', 'v': DATE '2026-10-01'}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Amzn-Requestid": [
+        "4ee24cd2-848a-4ac1-bae0-1068f9780d65"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "127"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Unsupported data type: UNKNOWN under key root at 1:56:12\"}"
+  }
+}

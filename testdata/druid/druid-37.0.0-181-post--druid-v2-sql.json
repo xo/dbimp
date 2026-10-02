@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST(id AS TINYINT) AS ti FROM dbimp_types\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "195"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:19 GMT",
+        "Thu, 01 Oct 2026 20:11:19 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "8399e6f1-13cc-4c9f-8a6e-eda46cbe56a0"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "8399e6f1-13cc-4c9f-8a6e-eda46cbe56a0"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"general\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Cannot coerce field [id] from type [java.lang.Integer] to type [TINYINT]\",\"context\":{}}"
+  }
+}

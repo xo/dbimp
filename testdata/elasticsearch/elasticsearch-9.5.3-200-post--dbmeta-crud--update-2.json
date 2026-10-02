@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbmeta_crud/_update/2",
+    "query": "refresh=true",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"doc\":{\"id\":2,\"s\":\"c\"},\"doc_as_upsert\":true}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"security_exception\",\"reason\":\"action [indices:data/write/update] is unauthorized for user [dbmeta_user] with effective roles [dbmeta_role] on indices [dbmeta_crud], this action is granted by the index privileges [index,write,all]\"}],\"type\":\"security_exception\",\"reason\":\"action [indices:data/write/update] is unauthorized for user [dbmeta_user] with effective roles [dbmeta_role] on indices [dbmeta_crud], this action is granted by the index privileges [index,write,all]\"},\"status\":403}"
+  }
+}

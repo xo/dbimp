@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SHOW TABLES LIKE 'dbimp%'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "958000"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"catalog\",\"type\":\"keyword\"},{\"name\":\"name\",\"type\":\"keyword\"},{\"name\":\"type\",\"type\":\"keyword\"},{\"name\":\"kind\",\"type\":\"keyword\"}],\"rows\":[[\"docker-cluster\",\"dbimp_secret\",\"TABLE\",\"INDEX\"]]}"
+  }
+}

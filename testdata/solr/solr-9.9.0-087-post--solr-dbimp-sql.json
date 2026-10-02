@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+id+FROM+dbimp+WHERE+id+%3D+%271%27+LIMIT+1%3B"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "445"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"EXCEPTION\":\"Failed to execute sqlQuery 'SELECT id FROM dbimp WHERE id = '1' LIMIT 1;' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"SELECT id FROM dbimp WHERE id = '1' LIMIT 1;\\\": parse failed: Encountered \\\";\\\" at line 1, column 44.\\nWas expecting one of:\\n    <EOF> \\n    \\\"OFFSET\\\" ...\\n    \\\",\\\" ...\\n    \",\n      \"EOF\":true,\n      \"RESPONSE_TIME\":0\n    }]\n  }\n}"
+  }
+}

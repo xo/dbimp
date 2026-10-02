@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"SELECT s, nul, \\\"absent\\\", nint, pk FROM dbimp_types WHERE pk = 't1'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "3c5fce6d-43dc-40ad-9847-59ea53c55a7f"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "3148860580"
+      ],
+      "Content-Length": [
+        "89"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ]
+    },
+    "body": "{\"Items\":[{\"nint\":{\"N\":\"42\"},\"s\":{\"S\":\"é'\\\"\\\\ x\"},\"pk\":{\"S\":\"t1\"},\"nul\":{\"NULL\":true}}]}"
+  }
+}

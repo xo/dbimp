@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"REPLACE INTO dbimp_extern OVERWRITE ALL\\nSELECT TIME_PARSE(t) AS __time, v\\nFROM TABLE(EXTERN('{\\\"type\\\":\\\"inline\\\",\\\"data\\\":\\\"{\\\\\\\"t\\\\\\\":\\\\\\\"2026-10-01T00:00:00Z\\\\\\\",\\\\\\\"v\\\\\\\":1}\\\\n{\\\\\\\"t\\\\\\\":\\\\\\\"2026-10-01T01:00:00Z\\\\\\\",\\\\\\\"v\\\\\\\":2}\\\"}', '{\\\"type\\\":\\\"json\\\"}')) EXTEND (t VARCHAR, v BIGINT)\\nPARTITIONED BY DAY\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:20:57 GMT",
+        "Thu, 01 Oct 2026 20:20:57 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"taskId\":\"query-87b41081-d64d-4c51-bcb5-5b3771cbba7f\",\"state\":\"RUNNING\"}"
+  }
+}

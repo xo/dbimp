@@ -1,0 +1,854 @@
+{
+  "driver": "drill",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/factset/go-drill",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/JohnOmernik/sqlalchemy-drill",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-058-post--query-json.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-060-post--query-json.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-061-post--query-json.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-062-post--query-json.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "create table as",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-057-post--query-json.json",
+      "test": "TestIntegrationCRUD/create_table_as"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-063-post--query-json.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "schema",
+      "name": "create table with columns",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-066-post--query-json.json",
+      "test": "TestIntegrationSchema/create_table_with_columns"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-067-post--query-json.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-068-post--query-json.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-069-post--query-json.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-070-post--query-json.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-081-post--query-json.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-072-post--query-json.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "temporary table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-075-post--query-json.json",
+      "test": "TestIntegrationSchema/temporary_table"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-065-post--query-json.json",
+      "test": "TestIntegrationSchema/drop_table"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table if exists",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-077-post--query-json.json",
+      "test": "TestIntegrationSchema/drop_table_if_exists"
+    },
+    {
+      "kind": "schema",
+      "name": "create schema for a table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-080-post--query-json.json",
+      "test": "TestIntegrationSchema/create_schema_for_a_table"
+    },
+    {
+      "kind": "schema",
+      "name": "partition by",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-084-post--query-json.json",
+      "test": "TestIntegrationSchema/partition_by"
+    },
+    {
+      "kind": "feature",
+      "name": "a file by its path",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-086-post--query-json.json",
+      "test": "TestIntegrationFeatures/a_file_by_its_path"
+    },
+    {
+      "kind": "feature",
+      "name": "implicit columns",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-087-post--query-json.json",
+      "test": "TestIntegrationFeatures/implicit_columns"
+    },
+    {
+      "kind": "feature",
+      "name": "flatten",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-088-post--query-json.json",
+      "test": "TestIntegrationFeatures/flatten"
+    },
+    {
+      "kind": "feature",
+      "name": "kvgen",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-089-post--query-json.json",
+      "test": "TestIntegrationFeatures/kvgen"
+    },
+    {
+      "kind": "feature",
+      "name": "a member of a map and a list",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-090-post--query-json.json",
+      "test": "TestIntegrationFeatures/a_member_of_a_map_and_a_list"
+    },
+    {
+      "kind": "feature",
+      "name": "repeated_count",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-091-post--query-json.json",
+      "test": "TestIntegrationFeatures/repeated_count"
+    },
+    {
+      "kind": "feature",
+      "name": "show schemas",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-092-post--query-json.json",
+      "test": "TestIntegrationFeatures/show_schemas"
+    },
+    {
+      "kind": "feature",
+      "name": "show files",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-093-post--query-json.json",
+      "test": "TestIntegrationFeatures/show_files"
+    },
+    {
+      "kind": "feature",
+      "name": "use",
+      "sources": [
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-094-post--query-json.json",
+      "test": "TestIntegrationFeatures/use"
+    },
+    {
+      "kind": "feature",
+      "name": "describe",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-095-post--query-json.json",
+      "test": "TestIntegrationFeatures/describe"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-096-post--query-json.json",
+      "test": "TestIntegrationFeatures/explain"
+    },
+    {
+      "kind": "feature",
+      "name": "a table function",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-097-post--query-json.json",
+      "test": "TestIntegrationFeatures/a_table_function"
+    },
+    {
+      "kind": "feature",
+      "name": "alter session",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-098-post--query-json.json",
+      "test": "TestIntegrationFeatures/alter_session"
+    },
+    {
+      "kind": "feature",
+      "name": "a session between requests",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-099-post--query-json.json",
+      "test": "TestIntegrationFeatures/a_session_between_requests"
+    },
+    {
+      "kind": "feature",
+      "name": "analyze table",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-101-post--query-json.json",
+      "test": "TestIntegrationFeatures/analyze_table"
+    },
+    {
+      "kind": "feature",
+      "name": "refresh table metadata",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-102-post--query-json.json",
+      "test": "TestIntegrationFeatures/refresh_table_metadata"
+    },
+    {
+      "kind": "feature",
+      "name": "sys tables",
+      "sources": [
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-103-post--query-json.json",
+      "test": "TestIntegrationFeatures/sys_tables"
+    },
+    {
+      "kind": "feature",
+      "name": "information_schema",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-104-post--query-json.json",
+      "test": "TestIntegrationFeatures/information_schema"
+    },
+    {
+      "kind": "feature",
+      "name": "convert_from and convert_to",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-106-post--query-json.json",
+      "test": "TestIntegrationFeatures/convert_from_and_convert_to"
+    },
+    {
+      "kind": "feature",
+      "name": "autoLimit",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-111-post--query-json.json",
+      "test": "TestIntegrationFeatures/autoLimit"
+    },
+    {
+      "kind": "feature",
+      "name": "defaultSchema",
+      "sources": [
+        "github.com/JohnOmernik/sqlalchemy-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-021-post--query-json.json",
+      "test": "TestIntegrationFeatures/defaultSchema"
+    },
+    {
+      "kind": "feature",
+      "name": "options in the body",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-115-post--query-json.json",
+      "test": "TestIntegrationFeatures/options_in_the_body"
+    },
+    {
+      "kind": "feature",
+      "name": "userName for impersonation",
+      "sources": [
+        "github.com/JohnOmernik/sqlalchemy-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-019-post--query-json.json",
+      "test": "TestIntegrationFeatures/userName_for_impersonation"
+    },
+    {
+      "kind": "feature",
+      "name": "a type that changes between files",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-028-post--query-json.json",
+      "test": "TestIntegrationFeatures/a_type_that_changes_between_files"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel by the query id",
+      "sources": [
+        "deepseek-flash",
+        "gemini-3.8-flash",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-128-get--profiles-cancel-15414a6d-03a5-a04b-758f-08fdd60b1f24.json",
+      "test": "TestIntegrationFeatures/cancel_by_the_query_id"
+    },
+    {
+      "kind": "feature",
+      "name": "the profile of a query",
+      "sources": [
+        "deepseek-flash",
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-125-get--profiles-15414a6c-aa0a-3d16-d7ed-f2c778cd5085-json.json",
+      "test": "TestIntegrationFeatures/the_profile_of_a_query"
+    },
+    {
+      "kind": "feature",
+      "name": "placeholders",
+      "sources": [
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-107-post--query-json.json",
+      "test": "TestIntegrationFeatures/placeholders"
+    },
+    {
+      "kind": "feature",
+      "name": "transactions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-153-post--query-json.json",
+      "test": "TestIntegrationFeatures/transactions"
+    },
+    {
+      "kind": "type",
+      "name": "INT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/INT"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/BIGINT"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT4",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/FLOAT4"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT8",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/FLOAT8"
+    },
+    {
+      "kind": "type",
+      "name": "VARDECIMAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/VARDECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "BIT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/BIT"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/VARCHAR"
+    },
+    {
+      "kind": "type",
+      "name": "VARBINARY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/VARBINARY"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "TIME",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/TIME"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-033-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/INTERVAL"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVALDAY",
+      "sources": [
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-034-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/INTERVALDAY"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVALYEAR",
+      "sources": [
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-034-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/INTERVALYEAR"
+    },
+    {
+      "kind": "type",
+      "name": "MAP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-038-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/MAP"
+    },
+    {
+      "kind": "type",
+      "name": "LIST",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "drill-1.22.0-038-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/LIST"
+    },
+    {
+      "kind": "type",
+      "name": "DICT",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-048-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/DICT"
+    },
+    {
+      "kind": "type",
+      "name": "UNION",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-030-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/UNION"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "deepseek-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-041-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/SMALLINT"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "deepseek-flash",
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-042-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/TINYINT"
+    },
+    {
+      "kind": "type",
+      "name": "UINT1",
+      "sources": [
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-053-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/UINT1"
+    },
+    {
+      "kind": "type",
+      "name": "UINT2",
+      "sources": [
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-052-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/UINT2"
+    },
+    {
+      "kind": "type",
+      "name": "UINT4",
+      "sources": [
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-051-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/UINT4"
+    },
+    {
+      "kind": "type",
+      "name": "UINT8",
+      "sources": [
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-050-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/UINT8"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/JohnOmernik/sqlalchemy-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-037-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL28SPARSE",
+      "sources": [
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-037-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL28SPARSE"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL38SPARSE",
+      "sources": [
+        "github.com/factset/go-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-037-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL38SPARSE"
+    },
+    {
+      "kind": "type",
+      "name": "BINARY",
+      "sources": [
+        "github.com/JohnOmernik/sqlalchemy-drill"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-054-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/BINARY"
+    },
+    {
+      "kind": "type",
+      "name": "NULL",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "drill-1.22.0-034-post--query-json.json",
+      "test": "TestIntegrationRoundTrip/NULL"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM dbimp_types ORDER BY __time\",\"resultFormat\":\"csv\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "a2712f3b-d7a2-4044-934c-a8929be54e5c"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "a2712f3b-d7a2-4044-934c-a8929be54e5c"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:18 GMT",
+        "Thu, 01 Oct 2026 20:11:18 GMT"
+      ]
+    },
+    "body": "__time,id,s,l,f,d,j,sa,la,da,mv,b\nLONG,LONG,STRING,LONG,FLOAT,DOUBLE,COMPLEX<json>,ARRAY<STRING>,ARRAY<LONG>,ARRAY<DOUBLE>,STRING,LONG\nTIMESTAMP,BIGINT,VARCHAR,BIGINT,FLOAT,DOUBLE,OTHER,ARRAY,ARRAY,ARRAY,VARCHAR,BIGINT\n1970-01-01T00:00:00.000Z,3,,,,,,,,,,\n2026-10-01T00:00:00.000Z,2,,-9223372036854775808,-1.5,-0.1,[],,,,z,0\n2026-10-01T12:34:56.789Z,1,\"é'\"\"\\ x\",9223372036854775807,3.4E38,1.7976931348623157E308,\"{\"\"k\"\":[1,\"\"two\"\",null,{\"\"n\"\":1.5}]}\",\"[\"\"a\"\",null,\"\"c\"\"]\",\"[-9223372036854775808,9223372036854775807]\",\"[0.1,1.5E300]\",\"[\"\"x\"\",\"\"y\"\"]\",1\n\n"
+  }
+}

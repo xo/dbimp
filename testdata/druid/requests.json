@@ -1,0 +1,2206 @@
+{
+  "driver": "druid",
+  "requests": [
+    {
+      "item": 1,
+      "name": "setup: make the datasource of every type",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "REPLACE INTO dbimp_types OVERWRITE ALL\nSELECT TIME_PARSE(t) AS __time, id, s, l, CAST(f AS FLOAT) AS f, d, PARSE_JSON(j) AS j,\n  CASE WHEN id = 1 THEN ARRAY['a', NULL, 'c'] ELSE NULL END AS sa,\n  CASE WHEN id = 1 THEN ARRAY[-9223372036854775808, 9223372036854775807] ELSE NULL END AS la,\n  CASE WHEN id = 1 THEN ARRAY[0.1, 1.5e300] ELSE NULL END AS da,\n  CASE WHEN id = 1 THEN ARRAY_TO_MV(ARRAY['x', 'y']) WHEN id = 2 THEN 'z' ELSE NULL END AS mv,\n  b\nFROM (VALUES\n  ('2026-10-01T12:34:56.789Z', 1, 'é''\"\\ x', 9223372036854775807, 3.4e38, 1.7976931348623157e308, '{\"k\":[1,\"two\",null,{\"n\":1.5}]}', TRUE),\n  ('2026-10-01T00:00:00Z', 2, '', -9223372036854775808, -1.5, -0.1, '[]', FALSE),\n  ('1970-01-01T00:00:00Z', 3, NULL, NULL, NULL, NULL, NULL, NULL)\n) AS v(t, id, s, l, f, d, j, b)\nPARTITIONED BY ALL"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 5,
+      "name": "setup: make the datasource of 400 rows",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "REPLACE INTO dbimp_big OVERWRITE ALL\nSELECT TIMESTAMPADD(SECOND, a.x * 20 + b.y + 1 + CASE WHEN a.x * 20 + b.y + 1 = 400 THEN 86400 ELSE 0 END, TIMESTAMP '2026-10-01 00:00:00') AS __time,\n  a.x * 20 + b.y + 1 AS n,\n  400 - (a.x * 20 + b.y + 1) AS z,\n  RPAD('row', 100, 'x') AS s\nFROM UNNEST(ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]) AS a(x) CROSS JOIN UNNEST(ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]) AS b(y)\nPARTITIONED BY DAY"
+      },
+      "phase": "setup",
+      "wait": "40s"
+    },
+    {
+      "item": 1,
+      "name": "setup: make the datasource for crud",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "REPLACE INTO dbimp_crud OVERWRITE ALL\nSELECT TIME_PARSE(t) AS __time, id, v\nFROM (VALUES ('2026-10-01T00:00:00Z', 1, 'one'), ('2026-10-02T00:00:00Z', 2, 'two')) AS x(t, id, v)\nPARTITIONED BY DAY\nCLUSTERED BY id"
+      },
+      "phase": "setup",
+      "wait": "40s"
+    },
+    {
+      "item": 1,
+      "name": "setup: make a datasource from inline data with extern",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "REPLACE INTO dbimp_extern OVERWRITE ALL\nSELECT TIME_PARSE(t) AS __time, v\nFROM TABLE(EXTERN('{\"type\":\"inline\",\"data\":\"{\\\"t\\\":\\\"2026-10-01T00:00:00Z\\\",\\\"v\\\":1}\\n{\\\"t\\\":\\\"2026-10-01T01:00:00Z\\\",\\\"v\\\":2}\"}', '{\"type\":\"json\"}')) EXTEND (t VARCHAR, v BIGINT)\nPARTITIONED BY DAY"
+      },
+      "phase": "setup",
+      "wait": "40s"
+    },
+    {
+      "item": 1,
+      "name": "setup: start the configuration of lookups",
+      "method": "POST",
+      "path": "/druid/coordinator/v1/lookups/config",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {},
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: make a lookup",
+      "method": "POST",
+      "path": "/druid/coordinator/v1/lookups/config",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "__default": {
+          "dbimp_lookup": {
+            "version": "v2",
+            "lookupExtractorFactory": {
+              "type": "map",
+              "map": {
+                "a": "apple",
+                "b": "banana"
+              }
+            }
+          }
+        }
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: wait for the datasources",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT COUNT(*) FROM dbimp_crud",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      },
+      "wait": "90s",
+      "phase": "setup"
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "GET",
+      "path": "/status"
+    },
+    {
+      "item": 9,
+      "name": "the version of each service",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT server_type, version FROM sys.servers ORDER BY server_type",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with no options",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types ORDER BY __time"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the result format object",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types ORDER BY __time",
+        "resultFormat": "object",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "the result format objectLines",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types ORDER BY __time",
+        "resultFormat": "objectLines",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "the result format arrayLines",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types ORDER BY __time",
+        "resultFormat": "arrayLines",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "the result format csv",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types ORDER BY __time",
+        "resultFormat": "csv",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "an unknown result format",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types",
+        "resultFormat": "tsv",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with no content type",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "text": "{\"query\":\"SELECT 1 AS a FROM dbimp_types LIMIT 1\"}"
+    },
+    {
+      "item": 1,
+      "name": "a statement as plain text",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "text/plain"
+        ]
+      },
+      "text": "SELECT 1 AS a FROM dbimp_types LIMIT 1"
+    },
+    {
+      "item": 1,
+      "name": "a GET of the SQL API",
+      "method": "GET",
+      "path": "/druid/v2/sql"
+    },
+    {
+      "item": 1,
+      "name": "an unknown field in the body",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT 1 AS a FROM dbimp_types LIMIT 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "dbimpUnknown": 1
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: insert through the SQL API",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "INSERT INTO dbimp_crud SELECT TIME_PARSE('2026-10-03T00:00:00Z') AS __time, 3 AS id, 'three' AS v PARTITIONED BY DAY",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: insert",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "INSERT INTO dbimp_crud SELECT TIME_PARSE('2026-10-03T00:00:00Z') AS __time, 3 AS id, 'three' AS v PARTITIONED BY DAY"
+      },
+      "capture": {
+        "insert": "taskId"
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: the state of the insert task",
+      "method": "GET",
+      "path": "/druid/indexer/v1/task/{{insert}}/status",
+      "wait": "20s",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "crud: select",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT __time, id, v FROM dbimp_crud ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      },
+      "wait": "60s"
+    },
+    {
+      "item": 1,
+      "name": "crud: update",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "UPDATE dbimp_crud SET v = 'uno' WHERE id = 1",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: update through the task API",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "UPDATE dbimp_crud SET v = 'uno' WHERE id = 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: replace one day",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "REPLACE INTO dbimp_crud OVERWRITE WHERE __time >= TIMESTAMP '2026-10-01 00:00:00' AND __time < TIMESTAMP '2026-10-02 00:00:00' SELECT TIME_PARSE('2026-10-01T00:00:00Z') AS __time, 1 AS id, 'uno' AS v PARTITIONED BY DAY"
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: select after the replace",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT __time, id, v FROM dbimp_crud ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      },
+      "wait": "75s",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "crud: delete",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "DELETE FROM dbimp_crud WHERE id = 2",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: delete one day with replace",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "REPLACE INTO dbimp_crud OVERWRITE WHERE __time >= TIMESTAMP '2026-10-02 00:00:00' AND __time < TIMESTAMP '2026-10-03 00:00:00' SELECT __time, id, v FROM dbimp_crud WHERE __time >= TIMESTAMP '2026-10-02 00:00:00' AND __time < TIMESTAMP '2026-10-03 00:00:00' AND id = 0 PARTITIONED BY DAY"
+      }
+    },
+    {
+      "item": 1,
+      "name": "crud: select after the delete",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT __time, id, v FROM dbimp_crud ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      },
+      "wait": "75s",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "schema: create table",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "CREATE TABLE dbimp_x (id BIGINT PRIMARY KEY, v VARCHAR DEFAULT 'a' UNIQUE)",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: foreign key",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "CREATE TABLE dbimp_y (id BIGINT REFERENCES dbimp_x (id))",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: create index",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "CREATE INDEX dbimp_i ON dbimp_crud (v)",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: create view",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "CREATE VIEW dbimp_v AS SELECT id FROM dbimp_crud",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: alter table",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "ALTER TABLE dbimp_crud ADD COLUMN w BIGINT",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: drop table",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "DROP TABLE dbimp_crud",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: create table through the task API",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "CREATE TABLE dbimp_x (id BIGINT)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: the columns of a datasource",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT COLUMN_NAME, ORDINAL_POSITION, DATA_TYPE, IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'dbimp_types' ORDER BY ORDINAL_POSITION",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "schema: the datasources",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'druid' ORDER BY TABLE_NAME",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: time floor on __time",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT TIME_FLOOR(__time, 'P1D') AS d, COUNT(*) AS c FROM dbimp_big GROUP BY 1 ORDER BY 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: a datasource from extern",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT __time, v FROM dbimp_extern ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: approximate functions",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT APPROX_COUNT_DISTINCT(s) AS a, APPROX_COUNT_DISTINCT_DS_HLL(s) AS h, APPROX_QUANTILE_DS(l, 0.5) AS q FROM dbimp_types",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: a sketch",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT DS_HLL(s) AS h FROM dbimp_types",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: multi-value strings",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, mv, MV_LENGTH(mv) AS n FROM dbimp_types WHERE MV_CONTAINS(mv, 'x') OR mv = 'z'",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: a multi-value string grouped",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT mv, COUNT(*) AS c FROM dbimp_types GROUP BY mv ORDER BY mv",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: unnest",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT d.id, u.e FROM dbimp_types AS d CROSS JOIN UNNEST(d.sa) AS u(e)",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: json functions",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT JSON_VALUE(j, '$.k[1]') AS v, JSON_QUERY(j, '$.k[3]') AS q FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: lookup function",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT LOOKUP('a', 'dbimp_lookup') AS a, LOOKUP('q', 'dbimp_lookup') AS q",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: lookup table",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT k, v FROM lookup.dbimp_lookup",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: the sys schema",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT datasource, COUNT(*) AS segments FROM sys.segments GROUP BY datasource ORDER BY datasource",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: the tasks in the sys schema",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT datasource, status FROM sys.tasks WHERE datasource = 'dbimp_crud' LIMIT 3",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: a query id",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "context": {
+          "sqlQueryId": "dbimp-query-id"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: the time zone in the context",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT __time, CAST(__time AS DATE) AS dt FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "context": {
+          "sqlTimeZone": "Asia/Jakarta"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: SET before a statement",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SET sqlTimeZone = 'Asia/Jakarta'; SELECT __time FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: an unknown context key",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "context": {
+          "dbimpUnknown": true
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "feature: explain",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "EXPLAIN PLAN FOR SELECT id FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the columns before the rows",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s, l FROM dbimp_types ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 2,
+      "name": "the columns of an empty result",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types WHERE id = 99",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 2,
+      "name": "the columns of an empty result in lines",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types WHERE id = 99",
+        "resultFormat": "arrayLines",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 2,
+      "name": "the columns of a limit of zero",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT * FROM dbimp_types LIMIT 0",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name as objects",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id AS a, l AS a FROM dbimp_types WHERE id = 1",
+        "resultFormat": "object",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 2,
+      "name": "two columns with one name as arrays",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id AS a, l AS a FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 2,
+      "name": "only the names of the columns",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, s FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT * FROM dbimp_types ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type with arrays as arrays",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT * FROM dbimp_types ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "context": {
+          "sqlStringifyArrays": false
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type as objects",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT * FROM dbimp_types ORDER BY __time",
+        "resultFormat": "object",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type as csv",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT * FROM dbimp_types ORDER BY __time",
+        "resultFormat": "csv",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "casts to other types",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT CAST(id AS INTEGER) AS i, CAST(d AS DECIMAL(38, 10)) AS dc, CAST(__time AS DATE) AS dt, CAST(f AS REAL) AS r, CAST(l AS VARCHAR) AS lv, id = 1 AS bo, CAST(NULL AS VARCHAR) AS nv FROM dbimp_types ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "a boolean column of the query",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id = 1 AS bo, id > 5 AS bf, s IS NULL AS bn FROM dbimp_types ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "literals of each type",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT 'x' AS c, NULL AS n, TRUE AS b, 1.5 AS dc, DATE '2026-10-01' AS dt, TIMESTAMP '2026-10-01 12:34:56.789' AS ts, ARRAY['a', NULL] AS a, PARSE_JSON('{\"k\":1}') AS j FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "an infinity and NaN",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT d * 10 AS inf, -d * 10 AS ninf, (d * 10) - (d * 10) AS nan FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "a float near its limit",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT f, CAST(f AS DOUBLE) AS fd FROM dbimp_types ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "a tinyint",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT CAST(id AS TINYINT) AS ti FROM dbimp_types",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "a smallint",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT CAST(id AS SMALLINT) AS si FROM dbimp_types",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "a time of day",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT CAST('12:34:56' AS TIME) AS t FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "a binary value",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT CAST(s AS VARBINARY) AS vb FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "an integer literal out of range",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT 12345678901234567890.123 AS big FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 3,
+      "name": "a timestamp before 1970",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT TIMESTAMP '1900-01-01 00:00:00' AS ts, TIME_PARSE('0001-01-01T00:00:00Z') AS early FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 4,
+      "name": "typed parameters",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT ? AS s, ? AS d, ? AS ts, ? AS b, ? AS big, ? AS nul, id FROM dbimp_types WHERE id = ?",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "VARCHAR",
+            "value": "é'x"
+          },
+          {
+            "type": "DOUBLE",
+            "value": 1.5
+          },
+          {
+            "type": "TIMESTAMP",
+            "value": "2026-10-01 12:34:56.789"
+          },
+          {
+            "type": "BOOLEAN",
+            "value": true
+          },
+          {
+            "type": "BIGINT",
+            "value": 9223372036854775807
+          },
+          {
+            "type": "VARCHAR",
+            "value": null
+          },
+          {
+            "type": "BIGINT",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "too few parameters",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT ? AS a, ? AS b FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "BIGINT",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "too many parameters",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT ? AS a FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "BIGINT",
+            "value": 1
+          },
+          {
+            "type": "BIGINT",
+            "value": 2
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a string for an integer",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE id = ?",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "INTEGER",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with no type",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE id = ?",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "an array parameter",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT ? AS arr FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "ARRAY",
+            "value": [
+              "a",
+              "b"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a timestamp parameter in milliseconds",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE __time = ?",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "TIMESTAMP",
+            "value": 1790858096789
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a date parameter",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE __time >= ?",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "DATE",
+            "value": "2026-10-01"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a decimal parameter",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT ? AS d FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "DECIMAL",
+            "value": 1.2345678901234568e+18
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a named parameter",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE id = :id",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "BIGINT",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a quoted string",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT '?' AS q, ? AS p FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "parameters": [
+          {
+            "type": "VARCHAR",
+            "value": "x"
+          }
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 400 rows",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n, s FROM dbimp_big ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 400 rows in lines",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n FROM dbimp_big ORDER BY __time",
+        "resultFormat": "arrayLines",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result with an outer limit",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n FROM dbimp_big ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "context": {
+          "sqlOuterLimit": 5
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result with limit and offset",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n FROM dbimp_big ORDER BY __time LIMIT 3 OFFSET 397",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELEC 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown datasource",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT * FROM dbimp_none",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error before any rows",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n, 100 / (z - z) AS q FROM dbimp_big",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n, s, 100 / z AS q FROM dbimp_big ORDER BY __time",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows in lines",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n, 100 / z AS q FROM dbimp_big ORDER BY __time",
+        "resultFormat": "arrayLines",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows as objects",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n, 100 / z AS q FROM dbimp_big ORDER BY __time",
+        "resultFormat": "objectLines",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error of a task",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "REPLACE INTO dbimp_crud OVERWRITE ALL SELECT 1 AS id PARTITIONED BY DAY"
+      }
+    },
+    {
+      "item": 7,
+      "name": "a timeout in the context",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT SUM(n * x + y) AS s FROM dbimp_big CROSS JOIN UNNEST(ARRAY[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500]) AS a(x) CROSS JOIN UNNEST(ARRAY[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500]) AS b(y)",
+        "resultFormat": "array",
+        "context": {
+          "timeout": 2000
+        }
+      }
+    },
+    {
+      "item": 7,
+      "name": "a statement to cancel",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT SUM(n * x + y) AS s FROM dbimp_big CROSS JOIN UNNEST(ARRAY[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500]) AS a(x) CROSS JOIN UNNEST(ARRAY[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500]) AS b(y)",
+        "resultFormat": "array",
+        "context": {
+          "timeout": 10000,
+          "sqlQueryId": "dbimp-cancel"
+        }
+      },
+      "background": true
+    },
+    {
+      "item": 7,
+      "name": "cancel the statement by its id",
+      "method": "DELETE",
+      "path": "/druid/v2/sql/dbimp-cancel",
+      "wait": "1500ms"
+    },
+    {
+      "item": 7,
+      "name": "cancel a statement that is not running",
+      "method": "DELETE",
+      "path": "/druid/v2/sql/dbimp-none",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a statement that the client leaves",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT SUM(n * x + y) AS s FROM dbimp_big CROSS JOIN UNNEST(ARRAY[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500]) AS a(x) CROSS JOIN UNNEST(ARRAY[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500]) AS b(y)",
+        "resultFormat": "array",
+        "context": {
+          "timeout": 10000
+        }
+      },
+      "timeout": "1500ms",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "a statement after the client left",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT COUNT(*) AS c FROM dbimp_types",
+        "resultFormat": "array"
+      },
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT 1 AS a FROM dbimp_types LIMIT 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      },
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a system table that needs a privilege",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT server, server_type FROM sys.servers ORDER BY server",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 8,
+      "name": "the users of the security API",
+      "method": "GET",
+      "path": "/proxy/coordinator/druid-ext/basic-security/authentication/db/basic/users"
+    },
+    {
+      "item": 8,
+      "name": "the datasources of the Coordinator",
+      "method": "GET",
+      "path": "/druid/coordinator/v1/datasources"
+    },
+    {
+      "item": 10,
+      "name": "two statements in one request",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT 1 AS a FROM dbimp_types LIMIT 1; SELECT 2 AS b FROM dbimp_types LIMIT 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 10,
+      "name": "comments",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "-- a comment\nSELECT /* inline */ id FROM dbimp_types WHERE id = 1 -- the end",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement that ends with a semicolon",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id FROM dbimp_types WHERE id = 1;",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "BEGIN",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit a transaction",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "COMMIT",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a gzip answer",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": {
+        "query": "SELECT n FROM dbimp_big ORDER BY __time LIMIT 50",
+        "resultFormat": "array"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a path of the Coordinator through the Router",
+      "method": "GET",
+      "path": "/druid/coordinator/v1/leader"
+    },
+    {
+      "item": 1,
+      "name": "step 7: upsert through the task API",
+      "method": "POST",
+      "path": "/druid/v2/sql/task",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "UPSERT INTO dbimp_crud SELECT TIME_PARSE('2026-10-04T00:00:00Z') AS __time, 4 AS id, 'four' AS v PARTITIONED BY DAY"
+      },
+      "releases": [
+        "druid-36"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "step 7: a multi-value string as an array",
+      "method": "POST",
+      "path": "/druid/v2/sql",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT id, MV_TO_ARRAY(mv) AS a FROM dbimp_types WHERE id = 1",
+        "resultFormat": "array",
+        "header": true,
+        "typesHeader": true,
+        "sqlTypesHeader": true,
+        "context": {
+          "sqlStringifyArrays": false
+        }
+      },
+      "releases": [
+        "druid-36"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "step 7: a statement of the statements API",
+      "method": "POST",
+      "path": "/druid/v2/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n FROM dbimp_big WHERE n <= 10",
+        "resultFormat": "array",
+        "context": {
+          "executionMode": "ASYNC",
+          "rowsPerPage": 4
+        }
+      },
+      "capture": {
+        "statement": "queryId"
+      },
+      "releases": [
+        "druid-36"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "step 7: the state of the statement",
+      "method": "GET",
+      "path": "/druid/v2/sql/statements/{{statement}}",
+      "wait": "30s",
+      "releases": [
+        "druid-36"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "step 7: the first page of the statement",
+      "method": "GET",
+      "path": "/druid/v2/sql/statements/{{statement}}/results?page=0",
+      "releases": [
+        "druid-36"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "step 7: the second page of the statement",
+      "method": "GET",
+      "path": "/druid/v2/sql/statements/{{statement}}/results?page=1",
+      "releases": [
+        "druid-36"
+      ]
+    },
+    {
+      "item": 5,
+      "name": "step 7: a statement that asks for durable storage",
+      "method": "POST",
+      "path": "/druid/v2/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "query": "SELECT n FROM dbimp_big WHERE n <= 10",
+        "resultFormat": "array",
+        "context": {
+          "executionMode": "ASYNC",
+          "selectDestination": "durableStorage"
+        }
+      },
+      "releases": [
+        "druid-36"
+      ]
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the datasource for crud",
+      "method": "DELETE",
+      "path": "/druid/coordinator/v1/datasources/dbimp_crud",
+      "phase": "teardown"
+    }
+  ]
+}

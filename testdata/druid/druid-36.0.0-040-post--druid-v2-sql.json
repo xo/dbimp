@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'druid' ORDER BY TABLE_NAME\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "X-Druid-Query-Id": [
+        "9ac19fc8-c6e2-4916-bc6c-403f036f13ba"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "9ac19fc8-c6e2-4916-bc6c-403f036f13ba"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Response-Context": [
+        "{}"
+      ]
+    },
+    "body": "[[\"TABLE_SCHEMA\",\"TABLE_NAME\",\"TABLE_TYPE\"],[\"STRING\",\"STRING\",\"STRING\"],[\"VARCHAR\",\"VARCHAR\",\"VARCHAR\"],[\"druid\",\"dbimp_big\",\"TABLE\"],[\"druid\",\"dbimp_crud\",\"TABLE\"],[\"druid\",\"dbimp_extern\",\"TABLE\"],[\"druid\",\"dbimp_types\",\"TABLE\"]]\n"
+  }
+}

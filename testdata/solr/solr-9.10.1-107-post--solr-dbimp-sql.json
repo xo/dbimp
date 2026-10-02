@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+id+FROM+dbimp+WHERE+ARRAY_CONTAINS%28n_ss%2C+%27a%27%29+LIMIT+5"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "465"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"EXCEPTION\":\"Failed to execute sqlQuery 'SELECT id FROM dbimp WHERE ARRAY_CONTAINS(n_ss, 'a') LIMIT 5' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"SELECT id FROM dbimp WHERE ARRAY_CONTAINS(n_ss, 'a') LIMIT 5\\\": From line 1, column 28 to line 1, column 52: No match found for function signature ARRAY_CONTAINS(<ANY>, <CHARACTER>)\",\n      \"EOF\":true,\n      \"RESPONSE_TIME\":6\n    }]\n  }\n}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT convert_from('[1,null]', 'JSON') AS l FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:05 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "2775"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a51-e9e7-85f0-2714-bd1c22839c02\"\n,\"exception\":\"java.lang.Exception\"\n,\"errorMessage\":\"UNSUPPORTED_OPERATION ERROR: Null values are not supported in lists by default. Please set `store.json.all_text_mode` to true to read lists containing nulls. Be advised that this will treat JSON null values as a string containing the word 'null'.\\n\\nLine: 1\\nColumn: 9\\nField: <none>\\nFragment: 0:0\\n\\n[Error Id: a2f6cc0a-81b7-4bae-b0d0-0219d7d8ec72 on 28c8e1a0237b:31010]\"\n,\"stackTrace\":[\"java.lang.Exception: UNSUPPORTED_OPERATION ERROR: Null values are not supported in lists by default. Please set `store.json.all_text_mode` to true to read lists containing nulls. Be advised that this will treat JSON null values as a string containing the word 'null'.\",\"Line: 1\",\"Column: 9\",\"Field: <none>\",\"Fragment: 0:0\",\"[Error Id: a2f6cc0a-81b7-4bae-b0d0-0219d7d8ec72 on 28c8e1a0237b:31010]\",\"\\tat org.apache.drill.common.exceptions.UserException$Builder.build(UserException.java:688)\",\"\\tat org.apache.drill.exec.vector.complex.fn.JsonReader.writeData(JsonReader.java:469)\",\"\\tat org.apache.drill.exec.vector.complex.fn.JsonReader.writeDataSwitch(JsonReader.java:205)\",\"\\tat org.apache.drill.exec.vector.complex.fn.JsonReader.writeDocument(JsonReader.java:186)\",\"\\tat org.apache.drill.exec.store.easy.json.reader.BaseJsonReader.writeToVector(BaseJsonReader.java:116)\",\"\\tat org.apache.drill.exec.store.easy.json.reader.BaseJsonReader.write(BaseJsonReader.java:70)\",\"\\tat org.apache.drill.exec.test.generated.ProjectorGen85.doEval(ProjectorGen85.java:50)\",\"\\tat org.apache.drill.exec.physical.impl.project.ProjectorTemplate.projectRecords(ProjectorTemplate.java:67)\",\"\\tat org.apache.drill.exec.physical.impl.project.ProjectRecordBatch.doWork(ProjectRecordBatch.java:166)\",\"\\tat org.apache.drill.exec.record.AbstractUnaryRecordBatch.innerNext(AbstractUnaryRecordBatch.java:103)\",\"\\tat org.apache.drill.exec.physical.impl.project.ProjectRecordBatch.innerNext(ProjectRecordBatch.java:93)\",\"\\tat org.apache.drill.exec.record.AbstractRecordBatch.next(AbstractRecordBatch.java:160)\",\"\\tat org.apache.drill.exec.physical.impl.BaseRootExec.next(BaseRootExec.java:103)\",\"\\tat org.apache.drill.exec.physical.impl.ScreenCreator$ScreenRoot.innerNext(ScreenCreator.java:81)\",\"\\tat org.apache.drill.exec.physical.impl.BaseRootExec.next(BaseRootExec.java:93)\",\"\\tat org.apache.drill.exec.work.fragment.FragmentExecutor.lambda$run$0(FragmentExecutor.java:321)\",\"\\tat .......(:0)\",\"\\tat org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1899)\",\"\\tat org.apache.drill.exec.work.fragment.FragmentExecutor.run(FragmentExecutor.java:310)\",\"\\tat org.apache.drill.common.SelfCleaningRunnable.run(SelfCleaningRunnable.java:38)\",\"\\tat .......(:0)\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

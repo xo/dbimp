@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT d * 10 AS inf, -d * 10 AS ninf, (d * 10) - (d * 10) AS nan FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Sql-Query-Id": [
+        "37a39b42-7b74-4bd4-901d-b046c0941c72"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Query-Id": [
+        "37a39b42-7b74-4bd4-901d-b046c0941c72"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "[[\"inf\",\"ninf\",\"nan\"],[\"DOUBLE\",\"DOUBLE\",\"DOUBLE\"],[\"DOUBLE\",\"DOUBLE\",\"DOUBLE\"],[\"Infinity\",\"-Infinity\",\"NaN\"]]\n"
+  }
+}

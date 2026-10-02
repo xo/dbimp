@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+1+AS+one+FROM+dbimp+LIMIT+1"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "661"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[\n      {\n        \"EXCEPTION\":\"Failed to execute sqlQuery 'SELECT 1 AS one FROM dbimp LIMIT 1' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"SELECT 1 AS one FROM dbimp LIMIT 1\\\": parse failed: Encountered \\\"one\\\" at line 1, column 13.\\nWas expecting one of:\\n    <QUOTED_STRING> ...\\n    <BRACKET_QUOTED_IDENTIFIER> ...\\n    <QUOTED_IDENTIFIER> ...\\n    <BACK_QUOTED_IDENTIFIER> ...\\n    <BIG_QUERY_BACK_QUOTED_IDENTIFIER> ...\\n    <HYPHENATED_IDENTIFIER> ...\\n    <IDENTIFIER> ...\\n    <UNICODE_QUOTED_IDENTIFIER> ...\\n    \",\n        \"EOF\":true,\n        \"RESPONSE_TIME\":0\n      }\n    ]\n  }\n}"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT COUNT(*) AS n FROM cp.`employee.json` a, cp.`employee.json` b, cp.`tpch/nation.parquet` c, cp.`tpch/region.parquet` d, cp.`tpch/region.parquet` e WHERE a.employee_id + b.employee_id + c.n_nationkey + d.r_regionkey + e.r_regionkey > 0\",\"options\":{\"planner.enable_nljoin_for_scalar_only\":\"false\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "153"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:48 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a26-f732-1518-fd50-d2b826f844fc\"\n,\"columns\":[\"n\"]\n,\"metadata\":[\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n]\n,\"queryState\":\"CANCELED\"\n}\n"
+  }
+}

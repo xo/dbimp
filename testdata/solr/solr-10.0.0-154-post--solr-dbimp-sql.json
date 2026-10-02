@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+id%2C+n_u%2C+n_loc+FROM+dbimp+WHERE+id+%3D+%271%27"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "521"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[\n      {\n        \"EXCEPTION\":\"Failed to execute sqlQuery 'SELECT id, n_u, n_loc FROM dbimp WHERE id = '1'' against JDBC connection 'jdbc:calcitesolr:'.\\nCaused by: Error while executing SQL \\\"SELECT id, n_u, n_loc FROM dbimp WHERE id = '1'\\\": java.io.IOException: java.io.IOException: --> http://192.168.1.5:8983/solr:Export fields must be one of the following types: int,float,long,double,string,date,boolean,SortableText\",\n        \"EOF\":true,\n        \"RESPONSE_TIME\":8\n      }\n    ]\n  }\n}"
+  }
+}

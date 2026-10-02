@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ? AS s, ? AS d, ? AS ts, ? AS b, ? AS big, ? AS nul, id FROM dbimp_types WHERE id = ?\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true,\"parameters\":[{\"type\":\"VARCHAR\",\"value\":\"é'x\"},{\"type\":\"DOUBLE\",\"value\":1.5},{\"type\":\"TIMESTAMP\",\"value\":\"2026-10-01 12:34:56.789\"},{\"type\":\"BOOLEAN\",\"value\":true},{\"type\":\"BIGINT\",\"value\":9223372036854775807},{\"type\":\"VARCHAR\",\"value\":null},{\"type\":\"BIGINT\",\"value\":1}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Query-Id": [
+        "70cf0ecc-d115-4074-8813-6375ada006ea"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "70cf0ecc-d115-4074-8813-6375ada006ea"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ]
+    },
+    "body": "[[\"s\",\"d\",\"ts\",\"b\",\"big\",\"nul\",\"id\"],[\"STRING\",\"DOUBLE\",\"LONG\",\"LONG\",\"LONG\",\"STRING\",\"LONG\"],[\"CHAR\",\"DOUBLE\",\"TIMESTAMP\",\"BOOLEAN\",\"BIGINT\",\"NULL\",\"BIGINT\"],[\"é'x\",1.5,\"2026-10-01T12:34:56.789Z\",true,9223372036854775807,null,1]]\n"
+  }
+}

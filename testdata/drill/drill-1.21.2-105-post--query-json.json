@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE FROM INFORMATION_SCHEMA.`COLUMNS` WHERE TABLE_SCHEMA = 'dfs.tmp' AND TABLE_NAME = 'dbimp_types'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "211"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:48 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a26-cf35-ee1d-4017-0c0e2e02e2c5\"\n,\"columns\":[\"COLUMN_NAME\",\"DATA_TYPE\",\"IS_NULLABLE\"]\n,\"metadata\":[\"VARCHAR\",\"VARCHAR\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

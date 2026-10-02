@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM dbmeta_nosuch\"}"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Error occurred in OpenSearch engine: no such index [dbmeta_nosuch]\",\n    \"details\": \"[dbmeta_nosuch] IndexNotFoundException[no such index [dbmeta_nosuch]]\\nFor more details, please send request for Json format to see the raw response from OpenSearch engine.\",\n    \"type\": \"IndexNotFoundException\"\n  },\n  \"status\": 404\n}"
+  }
+}

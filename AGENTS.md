@@ -64,6 +64,12 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Apache Pinot driver | [docs/PINOT.md](docs/PINOT.md), then W19 and D128 to D134 |
 | writing the rqlite driver | [docs/RQLITE.md](docs/RQLITE.md), then W22, D73 and D140 |
 | writing the libSQL and Turso driver | [docs/LIBSQL.md](docs/LIBSQL.md), then W23, D76 and D147 to D152 |
+| writing the Apache Druid driver | [docs/DRUID.md](docs/DRUID.md), then W25 and D162 |
+| writing the Apache Drill driver | [docs/DRILL.md](docs/DRILL.md), then W26 and D162 |
+| writing the Apache Solr driver | [docs/SOLR.md](docs/SOLR.md), then W27 and D162 |
+| writing the Elasticsearch driver | [docs/ELASTICSEARCH.md](docs/ELASTICSEARCH.md), then W28 and D162 |
+| writing the OpenSearch driver | [docs/OPENSEARCH.md](docs/OPENSEARCH.md), then W29 and D162 |
+| writing the Amazon DynamoDB and ScyllaDB Alternator driver | [docs/DYNAMODB.md](docs/DYNAMODB.md), then W30 and D162 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |

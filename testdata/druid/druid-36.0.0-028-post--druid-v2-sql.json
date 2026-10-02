@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT __time, id, v FROM dbimp_crud ORDER BY __time\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Query-Id": [
+        "a6be4165-ec5b-473d-bb02-d3dbb5ac2784"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "a6be4165-ec5b-473d-bb02-d3dbb5ac2784"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:25:03 GMT",
+        "Thu, 01 Oct 2026 20:25:03 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "[[\"__time\",\"id\",\"v\"],[\"LONG\",\"LONG\",\"STRING\"],[\"TIMESTAMP\",\"BIGINT\",\"VARCHAR\"],[\"2026-10-01T00:00:00.000Z\",1,\"uno\"],[\"2026-10-02T00:00:00.000Z\",2,\"two\"],[\"2026-10-03T00:00:00.000Z\",3,\"three\"]]\n"
+  }
+}

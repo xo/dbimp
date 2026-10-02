@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT d.id, u.e FROM dbimp_types AS d CROSS JOIN UNNEST(d.sa) AS u(e)\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "076ef1f4-fa1a-476c-9193-7e4116960283"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "076ef1f4-fa1a-476c-9193-7e4116960283"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ]
+    },
+    "body": "[[\"id\",\"e\"],[\"LONG\",\"STRING\"],[\"BIGINT\",\"VARCHAR\"],[1,\"a\"],[1,null],[1,\"c\"]]\n"
+  }
+}

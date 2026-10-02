@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "PUT",
+    "path": "/dbmeta_t_percolator/_doc/1",
+    "query": "refresh=true",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"id\":1,\"v\":{\"match\":{\"x\":\"y\"}}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"query_shard_exception\",\"reason\":\"No field mapping can be found for the field with name [x]\",\"index\":\"dbmeta_t_percolator\",\"index_uuid\":\"QVXTUnPrTDK8c5Gb0iXSSg\"}],\"type\":\"mapper_parsing_exception\",\"reason\":\"failed to parse\",\"caused_by\":{\"type\":\"query_shard_exception\",\"reason\":\"No field mapping can be found for the field with name [x]\",\"index\":\"dbmeta_t_percolator\",\"index_uuid\":\"QVXTUnPrTDK8c5Gb0iXSSg\"}},\"status\":400}"
+  }
+}

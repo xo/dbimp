@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT '?' AS q, ? AS p FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true,\"parameters\":[{\"type\":\"VARCHAR\",\"value\":\"x\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:19 GMT",
+        "Thu, 01 Oct 2026 20:26:19 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "d20f8e17-f8e0-4bf9-b9cf-b70079111fd8"
+      ],
+      "X-Druid-Query-Id": [
+        "d20f8e17-f8e0-4bf9-b9cf-b70079111fd8"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[[\"q\",\"p\"],[\"STRING\",\"STRING\"],[\"CHAR\",\"CHAR\"],[\"?\",\"x\"]]\n"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST(1 AS UINT2) AS u FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "5200"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:15 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a0b-8d6c-302b-43a6-7524cb6685a6\"\n,\"exception\":\"org.apache.calcite.runtime.CalciteContextException\"\n,\"errorMessage\":\"From line 1, column 18 to line 1, column 22: Unknown identifier 'UINT2': Unknown identifier 'UINT2'\"\n,\"stackTrace\":[\"org.apache.calcite.runtime.CalciteContextException: From line 1, column 18 to line 1, column 22: Unknown identifier 'UINT2': Unknown identifier 'UINT2'\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:945)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:930)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.newValidationError(SqlValidatorImpl.java:5464)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.getValidatedNodeType(SqlValidatorImpl.java:1793)\",\"\\tat org.apache.calcite.sql.SqlUserDefinedTypeNameSpec.deriveType(SqlUserDefinedTypeNameSpec.java:49)\",\"\\tat org.apache.calcite.sql.SqlDataTypeSpec.deriveType(SqlDataTypeSpec.java:233)\",\"\\tat org.apache.calcite.sql.SqlDataTypeSpec.deriveType(SqlDataTypeSpec.java:220)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$DeriveTypeVisitor.visit(SqlValidatorImpl.java:6623)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$DeriveTypeVisitor.visit(SqlValidatorImpl.java:6508)\",\"\\tat org.apache.calcite.sql.SqlDataTypeSpec.accept(SqlDataTypeSpec.java:197)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.deriveTypeImpl(SqlValidatorImpl.java:1897)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.deriveType(SqlValidatorImpl.java:1882)\",\"\\tat org.apache.calcite.sql.SqlOperator.deriveOperandType(SqlOperator.java:691)\",\"\\tat org.apache.calcite.sql.SqlOperator.constructArgTypeList(SqlOperator.java:681)\",\"\\tat org.apache.calcite.sql.SqlFunction.deriveType(SqlFunction.java:250)\",\"\\tat org.apache.calcite.sql.SqlFunction.deriveType(SqlFunction.java:231)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$DeriveTypeVisitor.visit(SqlValidatorImpl.java:6521)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$DeriveTypeVisitor.visit(SqlValidatorImpl.java:6508)\",\"\\tat org.apache.calcite.sql.SqlCall.accept(SqlCall.java:161)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.deriveTypeImpl(SqlValidatorImpl.java:1897)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.deriveType(SqlValidatorImpl.java:1882)\",\"\\tat org.apache.calcite.sql.SqlAsOperator.deriveType(SqlAsOperator.java:133)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$DeriveTypeVisitor.visit(SqlValidatorImpl.java:6521)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$DeriveTypeVisitor.visit(SqlValidatorImpl.java:6508)\",\"\\tat org.apache.calcite.sql.SqlCall.accept(SqlCall.java:161)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.deriveTypeImpl(SqlValidatorImpl.java:1897)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.deriveType(SqlValidatorImpl.java:1882)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.expandSelectItem(SqlValidatorImpl.java:489)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateSelectList(SqlValidatorImpl.java:4608)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateSelect(SqlValidatorImpl.java:3780)\",\"\\tat org.apache.calcite.sql.validate.SelectNamespace.validateImpl(SelectNamespace.java:61)\",\"\\tat org.apache.calcite.sql.validate.AbstractNamespace.validate(AbstractNamespace.java:88)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateNamespace(SqlValidatorImpl.java:1135)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateQuery(SqlValidatorImpl.java:1106)\",\"\\tat org.apache.calcite.sql.SqlSelect.validate(SqlSelect.java:282)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateScopedExpression(SqlValidatorImpl.java:1081)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validate(SqlValidatorImpl.java:787)\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.validate(SqlConverter.java:212)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateNode(DefaultSqlHandler.java:662)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateAndConvert(DefaultSqlHandler.java:198)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:172)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\",\"Caused by: org.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'UINT2'\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.runtime.Resources$ExInst.ex(Resources.java:599)\",\"\\t... 48 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"REPLACE INTO dbimp_crud OVERWRITE ALL\\nSELECT TIME_PARSE(t) AS __time, id, v\\nFROM (VALUES ('2026-10-01T00:00:00Z', 1, 'one'), ('2026-10-02T00:00:00Z', 2, 'two')) AS x(t, id, v)\\nPARTITIONED BY DAY\\nCLUSTERED BY id\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:20:17 GMT",
+        "Thu, 01 Oct 2026 20:20:17 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"taskId\":\"query-c5192557-9718-455a-99e5-0b32fc01edce\",\"state\":\"RUNNING\"}"
+  }
+}

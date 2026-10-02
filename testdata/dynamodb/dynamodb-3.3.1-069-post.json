@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"UPDATE dbimp_crud SET v = 'one' WHERE pk = 'a' AND sk = 1 RETURNING ALL OLD *\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "0a1e4d04-e2ab-42dd-9ec3-b7978039c002"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "2009201176"
+      ],
+      "Content-Length": [
+        "59"
+      ]
+    },
+    "body": "{\"Items\":[{\"sk\":{\"N\":\"1\"},\"v\":{\"S\":\"uno\"},\"pk\":{\"S\":\"a\"}}]}"
+  }
+}

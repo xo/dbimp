@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE OR REPLACE VIEW dfs.tmp.dbimp_v AS SELECT employee_id, full_name FROM cp.`employee.json` LIMIT 2\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:05 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "252"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a52-75c3-1ad4-43b2-95725b14298a\"\n,\"columns\":[\"ok\",\"summary\"]\n,\"metadata\":[\"BIT\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"ok\":true,\"summary\":\"View 'dbimp_v' created successfully in 'dfs.tmp' schema\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

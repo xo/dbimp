@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/solr/admin/info/system",
+    "query": "wt=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ]
+    },
+    "body": "{\n  \"responseHeader\":{\n    \"status\":0,\n    \"QTime\":3\n  },\n  \"mode\":\"solrcloud\",\n  \"zkHost\":\"192.168.1.5:9983\",\n  \"solr_home\":\"/var/solr/data\",\n  \"core_root\":\"/var/solr/data\",\n  \"lucene\":{\n    \"solr-spec-version\":\"9.10.1\",\n    \"solr-impl-version\":\"9.10.1 c135e6335c7158fa26e96b0dc386f825255b47c0 - gerlowskija - 2026-01-15 09:36:55\",\n    \"lucene-spec-version\":\"9.12.3\",\n    \"lucene-impl-version\":\"9.12.3 f965e930673c1f5cb478dc6a8907f5fc4ef7b539 - 2025-09-24 07:44:31\"\n  },\n  \"jvm\":{\n    \"version\":\"17.0.20.1 17.0.20.1+1\",\n    \"name\":\"Eclipse Adoptium OpenJDK 64-Bit Server VM\",\n    \"spec\":{\n      \"vendor\":\"Oracle Corporation\",\n      \"name\":\"Java Platform API Specification\",\n      \"version\":\"17\"\n    },\n    \"jre\":{\n      \"vendor\":\"Eclipse Adoptium\",\n      \"version\":\"17.0.20.1\"\n    },\n    \"vm\":{\n      \"vendor\":\"Eclipse Adoptium\",\n      \"name\":\"OpenJDK 64-Bit Server VM\",\n      \"version\":\"17.0.20.1+1\"\n    },\n    \"processors\":32,\n    \"memory\":{\n      \"free\":\"860.8 MB\",\n      \"total\":\"1 GB\",\n      \"max\":\"1 GB\",\n      \"used\":\"163.2 MB (%15.9)\",\n      \"raw\":{\n        \"free\":902581864,\n        \"total\":1073741824,\n        \"max\":1073741824,\n        \"used\":171159960,\n        \"used%\":15.940513461828232\n      }\n    },\n    \"jmx\":{\n      \"classpath\":\"start.jar\",\n      \"commandLineArgs\":[\"-Xms1g\",\"-Xmx1g\",\"-XX:+UseG1GC\",\"-XX:+PerfDisableSharedMem\",\"-XX:+ParallelRefProcEnabled\",\"-XX:MaxGCPauseMillis=250\",\"-XX:+UseLargePages\",\"-XX:+AlwaysPreTouch\",\"-XX:+ExplicitGCInvokesConcurrent\",\"-Xlog:gc*:file=/var/solr/logs/solr_gc.log:time,uptime:filecount=9,filesize=20M\",\"-Dsolr.jetty.inetaccess.includes=\",\"-Dsolr.jetty.inetaccess.excludes=\",\"-DzkClientTimeout=30000\",\"-DzkRun\",\"-Dsolr.log.dir=/var/solr/logs\",\"-Djetty.port=8983\",\"-DSTOP.PORT=7983\",\"-DSTOP.KEY=solrrocks\",\"-Djava.io.tmpdir=/tmp\",\"-Duser.timezone=UTC\",\"-XX:-OmitStackTraceInFastThrow\",\"-XX:+CrashOnOutOfMemoryError\",\"-XX:ErrorFile=/var/solr/logs/jvm_crash_%p.log\",\"-Djetty.home=/opt/solr-9.10.1/server\",\"-Dsolr.solr.home=/var/solr/data\",\"-Dsolr.install.dir=/opt/solr-9.10.1\",\"-Dsolr.install.symDir=/opt/solr\",\"-Dsolr.default.confdir=/opt/solr-9.10.1/server/solr/configsets/_default/conf\",\"-Dlog4j.configurationFile=/var/solr/log4j2.xml\",\"-Dsolr.jetty.host=0.0.0.0\",\"-Dsolr.zk.embedded.host=0.0.0.0\",\"-Xss256k\",\"-XX:CompileCommand=exclude,com.github.benmanes.caffeine.cache.BoundedLocalCache::put\",\"-Djava.security.manager\",\"-Djava.security.policy=/opt/solr-9.10.1/server/etc/security.policy\",\"-Djava.security.properties=/opt/solr-9.10.1/server/etc/security.properties\",\"-Dsolr.internal.network.permission=*\",\"-DdisableAdminUI=false\"],\n      \"startTime\":\"2026-10-01T18:51:59.737Z\",\n      \"upTimeMS\":9530\n    }\n  },\n  \"security\":{\n    \"authenticationPlugin\":\"org.apache.solr.security.BasicAuthPlugin\",\n    \"authorizationPlugin\":\"org.apache.solr.security.RuleBasedAuthorizationPlugin\",\n    \"username\":\"admin\",\n    \"roles\":[\"admin\"],\n    \"permissions\":[\"all\",\"read\",\"sql\"],\n    \"tls\":false\n  },\n  \"system\":{\n    \"name\":\"Linux\",\n    \"arch\":\"amd64\",\n    \"availableProcessors\":32,\n    \"systemLoadAverage\":1.91650390625,\n    \"version\":\"6.18.54-1-lts\",\n    \"committedVirtualMemorySize\":16520130560,\n    \"cpuLoad\":0.0,\n    \"freeMemorySize\":2574483456,\n    \"freePhysicalMemorySize\":2574483456,\n    \"freeSwapSpaceSize\":4294967296,\n    \"processCpuLoad\":0.0,\n    \"processCpuTime\":19920000000,\n    \"systemCpuLoad\":0.0,\n    \"totalMemorySize\":4294967296,\n    \"totalPhysicalMemorySize\":4294967296,\n    \"totalSwapSpaceSize\":4294967296,\n    \"maxFileDescriptorCount\":524288,\n    \"openFileDescriptorCount\":253\n  },\n  \"node\":\"192.168.1.5:8983_solr\"\n}"
+  }
+}

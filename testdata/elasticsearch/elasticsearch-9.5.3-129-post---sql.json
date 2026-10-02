@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n / 0 AS x FROM dbmeta_paging WHERE n = 1\"}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"arithmetic_exception\",\"reason\":\"/ by zero\"}],\"type\":\"arithmetic_exception\",\"reason\":\"/ by zero\"},\"status\":500}"
+  }
+}

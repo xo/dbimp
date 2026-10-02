@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT LOOKUP('a', 'dbimp_lookup') AS a, LOOKUP('q', 'dbimp_lookup') AS q\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "801d0b66-c958-4c9d-87da-a504ab33fd6e"
+      ],
+      "X-Druid-Response-Context": [
+        "{}"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ],
+      "X-Druid-Query-Id": [
+        "801d0b66-c958-4c9d-87da-a504ab33fd6e"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[[\"a\",\"q\"],[\"STRING\",\"STRING\"],[\"VARCHAR\",\"VARCHAR\"],[\"apple\",null]]\n"
+  }
+}

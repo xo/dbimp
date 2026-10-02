@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT TIME_FLOOR(__time, 'P1D') AS d, COUNT(*) AS c FROM dbimp_big GROUP BY 1 ORDER BY 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Query-Id": [
+        "5231a5ce-d88c-4552-87e1-78f40d3db764"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "5231a5ce-d88c-4552-87e1-78f40d3db764"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:18 GMT",
+        "Thu, 01 Oct 2026 20:11:18 GMT"
+      ]
+    },
+    "body": "[[\"d\",\"c\"],[\"LONG\",\"LONG\"],[\"TIMESTAMP\",\"BIGINT\"],[\"2026-10-01T00:00:00.000Z\",399],[\"2026-10-02T00:00:00.000Z\",1]]\n"
+  }
+}

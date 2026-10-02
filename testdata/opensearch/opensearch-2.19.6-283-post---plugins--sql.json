@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST('2026-10-01T12:00:00+05:30' AS TIMESTAMP)\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"timestamp:2026-10-01T12:00:00+05:30 in unsupported format, please use 'yyyy-MM-dd HH:mm:ss[.SSSSSSSSS]'\",\n    \"type\": \"SemanticCheckException\"\n  },\n  \"status\": 400\n}"
+  }
+}

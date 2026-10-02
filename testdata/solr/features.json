@@ -1,0 +1,973 @@
+{
+  "driver": "solr",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/stevenferrer/solr-go",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/apache/solr/solr/solrj-streaming",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-019-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-023-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-020-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-021-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "update handler add",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-022-post--solr-dbimp-update.json",
+      "test": "TestIntegrationCRUD/update_handler_add"
+    },
+    {
+      "kind": "crud",
+      "name": "update handler atomic update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-024-post--solr-dbimp-update.json",
+      "test": "TestIntegrationCRUD/update_handler_atomic_update"
+    },
+    {
+      "kind": "crud",
+      "name": "update handler replace",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-026-post--solr-dbimp-update.json",
+      "test": "TestIntegrationCRUD/update_handler_replace"
+    },
+    {
+      "kind": "crud",
+      "name": "update handler delete by id",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-028-post--solr-dbimp-update.json",
+      "test": "TestIntegrationCRUD/update_handler_delete_by_id"
+    },
+    {
+      "kind": "crud",
+      "name": "update handler delete by query",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-030-post--solr-dbimp-update.json",
+      "test": "TestIntegrationCRUD/update_handler_delete_by_query"
+    },
+    {
+      "kind": "crud",
+      "name": "update handler as the ordinary user",
+      "sources": [
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-127-post--solr-dbimp-update.json",
+      "test": "TestIntegrationCRUD/update_handler_as_the_ordinary_user"
+    },
+    {
+      "kind": "schema",
+      "name": "collection",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-006-get--solr-admin-collections.json",
+      "test": "TestIntegrationSchema/collection"
+    },
+    {
+      "kind": "schema",
+      "name": "create table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-035-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/create_table"
+    },
+    {
+      "kind": "schema",
+      "name": "unique key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-032-get--solr-dbimp-schema-uniquekey.json",
+      "test": "TestIntegrationSchema/unique_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-035-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-035-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-036-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-037-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "collection alias",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-018-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/collection_alias"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-034-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "field type",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-007-post--solr-dbimp-schema.json",
+      "test": "TestIntegrationSchema/field_type"
+    },
+    {
+      "kind": "schema",
+      "name": "dynamic field",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-034-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/dynamic_field"
+    },
+    {
+      "kind": "schema",
+      "name": "copy field",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-034-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/copy_field"
+    },
+    {
+      "kind": "schema",
+      "name": "the schema as the ordinary user",
+      "sources": [
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-138-get--solr-dbimp-schema-fields.json",
+      "test": "TestIntegrationSchema/the_schema_as_the_ordinary_user"
+    },
+    {
+      "kind": "schema",
+      "name": "metadata tables",
+      "sources": [
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-046-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/metadata_tables"
+    },
+    {
+      "kind": "schema",
+      "name": "metadata columns",
+      "sources": [
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-045-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationSchema/metadata_columns"
+    },
+    {
+      "kind": "feature",
+      "name": "full text search",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-097-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/full_text_search"
+    },
+    {
+      "kind": "feature",
+      "name": "lucene query",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-098-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/lucene_query"
+    },
+    {
+      "kind": "feature",
+      "name": "lucene query with spaces",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-099-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/lucene_query_with_spaces"
+    },
+    {
+      "kind": "feature",
+      "name": "score",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-101-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/score"
+    },
+    {
+      "kind": "feature",
+      "name": "score with no limit",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-069-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/score_with_no_limit"
+    },
+    {
+      "kind": "feature",
+      "name": "wildcard in equality",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-102-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/wildcard_in_equality"
+    },
+    {
+      "kind": "feature",
+      "name": "group by facet",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-103-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/group_by_facet"
+    },
+    {
+      "kind": "feature",
+      "name": "group by map reduce",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-104-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/group_by_map_reduce"
+    },
+    {
+      "kind": "feature",
+      "name": "map reduce group of a null integer",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-077-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/map_reduce_group_of_a_null_integer"
+    },
+    {
+      "kind": "feature",
+      "name": "map reduce group ordered by an aggregate",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-111-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/map_reduce_group_ordered_by_an_aggregate"
+    },
+    {
+      "kind": "feature",
+      "name": "two workers",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-114-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/two_workers"
+    },
+    {
+      "kind": "feature",
+      "name": "having and order by an aggregate",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-105-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/having_and_order_by_an_aggregate"
+    },
+    {
+      "kind": "feature",
+      "name": "distinct",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-071-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/distinct"
+    },
+    {
+      "kind": "feature",
+      "name": "union",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-109-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/union"
+    },
+    {
+      "kind": "feature",
+      "name": "join",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-228-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/join"
+    },
+    {
+      "kind": "feature",
+      "name": "array contains",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-107-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/array_contains"
+    },
+    {
+      "kind": "feature",
+      "name": "multi-valued field in a filter",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-108-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/multi-valued_field_in_a_filter"
+    },
+    {
+      "kind": "feature",
+      "name": "include metadata",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-039-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/include_metadata"
+    },
+    {
+      "kind": "feature",
+      "name": "two columns with one name",
+      "sources": [
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-042-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/two_columns_with_one_name"
+    },
+    {
+      "kind": "feature",
+      "name": "export with no limit",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-062-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/export_with_no_limit"
+    },
+    {
+      "kind": "feature",
+      "name": "export of a field with no docValues",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-068-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/export_of_a_field_with_no_docValues"
+    },
+    {
+      "kind": "feature",
+      "name": "limit and offset",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-065-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/limit_and_offset"
+    },
+    {
+      "kind": "feature",
+      "name": "offset with no limit",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-067-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/offset_with_no_limit"
+    },
+    {
+      "kind": "feature",
+      "name": "fetch next",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-066-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/fetch_next"
+    },
+    {
+      "kind": "feature",
+      "name": "expression in the projection",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-056-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/expression_in_the_projection"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-092-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/explain"
+    },
+    {
+      "kind": "feature",
+      "name": "streaming expression",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-083-post--solr-dbimp-stream.json",
+      "test": "TestIntegrationFeatures/streaming_expression"
+    },
+    {
+      "kind": "feature",
+      "name": "placeholder",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-059-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/placeholder"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameter",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-060-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/named_parameter"
+    },
+    {
+      "kind": "feature",
+      "name": "two statements",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-086-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/two_statements"
+    },
+    {
+      "kind": "feature",
+      "name": "comments",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-088-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/comments"
+    },
+    {
+      "kind": "feature",
+      "name": "quoted names",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-089-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/quoted_names"
+    },
+    {
+      "kind": "feature",
+      "name": "time allowed",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-113-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/time_allowed"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel by query id",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-116-get--solr-dbimp-tasks-cancel.json",
+      "test": "TestIntegrationFeatures/cancel_by_query_id"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-093-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "rollback of the update handler",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-117-post--solr-dbimp-update.json",
+      "test": "TestIntegrationFeatures/rollback_of_the_update_handler"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/null"
+    },
+    {
+      "kind": "type",
+      "name": "StrField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/StrField"
+    },
+    {
+      "kind": "type",
+      "name": "TextField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/TextField"
+    },
+    {
+      "kind": "type",
+      "name": "SortableTextField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/SortableTextField"
+    },
+    {
+      "kind": "type",
+      "name": "IntPointField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/IntPointField"
+    },
+    {
+      "kind": "type",
+      "name": "LongPointField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/LongPointField"
+    },
+    {
+      "kind": "type",
+      "name": "FloatPointField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/FloatPointField"
+    },
+    {
+      "kind": "type",
+      "name": "DoublePointField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/DoublePointField"
+    },
+    {
+      "kind": "type",
+      "name": "BoolField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/BoolField"
+    },
+    {
+      "kind": "type",
+      "name": "DatePointField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/stevenferrer/solr-go"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/DatePointField"
+    },
+    {
+      "kind": "type",
+      "name": "BinaryField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/BinaryField"
+    },
+    {
+      "kind": "type",
+      "name": "UUIDField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/UUIDField"
+    },
+    {
+      "kind": "type",
+      "name": "LatLonPointSpatialField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/LatLonPointSpatialField"
+    },
+    {
+      "kind": "type",
+      "name": "SpatialRecursivePrefixTreeFieldType",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-225-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/SpatialRecursivePrefixTreeFieldType"
+    },
+    {
+      "kind": "type",
+      "name": "BBoxField",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-225-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/BBoxField"
+    },
+    {
+      "kind": "type",
+      "name": "PointType",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-225-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/PointType"
+    },
+    {
+      "kind": "type",
+      "name": "multi-valued field",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-047-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/multi-valued_field"
+    },
+    {
+      "kind": "type",
+      "name": "aggregate",
+      "sources": [
+        "gemini-3.8-flash",
+        "github.com/apache/solr/solr/solrj-streaming"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-052-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/aggregate"
+    },
+    {
+      "kind": "type",
+      "name": "score",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "solr-10.0.0-101-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/score"
+    },
+    {
+      "kind": "type",
+      "name": "DenseVectorField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-050-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/DenseVectorField"
+    },
+    {
+      "kind": "type",
+      "name": "DateRangeField",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-051-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationRoundTrip/DateRangeField"
+    },
+    {
+      "kind": "type",
+      "name": "EnumFieldType",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-009-post--solr-dbimp-schema.json",
+      "test": "TestIntegrationRoundTrip/EnumFieldType"
+    },
+    {
+      "kind": "type",
+      "name": "CurrencyFieldType",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-229-post--solr-dbimp-schema.json",
+      "test": "TestIntegrationRoundTrip/CurrencyFieldType"
+    },
+    {
+      "kind": "feature",
+      "name": "infinity in a double",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "solr-10.0.0-226-post--solr-dbimp-sql.json",
+      "test": "TestIntegrationFeatures/infinity_in_a_double"
+    }
+  ]
+}

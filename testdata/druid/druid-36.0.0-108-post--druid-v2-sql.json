@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT server, server_type FROM sys.servers ORDER BY server\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Response-Context": [
+        "{}"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "3ee72118-cb79-49fc-a22a-54f7ceadf7de"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "3ee72118-cb79-49fc-a22a-54f7ceadf7de"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:31 GMT",
+        "Thu, 01 Oct 2026 20:26:31 GMT"
+      ]
+    },
+    "body": "[[\"server\",\"server_type\"],[\"STRING\",\"STRING\"],[\"VARCHAR\",\"VARCHAR\"],[\"localhost:8081\",\"coordinator\"],[\"localhost:8081\",\"overlord\"],[\"localhost:8082\",\"broker\"],[\"localhost:8083\",\"historical\"],[\"localhost:8091\",\"middle_manager\"],[\"localhost:8888\",\"router\"]]\n"
+  }
+}

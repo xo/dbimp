@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ]
+    },
+    "body": "{\"Statement\":\"UPDATE dbimp_crud SET v = 'eins' WHERE pk = 'a' AND sk = 1 RETURNING MODIFIED NEW *\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "30"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "66227b86-62c4-428a-8b7f-2b97590df013"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "1868815973"
+      ]
+    },
+    "body": "{\"Items\":[{\"v\":{\"S\":\"eins\"}}]}"
+  }
+}

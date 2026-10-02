@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST(1 AS SMALLINT) AS n FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "1497"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:44 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2a-eb41-652a-b08b-5617193206a1\"\n,\"exception\":\"org.apache.drill.exec.work.foreman.UnsupportedDataTypeException\"\n,\"errorMessage\":\"SMALLINT is not supported\\nSee Apache Drill JIRA: DRILL-1959\"\n,\"stackTrace\":[\"org.apache.drill.exec.work.foreman.UnsupportedDataTypeException: SMALLINT is not supported\",\"See Apache Drill JIRA: DRILL-1959\",\"\\tat org.apache.drill.exec.exception.UnsupportedOperatorCollector.convertException(UnsupportedOperatorCollector.java:40)\",\"\\tat org.apache.drill.exec.planner.sql.parser.UnsupportedOperatorsVisitor.convertException(UnsupportedOperatorsVisitor.java:77)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateNode(DefaultSqlHandler.java:672)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateAndConvert(DefaultSqlHandler.java:198)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:172)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

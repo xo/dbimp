@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"INSERT INTO dbimp_crud VALUE {'pk': 'e', 'sk': 1}, {'pk': 'e', 'sk': 2}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Amzn-Requestid": [
+        "17e28905-9948-459f-92a4-56df1963595f"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "192"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Statement wasn't well formed, can't be processed: INSERT INTO dbimp_crud VALUE {'pk': 'e', 'sk': 1}, {'pk': 'e', 'sk': 2}\"}"
+  }
+}

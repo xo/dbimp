@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Opaque-Id": [
+        "dbimp-cancel"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_paging ORDER BY s DESC\",\"fetch_size\":10,\"filter\":{\"script\":{\"script\":{\"source\":\"double x = doc[\\\"n\\\"].value; for (int i = 0; i < 900000; i++) { x = Math.sin(x) + Math.sqrt(i); } return x != 12345.0;\"}}}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "968284796"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Opaque-Id": [
+        "dbimp-cancel"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"n\",\"type\":\"integer\"}],\"rows\":[[99],[98],[97],[96],[95],[94],[93],[92],[91],[90]],\"cursor\":\"rce6BERGTABsUctOwkAUnVsJmCbGHeuRFYSE1BcpqcQQxRgfSKMG0RhS6LSM1CnMDPIwRn/InSt/wM/SWySuPJu5Z+7ck3PuwC2BPjGAGAZBfCPWkwJS3TiO9t+SGlla9SQf6l8Oq0OPi4gppf143I0YndIq9ePeXU7k7ktPXjRmDg1iSfNcaMqxaTl47NGKlQDrYrFAnxdj557ulxQX+WmBFpdsJHWeFxz6QiXTYynw4UaVbm5t7+yWLMckJgG0YQKYAWeR31Gx1KBIuhNwqTQAgcyAzSax9Jf2P2BlERAMkpbxBH0s0iLaeJmEBgCBa3h9//pMwZrffWTa6wy9kIswqwZ2+3jSmFw2y6Jv3wxP53a76RLIqvI89O0ocq3W/OJsdDRtPLgn2Fhqh9lD/2pcO7Aqbmt2bYl+nY20qteSyf8lMdTfLwAEICCDG2Qhk2gTZX8AAAD//wMA\"}"
+  }
+}

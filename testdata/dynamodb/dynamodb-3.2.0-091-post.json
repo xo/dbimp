@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"UPDATE dbimp_crud SET v = 'x' WHERE pk = 'c' AND sk = 1 AND v = 'nomatch'\",\"ReturnValuesOnConditionCheckFailure\":\"ALL_OLD\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "a3409675-918f-48b1-bf42-552bfcaeef93"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "213"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException\",\"Message\":\"The conditional request failed\",\"Item\":{\"ss\":{\"SS\":[\"a\",\"b\"]},\"sk\":{\"N\":\"1\"},\"pk\":{\"S\":\"c\"},\"l\":{\"L\":[{\"N\":\"1\"},{\"N\":\"2\"}]}}}"
+  }
+}

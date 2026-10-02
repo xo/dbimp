@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT o.a, o.s FROM dbmeta_types WHERE id = 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "9059325"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"o.a\",\"type\":\"integer\"},{\"name\":\"o.s\",\"type\":\"keyword\"}],\"rows\":[[1,\"x\"]]}"
+  }
+}

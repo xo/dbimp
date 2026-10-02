@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteTransaction"
+      ]
+    },
+    "body": "{\"TransactStatements\":[{\"Statement\":\"EXISTS(SELECT * FROM dbimp_tx WHERE pk = 'a' AND v = 1)\"},{\"Statement\":\"UPDATE dbimp_tx SET v = 10 WHERE pk = 'b'\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "526700e0-fbf2-4fbd-88b9-55784fccfc1c"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "2524921737"
+      ],
+      "Content-Length": [
+        "16"
+      ]
+    },
+    "body": "{\"Responses\":[]}"
+  }
+}

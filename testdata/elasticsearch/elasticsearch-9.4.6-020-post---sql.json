@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json&field_multi_value_leniency=true",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS one\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"illegal_argument_exception\",\"reason\":\"request [/_sql] contains unrecognized parameter: [field_multi_value_leniency]\"}],\"type\":\"illegal_argument_exception\",\"reason\":\"request [/_sql] contains unrecognized parameter: [field_multi_value_leniency]\"},\"status\":400}"
+  }
+}

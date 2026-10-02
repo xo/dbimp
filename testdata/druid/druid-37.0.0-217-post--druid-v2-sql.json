@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a FROM dbimp_types LIMIT 1; SELECT 2 AS b FROM dbimp_types LIMIT 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Query-Id": [
+        "b6ea068f-8cc3-48a2-9e3f-caedf5c15def"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "b6ea068f-8cc3-48a2-9e3f-caedf5c15def"
+      ],
+      "Content-Length": [
+        "317"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:25 GMT",
+        "Thu, 01 Oct 2026 20:11:25 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Only SET statements can appear before the final statement in a statement list, but found non-SET statement[SELECT 1 AS \\\"a\\\"\\nFROM \\\"dbimp_types\\\"\\nFETCH NEXT 1 ROWS ONLY]\",\"context\":{\"sourceType\":\"sql\"}}"
+  }
+}

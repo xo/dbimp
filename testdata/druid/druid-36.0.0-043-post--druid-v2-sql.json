@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT APPROX_COUNT_DISTINCT(s) AS a, APPROX_COUNT_DISTINCT_DS_HLL(s) AS h, APPROX_QUANTILE_DS(l, 0.5) AS q FROM dbimp_types\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "db063ca5-3396-4b86-96c3-b7e82225ed90"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "db063ca5-3396-4b86-96c3-b7e82225ed90"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ]
+    },
+    "body": "[[\"a\",\"h\",\"q\"],[\"LONG\",\"LONG\",\"DOUBLE\"],[\"BIGINT\",\"BIGINT\",\"DOUBLE\"],[1,1,-9.223372036854776E18]]\n"
+  }
+}

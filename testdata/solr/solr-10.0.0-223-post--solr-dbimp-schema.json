@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/schema",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"add-field-type\":{\"name\":\"bbox\",\"class\":\"solr.BBoxField\",\"geo\":\"true\",\"numberType\":\"pdouble\",\"distanceUnits\":\"kilometers\"},\"add-field\":[{\"name\":\"n_rpt\",\"type\":\"location_rpt\"},{\"name\":\"n_bbox\",\"type\":\"bbox\"},{\"name\":\"n_pt\",\"type\":\"point\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "60"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\n  \"responseHeader\":{\n    \"status\":0,\n    \"QTime\":102\n  }\n}"
+  }
+}

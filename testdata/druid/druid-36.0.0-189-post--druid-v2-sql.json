@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST(id AS SMALLINT) AS si FROM dbimp_types\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "dacc9aa0-31a4-41c2-8697-3723741dc111"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "dacc9aa0-31a4-41c2-8697-3723741dc111"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Length": [
+        "196"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"general\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Cannot coerce field [id] from type [java.lang.Integer] to type [SMALLINT]\",\"context\":{}}"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT AVG(n) AS a, SUM(n) AS s, MIN(s) AS m, COUNT(*) AS c FROM dbmeta_paging\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "6579916"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"a\",\"type\":\"double\"},{\"name\":\"s\",\"type\":\"long\"},{\"name\":\"m\",\"type\":\"keyword\"},{\"name\":\"c\",\"type\":\"long\"}],\"rows\":[[125.5,31375,\"row 1\",250]]}"
+  }
+}

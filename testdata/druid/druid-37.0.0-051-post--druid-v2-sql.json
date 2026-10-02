@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT datasource, COUNT(*) AS segments FROM sys.segments GROUP BY datasource ORDER BY datasource\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "3512efc5-1177-4906-9563-def7f68b2409"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "3512efc5-1177-4906-9563-def7f68b2409"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{}"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[[\"datasource\",\"segments\"],[\"STRING\",\"LONG\"],[\"VARCHAR\",\"BIGINT\"],[\"dbimp_big\",2],[\"dbimp_crud\",3],[\"dbimp_extern\",1],[\"dbimp_t\",1],[\"dbimp_types\",1]]\n"
+  }
+}

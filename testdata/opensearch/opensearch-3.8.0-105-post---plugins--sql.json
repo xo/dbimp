@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, i FROM dbmeta_types WHERE i = 2\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"id\",\n      \"type\": \"integer\"\n    },\n    {\n      \"name\": \"i\",\n      \"type\": \"integer\"\n    }\n  ],\n  \"datarows\": [\n    [\n      4,\n      [\n        1,\n        2,\n        3\n      ]\n    ]\n  ],\n  \"total\": 1,\n  \"size\": 1,\n  \"status\": 200\n}"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT datasource, status FROM sys.tasks WHERE datasource = 'dbimp_crud' LIMIT 3\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "ebb9e3eb-5268-4e38-9d16-9706418ff133"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "ebb9e3eb-5268-4e38-9d16-9706418ff133"
+      ],
+      "X-Druid-Response-Context": [
+        "{}"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[[\"datasource\",\"status\"],[\"STRING\",\"STRING\"],[\"VARCHAR\",\"VARCHAR\"],[\"dbimp_crud\",\"SUCCESS\"],[\"dbimp_crud\",\"SUCCESS\"],[\"dbimp_crud\",\"SUCCESS\"]]\n"
+  }
+}

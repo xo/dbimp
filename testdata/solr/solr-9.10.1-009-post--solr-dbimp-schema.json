@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/schema",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"add-field-type\":{\"name\":\"enum\",\"class\":\"solr.EnumFieldType\",\"enumsConfig\":\"enumsConfig.xml\",\"enumName\":\"severity\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "1019"
+      ]
+    },
+    "body": "{\n  \"responseHeader\":{\n    \"status\":400,\n    \"QTime\":14\n  },\n  \"error\":{\n    \"metadata\":[\"error-class\",\"org.apache.solr.api.ApiBag$ExceptionWithErrObject\",\"root-error-class\",\"org.apache.solr.api.ApiBag$ExceptionWithErrObject\"],\n    \"details\":[{\n      \"add-field-type\":{\n        \"name\":\"enum\",\n        \"class\":\"solr.EnumFieldType\",\n        \"enumsConfig\":\"enumsConfig.xml\",\n        \"enumName\":\"severity\"\n      },\n      \"errorMessages\":[\"Plugin init failure for [schema.xml] fieldType\\nenum: Error while parsing enums config.\\nCan't find resource 'enumsConfig.xml' in classpath or '/configs/dbimp', cwd=/opt/solr-9.10.1/server\\n\"]\n    }],\n    \"msg\":\"error processing commands, errors: [{add-field-type={name=enum, class=solr.EnumFieldType, enumsConfig=enumsConfig.xml, enumName=severity}, errorMessages=[Plugin init failure for [schema.xml] fieldType\\nenum: Error while parsing enums config.\\nCan't find resource 'enumsConfig.xml' in classpath or '/configs/dbimp', cwd=/opt/solr-9.10.1/server\\n]}], \",\n    \"code\":400\n  }\n}"
+  }
+}

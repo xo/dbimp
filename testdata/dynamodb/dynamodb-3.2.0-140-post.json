@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.BatchExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ]
+    },
+    "body": "{\"Statements\":[{\"Statement\":\"INSERT INTO dbimp_crud VALUE {'pk': 'c', 'sk': 1}\"},{\"Statement\":\"INSERT INTO dbimp_crud VALUE {'pk': 'c', 'sk': 9}\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "152"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "897854e7-1e18-4eb1-bd0f-fe90f443d526"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "2935507832"
+      ]
+    },
+    "body": "{\"Responses\":[{\"Error\":{\"Message\":\"Duplicate primary key exists in table\",\"Code\":\"DuplicateItem\"},\"TableName\":\"dbimp_crud\"},{\"TableName\":\"dbimp_crud\"}]}"
+  }
+}

@@ -88,6 +88,12 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/PINOT.md](docs/PINOT.md) | What Apache Pinot 1.4.0 and 1.5.1 answer, as measured |
 | [docs/RQLITE.md](docs/RQLITE.md) | What is known about rqlite, measured for its driver |
 | [docs/LIBSQL.md](docs/LIBSQL.md) | What is known about libSQL and Turso, measured for its driver |
+| [docs/DRUID.md](docs/DRUID.md) | What is known about Apache Druid, for its driver |
+| [docs/DRILL.md](docs/DRILL.md) | What is known about Apache Drill, for its driver |
+| [docs/SOLR.md](docs/SOLR.md) | What is known about Apache Solr, for its driver |
+| [docs/ELASTICSEARCH.md](docs/ELASTICSEARCH.md) | What is known about Elasticsearch, for its driver |
+| [docs/OPENSEARCH.md](docs/OPENSEARCH.md) | What is known about OpenSearch, for its driver |
+| [docs/DYNAMODB.md](docs/DYNAMODB.md) | What is known about Amazon DynamoDB and ScyllaDB Alternator, for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects

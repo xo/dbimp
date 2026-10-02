@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT HISTOGRAM(n, 100) AS h, COUNT(*) AS c FROM dbmeta_paging GROUP BY h ORDER BY h\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "4706512"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"h\",\"type\":\"integer\"},{\"name\":\"c\",\"type\":\"long\"}],\"rows\":[[0.0,99],[100.0,100],[200.0,51]]}"
+  }
+}

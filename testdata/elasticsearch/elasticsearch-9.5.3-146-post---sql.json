@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Opaque-Id": [
+        "dbimp-cancel"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_paging ORDER BY s DESC\",\"fetch_size\":10,\"filter\":{\"script\":{\"script\":{\"source\":\"double x = doc[\\\"n\\\"].value; for (int i = 0; i < 900000; i++) { x = Math.sin(x) + Math.sqrt(i); } return x != 12345.0;\"}}}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Opaque-Id": [
+        "dbimp-cancel"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"task_cancelled_exception\",\"reason\":\"task cancelled [by user request]\"}],\"type\":\"search_phase_execution_exception\",\"reason\":\"all shards failed\",\"phase\":\"query\",\"grouped\":true,\"failed_shards\":[{\"shard\":0,\"index\":\"dbmeta_paging\",\"node\":\"G9yVK6EBSlaAAAUX8X-GNA\",\"reason\":{\"type\":\"task_cancelled_exception\",\"reason\":\"task cancelled [by user request]\"}}]},\"status\":400}"
+  }
+}

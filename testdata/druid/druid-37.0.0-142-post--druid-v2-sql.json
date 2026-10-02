@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"CREATE VIEW dbimp_v AS SELECT id FROM dbimp_crud\",\"resultFormat\":\"array\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Druid-Query-Id": [
+        "7126efac-31e7-4499-8831-dc2a4c2c334d"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "7126efac-31e7-4499-8831-dc2a4c2c334d"
+      ],
+      "Content-Length": [
+        "3850"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:18 GMT",
+        "Thu, 01 Oct 2026 20:11:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Incorrect syntax near the keyword 'CREATE' at line 1, column 1.\\nWas expecting one of:\\n    \\\"INSERT\\\" ...\\n    \\\"UPSERT\\\" ...\\n    \\\"EXPLAIN\\\" ...\\n    \\\"SET\\\" ...\\n    \\\"RESET\\\" ...\\n    \\\"ALTER\\\" ...\\n    \\\"WITH\\\" ...\\n    \\\"SELECT\\\" ...\\n    \\\"VALUES\\\" ...\\n    \\\"VALUE\\\" ...\\n    \\\"TABLE\\\" ...\\n    \\\"+\\\" ...\\n    \\\"-\\\" ...\\n    \\\"NOT\\\" ...\\n    \\\"EXISTS\\\" ...\\n    \\\"UNIQUE\\\" ...\\n    \\\"INTERVAL\\\" ...\\n    <UNSIGNED_INTEGER_LITERAL> ...\\n    <DECIMAL_NUMERIC_LITERAL> ...\\n    \\\"DECIMAL\\\" ...\\n    <APPROX_NUMERIC_LITERAL> ...\\n    <BINARY_STRING_LITERAL> ...\\n    <PREFIXED_STRING_LITERAL> ...\\n    <QUOTED_STRING> ...\\n    <UNICODE_STRING_LITERAL> ...\\n    <C_STYLE_ESCAPED_STRING_LITERAL> ...\\n    <BIG_QUERY_DOUBLE_QUOTED_STRING> ...\\n    <BIG_QUERY_QUOTED_STRING> ...\\n    \\\"TRUE\\\" ...\\n    \\\"FALSE\\\" ...\\n    \\\"UNKNOWN\\\" ...\\n    \\\"NULL\\\" ...\\n    <LBRACE_D> ...\\n    <LBRACE_T> ...\\n    <LBRACE_TS> ...\\n    \\\"DATE\\\" ...\\n    \\\"DATETIME\\\" ...\\n    \\\"TIME\\\" ...\\n    \\\"TIMESTAMP\\\" ...\\n    \\\"?\\\" ...\\n    \\\"CAST\\\" ...\\n    \\\"SAFE_CAST\\\" ...\\n    \\\"TRY_CAST\\\" ...\\n    \\\"EXTRACT\\\" ...\\n    \\\"POSITION\\\" ...\\n    \\\"CONVERT\\\" ...\\n    \\\"TRANSLATE\\\" ...\\n    \\\"OVERLAY\\\" ...\\n    \\\"FLOOR\\\" ...\\n    \\\"CEIL\\\" ...\\n    \\\"CEILING\\\" ...\\n    \\\"SUBSTRING\\\" ...\\n    \\\"TRIM\\\" ...\\n    \\\"CLASSIFIER\\\" ...\\n    \\\"MATCH_NUMBER\\\" ...\\n    \\\"RUNNING\\\" ...\\n    \\\"PREV\\\" ...\\n    \\\"NEXT\\\" ...\\n    \\\"JSON_EXISTS\\\" ...\\n    \\\"JSON_VALUE\\\" ...\\n    \\\"JSON_QUERY\\\" ...\\n    \\\"JSON_OBJECT\\\" ...\\n    \\\"JSON_OBJECTAGG\\\" ...\\n    \\\"JSON_ARRAY\\\" ...\\n    \\\"JSON_ARRAYAGG\\\" ...\\n    <LBRACE_FN> ...\\n    \\\"MULTISET\\\" ...\\n    \\\"ARRAY\\\" ...\\n    \\\"PERIOD\\\" ...\\n    \\\"PERCENTILE_CONT\\\" ...\\n    \\\"PERCENTILE_DISC\\\" ...\\n    \\\"SPECIFIC\\\" ...\\n    <IDENTIFIER> ...\\n    <HYPHENATED_IDENTIFIER> ...\\n    <QUOTED_IDENTIFIER> ...\\n    <BACK_QUOTED_IDENTIFIER> ...\\n    <BIG_QUERY_BACK_QUOTED_IDENTIFIER> ...\\n    <BRACKET_QUOTED_IDENTIFIER> ...\\n    <UNICODE_QUOTED_IDENTIFIER> ...\\n    \\\"ABS\\\" ...\\n    \\\"AVG\\\" ...\\n    \\\"CARDINALITY\\\" ...\\n    \\\"CHAR\\\" ...\\n    \\\"CHAR_LENGTH\\\" ...\\n    \\\"CHARACTER_LENGTH\\\" ...\\n    \\\"COALESCE\\\" ...\\n    \\\"COLLECT\\\" ...\\n    \\\"COVAR_POP\\\" ...\\n    \\\"COVAR_SAMP\\\" ...\\n    \\\"CUME_DIST\\\" ...\\n    \\\"COUNT\\\" ...\\n    \\\"CURRENT_DATE\\\" ...\\n    \\\"CURRENT_TIME\\\" ...\\n    \\\"CURRENT_TIMESTAMP\\\" ...\\n    \\\"DENSE_RANK\\\" ...\\n    \\\"ELEMENT\\\" ...\\n    \\\"EVERY\\\" ...\\n    \\\"EXP\\\" ...\\n    \\\"FIRST_VALUE\\\" ...\\n    \\\"FUSION\\\" ...\\n    \\\"INTERSECTION\\\" ...\\n    \\\"GROUPING\\\" ...\\n    \\\"HOUR\\\" ...\\n    \\\"LAG\\\" ...\\n    \\\"LEAD\\\" ...\\n    \\\"LEFT\\\" ...\\n    \\\"LAST_VALUE\\\" ...\\n    \\\"LN\\\" ...\\n    \\\"LOCALTIME\\\" ...\\n    \\\"LOCALTIMESTAMP\\\" ...\\n    \\\"LOWER\\\" ...\\n    \\\"MAX\\\" ...\\n    \\\"MIN\\\" ...\\n    \\\"MINUTE\\\" ...\\n    \\\"MOD\\\" ...\\n    \\\"MONTH\\\" ...\\n    \\\"NTH_VALUE\\\" ...\\n    \\\"NTILE\\\" ...\\n    \\\"NULLIF\\\" ...\\n    \\\"OCTET_LENGTH\\\" ...\\n    \\\"PERCENT_RANK\\\" ...\\n    \\\"POWER\\\" ...\\n    \\\"RANK\\\" ...\\n    \\\"REGR_COUNT\\\" ...\\n    \\\"REGR_SXX\\\" ...\\n    \\\"REGR_SYY\\\" ...\\n    \\\"RIGHT\\\" ...\\n    \\\"ROW_NUMBER\\\" ...\\n    \\\"SECOND\\\" ...\\n    \\\"SOME\\\" ...\\n    \\\"SQRT\\\" ...\\n    \\\"STDDEV_POP\\\" ...\\n    \\\"STDDEV_SAMP\\\" ...\\n    \\\"SUM\\\" ...\\n    \\\"UPPER\\\" ...\\n    \\\"TRUNCATE\\\" ...\\n    \\\"USER\\\" ...\\n    \\\"VAR_POP\\\" ...\\n    \\\"VAR_SAMP\\\" ...\\n    \\\"YEAR\\\" ...\\n    \\\"CURRENT_CATALOG\\\" ...\\n    \\\"CURRENT_DEFAULT_TRANSFORM_GROUP\\\" ...\\n    \\\"CURRENT_PATH\\\" ...\\n    \\\"CURRENT_ROLE\\\" ...\\n    \\\"CURRENT_SCHEMA\\\" ...\\n    \\\"CURRENT_USER\\\" ...\\n    \\\"SESSION_USER\\\" ...\\n    \\\"SYSTEM_USER\\\" ...\\n    \\\"NEW\\\" ...\\n    \\\"CASE\\\" ...\\n    \\\"CURRENT\\\" ...\\n    \\\"CURSOR\\\" ...\\n    \\\"ROW\\\" ...\\n    \\\"(\\\" ...\\n    \\\"DESCRIBE\\\" ...\\n    \\\"DELETE\\\" ...\\n    \\\"UPDATE\\\" ...\\n    \\\"MERGE\\\" ...\\n    \\\"CALL\\\" ...\\n    \",\"context\":{\"sourceType\":\"sql\"}}"
+  }
+}

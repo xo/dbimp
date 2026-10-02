@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Opaque-Id": [
+        "dbimp-cancel"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_paging ORDER BY s DESC\",\"fetch_size\":10,\"filter\":{\"script\":{\"script\":{\"source\":\"double x = doc[\\\"n\\\"].value; for (int i = 0; i < 900000; i++) { x = Math.sin(x) + Math.sqrt(i); } return x != 12345.0;\"}}}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opaque-Id": [
+        "dbimp-cancel"
+      ],
+      "Took-Nanos": [
+        "977888885"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"n\",\"type\":\"integer\"}],\"rows\":[[99],[98],[97],[96],[95],[94],[93],[92],[91],[90]],\"cursor\":\"16LBBERGTAB0UdtOwkAQ3akETBPjG8+rTxACqTeEIDE1IcSgEgOaijGk0G27oWxhu+USY/Rb/AZ/wK/wc3RaiW+elz1ndmdyziwMCPhEA6JpBPGN2E0IZEZhGJy/JRxVNhpLPlO/GrZnNhcBiyLlhPEoYHRFm9QJx4/7Yv+psrCDmDWoG0pa4EJRjpdGA48zWjcSIC+VivQ5bbu2lV+JuCisirS0UXOpCrzYoC9UMhVLgQ/3mvTg8Oj4pGI0dKITQBs6gO5yFjjDKJQKIpIdulxGCoBAbsLWy1A6G/sfsJUGBI1kZbhEH2laxAMWk9AAIHANr1/vnxnYcUZTpuzhzPa48PIT1R2MrSvWW3R8h/NedWGVW7cE8u36+r5TbV30Ats0zTurZpXbN2ZqLoHMT2PfnVtd1a9XhXEarPuXDq952PnPSAz19wsALgjI4QaZxyTaxLE/AAAA//8DAA==\"}"
+  }
+}

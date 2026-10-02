@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id FROM dbimp_types WHERE id = 1;\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Query-Id": [
+        "2dbad47b-12b1-40e1-b9bc-ce486766d492"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "2dbad47b-12b1-40e1-b9bc-ce486766d492"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:09 GMT",
+        "Thu, 01 Oct 2026 20:28:09 GMT"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "[[\"id\"],[\"LONG\"],[\"BIGINT\"],[1]]\n"
+  }
+}

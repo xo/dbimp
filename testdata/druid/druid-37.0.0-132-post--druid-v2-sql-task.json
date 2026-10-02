@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"INSERT INTO dbimp_crud SELECT TIME_PARSE('2026-10-03T00:00:00Z') AS __time, 3 AS id, 'three' AS v PARTITIONED BY DAY\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "179"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:18 GMT",
+        "Thu, 01 Oct 2026 20:10:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"taskId\":\"forbidden\",\"state\":\"FAILED\",\"error\":{\"error\":\"druidException\",\"errorCode\":\"general\",\"persona\":\"USER\",\"category\":\"FORBIDDEN\",\"errorMessage\":\"Unauthorized\",\"context\":{}}}"
+  }
+}

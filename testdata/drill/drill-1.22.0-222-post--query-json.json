@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE OR REPLACE SCHEMA (employee_id BIGINT, extra VARCHAR NOT NULL DEFAULT 'z') FOR TABLE dfs.tmp.dbimp_json\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "236"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:06 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a50-a4eb-cf3d-ad26-d6cf9a7d7f43\"\n,\"columns\":[\"ok\",\"summary\"]\n,\"metadata\":[\"BIT\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"ok\":true,\"summary\":\"Created schema for [dfs.tmp.dbimp_json]\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE TABLE dfs.tmp.dbimp_complex AS SELECT 1 AS id, convert_from('{\\\"k\\\":[1,2,3],\\\"o\\\":{\\\"s\\\":\\\"x\\\"}}', 'JSON') AS m, convert_from('[1,2,3]', 'JSON') AS l, convert_from('[[1,2],[3]]', 'JSON') AS ll, convert_from('[{\\\"a\\\":1},{\\\"a\\\":2}]', 'JSON') AS lm, convert_from('[]', 'JSON') AS le FROM (VALUES(1))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "248"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:42 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2c-e92f-3ce8-673b-db8871cb1f58\"\n,\"columns\":[\"Fragment\",\"Number of records written\"]\n,\"metadata\":[\"VARCHAR\",\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"Fragment\":\"0_0\",\"Number of records written\":1}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

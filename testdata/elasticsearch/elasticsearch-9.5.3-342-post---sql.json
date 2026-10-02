@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT dn, CAST(dn AS TIME) AS t FROM dbmeta_types WHERE id = 1\",\"time_zone\":\"-03:00\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "3055552"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"dn\",\"type\":\"datetime\"},{\"name\":\"t\",\"type\":\"time\"}],\"rows\":[[\"2026-10-01T09:34:56.123456789-03:00\",\"09:34:56.123-03:00\"]]}"
+  }
+}

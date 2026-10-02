@@ -144,9 +144,14 @@ test, and never stop the server of another session. From dbmeta commit
 `ec91128`, each server carries an owner, and `dbrun` refuses to stop or
 remove a server of another owner unless you pass `--force`. Never pass it
 for a server that is not yours. A server that another session runs is
-shared, and `dbrun status` names its owner. The `dsn` field of the
-second command is an `http://` URL, and the `url` field is the URL in the
-form of `dburl`. Plain `dbrun dsn` prints a table.
+shared, and `dbrun status` names its owner. The second command prints
+three addresses for the server and for each principal. The `api` field is
+the `http://` address with the credentials, which `curl` and the recorder
+take. The `url` field is the URL in the form of `dburl`, which the driver
+takes. The `dsn` field is what the driver that `dbmeta` tests with takes,
+and it is not always an `http://` address (dbmeta D167). A product with no
+`http://` address, such as DynamoDB, has no `api`, and its recorder URL is
+built from its endpoint. Plain `dbrun dsn` prints a table.
 
 Gate: a `curl` request for the version returns HTTP 200 and a body that
 `jq .` parses, and the file is saved under `testdata/<driver>/`.
@@ -202,7 +207,7 @@ each release:
 
 ```bash
 go run ./dbimptest/cmd/record -dir testdata/<driver> -release <release> \
-	-admin <URL of the administrator> -ordinary <URL of the ordinary user>
+	-admin <api of the administrator> -ordinary <api of the ordinary user>
 ```
 
 If a release has no ordinary user, leave out `-ordinary`, and the command
@@ -764,8 +769,8 @@ Record the evidence in `docs/<PRODUCT>.md`. Write a decision in
 ## Flavors
 
 Some products speak the same interface as another product. DynamoDB and
-ScyllaDB Alternator, Trino and Presto, and Elasticsearch and OpenSearch are
-examples. One driver serves the products of such a group, and these steps
+ScyllaDB Alternator, and Trino and Presto, are examples. Elasticsearch and
+OpenSearch differ enough to get a driver each (D162). One driver serves the products of such a group, and these steps
 change:
 
 - Step 4: each flavor needs its own container entry, because each one has its

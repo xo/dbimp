@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.CreateTable"
+      ],
+      "X-Amz-Date": [
+        "20261001T181406Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"TableName\":\"dbimp_schema\",\"AttributeDefinitions\":[{\"AttributeName\":\"pk\",\"AttributeType\":\"S\"},{\"AttributeName\":\"sk\",\"AttributeType\":\"N\"},{\"AttributeName\":\"g\",\"AttributeType\":\"S\"},{\"AttributeName\":\"l\",\"AttributeType\":\"S\"}],\"KeySchema\":[{\"AttributeName\":\"pk\",\"KeyType\":\"HASH\"},{\"AttributeName\":\"sk\",\"KeyType\":\"RANGE\"}],\"BillingMode\":\"PAY_PER_REQUEST\",\"GlobalSecondaryIndexes\":[{\"IndexName\":\"gsi\",\"KeySchema\":[{\"AttributeName\":\"g\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"}}],\"LocalSecondaryIndexes\":[{\"IndexName\":\"lsi\",\"KeySchema\":[{\"AttributeName\":\"pk\",\"KeyType\":\"HASH\"},{\"AttributeName\":\"l\",\"KeyType\":\"RANGE\"}],\"Projection\":{\"ProjectionType\":\"ALL\"}}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "793"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 18:14:05 GMT"
+      ]
+    },
+    "body": "{\"TableDescription\":{\"TableName\":\"dbimp_schema\",\"AttributeDefinitions\":[{\"AttributeName\":\"pk\",\"AttributeType\":\"S\"},{\"AttributeName\":\"sk\",\"AttributeType\":\"N\"},{\"AttributeName\":\"g\",\"AttributeType\":\"S\"},{\"AttributeName\":\"l\",\"AttributeType\":\"S\"}],\"KeySchema\":[{\"AttributeName\":\"pk\",\"KeyType\":\"HASH\"},{\"AttributeName\":\"sk\",\"KeyType\":\"RANGE\"}],\"BillingMode\":\"PAY_PER_REQUEST\",\"GlobalSecondaryIndexes\":[{\"IndexName\":\"gsi\",\"KeySchema\":[{\"AttributeName\":\"g\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"}}],\"LocalSecondaryIndexes\":[{\"IndexName\":\"lsi\",\"KeySchema\":[{\"AttributeName\":\"pk\",\"KeyType\":\"HASH\"},{\"AttributeName\":\"l\",\"KeyType\":\"RANGE\"}],\"Projection\":{\"ProjectionType\":\"ALL\"}}],\"CreationDateTime\":1790878446.196,\"TableStatus\":\"ACTIVE\",\"TableId\":\"e3b81340-bdc3-11f1-bdd9-f45870b6b37f\"}}"
+  }
+}

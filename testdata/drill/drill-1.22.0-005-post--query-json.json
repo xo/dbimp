@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE TABLE dfs.tmp.dbimp_types AS SELECT id,\\nCASE id WHEN 1 THEN CAST(-2147483648 AS INT) WHEN 2 THEN CAST(2147483647 AS INT) END AS i,\\nCASE id WHEN 1 THEN CAST(-9223372036854775808 AS BIGINT) WHEN 2 THEN CAST(9223372036854775807 AS BIGINT) END AS b,\\nCASE id WHEN 1 THEN CAST(-3.4028235E38 AS FLOAT) WHEN 2 THEN CAST(1.4E-45 AS FLOAT) END AS f4,\\nCASE id WHEN 1 THEN CAST(-1.7976931348623157E308 AS DOUBLE) WHEN 2 THEN CAST(1.7976931348623157E308 AS DOUBLE) END AS f8,\\nCASE id WHEN 1 THEN CAST('-12345678901234567890.123456789012345678' AS DECIMAL(38,18)) WHEN 2 THEN CAST('0.000000000000000001' AS DECIMAL(38,18)) END AS d,\\nCASE id WHEN 1 THEN TRUE WHEN 2 THEN FALSE END AS bo,\\nCASE id WHEN 1 THEN 'é''\\\"\\\\ x' WHEN 2 THEN '' END AS s,\\nCASE id WHEN 1 THEN CAST('ab' AS VARBINARY) WHEN 2 THEN CAST('' AS VARBINARY) END AS vb,\\nCASE id WHEN 1 THEN DATE '0001-01-01' WHEN 2 THEN DATE '9999-12-31' END AS dt,\\nCASE id WHEN 1 THEN TIME '00:00:00' WHEN 2 THEN TIME '23:59:59.999' END AS t,\\nCASE id WHEN 1 THEN TIMESTAMP '1969-12-31 23:59:59.999' WHEN 2 THEN TIMESTAMP '9999-12-31 23:59:59.999' END AS ts,\\nCASE id WHEN 1 THEN INTERVAL '-1-2' YEAR TO MONTH WHEN 2 THEN INTERVAL '0' MONTH END AS iy,\\nCASE id WHEN 1 THEN INTERVAL '-1 02:03:04.5' DAY TO SECOND WHEN 2 THEN INTERVAL '0' SECOND END AS idy\\nFROM (VALUES (1), (2), (3)) AS v(id)\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "248"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:33:32 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a73-1c94-d748-2c8f-e8f851bf990e\"\n,\"columns\":[\"Fragment\",\"Number of records written\"]\n,\"metadata\":[\"VARCHAR\",\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"Fragment\":\"0_0\",\"Number of records written\":3}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

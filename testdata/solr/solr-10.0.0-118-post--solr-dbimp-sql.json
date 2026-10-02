@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+id%2C+n_i+FROM+dbimp+ORDER+BY+id+LIMIT+3"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "281"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[\n      {\n        \"id\":\"1\",\n        \"n_i\":2147483647\n      },\n      {\n        \"id\":\"2\",\n        \"n_i\":-2147483648\n      },\n      {\n        \"id\":\"3\",\n        \"n_i\":null\n      },\n      {\n        \"EOF\":true,\n        \"RESPONSE_TIME\":11\n      }\n    ]\n  }\n}"
+  }
+}

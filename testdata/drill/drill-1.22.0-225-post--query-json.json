@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE TABLE dfs.tmp.dbimp_part PARTITION BY (store_id) AS SELECT employee_id, store_id FROM cp.`employee.json` WHERE store_id < 3\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "249"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:06 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a50-9534-7be5-218f-2253dd82363a\"\n,\"columns\":[\"Fragment\",\"Number of records written\"]\n,\"metadata\":[\"VARCHAR\",\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"Fragment\":\"0_0\",\"Number of records written\":93}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

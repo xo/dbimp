@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT NOW() AS n, LOCALTIMESTAMP AS l, TIMEOFDAY() AS t FROM (VALUES(1))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "263"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:15 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a0c-017e-fe40-53d8-580071981759\"\n,\"columns\":[\"n\",\"l\",\"t\"]\n,\"metadata\":[\"TIMESTAMP\",\"TIMESTAMP\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"n\":1790883315889,\"l\":1790883315889,\"t\":\"2026-10-01 19:35:15.895 Etc/UTC\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

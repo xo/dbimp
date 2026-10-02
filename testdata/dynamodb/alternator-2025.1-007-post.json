@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261001T135244Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.BatchExecuteStatement"
+      ]
+    },
+    "body": "{\"Statements\":[{\"Statement\":\"SELECT pk FROM dbimp_types WHERE pk = 't1'\"},{\"Statement\":\"SELECT pk FROM dbimp_types WHERE pk = 'none'\"}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "127"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:44 GMT"
+      ],
+      "Server": [
+        "Seastar httpd"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazonaws.dynamodb.v20120810#UnknownOperationException\",\"message\":\"Unsupported operation BatchExecuteStatement\"}"
+  }
+}

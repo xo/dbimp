@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST(1e308 AS DOUBLE) * 10 AS inf, CAST(-1e308 AS DOUBLE) * 10 AS ninf, CAST('NaN' AS DOUBLE) AS nan, CAST(-0.0 AS DOUBLE) AS nz FROM (VALUES(1))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "260"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:05 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a51-9cbd-ce73-dac3-fce6295410fd\"\n,\"columns\":[\"inf\",\"ninf\",\"nan\",\"nz\"]\n,\"metadata\":[\"FLOAT8\",\"FLOAT8\",\"FLOAT8\",\"FLOAT8\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"inf\":\"Infinity\",\"ninf\":\"-Infinity\",\"nan\":\"NaN\",\"nz\":0.0}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

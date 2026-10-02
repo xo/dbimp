@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "PUT",
+    "path": "/_cluster/settings",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"transient\":{\"plugins.sql.query.bucket.size\":2000}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"settings_exception\",\"reason\":\"transient setting [plugins.sql.query.bucket.size], not recognized\"}],\"type\":\"settings_exception\",\"reason\":\"transient setting [plugins.sql.query.bucket.size], not recognized\"},\"status\":400}"
+  }
+}

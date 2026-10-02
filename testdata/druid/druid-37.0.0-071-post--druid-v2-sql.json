@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 'x' AS c, NULL AS n, TRUE AS b, 1.5 AS dc, DATE '2026-10-01' AS dt, TIMESTAMP '2026-10-01 12:34:56.789' AS ts, ARRAY['a', NULL] AS a, PARSE_JSON('{\\\"k\\\":1}') AS j FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "203b7c67-8120-474a-ac2e-d4f2cf3daa39"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "203b7c67-8120-474a-ac2e-d4f2cf3daa39"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[[\"c\",\"n\",\"b\",\"dc\",\"dt\",\"ts\",\"a\",\"j\"],[\"STRING\",\"STRING\",\"LONG\",\"DOUBLE\",\"LONG\",\"LONG\",\"ARRAY<STRING>\",\"COMPLEX<json>\"],[\"CHAR\",\"NULL\",\"BOOLEAN\",\"DECIMAL\",\"DATE\",\"TIMESTAMP\",\"ARRAY\",\"OTHER\"],[\"x\",null,true,1.5,\"2026-10-01T00:00:00.000Z\",\"2026-10-01T12:34:56.789Z\",\"[\\\"a\\\",null]\",\"{\\\"k\\\":1}\"]]\n"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n, d FROM dbmeta_paging WHERE n < 3 ORDER BY n\",\"runtime_mappings\":{\"d\":{\"type\":\"long\",\"script\":{\"source\":\"emit(doc[\\\"n\\\"].value * 2)\"}}}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "2763798"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"n\",\"type\":\"integer\"},{\"name\":\"d\",\"type\":\"long\"}],\"rows\":[[1,2],[2,4]]}"
+  }
+}

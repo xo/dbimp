@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"Cannot invoke \\\"org.opensearch.sql.ast.statement.Statement.accept(org.opensearch.sql.ast.AbstractNodeVisitor, Object)\\\" because \\\"statement\\\" is null\",\n    \"type\": \"NullPointerException\"\n  },\n  \"status\": 400\n}"
+  }
+}

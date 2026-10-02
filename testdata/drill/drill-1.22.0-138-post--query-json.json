@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT MIN(version) AS version FROM sys.drillbits\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "182"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:04 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a53-7fec-cb81-c638-7160a480d5f9\"\n,\"columns\":[\"version\"]\n,\"metadata\":[\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"version\":\"1.22.0\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"COMMIT\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "3067"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:15 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a0b-cc80-2acc-f152-7926924967e5\"\n,\"exception\":\"java.lang.Exception\"\n,\"errorMessage\":\"Non-query expression encountered in illegal context\"\n,\"stackTrace\":[\"java.lang.Exception: Non-query expression encountered in illegal context\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.parse(SqlConverter.java:195)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.checkAndApplyAutoLimit(DrillSqlWorker.java:307)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:224)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\",\"Caused by: org.apache.calcite.runtime.CalciteException: Non-query expression encountered in illegal context\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.runtime.Resources$ExInst.ex(Resources.java:599)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:945)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:930)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.checkNonQueryExpression(DrillParserImpl.java:327)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.Expression3(DrillParserImpl.java:5219)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.AddExpression2b(DrillParserImpl.java:4939)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.Expression2(DrillParserImpl.java:4980)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.Expression(DrillParserImpl.java:4912)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.LeafQueryOrExpr(DrillParserImpl.java:4891)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.QueryOrExpr(DrillParserImpl.java:4757)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.OrderedQueryOrExpr(DrillParserImpl.java:565)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.SqlStmt(DrillParserImpl.java:1081)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.SqlStmtEof(DrillParserImpl.java:1109)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.parseSqlStmtEof(DrillParserImpl.java:205)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserWithCompoundIdConverter.parseSqlStmtEof(DrillParserWithCompoundIdConverter.java:64)\",\"\\tat org.apache.calcite.sql.parser.SqlParser.parseQuery(SqlParser.java:172)\",\"\\tat org.apache.calcite.sql.parser.SqlParser.parseStmt(SqlParser.java:199)\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.parse(SqlConverter.java:193)\",\"\\t... 8 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

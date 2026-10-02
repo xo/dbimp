@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=csv",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n, s FROM dbmeta_paging WHERE n < 3 ORDER BY n\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "text/csv; charset=utf-8; header=present"
+      ],
+      "Took-Nanos": [
+        "3950127"
+      ]
+    },
+    "body": "n,s\r\n1,row 1\r\n2,row 2\r\n"
+  }
+}

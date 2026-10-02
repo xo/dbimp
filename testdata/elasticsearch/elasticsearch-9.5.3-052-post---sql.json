@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM dbmeta_types WHERE id < 5 ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "21159460"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"al\",\"type\":\"integer\"},{\"name\":\"b\",\"type\":\"boolean\"},{\"name\":\"bin\",\"type\":\"binary\"},{\"name\":\"by\",\"type\":\"byte\"},{\"name\":\"ck\",\"type\":\"keyword\"},{\"name\":\"d\",\"type\":\"double\"},{\"name\":\"dn\",\"type\":\"datetime\"},{\"name\":\"dt\",\"type\":\"datetime\"},{\"name\":\"f\",\"type\":\"float\"},{\"name\":\"gp\",\"type\":\"geo_point\"},{\"name\":\"gs\",\"type\":\"geo_shape\"},{\"name\":\"hf\",\"type\":\"half_float\"},{\"name\":\"i\",\"type\":\"integer\"},{\"name\":\"id\",\"type\":\"integer\"},{\"name\":\"ip\",\"type\":\"ip\"},{\"name\":\"k\",\"type\":\"keyword\"},{\"name\":\"l\",\"type\":\"long\"},{\"name\":\"mot\",\"type\":\"text\"},{\"name\":\"o.a\",\"type\":\"integer\"},{\"name\":\"o.s\",\"type\":\"keyword\"},{\"name\":\"sf\",\"type\":\"scaled_float\"},{\"name\":\"sh\",\"type\":\"short\"},{\"name\":\"shp\",\"type\":\"shape\"},{\"name\":\"t\",\"type\":\"text\"},{\"name\":\"ul\",\"type\":\"unsigned_long\"},{\"name\":\"v\",\"type\":\"version\"},{\"name\":\"w\",\"type\":\"keyword\"}],\"rows\":[[2147483647,true,\"AP8=\",127,\"fixed\",1.7976931348623157E308,\"2026-10-01T12:34:56.123456789Z\",\"2026-10-01T07:04:56.789Z\",3.4028235E38,\"POINT (-71.34 41.12)\",\"POINT (-71.34 41.12)\",65504.0,2147483647,1,\"2001:db8::1\",\"é'\\\"\\\\ x\",9223372036854775807,\"match only\",1,\"x\",1234.57,32767,\"POINT (1.5 2.5)\",\"Some text\",18446744073709551615,\"1.2.3-beta\",\"wild\"],[-2147483648,false,\"\",-128,\"fixed\",4.9E-324,\"1970-01-01T00:00:00.000Z\",\"1970-01-01T00:00:00.000Z\",-1.4E-45,null,null,-65504.0,-2147483648,2,\"0.0.0.0\",\"\",-9223372036854775808,\"\",null,null,0.0,-32768,null,\"\",0,\"0.0.0\",\"\"],[null,null,null,null,\"fixed\",null,null,null,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,\"fixed\",null,null,null,null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null,null]]}"
+  }
+}

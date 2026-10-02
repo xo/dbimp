@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM .plugins-ml-config\"}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Error occurred in OpenSearch engine: no permissions for [indices:admin/mappings/get] and User [name=dbmeta_user, backend_roles=[], requestedTenant=null]\",\n    \"details\": \"OpenSearchSecurityException[no permissions for [indices:admin/mappings/get] and User [name=dbmeta_user, backend_roles=[], requestedTenant=null]]\\nFor more details, please send request for Json format to see the raw response from OpenSearch engine.\",\n    \"type\": \"OpenSearchSecurityException\"\n  },\n  \"status\": 403\n}"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"SELECT pk, nint FROM dbimp_types WHERE pk = ? AND nint = ?\",\"Parameters\":[{\"S\":\"t1\"},{\"N\":\"42\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "47"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "4667f294-abc4-46dd-bd21-97d0b25e1f2a"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "2008942218"
+      ]
+    },
+    "body": "{\"Items\":[{\"nint\":{\"N\":\"42\"},\"pk\":{\"S\":\"t1\"}}]}"
+  }
+}

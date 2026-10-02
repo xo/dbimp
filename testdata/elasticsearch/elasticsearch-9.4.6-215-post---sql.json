@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ST_AsWKT(gp) AS w, ST_X(gp) AS x, ST_Y(gp) AS y, ST_GeometryType(gs) AS g FROM dbmeta_types WHERE id = 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "3242832"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"w\",\"type\":\"keyword\"},{\"name\":\"x\",\"type\":\"double\"},{\"name\":\"y\",\"type\":\"double\"},{\"name\":\"g\",\"type\":\"keyword\"}],\"rows\":[[\"POINT (-71.34 41.12)\",-71.34,41.12,\"POINT\"]]}"
+  }
+}

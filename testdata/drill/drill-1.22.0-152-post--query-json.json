@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT sqlTypeOf(i) AS i, sqlTypeOf(d) AS d, sqlTypeOf(iy) AS iy, sqlTypeOf(idy) AS idy, sqlTypeOf(ts) AS ts, modeof(i) AS mi FROM dfs.tmp.dbimp_types WHERE id = 1\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:04 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "334"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a53-0999-8afd-7b22-627ceb79f812\"\n,\"columns\":[\"i\",\"d\",\"iy\",\"idy\",\"ts\",\"mi\"]\n,\"metadata\":[\"VARCHAR\",\"VARCHAR\",\"VARCHAR\",\"VARCHAR\",\"VARCHAR\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"i\":\"INTEGER\",\"d\":\"DECIMAL(38, 18)\",\"iy\":\"INTERVAL\",\"idy\":\"INTERVAL\",\"ts\":\"TIMESTAMP\",\"mi\":\"NULLABLE\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

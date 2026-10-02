@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT JSON_VALUE(j, '$.k[1]') AS v, JSON_QUERY(j, '$.k[3]') AS q FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Query-Id": [
+        "43bda800-a26b-4549-9f05-1de6c9ae5229"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "43bda800-a26b-4549-9f05-1de6c9ae5229"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "[[\"v\",\"q\"],[\"STRING\",\"COMPLEX<json>\"],[\"VARCHAR\",\"OTHER\"],[\"two\",\"{\\\"n\\\":1.5}\"]]\n"
+  }
+}

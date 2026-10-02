@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbimp_big WHERE n <= 10\",\"resultFormat\":\"array\",\"context\":{\"executionMode\":\"ASYNC\",\"selectDestination\":\"durableStorage\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "454"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:39 GMT",
+        "Thu, 01 Oct 2026 20:28:39 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"general\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"The sql statement api cannot read from the select destination [durableStorage] provided in the query context [selectDestination] since it is not configured on the broker. It is recommended to configure durable storage as it allows the user to fetch large result sets. Please contact your cluster admin to configure durable storage.\",\"context\":{}}"
+  }
+}

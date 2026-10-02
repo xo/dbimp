@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statement\":\"INSERT INTO \\\"dbimp_schema\\\".\\\"gsi\\\" VALUE {'pk': 'b', 'sk': 1, 'g': 'x'}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Amzn-Requestid": [
+        "8e14621d-95f1-4bf1-9600-856784b44342"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "Content-Length": [
+        "151"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"FROM clause may only contain a single table name in data manipulation statements\"}"
+  }
+}

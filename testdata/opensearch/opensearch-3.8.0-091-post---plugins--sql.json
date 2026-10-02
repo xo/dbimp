@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM dbmeta_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"bin\",\n      \"type\": \"binary\"\n    },\n    {\n      \"name\": \"bo\",\n      \"type\": \"boolean\"\n    },\n    {\n      \"name\": \"dt\",\n      \"type\": \"timestamp\"\n    },\n    {\n      \"name\": \"mot\",\n      \"type\": \"text\"\n    },\n    {\n      \"name\": \"sf\",\n      \"type\": \"double\"\n    },\n    {\n      \"name\": \"sh\",\n      \"type\": \"short\"\n    },\n    {\n      \"name\": \"by\",\n      \"type\": \"byte\"\n    },\n    {\n      \"name\": \"dtf\",\n      \"type\": \"date\"\n    },\n    {\n      \"name\": \"id\",\n      \"type\": \"integer\"\n    },\n    {\n      \"name\": \"dtn\",\n      \"type\": \"timestamp\"\n    },\n    {\n      \"name\": \"d\",\n      \"type\": \"double\"\n    },\n    {\n      \"name\": \"f\",\n      \"type\": \"float\"\n    },\n    {\n      \"name\": \"ip\",\n      \"type\": \"ip\"\n    },\n    {\n      \"name\": \"gp\",\n      \"type\": \"geo_point\"\n    },\n    {\n      \"name\": \"i\",\n      \"type\": \"integer\"\n    },\n    {\n      \"name\": \"al\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"k\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"kv\",\n      \"type\": \"nested\"\n    },\n    {\n      \"name\": \"l\",\n      \"type\": \"long\"\n    },\n    {\n      \"name\": \"n\",\n      \"type\": \"nested\"\n    },\n    {\n      \"name\": \"o\",\n      \"type\": \"object\"\n    },\n    {\n      \"name\": \"t\",\n      \"type\": \"text\"\n    },\n    {\n      \"name\": \"tk\",\n      \"type\": \"text\"\n    },\n    {\n      \"name\": \"tm\",\n      \"type\": \"time\"\n    },\n    {\n      \"name\": \"hf\",\n      \"type\": \"float\"\n    }\n  ],\n  \"datarows\": [\n    [\n      \"AP8=\",\n      true,\n      \"2026-10-01 07:04:56.123\",\n      \"only text\",\n      12.345,\n      -32768,\n      -128,\n      \"2026-10-01\",\n      1,\n      \"2026-10-01 12:34:56.123456789\",\n      0.1,\n      3.4028235E38,\n      \"192.168.0.1\",\n      {\n        \"lat\": 41.12,\n        \"lon\": -71.34\n      },\n      -2147483648,\n      \"é'\\\"\\\\ x\",\n      \"é'\\\"\\\\ x\",\n      [\n        1.0,\n        2.0,\n        3.0\n      ],\n      -9223372036854775808,\n      [\n        {\n          \"a\": 1,\n          \"b\": \"x\"\n        },\n        {\n          \"a\": 2,\n          \"b\": \"y\"\n        }\n      ],\n      {\n        \"a\": 1,\n        \"b\": \"x\"\n      },\n      \"hello world\",\n      \"Hello Raw\",\n      \"12:34:56\",\n      0.1\n    ],\n    [\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      2,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null\n    ],\n    [\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      3,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null\n    ],\n    [\n      \"\",\n      false,\n      \"2026-10-01 12:34:56.123\",\n      null,\n      -0.01,\n      32767,\n      127,\n      \"0001-01-01\",\n      4,\n      \"2262-04-11 23:47:16.854775807\",\n      [\n        1.5,\n        null,\n        2.5\n      ],\n      1.4E-45,\n      \"::1\",\n      null,\n      [\n        1,\n        2,\n        3\n      ],\n      [\n        \"a\",\n        \"b\"\n      ],\n      [\n        \"a\",\n        \"b\"\n      ],\n      null,\n      9223372036854775807,\n      [\n        {\n          \"a\": 3,\n          \"b\": \"z\"\n        }\n      ],\n      [\n        {\n          \"a\": 1,\n          \"b\": \"x\"\n        },\n        {\n          \"a\": 2,\n          \"b\": \"y\"\n        }\n      ],\n      \"\",\n      null,\n      \"23:59:59\",\n      65504.0\n    ],\n    [\n      null,\n      true,\n      \"1001-01-01 00:00:00\",\n      null,\n      null,\n      null,\n      null,\n      null,\n      5,\n      \"1970-01-01 00:00:00\",\n      1.5,\n      null,\n      null,\n      null,\n      42,\n      \"\",\n      \"\",\n      null,\n      1,\n      null,\n      null,\n      null,\n      null,\n      null,\n      null\n    ]\n  ],\n  \"total\": 5,\n  \"size\": 5,\n  \"status\": 200\n}"
+  }
+}

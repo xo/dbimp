@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261001T135218Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.BatchExecuteStatement"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statements\":[{\"Statement\":\"SELECT pk FROM dbimp_types WHERE pk = 't1'\"},{\"Statement\":\"SELECT pk FROM dbimp_types WHERE pk = 'none'\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "3752499399"
+      ],
+      "Content-Length": [
+        "96"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:18 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "7b843c24-9991-4fb5-b786-f66627c0e113"
+      ]
+    },
+    "body": "{\"Responses\":[{\"TableName\":\"dbimp_types\",\"Item\":{\"pk\":{\"S\":\"t1\"}}},{\"TableName\":\"dbimp_types\"}]}"
+  }
+}

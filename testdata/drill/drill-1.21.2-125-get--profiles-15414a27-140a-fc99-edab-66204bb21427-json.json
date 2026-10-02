@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/profiles/15414a27-140a-fc99-edab-66204bb21427.json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:48 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "4940"
+      ]
+    },
+    "body": "{\"id\":{\"part1\":1531586879983123609,\"part2\":-1320849776808160217},\"type\":1,\"start\":1790883288430,\"end\":1790883288455,\"query\":\"SELECT id, CAST(s AS INT) AS v FROM dfs.tmp.dbimp_multi\",\"plan\":\"00-00    Screen : rowType = RecordType(ANY id, INTEGER v): rowcount = 303.0, cumulative cost = {939.3 rows, 2757.3 cpu, 606.0 io, 0.0 network, 0.0 memory}, id = 7911\\n00-01      Project(id=[$0], v=[$1]) : rowType = RecordType(ANY id, INTEGER v): rowcount = 303.0, cumulative cost = {909.0 rows, 2727.0 cpu, 606.0 io, 0.0 network, 0.0 memory}, id = 7910\\n00-02        Project(id=[$0], v=[CAST($1):INTEGER]) : rowType = RecordType(ANY id, INTEGER v): rowcount = 303.0, cumulative cost = {606.0 rows, 2121.0 cpu, 606.0 io, 0.0 network, 0.0 memory}, id = 7907\\n00-03          Scan(table=[[dfs, tmp, dbimp_multi]], groupscan=[ParquetGroupScan [entries=[ReadEntryWithPath [path=file:/tmp/dbimp_multi/a/0_0_0.parquet], ReadEntryWithPath [path=file:/tmp/dbimp_multi/b/0_0_0.parquet]], selectionRoot=file:/tmp/dbimp_multi, numFiles=2, numRowGroups=2, usedMetadataFile=false, usedMetastore=false, columns=[`id`, `s`]]]) : rowType = RecordType(ANY id, ANY s): rowcount = 303.0, cumulative cost = {303.0 rows, 606.0 cpu, 606.0 io, 0.0 network, 0.0 memory}, id = 7906\\n\",\"foreman\":{\"address\":\"63a17bf408ab\",\"userPort\":31010,\"controlPort\":31011,\"dataPort\":31012,\"version\":\"1.21.2\",\"state\":0},\"state\":4,\"totalFragments\":1,\"finishedFragments\":0,\"fragmentProfile\":[{\"majorFragmentId\":0,\"minorFragmentProfile\":[{\"state\":2,\"minorFragmentId\":0,\"operatorProfile\":[{\"inputProfile\":[{\"records\":0,\"batches\":0,\"schemas\":0}],\"operatorId\":3,\"operatorType\":21,\"setupNanos\":0,\"processNanos\":33900,\"peakLocalMemoryAllocated\":0,\"waitNanos\":0,\"operatorTypeName\":\"PARQUET_ROW_GROUP_SCAN\"},{\"inputProfile\":[{\"records\":0,\"batches\":0,\"schemas\":0}],\"operatorId\":2,\"operatorType\":10,\"setupNanos\":0,\"processNanos\":0,\"peakLocalMemoryAllocated\":0,\"waitNanos\":0,\"operatorTypeName\":\"PROJECT\"},{\"inputProfile\":[{\"records\":0,\"batches\":0,\"schemas\":0}],\"operatorId\":1,\"operatorType\":10,\"setupNanos\":0,\"processNanos\":0,\"peakLocalMemoryAllocated\":0,\"waitNanos\":0,\"operatorTypeName\":\"PROJECT\"},{\"inputProfile\":[{\"records\":0,\"batches\":0,\"schemas\":0}],\"operatorId\":0,\"operatorType\":13,\"setupNanos\":0,\"processNanos\":0,\"peakLocalMemoryAllocated\":0,\"waitNanos\":0,\"operatorTypeName\":\"SCREEN\"}],\"startTime\":1790883288449,\"endTime\":1790883288451,\"memoryUsed\":4000000,\"maxMemoryUsed\":4000000,\"endpoint\":{\"address\":\"63a17bf408ab\",\"userPort\":31010,\"controlPort\":31011,\"dataPort\":31012,\"version\":\"1.21.2\",\"state\":0},\"lastUpdate\":1790883288451,\"lastProgress\":1790883288451}]}],\"user\":\"admin\",\"error\":\"SYSTEM ERROR: Drill Remote Exception\\n\\n\\nPlease, refer to logs for more information.\\n\",\"verboseError\":\"SYSTEM ERROR: Drill Remote Exception\\n\\n\\nPlease, refer to logs for more information.\\n\\n\\n  (java.lang.NumberFormatException) x\\n    org.apache.drill.exec.expr.fn.impl.StringFunctionHelpers.nfeI():94\\n    org.apache.drill.exec.expr.fn.impl.StringFunctionHelpers.varTypesToInt():119\\n    org.apache.drill.exec.test.generated.ProjectorGen155.doEval():46\\n    org.apache.drill.exec.physical.impl.project.ProjectorTemplate.projectRecords():67\\n    org.apache.drill.exec.physical.impl.project.ProjectRecordBatch.doWork():166\\n    org.apache.drill.exec.record.AbstractUnaryRecordBatch.innerNext():103\\n    org.apache.drill.exec.physical.impl.project.ProjectRecordBatch.innerNext():93\\n    org.apache.drill.exec.record.AbstractRecordBatch.next():160\\n    org.apache.drill.exec.record.AbstractRecordBatch.next():109\\n    org.apache.drill.exec.record.AbstractRecordBatch.next():101\\n    org.apache.drill.exec.record.AbstractUnaryRecordBatch.innerNext():59\\n    org.apache.drill.exec.physical.impl.project.ProjectRecordBatch.innerNext():93\\n    org.apache.drill.exec.record.AbstractRecordBatch.next():160\\n    org.apache.drill.exec.physical.impl.BaseRootExec.next():103\\n    org.apache.drill.exec.physical.impl.ScreenCreator$ScreenRoot.innerNext():81\\n    org.apache.drill.exec.physical.impl.BaseRootExec.next():93\\n    org.apache.drill.exec.work.fragment.FragmentExecutor.lambda$run$0():321\\n    .......():0\\n    org.apache.hadoop.security.UserGroupInformation.doAs():1762\\n    org.apache.drill.exec.work.fragment.FragmentExecutor.run():310\\n    org.apache.drill.common.SelfCleaningRunnable.run():38\\n    .......():0\\n\",\"errorId\":\"08550851-0834-4b15-a2ba-9309b6d9cea7\",\"optionsJson\":\"[ {\\n  \\\"kind\\\" : \\\"BOOLEAN\\\",\\n  \\\"accessibleScopes\\\" : \\\"ALL\\\",\\n  \\\"name\\\" : \\\"planner.enable_file_listing_limit0_optimization\\\",\\n  \\\"bool_val\\\" : false,\\n  \\\"scope\\\" : \\\"QUERY\\\"\\n}, {\\n  \\\"kind\\\" : \\\"BOOLEAN\\\",\\n  \\\"accessibleScopes\\\" : \\\"ALL\\\",\\n  \\\"name\\\" : \\\"drill.exec.http.rest.errors.verbose\\\",\\n  \\\"bool_val\\\" : true,\\n  \\\"scope\\\" : \\\"SESSION\\\"\\n} ]\",\"planEnd\":1790883288448,\"queueWaitEnd\":1790883288448,\"totalCost\":1212.0,\"queueName\":\"Unknown\",\"queryId\":\"15414a27-140a-fc99-edab-66204bb21427\",\"scannedPlugins\":[\"dfs\"]}"
+  }
+}

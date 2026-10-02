@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT t, SCORE() AS sc FROM dbmeta_types WHERE MATCH(t, 'text')\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "10812333"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"t\",\"type\":\"text\"},{\"name\":\"sc\",\"type\":\"float\"}],\"rows\":[[\"Some text\",0.2876821]]}"
+  }
+}

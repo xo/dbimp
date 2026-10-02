@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM (SELECT n FROM dbmeta_rows WHERE n < 3) t\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"n\",\n      \"type\": \"integer\"\n    }\n  ],\n  \"datarows\": [\n    [\n      1\n    ],\n    [\n      2\n    ]\n  ],\n  \"total\": 2,\n  \"size\": 2,\n  \"status\": 200\n}"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT server_type, version FROM sys.servers ORDER BY server_type\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:18 GMT",
+        "Thu, 01 Oct 2026 20:10:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "79"
+      ]
+    },
+    "body": "{\"Access-Check-Result\":\"Insufficient permission to view servers: Unauthorized\"}"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+count%28%2A%29%2C+min%28n_i%29+FROM+dbimp&includeMetadata=true"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "291"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"isMetadata\":true,\n      \"fields\":[\"EXPR$0\",\"EXPR$1\"],\n      \"aliases\":{\n        \"EXPR$0\":\"EXPR$0\",\n        \"EXPR$1\":\"EXPR$1\"\n      }\n    },{\n      \"EXPR$0\":303,\n      \"EXPR$1\":-2147483648\n    },{\n      \"EOF\":true,\n      \"RESPONSE_TIME\":20\n    }]\n  }\n}"
+  }
+}

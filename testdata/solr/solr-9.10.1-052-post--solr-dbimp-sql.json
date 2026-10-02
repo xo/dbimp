@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+avg%28n_i%29+AS+a%2C+sum%28n_i%29+AS+s%2C+count%28%2A%29+AS+c%2C+avg%28n_d%29+AS+ad+FROM+dbimp+WHERE+id+%3D+%271%27+OR+id+%3D+%272%27"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "169"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"a\":0,\n      \"s\":-1,\n      \"c\":2,\n      \"ad\":8.988465674311579E307\n    },{\n      \"EOF\":true,\n      \"RESPONSE_TIME\":51\n    }]\n  }\n}"
+  }
+}

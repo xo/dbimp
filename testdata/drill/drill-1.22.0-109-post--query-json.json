@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT $1 AS p FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "4710"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:33:37 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a6e-59a3-3fae-2f37-4636895652e5\"\n,\"exception\":\"org.apache.calcite.runtime.CalciteContextException\"\n,\"errorMessage\":\"From line 1, column 8 to line 1, column 9: Column '$1' not found in any table: Column '$1' not found in any table\"\n,\"stackTrace\":[\"org.apache.calcite.runtime.CalciteContextException: From line 1, column 8 to line 1, column 9: Column '$1' not found in any table: Column '$1' not found in any table\",\"\\tat jdk.internal.reflect.GeneratedConstructorAccessor101.newInstance()\",\"\\tat jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:945)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:930)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.newValidationError(SqlValidatorImpl.java:5464)\",\"\\tat org.apache.calcite.sql.validate.DelegatingScope.fullyQualify(DelegatingScope.java:289)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$Expander.visit(SqlValidatorImpl.java:6659)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$SelectExpander.visit(SqlValidatorImpl.java:6828)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$SelectExpander.visit(SqlValidatorImpl.java:6814)\",\"\\tat org.apache.calcite.sql.SqlIdentifier.accept(SqlIdentifier.java:324)\",\"\\tat org.apache.calcite.sql.util.SqlShuttle$CallCopyingArgHandler.visitChild(SqlShuttle.java:134)\",\"\\tat org.apache.calcite.sql.util.SqlShuttle$CallCopyingArgHandler.visitChild(SqlShuttle.java:101)\",\"\\tat org.apache.calcite.sql.SqlAsOperator.acceptCall(SqlAsOperator.java:121)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$Expander.visitScoped(SqlValidatorImpl.java:6683)\",\"\\tat org.apache.calcite.sql.validate.SqlScopedShuttle.visit(SqlScopedShuttle.java:54)\",\"\\tat org.apache.calcite.sql.validate.SqlScopedShuttle.visit(SqlScopedShuttle.java:37)\",\"\\tat org.apache.calcite.sql.SqlCall.accept(SqlCall.java:161)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl$Expander.go(SqlValidatorImpl.java:6648)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.expandSelectExpr(SqlValidatorImpl.java:6213)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.expandSelectItem(SqlValidatorImpl.java:465)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateSelectList(SqlValidatorImpl.java:4608)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateSelect(SqlValidatorImpl.java:3780)\",\"\\tat org.apache.calcite.sql.validate.SelectNamespace.validateImpl(SelectNamespace.java:61)\",\"\\tat org.apache.calcite.sql.validate.AbstractNamespace.validate(AbstractNamespace.java:88)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateNamespace(SqlValidatorImpl.java:1135)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateQuery(SqlValidatorImpl.java:1106)\",\"\\tat org.apache.calcite.sql.SqlSelect.validate(SqlSelect.java:282)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validateScopedExpression(SqlValidatorImpl.java:1081)\",\"\\tat org.apache.calcite.sql.validate.SqlValidatorImpl.validate(SqlValidatorImpl.java:787)\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.validate(SqlConverter.java:212)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateNode(DefaultSqlHandler.java:662)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.validateAndConvert(DefaultSqlHandler.java:198)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:172)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\",\"Caused by: org.apache.calcite.sql.validate.SqlValidatorException: Column '$1' not found in any table\",\"\\tat jdk.internal.reflect.GeneratedConstructorAccessor100.newInstance()\",\"\\tat jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.runtime.Resources$ExInst.ex(Resources.java:599)\",\"\\t... 38 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

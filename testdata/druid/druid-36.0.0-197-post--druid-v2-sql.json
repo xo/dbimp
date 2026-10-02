@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id FROM dbimp_types WHERE id = ?\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true,\"parameters\":[{\"type\":\"INTEGER\",\"value\":\"1\"}]}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Length": [
+        "148"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"general\",\"persona\":\"OPERATOR\",\"category\":\"RUNTIME_FAILURE\",\"errorMessage\":\"Cannot handle query\",\"context\":{}}"
+  }
+}

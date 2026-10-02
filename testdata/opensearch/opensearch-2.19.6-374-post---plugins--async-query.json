@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_async_query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"datasource\":\"dbmeta\",\"lang\":\"sql\",\"query\":\"SELECT 1\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"status\": 403,\n  \"error\": {\n    \"type\": \"OpenSearchSecurityException\",\n    \"reason\": \"There was internal problem at backend\",\n    \"details\": \"no permissions for [cluster:admin/opensearch/ql/async_query/create] and User [name\\u003ddbmeta_user, backend_roles\\u003d[], requestedTenant\\u003dnull]\"\n  }\n}"
+  }
+}

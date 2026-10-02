@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1\"}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Www-Authenticate": [
+        "Basic realm=\"security\", charset=\"UTF-8\"",
+        "ApiKey"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"security_exception\",\"reason\":\"unable to authenticate user [elastic] for REST request [/_sql?format=json]\",\"header\":{\"WWW-Authenticate\":[\"Basic realm=\\\"security\\\", charset=\\\"UTF-8\\\"\",\"ApiKey\"]}}],\"type\":\"security_exception\",\"reason\":\"unable to authenticate user [elastic] for REST request [/_sql?format=json]\",\"header\":{\"WWW-Authenticate\":[\"Basic realm=\\\"security\\\", charset=\\\"UTF-8\\\"\",\"ApiKey\"]}},\"status\":401}"
+  }
+}

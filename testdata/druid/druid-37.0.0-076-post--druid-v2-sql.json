@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST('12:34:56' AS TIME) AS t FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "997917a5-f60c-4155-ac4d-90f56a2a7d1a"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Query-Id": [
+        "997917a5-f60c-4155-ac4d-90f56a2a7d1a"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:05 GMT",
+        "Thu, 01 Oct 2026 20:10:05 GMT"
+      ],
+      "Content-Length": [
+        "343"
+      ]
+    },
+    "body": "{\"error\":\"Unknown exception\",\"errorClass\":\"org.apache.druid.java.util.common.ISE\",\"host\":null,\"errorCode\":\"legacyQueryException\",\"persona\":\"OPERATOR\",\"category\":\"RUNTIME_FAILURE\",\"errorMessage\":\"Unsupported DateTime type[TIME]\",\"context\":{\"host\":null,\"errorClass\":\"org.apache.druid.java.util.common.ISE\",\"legacyErrorCode\":\"Unknown exception\"}}"
+  }
+}

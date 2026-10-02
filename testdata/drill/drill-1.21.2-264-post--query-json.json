@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT 1 / 0 AS n FROM (VALUES(1))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:17 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "4067"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a09-a43b-3c38-90f1-9d1e4d2b2c09\"\n,\"exception\":\"org.apache.drill.exec.work.foreman.ForemanException\"\n,\"errorMessage\":\"Unexpected exception during fragment initialization: Error while applying rule ReduceAndSimplifyProjectRule, args [rel#17235:LogicalProject.NONE.ANY([]).[](input=RelSubset#17234,exprs=[/(1, 0)])]\"\n,\"stackTrace\":[\"org.apache.drill.exec.work.foreman.ForemanException: Unexpected exception during fragment initialization: Error while applying rule ReduceAndSimplifyProjectRule, args [rel#17235:LogicalProject.NONE.ANY([]).[](input=RelSubset#17234,exprs=[/(1, 0)])]\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:301)\",\"\\tat .......(:0)\",\"Caused by: java.lang.RuntimeException: Error while applying rule ReduceAndSimplifyProjectRule, args [rel#17235:LogicalProject.NONE.ANY([]).[](input=RelSubset#17234,exprs=[/(1, 0)])]\",\"\\tat org.apache.calcite.plan.volcano.VolcanoRuleCall.onMatch(VolcanoRuleCall.java:250)\",\"\\tat org.apache.calcite.plan.volcano.IterativeRuleDriver.drive(IterativeRuleDriver.java:59)\",\"\\tat org.apache.calcite.plan.volcano.VolcanoPlanner.findBestExp(VolcanoPlanner.java:523)\",\"\\tat org.apache.calcite.tools.Programs$RuleSetProgram.run(Programs.java:317)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.transform(DefaultSqlHandler.java:405)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.transform(DefaultSqlHandler.java:351)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.convertToRawDrel(DefaultSqlHandler.java:245)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.convertToDrel(DefaultSqlHandler.java:308)\",\"\\tat org.apache.drill.exec.planner.sql.handlers.DefaultSqlHandler.getPlan(DefaultSqlHandler.java:176)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:298)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\t... 1 more\",\"Caused by: java.lang.RuntimeException: Error in evaluating function of divide\",\"\\tat org.apache.drill.exec.expr.fn.interpreter.InterpreterEvaluator$EvalVisitor.visitFunctionHolderExpression(InterpreterEvaluator.java:377)\",\"\\tat org.apache.drill.exec.expr.fn.interpreter.InterpreterEvaluator$EvalVisitor.visitFunctionHolderExpression(InterpreterEvaluator.java:212)\",\"\\tat org.apache.drill.common.expression.FunctionHolderExpression.accept(FunctionHolderExpression.java:57)\",\"\\tat org.apache.drill.exec.expr.fn.interpreter.InterpreterEvaluator.evaluateConstantExpr(InterpreterEvaluator.java:72)\",\"\\tat org.apache.drill.exec.planner.logical.DrillConstExecutor.reduce(DrillConstExecutor.java:159)\",\"\\tat org.apache.calcite.rel.rules.ReduceExpressionsRule.reduceExpressionsInternal(ReduceExpressionsRule.java:771)\",\"\\tat org.apache.calcite.rel.rules.ReduceExpressionsRule.reduceExpressions(ReduceExpressionsRule.java:711)\",\"\\tat org.apache.calcite.rel.rules.ReduceExpressionsRule$ProjectReduceExpressionsRule.onMatch(ReduceExpressionsRule.java:310)\",\"\\tat org.apache.drill.exec.planner.logical.ReduceAndSimplifyExpressionsRules$ReduceAndSimplifyProjectRule.onMatch(ReduceAndSimplifyExpressionsRules.java:121)\",\"\\tat org.apache.calcite.plan.volcano.VolcanoRuleCall.onMatch(VolcanoRuleCall.java:223)\",\"\\t... 15 more\",\"Caused by: java.lang.ArithmeticException: / by zero\",\"\\tat org.apache.drill.exec.expr.fn.impl.DivideFunctions$IntIntDivide.eval(DivideFunctions.java:59)\",\"\\tat org.apache.drill.exec.expr.fn.interpreter.InterpreterEvaluator.evaluateFunction(InterpreterEvaluator.java:149)\",\"\\tat org.apache.drill.exec.expr.fn.interpreter.InterpreterEvaluator$EvalVisitor.visitFunctionHolderExpression(InterpreterEvaluator.java:363)\",\"\\t... 24 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

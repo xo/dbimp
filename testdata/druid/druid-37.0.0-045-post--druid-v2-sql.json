@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, mv, MV_LENGTH(mv) AS n FROM dbimp_types WHERE MV_CONTAINS(mv, 'x') OR mv = 'z'\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Sql-Query-Id": [
+        "288dbe82-0020-45c1-bc46-421921d895e4"
+      ],
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:10:04 GMT",
+        "Thu, 01 Oct 2026 20:10:04 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "288dbe82-0020-45c1-bc46-421921d895e4"
+      ]
+    },
+    "body": "[[\"id\",\"mv\",\"n\"],[\"LONG\",\"STRING\",\"LONG\"],[\"BIGINT\",\"VARCHAR\",\"INTEGER\"],[2,\"z\",1],[1,\"[\\\"x\\\",\\\"y\\\"]\",2]]\n"
+  }
+}

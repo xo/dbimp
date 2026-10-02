@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ]
+    },
+    "body": "{\"Statement\":\"UPDATE dbimp_crud SET ss = set_add(ss, <<'b'>>) WHERE pk = 'c' AND sk = 1 RETURNING ALL NEW *\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Amzn-Requestid": [
+        "693a58ae-9095-493a-b214-5bfe3bc86cac"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "1539183338"
+      ],
+      "Content-Length": [
+        "87"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ]
+    },
+    "body": "{\"Items\":[{\"ss\":{\"SS\":[\"a\",\"b\"]},\"sk\":{\"N\":\"1\"},\"pk\":{\"S\":\"c\"},\"l\":{\"L\":[{\"N\":\"1\"}]}}]}"
+  }
+}

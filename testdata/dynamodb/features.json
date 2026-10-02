@@ -1,0 +1,808 @@
+{
+  "driver": "dynamodb",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "deepseek-flash",
+      "kind": "model",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/btnguyen2k/godynamo",
+      "kind": "driver",
+      "date": "2026-10-01"
+    },
+    {
+      "source": "github.com/boto/boto3",
+      "kind": "driver",
+      "date": "2026-10-01"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-058-post.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-060-post.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-061-post.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-062-post.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "update returning",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-069-post.json",
+      "test": "TestIntegrationCRUD/update_returning"
+    },
+    {
+      "kind": "crud",
+      "name": "delete returning",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-072-post.json",
+      "test": "TestIntegrationCRUD/delete_returning"
+    },
+    {
+      "kind": "crud",
+      "name": "insert returning",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-071-post.json",
+      "test": "TestIntegrationCRUD/insert_returning"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-079-post.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "update of a missing item",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-065-post.json",
+      "test": "TestIntegrationCRUD/update_of_a_missing_item"
+    },
+    {
+      "kind": "crud",
+      "name": "conditional write",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-075-post.json",
+      "test": "TestIntegrationCRUD/conditional_write"
+    },
+    {
+      "kind": "crud",
+      "name": "remove an attribute",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-076-post.json",
+      "test": "TestIntegrationCRUD/remove_an_attribute"
+    },
+    {
+      "kind": "crud",
+      "name": "add to a set",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-077-post.json",
+      "test": "TestIntegrationCRUD/add_to_a_set"
+    },
+    {
+      "kind": "crud",
+      "name": "append to a list",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-078-post.json",
+      "test": "TestIntegrationCRUD/append_to_a_list"
+    },
+    {
+      "kind": "crud",
+      "name": "alternator insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "alternator-2026.3-016-post.json",
+      "test": "TestIntegrationCRUD/alternator_insert"
+    },
+    {
+      "kind": "crud",
+      "name": "alternator select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "alternator-2026.3-017-post.json",
+      "test": "TestIntegrationCRUD/alternator_select"
+    },
+    {
+      "kind": "crud",
+      "name": "alternator update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "alternator-2026.3-018-post.json",
+      "test": "TestIntegrationCRUD/alternator_update"
+    },
+    {
+      "kind": "crud",
+      "name": "alternator delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "alternator-2026.3-019-post.json",
+      "test": "TestIntegrationCRUD/alternator_delete"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-001-post.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-102-post.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "global secondary index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-106-post.json",
+      "test": "TestIntegrationSchema/global_secondary_index"
+    },
+    {
+      "kind": "schema",
+      "name": "local secondary index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-107-post.json",
+      "test": "TestIntegrationSchema/local_secondary_index"
+    },
+    {
+      "kind": "schema",
+      "name": "time to live",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-109-post.json",
+      "test": "TestIntegrationSchema/time_to_live"
+    },
+    {
+      "kind": "schema",
+      "name": "table in a statement",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-096-post.json",
+      "test": "TestIntegrationSchema/table_in_a_statement"
+    },
+    {
+      "kind": "schema",
+      "name": "index in a statement",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-101-post.json",
+      "test": "TestIntegrationSchema/index_in_a_statement"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-097-post.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-098-post.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-099-post.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-100-post.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "alternator table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "alternator-2026.3-001-post.json",
+      "test": "TestIntegrationSchema/alternator_table"
+    },
+    {
+      "kind": "schema",
+      "name": "alternator secondary index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "alternator-2026.3-022-post.json",
+      "test": "TestIntegrationSchema/alternator_secondary_index"
+    },
+    {
+      "kind": "schema",
+      "name": "alternator time to live",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "alternator-2026.3-025-post.json",
+      "test": "TestIntegrationSchema/alternator_time_to_live"
+    },
+    {
+      "kind": "feature",
+      "name": "missing attribute",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-082-post.json",
+      "test": "TestIntegrationFeatures/missing_attribute"
+    },
+    {
+      "kind": "feature",
+      "name": "items with different attributes",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-060-post.json",
+      "test": "TestIntegrationFeatures/items_with_different_attributes"
+    },
+    {
+      "kind": "feature",
+      "name": "nested path",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-030-post.json",
+      "test": "TestIntegrationFeatures/nested_path"
+    },
+    {
+      "kind": "feature",
+      "name": "condition functions",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-083-post.json",
+      "test": "TestIntegrationFeatures/condition_functions"
+    },
+    {
+      "kind": "feature",
+      "name": "scan with no key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-027-post.json",
+      "test": "TestIntegrationFeatures/scan_with_no_key"
+    },
+    {
+      "kind": "feature",
+      "name": "next token paging",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-123-post.json",
+      "test": "TestIntegrationFeatures/next_token_paging"
+    },
+    {
+      "kind": "feature",
+      "name": "page of 1 MB",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-123-post.json",
+      "test": "TestIntegrationFeatures/page_of_1_MB"
+    },
+    {
+      "kind": "feature",
+      "name": "limit of evaluated items",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-127-post.json",
+      "test": "TestIntegrationFeatures/limit_of_evaluated_items"
+    },
+    {
+      "kind": "feature",
+      "name": "limit clause",
+      "sources": [
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-129-post.json",
+      "test": "TestIntegrationFeatures/limit_clause"
+    },
+    {
+      "kind": "feature",
+      "name": "consistent read",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-089-post.json",
+      "test": "TestIntegrationFeatures/consistent_read"
+    },
+    {
+      "kind": "feature",
+      "name": "consumed capacity",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-090-post.json",
+      "test": "TestIntegrationFeatures/consumed_capacity"
+    },
+    {
+      "kind": "feature",
+      "name": "values on a failed condition",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-091-post.json",
+      "test": "TestIntegrationFeatures/values_on_a_failed_condition"
+    },
+    {
+      "kind": "feature",
+      "name": "positional parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-112-post.json",
+      "test": "TestIntegrationFeatures/positional_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-115-post.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "batch of statements",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-021-post.json",
+      "test": "TestIntegrationFeatures/batch_of_statements"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-154-post.json",
+      "test": "TestIntegrationFeatures/transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction of reads",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-157-post.json",
+      "test": "TestIntegrationFeatures/transaction_of_reads"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction of reads and writes",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-158-post.json",
+      "test": "TestIntegrationFeatures/transaction_of_reads_and_writes"
+    },
+    {
+      "kind": "feature",
+      "name": "exists in a transaction",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-160-post.json",
+      "test": "TestIntegrationFeatures/exists_in_a_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "idempotency token",
+      "sources": [
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-163-post.json",
+      "test": "TestIntegrationFeatures/idempotency_token"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction across requests",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-173-post.json",
+      "test": "TestIntegrationFeatures/transaction_across_requests"
+    },
+    {
+      "kind": "feature",
+      "name": "parallel scan segments",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-174-post.json",
+      "test": "TestIntegrationFeatures/parallel_scan_segments"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel a statement",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-182-post.json",
+      "test": "TestIntegrationFeatures/cancel_a_statement"
+    },
+    {
+      "kind": "feature",
+      "name": "alternator scan through the API",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "alternator-2026.3-012-post.json",
+      "test": "TestIntegrationFeatures/alternator_scan_through_the_API"
+    },
+    {
+      "kind": "feature",
+      "name": "alternator batch of statements",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "alternator-2026.3-007-post.json",
+      "test": "TestIntegrationFeatures/alternator_batch_of_statements"
+    },
+    {
+      "kind": "feature",
+      "name": "alternator transaction",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "alternator-2026.3-048-post.json",
+      "test": "TestIntegrationFeatures/alternator_transaction"
+    },
+    {
+      "kind": "type",
+      "name": "S",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/S"
+    },
+    {
+      "kind": "type",
+      "name": "N",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/N"
+    },
+    {
+      "kind": "type",
+      "name": "B",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/B"
+    },
+    {
+      "kind": "type",
+      "name": "BOOL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/BOOL"
+    },
+    {
+      "kind": "type",
+      "name": "NULL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/NULL"
+    },
+    {
+      "kind": "type",
+      "name": "M",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/M"
+    },
+    {
+      "kind": "type",
+      "name": "L",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/L"
+    },
+    {
+      "kind": "type",
+      "name": "SS",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/SS"
+    },
+    {
+      "kind": "type",
+      "name": "NS",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/NS"
+    },
+    {
+      "kind": "type",
+      "name": "BS",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash",
+        "github.com/btnguyen2k/godynamo",
+        "github.com/boto/boto3"
+      ],
+      "verdict": "yes",
+      "evidence": "dynamodb-3.3.1-037-post.json",
+      "test": "TestIntegrationRoundTrip/BS"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-flash"
+      ],
+      "verdict": "no",
+      "evidence": "dynamodb-3.3.1-177-post.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    }
+  ]
+}

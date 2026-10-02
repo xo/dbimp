@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbmeta_crud/_delete_by_query",
+    "query": "refresh=true",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":{\"match_all\":{}}}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"security_exception\",\"reason\":\"action [indices:data/write/delete/byquery] is unauthorized for user [dbmeta_user] with effective roles [dbmeta_role] on indices [dbmeta_crud], this action is granted by the index privileges [delete,write,all]\"}],\"type\":\"security_exception\",\"reason\":\"action [indices:data/write/delete/byquery] is unauthorized for user [dbmeta_user] with effective roles [dbmeta_role] on indices [dbmeta_crud], this action is granted by the index privileges [delete,write,all]\"},\"status\":403}"
+  }
+}

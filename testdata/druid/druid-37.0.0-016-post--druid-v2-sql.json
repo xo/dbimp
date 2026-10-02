@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id FROM dbimp_types\",\"resultFormat\":\"tsv\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:06:14 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "490"
+      ]
+    },
+    "body": "{\"error\":\"Unknown exception\",\"errorMessage\":\"Unable to read query from request: Cannot construct instance of `org.apache.druid.sql.http.ResultFormat`, problem: No enum constant org.apache.druid.sql.http.ResultFormat.TSV\\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 54] (through reference chain: org.apache.druid.sql.http.SqlQuery[\\\"resultFormat\\\"])\",\"errorClass\":\"org.apache.druid.server.initialization.jetty.HttpException\",\"host\":null}"
+  }
+}

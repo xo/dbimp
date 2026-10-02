@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"REPLACE INTO dbimp_types OVERWRITE ALL\\nSELECT TIME_PARSE(t) AS __time, id, s, l, CAST(f AS FLOAT) AS f, d, PARSE_JSON(j) AS j,\\n  CASE WHEN id = 1 THEN ARRAY['a', NULL, 'c'] ELSE NULL END AS sa,\\n  CASE WHEN id = 1 THEN ARRAY[-9223372036854775808, 9223372036854775807] ELSE NULL END AS la,\\n  CASE WHEN id = 1 THEN ARRAY[0.1, 1.5e300] ELSE NULL END AS da,\\n  CASE WHEN id = 1 THEN ARRAY_TO_MV(ARRAY['x', 'y']) WHEN id = 2 THEN 'z' ELSE NULL END AS mv,\\n  b\\nFROM (VALUES\\n  ('2026-10-01T12:34:56.789Z', 1, 'é''\\\"\\\\ x', 9223372036854775807, 3.4e38, 1.7976931348623157e308, '{\\\"k\\\":[1,\\\"two\\\",null,{\\\"n\\\":1.5}]}', TRUE),\\n  ('2026-10-01T00:00:00Z', 2, '', -9223372036854775808, -1.5, -0.1, '[]', FALSE),\\n  ('1970-01-01T00:00:00Z', 3, NULL, NULL, NULL, NULL, NULL, NULL)\\n) AS v(t, id, s, l, f, d, j, b)\\nPARTITIONED BY ALL\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:02:44 GMT",
+        "Thu, 01 Oct 2026 20:02:44 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"taskId\":\"query-1c4a5c6f-4869-4a8a-907f-9bf095a36ea2\",\"state\":\"RUNNING\"}"
+  }
+}

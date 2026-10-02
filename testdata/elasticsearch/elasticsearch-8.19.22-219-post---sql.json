@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST('2026-10-01' AS DATE) AS d, CAST('12:34:56.789' AS TIME) AS t, CAST('2026-10-01T12:34:56.789+05:30' AS DATETIME) AS dt, 1.5 AS dbl, 9223372036854775807 AS big, 18446744073709551615 AS ubig, CAST(1 AS TINYINT) AS ti, CAST(1 AS SMALLINT) AS si, CAST(1.5 AS REAL) AS r, CAST(1.5 AS FLOAT) AS fl, TRUE AS b, CAST('1.2.3.4' AS IP) AS ip, CAST('abc' AS TEXT) AS tx, CAST(NULL AS INTEGER) AS ni, NULL AS n\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "1066058"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"d\",\"type\":\"date\"},{\"name\":\"t\",\"type\":\"time\"},{\"name\":\"dt\",\"type\":\"datetime\"},{\"name\":\"dbl\",\"type\":\"double\"},{\"name\":\"big\",\"type\":\"long\"},{\"name\":\"ubig\",\"type\":\"unsigned_long\"},{\"name\":\"ti\",\"type\":\"byte\"},{\"name\":\"si\",\"type\":\"short\"},{\"name\":\"r\",\"type\":\"float\"},{\"name\":\"fl\",\"type\":\"double\"},{\"name\":\"b\",\"type\":\"boolean\"},{\"name\":\"ip\",\"type\":\"ip\"},{\"name\":\"tx\",\"type\":\"text\"},{\"name\":\"ni\",\"type\":\"integer\"},{\"name\":\"n\",\"type\":\"null\"}],\"rows\":[[\"2026-10-01T00:00:00.000Z\",\"12:34:56.789Z\",\"2026-10-01T07:04:56.789Z\",1.5,9223372036854775807,18446744073709551615,1,1,1.5,1.5,true,\"1.2.3.4\",\"abc\",null,null]]}"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST('0001-01-01' AS DATE) AS a, CAST('-0001-01-01' AS DATE) AS b, CAST('9999-12-31T23:59:59.999Z' AS DATETIME) AS c, CAST('2026-10-01T12:34:56.123456789Z' AS DATETIME) AS d\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "1542861"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"a\",\"type\":\"date\"},{\"name\":\"b\",\"type\":\"date\"},{\"name\":\"c\",\"type\":\"datetime\"},{\"name\":\"d\",\"type\":\"datetime\"}],\"rows\":[[\"0001-01-01T00:00:00.000Z\",\"-0001-01-01T00:00:00.000Z\",\"9999-12-31T23:59:59.999Z\",\"2026-10-01T12:34:56.123456789Z\"]]}"
+  }
+}

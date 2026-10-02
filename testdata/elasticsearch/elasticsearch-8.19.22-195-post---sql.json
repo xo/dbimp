@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SHOW FUNCTIONS LIKE 'DATE%'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "567504"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"name\",\"type\":\"keyword\"},{\"name\":\"type\",\"type\":\"keyword\"}],\"rows\":[[\"DATEADD\",\"SCALAR\"],[\"DATEDIFF\",\"SCALAR\"],[\"DATEPART\",\"SCALAR\"],[\"DATETIME_FORMAT\",\"SCALAR\"],[\"DATETIME_PARSE\",\"SCALAR\"],[\"DATETRUNC\",\"SCALAR\"],[\"DATE_ADD\",\"SCALAR\"],[\"DATE_DIFF\",\"SCALAR\"],[\"DATE_FORMAT\",\"SCALAR\"],[\"DATE_PARSE\",\"SCALAR\"],[\"DATE_PART\",\"SCALAR\"],[\"DATE_TRUNC\",\"SCALAR\"]]}"
+  }
+}

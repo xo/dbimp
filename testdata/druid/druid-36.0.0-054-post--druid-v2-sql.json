@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT __time, CAST(__time AS DATE) AS dt FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true,\"context\":{\"sqlTimeZone\":\"Asia/Jakarta\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Response-Context": [
+        "{\"missingSegments\":[]}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Query-Id": [
+        "c3c2c188-8f54-400d-93e8-8e350bf7b411"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "c3c2c188-8f54-400d-93e8-8e350bf7b411"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ]
+    },
+    "body": "[[\"__time\",\"dt\"],[\"LONG\",\"LONG\"],[\"TIMESTAMP\",\"DATE\"],[\"2026-10-01T19:34:56.789+07:00\",\"2026-10-01T00:00:00.000+07:00\"]]\n"
+  }
+}

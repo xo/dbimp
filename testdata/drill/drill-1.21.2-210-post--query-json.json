@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE TABLE dfs.tmp.dbimp_fk (id INT REFERENCES dfs.tmp.dbimp_pk (id))\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "3089"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:16 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a0a-b2aa-b994-c86c-913b389c0b48\"\n,\"exception\":\"java.lang.Exception\"\n,\"errorMessage\":\"Extended columns not allowed under the current SQL conformance level\"\n,\"stackTrace\":[\"java.lang.Exception: Extended columns not allowed under the current SQL conformance level\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.parse(SqlConverter.java:195)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.checkAndApplyAutoLimit(DrillSqlWorker.java:307)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getQueryPlan(DrillSqlWorker.java:224)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPhysicalPlan(DrillSqlWorker.java:179)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.convertPlan(DrillSqlWorker.java:129)\",\"\\tat org.apache.drill.exec.planner.sql.DrillSqlWorker.getPlan(DrillSqlWorker.java:94)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.runSQL(Foreman.java:594)\",\"\\tat org.apache.drill.exec.work.foreman.Foreman.run(Foreman.java:274)\",\"\\tat .......(:0)\",\"Caused by: org.apache.calcite.sql.validate.SqlValidatorException: Extended columns not allowed under the current SQL conformance level\",\"\\tat .......(:0)\",\"\\tat org.apache.calcite.runtime.Resources$ExInstWithCause.ex(Resources.java:505)\",\"\\tat org.apache.calcite.runtime.Resources$ExInst.ex(Resources.java:599)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:945)\",\"\\tat org.apache.calcite.sql.SqlUtil.newContextException(SqlUtil.java:930)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.AddCompoundIdentifierType(DrillParserImpl.java:3625)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.AddCompoundIdentifierTypeCommaList(DrillParserImpl.java:6998)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.ParenthesizedCompoundIdentifierList(DrillParserImpl.java:7021)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.ParseRequiredFieldList(DrillParserImpl.java:1280)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.ParseOptionalFieldList(DrillParserImpl.java:1269)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.SqlCreateTable(DrillParserImpl.java:1401)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.SqlCreateOrReplace(DrillParserImpl.java:1324)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.SqlStmt(DrillParserImpl.java:1053)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.SqlStmtEof(DrillParserImpl.java:1109)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserImpl.parseSqlStmtEof(DrillParserImpl.java:205)\",\"\\tat org.apache.drill.exec.planner.sql.parser.impl.DrillParserWithCompoundIdConverter.parseSqlStmtEof(DrillParserWithCompoundIdConverter.java:64)\",\"\\tat org.apache.calcite.sql.parser.SqlParser.parseQuery(SqlParser.java:172)\",\"\\tat org.apache.calcite.sql.parser.SqlParser.parseStmt(SqlParser.java:199)\",\"\\tat org.apache.drill.exec.planner.sql.conversion.SqlConverter.parse(SqlConverter.java:193)\",\"\\t... 8 more\"]\n,\"queryState\":\"FAILED\"\n}\n"
+  }
+}

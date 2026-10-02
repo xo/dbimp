@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT server_type, version FROM sys.servers ORDER BY server_type\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:22:27 GMT",
+        "Thu, 01 Oct 2026 20:22:27 GMT"
+      ],
+      "X-Druid-Query-Id": [
+        "6bd64e4d-62a0-4233-a0b1-f7b0dfa063f0"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "6bd64e4d-62a0-4233-a0b1-f7b0dfa063f0"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Response-Context": [
+        "{}"
+      ]
+    },
+    "body": "[[\"server_type\",\"version\"],[\"STRING\",\"STRING\"],[\"VARCHAR\",\"VARCHAR\"],[\"broker\",\"36.0.0\"],[\"coordinator\",\"36.0.0\"],[\"historical\",\"36.0.0\"],[\"middle_manager\",\"36.0.0\"],[\"overlord\",\"36.0.0\"],[\"router\",\"36.0.0\"]]\n"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_paging ORDER BY s DESC\",\"fetch_size\":10,\"filter\":{\"script\":{\"script\":{\"source\":\"double x = doc[\\\"n\\\"].value; for (int i = 0; i < 900000; i++) { x = Math.sin(x) + Math.sqrt(i); } return x != 12345.0;\"}}},\"request_timeout\":\"100ms\"}"
+  },
+  "response": {
+    "status": 429,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"search_timeout_exception\",\"reason\":\"Time exceeded\",\"timed_out\":true}],\"type\":\"search_phase_execution_exception\",\"reason\":\"all shards failed\",\"phase\":\"query\",\"grouped\":true,\"failed_shards\":[{\"shard\":0,\"index\":\"dbmeta_paging\",\"node\":\"G9yVK6EBSlaAAAUX8X-GNA\",\"reason\":{\"type\":\"search_timeout_exception\",\"reason\":\"Time exceeded\",\"timed_out\":true}}]},\"status\":429}"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a FROM dbimp_types LIMIT 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:09 GMT"
+      ],
+      "Cache-Control": [
+        "must-revalidate,no-cache,no-store"
+      ],
+      "Content-Type": [
+        "text/html;charset=iso-8859-1"
+      ],
+      "Content-Length": [
+        "482"
+      ]
+    },
+    "body": "<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html;charset=ISO-8859-1\"/>\n<title>Error 401 User authentication failed.</title>\n</head>\n<body><h2>HTTP ERROR 401 User authentication failed.</h2>\n<table>\n<tr><th>URI:</th><td>/druid/v2/sql</td></tr>\n<tr><th>STATUS:</th><td>401</td></tr>\n<tr><th>MESSAGE:</th><td>User authentication failed.</td></tr>\n<tr><th>SERVLET:</th><td>org.apache.druid.server.AsyncQueryForwardingServlet-5eee3da9</td></tr>\n</table>\n\n</body>\n</html>\n"
+  }
+}

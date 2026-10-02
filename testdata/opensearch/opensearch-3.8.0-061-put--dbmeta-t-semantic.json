@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "PUT",
+    "path": "/dbmeta_t_semantic",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":0},\"mappings\":{\"properties\":{\"id\":{\"type\":\"integer\"},\"v\":{\"type\":\"semantic\"}}}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"illegal_argument_exception\",\"reason\":\"model_id is required for the semantic field at v\"}],\"type\":\"illegal_argument_exception\",\"reason\":\"model_id is required for the semantic field at v\"},\"status\":400}"
+  }
+}

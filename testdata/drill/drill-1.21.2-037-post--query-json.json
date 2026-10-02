@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST('12345678901234567890123456789012345678' AS DECIMAL(38, 0)) AS d, CAST('-0.00000000000000000000000000000000000001' AS DECIMAL(38, 38)) AS s FROM (VALUES(1))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "246"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:44 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2a-82f7-9cd3-38dd-580d3b3e1264\"\n,\"columns\":[\"d\",\"s\"]\n,\"metadata\":[\"VARDECIMAL(38, 0)\",\"VARDECIMAL(38, 38)\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"d\":12345678901234567890123456789012345678,\"s\":-1E-38}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

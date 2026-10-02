@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=yaml",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n, s FROM dbmeta_paging WHERE n < 3 ORDER BY n\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "9731327"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/yaml"
+      ]
+    },
+    "body": "---\ncolumns:\n- name: \"n\"\n  type: \"integer\"\n- name: \"s\"\n  type: \"keyword\"\nrows:\n- - 1\n  - \"row 1\"\n- - 2\n  - \"row 2\"\n"
+  }
+}

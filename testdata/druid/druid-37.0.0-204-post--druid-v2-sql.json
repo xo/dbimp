@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n, 100 / (z - z) AS q FROM dbimp_big\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Druid-Query-Id": [
+        "9604138c-ad1e-48a0-b77f-91186295b359"
+      ],
+      "Content-Length": [
+        "324"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "9604138c-ad1e-48a0-b77f-91186295b359"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:11:19 GMT",
+        "Thu, 01 Oct 2026 20:11:19 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"error\":\"Unknown exception\",\"errorClass\":\"java.lang.ArithmeticException\",\"host\":\"localhost:8083\",\"errorCode\":\"legacyQueryException\",\"persona\":\"OPERATOR\",\"category\":\"RUNTIME_FAILURE\",\"errorMessage\":\"null\",\"context\":{\"host\":\"localhost:8083\",\"errorClass\":\"java.lang.ArithmeticException\",\"legacyErrorCode\":\"Unknown exception\"}}"
+  }
+}

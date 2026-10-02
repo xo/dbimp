@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS one\",\"mode\":\"jdbc\",\"version\":\"9.5.3\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"security_exception\",\"reason\":\"current license is non-compliant for [jdbc]\",\"license.expired.feature\":\"jdbc\"}],\"type\":\"security_exception\",\"reason\":\"current license is non-compliant for [jdbc]\",\"license.expired.feature\":\"jdbc\"},\"status\":403}"
+  }
+}

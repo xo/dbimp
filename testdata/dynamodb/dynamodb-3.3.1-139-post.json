@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.BatchExecuteStatement"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"Statements\":[{\"Statement\":\"SELECT pk FROM dbimp_none WHERE pk = 'c'\"},{\"Statement\":\"SELECT pk FROM dbimp_crud WHERE pk = 'c' AND sk = 1\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "ecb18815-c9a6-4fc6-ba48-eb21933eec5c"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "1846701021"
+      ],
+      "Content-Length": [
+        "161"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ]
+    },
+    "body": "{\"Responses\":[{\"Error\":{\"Message\":\"Cannot do operations on a non-existent table\",\"Code\":\"ResourceNotFound\"}},{\"TableName\":\"dbimp_crud\",\"Item\":{\"pk\":{\"S\":\"c\"}}}]}"
+  }
+}

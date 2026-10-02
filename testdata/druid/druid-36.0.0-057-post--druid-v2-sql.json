@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"EXPLAIN PLAN FOR SELECT id FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Response-Context": [
+        "{}"
+      ],
+      "X-Druid-Query-Id": [
+        "7692ea3d-6f81-45cd-bd51-ca01af4e3f8d"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "7692ea3d-6f81-45cd-bd51-ca01af4e3f8d"
+      ]
+    },
+    "body": "[[\"[{\\\"query\\\":{\\\"queryType\\\":\\\"scan\\\",\\\"dataSource\\\":{\\\"type\\\":\\\"table\\\",\\\"name\\\":\\\"dbimp_types\\\"},\\\"intervals\\\":{\\\"type\\\":\\\"intervals\\\",\\\"intervals\\\":[\\\"-146136543-09-08T08:23:32.096Z/146140482-04-24T15:36:27.903Z\\\"]},\\\"resultFormat\\\":\\\"compactedList\\\",\\\"filter\\\":{\\\"type\\\":\\\"equals\\\",\\\"column\\\":\\\"id\\\",\\\"matchValueType\\\":\\\"LONG\\\",\\\"matchValue\\\":1},\\\"columns\\\":[\\\"id\\\"],\\\"context\\\":{\\\"queryId\\\":\\\"7692ea3d-6f81-45cd-bd51-ca01af4e3f8d\\\",\\\"sqlQueryId\\\":\\\"7692ea3d-6f81-45cd-bd51-ca01af4e3f8d\\\"},\\\"columnTypes\\\":[\\\"LONG\\\"],\\\"granularity\\\":{\\\"type\\\":\\\"all\\\"},\\\"legacy\\\":false},\\\"signature\\\":[{\\\"name\\\":\\\"id\\\",\\\"type\\\":\\\"LONG\\\"}],\\\"columnMappings\\\":[{\\\"queryColumn\\\":\\\"id\\\",\\\"outputColumn\\\":\\\"id\\\"}]}]\",\"[{\\\"name\\\":\\\"dbimp_types\\\",\\\"type\\\":\\\"DATASOURCE\\\"}]\",\"{\\\"statementType\\\":\\\"SELECT\\\"}\"]]\n"
+  }
+}

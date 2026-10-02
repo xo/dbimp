@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST(s AS VARBINARY) AS vb FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 501,
+    "header": {
+      "X-Druid-Sql-Query-Id": [
+        "f3de9ab8-5704-4d7f-951f-fb0a835f2d15"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Query-Id": [
+        "f3de9ab8-5704-4d7f-951f-fb0a835f2d15"
+      ],
+      "Content-Length": [
+        "186"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:18 GMT",
+        "Thu, 01 Oct 2026 20:26:18 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"general\",\"persona\":\"OPERATOR\",\"category\":\"UNSUPPORTED\",\"errorMessage\":\"Unhandled Query Planning Failure, see broker logs for details\",\"context\":{}}"
+  }
+}

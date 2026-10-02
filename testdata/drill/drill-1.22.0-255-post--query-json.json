@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT employee_id FROM cp.`employee.json` LIMIT 3\",\"autoLimit\":\"-1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:07 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "220"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a50-720f-eb8b-ab37-be4205c97451\"\n,\"columns\":[\"employee_id\"]\n,\"metadata\":[\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"employee_id\":1}\n,{\"employee_id\":2}\n,{\"employee_id\":4}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ]
+    },
+    "body": "{\"Statement\":\"SELECT pk FROM dbimp_crud WHERE begins_with(pk, 'c') AND contains(ss, 'a')\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Amzn-Requestid": [
+        "2f0451e4-b9e0-4c36-a1f5-68ba3a7461a5"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Crc32": [
+        "1346860013"
+      ],
+      "Content-Length": [
+        "28"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ]
+    },
+    "body": "{\"Items\":[{\"pk\":{\"S\":\"c\"}}]}"
+  }
+}

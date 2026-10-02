@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT INTERVAL 1 YEAR AS y, INTERVAL 1 MONTH AS mo, INTERVAL 2 DAY AS d, INTERVAL 3 HOUR AS h, INTERVAL 3 MINUTE AS mi, INTERVAL 4.5 SECOND AS s, INTERVAL '1-2' YEAR TO MONTH AS ym, INTERVAL '1 2' DAY TO HOUR AS dh, INTERVAL '1 2:3' DAY TO MINUTE AS dm, INTERVAL '1 02:03:04.5' DAY TO SECOND AS ds, INTERVAL '2:3' HOUR TO MINUTE AS hm, INTERVAL '2:3:4.5' HOUR TO SECOND AS hs, INTERVAL '3:4.5' MINUTE TO SECOND AS ms, INTERVAL -1 DAY AS neg, INTERVAL '-1-2' YEAR TO MONTH AS negym\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "5526448"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"y\",\"type\":\"interval_year\"},{\"name\":\"mo\",\"type\":\"interval_month\"},{\"name\":\"d\",\"type\":\"interval_day\"},{\"name\":\"h\",\"type\":\"interval_hour\"},{\"name\":\"mi\",\"type\":\"interval_minute\"},{\"name\":\"s\",\"type\":\"interval_second\"},{\"name\":\"ym\",\"type\":\"interval_year_to_month\"},{\"name\":\"dh\",\"type\":\"interval_day_to_hour\"},{\"name\":\"dm\",\"type\":\"interval_day_to_minute\"},{\"name\":\"ds\",\"type\":\"interval_day_to_second\"},{\"name\":\"hm\",\"type\":\"interval_hour_to_minute\"},{\"name\":\"hs\",\"type\":\"interval_hour_to_second\"},{\"name\":\"ms\",\"type\":\"interval_minute_to_second\"},{\"name\":\"neg\",\"type\":\"interval_day\"},{\"name\":\"negym\",\"type\":\"interval_year_to_month\"}],\"rows\":[[\"P1Y\",\"P1M\",\"PT48H\",\"PT3H\",\"PT3M\",\"PT4S\",\"P1Y2M\",\"PT26H\",\"PT26H3M\",\"PT26H3M4.5S\",\"PT2H3M\",\"PT2H3M4.5S\",\"PT3M4.5S\",\"PT-24H\",\"P-1Y-2M\"]]}"
+  }
+}

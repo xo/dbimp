@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT employee_id FROM table(cp.`employee.json`(type => 'json')) LIMIT 1\",\"options\":{\"drill.exec.http.rest.errors.verbose\":\"true\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "182"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:46 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a28-d10a-84a2-e66d-f88fc0ecaee7\"\n,\"columns\":[\"employee_id\"]\n,\"metadata\":[\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"employee_id\":1}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

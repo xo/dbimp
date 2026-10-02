@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"DELETE FROM dbimp_crud WHERE id = 2\",\"resultFormat\":\"array\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "180"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:01 GMT",
+        "Thu, 01 Oct 2026 20:28:01 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "825ada11-0b96-4a42-bd24-4bedf70b718e"
+      ],
+      "X-Druid-Query-Id": [
+        "825ada11-0b96-4a42-bd24-4bedf70b718e"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Unsupported SQL statement [DELETE]\",\"context\":{\"sourceType\":\"sql\"}}"
+  }
+}

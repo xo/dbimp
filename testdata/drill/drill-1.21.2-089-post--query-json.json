@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT KVGEN(m) AS k FROM (SELECT convert_from('{\\\"a\\\":1,\\\"b\\\":2}', 'JSON') AS m FROM (VALUES(1)))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "203"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:45 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a29-d705-d696-160e-a4a2887bfed2\"\n,\"columns\":[\"k\"]\n,\"metadata\":[\"MAP\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"k\":[{\"key\":\"a\",\"value\":1},{\"key\":\"b\",\"value\":2}]}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

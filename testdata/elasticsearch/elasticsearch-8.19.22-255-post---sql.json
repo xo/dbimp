@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM (SELECT n, s FROM dbmeta_paging WHERE n < 4) PIVOT (COUNT(n) FOR s IN ('row 1', 'row 2'))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "8892682"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"'row 1'\",\"type\":\"long\"},{\"name\":\"'row 2'\",\"type\":\"long\"}],\"rows\":[[1,1]],\"cursor\":\"ic+bBERGTACcUc1OwkAY/L61UCExepGzL2DSFtviyWCMRCMhjQbUC+nPtqml3dIuQr3o1WfwNXwPX8O3wG1B4kEv7uX7Mjs7k5nFe8AUEBsui1OWh5zKQcZmqVNg3Q8nnGayoWjmka4CLOt0EeY8P3kBAExgibDt+J22f+yqiLnABP4pY/MHDrWMzQ80IAhE3MJSnN1yQclhbFJJkVpmJwFdywpVAKmkQE3Yx2u7HHBPJvuVnLoaWilTEcvlHbeAVB6ApQvg8+vHm4Q7nhNTbo9TOwiToKVFPXP0dL64mfccbk8HylneNbuArTYfP1wYQ8syBp1Tq88W1khJrI3BXWtoqoWuHBbXl9rA7l/Rzq1OqSD8JQnQ3CQmJH3EaNMWyBEt5izzMP6ut+Exd+yyWcKxvpoifxX2/081Uclvv/EFAAD//wMA\"}"
+  }
+}

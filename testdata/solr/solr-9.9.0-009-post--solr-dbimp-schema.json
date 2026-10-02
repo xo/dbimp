@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/schema",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"add-field-type\":{\"name\":\"enum\",\"class\":\"solr.EnumFieldType\",\"enumsConfig\":\"enumsConfig.xml\",\"enumName\":\"severity\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Content-Length": [
+        "1017"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"responseHeader\":{\n    \"status\":400,\n    \"QTime\":14\n  },\n  \"error\":{\n    \"metadata\":[\"error-class\",\"org.apache.solr.api.ApiBag$ExceptionWithErrObject\",\"root-error-class\",\"org.apache.solr.api.ApiBag$ExceptionWithErrObject\"],\n    \"details\":[{\n      \"errorMessages\":[\"Plugin init failure for [schema.xml] fieldType\\nenum: Error while parsing enums config.\\nCan't find resource 'enumsConfig.xml' in classpath or '/configs/dbimp', cwd=/opt/solr-9.9.0/server\\n\"],\n      \"add-field-type\":{\n        \"name\":\"enum\",\n        \"class\":\"solr.EnumFieldType\",\n        \"enumsConfig\":\"enumsConfig.xml\",\n        \"enumName\":\"severity\"\n      }\n    }],\n    \"msg\":\"error processing commands, errors: [{errorMessages=[Plugin init failure for [schema.xml] fieldType\\nenum: Error while parsing enums config.\\nCan't find resource 'enumsConfig.xml' in classpath or '/configs/dbimp', cwd=/opt/solr-9.9.0/server\\n], add-field-type={name=enum, class=solr.EnumFieldType, enumsConfig=enumsConfig.xml, enumName=severity}}], \",\n    \"code\":400\n  }\n}"
+  }
+}

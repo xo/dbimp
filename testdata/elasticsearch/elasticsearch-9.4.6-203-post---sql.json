@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, i, k, o.a FROM dbmeta_types ORDER BY id\",\"field_multi_value_leniency\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "2925430"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"id\",\"type\":\"integer\"},{\"name\":\"i\",\"type\":\"integer\"},{\"name\":\"k\",\"type\":\"keyword\"},{\"name\":\"o.a\",\"type\":\"integer\"}],\"rows\":[[1,2147483647,\"é'\\\"\\\\ x\",1],[2,-2147483648,\"\",null],[3,null,null,null],[4,null,null,null],[5,1,\"a\",1]]}"
+  }
+}

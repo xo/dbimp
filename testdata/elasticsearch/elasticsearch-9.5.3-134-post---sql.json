@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{not json"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"x_content_parse_exception\",\"reason\":\"[1:2] Unexpected character ('n' (code 110)): was expecting double-quote to start field name\\n at [Source: (byte[])\\\"{not json\\\"; line: 1, column: 2]\"}],\"type\":\"x_content_parse_exception\",\"reason\":\"[1:2] Unexpected character ('n' (code 110)): was expecting double-quote to start field name\\n at [Source: (byte[])\\\"{not json\\\"; line: 1, column: 2]\",\"caused_by\":{\"type\":\"json_parse_exception\",\"reason\":\"Unexpected character ('n' (code 110)): was expecting double-quote to start field name\\n at [Source: (byte[])\\\"{not json\\\"; line: 1, column: 2]\"}},\"status\":400}"
+  }
+}

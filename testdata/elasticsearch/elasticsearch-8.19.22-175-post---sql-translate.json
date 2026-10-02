@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql/translate",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_paging WHERE n = 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ]
+    },
+    "body": "{\"size\":1000,\"query\":{\"term\":{\"n\":{\"value\":1}}},\"_source\":false,\"fields\":[{\"field\":\"n\"}],\"sort\":[{\"_doc\":{\"order\":\"asc\"}}],\"track_total_hits\":-1}"
+  }
+}

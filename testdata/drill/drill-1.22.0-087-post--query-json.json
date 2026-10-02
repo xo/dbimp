@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT filename, fqn, dir0 FROM dfs.tmp.dbimp_multi ORDER BY id LIMIT 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "276"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:33:35 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a70-08ca-5d61-2848-b1afcffa17db\"\n,\"columns\":[\"filename\",\"fqn\",\"dir0\"]\n,\"metadata\":[\"VARCHAR\",\"VARCHAR\",\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"filename\":\"0_0_0.parquet\",\"fqn\":\"/tmp/dbimp_multi/a/0_0_0.parquet\",\"dir0\":\"a\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

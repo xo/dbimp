@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 12345678901234567890.123 AS big FROM dbimp_types WHERE id = 1\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Druid-Sql-Query-Id": [
+        "139a7b68-86da-440d-94f9-36e379189e65"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "X-Druid-Query-Id": [
+        "139a7b68-86da-440d-94f9-36e379189e65"
+      ],
+      "Content-Length": [
+        "279"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:19 GMT",
+        "Thu, 01 Oct 2026 20:26:19 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"Numeric literal '12345678901234567890.123' out of range (line [1], column [8])\",\"context\":{\"sourceType\":\"sql\",\"line\":\"1\",\"column\":\"8\",\"endLine\":\"1\",\"endColumn\":\"31\"}}"
+  }
+}

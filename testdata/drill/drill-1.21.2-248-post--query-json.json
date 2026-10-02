@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT convert_from(convert_to(m, 'JSON'), 'UTF8') AS j FROM dfs.tmp.dbimp_complex\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:35:17 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "229"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a09-b0b6-b2fd-b208-e5d30548b5cc\"\n,\"columns\":[\"j\"]\n,\"metadata\":[\"VARCHAR\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"j\":\"{\\n  \\\"k\\\" : [ 1, 2, 3 ],\\n  \\\"o\\\" : {\\n    \\\"s\\\" : \\\"x\\\"\\n  }\\n}\"}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

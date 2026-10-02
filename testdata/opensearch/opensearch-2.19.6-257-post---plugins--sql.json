@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n, s FROM dbmeta_rows WHERE n > 1000\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"n\",\n      \"type\": \"integer\"\n    },\n    {\n      \"name\": \"s\",\n      \"type\": \"keyword\"\n    }\n  ],\n  \"datarows\": [],\n  \"total\": 0,\n  \"size\": 0,\n  \"status\": 200\n}"
+  }
+}

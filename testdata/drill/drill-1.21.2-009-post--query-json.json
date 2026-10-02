@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"CREATE TABLE dfs.tmp.`dbimp_change/a` AS SELECT CAST(1 AS BIGINT) AS x, convert_from('{\\\"k\\\":1}', 'JSON') AS m FROM (VALUES(1))\",\"options\":{\"store.format\":\"json\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:43 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "248"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a2b-8ae6-7464-68fa-6c507b74354f\"\n,\"columns\":[\"Fragment\",\"Number of records written\"]\n,\"metadata\":[\"VARCHAR\",\"BIGINT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"Fragment\":\"0_0\",\"Number of records written\":1}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

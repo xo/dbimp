@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ],
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135219Z"
+      ]
+    },
+    "body": "{\"Statement\":\"CREATE VIEW dbimp_view AS SELECT * FROM dbimp_crud\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "171"
+      ],
+      "Server": [
+        "Jetty(12.0.31)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:19 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "a378fc23-3e2c-4c08-b41a-4a6b7cefb569"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"__type\":\"com.amazon.coral.validate#ValidationException\",\"Message\":\"Statement wasn't well formed, can't be processed: CREATE VIEW dbimp_view AS SELECT * FROM dbimp_crud\"}"
+  }
+}

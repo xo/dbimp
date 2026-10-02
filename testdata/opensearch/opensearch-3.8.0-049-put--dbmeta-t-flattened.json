@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "PUT",
+    "path": "/dbmeta_t_flattened",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":0},\"mappings\":{\"properties\":{\"id\":{\"type\":\"integer\"},\"v\":{\"type\":\"flattened\"}}}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"mapper_parsing_exception\",\"reason\":\"No handler for type [flattened] declared on field [v]\"}],\"type\":\"mapper_parsing_exception\",\"reason\":\"Failed to parse mapping [_doc]: No handler for type [flattened] declared on field [v]\",\"caused_by\":{\"type\":\"mapper_parsing_exception\",\"reason\":\"No handler for type [flattened] declared on field [v]\"}},\"status\":400}"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, i FROM dbmeta_types ORDER BY id\",\"fetch_size\":2}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Took-Nanos": [
+        "3911936"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"id\",\"type\":\"integer\"},{\"name\":\"i\",\"type\":\"integer\"}],\"rows\":[[1,2147483647],[2,-2147483648]],\"cursor\":\"rce6BERGTABijGJgzGBgYmRgYmIAgv9AwA9iAAETIyNXWmZqTkp8cX5RCVNmCgNrfE5icQkjAwMje2ZeSWp6ahFEJeMWRmawAYxAg4AawUYBATNQBGQiIxNINxNjJhDXrT2+i4WRJyUpN7UkMb6ksiC1WCzMOK3K3KCoKCjA38c519wy3tXTKTGdgVGs2KwqPcUiJyfQILzK36fQrcIvK9ArkAFkCQgYiLmkhJQ6OhtYBoZXhhrkZbimFpYUuzoCdeIwkoGBC+5NJsY0oLOQvMKYxpiJzAU6HwAAAP//AwA=\"}"
+  }
+}

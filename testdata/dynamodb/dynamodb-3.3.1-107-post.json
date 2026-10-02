@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"SELECT pk, l FROM \\\"dbimp_schema\\\".\\\"lsi\\\" WHERE pk = 'a' AND l = 'lv'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Amz-Crc32": [
+        "2216286372"
+      ],
+      "Content-Length": [
+        "43"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "9ab042b5-8286-4a6f-80f0-8cb39e422c3a"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Items\":[{\"l\":{\"S\":\"lv\"},\"pk\":{\"S\":\"a\"}}]}"
+  }
+}

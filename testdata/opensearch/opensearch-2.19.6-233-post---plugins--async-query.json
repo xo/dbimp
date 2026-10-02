@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_async_query",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"datasource\":\"dbmeta\",\"lang\":\"sql\",\"query\":\"SELECT 1\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"status\": 400,\n  \"error\": {\n    \"type\": \"DataSourceNotFoundException\",\n    \"reason\": \"Invalid Request\",\n    \"details\": \"DataSource with name dbmeta doesn\\u0027t exist.\"\n  }\n}"
+  }
+}

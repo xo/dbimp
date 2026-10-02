@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbimp_big WHERE n <= 10\",\"resultFormat\":\"array\",\"context\":{\"executionMode\":\"ASYNC\",\"rowsPerPage\":4}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:09 GMT",
+        "Thu, 01 Oct 2026 20:28:09 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"query-4aa23021-6210-4fc4-98d5-2a3b09ddd46f\",\"state\":\"ACCEPTED\",\"createdAt\":\"2026-10-01T20:28:09.138Z\",\"schema\":[{\"name\":\"n\",\"type\":\"BIGINT\",\"nativeType\":\"LONG\"}],\"durationMs\":-1}"
+  }
+}

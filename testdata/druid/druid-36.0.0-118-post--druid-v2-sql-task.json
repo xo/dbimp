@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"UPSERT INTO dbimp_crud SELECT TIME_PARSE('2026-10-04T00:00:00Z') AS __time, 4 AS id, 'four' AS v PARTITIONED BY DAY\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "245"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:26:31 GMT",
+        "Thu, 01 Oct 2026 20:26:31 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"taskId\":\"8d32e173-7c84-48a7-8e4c-2bdd9e62c85e\",\"state\":\"FAILED\",\"error\":{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"UPSERT is not supported.\",\"context\":{\"sourceType\":\"sql\"}}}"
+  }
+}

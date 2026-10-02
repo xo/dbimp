@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/_cluster/settings",
+    "query": "include_defaults=true&filter_path=defaults.plugins.sql,defaults.plugins.query.size_limit,defaults.plugins.query.buckets,defaults.plugins.calcite.enabled,defaults.opendistro.sql,defaults.opendistro.query",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.8.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"defaults\":{\"plugins\":{\"calcite\":{\"enabled\":\"true\"},\"sql\":{\"cursor\":{\"keep_alive\":\"1m\"},\"slowlog\":\"2\",\"enabled\":\"true\"},\"query\":{\"buckets\":\"10000\",\"size_limit\":\"10000\"}}}}"
+  }
+}

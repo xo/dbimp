@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "DynamoDB_20120810.ExecuteStatement"
+      ],
+      "X-Amz-Date": [
+        "20261001T135224Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Statement\":\"-- a comment\\nSELECT pk FROM dbimp_types /* another */ WHERE pk = 't1'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Amz-Crc32": [
+        "317510551"
+      ],
+      "Content-Length": [
+        "29"
+      ],
+      "Server": [
+        "Jetty(12.1.11)"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 13:52:24 GMT"
+      ],
+      "X-Amzn-Requestid": [
+        "9ea51f62-f2bc-4ac1-a5b5-3d123abb0aef"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.0"
+      ]
+    },
+    "body": "{\"Items\":[{\"pk\":{\"S\":\"t1\"}}]}"
+  }
+}

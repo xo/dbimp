@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, v FROM dbmeta_t_double_range\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"can't resolve Symbol(namespace=FIELD_NAME, name=v) in type env\",\n    \"type\": \"SemanticCheckException\"\n  },\n  \"status\": 400\n}"
+  }
+}

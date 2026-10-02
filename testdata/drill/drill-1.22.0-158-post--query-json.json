@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"sql\",\"query\":\"SELECT 1 AS one FROM (VALUES(1))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Length": [
+        "163"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:05 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a51-c274-c71a-ca21-770a8eda1202\"\n,\"columns\":[\"one\"]\n,\"metadata\":[\"INT\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"one\":1}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

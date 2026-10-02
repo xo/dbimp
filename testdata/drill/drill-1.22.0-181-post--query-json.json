@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/query.json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"queryType\":\"SQL\",\"query\":\"SELECT CAST(s AS CHAR(5)) AS c, CAST(s AS VARCHAR(3)) AS v FROM dfs.tmp.dbimp_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "242"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 19:34:05 GMT"
+      ],
+      "Set-Cookie": [
+        "REDACTED"
+      ],
+      "Expires": [
+        "Thu, 01 Jan 1970 00:00:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"queryId\":\"15414a52-7e5e-3a54-c4cb-82ac70164d91\"\n,\"columns\":[\"c\",\"v\"]\n,\"metadata\":[\"VARCHAR(5)\",\"VARCHAR(3)\"]\n,\"attemptedAutoLimit\":0\n,\"rows\":[\n{\"c\":\"é'\\\"\\\\ \",\"v\":\"é'\\\"\"}\n,{\"c\":\"\",\"v\":\"\"}\n,{\"c\":null,\"v\":null}\n]\n,\"queryState\":\"COMPLETED\"\n}\n"
+  }
+}

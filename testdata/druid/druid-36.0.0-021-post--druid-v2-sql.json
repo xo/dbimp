@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"INSERT INTO dbimp_crud SELECT TIME_PARSE('2026-10-03T00:00:00Z') AS __time, 3 AS id, 'three' AS v PARTITIONED BY DAY\",\"resultFormat\":\"array\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "235"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:22:28 GMT",
+        "Thu, 01 Oct 2026 20:22:28 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "4ef43d72-f8f8-4790-96a2-5f588a3c4a24"
+      ],
+      "X-Druid-Query-Id": [
+        "4ef43d72-f8f8-4790-96a2-5f588a3c4a24"
+      ]
+    },
+    "body": "{\"error\":\"druidException\",\"errorCode\":\"invalidInput\",\"persona\":\"USER\",\"category\":\"INVALID_INPUT\",\"errorMessage\":\"INSERT operations are not supported by requested SQL engine [native], consider using MSQ.\",\"context\":{\"sourceType\":\"sql\"}}"
+  }
+}

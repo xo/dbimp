@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT k, v FROM lookup.dbimp_lookup\",\"resultFormat\":\"array\",\"header\":true,\"typesHeader\":true,\"sqlTypesHeader\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Druid-Query-Id": [
+        "a57fbd3b-9c9d-40e5-8127-63743b36cb9c"
+      ],
+      "X-Druid-Sql-Header-Included": [
+        "yes"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "X-Druid-Sql-Query-Id": [
+        "a57fbd3b-9c9d-40e5-8127-63743b36cb9c"
+      ],
+      "X-Druid-Response-Context": [
+        "{}"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Thu, 01 Oct 2026 20:28:02 GMT",
+        "Thu, 01 Oct 2026 20:28:02 GMT"
+      ]
+    },
+    "body": "[[\"k\",\"v\"],[\"STRING\",\"STRING\"],[\"VARCHAR\",\"VARCHAR\"],[\"a\",\"apple\"],[\"b\",\"banana\"]]\n"
+  }
+}

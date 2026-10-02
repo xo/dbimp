@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id FROM dbmeta_types WHERE k = ? OR id = 3\",\"parameters\":[{\"type\":\"string\",\"value\":\"x' OR 1=1 --\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"id\",\n      \"type\": \"integer\"\n    }\n  ],\n  \"datarows\": [\n    [\n      3\n    ]\n  ],\n  \"total\": 1,\n  \"size\": 1,\n  \"status\": 200\n}"
+  }
+}

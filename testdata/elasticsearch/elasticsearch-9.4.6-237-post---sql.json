@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST(? AS UNSIGNED_LONG) AS u, CAST(? AS DATE) AS d, ?::INTEGER AS i\",\"params\":[\"18446744073709551615\",\"2026-10-01\",\"7\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Took-Nanos": [
+        "459513"
+      ],
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"columns\":[{\"name\":\"u\",\"type\":\"unsigned_long\"},{\"name\":\"d\",\"type\":\"date\"},{\"name\":\"i\",\"type\":\"integer\"}],\"rows\":[[18446744073709551615,\"2026-10-01T00:00:00.000Z\",7]]}"
+  }
+}

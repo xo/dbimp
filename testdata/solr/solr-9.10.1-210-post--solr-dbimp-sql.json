@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/solr/dbimp/sql",
+    "header": {
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "stmt=SELECT+n_i%2C+count%28%2A%29+AS+c+FROM+dbimp+GROUP+BY+n_i+HAVING+count%28%2A%29+%3E+0+ORDER+BY+n_i+DESC+LIMIT+3"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Content-Type": [
+        "application/json;charset=utf-8"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Length": [
+        "206"
+      ],
+      "Content-Security-Policy": [
+        "default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';"
+      ]
+    },
+    "body": "{\n  \"result-set\":{\n    \"docs\":[{\n      \"n_i\":2147483647,\n      \"c\":1\n    },{\n      \"n_i\":299,\n      \"c\":1\n    },{\n      \"n_i\":298,\n      \"c\":1\n    },{\n      \"EOF\":true,\n      \"RESPONSE_TIME\":11\n    }]\n  }\n}"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/druid/v2/sql/task",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"REPLACE INTO dbimp_crud OVERWRITE WHERE __time >= TIMESTAMP '2026-10-01 00:00:00' AND __time < TIMESTAMP '2026-10-02 00:00:00' SELECT TIME_PARSE('2026-10-01T00:00:00Z') AS __time, 1 AS id, 'uno' AS v PARTITIONED BY DAY\"}"
+  },
+  "response": {
+    "status": 202,
+    "header": {
+      "Date": [
+        "Thu, 01 Oct 2026 20:07:34 GMT",
+        "Thu, 01 Oct 2026 20:07:34 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"taskId\":\"query-f20abc4c-13a6-44cf-ad13-eec498b2eb56\",\"state\":\"RUNNING\"}"
+  }
+}

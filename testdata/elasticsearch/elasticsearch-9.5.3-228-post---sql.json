@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT dv FROM dbmeta_types\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"root_cause\":[{\"type\":\"verification_exception\",\"reason\":\"Found 1 problem\\nline 1:8: Cannot use field [dv] with unsupported type [dense_vector]\"}],\"type\":\"verification_exception\",\"reason\":\"Found 1 problem\\nline 1:8: Cannot use field [dv] with unsupported type [dense_vector]\"},\"status\":400}"
+  }
+}

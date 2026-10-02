@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbmeta_types/_bulk",
+    "query": "refresh=true",
+    "header": {
+      "Content-Type": [
+        "application/x-ndjson"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"index\":{\"_id\":\"1\"}}\n{\"id\":1,\"b\":true,\"by\":127,\"sh\":32767,\"i\":2147483647,\"l\":9223372036854775807,\"ul\":18446744073709551615,\"hf\":65504,\"f\":3.4028235e+38,\"d\":1.7976931348623157e+308,\"sf\":1234.5678,\"k\":\"é'\\\"\\\\ x\",\"t\":\"Some text\",\"w\":\"wild\",\"mot\":\"match only\",\"dt\":\"2026-10-01T12:34:56.789+05:30\",\"dn\":\"2026-10-01T12:34:56.123456789Z\",\"ip\":\"2001:db8::1\",\"v\":\"1.2.3-beta\",\"bin\":\"AP8=\",\"o\":{\"a\":1,\"s\":\"x\"},\"n\":[{\"a\":1},{\"a\":2}],\"gp\":{\"lat\":41.12,\"lon\":-71.34},\"gs\":{\"type\":\"point\",\"coordinates\":[-71.34,41.12]},\"pt\":{\"x\":1.5,\"y\":2.5},\"shp\":{\"type\":\"point\",\"coordinates\":[1.5,2.5]},\"fl\":{\"x\":\"1\",\"y\":{\"z\":\"2\"}},\"ir\":{\"gte\":1,\"lt\":10},\"dv\":[1.0,2.0,3.0],\"amd\":{\"min\":1.5,\"max\":9.5}}\n{\"index\":{\"_id\":\"2\"}}\n{\"id\":2,\"b\":false,\"by\":-128,\"sh\":-32768,\"i\":-2147483648,\"l\":-9223372036854775808,\"ul\":0,\"hf\":-65504,\"f\":-1.4e-45,\"d\":5e-324,\"sf\":0,\"k\":\"\",\"t\":\"\",\"w\":\"\",\"mot\":\"\",\"dt\":\"1970-01-01\",\"dn\":\"1970-01-01T00:00:00Z\",\"ip\":\"0.0.0.0\",\"v\":\"0.0.0\",\"bin\":\"\",\"o\":{},\"n\":[],\"fl\":{}}\n{\"index\":{\"_id\":\"3\"}}\n{\"id\":3,\"b\":null,\"by\":null,\"sh\":null,\"i\":null,\"l\":null,\"ul\":null,\"hf\":null,\"f\":null,\"d\":null,\"sf\":null,\"k\":null,\"t\":null,\"w\":null,\"mot\":null,\"dt\":null,\"dn\":null,\"ip\":null,\"v\":null,\"bin\":null,\"o\":null,\"n\":null,\"gp\":null,\"gs\":null,\"pt\":null,\"shp\":null,\"fl\":null,\"ir\":null,\"dv\":null,\"amd\":null}\n{\"index\":{\"_id\":\"4\"}}\n{\"id\":4}\n{\"index\":{\"_id\":\"5\"}}\n{\"id\":5,\"i\":[1,2,3],\"k\":[\"a\",\"b\"],\"o\":[{\"a\":1},{\"a\":2}]}\n"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Elastic-Product": [
+        "Elasticsearch"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"errors\":false,\"took\":0,\"items\":[{\"index\":{\"_index\":\"dbmeta_types\",\"_id\":\"1\",\"_version\":1,\"result\":\"created\",\"forced_refresh\":true,\"_shards\":{\"total\":2,\"successful\":1,\"failed\":0},\"_seq_no\":0,\"_primary_term\":1,\"status\":201}},{\"index\":{\"_index\":\"dbmeta_types\",\"_id\":\"2\",\"_version\":1,\"result\":\"created\",\"forced_refresh\":true,\"_shards\":{\"total\":2,\"successful\":1,\"failed\":0},\"_seq_no\":1,\"_primary_term\":1,\"status\":201}},{\"index\":{\"_index\":\"dbmeta_types\",\"_id\":\"3\",\"_version\":1,\"result\":\"created\",\"forced_refresh\":true,\"_shards\":{\"total\":2,\"successful\":1,\"failed\":0},\"_seq_no\":2,\"_primary_term\":1,\"status\":201}},{\"index\":{\"_index\":\"dbmeta_types\",\"_id\":\"4\",\"_version\":1,\"result\":\"created\",\"forced_refresh\":true,\"_shards\":{\"total\":2,\"successful\":1,\"failed\":0},\"_seq_no\":3,\"_primary_term\":1,\"status\":201}},{\"index\":{\"_index\":\"dbmeta_types\",\"_id\":\"5\",\"_version\":1,\"result\":\"created\",\"forced_refresh\":true,\"_shards\":{\"total\":2,\"successful\":1,\"failed\":0},\"_seq_no\":4,\"_primary_term\":1,\"status\":201}}]}"
+  }
+}
