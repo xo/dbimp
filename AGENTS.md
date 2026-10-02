@@ -52,6 +52,7 @@ every other agent read the same rules. Edit this file, not that one.
 | looking for an open question | the end of [docs/PLAN.md](docs/PLAN.md), and of each product document |
 | asking why something is the way it is | the index in [docs/decisions/README.md](docs/decisions/README.md) |
 | looking for the next piece of work | [docs/BACKLOG.md](docs/BACKLOG.md) |
+| resuming work after a crash | [docs/PROGRESS.md](docs/PROGRESS.md) |
 | writing the Couchbase driver | [docs/COUCHBASE.md](docs/COUCHBASE.md), then D23 and W5 |
 | writing the SurrealDB driver | [docs/SURREALDB.md](docs/SURREALDB.md), then W8 |
 | writing the Neo4j driver | [docs/NEO4J.md](docs/NEO4J.md), then W9 |

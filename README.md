@@ -94,6 +94,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/ELASTICSEARCH.md](docs/ELASTICSEARCH.md) | What is known about Elasticsearch, for its driver |
 | [docs/OPENSEARCH.md](docs/OPENSEARCH.md) | What is known about OpenSearch, for its driver |
 | [docs/DYNAMODB.md](docs/DYNAMODB.md) | What is known about Amazon DynamoDB and ScyllaDB Alternator, for its driver |
+| [docs/PROGRESS.md](docs/PROGRESS.md) | Where the work in progress stands, and how to resume it after a crash |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects
