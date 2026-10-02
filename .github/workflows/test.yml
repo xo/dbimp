@@ -91,7 +91,10 @@ jobs:
           go-version-file: dbmeta/test/go.mod
           cache-dependency-path: dbmeta/test/go.sum
       # A driver has the name of its product (D30), and each driver has a
-      # folder under testdata/. A driver also tests each other product of a
+      # folder under testdata/ and a package folder of the same name. A
+      # folder under testdata/ with no package folder holds the recordings
+      # of a driver that is not written yet, and has no test to run. A
+      # driver also tests each other product of a
       # release that its manifest recorded, such as phoenix for avatica,
       # whose name is not the name of a driver (D161). A product that a
       # dbmeta model reads is in the tiers tested and nightly, and any other
@@ -106,7 +109,7 @@ jobs:
             cadences='["tested","nightly"]'
           fi
           tiers=$(echo "$cadences" | jq -r 'join(" ")')
-          drivers=$(ls -d testdata/*/ | xargs -n1 basename | jq -R . | jq -sc .)
+          drivers=$(for d in testdata/*/; do d=$(basename "$d"); if [ -d "$d" ]; then echo "$d"; fi; done | jq -R . | jq -sc .)
           list=$(cd dbmeta/test && go run ./cmd/dbrun list --json $tiers staged)
           recorded=$(for d in $(echo "$drivers" | jq -r '.[]'); do
             jq -c --arg d "$d" '[.entries[].release | {release: ., driver: $d}]' "testdata/$d/manifest.json"
