@@ -18,6 +18,9 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"errors"
@@ -25,6 +28,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"maps"
 	"net/http"
 	"net/url"
 	"os"
@@ -54,8 +58,15 @@ type Script struct {
 	Header map[string]http.Header `json:"header,omitzero"`
 	// Auth is "bearer" to send the password of each URL as a Bearer token,
 	// as for a server that takes a token and no user, such as libSQL with a
-	// JWT (D94). It is "" for basic authentication.
+	// JWT (D94). It is "sigv4" to sign each request with AWS Signature
+	// Version 4, as DynamoDB takes it, with the user of each URL as the
+	// access key and its password as the secret key. It is "" for basic
+	// authentication.
 	Auth string `json:"auth,omitzero"`
+	// Region and Service name the scope of each signature when Auth is
+	// "sigv4", such as "us-east-1" and "dynamodb".
+	Region  string `json:"region,omitzero"`
+	Service string `json:"service,omitzero"`
 }
 
 // Request is one request of the script.
@@ -114,8 +125,9 @@ type Request struct {
 	// or the teardown can name it.
 	Server string `json:"server,omitzero"`
 
-	// auth is the Auth of the script.
-	auth string
+	// auth, region and service are the Auth, the Region and the Service of
+	// the script.
+	auth, region, service string
 }
 
 // maxFollow bounds the pages that one request follows.
@@ -164,11 +176,15 @@ func run(ctx context.Context, dir, release, second string, principals map[string
 	if err := json.Unmarshal(b, &script, json.RejectUnknownMembers(true)); err != nil {
 		return fmt.Errorf("reading the script: %w", err)
 	}
-	if script.Auth != "" && script.Auth != dbimp.AuthBearer {
+	switch {
+	case !slices.Contains([]string{"", dbimp.AuthBearer, authSigV4}, script.Auth):
 		return fmt.Errorf("reading the script: the auth %q: %w", script.Auth, dbimp.ErrInvalidValue)
+	case script.Auth == authSigV4 && (script.Region == "" || script.Service == ""):
+		return fmt.Errorf("reading the script: the auth %q needs a region and a service: %w", script.Auth, dbimp.ErrInvalidValue)
 	}
 	for i := range script.Requests {
-		script.Requests[i].auth = script.Auth
+		r := &script.Requests[i]
+		r.auth, r.region, r.service = script.Auth, script.Region, script.Service
 	}
 	if err := forget(dir, release); err != nil {
 		return err
@@ -527,22 +543,28 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 	u.User = nil
 	path, query, _ := strings.Cut(r.Path, "?")
 	u.Path, u.RawQuery = path, query
-	var body io.Reader
+	// A signature of AWS covers the bytes of the body, so the body is
+	// built before the request.
+	var payload []byte
 	switch {
 	case r.Text != "":
-		body = strings.NewReader(r.Text)
+		payload = []byte(r.Text)
 	case len(r.Body) > 0 && r.Encoding == "cbor":
 		b, err := toCBOR(r.Body)
 		if err != nil {
 			return fmt.Errorf("encoding the body as CBOR: %w", err)
 		}
-		body = bytes.NewReader(b)
+		payload = b
 	case len(r.Body) > 0:
 		v := r.Body.Clone()
 		if err := v.Compact(); err != nil {
 			return fmt.Errorf("compacting the body: %w", err)
 		}
-		body = bytes.NewReader(v)
+		payload = v
+	}
+	var body io.Reader
+	if payload != nil {
+		body = bytes.NewReader(payload)
 	}
 	req, err := http.NewRequestWithContext(ctx, r.Method, u.String(), body)
 	if err != nil {
@@ -558,9 +580,12 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		if r.Auth == "wrong" {
 			pass += "-wrong"
 		}
-		if r.auth == dbimp.AuthBearer {
+		switch r.auth {
+		case dbimp.AuthBearer:
 			req.Header.Set("Authorization", "Bearer "+pass)
-		} else {
+		case authSigV4:
+			signV4(req, payload, user.Username(), pass, r.region, r.service, time.Now())
+		default:
 			req.SetBasicAuth(user.Username(), pass)
 		}
 	}
@@ -600,6 +625,61 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		}
 	}
 	return fmt.Errorf("following %s: more than %d pages", r.Follow, maxFollow)
+}
+
+// authSigV4 is the Auth of a script that signs each request with AWS
+// Signature Version 4.
+const authSigV4 = "sigv4"
+
+// signV4 signs req, whose body is payload, with AWS Signature Version 4, by
+// the access key key and the secret key secret, in the scope of region and
+// service, at the time now. It signs the host and every header of req, and
+// sets X-Amz-Date and Authorization.
+func signV4(req *http.Request, payload []byte, key, secret, region, service string, now time.Time) {
+	now = now.UTC()
+	day, stamp := now.Format("20060102"), now.Format("20060102T150405Z")
+	req.Header.Set("X-Amz-Date", stamp)
+	headers := map[string]string{"host": req.URL.Host}
+	for name, vals := range req.Header {
+		trimmed := make([]string, len(vals))
+		for i, v := range vals {
+			trimmed[i] = strings.Join(strings.Fields(v), " ")
+		}
+		headers[strings.ToLower(name)] = strings.Join(trimmed, ",")
+	}
+	names := slices.Sorted(maps.Keys(headers))
+	var canonical strings.Builder
+	for _, name := range names {
+		canonical.WriteString(name + ":" + headers[name] + "\n")
+	}
+	signed := strings.Join(names, ";")
+	path := req.URL.EscapedPath()
+	if path == "" {
+		path = "/"
+	}
+	query := strings.ReplaceAll(req.URL.Query().Encode(), "+", "%20")
+	request := strings.Join([]string{req.Method, path, query, canonical.String(), signed, hexSHA256(payload)}, "\n")
+	scope := day + "/" + region + "/" + service + "/aws4_request"
+	toSign := "AWS4-HMAC-SHA256\n" + stamp + "\n" + scope + "\n" + hexSHA256([]byte(request))
+	k := []byte("AWS4" + secret)
+	for _, part := range []string{day, region, service, "aws4_request"} {
+		k = hmacSHA256(k, part)
+	}
+	req.Header.Set("Authorization", "AWS4-HMAC-SHA256 Credential="+key+"/"+scope+
+		", SignedHeaders="+signed+", Signature="+hex.EncodeToString(hmacSHA256(k, toSign)))
+}
+
+// hexSHA256 returns the SHA-256 of b in lower case hex.
+func hexSHA256(b []byte) string {
+	sum := sha256.Sum256(b)
+	return hex.EncodeToString(sum[:])
+}
+
+// hmacSHA256 returns the HMAC-SHA256 of s by the key key.
+func hmacSHA256(key []byte, s string) []byte {
+	h := hmac.New(sha256.New, key)
+	h.Write([]byte(s))
+	return h.Sum(nil)
 }
 
 // get sends GET to the URI uri of a page that r follows, with the headers
