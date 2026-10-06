@@ -57,6 +57,9 @@ and each one that is not measured says so. The sources, each read on
   with `grep` in `dburl/scheme.go` and `ls usql/drivers` on 2026-10-01).
 - `dbmeta` has no model for Druid. Its backlog waits for this driver and a
   scheme in `dburl` (`dbmeta/docs/BACKLOG.md`).
+- The driver is `github.com/xo/dbimp/druid` (D164). It reads only (D163).
+  Its integration tests passed on `druid-36.0.0` and on `druid-37.0.0` on
+  2026-10-02, as both principals (step 14).
 
 ## Requests
 
@@ -114,7 +117,10 @@ This fact was measured with `curl` on 37.0.0 on 2026-10-01:
 
 ## The DSN
 
-- Step 9 decides the URL (D27 and D35). godruid takes the schemes `druid`,
+- The DSN is `druid://user:password@host:8888`, with the keys `tls`,
+  `timezone` and `timeout`, and no path (D164). The port is 8888 when the
+  URL names none, with `tls=true` too.
+- godruid takes the schemes `druid`,
   `druids`, `http` and `https`, and the keys `header`, `token`, `jwt`,
   `skip_tls_verify`, `ca_cert`, `client_cert`, `client_key`, `proxy`,
   `user` and `password` (godruid, `druidsql/dsn.go`). kaplanmaxe takes the
@@ -431,6 +437,35 @@ These facts were recorded on each release:
   /druid/coordinator/v1/datasources/<name>` drops it (recorded: "teardown:
   drop the datasource for crud").
 
+These facts were measured by the integration tests of the driver, on 36.0.0
+and 37.0.0 on 2026-10-02:
+
+- A task of the multi-stage engine took from 5 to 12 seconds, and its rows
+  answered a query some seconds after it ended. A dropped datasource left
+  the answers in about one second (`TestIntegrationSchema`).
+- `POST /druid/coordinator/v1/datasources/<name>/markUnused` with an
+  interval drops the rows of that interval from the answers, with no task
+  (`TestIntegrationRoundTrip`).
+- `CLUSTERED BY id` writes a segment of the shard spec `numbered`, whose
+  rows are in the order of `__time` and then of `id`, and a query with no
+  `ORDER BY` reads them in that order (`TestIntegrationSchema`).
+- A segment whose JSON column holds only NULL stores the column as a
+  `VARCHAR`. A datasource whose only segment is such a segment answers the
+  column as a `VARCHAR` (`TestIntegrationRoundTrip`).
+- `ORDER BY` on a column other than `__time`, with no `GROUP BY`, fails with
+  `Query could not be planned`, on a lookup table too
+  (`TestIntegrationFeatures`).
+- A lookup that the Coordinator makes answers `LOOKUP` within about 60
+  seconds (`TestIntegrationFeatures`).
+- The task API refuses `CAST(NULL AS VARCHAR ARRAY)` with `Cannot handle
+  literal [null:VARCHAR NOT NULL ARRAY] of unsupported type [ARRAY]`. A
+  NULL array that `EXTERN` reads from a row of JSON is written
+  (`TestIntegrationRoundTrip`, on 36.0.0).
+- When the host was under heavy load, the Router answered HTTP 503 with
+  `Unable to determine destination` for the state of a task, and the task
+  API refused a task with HTTP 500 that names HTTP 503 of the Overlord. The
+  tests read the state again, and submit such a task again (on 36.0.0).
+
 ## Principals
 
 These facts were recorded on each release:
@@ -448,6 +483,17 @@ These facts were recorded on each release:
 - `dbmeta_user` reads `GET /druid/coordinator/v1/datasources` (recorded:
   "the datasources of the Coordinator").
 
+Step 16 ran the statement for the version through the driver, on 36.0.0 and
+37.0.0 on 2026-10-02 (`TestIntegrationVersion`). `usql` has no driver for
+Druid, so the statement is `SELECT server_type, version FROM sys.servers`,
+which answers for each service:
+
+- `admin` reads one row for each service, `broker`, `coordinator`,
+  `historical`, `middle_manager`, `overlord` and `router`, each with the
+  version of the release, such as `36.0.0`.
+- `dbmeta_user` gets HTTP 403 with `Insufficient permission to view
+  servers: Unauthorized`. So the ordinary user gets no version.
+
 ## Flavors
 
 - No flavor was measured.
@@ -456,7 +502,30 @@ These facts were recorded on each release:
 
 ## Interfaces
 
-Step 10 writes this table from the code.
+`druid/tables_test.go` writes this table from the code (step 10).
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping runs SELECT 1, which checks the credentials. GET /status needs more than the privilege to read. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because the SQL API has no sessions. |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, a decimal, a dbimp.Date, a dbimp.LocalDateTime and a slice, which the driver binds with a type of their own (D164). |
+| `driver.QueryerContext` | yes | The server binds each argument as a typed parameter (D164). |
+| `driver.ExecerContext` | yes | Exec reads the result to its end. The SQL API takes no write, so RowsAffected fails (D163). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because Druid has no transactions (D164). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, after any SET, so an answer has one result. |
+| `driver.RowsColumnTypeScanType` | yes | The header names the SQL type and the native type of each column (D164). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The header names the SQL type of each column, such as BIGINT, or OTHER for a complex type. |
+| `driver.RowsColumnTypeLength` | no | The header names no length. |
+| `driver.RowsColumnTypeNullable` | yes | The header does not say whether a column can be NULL, and every type can be. |
+| `driver.RowsColumnTypePrecisionScale` | no | The header names no precision and no scale, and a DECIMAL is a double. |
+<!-- /dbimp:interfaces -->
 
 ## Faults
 
@@ -529,28 +598,107 @@ answered:
 
 ## Open questions
 
-These wait for Ken:
+Ken settled the first four questions of step 8 on 2026-10-02, and D163 and
+D164 hold the answers:
 
-1. Druid refuses `UPDATE` and `DELETE`. A write goes through the task API,
-   and `REPLACE` of a span of time takes the place of both. DRIVER.md says
-   to stop and ask when a server refuses one of insert, select, update and
-   delete. Can the driver go on, and does it send `INSERT` and `REPLACE` to
-   the task API, which answers before the rows can be read?
-2. An error after some rows ends an answer of HTTP 200 with no error text.
-   Only the missing `]`, or the missing empty line of a lines format, shows
-   it. Does that meet D21, or does it make Druid a target of "When it cannot
-   be a driver"? The driver can read `array` or `arrayLines` and fail when
-   the end is missing.
-3. A `DECIMAL` has the native type `DOUBLE`. Is it an `*apd.Decimal`, as
-   D135 says for a decimal, or a `float64`, as Gemini said?
-4. A multi-value string is a `VARCHAR`, and two values arrive as the JSON
-   text of an array. Does the driver keep it as a `string`, as D135 says
-   for a string column?
-5. `dbmeta_user` cannot read the version, because `GET /status` and
-   `sys.servers` need more than `READ` on the datasources. Does the
-   `dbmeta` entry give its role more, or does the version stay out of reach
-   for an ordinary user?
-6. Two tasks of the multi-stage engine at once never ended on the nano
-   quickstart, which has two slots. Does the `dbmeta` entry give the
-   Middle Manager more slots, so that the tests of the driver can write
-   without a wait?
+1. The driver reads only. It sends `INSERT` and `REPLACE` to the SQL API,
+   which refuses them, and never to the task API (D163).
+2. The driver reads `arrayLines`, and an answer that ends with no empty line
+   is an error that wraps `dbimp.ErrIncomplete` (D164).
+3. A `DECIMAL` is a `float64` (D164).
+4. A multi-value `VARCHAR` with more than one value is a `[]any` of its
+   strings, and one value stays a `string` (D164).
+
+Two facts wait for `dbmeta`, and not for the driver (D164): `dbmeta_user`
+cannot read the version, and the nano quickstart has two task slots, so the
+tests run one task at a time.
+
+Ken answered the questions of the steps after step 9 on 2026-10-07, and D164
+holds the answers:
+
+1. The driver reads a plain string whose text is a JSON array of two or more
+   strings, such as `["x","y"]`, as a `[]any` too, because the server names
+   it as it names a multi-value string (`druid/types.go`).
+2. The driver cancels a query by its id when the context of the query ends
+   before the driver reads the whole answer, and when the caller closes the
+   rows before their end, as Neo4j does (D105).
+3. The port is 8888 when the DSN names none, with `tls=true` too, as Pinot
+   keeps 8099 (D129).
+4. `dbrun` gives the `url` of each principal as `http://`, and the tests read
+   it as the DSN `druid://` (`druid/integration_test.go`). Ken asked the
+   `dbmeta` session to give the six new entries the scheme of their driver,
+   as D156 did for Avatica. Until it does, the conversion stays in the
+   tests.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It
+was written on 2026-10-02 from the staged code. A fact of Couchbase comes
+from [COUCHBASE.md](COUCHBASE.md), and a fact of Druid from the sections
+above.
+
+### The server
+
+| | Couchbase | Apache Druid |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /druid/v2/sql` on the Router, with `query`, `resultFormat`, the three keys of the header, `context` and `parameters` (Requests) |
+| Database | The key `query_context` of the body | None. Every datasource is in the schema `druid` (The DSN) |
+| Language | SQL++, which is close to SQL | SQL, parsed by Calcite. A write is SQL of the multi-stage engine, which only the task API runs (Requests) |
+| DDL | In SQL++ | None. A write makes a datasource, and the Coordinator drops it. Every statement of DDL is a syntax error (Statements) |
+| Parameters | `?`, `$1` and `$name` | `?` only, each a typed `{type, value}` (Parameters) |
+| Framing | One body for the whole result, which does not page | One body for the whole result, which the server writes as the query runs. `arrayLines` writes one row on each line, and an empty line at the end (Responses) |
+| Columns | `signature`, before the first row | The three rows of the header: the names, the native types and the SQL types (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement |
+| Errors | Can come with HTTP 200, after some rows | Before any row, a status that is not 2xx with a JSON object. After some rows, HTTP 200 with no empty line at the end and no other sign (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON, with a SQL type and a native type for each column. A time is ISO 8601 text, an array is JSON text, a JSON value is its text, and a sketch is base64 (Types) |
+| Cancel | The server stops a query when the client leaves | The query runs on when the client leaves, and `DELETE /druid/v2/sql/<sqlQueryId>` stops it, which the driver sends when the context ends or the rows close early (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None. `BEGIN` is a syntax error (Transactions) |
+| Authentication | Basic, or `creds` in the body | Basic |
+| Default port | 8093, or 18093 with TLS | 8888 on the Router |
+
+The differences that a caller sees:
+
+- Every write fails with the refusal of the server, because the SQL API
+  takes none (D163).
+- A query has no database, and `WithDatabase` fails (D164).
+- The server binds each argument as a typed parameter that the driver names
+  from the Go type of the argument, and a named argument is refused (D164).
+- A result that the server cut short after some rows fails with
+  `dbimp.ErrIncomplete` and `druid.ErrCut`, because the answer ends with no
+  empty line (D164).
+- The server does not stop a query when the client leaves, so the driver
+  cancels it by its id when its context ends (D164).
+
+### The driver
+
+| | `couchbase` | `druid` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-02 | About 1300 lines in 8 files | About 1500 lines in 8 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `User`, `Password`, `TimeZone`, `Timeout` |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`, as `WithQueryContext` does. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase` and `WithTimeZone`, through `WithOptions` or an argument (D109). `WithTimeout` sends `timeout` in the context. `WithReadonly` changes nothing, because every statement is read-only. `WithDatabase` gives `dbimp.ErrNotSupported`. `WithParameter("context")` replaces the whole context, the id of the query too |
+| Arguments | Sent to the server as `args` and `$name` | Sent as `parameters`, each with the SQL type of its Go type: `BIGINT`, `DOUBLE`, `BOOLEAN`, `VARCHAR`, `TIMESTAMP` in milliseconds, `DATE`, `DECIMAL` and `ARRAY`. A named argument, a `[]byte`, `NaN` and an infinity are refused (`druid/types.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | A reader of its own for `arrayLines`, which keeps the last two bytes of the body to see the empty line (`druid/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | `ColumnTypeDatabaseTypeName`, the SQL type, and `ColumnTypeScanType`, from the SQL type or the native type of `OTHER`. Every column can be NULL |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the column: `int64`, `float64` for a `DECIMAL` too, `bool`, `string`, `[]any` for a multi-value string with more than one value, `time.Time`, `dbimp.Date`, `[]any` for an array, the decoded value of JSON, and `[]byte` for a sketch (D164) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported`, because the SQL API changes no rows (D163) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D164) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | Each query has its own `sqlQueryId`. When the context ends before the driver read the whole answer, the driver sends `DELETE /druid/v2/sql/<sqlQueryId>` with a limit of 5 seconds (D164) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Code, Category, Persona, Class, Message}`, which unwraps to `*dbimp.StatusError`, and `ErrCut` for an answer with no empty line |
+| Authentication | Basic | Basic, and the driver follows no redirect, so the credentials go to the host of the DSN only (D164) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error` and `ErrCut` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a time and a sketch too, where Couchbase gives
+  JSON shapes (D135 and D164).
+- A `DECIMAL` is a `float64`, where D135 gives a decimal an `*apd.Decimal`,
+  because the server computes it as a double (D164).
+- A multi-value string with more than one value is a `[]any`, so one column
+  can give a `string` in one row and a `[]any` in the next (D164).
+- `WithReadonly` succeeds and does nothing, where Couchbase sends
+  `readonly`, because the SQL API takes no write (D163).
+- `RowsAffected` always returns an error, where Couchbase counts every
+  statement by `mutationCount` (D163).
+- A result that the server cut short fails with `ErrCut` and
+  `dbimp.ErrIncomplete` after its rows (D164).

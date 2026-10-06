@@ -29,7 +29,7 @@ They can be lost, so the files below are the record.
 
 | Target | Work item | Step reached | On disk | Next |
 | --- | --- | --- | --- | --- |
-| Apache Druid | W25 | Steps 10 to 17a: in progress | The decisions D163 and D164. An agent writes `druid/`, its tests and the comparison of step 17a. Nothing of `druid/` is committed yet | Check `druid/` on disk, and resume from step 10 if it is missing |
+| Apache Druid | W25 | Step 17a: done | `druid/`, its tests, and DRUID.md with the comparison of step 17a, staged for Ken | Ken reviews the staged driver and its open questions |
 | Apache Drill | W26 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D165 | Step 10, after the driver before it in D162 |
 | Apache Solr | W27 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D166 | Step 10, after the driver before it in D162 |
 | Elasticsearch | W28 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D167 | Step 10, after the driver before it in D162 |
@@ -44,7 +44,4 @@ Elasticsearch, OpenSearch, then DynamoDB.
 
 ## Waiting for Ken
 
-- Step 20 of Avatica (W24): the requests to `dburl`, `dbmeta` and `usql`.
-- W23 can be marked Done, because each consumer reported.
-- Whether QuestDB and GreptimeDB get no driver, as D88 decided for CrateDB,
-  because each speaks a wire protocol that `usql` reaches already.
+- The review and the commit of the staged Druid driver (W25).

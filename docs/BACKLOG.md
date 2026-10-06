@@ -1163,7 +1163,7 @@ driver, as both principals. That closed this item.
    `Version` can run `SELECT sqlite_version()`, which gives the version of
    SQLite, for both principals. The driver has no transactions (D144).
 
-## W23. Write the libSQL and Turso driver
+## W23. Write the libSQL and Turso driver. Done.
 
 libSQL and Turso are the next target, by D73. Ken named them at step 1 on
 2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 is in
@@ -1357,12 +1357,42 @@ is the gate of step 19: https://github.com/xo/dbimp/releases/tag/v0.10.0.
 
 Step 20 waits for Ken. The requests above name `v0.10.0`.
 
+Step 20 sent the requests of step 16 on 2026-10-07, at Ken's word, to the
+`dburl`, `usql` and `dbmeta` sessions, each naming `v0.10.0`. This item
+stays open until each session reports its change as staged.
+
 ## W25. Write the Apache Druid driver
 
 Apache Druid is a target after Avatica, by D162. Ken named it at step 1 on
 2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
 [DRUID.md](DRUID.md), and the package is `druid`. `dbrun` starts `druid-36.0.0` and `druid-37.0.0`. D154 gave it a driver of its own. `dburl` has no scheme for it, and `usql` has no driver.
 The six drivers of D162 go through step 9 together, before step 10 of any.
+
+Steps 2 to 9 went in on 2026-10-01 and 2026-10-02: the recordings of
+`druid-36.0.0` and `druid-37.0.0` as both principals, the survey, and
+DRUID.md with its type table. Ken decided D163 and D164 on 2026-10-02.
+
+Steps 10 to 17a went in on 2026-10-02, staged for Ken's review:
+
+- Steps 10 to 13: the package `druid/`, its tables, the contract, the replay
+  tests, the unit tests, and the DSN tests. The fuzz test ran for 60 seconds
+  and found nothing. The replay server writes a recorded `array` body as
+  lines, because most recordings asked for `array`.
+- Steps 14 and 14a: the integration tests passed on both releases. A round
+  trip writes each value through a task, so it takes about 45 minutes for
+  each release.
+- Step 17a: `## Compared with Couchbase` is in DRUID.md.
+
+1. To `dburl`: please add the scheme `druid`, with the `GoPackage`
+   `github.com/xo/dbimp/druid` and `RequiresCGO` false. The URL is
+   `druid://user:password@host:port`, with no path, and the keys `tls`,
+   `timezone` and `timeout` (D164).
+2. To `dbmeta`: the `url` of the Druid entry is `http://`, and the driver
+   takes `druid://` (D164). `dbmeta_user` cannot read the version, and the
+   nano quickstart has two task slots.
+3. To `usql`: `drivers/druid/druid.go` imports `github.com/xo/dbimp/druid`.
+   Its `Version` can run `SELECT server_type, version FROM sys.servers`,
+   which answers HTTP 403 to `dbmeta_user`.
 
 ## W26. Write the Apache Drill driver
 

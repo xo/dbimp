@@ -43,3 +43,12 @@ is read only.
 
 Two facts wait for `dbmeta`, and not for this decision: `dbmeta_user`
 cannot read the version, and the nano quickstart has two task slots.
+
+Ken added these on 2026-10-07, after step 17a:
+
+12. A plain string whose text is a JSON array of two or more strings is a
+    `[]any`, because the server names it as it names a multi-value string.
+13. The driver also sends the cancel of item 8 when the caller closes the
+    rows before the end of the answer, as Neo4j does (D105).
+14. The default port is 8888 with `tls=true` too, as Pinot keeps 8099
+    (D129).
