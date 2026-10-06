@@ -38,8 +38,8 @@ released in `v0.1.0`, `surrealdb` and `neo4j`, which the tags `v0.2.0` and
 other three, `arangodb`, which was first released in `v0.5.0`, `databend`,
 which was first released in `v0.6.0`, `pinot`, which was first released in
 `v0.7.0`, `rqlite`, which was first released in `v0.8.0`, and `libsql`,
-which was first released in `v0.9.0`, and `avatica`, which was first
-released in `v0.10.0`.
+which was first released in `v0.9.0`, `avatica`, which was first
+released in `v0.10.0`, and `druid`, which was first released in `v0.11.0`.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -95,6 +95,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/OPENSEARCH.md](docs/OPENSEARCH.md) | What is known about OpenSearch, for its driver |
 | [docs/DYNAMODB.md](docs/DYNAMODB.md) | What is known about Amazon DynamoDB and ScyllaDB Alternator, for its driver |
 | [docs/PROGRESS.md](docs/PROGRESS.md) | Where the work in progress stands, and how to resume it after a crash |
+| [docs/TRINO.md](docs/TRINO.md) | What is known about Trino and Presto, for their driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects

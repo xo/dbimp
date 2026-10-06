@@ -19,22 +19,23 @@ into a scratch folder, and run that copy.
    `main`, as a commit that says what it holds, with no commit that is
    only a checkpoint. Do not push. Ken decides when `main` is pushed.
 
-## The six drivers of D162
+## The drivers after Avatica
 
 Ken named six targets after Avatica on 2026-10-01 (D162). Each one goes
 through step 8a of [DRIVER.md](DRIVER.md), and then all six go through step
-9 together. No Go code of a driver exists yet. The scratch notes of each
-target are outside the repository, in the scratch folder of the session.
-They can be lost, so the files below are the record.
+9 together. The scratch notes of each target are outside the repository, in
+the scratch folder of the session. They can be lost, so the files below are
+the record.
 
 | Target | Work item | Step reached | On disk | Next |
 | --- | --- | --- | --- | --- |
-| Apache Druid | W25 | Step 17a: done | `druid/`, its tests, and DRUID.md with the comparison of step 17a, staged for Ken | Ken reviews the staged driver and its open questions |
+| Apache Druid | W25 | Released in `v0.11.0` | The driver, its tests and DRUID.md. Its integration jobs in CI had not finished when it was tagged | Watch the nightly run, which runs every type of the round trip |
 | Apache Drill | W26 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D165 | Step 10, after the driver before it in D162 |
 | Apache Solr | W27 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D166 | Step 10, after the driver before it in D162 |
 | Elasticsearch | W28 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D167 | Step 10, after the driver before it in D162 |
 | OpenSearch | W29 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D168 | Step 10, after the driver before it in D162 |
 | DynamoDB | W30 | Step 9: decided | Recordings, `features.json`, `docs/DYNAMODB.md` with its type table, and D169. D163 dropped Alternator | Step 10, after OpenSearch |
+| Trino and Presto | W31 | Step 1: done | D173 and a draft `docs/TRINO.md` | An agent measures steps 2 to 8a, one server at a time |
 
 ## Next
 

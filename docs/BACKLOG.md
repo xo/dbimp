@@ -45,7 +45,7 @@ from Ken on 2026-09-30, who asked for one table of every type of every
 driver after D135, and W21 from D138. W22 came from Ken on 2026-09-30,
 who named rqlite as the next target at step 1. W23 came from Ken on 2026-10-01,
 who named libSQL and Turso as the next target at step 1. W24 came from Ken on
-2026-10-01, who named Avatica as the next driver at step 1. W25 to W30 came
+2026-10-01, who named Avatica as the next driver at step 1. W25 to W30 and W31 came
 from Ken on 2026-10-01, who named Druid, Drill, Solr, Elasticsearch,
 OpenSearch and DynamoDB as the next six at step 1 (D162).
 
@@ -1394,6 +1394,16 @@ Steps 10 to 17a went in on 2026-10-02, staged for Ken's review:
    Its `Version` can run `SELECT server_type, version FROM sys.servers`,
    which answers HTTP 403 to `dbmeta_user`.
 
+Ken committed steps 2 to 17a as `5bf3b5b`, and the fixes of the cancel and of
+the CI as `f134612` and `6c20b76`. At Ken's word, the session tagged
+`v0.11.0` on `6c20b76` and published it on 2026-10-07, which is the gate of
+step 19, before the integration jobs of Druid had finished:
+https://github.com/xo/dbimp/releases/tag/v0.11.0. The driver was tested on
+the machine of the author only on 36.0.0 and 37.0.0. Step 20 sent the
+requests of step 16 on the same day. The `dburl` session released the scheme
+`druid` in dburl `v0.42.0` as provisional, and waits to check it against
+`v0.11.0`. The `dbmeta` session builds its Dialect for Druid on the driver.
+
 ## W26. Write the Apache Drill driver
 
 Apache Drill is a target after Avatica, by D162. Ken named it at step 1 on
@@ -1428,3 +1438,14 @@ Amazon DynamoDB is a target after Avatica, by D162. Ken named it at step 1 on
 2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
 [DYNAMODB.md](DYNAMODB.md), and the package is `dynamodb`. `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, and ScyllaDB Alternator as `alternator-2025.1` and `alternator-2026.3`, which is a flavor. DynamoDB Local checks no key, so it has no ordinary user, and Alternator has one. `usql` reaches DynamoDB through `btnguyen2k/godynamo`, under the `dburl` scheme `godynamo`, and this driver can replace it (D24).
 The six drivers of D162 go through step 9 together, before step 10 of any.
+
+## W31. Write the Trino and Presto driver
+
+Trino and Presto are the next target, by D173. Ken named them on 2026-10-07
+at step 1. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[TRINO.md](TRINO.md). One driver, `trino`, serves both, and Presto is a
+flavor (D173). `dbrun` starts `trino-476`, `trino-483` and `presto-0.299`,
+which `dbmeta` reads already. `dburl` has the schemes `trino` and `presto`,
+and `usql` has a driver for each (`trinodb/trino-go-client` and
+`prestodb/presto-go-client`), which this driver can replace (D24).
+

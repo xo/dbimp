@@ -27,7 +27,8 @@ holds the second and the third. The fifth, in
 `pinot/`, was first released in `v0.7.0` (W19). The eighth, in
 `rqlite/`, was first released in `v0.8.0` (W22). The ninth, in
 `libsql/`, was first released in `v0.9.0` (W23). The tenth, in
-`avatica/`, was first released in `v0.10.0` (W24). The
+`avatica/`, was first released in `v0.10.0` (W24). The eleventh, in
+`druid/`, was first released in `v0.11.0` (W25). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -70,7 +71,8 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Apache Solr driver | [docs/SOLR.md](docs/SOLR.md), then W27 and D162 |
 | writing the Elasticsearch driver | [docs/ELASTICSEARCH.md](docs/ELASTICSEARCH.md), then W28 and D162 |
 | writing the OpenSearch driver | [docs/OPENSEARCH.md](docs/OPENSEARCH.md), then W29 and D162 |
-| writing the Amazon DynamoDB and ScyllaDB Alternator driver | [docs/DYNAMODB.md](docs/DYNAMODB.md), then W30 and D162 |
+| writing the Amazon DynamoDB driver | [docs/DYNAMODB.md](docs/DYNAMODB.md), then W30 and D162 |
+| writing the Trino and Presto driver | [docs/TRINO.md](docs/TRINO.md), then W31, D162 and D173 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |
