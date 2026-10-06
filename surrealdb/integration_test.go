@@ -212,6 +212,15 @@ func is3(t *testing.T) bool {
 	return m >= 3
 }
 
+// refusesOtherDatabase reports whether the server refuses a user of a
+// database that names another one, which 3.3.0 does, and 3.2.4 and earlier
+// do not.
+func refusesOtherDatabase(t *testing.T) bool {
+	t.Helper()
+	major, minor := release(t)
+	return major > 3 || major == 3 && minor >= 3
+}
+
 // get returns the body of a GET of url.
 func get(t *testing.T, url string) string {
 	t.Helper()
@@ -918,15 +927,16 @@ func TestIntegrationOptions(t *testing.T) {
 		equal(t, "the database", query(t, db, current), [][][]any{{{"dbmeta"}}})
 		all, err := queryErr(t, db, current, WithDatabase("other"))
 		switch {
-		case p.name == "ordinary" && is3(t):
-			// 3.x refuses a user of dbmeta in another database, with HTTP
+		case p.name == "ordinary" && refusesOtherDatabase(t):
+			// 3.3.0 refuses a user of dbmeta in another database, with HTTP
 			// 401 (measured by hand on 3.3.0).
 			refused(t, "the ordinary user in another database", err, "authentication")
 		case err != nil:
 			t.Errorf("%s with WithDatabase: %v", current, err)
 		default:
-			// 2.7.0 lets a user of dbmeta name another database (measured by
-			// hand on 2.7.0).
+			// 2.7.0, 3.1.6 and 3.2.4 let a user of dbmeta name another
+			// database (measured by hand on 2.7.0 and 3.2.4, and by the
+			// nightly run on 3.1.6).
 			equal(t, "the database with WithDatabase", all, [][][]any{{{"other"}}})
 		}
 		equal(t, "a statement with WithParameter", query(t, db, "RETURN 1", WithParameter("id", int64(7))), [][][]any{{{int64(1)}}})
