@@ -438,6 +438,12 @@ func (r *rows) fail(err error) error {
 	if r.st != nil {
 		_ = r.st.Close()
 	}
+	// When the context ends, the transport can close the connection before
+	// the read sees the end, and the read then fails with "use of closed
+	// network connection". The caller must see that its context ended (D36).
+	if cerr := r.ctx.Err(); cerr != nil && !errors.Is(err, cerr) {
+		err = fmt.Errorf("%w: %w", cerr, err)
+	}
 	if rerr := r.release(); rerr != nil {
 		err = errors.Join(err, rerr)
 	}
