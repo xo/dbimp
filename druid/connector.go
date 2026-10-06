@@ -197,8 +197,15 @@ func (w *watch) end() {
 		return
 	}
 	w.once.Do(func() {
-		if !w.stop() {
+		switch {
+		case !w.stop():
 			<-w.done
+		case w.err() != nil:
+			// The context ended, and the transport saw it before the
+			// function of the watch started, so stop kept it from running.
+			// The query still runs on the server, and the watch cancels it
+			// here.
+			w.now()
 		}
 	})
 }

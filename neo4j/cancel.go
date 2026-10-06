@@ -44,6 +44,9 @@ type watch struct {
 	// now stops the statement on the server at once, for an early Close
 	// (D105).
 	now func() error
+	// ended returns the cause of the end of the context, or nil while the
+	// context lives.
+	ended func() error
 }
 
 // watch returns a watch of ctx for a statement of the connection, which
@@ -54,6 +57,7 @@ func (c *conn) watch(ctx context.Context, how string) *watch {
 		return nil
 	}
 	w := &watch{done: make(chan struct{})}
+	w.ended = func() error { return context.Cause(ctx) }
 	w.now = func() error { return c.stopStatement(ctx, how) }
 	w.stop = context.AfterFunc(ctx, func() {
 		defer close(w.done)
@@ -90,8 +94,17 @@ func (w *watch) end() (bool, error) {
 		return false, nil
 	}
 	w.once.Do(func() {
-		if !w.stop() {
+		switch {
+		case !w.stop():
 			<-w.done
+			w.ran = true
+		case w.ended() != nil:
+			// The context ended, and the transport saw it before the
+			// function of the watch started, so stop kept it from running.
+			// The statement still runs on the server, and the watch stops
+			// it here.
+			w.cause = w.ended()
+			w.err = w.now()
 			w.ran = true
 		}
 	})

@@ -51,6 +51,10 @@ type watch struct {
 	once sync.Once
 	ran  bool
 	err  error
+	// kill kills the query at once, and ended returns the error of the
+	// context, or nil while the context lives.
+	kill  func() error
+	ended func() error
 }
 
 // watch returns a watch of ctx for the query that tag names in the database
@@ -60,10 +64,11 @@ func (c *conn) watch(ctx context.Context, db, tag string) *watch {
 	if tag == "" {
 		return nil
 	}
-	w := &watch{done: make(chan struct{})}
+	w := &watch{done: make(chan struct{}), ended: ctx.Err}
+	w.kill = func() error { return c.c.kill(ctx, db, tag) }
 	w.stop = context.AfterFunc(ctx, func() {
 		defer close(w.done)
-		w.err = c.c.kill(ctx, db, tag)
+		w.err = w.kill()
 	})
 	return w
 }
@@ -75,8 +80,16 @@ func (w *watch) end() (bool, error) {
 		return false, nil
 	}
 	w.once.Do(func() {
-		if !w.stop() {
+		switch {
+		case !w.stop():
 			<-w.done
+			w.ran = true
+		case w.ended() != nil:
+			// The context ended, and the transport saw it before the
+			// function of the watch started, so stop kept it from running.
+			// The query still runs on the server, and the watch kills it
+			// here.
+			w.err = w.kill()
 			w.ran = true
 		}
 	})
