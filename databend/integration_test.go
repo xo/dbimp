@@ -255,8 +255,12 @@ func TestIntegrationErrors(t *testing.T) {
 		for rows.Next() {
 			n++
 		}
-		if err := rows.Err(); code(err) != 1006 || !errors.Is(err, dbimp.ErrIncomplete) {
-			t.Errorf("an error after %d rows gave %v, want the code 1006, which wraps dbimp.ErrIncomplete", n, err)
+		// The server can fail before it sends the first page, on a slow
+		// runner, and an error before any row does not wrap
+		// dbimp.ErrIncomplete (D107).
+		err = rows.Err()
+		if code(err) != 1006 || (n > 0) != errors.Is(err, dbimp.ErrIncomplete) {
+			t.Errorf("an error after %d rows gave %v, want the code 1006, which wraps dbimp.ErrIncomplete only after a row", n, err)
 		}
 		cfg, err := databend.ParseDSN(dsn(t, p))
 		if err != nil {
