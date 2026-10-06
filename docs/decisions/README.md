@@ -190,3 +190,5 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D167](D167-the-elasticsearch-driver.md) | The Elasticsearch driver | Decided |
 | [D168](D168-the-opensearch-driver.md) | The OpenSearch driver | Decided |
 | [D169](D169-the-dynamodb-driver.md) | The DynamoDB driver | Decided |
+| [D170](D170-questdb-and-greptimedb-get-no-driver.md) | QuestDB and GreptimeDB get no driver | Decided |
+| [D171](D171-no-ddl-in-the-drivers-and-a-read-only-sql-layer-later.md) | No DDL in the drivers, and a read only SQL layer later | Decided |
