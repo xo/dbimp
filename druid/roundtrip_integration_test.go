@@ -7,7 +7,9 @@ import (
 	"encoding/json/v2"
 	"fmt"
 	"math"
+	"os"
 	"reflect"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -375,15 +377,31 @@ func checkType(t *testing.T, db *sql.DB, query, typ string) {
 	}
 }
 
+// envFull is the environment variable that makes the round trip run every
+// type.
+const envFull = "DBIMP_FULL"
+
+// quickTypes are the types of the round trip that a run reads when envFull is
+// not set: an integer, a string and a time.
+var quickTypes = []string{"BIGINT", "VARCHAR", "TIMESTAMP"}
+
 // TestIntegrationRoundTrip runs dbimptest.RoundTrip for each type that
 // features.json marks yes, as each principal. The administrator writes each
 // value through the task API, and the principal reads it through the
 // driver.
+//
+// Each write is a task of the server that takes 5 to 12 seconds, so the round
+// trip of every type takes more than an hour for a release. A run reads the
+// types of quickTypes only, unless the environment variable DBIMP_FULL is set,
+// which the workflow sets for the nightly run and for a manual one.
 func TestIntegrationRoundTrip(t *testing.T) {
 	s := newAdminAPI(t)
 	forEach(t, func(t *testing.T, p principal, db *sql.DB) {
 		for _, rt := range rtTypes(t, db) {
 			t.Run(rt.typ, func(t *testing.T) {
+				if os.Getenv(envFull) == "" && !slices.Contains(quickTypes, rt.typ) {
+					t.Skipf("the round trip of %s runs when %s is set, because each write is a task of the server", rt.typ, envFull)
+				}
 				connector, err := druid.Driver{}.OpenConnector(dsn(t, p))
 				if err != nil {
 					t.Fatal(err)

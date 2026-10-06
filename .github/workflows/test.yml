@@ -171,7 +171,12 @@ jobs:
           export "${prefix}_DSN=$(echo "$info" | jq -r '.[0].url')"
           export "${prefix}_ORDINARY_DSN=$(echo "$info" | jq -r '[.[0].principals[]? | select(.role == "user") | .url][0] // empty')"
           export "${prefix}_SECOND_ADDRESS=$(echo "$info" | jq -r '.[0].secondAddress // empty')"
-          go test -race -count=1 -run Integration -v "./$driver/..."
+          # A run of the schedule or a manual run reads every type of a
+          # round trip that is slow, and a push reads a few (D172).
+          if [ "${{ github.event_name }}" = schedule ] || [ "${{ github.event_name }}" = workflow_dispatch ]; then
+            export DBIMP_FULL=1
+          fi
+          go test -race -count=1 -timeout 150m -run Integration -v "./$driver/..."
       - name: Logs
         if: failure()
         working-directory: dbmeta/test
