@@ -199,3 +199,5 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D176](D176-the-clickhouse-driver-reads-json-and-kills-queries.md) | The ClickHouse driver reads JSON and kills queries | Decided |
 | [D177](D177-the-rest-of-the-clickhouse-driver.md) | The rest of the ClickHouse driver | Decided |
 | [D178](D178-answers-for-drill-solr-elasticsearch-opensearch-and-dynamodb.md) | Answers for Drill, Solr, Elasticsearch, OpenSearch and DynamoDB | Decided |
+| [D179](D179-the-voltdb-driver-speaks-http.md) | The VoltDB driver speaks HTTP | Decided. Amended by D180 |
+| [D180](D180-voltdb-gets-no-driver-here.md) | VoltDB gets no driver here | Amends D179 |

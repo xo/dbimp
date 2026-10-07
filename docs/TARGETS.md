@@ -232,7 +232,9 @@ nothing about these targets is measured:
 
 - Azure Cosmos DB. `usql` has a driver, and a Linux emulator exists.
 - Apache Ignite. dbmeta D66 names it.
-- VoltDB. dbmeta D66 names it.
+- VoltDB: no driver here (D180). Ken moved it into the order on 2026-10-08
+  (D179), and the `dbmeta` session then found that neither release serves an
+  HTTP interface. See [VOLTDB.md](VOLTDB.md).
 - Amazon Athena, which is cloud only.
 - Prometheus, with PromQL.
 - VictoriaMetrics, with PromQL.

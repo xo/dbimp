@@ -105,3 +105,12 @@ Elasticsearch, OpenSearch and DynamoDB (W26 to W30). Ken decided them on
     driver is unchanged, because `flavor` is a key of its DSN already (D175),
     and so a `presto://` URL against a Trino server fails with the error of the
     server and not with a silent switch of flavor.
+17. This amends item 15 for one case. On OpenSearch 2.19.6 the legacy
+    `DESCRIBE TABLES` names every column `keyword` and sends numbers in
+    `NUM_PREC_RADIX`, `NULLABLE` and `ORDINAL_POSITION`. The OpenSearch driver
+    reads such a number as the value that arrived, an `int64` or a `float64`,
+    and does not fail the row. The schema of that server is wrong, so the value
+    is a decoded value and not text in place of one (hard rule 3).
+    `ColumnTypeScanType` still names the type of the schema. OPENSEARCH.md
+    says that this is a fault of 2.19.6. Ken decided this on 2026-10-08, at the
+    request of `dbmeta`, which has no column source on 2.19.6 otherwise.

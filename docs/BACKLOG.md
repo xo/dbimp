@@ -1734,3 +1734,11 @@ Ken committed the driver as `db7a4eb`, and the pin of `dbmeta` at `v0.3.0` as
 `54d087b`. At Ken's word, the session tagged `v0.13.0` on `54d087b` after CI
 passed 32 of 32 jobs, and published it on 2026-10-07:
 https://github.com/xo/dbimp/releases/tag/v0.13.0. Step 20 waits for Ken.
+
+## W33. Write the VoltDB driver. Closed, no driver.
+
+VoltDB was the next target after ClickHouse, by D179. Ken named it on
+2026-10-08 at step 1. Step 2 found that neither release that `dbrun` starts
+serves an HTTP interface, so Ken decided on the same day that dbimp writes no
+driver for it (D180). [VOLTDB.md](VOLTDB.md) holds the facts. `usql` keeps its
+driver on the native protocol.

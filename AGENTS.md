@@ -78,6 +78,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Amazon DynamoDB driver | [docs/DYNAMODB.md](docs/DYNAMODB.md), then W30 and D162 |
 | writing the Trino and Presto driver | [docs/TRINO.md](docs/TRINO.md), then W31, D162 and D173 |
 | writing the ClickHouse driver | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md), then W32 and D174 |
+| asking why VoltDB has no driver here | [docs/VOLTDB.md](docs/VOLTDB.md), then D180 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |

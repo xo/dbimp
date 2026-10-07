@@ -100,6 +100,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/PROGRESS.md](docs/PROGRESS.md) | Where the work in progress stands, and how to resume it after a crash |
 | [docs/TRINO.md](docs/TRINO.md) | What is known about Trino and Presto, for their driver |
 | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md) | What is known about ClickHouse over HTTP, for its driver |
+| [docs/VOLTDB.md](docs/VOLTDB.md) | What is known about VoltDB, and why it has no driver here |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects
