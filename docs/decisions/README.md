@@ -198,3 +198,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D175](D175-the-trino-and-presto-driver.md) | The Trino and Presto driver | Decided |
 | [D176](D176-the-clickhouse-driver-reads-json-and-kills-queries.md) | The ClickHouse driver reads JSON and kills queries | Decided |
 | [D177](D177-the-rest-of-the-clickhouse-driver.md) | The rest of the ClickHouse driver | Decided |
+| [D178](D178-answers-for-drill-solr-elasticsearch-and-opensearch.md) | Answers for Drill, Solr, Elasticsearch and OpenSearch | Decided |

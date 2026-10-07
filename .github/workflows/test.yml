@@ -37,7 +37,15 @@ env:
   # and a59c0c1 prints the URL of D148 for libSQL. 7cbe9bf is the release
   # v0.3.0 of dbmeta. It prints the field api, the http:// address (dbmeta
   # D167), the URL of D175 for Trino and Presto, and for ClickHouse the HTTP
-  # port 8123 as secondAddress and the user dbmeta_user.
+  # port 8123 as secondAddress and the user dbmeta_user. The same release
+  # starts each Solr release with the URL solr://, which holds no path, and
+  # with the user dbmeta_user, so the Solr tests need no other pin (W27 and
+  # D166). It also starts each Elasticsearch release with the URL
+  # elasticsearch:// and the user dbmeta_user, who reads the indices dbmeta*
+  # only, so the Elasticsearch tests need no other pin (W28 and D167). It
+  # starts each OpenSearch release with the URL opensearch:// and the user
+  # dbmeta_user, who reads the indices dbmeta* only, so the OpenSearch tests
+  # need no other pin either (W29 and D168).
   DBMETA_COMMIT: 7cbe9bf14c732b4730c992a18003395bd73635dd
   DBMETA_OWNER: dbimp-ci
   DBMETA_RUNNER: docker
@@ -102,7 +110,10 @@ jobs:
       # whose name is not the name of a driver (D161). A product that a
       # dbmeta model reads is in the tiers tested and nightly, and any other
       # is Staged, with the tier that it would have as its cadence (dbmeta
-      # D120). A driver with no release fails the job, so that a change in
+      # D120). The manifest of the DynamoDB driver records the releases of
+      # Alternator too, which the driver does not serve, because Alternator
+      # refuses every PartiQL statement (D163). The list drops them for that
+      # driver. A driver with no release fails the job, so that a change in
       # dbmeta never drops the tests of a driver without a word.
       - name: List
         id: list
@@ -115,7 +126,7 @@ jobs:
           drivers=$(for d in testdata/*/; do d=$(basename "$d"); if [ -d "$d" ]; then echo "$d"; fi; done | jq -R . | jq -sc .)
           list=$(cd dbmeta/test && go run ./cmd/dbrun list --json $tiers staged)
           recorded=$(for d in $(echo "$drivers" | jq -r '.[]'); do
-            jq -c --arg d "$d" '[.entries[].release | {release: ., driver: $d}]' "testdata/$d/manifest.json"
+            jq -c --arg d "$d" '[.entries[].release | select(($d == "dynamodb" and startswith("alternator-")) | not) | {release: ., driver: $d}]' "testdata/$d/manifest.json"
           done | jq -sc 'add | unique')
           owners=$(echo "$list" | jq -c --argjson drivers "$drivers" --argjson recorded "$recorded" \
             '[$drivers[] | {product: ., driver: .}] + [.[] as $e | $recorded[] | select(.release == $e.name) | {product: $e.product, driver}] | unique')

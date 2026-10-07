@@ -1411,12 +1411,100 @@ Apache Drill is a target after Avatica, by D162. Ken named it at step 1 on
 [DRILL.md](DRILL.md), and the package is `drill`. `dbrun` starts `drill-1.21.2` and `drill-1.22.0`. `dburl` has no scheme for it, and `usql` has no driver.
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
+Steps 2 to 9 went in on 2026-10-02, and D165 holds the decisions. Steps 10 to
+17a went in on 2026-10-07, staged for Ken's review:
+
+- Steps 10 to 13: the package `drill/`, its tables, the contract, the replay
+  tests over the recorded exchanges of both releases, the unit tests of the
+  types, the literals, the options, the cancel, the profile and the session
+  cookie, the tests of the DSN, and the fuzz test, which ran for 60 seconds and
+  found nothing.
+- Steps 14 and 14a: the integration tests passed on `drill-1.21.2` and
+  `drill-1.22.0` as both principals, with 241 tests on each and none skipped.
+  The round trip of each type that `features.json` marks yes makes a table
+  with `CREATE TABLE AS` for each key, as D163 says, and drops it.
+- Step 15: no new job. The job `releases` reads `testdata/drill/` and its
+  manifest, and the tests read `DRILL_DSN` and `DRILL_ORDINARY_DSN`. The pin
+  of `dbmeta` is `v0.3.0`, which starts both releases and prints the URL
+  `drill://`.
+- Step 16: `usql` has no driver for Drill, so there is no statement of
+  `usql` to run. `SELECT version FROM sys.version` gave the version to both
+  principals on both releases (DRILL.md, Principals).
+- Step 17a: `## Compared with Couchbase` is in DRILL.md. Open questions 9 to
+  15 there wait for Ken.
+
+1. To `dburl`: the scheme `drill` names `github.com/xo/dbimp/drill`, with
+   `RequiresCGO` false. D165 settles the DSN: `drill://user:password@host:8047`,
+   with no path, the keys `tls`, `schema` and `autolimit`, and the port 8047
+   with `tls=true` too. The driver speaks HTTP only, and registers the name
+   `drill` with no alias.
+2. To `dbmeta`: nothing is needed to run the tests, because the entry prints
+   the `url` `drill://user:password@127.0.0.1:<port>` and the user
+   `dbmeta_user` already. A model for Drill can be built on this driver. Note
+   that `dbmeta_user` can read `sys.options` and `INFORMATION_SCHEMA`, and
+   cannot read `GET /storage.json` or change a system option.
+3. To `usql`: add `drivers/drill/drill.go`, which imports
+   `github.com/xo/dbimp/drill`. There is no driver to replace. The version is
+   `SELECT version FROM sys.version`. The driver gives `*drill.Error` with the
+   message of the server, `drill.ErrLogin` for a wrong password, and
+   `dbimp.ErrIncomplete` for a result that failed after some rows. A statement
+   with a semicolon at its end fails on the server, so `usql` cuts it.
+
+Do not send these requests before the tag of step 19 (step 20).
+
 ## W27. Write the Apache Solr driver
 
 Apache Solr is a target after Avatica, by D162. Ken named it at step 1 on
 2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
 [SOLR.md](SOLR.md), and the package is `solr`. `dbrun` starts `solr-9.9.0`, `solr-9.10.1` and `solr-10.0.0`. `dburl` has no scheme for it, and `usql` has no driver.
 The six drivers of D162 go through step 9 together, before step 10 of any.
+
+Steps 2 to 9 went in on 2026-10-02, and D166 holds the decisions. Steps 10 to
+17a went in on 2026-10-07, staged for Ken's review:
+
+- Steps 10 to 13: the package `solr/`, its tables, the contract, the replay
+  tests over the recorded exchanges of all three releases, the unit tests of the
+  types, the literals, the tables of a statement, the schema and the options,
+  the tests of the DSN, and the fuzz test, which ran for 60 seconds and found
+  nothing.
+- Steps 14 and 14a: the integration tests passed on `solr-9.9.0`,
+  `solr-9.10.1` and `solr-10.0.0` as both principals, with 291 tests on each and
+  none skipped. The SQL of Solr takes no write, so the round trip of each type
+  that `features.json` marks yes adds a field through the Schema API, writes each
+  value as a document through the update handler, and reads it through the
+  driver (D163).
+- Step 15: no new job. The job `releases` reads `testdata/solr/` and its
+  manifest, and the tests read `SOLR_DSN` and `SOLR_ORDINARY_DSN`. The pin of
+  `dbmeta` is `v0.3.0`, which starts the three releases and prints the URL
+  `solr://` with no path. `actionlint` passes.
+- Step 16: `usql` has no driver for Solr, so there is no statement of `usql` to
+  run. The administrator reads the version at `/solr/admin/info/system`, and the
+  ordinary user gets HTTP 403 (SOLR.md, Principals).
+- Step 17a: `## Compared with Couchbase` is in SOLR.md. Open questions 8 to 15
+  there wait for Ken. The first one is a difference from D166: the class of the
+  field type comes from the luke handler, because `metadata.COLUMNS` does not
+  name it.
+
+1. To `dburl`: add the scheme `solr` with `GoPackage`
+   `github.com/xo/dbimp/solr` and `RequiresCGO` false. D166 settles the DSN:
+   `solr://user:password@host:8983/<collection>`, with the keys `tls` and `mode`,
+   and the port 8983 with `tls=true` too. The path names the collection that
+   takes the statement. The driver speaks HTTP only, and registers the name
+   `solr` with no alias.
+2. To `dbmeta`: nothing is needed to run the tests, because the entry prints
+   the `url` `solr://user:password@host:port` and the user `dbmeta_user`
+   already. A model for Solr can be built on this driver. Note that
+   `dbmeta_user` can read the luke handler and `metadata.COLUMNS`, and cannot
+   read the Schema API, the list of collections or the version. The `url` has
+   no path, so a model must name a collection, such as `dbmeta`.
+3. To `usql`: add `drivers/solr/solr.go`, which imports
+   `github.com/xo/dbimp/solr`. There is no driver to replace. The driver gives
+   `*solr.Error` with the message of the server, and `dbimp.ErrIncomplete` for a
+   result that failed after some rows. A statement with a semicolon at its end
+   fails on the server, so `usql` cuts it. The version has no statement, and
+   only the administrator reads it.
+
+Do not send these requests before the tag of step 19 (step 20).
 
 ## W28. Write the Elasticsearch driver
 
@@ -1425,6 +1513,42 @@ Elasticsearch is a target after Avatica, by D162. Ken named it at step 1 on
 [ELASTICSEARCH.md](ELASTICSEARCH.md), and the package is `elasticsearch`. `dbrun` starts `elasticsearch-8.19.22`, `elasticsearch-9.4.6` and `elasticsearch-9.5.3`. The driver reads SQL through `_sql`. `dburl` has no scheme for it, and `usql` has no driver.
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
+Steps 2 to 9 went in on 2026-10-01 and 2026-10-02, and Ken decided step 9 on
+2026-10-02 (D167). Steps 10 to 17a went in on 2026-10-07, staged for Ken's
+review:
+
+- Steps 10 to 13: the package `elasticsearch/`, its tables, the contract, the
+  replay tests over the recorded exchanges of all three releases, the tests of
+  the pages, the cursor, the cancel, the options and the types, the tests of the
+  DSN, and the fuzz test, which ran for 60 seconds and found nothing.
+- Steps 14 and 14a: the integration tests passed on all three releases as both
+  principals, with 362 tests on each of `elasticsearch-8.19.22`, `elasticsearch-9.4.6` and `elasticsearch-9.5.3`, and none skipped (ELASTICSEARCH.md, Integration tests).
+- Step 15: no new job. The workflow reads the folder `testdata/elasticsearch`,
+  and the pin of `dbmeta` already starts each release with the user
+  `dbmeta_user` and the URL `elasticsearch://`. Only the comment of the pin
+  changed.
+- Step 17a: `## Compared with Couchbase` is in ELASTICSEARCH.md. Open questions 6
+  to 13 there wait for Ken.
+
+1. To `dburl`: add the scheme `elasticsearch`, which has none today, with the
+   `GoPackage` `github.com/xo/dbimp/elasticsearch` and `RequiresCGO` false. D167
+   settles the DSN: `elasticsearch://user:password@host:9200`, with no path and
+   the keys `tls`, `auth` (`basic` or `apikey`), `fetch_size`, `time_zone`,
+   `field_multi_value_leniency` and `catalog`. The port is 9200 with `tls=true`
+   too. Any other key is refused.
+2. To `dbmeta`: no change is needed for the driver, because `dbmeta` has no model
+   for Elasticsearch, and its entry prints the URL with the scheme
+   `elasticsearch`. If Ken wants the version, give `dbmeta_user` the cluster
+   privilege `monitor`, which lets it read `GET /` (ELASTICSEARCH.md, Principals).
+3. To `usql`: add `drivers/elasticsearch/elasticsearch.go`, which imports
+   `github.com/xo/dbimp/elasticsearch`. There is no driver to replace. The driver
+   gives `*elasticsearch.Error` with the type and the reason of the server, and
+   `dbimp.ErrIncomplete` for a result that failed on a later page. A statement
+   with a semicolon at its end fails on the server, so `usql` cuts it. SQL has no
+   function for the version, and only the administrator can read it with `GET /`.
+
+Do not send these requests before the tag of step 19 (step 20).
+
 ## W29. Write the OpenSearch driver
 
 OpenSearch is a target after Avatica, by D162. Ken named it at step 1 on
@@ -1432,12 +1556,83 @@ OpenSearch is a target after Avatica, by D162. Ken named it at step 1 on
 [OPENSEARCH.md](OPENSEARCH.md), and the package is `opensearch`. `dbrun` starts `opensearch-2.19.6` and `opensearch-3.8.0`. `dburl` has no scheme for it, and `usql` has no driver.
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
+Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
+
+- Steps 10 to 13: the package `opensearch/`, its tables, the contract, the replay
+  tests over the recorded exchanges of 2.19.6 and 3.8.0, the unit tests of the
+  types, the literals, the pages, the options and the DSN, and the fuzz test,
+  which ran for 60 seconds and found nothing.
+- Steps 14 and 14a: `dbrun` lists `opensearch-3.9.0` now and no longer lists
+  `opensearch-3.8.0`, which step 6 recorded, so the integration tests ran on
+  `opensearch-2.19.6` and `opensearch-3.9.0`. They passed as both principals,
+  with 347 tests on 2.19.6 and 361 on 3.9.0, and 34 and 20 skipped for the
+  release or for the ordinary user of 2.19.6.
+- Step 15: no new job. The workflow derives the driver from `testdata/opensearch/`
+  and reads `OPENSEARCH_DSN` and `OPENSEARCH_ORDINARY_DSN` from its prefix, and
+  only its comment changed. `actionlint` passes.
+- Step 17a: `## Compared with Couchbase` is in OPENSEARCH.md. Open questions 11 to
+  18 there wait for Ken.
+
+1. To `dburl`: the scheme `opensearch` names `github.com/xo/dbimp/opensearch`. D168
+   settles the DSN: `opensearch://user:password@host:9200`, with no path, the keys
+   `tls` and `fetch_size`, the port 9200 with and without TLS, and any other key
+   refused. `dburl` has no scheme for OpenSearch today.
+2. To `dbmeta`: no change is needed, because `dbmeta` has no model for OpenSearch
+   and its entry already prints the URL `opensearch://` and the user `dbmeta_user`.
+   A model that reads through this driver meets two facts: the ordinary user of
+   2.19.6 cannot read a cursor, so each plain `SELECT` of the driver fails for it
+   (OPENSEARCH.md, Open questions 13), and `DESCRIBE TABLES` on 2.19.6 gives a
+   row that the driver refuses (Open questions 15).
+3. To `usql`: add `drivers/opensearch/opensearch.go`, which imports
+   `github.com/xo/dbimp/opensearch`. `usql` has no driver for OpenSearch, so none
+   goes away. SQL has no statement for the version, because `SELECT VERSION()`
+   fails with HTTP 400, and `GET /` needs a privilege that the ordinary user
+   lacks. `SHOW TABLES` and `DESCRIBE TABLES` are the statements for the
+   metadata, and `SHOW TABLES` is refused to the ordinary user.
+
+Do not send these requests before the tag of step 19 (step 20).
+
 ## W30. Write the Amazon DynamoDB driver
 
 Amazon DynamoDB is a target after Avatica, by D162. Ken named it at step 1 on
 2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
-[DYNAMODB.md](DYNAMODB.md), and the package is `dynamodb`. `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, and ScyllaDB Alternator as `alternator-2025.1` and `alternator-2026.3`, which is a flavor. DynamoDB Local checks no key, so it has no ordinary user, and Alternator has one. `usql` reaches DynamoDB through `btnguyen2k/godynamo`, under the `dburl` scheme `godynamo`, and this driver can replace it (D24).
+[DYNAMODB.md](DYNAMODB.md), and the package is `dynamodb`. `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, and ScyllaDB Alternator as `alternator-2025.1` and `alternator-2026.3`, which D163 dropped from the driver. DynamoDB Local checks no key, so it has no ordinary user. `usql` reaches DynamoDB through `btnguyen2k/godynamo`, under the `dburl` scheme `godynamo`, and this driver can replace it (D24).
 The six drivers of D162 go through step 9 together, before step 10 of any.
+
+Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
+
+- Steps 10 to 13: the package `dynamodb/`, its tables, the contract, the
+  replay tests of both releases, the tests of the pages, the options, the
+  arguments, the statements and the signature, and the DSN tests. The fuzz test
+  ran for 60 seconds and found nothing. The driver writes AWS Signature
+  Version 4 with the standard library, and `TestSignV4` checks it against a
+  vector of the test suite of AWS.
+- Steps 14 and 14a: the integration tests passed on `dynamodb-3.2.0` and on
+  `dynamodb-3.3.1` as the administrator. DynamoDB Local has no ordinary user.
+  The tests found two facts about the server, `ORDER BY sk DESC` and the limit
+  of 8192 characters of a statement (DYNAMODB.md, Responses).
+- Step 15: the list of releases in `.github/workflows/test.yml` drops the
+  releases of Alternator for this driver, because its manifest records them
+  and D163 dropped it. `dbrun` prints the DSN with no `tls` key, so the tests
+  add `tls=false` for a host on this machine.
+- Step 17a: `## Compared with Couchbase` is in DYNAMODB.md. The rows of the
+  driver keep the context of the query for the request of each page after the
+  first, which hard rule 4 of AGENTS.md does not name yet.
+
+The requests of step 16 wait for the tag of step 19:
+
+1. To `dburl`: please set the `GoPackage` of the scheme `godynamo`, with the
+   alias `dynamodb`, to `github.com/xo/dbimp/dynamodb`, set `RequiresCGO` to
+   false, and rename the scheme to `dynamodb`, keeping `godynamo` as an alias
+   (D28 and D30). The URL is `dynamodb://key:secret@host:port?region=r`, with
+   no path, and the keys `tls` and `region` (D169). The region is the key
+   `region` and no longer the host.
+2. To `dbmeta`: DynamoDB Local has no model yet (dbmeta D66). The URL of the
+   entries has no `tls` key, and the driver turns TLS on by default, so the
+   URL needs `tls=false` for a local server.
+3. To `usql`: `drivers/dynamodb/dynamodb.go` imports
+   `github.com/xo/dbimp/dynamodb` in place of `btnguyen2k/godynamo`. The
+   driver has no `Version`, because DynamoDB has no statement for it.
 
 ## W31. Write the Trino and Presto driver
 

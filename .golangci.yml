@@ -129,6 +129,11 @@ linters:
         - (*github.com/xo/dbimp/druid.rows).Close
         - (*github.com/xo/dbimp/trino.rows).Close
         - (*github.com/xo/dbimp/clickhouse.rows).Close
+        - (*github.com/xo/dbimp/drill.rows).Close
+        - (*github.com/xo/dbimp/solr.rows).Close
+        - (*github.com/xo/dbimp/elasticsearch.rows).Close
+        - (*github.com/xo/dbimp/opensearch.rows).Close
+        - (*github.com/xo/dbimp/dynamodb.rows).Close
         - (database/sql/driver.Rows).Close
         # The stream of a body, closed after the part that matters was read.
         - (*github.com/xo/dbimp.Stream).Close
@@ -199,7 +204,7 @@ linters:
       # The integration tests of a driver share one server and the scope that
       # TestMain makes, and run in order. A body that runs once for each
       # principal takes *testing.T and is a test, not a helper.
-      - path: integration_test\.go
+      - path: (integration_test\.go|(drill|solr|elasticsearch|opensearch|dynamodb)/replay_test\.go)
         linters:
           - paralleltest
           - thelper
@@ -212,7 +217,7 @@ linters:
       - path: _test\.go
         linters:
           - gosec
-        text: G202|G701|G703
+        text: G202|G701|G703|G124
       - path: _test\.go
         linters:
           - gosmopolitan
@@ -238,9 +243,37 @@ linters:
       - path: databend/
         linters:
           - tagliatelle
+      # The Drill driver sends the cookie of the session that the server set. A
+      # cookie of a request has no attribute that G124 can ask for.
+      - path: drill/connector\.go
+        linters:
+          - gosec
+        text: G124
       # The tags of the Druid driver are the names that the server sends,
       # such as Access-Check-Result, which the driver cannot rename.
       - path: druid/
+        linters:
+          - tagliatelle
+      # The tags of the Solr tests are the names that the server sends, such as
+      # result-set, which the tests cannot rename.
+      - path: solr/
+        linters:
+          - tagliatelle
+      # The tags of the Elasticsearch driver are the names that the server
+      # sends, such as fetch_size, time_zone and root_cause, which the driver
+      # cannot rename.
+      - path: elasticsearch/
+        linters:
+          - tagliatelle
+      # The tags of the OpenSearch driver are the names that the server sends,
+      # such as fetch_size, which the driver cannot rename.
+      - path: opensearch/
+        linters:
+          - tagliatelle
+      # The tags of the DynamoDB driver are the names that the server sends,
+      # such as Statement, NextToken and __type, which the driver cannot
+      # rename.
+      - path: dynamodb/
         linters:
           - tagliatelle
       # The contract reads rows in several shapes, and closes each one in a
