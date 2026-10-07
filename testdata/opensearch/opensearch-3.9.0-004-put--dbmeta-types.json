@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "PUT",
+    "path": "/dbmeta_types",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":0},\"mappings\":{\"properties\":{\"id\":{\"type\":\"integer\"},\"bo\":{\"type\":\"boolean\"},\"by\":{\"type\":\"byte\"},\"sh\":{\"type\":\"short\"},\"i\":{\"type\":\"integer\"},\"l\":{\"type\":\"long\"},\"ul\":{\"type\":\"unsigned_long\"},\"hf\":{\"type\":\"half_float\"},\"f\":{\"type\":\"float\"},\"d\":{\"type\":\"double\"},\"sf\":{\"type\":\"scaled_float\",\"scaling_factor\":100},\"k\":{\"type\":\"keyword\"},\"t\":{\"type\":\"text\"},\"tk\":{\"type\":\"text\",\"fields\":{\"raw\":{\"type\":\"keyword\"}}},\"mot\":{\"type\":\"match_only_text\"},\"w\":{\"type\":\"wildcard\"},\"dt\":{\"type\":\"date\"},\"dtn\":{\"type\":\"date_nanos\"},\"dtf\":{\"type\":\"date\",\"format\":\"yyyy-MM-dd\"},\"tm\":{\"type\":\"date\",\"format\":\"HH:mm:ss\"},\"ip\":{\"type\":\"ip\"},\"bin\":{\"type\":\"binary\"},\"gp\":{\"type\":\"geo_point\"},\"gs\":{\"type\":\"geo_shape\"},\"ir\":{\"type\":\"integer_range\"},\"o\":{\"type\":\"object\",\"properties\":{\"a\":{\"type\":\"integer\"},\"b\":{\"type\":\"keyword\"}}},\"n\":{\"type\":\"nested\",\"properties\":{\"a\":{\"type\":\"integer\"},\"b\":{\"type\":\"keyword\"}}},\"fo\":{\"type\":\"flat_object\"},\"kv\":{\"type\":\"knn_vector\",\"dimension\":3},\"al\":{\"type\":\"alias\",\"path\":\"k\"}}}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"acknowledged\":true,\"shards_acknowledged\":true,\"index\":\"dbmeta_types\"}"
+  }
+}

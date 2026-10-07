@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "query": "format=yaml",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"Failed to create executor due to unknown response format: yaml\",\n    \"type\": \"IllegalArgumentException\"\n  },\n  \"status\": 400\n}"
+  }
+}

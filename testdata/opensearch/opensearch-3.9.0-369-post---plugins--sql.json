@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_rows WHERE n = 1 UNION SELECT n FROM dbmeta_rows WHERE n = 2\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"There was internal problem at backend\",\n    \"details\": \"Cannot invoke \\\"org.opensearch.sql.legacy.domain.QueryStatement.getClass()\\\" because \\\"queryStatement\\\" is null\",\n    \"type\": \"NullPointerException\"\n  },\n  \"status\": 500\n}"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, v FROM dbmeta_t_histogram\"}"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Error occurred in OpenSearch engine: no such index [dbmeta_t_histogram]\",\n    \"details\": \"[dbmeta_t_histogram] IndexNotFoundException[no such index [dbmeta_t_histogram]]\\nFor more details, please send request for Json format to see the raw response from OpenSearch engine.\",\n    \"type\": \"IndexNotFoundException\"\n  },\n  \"status\": 404\n}"
+  }
+}

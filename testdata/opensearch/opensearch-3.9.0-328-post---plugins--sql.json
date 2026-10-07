@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT n FROM dbmeta_lead WHERE n = :p\",\"parameters\":[{\"type\":\"integer\",\"value\":1}]}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"Failed to parse SqlExpression of type class com.alibaba.druid.sql.ast.expr.SQLVariantRefExpr. expression value: :p\",\n    \"type\": \"SqlParseException\"\n  },\n  \"status\": 400\n}"
+  }
+}

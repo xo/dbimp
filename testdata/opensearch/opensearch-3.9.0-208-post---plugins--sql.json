@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM .plugins-ml-config\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"tenant_id\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"master_key\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"config_type\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"create_time\",\n      \"type\": \"timestamp\"\n    },\n    {\n      \"name\": \"last_updated_time\",\n      \"type\": \"timestamp\"\n    }\n  ],\n  \"datarows\": [],\n  \"total\": 0,\n  \"size\": 0,\n  \"status\": 200\n}"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "query": "format=json",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, k, i, o FROM dbmeta_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"Failed to create executor due to unknown response format: json\",\n    \"type\": \"IllegalArgumentException\"\n  },\n  \"status\": 400\n}"
+  }
+}

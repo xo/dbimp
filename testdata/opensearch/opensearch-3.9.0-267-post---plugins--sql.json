@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, ul FROM dbmeta_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"can't resolve Symbol(namespace=FIELD_NAME, name=ul) in type env\",\n    \"type\": \"SemanticCheckException\"\n  },\n  \"status\": 400\n}"
+  }
+}

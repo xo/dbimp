@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 9223372036854775808\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"For input string: \\\"9223372036854775808\\\"\",\n    \"type\": \"NumberFormatException\"\n  },\n  \"status\": 400\n}"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT CAST('2026-10-01T12:00:00+05:30' AS TIMESTAMP)\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"CAST('2026-10-01T12:00:00+05:30' AS TIMESTAMP)\",\n      \"type\": \"timestamp\"\n    }\n  ],\n  \"datarows\": [\n    [\n      \"2026-10-01 06:30:00\"\n    ]\n  ],\n  \"total\": 1,\n  \"size\": 1,\n  \"status\": 200\n}"
+  }
+}

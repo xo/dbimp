@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "PUT",
+    "path": "/_cluster/settings",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"transient\":{\"plugins.sql.cursor.keep_alive\":\"2s\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\"acknowledged\":true,\"persistent\":{},\"transient\":{\"plugins\":{\"sql\":{\"cursor\":{\"keep_alive\":\"2s\"}}}}}"
+  }
+}

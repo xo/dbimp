@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id FROM dbmeta_types WHERE id = ? OR id = ?\",\"parameters\":[{\"type\":\"integer\",\"value\":1}]}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"There was internal problem at backend\",\n    \"details\": \"Placeholder count is greater than parameter number 1 . Cannot convert PreparedStatement to sql query\",\n    \"type\": \"IllegalStateException\"\n  },\n  \"status\": 500\n}"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "query": "format=raw",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, k, i, o FROM dbmeta_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "plain/text; charset=UTF-8"
+      ]
+    },
+    "body": "id|k|i|o\n1|\"é'\"\"\\ x\"|-2147483648|{a=1, b=x}\n2|||\n3|||\n4|[a, b]|[1, 2, 3]|[{a=1, b=x}, {a=2, b=y}]\n5||42|"
+  }
+}

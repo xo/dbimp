@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1\",\"wait_for_completion_timeout\":\"0s\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"reason\": \"Invalid SQL query\",\n    \"details\": \"Cannot invoke \\\"com.alibaba.druid.sql.ast.statement.SQLTableSource.getAlias()\\\" because the return value of \\\"com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlSelectQueryBlock.getFrom()\\\" is null\",\n    \"type\": \"NullPointerException\"\n  },\n  \"status\": 400\n}"
+  }
+}

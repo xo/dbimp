@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, al FROM dbmeta_types ORDER BY id\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"id\",\n      \"type\": \"integer\"\n    },\n    {\n      \"name\": \"al\",\n      \"type\": \"keyword\"\n    }\n  ],\n  \"datarows\": [\n    [\n      1,\n      \"é'\\\"\\\\ x\"\n    ],\n    [\n      2,\n      null\n    ],\n    [\n      3,\n      null\n    ],\n    [\n      4,\n      [\n        \"a\",\n        \"b\"\n      ]\n    ],\n    [\n      5,\n      \"\"\n    ]\n  ],\n  \"total\": 5,\n  \"size\": 5,\n  \"status\": 200\n}"
+  }
+}

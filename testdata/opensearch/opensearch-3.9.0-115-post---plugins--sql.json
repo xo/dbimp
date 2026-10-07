@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT TYPEOF(1), TYPEOF(NOW()), TYPEOF(o) FROM dbmeta_types WHERE id = 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"TYPEOF(1)\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"TYPEOF(NOW())\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"TYPEOF(o)\",\n      \"type\": \"keyword\"\n    }\n  ],\n  \"datarows\": [\n    [\n      \"INTEGER\",\n      \"TIMESTAMP\",\n      \"OBJECT\"\n    ]\n  ],\n  \"total\": 1,\n  \"size\": 1,\n  \"status\": 200\n}"
+  }
+}

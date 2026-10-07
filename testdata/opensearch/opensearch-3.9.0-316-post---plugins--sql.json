@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/_plugins/_sql",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ? AS i, ? AS l, ? AS d, ? AS f, ? AS b, ? AS s, ? AS dt, ? AS nl\",\"parameters\":[{\"type\":\"integer\",\"value\":1},{\"type\":\"long\",\"value\":9223372036854775807},{\"type\":\"double\",\"value\":1.5},{\"type\":\"float\",\"value\":1.5},{\"type\":\"boolean\",\"value\":true},{\"type\":\"string\",\"value\":\"it's a\\\\b\"},{\"type\":\"date\",\"value\":\"2026-10-01\"},{\"type\":\"null\",\"value\":null}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Opensearch-Version": [
+        "OpenSearch/3.9.0 (opensearch)"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"schema\": [\n    {\n      \"name\": \"1\",\n      \"alias\": \"i\",\n      \"type\": \"integer\"\n    },\n    {\n      \"name\": \"9223372036854775807\",\n      \"alias\": \"l\",\n      \"type\": \"long\"\n    },\n    {\n      \"name\": \"1.5\",\n      \"alias\": \"d\",\n      \"type\": \"double\"\n    },\n    {\n      \"name\": \"1.5\",\n      \"alias\": \"f\",\n      \"type\": \"double\"\n    },\n    {\n      \"name\": \"true\",\n      \"alias\": \"b\",\n      \"type\": \"boolean\"\n    },\n    {\n      \"name\": \"'it\\\\'s a\\\\\\\\b'\",\n      \"alias\": \"s\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"'2026-10-01'\",\n      \"alias\": \"dt\",\n      \"type\": \"keyword\"\n    },\n    {\n      \"name\": \"null\",\n      \"alias\": \"nl\",\n      \"type\": \"undefined\"\n    }\n  ],\n  \"datarows\": [\n    [\n      1,\n      9223372036854775807,\n      1.5,\n      1.5,\n      true,\n      \"it's a\\\\b\",\n      \"2026-10-01\",\n      null\n    ]\n  ],\n  \"total\": 1,\n  \"size\": 1,\n  \"status\": 200\n}"
+  }
+}
