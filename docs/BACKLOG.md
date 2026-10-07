@@ -1598,7 +1598,7 @@ Do not send these requests before the tag of step 19 (step 20).
 
 Amazon DynamoDB is a target after Avatica, by D162. Ken named it at step 1 on
 2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
-[DYNAMODB.md](DYNAMODB.md), and the package is `dynamodb`. `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, and ScyllaDB Alternator as `alternator-2025.1` and `alternator-2026.3`, which D163 dropped from the driver. DynamoDB Local checks no key, so it has no ordinary user. `usql` reaches DynamoDB through `btnguyen2k/godynamo`, under the `dburl` scheme `godynamo`, and this driver can replace it (D24).
+[DYNAMODB.md](DYNAMODB.md), and the package is `dynamodb`. `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, and ScyllaDB Alternator as `alternator-2025.1` and `alternator-2026.3`, which D163 dropped from the driver. Ken removed its recordings on 2026-10-07, so Alternator is not part of this driver. DynamoDB Local checks no key, so it has no ordinary user. `usql` reaches DynamoDB through `btnguyen2k/godynamo`, under the `dburl` scheme `godynamo`, and this driver can replace it (D24).
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
 Steps 10 to 17a went in on 2026-10-07, and were committed on 2026-10-07 as
@@ -1614,9 +1614,9 @@ Steps 10 to 17a went in on 2026-10-07, and were committed on 2026-10-07 as
   `dynamodb-3.3.1` as the administrator. DynamoDB Local has no ordinary user.
   The tests found two facts about the server, `ORDER BY sk DESC` and the limit
   of 8192 characters of a statement (DYNAMODB.md, Responses).
-- Step 15: the list of releases in `.github/workflows/test.yml` drops the
-  releases of Alternator for this driver, because its manifest records them
-  and D163 dropped it. `dbrun` prints the DSN with no `tls` key, so the tests
+- Step 15: the list of releases in `.github/workflows/test.yml` had a filter
+  that dropped the releases of Alternator for this driver. Ken removed the
+  recordings of Alternator on 2026-10-07, so the filter is gone. `dbrun` prints the DSN with no `tls` key, so the tests
   add `tls=false` for a host on this machine.
 - Step 17a: `## Compared with Couchbase` is in DYNAMODB.md. The rows of the
   driver keep the context of the query for the request of each page after the

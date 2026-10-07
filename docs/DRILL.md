@@ -811,34 +811,34 @@ up in steps 10 to 17a of 2026-10-07. Ken closed question 9 on the same day
    ends with its own session, or send no cookie at all, which D165 rejected.
    Ken decided on 2026-10-07 to leave it and to name it in the documentation
    (D178, item 1). A caller clears the limit with `ALTER SESSION RESET ALL`.
-10. The profile of a query that failed has no error for a few milliseconds
+10. Closed by D178. The profile of a query that failed has no error for a few milliseconds
     after the answer ends (see Errors). D165 item 7 says that the driver reads
     the message from the profile, and says nothing about the wait. The driver
     reads the profile again, with a wait of 10 milliseconds that doubles up to
     250 milliseconds, until the profile holds an error or 2 seconds passed.
     After 2 seconds the message says that the server gave no reason. Ken
     decides the limit.
-11. D165 item 8 names the context that ends. The driver also sends the cancel
+11. Closed by D178. D165 item 8 names the context that ends. The driver also sends the cancel
     when the caller closes the rows before their end, because the server runs
     the query on when the client leaves (recorded: "the running queries after
     the client left"), as the Druid driver does (D164). Ken decides whether
     `Rows.Close` cancels.
-12. D109 asks for five options. The REST interface of Drill has no setting for
+12. Closed by D178. D109 asks for five options. The REST interface of Drill has no setting for
     a timeout and none that refuses a write, so `WithTimeout` above zero and
     `WithReadonly(true)` fail with `dbimp.ErrNotSupported`, as D109 says. The
     context of a statement still bounds it on the client. `WithDatabase` sets
     `defaultSchema`, and `WithSchema` is the same option with the name of the
     key of the DSN. `WithAutoLimit` is the option for `autolimit`. Ken
     decides the names.
-13. `Ping` runs `SELECT 1 AS one FROM (VALUES(1))`. `GET /status.json` and `GET
+13. Closed by D178. `Ping` runs `SELECT 1 AS one FROM (VALUES(1))`. `GET /status.json` and `GET
     /cluster.json` answer HTTP 200 to a wrong password (measured on 2026-10-07),
     so only a statement checks the credentials. Ken decides whether a ping
     that costs a plan is right.
-14. `RowsAffected` of `Exec` is the count in the column `Number of records
+14. Closed by D178. `RowsAffected` of `Exec` is the count in the column `Number of records
     written`, which `CREATE TABLE AS` and `ANALYZE TABLE` answer, and
     `dbimp.ErrNotSupported` for any other statement. D165 does not say. `LastInsertId`
     is `dbimp.ErrNotSupported`.
-15. A statement that ends with a semicolon fails on the server (recorded: "a
+15. Closed by D178. A statement that ends with a semicolon fails on the server (recorded: "a
     statement that ends with a semicolon"). The driver sends the statement as
     it is and does not cut the semicolon, and D165 does not say. Ken decides
     whether the driver cuts one.

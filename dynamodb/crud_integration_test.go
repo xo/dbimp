@@ -105,7 +105,6 @@ func TestIntegrationCRUD(t *testing.T) {
 		same(t, "after list_append", rowsOf(t, db, "UPDATE "+crud+" SET l = list_append(l, [2]) WHERE pk = 'c' AND sk = 1 RETURNING ALL NEW *"),
 			`{l:[N(1) N(2)] pk:S("c") sk:N(1) ss:[S("a") S("b")]}`)
 	})
-	skipAlternator(t, "alternator_insert", "alternator_select", "alternator_update", "alternator_delete")
 	t.Run("nothing is left", func(t *testing.T) {
 		must(t, db, "DELETE FROM "+crud+" WHERE pk = 'c' AND sk = 1")
 		must(t, db, "DELETE FROM "+plain+" WHERE pk = 'p1'")
@@ -115,16 +114,4 @@ func TestIntegrationCRUD(t *testing.T) {
 			same(t, name, rowsOf(t, db, "SELECT * FROM "+name))
 		}
 	})
-}
-
-// skipAlternator makes a subtest for each entry of features.json that names
-// a flavor that the driver does not serve. Alternator runs no PartiQL, so D163
-// drops it from the driver, and dbrun starts it only for the recordings.
-func skipAlternator(t *testing.T, names ...string) {
-	t.Helper()
-	for _, name := range names {
-		t.Run(name, func(t *testing.T) {
-			t.Skip("the driver serves no Alternator (D163)")
-		})
-	}
 }

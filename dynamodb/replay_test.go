@@ -25,8 +25,7 @@ import (
 const testdata = "../testdata/dynamodb"
 
 // releases are the releases of DynamoDB Local that step 6 recorded for this
-// driver. The recordings of Alternator are not used, because the driver does
-// not serve it (D163).
+// driver.
 var releases = []string{"dynamodb-3.2.0", "dynamodb-3.3.1"}
 
 // match matches the target and the body of a request with a recorded one.

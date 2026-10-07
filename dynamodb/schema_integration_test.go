@@ -106,5 +106,4 @@ func TestIntegrationSchema(t *testing.T) {
 			refused(t, db, "ValidationException", tt.query)
 		})
 	}
-	skipAlternator(t, "alternator_table", "alternator_secondary_index", "alternator_time_to_live")
 }

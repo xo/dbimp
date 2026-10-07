@@ -663,7 +663,7 @@ follows the first answer of each one, and says so:
    two statements for each table, and keeps the schema for the connection. The
    type table names the luke handler in the three cells that D166 names. This
    amends item 3 of D166.
-9. The path of the DSN names the collection, and `dbrun` prints a `url` with
+9. Closed by D178. The path of the DSN names the collection, and `dbrun` prints a `url` with
    no path (measured on 2026-10-07). The driver takes a DSN with no path, and
    fails each statement that has no `WithDatabase` with
    `dbimp.ErrInvalidValue`. The other choice is a DSN that must have a path.
@@ -672,11 +672,11 @@ follows the first answer of each one, and says so:
 10. `WithDatabase` names the collection of the path of one statement. The
     other choice is `dbimp.ErrNotSupported`, as for Druid and Pinot, which have
     no database to choose.
-11. `WithTimeout` fails with `dbimp.ErrNotSupported` for a timeout other than
+11. Closed by D178. `WithTimeout` fails with `dbimp.ErrNotSupported` for a timeout other than
     zero, because `timeAllowed` cut nothing. The other choice is a deadline that
     the driver sets on the request. A deadline of the context stops the request
     already (D36).
-12. The driver finds the tables of a statement by a scan of its text for the
+12. Closed by D178. The driver finds the tables of a statement by a scan of its text for the
     words `FROM` and `JOIN`. A table that the scan misses, or whose case differs
     from the name of its collection, has no schema, and its columns read by their
     JSON tokens: a `BoolField` is a `string` there. Solr matches the names of
@@ -686,13 +686,13 @@ follows the first answer of each one, and says so:
     measured. The other choice is a request for the collections that the
     statement names, which the ordinary user cannot make (recorded: "the list
     of collections").
-13. An equality on a `StrField` reads `*` and `?` in its text as wildcards, and
+13. Closed by D178. An equality on a `StrField` reads `*` and `?` in its text as wildcards, and
     a text with spaces matched other documents (measured on 10.0.0 on
     2026-10-07). The driver writes the literal that the caller gave, and the
     server decides what it means. The other choice is a refusal of an argument
     with `*` or `?`, which also refuses a wildcard that a caller writes on
     purpose (feature "wildcard in equality").
-14. The driver exports `ErrCut`, as Druid does, for an answer that ends before
+14. Closed by D178. The driver exports `ErrCut`, as Druid does, for an answer that ends before
     its tuple `EOF`. The error wraps `dbimp.ErrIncomplete` after a row.
 15. The driver stores no `context.Context`. The function that reads the types
     of the columns takes the context of the statement, and the rows drop it before

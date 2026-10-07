@@ -61,7 +61,7 @@ func checkStatus(res *http.Response) error {
 }
 
 // newError returns the *Error of a response whose status is not 2xx. The
-// body is a JSON object with __type and Message, which Alternator writes as
+// body is a JSON object with __type and Message, which a server can write as
 // message, or text (recorded).
 func newError(serr *dbimp.StatusError) *Error {
 	e := &Error{HTTPStatus: serr.Code, status: serr}

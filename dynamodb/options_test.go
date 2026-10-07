@@ -225,7 +225,7 @@ func TestError(t *testing.T) {
 	}{
 		{"a syntax error", 400, `{"__type":"com.amazon.coral.validate#ValidationException","Message":"Statement wasn't well formed, can't be processed: SELEC"}`, "ValidationException", "Statement wasn't well formed, can't be processed: SELEC", "dynamodb: ValidationException: Statement wasn't well formed, can't be processed: SELEC"},
 		{"an unknown table", 400, `{"__type":"com.amazonaws.dynamodb.v20120810#ResourceNotFoundException","Message":"Cannot do operations on a non-existent table"}`, "ResourceNotFoundException", "Cannot do operations on a non-existent table", ""},
-		{"a message of Alternator", 400, `{"__type":"com.amazonaws.dynamodb.v20120810#UnknownOperationException","message":"Unsupported operation ExecuteStatement"}`, "UnknownOperationException", "Unsupported operation ExecuteStatement", ""},
+		{"a message in lower case", 400, `{"__type":"com.amazonaws.dynamodb.v20120810#UnknownOperationException","message":"Unsupported operation ExecuteStatement"}`, "UnknownOperationException", "Unsupported operation ExecuteStatement", ""},
 		{"an internal failure", 500, `{"__type":"com.amazon.coral.service#InternalFailure"}`, "InternalFailure", "Internal Server Error", "dynamodb: InternalFailure: Internal Server Error"},
 		{"a type with no namespace", 400, `{"__type":"Boom","Message":"m"}`, "Boom", "m", ""},
 		{"text", 503, "slow down", "", "slow down", "dynamodb: 503: slow down"},

@@ -321,5 +321,4 @@ func TestIntegrationFeatures(t *testing.T) {
 			t.Errorf("HTTP %d: %v, want UnknownOperationException", status, m)
 		}
 	})
-	skipAlternator(t, "alternator_scan_through_the_API", "alternator_batch_of_statements", "alternator_transaction")
 }

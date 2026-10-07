@@ -699,20 +699,20 @@ These questions came from steps 10 to 17a. Ken closed questions 6 and 7 on
    (Cancellation and timeouts). Ken decided on 2026-10-07 that the driver does
    this, which differs from D36 for this driver (D178, item 3). The
    `keep_alive` default of 45 seconds is not measured.
-8. A `float` and a `half_float` arrive as the shortest text of a 32-bit float.
+8. Closed by D178. A `float` and a `half_float` arrive as the shortest text of a 32-bit float.
    The driver reads that text as a `float64`, so `6.1035156E-5` is 6.1035156e-05
    and not 2 to the power of -14. The other choice is to read the text as a
    `float32` and widen it, which gives the exact 32-bit value.
-9. A day-time interval of more than about 292 years cannot be a
+9. Closed by D178. A day-time interval of more than about 292 years cannot be a
    `time.Duration`, and the driver fails the row with `dbimp.ErrInvalidValue`.
    The other choices are to give a `dbimp.Interval` for such a value, or to
    cap it.
-10. `WithDatabase` fails with `dbimp.ErrNotSupported`, because Elasticsearch has
+10. Closed by D178. `WithDatabase` fails with `dbimp.ErrNotSupported`, because Elasticsearch has
     no database to choose. The cluster is the catalog, and `WithCatalog` sets
     it, as the key `catalog` does. `WithParameter` applies to the first request
     of a statement and not to the request for each next page, which holds the
     cursor, the leniency and the timeout only.
-11. A type that the driver does not know is the decoded JSON value, with the
+11. Closed by D178. A type that the driver does not know is the decoded JSON value, with the
     scan type `any`. The server refuses every type that has no mapping in the
     table, so no recorded column has such a type. The other choice is an error.
 12. OpenSearch will share little with this driver. Its answer names the columns

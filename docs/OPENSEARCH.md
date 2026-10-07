@@ -867,7 +867,7 @@ These questions came from steps 10 to 17a. Ken closed questions 11, 13, 14 and
     stores a context nowhere else. Ken decided on 2026-10-07 that hard rule 4
     of AGENTS.md names the rows of an OpenSearch query (D178, item 2). This is
     the same question as 6 of ELASTICSEARCH.md.
-12. D168 says that each plain `SELECT` sends `fetch_size`, and does not say
+12. Closed by D178. D168 says that each plain `SELECT` sends `fetch_size`, and does not say
     what plain means. The driver reads the statement without its literals,
     quoted names and comments. It is plain when it starts with `SELECT`, has a
     `FROM`, and has none of the words `LIMIT`, `GROUP`, `DISTINCT`, `JOIN`,
@@ -894,7 +894,7 @@ These questions came from steps 10 to 17a. Ken closed questions 11, 13, 14 and
     that it knows, including one that it read before the context ended
     (`TestCancelAfterTheCursor`). Ken decided on 2026-10-07 that this is the
     behavior (D178, item 6).
-15. A value that does not fit its type. The legacy engine names an object and a
+15. Closed by D178. A value that does not fit its type. The legacy engine names an object and a
     nested field `text` with an empty alias and sends an object or an array,
     sends a `date` as the text of a timestamp on 2.19.6, sends a number or a
     boolean that the source holds as text under `integer` and `boolean`, and
@@ -906,7 +906,7 @@ These questions came from steps 10 to 17a. Ken closed questions 11, 13, 14 and
     that reach it are one with a `filter`, one with a `LIMIT` that a caller gives
     a page size with `WithParameter`, and `DESCRIBE TABLES` on 2.19.6. The other
     choices are the decoded JSON value, or a conversion by the value.
-16. `WithTimeout` fails with `dbimp.ErrNotSupported` for a time above zero, as
+16. Closed by D178. `WithTimeout` fails with `dbimp.ErrNotSupported` for a time above zero, as
     D109 says for an option that the server cannot honor. The SQL plugin has no
     time limit, and `wait_for_completion_timeout` does not work (Requests).
     `WithDatabase` fails the same way. `WithParameter` applies to the first

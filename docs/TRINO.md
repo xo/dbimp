@@ -1001,7 +1001,7 @@ one says:
     transaction, so that `QueryRow` in a transaction keeps the transaction.
     D175 item 13 decides that the driver reads up to four pages of at most 64
     KiB each in a transaction, and sends the `DELETE` only for a larger result.
-12. `QueryContext` reads up to the first row, so that an error that comes before
+12. Closed by D178. `QueryContext` reads up to the first row, so that an error that comes before
     any row is the error of `QueryContext`, as step 12 of DRIVER.md says. D175
     says only that the driver polls `nextUri`. This question still waits for
     Ken.

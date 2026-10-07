@@ -59,3 +59,49 @@ Elasticsearch, OpenSearch and DynamoDB (W26 to W30). Ken decided them on
 11. The OpenSearch driver serves no flavor and sends no request for the
     release. This amends item 10 of D168, which said that the release comes
     from `GET /` or from a header.
+12. The Solr driver accepts a DSN with no path, and a statement then needs
+    `WithDatabase`. `WithTimeout` above zero fails with `dbimp.ErrNotSupported`,
+    because `timeAllowed` cut nothing. An equality on a `StrField` treats `*`
+    and `?` as wildcards, and the driver writes the literal of the caller as
+    given. SOLR.md names the wildcards as a fault of the server. These are
+    questions 9, 11 and 13 of SOLR.md.
+13. The Elasticsearch driver fails `WithDatabase` with `dbimp.ErrNotSupported`
+    and has the option `WithCatalog`, which sets the catalog. `WithParameter`
+    applies only to the first request. A type that the driver does not know is
+    the decoded JSON value. These are questions 10 and 11 of ELASTICSEARCH.md.
+14. A driver whose server does not tell the count of the rows that a statement
+    changed returns an error that wraps `dbimp.ErrNotSupported` from
+    `RowsAffected`, with the reason. It returns the count whenever the server
+    sends one, as the Trino driver does with `updateCount`. It never returns 0
+    or -1 in place of the error. Ken decided this on 2026-10-07. Every driver
+    here follows it already.
+15. Ken confirmed on 2026-10-07 the choices that the agents made where a
+    decision named none:
+    - Trino: `QueryContext` waits for the first row, or for the end of an
+      answer with none, as the official client does (question 12 of TRINO.md).
+    - ClickHouse: `WithReadonly(true)` sends `readonly=1`, `Ping` runs `SELECT
+      1` in place of `GET /ping`, and the transport lets go of an idle
+      connection after 5 seconds (questions 19 and 22 of CLICKHOUSE.md).
+    - Drill: the driver reads the profile of a failed query again for up to 2
+      seconds, sends the cancel when the caller closes the rows early, and takes
+      the options that the REST interface allows. `Ping` runs a `SELECT`.
+      `RowsAffected` is the count of `CREATE TABLE AS`, and a trailing semicolon
+      is not cut (questions 10 to 15 of DRILL.md).
+    - OpenSearch: the word-scan rule for a plain `SELECT`, a failed row for a
+      value that does not fit its type, and `WithTimeout` that fails with
+      `dbimp.ErrNotSupported` (questions 12, 15 and 16 of OPENSEARCH.md).
+    - Solr: the scan of `FROM` and `JOIN` for the tables of a statement, and
+      the exported `ErrCut` (questions 12 and 14 of SOLR.md).
+    - Elasticsearch: a `float` is read as a `float64`, and a day-time interval
+      of more than about 292 years fails the row (questions 8 and 9 of
+      ELASTICSEARCH.md).
+    - DynamoDB: the column of `SELECT *` and of `RETURNING` is named `""`,
+      `Error` keeps no `Item`, and a DSN with no user or no password is refused
+      (questions 3 and 8 of DYNAMODB.md, and the DSN of D169).
+
+16. Ken decided on 2026-10-07 that `dburl` writes the key `flavor` of a Trino
+    or Presto URL from its scheme: `trino://` writes `flavor=trino` and
+    `presto://` writes `flavor=presto`, unless the URL names a flavor. The
+    driver is unchanged, because `flavor` is a key of its DSN already (D175),
+    and so a `presto://` URL against a Trino server fails with the error of the
+    server and not with a silent switch of flavor.

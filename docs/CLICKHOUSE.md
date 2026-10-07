@@ -1508,7 +1508,7 @@ make. D176 and D177 closed questions 1 to 11, and Ken decided question 15 on
     the end. A `QueryRow` is then two requests, and the second one finds no
     query. The driver can skip the cancel when it knows that the body is at its
     end, which it cannot know without a read that can block.
-19. `WithReadonly(true)` sends `readonly=1`. The server then refuses a write and
+19. Closed by D178. `WithReadonly(true)` sends `readonly=1`. The server then refuses a write and
     a change of a setting in the text of the statement, and accepts the settings
     in the query string, which are the settings of the driver (measured on all
     three releases by `TestIntegrationFeatures`). D109 asks for an option
@@ -1524,7 +1524,7 @@ make. D176 and D177 closed questions 1 to 11, and Ken decided question 15 on
     parameter (measured on 25.8: the column held the text `{p:Int64}`). `INSERT
     ... SELECT ?, ?` works for every type, and the round trip uses it. The
     driver does not change the text of a statement.
-22. The transport lets go of an idle connection after 5 seconds. The server closes
+22. Closed by D178. The transport lets go of an idle connection after 5 seconds. The server closes
     an idle connection after 10 seconds on 25.3 and 25.8, and after 30 on 26.9
     (the header `Keep-Alive`), and the driver sends a `POST` once, so a request on
     a connection that the server has just closed is an error. DRIVER.md says

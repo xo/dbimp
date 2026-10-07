@@ -3,7 +3,10 @@
 This document holds what is known about Amazon DynamoDB, for its driver
 `dynamodb` (W30, D162 and D169). ScyllaDB Alternator speaks the API of
 DynamoDB. D162 named it a flavor, and D163 dropped it, because it runs no
-PartiQL. The headings are the template of [DRIVER.md](DRIVER.md).
+PartiQL. Alternator is not part of this driver. On 2026-10-07 Ken removed its
+recordings from `testdata/dynamodb/`, so a line below that names Alternator
+is a fact that was measured on 2026-10-01 and 2026-10-02, and no file holds
+it now. The headings are the template of [DRIVER.md](DRIVER.md).
 
 Steps 5a to 7 measured DynamoDB Local 3.2.0 and 3.3.1 as its one key, and
 Alternator 2025.1 and 2026.3 as `cassandra` and as `dbmeta_user`, on
@@ -38,7 +41,7 @@ read on 2026-10-01, are these:
 - `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, which are DynamoDB
   Local, and `alternator-2025.1` and `alternator-2026.3`, which are
   ScyllaDB with Alternator on. Each is in the Staged tier with the cadence
-  `tested` (the dbmeta entries).
+  `tested` (the dbmeta entries). This driver tests only DynamoDB Local.
 - R holds for DynamoDB Local and for Alternator (measured with `dbrun start`
   on 2026-10-01). The cloud service fails R, and DynamoDB Local stands in
   for it.
@@ -67,8 +70,8 @@ read on 2026-10-01, are these:
   its integration tests on `dynamodb-3.2.0` and on `dynamodb-3.3.1` on
   2026-10-07, and they passed on both (see Integration tests). DynamoDB Local
   has no ordinary user, so the tests as that user skip with the reason. The
-  tests of the entries for Alternator skip too, because the driver does not
-  serve it (D163).
+  tests of this driver name no Alternator, because the driver does not serve
+  it (D163).
 
 ## Requests
 
@@ -230,7 +233,7 @@ These facts were recorded on each release of DynamoDB Local:
   Local sends `X-Amz-Crc32` with each answer, and Alternator does not.
 - No answer was a redirect (recorded).
 
-These facts were recorded on Alternator:
+These facts were measured on Alternator, and no file holds them now:
 
 - `Scan` answers `Count`, `ScannedCount`, `Items` and `LastEvaluatedKey`
   when more follows. `Limit` 1 gave one item and a `LastEvaluatedKey`
@@ -574,11 +577,11 @@ These facts were recorded on each release of DynamoDB Local:
   Alternator (Errors).
 - Neither flavor gives the version of its release (recorded under item 9).
 - The service of AWS was not measured, because it fails R.
-- D163 dropped Alternator from the driver. The recordings of its two releases
-  stay in `testdata/dynamodb/`, and the manifest names them. The workflow of
-  CI drops the releases of Alternator from the list of this driver, so
-  `dbrun` never starts them for its tests (`.github/workflows/test.yml`).
-  The subtests of `features.json` for Alternator skip with that reason.
+- D163 dropped Alternator from the driver. Ken decided on 2026-10-07 to
+  remove its recordings, its entries in the manifest and its entries in
+  `features.json`. The workflow of CI has no filter for it, because the
+  manifest names no release of Alternator, so `dbrun` never starts it for
+  the tests of this driver.
 
 ## Interfaces
 
@@ -654,8 +657,7 @@ What the tests do (step 14a):
 
 - The administrator is the one principal of these releases. The tests as the
   ordinary user skip with the reason, because `DYNAMODB_ORDINARY_DSN` is empty
-  and the manifest says that DynamoDB Local has no ordinary user. Alternator has one,
-  which the driver does not serve (D163).
+  and the manifest says that DynamoDB Local has no ordinary user.
 - PartiQL has no DDL (D171), so each test makes its tables through the API
   with `CreateTable`, and drops them in a cleanup. `TestMain` lists the
   tables with the prefix of the run and drops any that is left. Each table
@@ -742,9 +744,9 @@ against [TYPES.md](TYPES.md) and D135, in separate conversations:
 The questions that step 1 to step 9 left are answered: D163 dropped
 Alternator, D169 decided the DSN, the type of `N`, NULL and a missing
 attribute, and the columns, and D162 and D169 fixed the rest. Ken closed
-questions 1, 4 and 10 on 2026-10-07 (D178 for question 1). Their text stays,
-with the answer, so that the numbers of the others do not change. Questions 2,
-3, 5, 6, 7, 8 and 9 still wait for Ken.
+questions 1, 4, 6, 7 and 10 on 2026-10-07 (D178 for question 1). Their text
+stays, with the answer, so that the numbers of the others do not change.
+Questions 2, 3, 5, 8 and 9 still wait for Ken.
 
 1. Closed by D178, item 9. A list and a set are both a `[]any` when the driver
    reads them, and an argument cannot tell them apart. D169 names the Go type
@@ -753,10 +755,10 @@ with the answer, so that the numbers of the others do not change. Questions 2,
    of the set: `SS`, `NS` or `BS`. A caller that reads a set and writes it back
    gets a `[]any`, which is a list. Ken decided on 2026-10-07 to keep this
    type for now. It can be removed later, as the `Row` type of Trino was.
-2. D169 does not say whether `RowsAffected` is known. `UPDATE` and `DELETE`
+2. Closed by D178 item 14. D169 does not say whether `RowsAffected` is known. `UPDATE` and `DELETE`
    give no count (Statements), so the driver returns an error that wraps
    `dbimp.ErrNotSupported` from `RowsAffected` and from `LastInsertId`.
-3. The column of `SELECT *` and of `RETURNING` is named `""`, as the column
+3. Closed by D178. The column of `SELECT *` and of `RETURNING` is named `""`, as the column
    of one document in ArangoDB and in SurrealDB (D18, D89 and D101). D163 says
    that it has no name from the server. Does Ken want another name?
 4. Closed on 2026-10-07. The service of AWS needs `X-Amz-Security-Token`
@@ -767,16 +769,15 @@ with the answer, so that the numbers of the others do not change. Questions 2,
    turns TLS on by default (D169). The integration tests add `tls=false` for a
    host on this machine. `dbmeta` can print `tls=false` for the two
    releases.
-6. The manifest of `testdata/dynamodb/` records the releases of Alternator,
-   and the workflow reads the manifest to find the releases to start. The
-   workflow drops them for this driver with a test on the name of the driver
-   and of the product. A field in the manifest that names the releases which
-   the driver does not serve holds it better, and it needs a change in
-   `dbimptest`.
-7. `features.json` keeps the entries for Alternator, with the verdict from
-   step 6, and `TestEveryDriverHasItsFeatures` needs their test names. Each
-   subtest skips. Do the entries stay?
-8. An error of `ConditionalCheckFailedException` carries the item in `Item`
+6. Closed on 2026-10-07. The manifest of `testdata/dynamodb/` recorded the
+   releases of Alternator, and the workflow dropped them for this driver.
+   Ken decided on 2026-10-07 to remove them from the manifest, with their
+   recorded files. The workflow has no filter for them now, and `dbimptest`
+   needs no field.
+7. Closed on 2026-10-07. `features.json` kept the entries for Alternator.
+   Ken decided on 2026-10-07 to remove them, with their test names in the Go
+   tests. `TestEveryDriverHasItsFeatures` passes without them.
+8. Closed by D178. An error of `ConditionalCheckFailedException` carries the item in `Item`
    when the statement sets `ReturnValuesOnConditionCheckFailure` (recorded:
    "crud: return the values when a condition fails"). The type `Error` keeps
    no `Item`. Does it get one?

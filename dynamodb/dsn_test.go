@@ -31,7 +31,7 @@ func TestDSNRoundTrip(t *testing.T) {
 			c.User, c.Password, c.TLS = "dbmeta", "P4ssw0rd!x", false
 		})},
 		{"dynamodb://key:secret@[::1]:8000?region=eu-west-2&tls=true", with(cfg("::1", 8000), func(c *dynamodb.Config) { c.Region = "eu-west-2" })},
-		// The secret of Alternator is a hash with a slash, which the URL escapes.
+		// A secret can be a hash with a slash, which the URL escapes.
 		{"dynamodb://cassandra:%246%24salt%24Tw%2F8k@h:8000?region=us-east-1", with(cfg("h", 8000), func(c *dynamodb.Config) {
 			c.User, c.Password = "cassandra", "$6$salt$Tw/8k"
 		})},
