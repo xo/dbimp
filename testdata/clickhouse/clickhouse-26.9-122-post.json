@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT (1.5, 2.5)::Point AS p, [[(0, 0), (1, 1)]]::Polygon AS pg"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "Content-Disposition": [
+        "attachment; filename=\"result.RowBinaryWithNamesAndTypes\""
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "ptgnhdlsfgapyvsq"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"1088\",\"elapsed_ns\":\"397240\",\"memory_usage\":\"8142611\"}"
+      ],
+      "Content-Type": [
+        "application/octet-stream"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Format": [
+        "RowBinaryWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:55 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "f6cc3601-23eb-4da8-89f6-4f375e8df1fb"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9878"
+      ]
+    },
+    "body": "",
+    "binary": "AgFwAnBnBVBvaW50B1BvbHlnb24AAAAAAAD4PwAAAAAAAARAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8D8AAAAAAADwPw=="
+  }
+}

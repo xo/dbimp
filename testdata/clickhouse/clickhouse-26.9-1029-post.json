@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT name, engine, total_rows FROM system.tables WHERE database = 'dbimp' ORDER BY name"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"20\",\"read_bytes\":\"1165\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"20\",\"result_bytes\":\"9651\",\"elapsed_ns\":\"788540\",\"memory_usage\":\"8185161\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "079795d2-b942-4bc7-b75c-23ec0997d9e6"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9892"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:50:06 GMT"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "sqrxwralcozvsrnq"
+      ]
+    },
+    "body": "[\"name\", \"engine\", \"total_rows\"]\n[\"String\", \"String\", \"Nullable(UInt64)\"]\n[\".inner_id.f8e223a6-b883-4115-9c1e-01eb5f429f19\", \"MergeTree\", 1]\n[\"dbimp_big\", \"MergeTree\", 5000]\n[\"dbimp_chk\", \"MergeTree\", 0]\n[\"dbimp_crud\", \"MergeTree\", 1]\n[\"dbimp_crud2\", \"MergeTree\", 0]\n[\"dbimp_cts\", \"Memory\", 0]\n[\"dbimp_def\", \"MergeTree\", 0]\n[\"dbimp_dict\", \"Dictionary\", null]\n[\"dbimp_fk\", \"MergeTree\", 1]\n[\"dbimp_log\", \"TinyLog\", 0]\n[\"dbimp_lw\", \"MergeTree\", 0]\n[\"dbimp_mem\", \"Memory\", 0]\n[\"dbimp_mv\", \"MaterializedView\", 1]\n[\"dbimp_pk\", \"MergeTree\", 2]\n[\"dbimp_pk2\", \"MergeTree\", 0]\n[\"dbimp_pk3\", \"MergeTree\", 0]\n[\"dbimp_rep\", \"ReplacingMergeTree\", 2]\n[\"dbimp_ttl2\", \"MergeTree\", 2]\n[\"dbimp_types\", \"MergeTree\", 3]\n[\"dbimp_view\", \"View\", null]\n"
+  }
+}

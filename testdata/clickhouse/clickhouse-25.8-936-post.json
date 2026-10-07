@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&mutations_sync=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "UPDATE dbimp.dbimp_crud SET name = 'dos' WHERE id = 2"
+  },
+  "response": {
+    "status": 501,
+    "header": {
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9983"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:37 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"183080\"}"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "420c60bd-f2c0-44f3-a226-55f89d919930"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "48"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 48. DB::Exception: Lightweight updates are not supported. Lightweight updates are supported only for tables with materialized _block_number column. Run 'MODIFY SETTING enable_block_number_column = 1' command to enable it. (NOT_IMPLEMENTED) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

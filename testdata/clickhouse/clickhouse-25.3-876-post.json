@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+    "header": {
+      "Accept-Encoding": [
+        "zstd"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "70038907-8d02-4c21-af3e-52322f805a26"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Content-Encoding": [
+        "zstd"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"5000\",\"read_bytes\":\"40000\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"500\",\"result_rows\":\"500\",\"result_bytes\":\"8192\",\"elapsed_ns\":\"899241\"}"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:36 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9925"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ]
+    },
+    "body": "",
+    "binary": "KLUv/QRYkAAAWyJpZCJdClsiVUludDY0Il0K1AwAdmFAEKAlyQGrupl2RUTKaFaH+wo8ADkAOgDbJEmSpIiIiIgIIYQQQggh/v///5mZmZkZERERERHbtm27bdu2JUmSJLdt2zZJkiQpIiIiIj7icooQAARt25YkSZLctm3bJEmSpIiIiIiIoKCgoKCgoKCgoP///39mZmZmRkRERETEtm3bbtu2bUmSJMlt2xYjIiIiImLbtm23bdu2JEmS5LZt2yZJkiRFRERERISFhYWFhYWFhYX9////MzMzMzMiIiIiIrZt23bbgYDg/////8zMzMyMiIiIiIht27bdtm3bkiRJktu2bZskSZIUEREREREYGBgYGBgYGBj4////z8zMzEyB86gh7B7RlwxrESRAfgz7/f///////1nXaJqmaZq2BRFFEUMKJcqgaJqm6TRNWwMKI4okihRqUDRN0zRN060EhhRKGEkUedGkosqqBlWCqoEqQNU/FT/VPhWfyp4q9agq1apKq2pVbVW1WrWq2qpa1VpVrVZNKlFD1A41Q61QS6gNaoJaFKiBBgAAAAAALCAUkBHwVwEBAADdS4Ja"
+  }
+}

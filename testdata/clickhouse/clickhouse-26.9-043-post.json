@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompact",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Keep-Alive": [
+        "timeout=30, max=9957"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"16768\",\"elapsed_ns\":\"425731\",\"memory_usage\":\"8141499\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:54 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "jzsnnbhaqxbrtupx"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompact"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "d83a5414-2d63-4065-9cbc-01fd4a63130d"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "{\n\t\"meta\":\n\t[\n\t\t{\n\t\t\t\"name\": \"a\",\n\t\t\t\"type\": \"UInt8\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"b\",\n\t\t\t\"type\": \"String\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"c\",\n\t\t\t\"type\": \"Nullable(Nothing)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"d\",\n\t\t\t\"type\": \"Int64\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"a\",\n\t\t\t\"type\": \"UInt8\"\n\t\t}\n\t],\n\n\t\"data\":\n\t[\n\t\t[1, \"x\", null, -2, 1]\n\t],\n\n\t\"rows\": 1,\n\n\t\"statistics\":\n\t{\n\t\t\"elapsed\": 0.000365941,\n\t\t\"rows_read\": 1,\n\t\t\"bytes_read\": 1\n\t}\n}\n"
+  }
+}

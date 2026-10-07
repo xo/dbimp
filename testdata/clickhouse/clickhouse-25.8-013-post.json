@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_big SELECT number, toString(number) FROM numbers(5000)"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "a9a16d56-4044-4b75-bcc7-049f91111204"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9987"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:13 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"5000\",\"read_bytes\":\"40000\",\"written_rows\":\"5000\",\"written_bytes\":\"98890\",\"total_rows_to_read\":\"5000\",\"result_rows\":\"5000\",\"result_bytes\":\"98890\",\"elapsed_ns\":\"1490251\"}"
+      ]
+    },
+    "body": ""
+  }
+}

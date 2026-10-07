@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT CAST(toInt32(1) AS Dynamic) AS a, CAST('s' AS Dynamic) AS b"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "3bf6fcc0-9da1-415c-9c63-83ba18011d4a"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Format": [
+        "RowBinaryWithNamesAndTypes"
+      ],
+      "Content-Type": [
+        "application/octet-stream"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9979"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"270820\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:58 GMT"
+      ]
+    },
+    "body": "\u0002\u0001a\u0001b\u0007Dynamic\u0007Dynamic\t\u0001\u0000\u0000\u0000\u0015\u0001s"
+  }
+}

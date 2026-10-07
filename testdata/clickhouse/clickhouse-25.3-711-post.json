@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=42&param_s=hello%20w%27orld&param_d=2026-10-07&param_arr=%5B1%2C2%2C3%5D&param_n=%5CN&param_u=18446744073709551615&param_f=1.5&param_dec=123.45&param_b=true&param_uu=61f0c404-5cb3-11e7-907b-a6006ad3dba0&param_t=2026-10-07%2012%3A00%3A00&param_t3=2026-10-07%2012%3A00%3A00.123&param_tup=%281%2C%27x%27%29&param_m=%7B%27k%27%3A1%7D&param_i128=170141183460469231731687303715884105727&param_ip=1.2.3.4",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT {a:Int32} AS a, {s:String} AS s, {d:Date} AS d, {arr:Array(Int32)} AS arr, {n:Nullable(String)} AS n, {u:UInt64} AS u, {f:Float64} AS f, {dec:Decimal(10, 2)} AS dec, {b:Bool} AS b, {uu:UUID} AS uu, {t:DateTime('Asia/Jakarta')} AS t, {t3:DateTime64(3, 'UTC')} AS t3, {tup:Tuple(Int32, String)} AS tup, {m:Map(String, Int32)} AS m, {i128:Int128} AS i128, {ip:IPv4} AS ip"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9866"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"737850\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "c856a4b7-1b0f-426a-9d96-45ad71ad272e"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:04 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ]
+    },
+    "body": "[\"a\", \"s\", \"d\", \"arr\", \"n\", \"u\", \"f\", \"dec\", \"b\", \"uu\", \"t\", \"t3\", \"tup\", \"m\", \"i128\", \"ip\"]\n[\"Int32\", \"String\", \"Date\", \"Array(Int32)\", \"Nullable(String)\", \"UInt64\", \"Float64\", \"Decimal(10, 2)\", \"Bool\", \"UUID\", \"DateTime('Asia\\/Jakarta')\", \"DateTime64(3, 'UTC')\", \"Tuple(Int32, String)\", \"Map(String, Int32)\", \"Int128\", \"IPv4\"]\n[42, \"hello w'orld\", \"2026-10-07\", [1,2,3], null, \"18446744073709551615\", 1.5, 123.45, true, \"61f0c404-5cb3-11e7-907b-a6006ad3dba0\", \"2026-10-07 12:00:00\", \"2026-10-07 12:00:00.123\", [1,\"x\"], {\"k\":1}, \"170141183460469231731687303715884105727\", \"1.2.3.4\"]\n"
+  }
+}

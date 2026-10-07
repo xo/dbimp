@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT tuple(1, 'a') AS t, CAST((1, 'a') AS Tuple(x Int32, y String)) AS n, CAST((1, 'a') AS Tuple(Int32, String)) AS u"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9898"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"17280\",\"elapsed_ns\":\"449860\",\"memory_usage\":\"8164419\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "4ba00aac-2dde-4cb9-b7a3-6bf2fc6b1a84"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "gngacyivtxzrlthl"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:55 GMT"
+      ]
+    },
+    "body": "[\"t\", \"n\", \"u\"]\n[\"Tuple(UInt8, String)\", \"Tuple(x Int32, y String)\", \"Tuple(Int32, String)\"]\n[[1,\"a\"], {\"x\":1,\"y\":\"a\"}, [1,\"a\"]]\n"
+  }
+}

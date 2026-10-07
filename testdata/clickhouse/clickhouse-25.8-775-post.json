@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=Native",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT * FROM dbimp.nosuch"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "8b8f1a87-d0ad-439c-9b08-7f4d6eb04afa"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"249420\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "60"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9998"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:01 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ]
+    },
+    "body": "Code: 60. DB::Exception: Unknown table expression identifier 'dbimp.nosuch' in scope SELECT * FROM dbimp.nosuch. (UNKNOWN_TABLE) (version 25.8.33.6 (official build))\n"
+  }
+}

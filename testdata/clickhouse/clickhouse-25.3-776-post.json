@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompact&max_block_size=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9801"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:04 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"4\",\"read_bytes\":\"32\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"375100\"}"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "9e76aa21-13ab-4eed-b275-79c735ff51a1"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompact"
+      ]
+    },
+    "body": "{\n\t\"meta\":\n\t[\n\t\t{\n\t\t\t\"name\": \"number\",\n\t\t\t\"type\": \"UInt64\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"throwIf(equals(number, 5))\",\n\t\t\t\"type\": \"UInt8\"\n\t\t}\n\t],\n\n\t\"data\":\n\t[\n\t\t[\"0\", 0],\n\t\t[\"1\", 0],\n\t\t[\"2\", 0],\n\t\t[\"3\", 0]\n\t],\n\n\t\"rows\": 4,\n\n\t\"exception\": \"Code: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.number, 5_UInt8) :: 0) -> throwIf(equals(__table1.number, 5_UInt8)) UInt8 : 2'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 25.3.14.14 (official build))\"\n}\n"
+  }
+}

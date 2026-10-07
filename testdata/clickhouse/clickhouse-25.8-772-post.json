@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 'a' + 1"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "9fe3d253-e84b-4ffe-9d87-ace68b5033af"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "43"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:01 GMT"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9999"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"470980\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 43. DB::Exception: Illegal types String and UInt8 of arguments of function plus: In scope SELECT 'a' + 1. (ILLEGAL_TYPE_OF_ARGUMENT) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp_other.secret VALUES (2)"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "60"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9999"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"369280\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:34 GMT"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "69e5f044-c124-47ab-b998-d64ddd86eba7"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 60. DB::Exception: Table dbimp_other.secret does not exist. (UNKNOWN_TABLE) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=TabSeparated&session_id=dbimp-busy-default&max_block_size=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT sleepEachRow(0.2) FROM numbers(10)"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "83609350-878a-43d8-aa0c-2368602c27b3"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:01 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9984"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"2\",\"read_bytes\":\"16\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"200579635\"}"
+      ],
+      "X-Clickhouse-Format": [
+        "TabSeparated"
+      ],
+      "Content-Type": [
+        "text/tab-separated-values; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ]
+    },
+    "body": "0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n"
+  }
+}

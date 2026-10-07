@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SHOW GRANTS"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"2\",\"read_bytes\":\"286\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"2\",\"result_bytes\":\"4608\",\"elapsed_ns\":\"236250\",\"memory_usage\":\"8029403\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:50:03 GMT"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "fdf05940-3ca5-4988-9ec9-ac1001a4147c"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "teajuxuqpsjmoyew"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9981"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "[\"GRANTS\"]\n[\"String\"]\n[\"GRANT SELECT, INSERT, ALTER TABLE, ALTER DATABASE, ALTER VIEW, CREATE DATABASE, CREATE TABLE, CREATE VIEW, CREATE DICTIONARY, DROP DATABASE, DROP TABLE, DROP VIEW, DROP DICTIONARY, TRUNCATE, OPTIMIZE ON dbimp.* TO dbimp_user\"]\n[\"GRANT SELECT ON system.processes TO dbimp_user\"]\n"
+  }
+}

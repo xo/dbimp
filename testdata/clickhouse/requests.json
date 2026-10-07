@@ -1,0 +1,4408 @@
+{
+  "driver": "clickhouse",
+  "requests": [
+    {
+      "item": 1,
+      "name": "setup: drop the databases",
+      "method": "POST",
+      "path": "/",
+      "text": "DROP DATABASE IF EXISTS dbimp SYNC",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_other",
+      "method": "POST",
+      "path": "/",
+      "text": "DROP DATABASE IF EXISTS dbimp_other SYNC",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop the ordinary user",
+      "method": "POST",
+      "path": "/",
+      "text": "DROP USER IF EXISTS dbimp_user",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create dbimp",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE DATABASE dbimp",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create dbimp_other",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE DATABASE dbimp_other",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create the ordinary user",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE USER dbimp_user IDENTIFIED BY 'dbimp_secret'",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: grant the ordinary user the database dbimp",
+      "method": "POST",
+      "path": "/",
+      "text": "GRANT SELECT, INSERT, ALTER, CREATE, DROP, TRUNCATE, OPTIMIZE ON dbimp.* TO dbimp_user",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: grant the ordinary user its own processes",
+      "method": "POST",
+      "path": "/",
+      "text": "GRANT SELECT ON system.processes TO dbimp_user",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create dbimp_crud",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE TABLE dbimp.dbimp_crud (id UInt32, name String, v Int64, ts DateTime('UTC')) ENGINE = MergeTree ORDER BY id",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create dbimp_crud2",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE TABLE dbimp.dbimp_crud2 (id UInt32, parent_id UInt32, label String, INDEX idx_label label TYPE bloom_filter GRANULARITY 1) ENGINE = MergeTree ORDER BY id",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create dbimp_lw",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE TABLE dbimp.dbimp_lw (id UInt32, name String) ENGINE = MergeTree ORDER BY id SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create dbimp_big",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE TABLE dbimp.dbimp_big (id UInt64, s String) ENGINE = MergeTree ORDER BY id",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: fill dbimp_big",
+      "method": "POST",
+      "path": "/",
+      "text": "INSERT INTO dbimp.dbimp_big SELECT number, toString(number) FROM numbers(5000)",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create dbimp_other.secret",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE TABLE dbimp_other.secret (a Int32) ENGINE = MergeTree ORDER BY a",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: fill dbimp_other.secret",
+      "method": "POST",
+      "path": "/",
+      "text": "INSERT INTO dbimp_other.secret VALUES (1)",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: dbimp_types: CREATE TABLE dbimp.dbimp_types (id UInt3",
+      "method": "POST",
+      "path": "/",
+      "text": "CREATE TABLE dbimp.dbimp_types (id UInt32, i8 Int8, u8 UInt8, i16 Int16, u16 UInt16, i32 Int32, u32 UInt32, i64 Int64, u64 UInt64, i128 Int128, u128 UInt128, i256 Int256, u256 UInt256, f32 Float32, f64 Float64, d32 Decimal32(4), d64 Decimal64(10), d128 Decimal128(20), d256 Decimal256(40), b Bool, s String, sb String, fs FixedString(4), dt Date, dt32 Date32, dtm DateTime, dtm64 DateTime64(9), dtz DateTime('Asia/Jakarta'), dt64z DateTime64(3, 'America/New_York'), e8 Enum8('a' = 1, 'b' = 2), e16 Enum16('x' = 1000, 'y' = 2000), uu UUID, ip4 IPv4, ip6 IPv6, arr Array(Int32), arr2 Array(Array(String)), arrn Array(Nullable(Int32)), tup Tuple(Int32, String), tupn Tuple(a Int32, b String), mp Map(String, Int32), mpn Map(Int32, Array(String)), lc LowCardinality(String), lcn LowCardinality(Nullable(String)), nl Nullable(Int32), nls Nullable(String), nld Nullable(DateTime64(3)), var Variant(Int32, String, Array(Int32)), dyn Dynamic, js JSON, nest Nested(a Int32, b String), sagg SimpleAggregateFunction(max, Int32), agg AggregateFunction(sum, UInt32)) ENGINE = MergeTree ORDER BY id",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: dbimp_types: INSERT INTO dbimp.dbimp_types SELECT 1, ",
+      "method": "POST",
+      "path": "/",
+      "text": "INSERT INTO dbimp.dbimp_types SELECT 1, -128, 255, -32768, 65535, -2147483648, 4294967295, -9223372036854775808, 18446744073709551615, toInt128('-170141183460469231731687303715884105728'), toUInt128('340282366920938463463374607431768211455'), toInt256('-57896044618658097711785492504343953926634992332820282019728792003956564819968'), toUInt256('115792089237316195423570985008687907853269984665640564039457584007913129639935'), toFloat32('3.4028234663852886e38'), 1.7976931348623157e308, toDecimal32('99999.9999', 4), toDecimal64('99999999.9999999999', 10), toDecimal128('123456789012345678.12345678901234567890', 20), toDecimal256('123456789012345678901234567890123456.1234567890123456789012345678901234567890', 40), true, 'héllo € 日本', unhex('ff80'), toFixedString('abcd', 4), toDate('2149-06-06'), toDate32('2299-12-31'), toDateTime('2106-02-07 06:28:15', 'UTC'), toDateTime64('2262-04-11 23:47:16.854775807', 9, 'UTC'), toDateTime('2026-10-07 12:00:00', 'Asia/Jakarta'), toDateTime64('2026-10-07 12:00:00.123', 3, 'America/New_York'), 'a', 'y', toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'), toIPv4('192.168.0.1'), toIPv6('2001:db8::1'), [1, 2, 3], [['a', 'b'], [], ['c']], [1, NULL, 3], (1, 'x'), (2, 'y'), map('k', 1, 'l', 2), map(1, ['p', 'q']), 'lc', 'lcn', 42, 'text', toDateTime64('2026-10-07 12:00:00.123', 3, 'UTC'), CAST(toInt32(42) AS Variant(Int32, String, Array(Int32))), CAST(7 AS Dynamic), CAST('{\"a\":1,\"b\":{\"c\":[1,2,\"x\"]},\"d\":null}' AS JSON), [1, 2], ['p', 'q'], 5, initializeAggregation('sumState', toUInt32(5))",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: dbimp_types: INSERT INTO dbimp.dbimp_types SELECT 2, ",
+      "method": "POST",
+      "path": "/",
+      "text": "INSERT INTO dbimp.dbimp_types SELECT 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, '', '', toFixedString('', 4), toDate('1970-01-01'), toDate32('1900-01-01'), toDateTime(0, 'UTC'), toDateTime64(0, 9, 'UTC'), toDateTime(0, 'Asia/Jakarta'), toDateTime64(0, 3, 'America/New_York'), 'b', 'x', toUUID('00000000-0000-0000-0000-000000000000'), toIPv4('0.0.0.0'), toIPv6('::'), CAST([] AS Array(Int32)), CAST([] AS Array(Array(String))), CAST([] AS Array(Nullable(Int32))), (0, ''), (0, ''), CAST(map() AS Map(String, Int32)), CAST(map() AS Map(Int32, Array(String))), '', '', 0, '', toDateTime64(0, 3, 'UTC'), CAST('s' AS Variant(Int32, String, Array(Int32))), CAST('dyn' AS Dynamic), CAST('{}' AS JSON), CAST([] AS Array(Int32)), CAST([] AS Array(String)), 0, initializeAggregation('sumState', toUInt32(0))",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: dbimp_types: INSERT INTO dbimp.dbimp_types SELECT 3, ",
+      "method": "POST",
+      "path": "/",
+      "text": "INSERT INTO dbimp.dbimp_types SELECT 3, 127, 1, 32767, 1, 2147483647, 1, 9223372036854775807, 1, toInt128('170141183460469231731687303715884105727'), 1, toInt256('57896044618658097711785492504343953926634992332820282019728792003956564819967'), 1, -1.5, nan, -0.0001, 0.0000000001, -0.00000000000000000001, -0.0000000000000000000000000000000000000001, true, 'x', unhex('00'), toFixedString('ab', 4), toDate('2026-02-28'), toDate32('1969-12-31'), toDateTime('2026-03-29 02:30:00', 'Asia/Jakarta'), toDateTime64('1969-12-31 23:59:59.999999999', 9, 'UTC'), toDateTime('2026-10-07 12:00:00', 'Asia/Jakarta'), toDateTime64('2026-11-01 01:30:00.000', 3, 'America/New_York'), 'a', 'y', toUUID('ffffffff-ffff-ffff-ffff-ffffffffffff'), toIPv4('255.255.255.255'), toIPv6('::ffff:1.2.3.4'), [-1], [['']], [NULL], (-1, 'z'), (-1, 'z'), map('', 0), map(0, ['']), 'lc2', NULL, NULL, NULL, NULL, CAST([toInt32(1), toInt32(2)] AS Variant(Int32, String, Array(Int32))), CAST([1, 2] AS Dynamic), CAST('{\"a\":\"str\"}' AS JSON), [7], ['w'], -5, initializeAggregation('sumState', toUInt32(1))",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: sync the logs before the first request",
+      "method": "POST",
+      "path": "/",
+      "text": "SYSTEM FLUSH LOGS",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a statement in the body",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "a statement in the body with a plain text content type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Content-Type": [
+          "text/plain"
+        ]
+      },
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "a statement in the body with a JSON content type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      },
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "a statement in the query string by GET",
+      "method": "GET",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=SELECT%201%20AS%20a"
+    },
+    {
+      "item": 1,
+      "name": "a statement in the query string by POST",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=SELECT%202%20AS%20a",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "a statement as a form field",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "query=SELECT+3+AS+a"
+    },
+    {
+      "item": 1,
+      "name": "a statement with no default format",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "a statement with the FORMAT clause",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "text": "SELECT 1 AS a FORMAT JSONCompactEachRowWithNamesAndTypes"
+    },
+    {
+      "item": 1,
+      "name": "a statement with an empty body",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "text": ""
+    },
+    {
+      "item": 1,
+      "name": "a GET that writes",
+      "method": "GET",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=CREATE%20TABLE%20dbimp.dbimp_get%20%28a%20Int8%29%20ENGINE%20%3D%20Memory"
+    },
+    {
+      "item": 1,
+      "name": "the user in the query string with the header of Authorization",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&user={{user}}",
+      "text": "SELECT currentUser() AS u"
+    },
+    {
+      "item": 1,
+      "name": "the user in the header X-ClickHouse-User with the header of Authorization",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-User": [
+          "{{user}}"
+        ]
+      },
+      "text": "SELECT currentUser() AS u"
+    },
+    {
+      "item": 1,
+      "name": "the database in the header X-ClickHouse-Database",
+      "method": "POST",
+      "path": "/?default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-Database": [
+          "dbimp"
+        ]
+      },
+      "text": "SELECT currentDatabase() AS d"
+    },
+    {
+      "item": 1,
+      "name": "the database in the query string",
+      "method": "POST",
+      "path": "/?database=dbimp_other&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT currentDatabase() AS d"
+    },
+    {
+      "item": 1,
+      "name": "a database in the query string that does not exist",
+      "method": "POST",
+      "path": "/?database=nosuchdb&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "a database in the header that does not exist",
+      "method": "POST",
+      "path": "/?default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-Database": [
+          "nosuchdb"
+        ]
+      },
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "the ping endpoint",
+      "method": "GET",
+      "path": "/ping"
+    },
+    {
+      "item": 1,
+      "name": "the root endpoint",
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "item": 1,
+      "name": "the replicas status endpoint",
+      "method": "GET",
+      "path": "/replicas_status"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSONCompactEachRowWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSONCompactEachRowWithNames",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNames",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSONCompactEachRow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRow",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSONColumnsWithMetadata",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONColumnsWithMetadata",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSON",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSON",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSONEachRow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONEachRow",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, JSONCompactStringsEachRowWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactStringsEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, RowBinaryWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, RowBinaryWithNames",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNames",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, Native",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Native",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, TabSeparatedWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparatedWithNamesAndTypes",
+      "text": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+    },
+    {
+      "item": 2,
+      "name": "columns, Arrow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=ArrowStream",
+      "text": "SELECT 1 AS a, 'x' AS b"
+    },
+    {
+      "item": 2,
+      "name": "no rows, JSONCompactEachRowWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a, 'x' AS b WHERE 0"
+    },
+    {
+      "item": 2,
+      "name": "no rows, JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "SELECT 1 AS a, 'x' AS b WHERE 0"
+    },
+    {
+      "item": 2,
+      "name": "no rows, RowBinaryWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT 1 AS a, 'x' AS b WHERE 0"
+    },
+    {
+      "item": 2,
+      "name": "no rows, Native",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Native",
+      "text": "SELECT 1 AS a, 'x' AS b WHERE 0"
+    },
+    {
+      "item": 2,
+      "name": "a column of a table named with a dot",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT nest.a, nest.b FROM dbimp.dbimp_types WHERE id = 1"
+    },
+    {
+      "item": 2,
+      "name": "describe a statement",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DESCRIBE TABLE dbimp.dbimp_crud"
+    },
+    {
+      "item": 2,
+      "name": "the order of many columns",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 9 AS z, 8 AS y, 7 AS x, 6 AS w, 5 AS v, 4 AS u, 3 AS t, 2 AS s, 1 AS r, 0 AS q, 'a' AS A"
+    },
+    {
+      "item": 2,
+      "name": "a statement that returns no columns",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE IF NOT EXISTS dbimp.dbimp_empty (a Int8) ENGINE = Memory"
+    },
+    {
+      "item": 2,
+      "name": "a statement that returns no columns, JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_empty"
+    },
+    {
+      "item": 2,
+      "name": "the summary of an insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (1000, 'summary', 1)"
+    },
+    {
+      "item": 2,
+      "name": "the summary of an insert with a response format",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&send_progress_in_http_headers=1",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (1001, 'summary', 1)"
+    },
+    {
+      "item": 2,
+      "name": "the header X-ClickHouse-Format and the timezone",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_timezone=Asia%2FJakarta",
+      "text": "SELECT now() AS n"
+    },
+    {
+      "item": 3,
+      "name": "every type, JSONCompactEachRowWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "every type, JSONCompactEachRowWithNamesAndTypes with every quote setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&output_format_json_quote_64bit_integers=1&output_format_json_quote_64bit_floats=1&output_format_json_quote_decimals=1&output_format_json_quote_denormals=1",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "every type, JSONCompactEachRowWithNamesAndTypes with no quote setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&output_format_json_quote_64bit_integers=0&output_format_json_quote_64bit_floats=0&output_format_json_quote_decimals=0&output_format_json_quote_denormals=0",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "every type, JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "every type, JSONCompactStringsEachRowWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactStringsEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "every type, RowBinaryWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "every type, Native",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Native",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "every type, JSONEachRow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONEachRow",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "the settings of the quotes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, value FROM system.settings WHERE name LIKE 'output_format_json_quote%' OR name = 'date_time_output_format' OR name = 'http_write_exception_in_output_format' OR name = 'output_format_json_validate_utf8' OR name LIKE 'cancel_http%' ORDER BY name",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "the settings of the quotes as the ordinary user",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, value FROM system.settings WHERE name LIKE 'output_format_json_quote%' OR name = 'date_time_output_format' ORDER BY name",
+      "principals": [
+        "ordinary"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "NaN and infinities by default",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT nan AS n, inf AS i, -inf AS ni, toFloat32(nan) AS n32, -0.0 AS nz, 1e300 * 1e10 AS ov"
+    },
+    {
+      "item": 3,
+      "name": "NaN and infinities, quoted",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&output_format_json_quote_denormals=1",
+      "text": "SELECT nan AS n, inf AS i, -inf AS ni, toFloat32(nan) AS n32"
+    },
+    {
+      "item": 3,
+      "name": "NaN and infinities, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT nan AS n, inf AS i, -inf AS ni, toFloat32(nan) AS n32"
+    },
+    {
+      "item": 3,
+      "name": "NaN and infinities in JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "SELECT nan AS n, inf AS i, -inf AS ni"
+    },
+    {
+      "item": 3,
+      "name": "a string of invalid UTF-8",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT unhex('ff80') AS s, toFixedString(unhex('ff'), 2) AS fs"
+    },
+    {
+      "item": 3,
+      "name": "a string of invalid UTF-8, validated",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&output_format_json_validate_utf8=1",
+      "text": "SELECT unhex('ff80') AS s"
+    },
+    {
+      "item": 3,
+      "name": "a string of invalid UTF-8, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT unhex('ff80') AS s, toFixedString(unhex('ff'), 2) AS fs"
+    },
+    {
+      "item": 3,
+      "name": "a string with escapes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT concat('a/b\"c\\\\d', char(1, 10, 9, 127), ' ') AS s"
+    },
+    {
+      "item": 3,
+      "name": "the largest and the smallest integers as literals",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toInt64('-9223372036854775808') AS a, toInt64('9223372036854775807') AS b, toUInt64('18446744073709551615') AS c, toInt128('170141183460469231731687303715884105727') AS d"
+    },
+    {
+      "item": 3,
+      "name": "an integer literal out of range",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 9223372036854775808 AS a, 18446744073709551616 AS b, -9223372036854775809 AS c"
+    },
+    {
+      "item": 3,
+      "name": "an integer that overflows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toInt8(200) AS a, toInt64('9223372036854775808') AS b"
+    },
+    {
+      "item": 3,
+      "name": "the longest decimals",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDecimal256('-1234567890123456789012345678901234567890123456789012345678901234567890123456', 0) AS a, toDecimal256('0.0000000000000000000000000000000000000000000000000000000000000000000000000001', 76) AS b, toDecimal256('99999999999999999999999999999999999999999999999999999999999999999999999999999', 0) AS c"
+    },
+    {
+      "item": 3,
+      "name": "a decimal with trailing zeros",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDecimal64('1.50', 4) AS a, toDecimal64('100', 2) AS b, toDecimal64('-0.01', 2) AS c"
+    },
+    {
+      "item": 3,
+      "name": "a decimal as quoted and as unquoted",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&output_format_json_quote_decimals=1",
+      "text": "SELECT toDecimal128('1234567890123456789012345678.123456789', 9) AS a"
+    },
+    {
+      "item": 3,
+      "name": "dates and times as the server writes them",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDate('2026-10-07') AS d, toDateTime('2026-10-07 12:34:56', 'UTC') AS t, toDateTime64('2026-10-07 12:34:56.123456789', 9, 'UTC') AS t9, toDateTime64('2026-10-07 12:34:56.5', 1, 'UTC') AS t1"
+    },
+    {
+      "item": 3,
+      "name": "a date time with each output format, iso",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&date_time_output_format=iso",
+      "text": "SELECT toDateTime('2026-10-07 12:34:56', 'Asia/Jakarta') AS t, toDateTime64('2026-11-01 01:30:00.000', 3, 'America/New_York') AS t3"
+    },
+    {
+      "item": 3,
+      "name": "a date time with each output format, unix_timestamp",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&date_time_output_format=unix_timestamp",
+      "text": "SELECT toDateTime('2026-10-07 12:34:56', 'Asia/Jakarta') AS t, toDateTime64('2026-11-01 01:30:00.000', 3, 'America/New_York') AS t3, toDateTime64('1969-12-31 23:59:59.999', 3, 'UTC') AS tn"
+    },
+    {
+      "item": 3,
+      "name": "a date time with each output format, simple",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDateTime64('2026-11-01 01:30:00.000', 3, 'America/New_York') AS t3, toDateTime64('2026-11-01 01:30:00.000', 3, 'America/New_York') + 3600 AS t3b"
+    },
+    {
+      "item": 3,
+      "name": "the time zone of the session",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_timezone=Asia%2FJakarta",
+      "text": "SELECT toDateTime(0) AS t, toTypeName(toDateTime(0)) AS ty, timezone() AS tz"
+    },
+    {
+      "item": 3,
+      "name": "a date time with a zone from the type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDateTime(0, 'Asia/Jakarta') AS t, toDateTime64(0, 3, 'America/New_York') AS t3"
+    },
+    {
+      "item": 3,
+      "name": "the ranges of the dates",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDate('1970-01-01') AS d0, toDate('2149-06-06') AS d1, toDate32('1900-01-01') AS e0, toDate32('2299-12-31') AS e1, toDateTime('2106-02-07 06:28:15', 'UTC') AS t1, toDateTime64('1900-01-01 00:00:00', 0, 'UTC') AS t64"
+    },
+    {
+      "item": 3,
+      "name": "a date out of range",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDate('2150-01-01') AS d, toDate32('2300-01-01') AS e, toDateTime('1960-01-01', 'UTC') AS t"
+    },
+    {
+      "item": 3,
+      "name": "an enum with a value outside the names",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(3 AS Enum8('a' = 1, 'b' = 2)) AS e"
+    },
+    {
+      "item": 3,
+      "name": "an enum",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST('a' AS Enum8('a' = 1, 'b' = 2, 'c d' = 3)) AS e, CAST('x' AS Enum16('x' = -1000, 'y' = 1000)) AS e16, CAST(1 AS Enum8('a' = 1, 'b' = 2)) AS e1"
+    },
+    {
+      "item": 3,
+      "name": "an interval",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toIntervalDay(3) AS i, INTERVAL 1 MONTH AS m, toIntervalNanosecond(5) AS n"
+    },
+    {
+      "item": 3,
+      "name": "the type Nothing and NULL",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT NULL AS n, [] AS e, tuple() AS t, map() AS m"
+    },
+    {
+      "item": 3,
+      "name": "a nested array and a tuple in an array",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT [[1, 2], [3]] AS a, [(1, 'a'), (2, 'b')] AS t, [NULL, 1] AS n, [[NULL]] AS nn"
+    },
+    {
+      "item": 3,
+      "name": "a map with each key type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT map(1, 'a') AS i, map('k', 1) AS s, map(toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'), 1) AS u, map(toDate('2026-01-01'), 1) AS d, map((1, 2), 3) AS t"
+    },
+    {
+      "item": 3,
+      "name": "a tuple with names and with no names",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT tuple(1, 'a') AS t, CAST((1, 'a') AS Tuple(x Int32, y String)) AS n, CAST((1, 'a') AS Tuple(Int32, String)) AS u"
+    },
+    {
+      "item": 3,
+      "name": "a named tuple as an array",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&output_format_json_named_tuples_as_objects=0",
+      "text": "SELECT CAST((1, 'a') AS Tuple(x Int32, y String)) AS n"
+    },
+    {
+      "item": 3,
+      "name": "a variant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(toInt32(1) AS Variant(Int32, String)) AS a, CAST('s' AS Variant(Int32, String)) AS b, CAST(NULL AS Variant(Int32, String)) AS c, variantType(a) AS ta"
+    },
+    {
+      "item": 3,
+      "name": "a dynamic",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(toInt32(1) AS Dynamic) AS a, CAST('s' AS Dynamic) AS b, CAST([1, 2] AS Dynamic) AS c, CAST(NULL AS Dynamic) AS d, CAST(toDate('2026-01-01') AS Dynamic) AS e, CAST(toUInt64(18446744073709551615) AS Dynamic) AS f, dynamicType(a) AS ta"
+    },
+    {
+      "item": 3,
+      "name": "a dynamic, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT CAST(toInt32(1) AS Dynamic) AS a, CAST('s' AS Dynamic) AS b"
+    },
+    {
+      "item": 3,
+      "name": "a variant, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT CAST(toInt32(1) AS Variant(Int32, String)) AS a, CAST(NULL AS Variant(Int32, String)) AS c"
+    },
+    {
+      "item": 3,
+      "name": "a JSON column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT js FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "a JSON column, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT js FROM dbimp.dbimp_types WHERE id = 3"
+    },
+    {
+      "item": 3,
+      "name": "a JSON column with typed paths",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST('{\"a\":1,\"b\":\"x\",\"c\":[1,2]}' AS JSON(a Int64, b String)) AS j, JSONAllPaths(j) AS p, toTypeName(j.a) AS ta, toTypeName(j.b) AS tb, toTypeName(j.c) AS tc"
+    },
+    {
+      "item": 3,
+      "name": "a JSON column read as text",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toJSONString(js) AS s FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "a JSON number beyond 64 bits in a JSON column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST('{\"a\":12345678901234567890123}' AS JSON) AS j"
+    },
+    {
+      "item": 3,
+      "name": "a low cardinality type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toLowCardinality('a') AS a, toLowCardinality(toNullable('b')) AS b, CAST(NULL AS LowCardinality(Nullable(String))) AS c"
+    },
+    {
+      "item": 3,
+      "name": "a fixed string with zero bytes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toFixedString('a', 3) AS a, hex(toFixedString('a', 3)) AS h"
+    },
+    {
+      "item": 3,
+      "name": "an aggregate function state",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT sumState(toUInt32(5)) AS a, uniqState(1) AS u"
+    },
+    {
+      "item": 3,
+      "name": "an aggregate function state, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT sumState(toUInt32(5)) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a UUID and its zero",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0') AS u, toUUID('00000000-0000-0000-0000-000000000000') AS z"
+    },
+    {
+      "item": 3,
+      "name": "an IP address",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toIPv4('1.2.3.4') AS a, toIPv6('::1') AS b, toIPv6('::ffff:1.2.3.4') AS c, toIPv4OrNull('x') AS d"
+    },
+    {
+      "item": 3,
+      "name": "a UUID and an IP address, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0') AS u, toIPv4('1.2.3.4') AS a, toIPv6('::1') AS b"
+    },
+    {
+      "item": 3,
+      "name": "a boolean",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT true AS t, false AS f, toBool(1) AS b, CAST(NULL AS Nullable(Bool)) AS n, toTypeName(true) AS ty"
+    },
+    {
+      "item": 3,
+      "name": "a geo type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT (1.5, 2.5)::Point AS p, [(0, 0), (1, 1)]::Ring AS r, [[(0, 0), (1, 1)]]::Polygon AS pg, [[[(0, 0), (1, 1)]]]::MultiPolygon AS mpg, [(0, 0), (1, 1)]::LineString AS ls, [[(0, 0), (1, 1)]]::MultiLineString AS mls"
+    },
+    {
+      "item": 3,
+      "name": "a geo type, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT (1.5, 2.5)::Point AS p, [[(0, 0), (1, 1)]]::Polygon AS pg"
+    },
+    {
+      "item": 3,
+      "name": "a float with its shortest text",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toFloat32('3.4028234663852886e38') AS fmax, toFloat32('1.17549435e-38') AS fmin, toFloat32('1.4e-45') AS fden, toFloat64('5e-324') AS d, toFloat64('1.7976931348623157e308') AS dmax, 0.1 + 0.2 AS s, toFloat32(16777217) AS f"
+    },
+    {
+      "item": 3,
+      "name": "a float with its text in RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT toFloat32('3.4028234663852886e38') AS fmax, toFloat64('5e-324') AS d"
+    },
+    {
+      "item": 3,
+      "name": "a string with each byte",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT arrayStringConcat(arrayMap(x -> char(x), range(1, 128)), '') AS s"
+    },
+    {
+      "item": 3,
+      "name": "a long string",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT repeat('é', 100000) AS s, length(s) AS n"
+    },
+    {
+      "item": 3,
+      "name": "a type name with a quote in the zone and the name of an enum",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST('it''s' AS Enum8('it''s' = 1, 'a\"b' = 2)) AS e"
+    },
+    {
+      "item": 3,
+      "name": "type Time and Time64, with no setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toTime('12:34:56') AS t, toTime64('12:34:56.789', 3) AS t3, toTime('-01:00:00') AS n"
+    },
+    {
+      "item": 3,
+      "name": "type Time and Time64, with its settings",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_time_time64_type=1&enable_time_time64_type=1",
+      "text": "SELECT toTime('12:34:56') AS t, toTime64('12:34:56.789', 3) AS t3, toTime('-01:00:00') AS n",
+      "releases": [
+        "clickhouse-25.8"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type Time and Time64 in a table, with no setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_time (id UInt32, t Time, t3 Time64(3)) ENGINE = MergeTree ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "type Time and Time64 in a table, with its settings",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_time_time64_type=1&enable_time_time64_type=1",
+      "text": "CREATE TABLE dbimp.dbimp_time (id UInt32, t Time, t3 Time64(3)) ENGINE = MergeTree ORDER BY id",
+      "releases": [
+        "clickhouse-25.8"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type Time and Time64 insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_time_time64_type=1&enable_time_time64_type=1",
+      "text": "INSERT INTO dbimp.dbimp_time VALUES (1, '12:34:56', '12:34:56.789'), (2, '999:59:59', '-999:59:59.999')",
+      "releases": [
+        "clickhouse-25.8",
+        "clickhouse-26"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type Time and Time64 select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_time_time64_type=1&enable_time_time64_type=1",
+      "text": "SELECT * FROM dbimp.dbimp_time ORDER BY id",
+      "releases": [
+        "clickhouse-25.8",
+        "clickhouse-26"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type Time and Time64 select, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes&allow_experimental_time_time64_type=1&enable_time_time64_type=1",
+      "text": "SELECT * FROM dbimp.dbimp_time ORDER BY id",
+      "releases": [
+        "clickhouse-25.8",
+        "clickhouse-26"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type BFloat16",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toBFloat16(1.5) AS a, toBFloat16(3.14159) AS b, toBFloat16(1e38) AS c"
+    },
+    {
+      "item": 3,
+      "name": "type BFloat16, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT toBFloat16(1.5) AS a, toBFloat16(3.14159) AS b"
+    },
+    {
+      "item": 3,
+      "name": "type QBit",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_qbit (id UInt32, q QBit(Float32, 4)) ENGINE = MergeTree ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "type QBit insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_qbit VALUES (1, [1, 2, 3, 4]), (2, [0.5, -0.5, 1e10, 3])",
+      "releases": [
+        "clickhouse-26"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type QBit select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_qbit ORDER BY id",
+      "releases": [
+        "clickhouse-26"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type QBit select, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_qbit ORDER BY id",
+      "releases": [
+        "clickhouse-26"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "type MultiPoint",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT [(0, 0), (1, 1)]::MultiPoint AS m"
+    },
+    {
+      "item": 3,
+      "name": "type MultiPoint, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT [(0, 0), (1, 1)]::MultiPoint AS m"
+    },
+    {
+      "item": 3,
+      "name": "type Geometry",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST((1.5, 2.5)::Point AS Geometry) AS g, CAST([(0, 0), (1, 1)]::LineString AS Geometry) AS h"
+    },
+    {
+      "item": 3,
+      "name": "type Geometry, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT CAST((1.5, 2.5)::Point AS Geometry) AS g"
+    },
+    {
+      "item": 3,
+      "name": "type Object and old JSON",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_object_type=1",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "the drop of the tables of the experimental types",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_time"
+    },
+    {
+      "item": 3,
+      "name": "the drop of the table of QBit",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_qbit"
+    },
+    {
+      "item": 3,
+      "name": "a nullable array",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(Array(Int32))) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable tuple",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(Tuple(Int32, String))) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable map",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(Map(String, Int32))) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable variant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(Variant(Int32, String))) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable dynamic",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(Dynamic)) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable JSON",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(JSON)) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable low cardinality of a number",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS LowCardinality(Nullable(Int32))) AS a, CAST(NULL AS Nullable(LowCardinality(String))) AS b"
+    },
+    {
+      "item": 3,
+      "name": "a nullable geo type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(Point)) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable aggregate function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(AggregateFunction(sum, UInt32))) AS a"
+    },
+    {
+      "item": 3,
+      "name": "a nullable fixed string, enum, uuid and ip",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT CAST(NULL AS Nullable(FixedString(2))) AS a, CAST(NULL AS Nullable(Enum8('a' = 1))) AS b, CAST(NULL AS Nullable(UUID)) AS c, CAST(NULL AS Nullable(IPv6)) AS d, CAST(NULL AS Nullable(Decimal(10, 2))) AS e, CAST(NULL AS Nullable(DateTime64(3, 'UTC'))) AS f, CAST(NULL AS Nullable(Date)) AS g"
+    },
+    {
+      "item": 3,
+      "name": "a type name from the server",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toTypeName(1) AS a, toTypeName(1.5) AS b, toTypeName('x') AS c, toTypeName(NULL) AS d, toTypeName([1]) AS e, toTypeName(now()) AS f, toTypeName(now64()) AS g, toTypeName(today()) AS h"
+    },
+    {
+      "item": 3,
+      "name": "a nullable column from a table has no default marker",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT nl, nls, nld, lcn FROM dbimp.dbimp_types ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "a column of a table with a default, null and empty values",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v, ts FROM dbimp.dbimp_crud ORDER BY id LIMIT 3"
+    },
+    {
+      "item": 4,
+      "name": "typed parameters of each type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=42&param_s=hello%20w%27orld&param_d=2026-10-07&param_arr=%5B1%2C2%2C3%5D&param_n=%5CN&param_u=18446744073709551615&param_f=1.5&param_dec=123.45&param_b=true&param_uu=61f0c404-5cb3-11e7-907b-a6006ad3dba0&param_t=2026-10-07%2012%3A00%3A00&param_t3=2026-10-07%2012%3A00%3A00.123&param_tup=%281%2C%27x%27%29&param_m=%7B%27k%27%3A1%7D&param_i128=170141183460469231731687303715884105727&param_ip=1.2.3.4",
+      "text": "SELECT {a:Int32} AS a, {s:String} AS s, {d:Date} AS d, {arr:Array(Int32)} AS arr, {n:Nullable(String)} AS n, {u:UInt64} AS u, {f:Float64} AS f, {dec:Decimal(10, 2)} AS dec, {b:Bool} AS b, {uu:UUID} AS uu, {t:DateTime('Asia/Jakarta')} AS t, {t3:DateTime64(3, 'UTC')} AS t3, {tup:Tuple(Int32, String)} AS tup, {m:Map(String, Int32)} AS m, {i128:Int128} AS i128, {ip:IPv4} AS ip"
+    },
+    {
+      "item": 4,
+      "name": "typed parameters by GET",
+      "method": "GET",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=5&param_s=get&query=SELECT%20%7Ba%3AInt32%7D%20AS%20a%2C%20%7Bs%3AString%7D%20AS%20s"
+    },
+    {
+      "item": 4,
+      "name": "a parameter of a string with a tab, a newline and a backslash",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_s=a%09b%0Ac%5Cd",
+      "text": "SELECT {s:String} AS s"
+    },
+    {
+      "item": 4,
+      "name": "a parameter of an empty string",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_s=&param_n=",
+      "text": "SELECT {s:String} AS s, {n:Nullable(String)} AS n"
+    },
+    {
+      "item": 4,
+      "name": "a parameter of NULL spelled NULL",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_n=NULL",
+      "text": "SELECT {n:Nullable(Int32)} AS n"
+    },
+    {
+      "item": 4,
+      "name": "a parameter that is missing",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT {a:Int32} AS a"
+    },
+    {
+      "item": 4,
+      "name": "a parameter that is not used",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_zz=1",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the wrong type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=abc",
+      "text": "SELECT {a:Int32} AS a"
+    },
+    {
+      "item": 4,
+      "name": "a parameter out of range",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=300",
+      "text": "SELECT {a:Int8} AS a"
+    },
+    {
+      "item": 4,
+      "name": "a parameter with no type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=1",
+      "text": "SELECT {a} AS a"
+    },
+    {
+      "item": 4,
+      "name": "a parameter as an identifier",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_t=dbimp.dbimp_big",
+      "text": "SELECT count() AS n FROM {t:Identifier}"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a limit",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_n=2",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT {n:UInt32}"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a where",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_id=4999",
+      "text": "SELECT id, s FROM dbimp.dbimp_big WHERE id = {id:UInt64}"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in an insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_id=2000&param_n=param&param_v=-9223372036854775808",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES ({id:UInt32}, {n:String}, {v:Int64})"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in an update",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_id=2000&param_n=param2&mutations_sync=2",
+      "text": "ALTER TABLE dbimp.dbimp_crud UPDATE name = {n:String} WHERE id = {id:UInt32}"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a delete",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_id=2000",
+      "text": "DELETE FROM dbimp.dbimp_crud WHERE id = {id:UInt32}"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in an in list",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_ids=%5B1%2C2%2C3%5D",
+      "text": "SELECT id FROM dbimp.dbimp_big WHERE id IN {ids:Array(UInt64)} ORDER BY id"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a query that is also in the body of a form",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Content-Type": [
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "text": "query=SELECT+%7Ba%3AInt32%7D+AS+a&param_a=9"
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the same name twice",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=1",
+      "text": "SELECT {a:Int32} AS a, {a:Int32} AS b"
+    },
+    {
+      "item": 4,
+      "name": "a parameter repeated in the query string",
+      "method": "POST",
+      "path": "/?param_a=1&param_a=2&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT {a:Int32} AS a"
+    },
+    {
+      "item": 4,
+      "name": "a question mark",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT ? AS a"
+    },
+    {
+      "item": 4,
+      "name": "a dollar placeholder",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT $1 AS a"
+    },
+    {
+      "item": 4,
+      "name": "a named placeholder with an at sign",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=1",
+      "text": "SELECT @a AS a"
+    },
+    {
+      "item": 4,
+      "name": "a colon placeholder",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=1",
+      "text": "SELECT :a AS a"
+    },
+    {
+      "item": 4,
+      "name": "a parameter with a settings value of the same name",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_max_threads=3",
+      "text": "SELECT {max_threads:UInt32} AS a"
+    },
+    {
+      "item": 4,
+      "name": "a parameter in a view definition",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE VIEW dbimp.dbimp_pview AS SELECT {a:Int32} AS a"
+    },
+    {
+      "item": 4,
+      "name": "the drop of the view of a parameter",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP VIEW IF EXISTS dbimp.dbimp_pview"
+    },
+    {
+      "item": 4,
+      "name": "a literal for a string with escapes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 'it\\'s' AS a, 'a''b' AS b, 'x\\\\y' AS c, 'tab\\there' AS d, 'é' AS e"
+    },
+    {
+      "item": 4,
+      "name": "a literal in a quoted identifier",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS `a b`, 2 AS \"c\""
+    },
+    {
+      "item": 4,
+      "name": "a literal date and time",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT toDateTime('2026-10-07 12:00:00', 'UTC') AS a, DATE '2026-10-07' AS b, TIMESTAMP '2026-10-07 12:00:00' AS c"
+    },
+    {
+      "item": 5,
+      "name": "a result of 5000 rows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, s FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result of 5000 rows, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT id, s FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result of 5000 rows, JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "SELECT id, s FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result of 5000 rows, with a small block",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=100&output_format_parallel_formatting=0",
+      "text": "SELECT id, s FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result of 5000 rows, with no ordering",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, s FROM dbimp.dbimp_big"
+    },
+    {
+      "item": 5,
+      "name": "a result of 20000 rows from numbers",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRow",
+      "text": "SELECT number, toString(number) AS s FROM numbers(20000)"
+    },
+    {
+      "item": 5,
+      "name": "a result with max_result_rows and break",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_result_rows=100&result_overflow_mode=break",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result with max_result_rows and throw",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_result_rows=100&result_overflow_mode=throw",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result with max_result_bytes and throw",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_result_bytes=1000&result_overflow_mode=throw",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result with a limit",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 3 OFFSET 4998"
+    },
+    {
+      "item": 5,
+      "name": "a result with the progress in headers",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&send_progress_in_http_headers=1&http_headers_progress_interval_ms=0&max_block_size=1000",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "a result with wait_end_of_query",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&wait_end_of_query=1",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 3"
+    },
+    {
+      "item": 5,
+      "name": "a result with a totals row",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "SELECT id % 2 AS k, count() AS c FROM dbimp.dbimp_big GROUP BY k WITH TOTALS ORDER BY k"
+    },
+    {
+      "item": 5,
+      "name": "a result with extremes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact&extremes=1",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 3"
+    },
+    {
+      "item": 5,
+      "name": "a result with a buffer size",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&buffer_size=100000&wait_end_of_query=1",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 5,
+      "name": "many columns of a result",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_types ORDER BY id LIMIT 1"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, a syntax error",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELEC 1"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, an unknown table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.nosuch"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, an unknown database",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM nosuchdb.t"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, an unknown column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT nosuch FROM dbimp.dbimp_crud"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, an unknown function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT nosuchfn(1)"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, a type error",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 'a' + 1"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact",
+      "text": "SELECT * FROM dbimp.nosuch"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.nosuch"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, Native",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Native",
+      "text": "SELECT * FROM dbimp.nosuch"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, no format",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "text": "SELECT * FROM dbimp.nosuch"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, an unknown format",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=NoSuchFormat",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, a table that exists",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_crud (a Int8) ENGINE = Memory"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, a division by zero in a constant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT intDiv(1, 0)"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, an insert of a wrong value",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id) VALUES ('x')"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, an unknown setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&no_such_setting=1",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, a setting out of range",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_threads=-1",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 6,
+      "name": "an error before rows, a setting that is readonly for the user",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&readonly=1&max_threads=2",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, throwIf in JSONCompactEachRowWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=2",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, in JSONCompactEachRow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRow&max_block_size=2",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, in JSONCompact",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompact&max_block_size=2",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, in JSONEachRow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONEachRow&max_block_size=2",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, in RowBinaryWithNamesAndTypes",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes&max_block_size=2",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, in Native",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Native&max_block_size=2",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, in TabSeparated",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated&max_block_size=2",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, with wait_end_of_query",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=2&wait_end_of_query=1",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, with no exception in the format",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=2&http_write_exception_in_output_format=0",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, with no exception in the format, RowBinary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes&max_block_size=2&http_write_exception_in_output_format=0",
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, with the table of 5000 rows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=1000&output_format_parallel_formatting=0",
+      "text": "SELECT id, throwIf(id = 3000) FROM dbimp.dbimp_big ORDER BY id"
+    },
+    {
+      "item": 6,
+      "name": "an error after rows, a string that is not a number",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=2",
+      "text": "SELECT toInt32(if(number = 3, 'x', toString(number))) AS n FROM numbers(6)"
+    },
+    {
+      "item": 6,
+      "name": "an error in the last chunk after the last row",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=1",
+      "text": "SELECT number FROM numbers(3) UNION ALL SELECT throwIf(1)"
+    },
+    {
+      "item": 6,
+      "name": "an error, the header X-ClickHouse-Exception-Code",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT throwIf(1)"
+    },
+    {
+      "item": 6,
+      "name": "an insert that fails in the middle",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=1&max_insert_block_size=1&min_insert_block_size_rows=1",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) SELECT number, 'x', throwIf(number = 3) FROM numbers(10)"
+    },
+    {
+      "item": 6,
+      "name": "what the failed insert left",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_crud WHERE name = 'x'"
+    },
+    {
+      "item": 6,
+      "name": "the clean up of the failed insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "TRUNCATE TABLE dbimp.dbimp_crud"
+    },
+    {
+      "item": 6,
+      "name": "a query that is too large",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_query_size=5",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 7,
+      "name": "a client that gives up while rows flow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-give-up-rows-{{user}}&max_block_size=1",
+      "text": "SELECT sleepEachRow(0.2) FROM numbers(30)",
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "the query after the client gave up while rows flow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-give-up-rows-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a client that gives up while no row flows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-give-up-{{user}}&max_block_size=1",
+      "text": "SELECT sum(sleepEachRow(0.2)) FROM numbers(30)",
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "the query after the client gave up while no row flows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-give-up-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "500ms"
+    },
+    {
+      "item": 7,
+      "name": "the query three seconds after the client gave up while no row flows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-give-up-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "2500ms"
+    },
+    {
+      "item": 7,
+      "name": "the query a few seconds after the client gave up while no row flows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-give-up-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "4s"
+    },
+    {
+      "item": 7,
+      "name": "a client that gives up with the readonly cancel while no row flows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-cancel-{{user}}&max_block_size=1&readonly=1&cancel_http_readonly_queries_on_client_close=1",
+      "text": "SELECT sum(sleepEachRow(0.2)) FROM numbers(30)",
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "the query after the client gave up with the readonly cancel",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-cancel-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a client that gives up by GET with the cancel setting while no row flows",
+      "method": "GET",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-getcancel-{{user}}&max_block_size=1&cancel_http_readonly_queries_on_client_close=1&query=SELECT%20sum%28sleepEachRow%280.2%29%29%20FROM%20numbers%2830%29",
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "the query after the client gave up by GET",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-getcancel-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a client that gives up with the cancel setting and no readonly while no row flows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-setonly-{{user}}&max_block_size=1&cancel_http_readonly_queries_on_client_close=1",
+      "text": "SELECT sum(sleepEachRow(0.2)) FROM numbers(30)",
+      "timeout": "1s"
+    },
+    {
+      "item": 7,
+      "name": "the query after the client gave up with the cancel setting and no readonly",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-setonly-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a query that runs in the background",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated&query_id=dbimp-kill-{{user}}&max_block_size=1",
+      "text": "SELECT sleepEachRow(0.2) FROM numbers(30)",
+      "background": true
+    },
+    {
+      "item": 7,
+      "name": "the running query",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-kill-{{user}}",
+      "text": "SELECT query_id, user FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "1s"
+    },
+    {
+      "item": 7,
+      "name": "KILL QUERY by query_id",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-kill-{{user}}",
+      "text": "KILL QUERY WHERE query_id = {qid:String} SYNC"
+    },
+    {
+      "item": 7,
+      "name": "the query after the kill",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-kill-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "1s"
+    },
+    {
+      "item": 7,
+      "name": "a query id that is in use",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated&query_id=dbimp-same-{{user}}&max_block_size=1",
+      "text": "SELECT sleepEachRow(0.2) FROM numbers(10)",
+      "background": true
+    },
+    {
+      "item": 7,
+      "name": "a second query with the query id in use",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-same-{{user}}",
+      "text": "SELECT 1",
+      "wait": "500ms"
+    },
+    {
+      "item": 7,
+      "name": "a query id that is in use is waited for",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-same-{{user}}",
+      "text": "SELECT sleepEachRow(0.1) FROM numbers(1)",
+      "wait": "2s"
+    },
+    {
+      "item": 7,
+      "name": "max_execution_time",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_execution_time=1&max_block_size=1",
+      "text": "SELECT sleepEachRow(0.5) FROM numbers(10)"
+    },
+    {
+      "item": 7,
+      "name": "max_execution_time with break",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_execution_time=1&timeout_overflow_mode=break&max_block_size=1",
+      "text": "SELECT sleepEachRow(0.5) FROM numbers(10)"
+    },
+    {
+      "item": 7,
+      "name": "a query that sleeps too long",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_execution_time=2",
+      "text": "SELECT sleep(4)"
+    },
+    {
+      "item": 7,
+      "name": "KILL QUERY of a query that does not exist",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "KILL QUERY WHERE query_id = 'dbimp-none' SYNC"
+    },
+    {
+      "item": 7,
+      "name": "KILL QUERY of a query of another user",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "KILL QUERY WHERE user = 'default' SYNC",
+      "principals": [
+        "ordinary"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "the log of the queries that ended",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SYSTEM FLUSH LOGS",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "the exit of the cancelled queries from the log",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT query_id, type, exception_code FROM system.query_log WHERE query_id LIKE 'dbimp-%' AND type != 'QueryStart' ORDER BY query_id, event_time_microseconds",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 7,
+      "name": "the send timeout and the receive timeout",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&http_send_timeout=1&http_receive_timeout=1",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 8,
+      "name": "a wrong password",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a user that does not exist by the query string",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&user=nosuchuser&password=x",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 8,
+      "name": "a read of a database with no grant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp_other.secret"
+    },
+    {
+      "item": 8,
+      "name": "a read of a system table with no grant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM system.users"
+    },
+    {
+      "item": 8,
+      "name": "a write to a database with no grant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp_other.secret VALUES (2)"
+    },
+    {
+      "item": 8,
+      "name": "a create of a database with no grant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE DATABASE dbimp_new"
+    },
+    {
+      "item": 8,
+      "name": "a create of a user with no grant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE USER dbimp_x IDENTIFIED BY 'x'"
+    },
+    {
+      "item": 8,
+      "name": "show grants",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SHOW GRANTS"
+    },
+    {
+      "item": 8,
+      "name": "show the tables",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SHOW TABLES FROM dbimp"
+    },
+    {
+      "item": 8,
+      "name": "show the databases",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SHOW DATABASES"
+    },
+    {
+      "item": 8,
+      "name": "the current user",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT currentUser() AS u, currentRoles() AS r"
+    },
+    {
+      "item": 8,
+      "name": "the roles and the settings of a user",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, value FROM system.settings WHERE name IN ('readonly', 'allow_ddl', 'max_execution_time')",
+      "principals": [
+        "ordinary"
+      ]
+    },
+    {
+      "item": 8,
+      "name": "the setting readonly set by the client",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&readonly=1",
+      "text": "CREATE TABLE dbimp.dbimp_ro (a Int8) ENGINE = Memory"
+    },
+    {
+      "item": 8,
+      "name": "the setting readonly set to 2",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&readonly=2",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 8,
+      "name": "a drop with no grant",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE dbimp_other.secret"
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT version() AS v"
+    },
+    {
+      "item": 9,
+      "name": "the version, the full text",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT version() AS v, getServerSetting('max_connections') AS c, hostName() AS h"
+    },
+    {
+      "item": 9,
+      "name": "the version from the build",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT value FROM system.build_options WHERE name IN ('VERSION_FULL', 'VERSION_DESCRIBE')"
+    },
+    {
+      "item": 9,
+      "name": "the version from the table of the settings",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name FROM system.settings LIMIT 1"
+    },
+    {
+      "item": 9,
+      "name": "the version from the server uptime",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT uptime() AS u, buildId() AS b, currentDatabase() AS d, timezone() AS tz"
+    },
+    {
+      "item": 9,
+      "name": "the version of the product named",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, value FROM system.build_options WHERE name = 'SYSTEM'"
+    },
+    {
+      "item": 9,
+      "name": "the name of the server in the header",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 9,
+      "name": "the version, through GET",
+      "method": "GET",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=SELECT%20version%28%29%20AS%20v"
+    },
+    {
+      "item": 9,
+      "name": "the version, the usql statement",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "text": "SELECT version()"
+    },
+    {
+      "item": 9,
+      "name": "the table of the versions of the data",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT value FROM system.settings WHERE name = 'compatibility'"
+    },
+    {
+      "item": 10,
+      "name": "two statements in one request",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1; SELECT 2"
+    },
+    {
+      "item": 10,
+      "name": "two statements, an insert and a select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (3000, 'two', 1); SELECT 1"
+    },
+    {
+      "item": 10,
+      "name": "a trailing semicolon",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a;"
+    },
+    {
+      "item": 10,
+      "name": "a trailing semicolon and a newline",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a;\n"
+    },
+    {
+      "item": 10,
+      "name": "a trailing semicolon and a comment",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a; -- done"
+    },
+    {
+      "item": 10,
+      "name": "a trailing semicolon and a block comment",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a; /* done */"
+    },
+    {
+      "item": 10,
+      "name": "a line comment",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "-- first\nSELECT 1 AS a -- second\n"
+    },
+    {
+      "item": 10,
+      "name": "a block comment",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "/* first */ SELECT /* inside */ 1 AS a /* last */"
+    },
+    {
+      "item": 10,
+      "name": "a hash comment",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "# first\nSELECT 1 AS a"
+    },
+    {
+      "item": 10,
+      "name": "a nested block comment",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT /* a /* b */ c */ 1 AS a"
+    },
+    {
+      "item": 10,
+      "name": "a comment only",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "-- nothing"
+    },
+    {
+      "item": 10,
+      "name": "a comment with a semicolon",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a -- ; SELECT 2"
+    },
+    {
+      "item": 10,
+      "name": "a string with a semicolon",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT ';' AS a, '--' AS b, '/*' AS c"
+    },
+    {
+      "item": 10,
+      "name": "a statement with a leading space and a newline",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "\n  SELECT 1 AS a"
+    },
+    {
+      "item": 10,
+      "name": "a statement with a settings clause",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a SETTINGS max_threads = 1"
+    },
+    {
+      "item": 10,
+      "name": "a statement with a format after a settings clause",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a SETTINGS max_threads = 1 FORMAT JSONCompact"
+    },
+    {
+      "item": 10,
+      "name": "an insert with data after the statement",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) FORMAT JSONEachRow\n{\"id\": 3001, \"name\": \"json\", \"v\": 1}\n{\"id\": 3002, \"name\": \"json\", \"v\": 2}\n"
+    },
+    {
+      "item": 10,
+      "name": "an insert with the data in the body and the statement in the query",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=INSERT%20INTO%20dbimp.dbimp_crud%20%28id%2C%20name%2C%20v%29%20FORMAT%20CSV",
+      "text": "3003,csv,3\n3004,\"csv, two\",4\n"
+    },
+    {
+      "item": 10,
+      "name": "the rows that the inserts wrote",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v FROM dbimp.dbimp_crud WHERE id >= 3000 ORDER BY id"
+    },
+    {
+      "item": 10,
+      "name": "an insert with values and a semicolon",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (3005, 'a;b', 5);"
+    },
+    {
+      "item": 10,
+      "name": "an insert with a select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) SELECT number + 3100, 'sel', number FROM numbers(3)"
+    },
+    {
+      "item": 10,
+      "name": "a describe",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DESCRIBE TABLE dbimp.dbimp_crud"
+    },
+    {
+      "item": 10,
+      "name": "an explain",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "EXPLAIN SELECT 1"
+    },
+    {
+      "item": 10,
+      "name": "a statement with the keyword use",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "USE dbimp"
+    },
+    {
+      "item": 10,
+      "name": "a statement with the keyword set",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SET max_threads = 2"
+    },
+    {
+      "item": 10,
+      "name": "a statement with exists",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "EXISTS TABLE dbimp.dbimp_crud"
+    },
+    {
+      "item": 10,
+      "name": "a with clause",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "WITH 1 AS x SELECT x + 1 AS a"
+    },
+    {
+      "item": 10,
+      "name": "a very long statement",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 AS a"
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "BEGIN TRANSACTION"
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction in a session",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-tx-{{user}}",
+      "text": "BEGIN TRANSACTION"
+    },
+    {
+      "item": 11,
+      "name": "commit a transaction in a session",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-tx-{{user}}",
+      "text": "COMMIT"
+    },
+    {
+      "item": 11,
+      "name": "rollback in a session",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-tx-{{user}}",
+      "text": "ROLLBACK"
+    },
+    {
+      "item": 11,
+      "name": "an implicit transaction",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&implicit_transaction=1&session_id=dbimp-tx2-{{user}}",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 11,
+      "name": "the setting that allows transactions",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, value FROM system.settings WHERE name LIKE '%transaction%' ORDER BY name",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 11,
+      "name": "start transaction",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "START TRANSACTION"
+    },
+    {
+      "item": 11,
+      "name": "set a transaction",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SET TRANSACTION SNAPSHOT 1"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with gzip",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "text": "SELECT id, s FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+    },
+    {
+      "item": 12,
+      "name": "a response with gzip asked for and compression off",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "text": "SELECT id, s FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with deflate",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+      "header": {
+        "Accept-Encoding": [
+          "deflate"
+        ]
+      },
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with zstd",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+      "header": {
+        "Accept-Encoding": [
+          "zstd"
+        ]
+      },
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with brotli",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+      "header": {
+        "Accept-Encoding": [
+          "br"
+        ]
+      },
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with xz",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+      "header": {
+        "Accept-Encoding": [
+          "xz"
+        ]
+      },
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with an encoding that does not exist",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+      "header": {
+        "Accept-Encoding": [
+          "nosuch"
+        ]
+      },
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with gzip and an error",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1",
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "text": "SELECT * FROM dbimp.nosuch"
+    },
+    {
+      "item": 12,
+      "name": "a response compressed with gzip and an error after rows",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1&max_block_size=2",
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "text": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+    },
+    {
+      "item": 12,
+      "name": "a response of the native compression",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Native&compress=1",
+      "text": "SELECT id FROM dbimp.dbimp_big ORDER BY id LIMIT 500"
+    },
+    {
+      "item": 12,
+      "name": "a request with a body that is not compressed but says it is",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Content-Encoding": [
+          "gzip"
+        ]
+      },
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a request with an unknown content encoding",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Content-Encoding": [
+          "nosuch"
+        ]
+      },
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "the headers of a response of a select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 12,
+      "name": "the headers of a response of a failed select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.nosuch"
+    },
+    {
+      "item": 12,
+      "name": "the headers with an unauthorized request",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1",
+      "auth": "wrong"
+    },
+    {
+      "item": 12,
+      "name": "a request to a path that does not exist",
+      "method": "GET",
+      "path": "/nosuch"
+    },
+    {
+      "item": 12,
+      "name": "a request to a path with a trailing slash and a query",
+      "method": "POST",
+      "path": "//?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a PUT request",
+      "method": "PUT",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a DELETE request",
+      "method": "DELETE",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a HEAD request",
+      "method": "HEAD",
+      "path": "/ping"
+    },
+    {
+      "item": 12,
+      "name": "an OPTIONS request",
+      "method": "OPTIONS",
+      "path": "/"
+    },
+    {
+      "item": 12,
+      "name": "a request with the header Expect",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Expect": [
+          "100-continue"
+        ]
+      },
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a request with the header X-ClickHouse-Quota",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-Quota": [
+          "default"
+        ]
+      },
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a request with the header X-ClickHouse-Format",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "header": {
+        "X-ClickHouse-Format": [
+          "JSONCompact"
+        ]
+      },
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 12,
+      "name": "a request with the header X-ClickHouse-Query-Id",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-Query-Id": [
+          "dbimp-header-{{user}}"
+        ]
+      },
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 12,
+      "name": "the query_id in the response",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-id-{{user}}",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 12,
+      "name": "a request with an HTTP session id",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-session-{{user}}&session_timeout=60",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a response with the summary of a select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_big"
+    },
+    {
+      "item": 7,
+      "name": "a session: close it before the group",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}&close_session=1",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 7,
+      "name": "a session: create a temporary table",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}",
+      "text": "CREATE TEMPORARY TABLE tmp_a (a Int8)"
+    },
+    {
+      "item": 7,
+      "name": "a session: insert into the temporary table",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}",
+      "text": "INSERT INTO tmp_a VALUES (1), (2)"
+    },
+    {
+      "item": 7,
+      "name": "a session: select from the temporary table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-s-{{user}}",
+      "text": "SELECT a FROM tmp_a ORDER BY a"
+    },
+    {
+      "item": 7,
+      "name": "a session: select with no session",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a FROM tmp_a ORDER BY a"
+    },
+    {
+      "item": 7,
+      "name": "a session: a setting that stays",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}",
+      "text": "SET max_result_rows = 1"
+    },
+    {
+      "item": 7,
+      "name": "a session: the setting after",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}",
+      "text": "SELECT value FROM system.settings WHERE name = 'max_result_rows'"
+    },
+    {
+      "item": 7,
+      "name": "a session: the setting in another request",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "text": "SELECT value FROM system.settings WHERE name = 'max_result_rows'"
+    },
+    {
+      "item": 7,
+      "name": "a session: a session that is in use",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated&session_id=dbimp-busy-{{user}}&max_block_size=1",
+      "text": "SELECT sleepEachRow(0.2) FROM numbers(10)",
+      "background": true
+    },
+    {
+      "item": 7,
+      "name": "a session: the same session at the same time",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-busy-{{user}}",
+      "text": "SELECT 1",
+      "wait": "500ms"
+    },
+    {
+      "item": 7,
+      "name": "a session: the session check",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-none-{{user}}&session_check=1",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 7,
+      "name": "a session: the use of a database",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}",
+      "text": "USE dbimp_other"
+    },
+    {
+      "item": 7,
+      "name": "a session: the database after use",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}",
+      "text": "SELECT currentDatabase() AS d"
+    },
+    {
+      "item": 7,
+      "name": "a session: close it",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}&close_session=1",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 7,
+      "name": "a session: the temporary table after the close",
+      "method": "POST",
+      "path": "/?database=dbimp&session_id=dbimp-s-{{user}}",
+      "text": "SELECT a FROM tmp_a ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "crud: truncate",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "TRUNCATE TABLE dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert values",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v, ts) VALUES (1, 'one', 10, '2026-10-07 12:00:00'), (2, 'two', 20, '2026-10-07 12:00:01'), (3, 'three', 30, '2026-10-07 12:00:02')"
+    },
+    {
+      "item": 3,
+      "name": "crud: select after insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v, ts FROM dbimp.dbimp_crud ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: select with a where",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name FROM dbimp.dbimp_crud WHERE v >= 20 ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: update with a mutation",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&mutations_sync=2",
+      "text": "ALTER TABLE dbimp.dbimp_crud UPDATE name = 'uno', v = v + 1 WHERE id = 1"
+    },
+    {
+      "item": 3,
+      "name": "crud: select after update",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v FROM dbimp.dbimp_crud ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: lightweight update on a table with the block number column: insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_lw VALUES (1, 'a'), (2, 'b')"
+    },
+    {
+      "item": 3,
+      "name": "crud: lightweight update on a table with the block number column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "UPDATE dbimp.dbimp_lw SET name = 'z' WHERE id = 1"
+    },
+    {
+      "item": 3,
+      "name": "crud: lightweight update on a table with the block number column: select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name FROM dbimp.dbimp_lw ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: lightweight update on a table with the block number column: clean",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "TRUNCATE TABLE dbimp.dbimp_lw"
+    },
+    {
+      "item": 3,
+      "name": "crud: update, the lightweight form",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&mutations_sync=2",
+      "text": "UPDATE dbimp.dbimp_crud SET name = 'dos' WHERE id = 2"
+    },
+    {
+      "item": 3,
+      "name": "crud: select after the lightweight update",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v FROM dbimp.dbimp_crud ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: update, the lightweight form with the setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&mutations_sync=2&allow_experimental_lightweight_update=1&enable_lightweight_update=1",
+      "text": "UPDATE dbimp.dbimp_crud SET name = 'dos' WHERE id = 2"
+    },
+    {
+      "item": 3,
+      "name": "crud: select after the lightweight update with the setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v FROM dbimp.dbimp_crud ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: update with a statement of the SQL standard",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "UPDATE dbimp.dbimp_crud SET v = 99 WHERE id = 3"
+    },
+    {
+      "item": 3,
+      "name": "crud: the mutations of the table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT command, is_done, latest_fail_reason FROM system.mutations WHERE database = 'dbimp' AND table = 'dbimp_crud' ORDER BY create_time",
+      "principals": [
+        "administrator"
+      ]
+    },
+    {
+      "item": 3,
+      "name": "crud: delete, the lightweight form",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DELETE FROM dbimp.dbimp_crud WHERE id = 3"
+    },
+    {
+      "item": 3,
+      "name": "crud: select after the delete",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v FROM dbimp.dbimp_crud ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: the rows after the delete, with the rows of the mutation",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "crud: delete with a mutation",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&mutations_sync=2",
+      "text": "ALTER TABLE dbimp.dbimp_crud DELETE WHERE id = 2"
+    },
+    {
+      "item": 3,
+      "name": "crud: select after the mutation delete",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v FROM dbimp.dbimp_crud ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "crud: delete with no where",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DELETE FROM dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "crud: select after delete of every row",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert from a select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) SELECT number + 10, 'gen', number FROM numbers(3)"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert as JSONEachRow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) FORMAT JSONEachRow\n{\"id\": 20, \"name\": \"j\", \"v\": 1}\n"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert as CSV",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) FORMAT CSV\n21,\"c\",2\n"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert as TabSeparated",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) FORMAT TabSeparated\n22\tt\t3\n"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert as JSONCompactEachRow",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) FORMAT JSONCompactEachRow\n[23, \"jc\", 4]\n"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert as Values with an expression",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (24, concat('a', 'b'), 1 + 1)"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert with the setting async_insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&async_insert=1&wait_for_async_insert=1",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (25, 'async', 1)"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert of a duplicate key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (20, 'dup', 1)"
+    },
+    {
+      "item": 3,
+      "name": "crud: the rows after the duplicate",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name FROM dbimp.dbimp_crud WHERE id = 20 ORDER BY name"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert with a default",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id) VALUES (26)"
+    },
+    {
+      "item": 3,
+      "name": "crud: select the default",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name, v, ts FROM dbimp.dbimp_crud WHERE id = 26"
+    },
+    {
+      "item": 3,
+      "name": "crud: truncate at the end",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "TRUNCATE TABLE dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "crud: select into outfile",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 INTO OUTFILE '/tmp/dbimp_out.txt'"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert into a function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO FUNCTION null('a Int8') VALUES (1)"
+    },
+    {
+      "item": 3,
+      "name": "crud: upsert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (1, 'a', 1) ON DUPLICATE KEY UPDATE v = 2"
+    },
+    {
+      "item": 3,
+      "name": "crud: merge",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "MERGE INTO dbimp.dbimp_crud USING dbimp.dbimp_crud2 ON 1 WHEN MATCHED THEN DELETE"
+    },
+    {
+      "item": 3,
+      "name": "crud: replace into",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "REPLACE INTO dbimp.dbimp_crud (id, name, v) VALUES (1, 'a', 1)"
+    },
+    {
+      "item": 3,
+      "name": "crud: insert returning",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (30, 'a', 1) RETURNING id"
+    },
+    {
+      "item": 3,
+      "name": "crud: select for update",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id FROM dbimp.dbimp_crud FOR UPDATE"
+    },
+    {
+      "item": 3,
+      "name": "schema: create the table with a primary key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_pk (a UInt32, b String, c Int32) ENGINE = MergeTree PRIMARY KEY a ORDER BY (a, b)"
+    },
+    {
+      "item": 3,
+      "name": "schema: the primary key in the table of the columns",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, is_in_primary_key, is_in_sorting_key, type FROM system.columns WHERE database = 'dbimp' AND table = 'dbimp_pk' ORDER BY position"
+    },
+    {
+      "item": 3,
+      "name": "schema: a primary key with SQL standard syntax",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_pk2 (a UInt32, b String, PRIMARY KEY (a)) ENGINE = MergeTree"
+    },
+    {
+      "item": 3,
+      "name": "schema: a primary key with no engine",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_pk3 (a UInt32, PRIMARY KEY (a))"
+    },
+    {
+      "item": 3,
+      "name": "schema: a duplicate primary key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_pk VALUES (1, 'a', 1), (1, 'a', 2)"
+    },
+    {
+      "item": 3,
+      "name": "schema: the rows of the duplicate primary key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_pk"
+    },
+    {
+      "item": 3,
+      "name": "schema: a foreign key in a table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_fk (a UInt32, p UInt32, FOREIGN KEY (p) REFERENCES dbimp.dbimp_pk (a)) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: the foreign key as the server stored it",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated",
+      "text": "SHOW CREATE TABLE dbimp.dbimp_fk"
+    },
+    {
+      "item": 3,
+      "name": "schema: a row that breaks the foreign key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_fk VALUES (1, 999)"
+    },
+    {
+      "item": 3,
+      "name": "schema: the row that broke the foreign key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a, p FROM dbimp.dbimp_fk"
+    },
+    {
+      "item": 3,
+      "name": "schema: a foreign key with a column constraint",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_fk2 (a UInt32, p UInt32 REFERENCES dbimp.dbimp_pk (a)) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a foreign key with alter",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "ALTER TABLE dbimp.dbimp_pk ADD CONSTRAINT fk FOREIGN KEY (c) REFERENCES dbimp.dbimp_crud (id)"
+    },
+    {
+      "item": 3,
+      "name": "schema: a unique constraint",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_uq (a UInt32, UNIQUE (a)) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a unique column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_uq2 (a UInt32 UNIQUE) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a unique index",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_uq3 (a UInt32, INDEX i a TYPE unique GRANULARITY 1) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a check constraint",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_chk (a Int32, CONSTRAINT pos CHECK a > 0) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a check constraint is enforced",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_chk VALUES (-1)"
+    },
+    {
+      "item": 3,
+      "name": "schema: a replacing table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_rep (a UInt32, v String, ver UInt32) ENGINE = ReplacingMergeTree(ver) ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a replacing table insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_rep VALUES (1, 'a', 1), (1, 'b', 2), (2, 'c', 1)"
+    },
+    {
+      "item": 3,
+      "name": "schema: a replacing table select with final",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a, v FROM dbimp.dbimp_rep FINAL ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a replacing table select without final",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a, v FROM dbimp.dbimp_rep ORDER BY a, v"
+    },
+    {
+      "item": 3,
+      "name": "schema: an index on a table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "ALTER TABLE dbimp.dbimp_crud2 ADD INDEX idx_parent parent_id TYPE minmax GRANULARITY 1"
+    },
+    {
+      "item": 3,
+      "name": "schema: the indexes of a table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, type, expr FROM system.data_skipping_indices WHERE database = 'dbimp' AND table = 'dbimp_crud2' ORDER BY name"
+    },
+    {
+      "item": 3,
+      "name": "schema: an index that a query uses",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated",
+      "text": "EXPLAIN indexes = 1 SELECT id FROM dbimp.dbimp_crud2 WHERE label = 'x'"
+    },
+    {
+      "item": 3,
+      "name": "schema: a create index statement",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE INDEX idx2 ON dbimp.dbimp_crud2 (label) TYPE bloom_filter GRANULARITY 1"
+    },
+    {
+      "item": 3,
+      "name": "schema: drop an index",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "ALTER TABLE dbimp.dbimp_crud2 DROP INDEX idx_parent"
+    },
+    {
+      "item": 3,
+      "name": "schema: a projection",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "ALTER TABLE dbimp.dbimp_crud2 ADD PROJECTION p (SELECT label, count() GROUP BY label)"
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the second index",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "ALTER TABLE dbimp.dbimp_crud2 DROP INDEX IF EXISTS idx2"
+    },
+    {
+      "item": 3,
+      "name": "schema: drop the projection",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "ALTER TABLE dbimp.dbimp_crud2 DROP PROJECTION IF EXISTS p"
+    },
+    {
+      "item": 3,
+      "name": "schema: a view",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE VIEW dbimp.dbimp_view AS SELECT id, name FROM dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "schema: select from the view",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_view"
+    },
+    {
+      "item": 3,
+      "name": "schema: a materialized view",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE MATERIALIZED VIEW dbimp.dbimp_mv ENGINE = MergeTree ORDER BY id AS SELECT id, name FROM dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "schema: a materialized view is fed by an insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (40, 'mv', 1)"
+    },
+    {
+      "item": 3,
+      "name": "schema: select from the materialized view",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, name FROM dbimp.dbimp_mv ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "schema: a default value",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_def (a Int32 DEFAULT 5, b String DEFAULT 'x', c Int32 MATERIALIZED a * 2, d Int32 ALIAS a + 1, e DateTime DEFAULT now()) ENGINE = MergeTree ORDER BY tuple()"
+    },
+    {
+      "item": 3,
+      "name": "schema: a default value insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_def (a) VALUES (1)"
+    },
+    {
+      "item": 3,
+      "name": "schema: a default value insert with no column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_def (b) VALUES ('y')"
+    },
+    {
+      "item": 3,
+      "name": "schema: a default value select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a, b, c, d FROM dbimp.dbimp_def ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a default value select star",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM dbimp.dbimp_def ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a column with a comment and a ttl",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_ttl (a Int32 COMMENT 'the a', t DateTime) ENGINE = MergeTree ORDER BY a TTL t + INTERVAL 1 DAY COMMENT 'with ttl'"
+    },
+    {
+      "item": 3,
+      "name": "schema: alter add column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&alter_sync=2",
+      "text": "ALTER TABLE dbimp.dbimp_ttl ADD COLUMN z Int32 DEFAULT 1"
+    },
+    {
+      "item": 3,
+      "name": "schema: alter drop column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&alter_sync=2",
+      "text": "ALTER TABLE dbimp.dbimp_ttl DROP COLUMN z"
+    },
+    {
+      "item": 3,
+      "name": "schema: alter modify column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&alter_sync=2",
+      "text": "ALTER TABLE dbimp.dbimp_ttl MODIFY COLUMN a Int64"
+    },
+    {
+      "item": 3,
+      "name": "schema: alter rename column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&alter_sync=2",
+      "text": "ALTER TABLE dbimp.dbimp_ttl RENAME COLUMN a TO aa"
+    },
+    {
+      "item": 3,
+      "name": "schema: rename table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "RENAME TABLE dbimp.dbimp_ttl TO dbimp.dbimp_ttl2"
+    },
+    {
+      "item": 3,
+      "name": "schema: exchange tables",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "EXCHANGE TABLES dbimp.dbimp_ttl2 AND dbimp.dbimp_def"
+    },
+    {
+      "item": 3,
+      "name": "schema: a dictionary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE DICTIONARY dbimp.dbimp_dict (id UInt32, name String) PRIMARY KEY id SOURCE(NULL()) LAYOUT(FLAT()) LIFETIME(0)"
+    },
+    {
+      "item": 3,
+      "name": "schema: a dictionary lookup",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT dictGet('dbimp.dbimp_dict', 'name', toUInt64(40)) AS n, dictGetOrDefault('dbimp.dbimp_dict', 'name', toUInt64(1), 'none') AS d"
+    },
+    {
+      "item": 3,
+      "name": "schema: the dictionary in the system table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, status, source FROM system.dictionaries WHERE database = 'dbimp'"
+    },
+    {
+      "item": 3,
+      "name": "schema: a sequence",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE SEQUENCE dbimp.s"
+    },
+    {
+      "item": 3,
+      "name": "schema: auto increment",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_ai (a Int32 AUTO_INCREMENT) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a table with the engine Memory",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_mem (a Int32) ENGINE = Memory"
+    },
+    {
+      "item": 3,
+      "name": "schema: a table with the engine Log",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_log (a Int32) ENGINE = TinyLog"
+    },
+    {
+      "item": 3,
+      "name": "schema: create table as select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_cts ENGINE = MergeTree ORDER BY id AS SELECT id, name FROM dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "schema: create table if not exists",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE IF NOT EXISTS dbimp.dbimp_cts (id Int32) ENGINE = Memory"
+    },
+    {
+      "item": 3,
+      "name": "schema: create or replace",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE OR REPLACE TABLE dbimp.dbimp_cts (id Int32) ENGINE = Memory"
+    },
+    {
+      "item": 3,
+      "name": "schema: a temporary table with no session",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TEMPORARY TABLE dbimp_tmp (a Int8)"
+    },
+    {
+      "item": 3,
+      "name": "schema: the show create table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated",
+      "text": "SHOW CREATE TABLE dbimp.dbimp_pk"
+    },
+    {
+      "item": 3,
+      "name": "schema: a describe of a table with every type",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DESCRIBE TABLE dbimp.dbimp_types"
+    },
+    {
+      "item": 3,
+      "name": "schema: the columns of the table of the types",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, type, default_kind, is_in_primary_key FROM system.columns WHERE database = 'dbimp' AND table = 'dbimp_types' ORDER BY position LIMIT 8"
+    },
+    {
+      "item": 3,
+      "name": "schema: the tables of the database",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name, engine, total_rows FROM system.tables WHERE database = 'dbimp' ORDER BY name"
+    },
+    {
+      "item": 3,
+      "name": "schema: a table that the user cannot see",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT name FROM system.tables WHERE database = 'dbimp_other'"
+    },
+    {
+      "item": 3,
+      "name": "schema: the information schema",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = 'dbimp' AND table_name = 'dbimp_crud' ORDER BY ordinal_position"
+    },
+    {
+      "item": 3,
+      "name": "schema: the information schema of the database",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'dbimp%' ORDER BY 1"
+    },
+    {
+      "item": 3,
+      "name": "schema: the drop of a table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE dbimp.dbimp_mem"
+    },
+    {
+      "item": 3,
+      "name": "schema: the drop of a table that does not exist",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE dbimp.dbimp_none"
+    },
+    {
+      "item": 3,
+      "name": "schema: the drop with sync",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_log SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: the create of a database",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE DATABASE IF NOT EXISTS dbimp_x"
+    },
+    {
+      "item": 3,
+      "name": "schema: the drop of a database",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP DATABASE IF EXISTS dbimp_x"
+    },
+    {
+      "item": 3,
+      "name": "schema: the namespace of the user",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT currentDatabase() AS d, count() AS n FROM system.tables WHERE database = currentDatabase()"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_pk",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_pk SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_pk2",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_pk2 SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_pk3",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_pk3 SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_fk",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_fk SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_fk2",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_fk2 SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_uq",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_uq SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_uq2",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_uq2 SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_uq3",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_uq3 SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_chk",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_chk SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_rep",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_rep SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_view",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_view SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_mv",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_mv SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_def",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_def SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_ttl",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_ttl SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_ttl2",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_ttl2 SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_mem",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_mem SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_log",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_log SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_cts",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_cts SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_ai",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_ai SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_get",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_get SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_ro",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_ro SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_time",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_time SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_qbit",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_qbit SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up the dictionary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP DICTIONARY IF EXISTS dbimp.dbimp_dict"
+    },
+    {
+      "item": 3,
+      "name": "schema: an ephemeral column",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_eph (a Int32, b Int32 EPHEMERAL, c Int32 DEFAULT b + 1) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: an ephemeral column insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_eph (a, b) VALUES (1, 10)"
+    },
+    {
+      "item": 3,
+      "name": "schema: an ephemeral column select",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a, c FROM dbimp.dbimp_eph"
+    },
+    {
+      "item": 3,
+      "name": "schema: a live view",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE LIVE VIEW dbimp.dbimp_live AS SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a live view with its setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_live_view=1",
+      "text": "CREATE LIVE VIEW dbimp.dbimp_live AS SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a window view",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE WINDOW VIEW dbimp.dbimp_win ENGINE = Memory AS SELECT count() AS c, tumbleStart(w) AS s FROM dbimp.dbimp_crud GROUP BY tumble(now(), INTERVAL 1 SECOND) AS w"
+    },
+    {
+      "item": 3,
+      "name": "schema: a window view with its setting",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_window_view=1",
+      "text": "CREATE WINDOW VIEW dbimp.dbimp_win ENGINE = Memory AS SELECT count() AS c, tumbleStart(w) AS s FROM dbimp.dbimp_crud GROUP BY tumble(now(), INTERVAL 1 SECOND) AS w"
+    },
+    {
+      "item": 3,
+      "name": "schema: a collapsing table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_col (a UInt32, v Int32, sign Int8) ENGINE = CollapsingMergeTree(sign) ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a collapsing table insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_col VALUES (1, 5, 1), (1, 5, -1), (2, 7, 1)"
+    },
+    {
+      "item": 3,
+      "name": "schema: a collapsing table select with final",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a, v FROM dbimp.dbimp_col FINAL ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a partitioned table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_part (a UInt32, d Date) ENGINE = MergeTree PARTITION BY toYYYYMM(d) ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a partitioned table insert",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "INSERT INTO dbimp.dbimp_part VALUES (1, '2026-01-05'), (2, '2026-02-05')"
+    },
+    {
+      "item": 3,
+      "name": "schema: the partitions of the table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT partition, rows FROM system.parts WHERE database = 'dbimp' AND table = 'dbimp_part' AND active ORDER BY partition"
+    },
+    {
+      "item": 3,
+      "name": "schema: drop a partition",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "ALTER TABLE dbimp.dbimp_part DROP PARTITION 202601"
+    },
+    {
+      "item": 3,
+      "name": "schema: the rows after the drop of a partition",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a FROM dbimp.dbimp_part ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: a column with a codec",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_codec (a UInt32 CODEC(Delta, ZSTD(3)), s String CODEC(LZ4)) ENGINE = MergeTree ORDER BY a"
+    },
+    {
+      "item": 3,
+      "name": "schema: the Kafka engine",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_kafka (a Int32) ENGINE = Kafka SETTINGS kafka_broker_list = '127.0.0.1:1', kafka_topic_list = 't', kafka_group_name = 'g', kafka_format = 'CSV'"
+    },
+    {
+      "item": 3,
+      "name": "feature: the url table function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&http_max_tries=1&http_connection_timeout=1",
+      "text": "SELECT 1 FROM url('http://127.0.0.1:1/x', CSV, 'a Int8')"
+    },
+    {
+      "item": 3,
+      "name": "feature: the s3 table function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&http_max_tries=1&s3_max_get_rps=0&s3_retry_attempts=1&http_connection_timeout=1",
+      "text": "SELECT 1 FROM s3('http://127.0.0.1:1/bucket/key', 'CSV', 'a Int8')"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_eph",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_eph SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_live",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_live SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_win",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_win SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_col",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_col SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_part",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_part SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_codec",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_codec SYNC"
+    },
+    {
+      "item": 3,
+      "name": "schema: clean up dbimp_kafka",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_kafka SYNC"
+    },
+    {
+      "item": 3,
+      "name": "feature: FINAL",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id FROM dbimp.dbimp_crud FINAL"
+    },
+    {
+      "item": 3,
+      "name": "feature: SAMPLE",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_big SAMPLE 0.1"
+    },
+    {
+      "item": 3,
+      "name": "feature: SAMPLE on a table with a sampling key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "CREATE TABLE dbimp.dbimp_smp (id UInt64) ENGINE = MergeTree ORDER BY intHash32(id) SAMPLE BY intHash32(id)"
+    },
+    {
+      "item": 3,
+      "name": "feature: SAMPLE with a sampling key",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_smp SAMPLE 1 / 10"
+    },
+    {
+      "item": 3,
+      "name": "feature: the drop of the sample table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "DROP TABLE IF EXISTS dbimp.dbimp_smp SYNC"
+    },
+    {
+      "item": 3,
+      "name": "feature: PREWHERE",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id FROM dbimp.dbimp_big PREWHERE id < 3 WHERE s != 'x' ORDER BY id"
+    },
+    {
+      "item": 3,
+      "name": "feature: WITH FILL",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT number AS n FROM numbers(1) WHERE 0 ORDER BY n WITH FILL FROM 1 TO 4"
+    },
+    {
+      "item": 3,
+      "name": "feature: ARRAY JOIN",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a FROM (SELECT [1, 2, 3] AS arr) ARRAY JOIN arr AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: LIMIT BY",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id % 2 AS k, id FROM dbimp.dbimp_big ORDER BY k, id LIMIT 2 BY k LIMIT 4"
+    },
+    {
+      "item": 3,
+      "name": "feature: window function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT id, sum(id) OVER (ORDER BY id) AS s FROM dbimp.dbimp_big ORDER BY id LIMIT 3"
+    },
+    {
+      "item": 3,
+      "name": "feature: ASOF JOIN",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT a.n, b.n FROM (SELECT 1 AS k, 5 AS n) a ASOF JOIN (SELECT 1 AS k, 3 AS n) b ON a.k = b.k AND a.n >= b.n"
+    },
+    {
+      "item": 3,
+      "name": "feature: a settings clause",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a SETTINGS max_threads = 1"
+    },
+    {
+      "item": 3,
+      "name": "feature: the format clause",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "text": "SELECT 1 AS a FORMAT CSV"
+    },
+    {
+      "item": 3,
+      "name": "feature: format CSV",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=CSV",
+      "text": "SELECT 1 AS a, 'x,y' AS b"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Parquet",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Parquet",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format JSONLines",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONLines",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Protobuf",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Protobuf",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Avro",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Avro",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Vertical",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Vertical",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Pretty",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=PrettyCompact",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Markdown",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Markdown",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format XML",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=XML",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Template",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Template",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format RowBinaryWithDefaults",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=RowBinaryWithDefaults",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Npy",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Npy",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: format Null",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=Null",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: query id",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-feature-{{user}}",
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: the log of a query id",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-feature-{{user}}",
+      "text": "SELECT query_id, query_kind FROM system.processes WHERE query_id = {qid:String}"
+    },
+    {
+      "item": 3,
+      "name": "feature: the progress headers",
+      "method": "POST",
+      "path": "/?database=dbimp&send_progress_in_http_headers=1&http_headers_progress_interval_ms=0&max_block_size=100000",
+      "text": "SELECT number FROM numbers(1000000) FORMAT Null"
+    },
+    {
+      "item": 3,
+      "name": "feature: the settings in the query string",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_threads=3&max_block_size=777",
+      "text": "SELECT getSetting('max_threads') AS t, getSetting('max_block_size') AS b"
+    },
+    {
+      "item": 3,
+      "name": "feature: the settings in the header",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-Setting-max_threads": [
+          "3"
+        ]
+      },
+      "text": "SELECT getSetting('max_threads') AS t"
+    },
+    {
+      "item": 3,
+      "name": "feature: a role in the query string",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&role=nosuchrole",
+      "text": "SELECT currentRoles() AS r"
+    },
+    {
+      "item": 3,
+      "name": "feature: the profile and the quota",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&quota_key=k",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 3,
+      "name": "feature: EXPLAIN",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated",
+      "text": "EXPLAIN SYNTAX SELECT 1"
+    },
+    {
+      "item": 3,
+      "name": "feature: system table functions",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT * FROM numbers(3)"
+    },
+    {
+      "item": 3,
+      "name": "feature: the remote table function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 FROM remote('127.0.0.1', system.one)"
+    },
+    {
+      "item": 3,
+      "name": "feature: a lambda function",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT arrayMap(x -> x * 2, [1, 2, 3]) AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: a query with a union",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT 1 AS a UNION ALL SELECT 2 AS a"
+    },
+    {
+      "item": 3,
+      "name": "feature: the optimize",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "OPTIMIZE TABLE dbimp.dbimp_crud FINAL"
+    },
+    {
+      "item": 3,
+      "name": "feature: the check table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated",
+      "text": "CHECK TABLE dbimp.dbimp_crud"
+    },
+    {
+      "item": 3,
+      "name": "feature: the system flush",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SYSTEM FLUSH LOGS"
+    },
+    {
+      "item": 3,
+      "name": "feature: the rows read in the summary",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "text": "SELECT count() AS n FROM dbimp.dbimp_big WHERE id < 100"
+    },
+    {
+      "item": 4,
+      "name": "a multipart form with the query and a parameter",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Content-Type": [
+          "multipart/form-data; boundary=dbimpboundary"
+        ]
+      },
+      "text": "--dbimpboundary\r\nContent-Disposition: form-data; name=\"query\"\r\n\r\nSELECT {a:Int32} AS a, {s:String} AS s\r\n--dbimpboundary\r\nContent-Disposition: form-data; name=\"param_a\"\r\n\r\n7\r\n--dbimpboundary\r\nContent-Disposition: form-data; name=\"param_s\"\r\n\r\nmulti\tpart\r\n--dbimpboundary--\r\n"
+    },
+    {
+      "item": 4,
+      "name": "a multipart form with an external table",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=SELECT%20a%2C%20b%20FROM%20ext%20ORDER%20BY%20a&ext_structure=a%20Int32%2C%20b%20String&ext_format=CSV",
+      "header": {
+        "Content-Type": [
+          "multipart/form-data; boundary=dbimpboundary"
+        ]
+      },
+      "text": "--dbimpboundary\r\nContent-Disposition: form-data; name=\"ext\"; filename=\"ext\"\r\n\r\n1,x\r\n2,y\r\n\r\n--dbimpboundary--\r\n"
+    },
+    {
+      "item": 4,
+      "name": "a multipart form with an external table and a parameter",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=SELECT%20a%2C%20b%20FROM%20ext%20WHERE%20a%20%3D%20%7Ba%3AInt32%7D&ext_structure=a%20Int32%2C%20b%20String&ext_format=CSV",
+      "header": {
+        "Content-Type": [
+          "multipart/form-data; boundary=dbimpboundary"
+        ]
+      },
+      "text": "--dbimpboundary\r\nContent-Disposition: form-data; name=\"ext\"; filename=\"ext\"\r\n\r\n1,x\r\n2,y\r\n\r\n--dbimpboundary\r\nContent-Disposition: form-data; name=\"param_a\"\r\n\r\n2\r\n--dbimpboundary--\r\n"
+    },
+    {
+      "item": 7,
+      "name": "a query that replaces the running query with the same id",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=TabSeparated&query_id=dbimp-replace-{{user}}&max_block_size=1",
+      "text": "SELECT sleepEachRow(0.2) FROM numbers(15)",
+      "background": true
+    },
+    {
+      "item": 7,
+      "name": "the query that replaces it",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query_id=dbimp-replace-{{user}}&replace_running_query=1",
+      "text": "SELECT 7 AS a",
+      "wait": "500ms"
+    },
+    {
+      "item": 7,
+      "name": "the first query after it was replaced",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_qid=dbimp-replace-{{user}}",
+      "text": "SELECT count() AS n FROM system.processes WHERE query_id = {qid:String}",
+      "wait": "1s"
+    },
+    {
+      "item": 1,
+      "name": "the key in the header X-ClickHouse-Key with the header of Authorization",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-Key": [
+          "x"
+        ]
+      },
+      "text": "SELECT currentUser() AS u"
+    },
+    {
+      "item": 1,
+      "name": "the user and the key in the headers with the header of Authorization",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-User": [
+          "{{user}}"
+        ],
+        "X-ClickHouse-Key": [
+          "x"
+        ]
+      },
+      "text": "SELECT currentUser() AS u"
+    },
+    {
+      "item": 12,
+      "name": "a role in the query string",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&role=nosuchrole",
+      "text": "SELECT currentRoles() AS r"
+    },
+    {
+      "item": 12,
+      "name": "the headers of the settings",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "X-ClickHouse-Setting-max_threads": [
+          "3"
+        ]
+      },
+      "text": "SELECT getSetting('max_threads') AS t"
+    },
+    {
+      "item": 12,
+      "name": "the setting http_response_headers",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&http_response_headers=%7B%22X-Dbimp%22%3A%20%221%22%7D",
+      "text": "SELECT 1"
+    },
+    {
+      "item": 12,
+      "name": "a request to a binary format by GET",
+      "method": "GET",
+      "path": "/?database=dbimp&default_format=RowBinaryWithNamesAndTypes&query=SELECT%201%20AS%20a"
+    },
+    {
+      "item": 12,
+      "name": "a request with the header Accept for JSON",
+      "method": "POST",
+      "path": "/?database=dbimp",
+      "header": {
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 12,
+      "name": "a request with the header Connection close",
+      "method": "POST",
+      "path": "/?database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+      "header": {
+        "Connection": [
+          "close"
+        ]
+      },
+      "text": "SELECT 1 AS a"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the ordinary user",
+      "method": "POST",
+      "path": "/",
+      "text": "DROP USER IF EXISTS dbimp_user",
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp",
+      "method": "POST",
+      "path": "/",
+      "text": "DROP DATABASE IF EXISTS dbimp SYNC",
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_other",
+      "method": "POST",
+      "path": "/",
+      "text": "DROP DATABASE IF EXISTS dbimp_other SYNC",
+      "phase": "teardown"
+    }
+  ]
+}

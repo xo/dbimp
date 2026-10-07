@@ -1460,6 +1460,13 @@ starts `clickhouse-25.3`, `clickhouse-25.8` and `clickhouse-26.9`, which
 speaks the native protocol by default. This driver speaks HTTP only, so it
 replaces that client in `usql` only if it matches it for a caller (D24).
 
+Steps 2 to 8a went in on 2026-10-07, over HTTP, on `clickhouse-25.3`,
+`clickhouse-25.8` and `clickhouse-26.9`. Ken decided the format, the
+parameters, the end of a result, the cancel and `UPDATE` the same day (D176),
+and the Go types, the DSN, transactions, redirects and flavors (D177), which
+ends step 9. `dbmeta` has staged the port 8123, an `api` address and the user
+`dbmeta_user`, which step 14 needs. The next step is step 10.
+
 Steps 2 to 9 went in on 2026-10-07: the recordings of `trino-476`,
 `trino-483` and `presto-0.299`, the survey, TRINO.md with its type table, and
 D175, which Ken decided the same day. The recorder gained the follow of an

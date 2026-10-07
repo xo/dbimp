@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Content-Encoding": [
+        "nosuch"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 1"
+  },
+  "response": {
+    "status": 501,
+    "header": {
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:51 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "48"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9996"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"44270\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ]
+    },
+    "body": "Code: 48. DB::Exception: Unknown compression method 'nosuch'. Only 'auto', 'none', 'gzip', 'deflate', 'br', 'xz', 'zstd', 'lz4', 'bz2', 'snappy' are supported as compression methods. (NOT_IMPLEMENTED) (version 25.8.33.6 (official build))\n"
+  }
+}

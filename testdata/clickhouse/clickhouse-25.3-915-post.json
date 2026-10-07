@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&session_id=dbimp-s-dbimp_user",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT a FROM tmp_a ORDER BY a"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "86daf3bf-de51-4824-8ffc-d6f5cae1f200"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "60"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9994"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"341770\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:37 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "Code: 60. DB::Exception: Unknown table expression identifier 'tmp_a' in scope SELECT a FROM tmp_a ORDER BY a ASC. (UNKNOWN_TABLE) (version 25.3.14.14 (official build))\n"
+  }
+}

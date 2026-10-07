@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_timezone=Asia%2FJakarta",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT toDateTime(0) AS t, toTypeName(toDateTime(0)) AS ty, timezone() AS tz"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Wed, 07 Oct 2026 01:49:32 GMT"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9714"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "snnihvntioovuvda"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"8960\",\"elapsed_ns\":\"399200\",\"memory_usage\":\"8142195\"}"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "29fb5dfd-57e0-44d4-aecd-8109199da15e"
+      ],
+      "X-Clickhouse-Timezone": [
+        "Asia/Jakarta"
+      ]
+    },
+    "body": "[\"t\", \"ty\", \"tz\"]\n[\"DateTime\", \"String\", \"String\"]\n[\"1970-01-01 07:00:00\", \"DateTime\", \"Asia\\/Jakarta\"]\n"
+  }
+}

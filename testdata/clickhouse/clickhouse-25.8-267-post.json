@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE USER dbimp_x IDENTIFIED BY 'x'"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "493"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"355840\"}"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "4744a5b7-bf3d-4838-89e0-1b3ac04ac79a"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9999"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:50 GMT"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 493. DB::Exception: user `dbimp_x`: cannot insert because user `dbimp_x` already exists in `local_directory`. (ACCESS_ENTITY_ALREADY_EXISTS) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

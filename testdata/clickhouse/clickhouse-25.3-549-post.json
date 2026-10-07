@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&send_progress_in_http_headers=1&http_headers_progress_interval_ms=0&max_block_size=100000",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number FROM numbers(1000000) FORMAT Null"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9803"
+      ],
+      "X-Clickhouse-Progress": [
+        "{\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"296210\"}",
+        "{\"read_rows\":\"100000\",\"read_bytes\":\"800000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"318930\"}",
+        "{\"read_rows\":\"200000\",\"read_bytes\":\"1600000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"344540\"}",
+        "{\"read_rows\":\"300000\",\"read_bytes\":\"2400000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"369701\"}",
+        "{\"read_rows\":\"400000\",\"read_bytes\":\"3200000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"392901\"}",
+        "{\"read_rows\":\"500000\",\"read_bytes\":\"4000000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"411861\"}",
+        "{\"read_rows\":\"600000\",\"read_bytes\":\"4800000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"432411\"}",
+        "{\"read_rows\":\"700000\",\"read_bytes\":\"5600000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"451681\"}",
+        "{\"read_rows\":\"800000\",\"read_bytes\":\"6400000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"471501\"}",
+        "{\"read_rows\":\"900000\",\"read_bytes\":\"7200000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"491391\"}",
+        "{\"read_rows\":\"1000000\",\"read_bytes\":\"8000000\",\"total_rows_to_read\":\"1000000\",\"elapsed_ns\":\"509461\"}",
+        "{\"read_rows\":\"1000000\",\"read_bytes\":\"8000000\",\"total_rows_to_read\":\"1000000\",\"result_rows\":\"1000000\",\"result_bytes\":\"8001280\",\"elapsed_ns\":\"552721\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:02 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "29722b83-0bf3-4fbd-9154-f5e21bd3842b"
+      ],
+      "X-Clickhouse-Format": [
+        "Null"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1000000\",\"read_bytes\":\"8000000\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1000000\",\"result_rows\":\"1000000\",\"result_bytes\":\"8001280\",\"elapsed_ns\":\"619291\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": ""
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=2&http_write_exception_in_output_format=0",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "8e48c886-7737-4e18-b4c4-43484c79bf68"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9998"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"6\",\"read_bytes\":\"48\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"543710\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:02 GMT"
+      ]
+    },
+    "body": "[\"number\", \"throwIf(equals(number, 5))\"]\n[\"UInt64\", \"UInt8\"]\n__exception__\r\nCode: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.number, 5_UInt8) :: 0) -> throwIf(equals(__table1.number, 5_UInt8)) UInt8 : 2'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 25.8.33.6 (official build))\n",
+    "truncated": true
+  }
+}

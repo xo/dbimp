@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&alter_sync=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "ALTER TABLE dbimp.dbimp_ttl MODIFY COLUMN a Int64"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "9116b62b-3de6-42bf-af44-e0dff8b405c8"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "524"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9910"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"470590\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:38 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 524. DB::Exception: ALTER of key column a from type Int32 to type Int64 is not safe because it can change the representation of primary key. (ALTER_OF_COLUMN_IS_FORBIDDEN) (version 25.3.14.14 (official build))\"]\n"
+  }
+}

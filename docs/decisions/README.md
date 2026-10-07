@@ -196,3 +196,5 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D173](D173-trino-and-presto-in-one-driver.md) | Trino and Presto in one driver | Decided |
 | [D174](D174-the-clickhouse-driver-speaks-http.md) | The ClickHouse driver speaks HTTP | Decided |
 | [D175](D175-the-trino-and-presto-driver.md) | The Trino and Presto driver | Decided |
+| [D176](D176-the-clickhouse-driver-reads-json-and-kills-queries.md) | The ClickHouse driver reads JSON and kills queries | Decided |
+| [D177](D177-the-rest-of-the-clickhouse-driver.md) | The rest of the ClickHouse driver | Decided |

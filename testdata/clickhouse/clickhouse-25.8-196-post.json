@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_result_bytes=1000&result_overflow_mode=throw",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT id FROM dbimp.dbimp_big ORDER BY id"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "396"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9985"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:17 GMT"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "cd7897fc-069f-4b6e-bdd0-9b8b0aae8a0c"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"5000\",\"read_bytes\":\"40000\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"5000\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"431640\"}"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "[\"id\"]\n[\"UInt64\"]\n[\"Code: 396. DB::Exception: Limit for result exceeded, max bytes: 1000.00 B, current bytes: 39.06 KiB. (TOO_MANY_ROWS_OR_BYTES) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

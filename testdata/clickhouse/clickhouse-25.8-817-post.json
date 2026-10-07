@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_execution_time=1&max_block_size=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT sleepEachRow(0.5) FROM numbers(10)"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9994"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"2\",\"read_bytes\":\"16\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"500722308\"}"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:32 GMT"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "84dfb8f7-ccfd-4662-9d48-f47d7282ad80"
+      ]
+    },
+    "body": "[\"sleepEachRow(0.5)\"]\n[\"UInt8\"]\n[0]\n[\"Code: 159. DB::Exception: Timeout exceeded: elapsed 1000.737576 ms, maximum: 1000 ms. (TIMEOUT_EXCEEDED) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=1&max_insert_block_size=1&min_insert_block_size_rows=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_crud (id, name, v) SELECT number, 'x', throwIf(number = 3) FROM numbers(10)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Keep-Alive": [
+        "timeout=30, max=9990"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "dxugupgywzjeqooj"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"4\",\"read_bytes\":\"32\",\"written_rows\":\"3\",\"written_bytes\":\"63\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"2884102\",\"memory_usage\":\"8538645\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:55 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "395"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "f48a6c16-73d7-468f-87b1-fb940be1ad9c"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "Code: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.number, 3_UInt8) :: 0) -> throwIf(equals(__table1.number, 3_UInt8)) UInt8 : 3'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 26.9.2.8 (official build))\n"
+  }
+}

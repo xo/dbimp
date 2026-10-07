@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "REPLACE INTO dbimp.dbimp_crud (id, name, v) VALUES (1, 'a', 1)"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9955"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:38 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"108610\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "62"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "3e9f0459-5903-4973-9347-49795603ae39"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 62. DB::Exception: Syntax error: failed at position 9 (INTO): INTO dbimp.dbimp_crud (id, name, v) VALUES (1, 'a', 1). Expected one of: TABLE, DICTIONARY. (SYNTAX_ERROR) (version 25.3.14.14 (official build))\"]\n"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=1000&output_format_parallel_formatting=0",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT id, throwIf(id = 3000) FROM dbimp.dbimp_big ORDER BY id"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Date": [
+        "Wed, 07 Oct 2026 01:50:29 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9999"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "395"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "311198ac-10d8-4fd8-8d73-45454df1b690"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"5000\",\"read_bytes\":\"40000\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"5000\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"1085040\"}"
+      ]
+    },
+    "body": "[\"id\", \"throwIf(equals(id, 3000))\"]\n[\"UInt64\", \"UInt8\"]\n[\"Code: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.id, 3000_UInt16) :: 3) -> throwIf(equals(__table1.id, 3000_UInt16)) UInt8 : 1'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 25.3.14.14 (official build))\"]\n"
+  }
+}

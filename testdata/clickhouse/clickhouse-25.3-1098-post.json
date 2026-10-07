@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=XML",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 1 AS a"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"237470\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "f219e790-dd8e-461e-9117-8b1eb3518ade"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:38 GMT"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9811"
+      ],
+      "Content-Type": [
+        "application/xml; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Format": [
+        "XML"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "<?xml version='1.0' encoding='UTF-8' ?>\n<result>\n\t<meta>\n\t\t<columns>\n\t\t\t<column>\n\t\t\t\t<name>a</name>\n\t\t\t\t<type>UInt8</type>\n\t\t\t</column>\n\t\t</columns>\n\t</meta>\n\t<data>\n\t\t<row>\n\t\t\t<a>1</a>\n\t\t</row>\n\t</data>\n\t<rows>1</rows>\n\t<statistics>\n\t\t<elapsed>0.000260561</elapsed>\n\t\t<rows_read>1</rows_read>\n\t\t<bytes_read>1</bytes_read>\n\t</statistics>\n</result>\n"
+  }
+}

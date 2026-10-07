@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_chk VALUES (-1)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9935"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"51572454\",\"memory_usage\":\"0\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "469"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "rwzdqvoxflphrcgc"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:49:29 GMT"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "b5061089-333f-4efd-b9a0-58e4ee83c994"
+      ]
+    },
+    "body": "Code: 469. DB::Exception: Constraint `pos` for table dbimp.dbimp_chk (1f5107a5-ca4a-4054-8602-f0911d5c9d95) is violated at row 1. Expression: (a > 0). Column values: a = -1: While executing WaitForAsyncInsert. (VIOLATED_CONSTRAINT) (version 26.9.2.8 (official build))\n"
+  }
+}

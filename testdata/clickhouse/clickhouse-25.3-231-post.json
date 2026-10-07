@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=1&max_insert_block_size=1&min_insert_block_size_rows=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_crud (id, name, v) SELECT number, 'x', throwIf(number = 3) FROM numbers(10)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "25e8c13d-d0e4-4994-9bca-687bcee06b10"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "395"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9994"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:50:29 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"4\",\"read_bytes\":\"32\",\"written_rows\":\"3\",\"written_bytes\":\"66\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"1804461\"}"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.number, 3_UInt8) :: 0) -> throwIf(equals(__table1.number, 3_UInt8)) UInt8 : 3'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 25.3.14.14 (official build))\"]\n"
+  }
+}

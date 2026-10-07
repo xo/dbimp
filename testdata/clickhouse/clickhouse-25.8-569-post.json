@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Content-Type": [
+        "multipart/form-data; boundary=dbimpboundary"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "--dbimpboundary\r\nContent-Disposition: form-data; name=\"query\"\r\n\r\nSELECT {a:Int32} AS a, {s:String} AS s\r\n--dbimpboundary\r\nContent-Disposition: form-data; name=\"param_a\"\r\n\r\n7\r\n--dbimpboundary\r\nContent-Disposition: form-data; name=\"param_s\"\r\n\r\nmulti\tpart\r\n--dbimpboundary--\r\n"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"179200\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:56 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9959"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "77f6a171-57b3-49dc-ad1e-915ce215974a"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "457"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 457. DB::Exception: Value multi\\tpart cannot be parsed as String for query parameter 's' because it isn't parsed completely: only 5 of 10 bytes was parsed: multi. (BAD_QUERY_PARAMETER) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

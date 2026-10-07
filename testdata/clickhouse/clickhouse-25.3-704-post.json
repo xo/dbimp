@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT CAST(NULL AS LowCardinality(Nullable(Int32))) AS a, CAST(NULL AS Nullable(LowCardinality(String))) AS b"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"423100\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:04 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "bb7ad3fe-a469-4ca2-b350-8d00246efb10"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "455"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9873"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 455. DB::Exception: Creating columns of type LowCardinality(Nullable(Int32)) is prohibited by default due to expected negative impact on performance. It can be enabled with the `allow_suspicious_low_cardinality_types` setting: In scope SELECT CAST(NULL, 'LowCardinality(Nullable(Int32))') AS a, CAST(NULL, 'Nullable(LowCardinality(String))') AS b. (SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY) (version 25.3.14.14 (official build))\"]\n"
+  }
+}

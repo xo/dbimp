@@ -25,6 +25,7 @@ list does not name. A new kind needs a decision.
 | number | A number whose type the database does not name, such as a JSON number | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`, as `dbimp.Number` decodes it (D19) |
 | float | A floating point number | `float64` |
 | decimal | A number with a fixed or an exact precision | `*apd.Decimal` (D33) |
+| big integer | An integer of 128 or 256 bits, which does not fit in `int64` or `uint64` | `*big.Int` (D177) |
 | string | Text | `string` |
 | binary | Bytes | `[]byte` |
 | date | A day of the calendar, with no time and no zone | `dbimp.Date` (D138) |
@@ -35,6 +36,7 @@ list does not name. A new kind needs a decision.
 | duration | An exact length of time | `time.Duration` |
 | interval | A length of the calendar, with months and days | `dbimp.Interval` (D138) |
 | uuid | A UUID | `uuid.UUID` (D25) |
+| ip address | An IPv4 or an IPv6 address | `netip.Addr` (D177) |
 | json | A value of any JSON shape, such as a variant or a JSON column | the decoded value: nil, `bool`, `string`, a number, `[]any` or `map[string]any` |
 | array | A list of values | `[]any`, of the Go types of its elements |
 | set | A list of values with no order | `[]any` |
@@ -69,6 +71,7 @@ the scan type and the database type.
 | number | integer: `int64`<br>double: `float64` |  | number: `int64` |  |  |  | NUMERIC: `int64 for an integer` |  |  | NUMERIC: `int64 for a number with no fraction that fits` |  |  |
 | float |  | DOUBLE: `float64`<br>FLOAT: `float64` |  | float: `float64`<br>double: `float64` | FLOAT: `float64`<br>REAL: `float64`<br>DOUBLE: `float64` | float: `float64` | REAL: `float64` | float: `float64` | FLOAT: `float64`<br>DOUBLE: `float64` | REAL: `float64` | float: `float64` | REAL: `float64`<br>DOUBLE: `float64` |
 | decimal |  | DECIMAL: `*apd.Decimal` |  | decimal: `*apd.Decimal` | DECIMAL: `float64` |  |  |  | BIG_DECIMAL: `*apd.Decimal` |  | decimal: `*apd.Decimal` | DECIMAL: `*apd.Decimal`<br>trino 483 NUMBER: `*apd.Decimal` |
+| big integer |  |  |  |  |  |  |  |  |  |  |  |  |
 | string | string: `string` | CHAR: `string`<br>VARCHAR: `string` | string: `string` | string: `string` | VARCHAR: `string`<br>CHAR: `string` | string: `string`<br>tag: `string` | TEXT: `string` | string: `string` | STRING: `string` | TEXT: `string` | string: `string` | CHAR: `string`<br>VARCHAR: `string` |
 | binary |  | BINARY: `[]byte`<br>VARBINARY: `[]byte` | bytes as a base64 string: `[]byte` | binary: `[]byte` | COMPLEX<HLLSketch>: `[]byte` |  | BLOB: `[]byte` | byte array: `[]byte` | BYTES: `[]byte` | BLOB: `[]byte` | bytes: `[]byte` | VARBINARY: `[]byte`<br>HYPERLOGLOG: `[]byte`<br>P4HYPERLOGLOG: `[]byte`<br>SETDIGEST: `[]byte`<br>QDIGEST: `[]byte`<br>TDIGEST: `[]byte` |
 | date |  | DATE: `dbimp.Date` |  | date: `dbimp.Date` | DATE: `dbimp.Date` |  | DATE: `dbimp.Date` | date: `dbimp.Date` |  | DATE: `dbimp.Date` |  | DATE: `dbimp.Date` |
@@ -79,6 +82,7 @@ the scan type and the database type.
 | duration |  |  |  |  |  |  |  |  |  |  | duration: `time.Duration` |  |
 | interval |  | INTERVAL: `dbimp.Interval` |  | interval: `dbimp.Interval` |  |  |  | duration: `dbimp.Interval` |  |  |  | INTERVAL YEAR TO MONTH: `dbimp.Interval`<br>INTERVAL DAY TO SECOND: `dbimp.Interval` |
 | uuid |  | UUID: `uuid.UUID` |  |  |  |  |  | uuid: `uuid.UUID` |  |  | uuid: `uuid.UUID` | UUID: `uuid.UUID` |
+| ip address |  |  |  |  |  |  |  |  |  |  |  |  |
 | json |  |  |  | variant: `the decoded JSON value` | COMPLEX<json>: `the decoded JSON value` |  |  |  | JSON: `the decoded JSON value` |  |  | JSON: `the decoded JSON value`<br>trino 483 VARIANT: `the decoded JSON value` |
 | array | array: `[]any` | ARRAY: `[]any` | array: `[]any` | array: `[]any` | ARRAY: `[]any` |  |  | list: `[]any` | INT_ARRAY: `[]any`<br>LONG_ARRAY: `[]any`<br>FLOAT_ARRAY: `[]any`<br>DOUBLE_ARRAY: `[]any`<br>BOOLEAN_ARRAY: `[]any`<br>STRING_ARRAY: `[]any`<br>TIMESTAMP_ARRAY: `[]any` |  | array: `[]any` | ARRAY: `[]any` |
 | set |  |  |  |  |  |  |  |  |  |  | set: `[]any` |  |

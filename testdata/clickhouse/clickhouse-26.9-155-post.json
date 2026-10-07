@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT CAST(NULL AS Nullable(FixedString(2))) AS a, CAST(NULL AS Nullable(Enum8('a' = 1))) AS b, CAST(NULL AS Nullable(UUID)) AS c, CAST(NULL AS Nullable(IPv6)) AS d, CAST(NULL AS Nullable(Decimal(10, 2))) AS e, CAST(NULL AS Nullable(DateTime64(3, 'UTC'))) AS f, CAST(NULL AS Nullable(Date)) AS g"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"53512\",\"elapsed_ns\":\"586780\",\"memory_usage\":\"8277155\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:55 GMT"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "kaekjtqccuivgxom"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "bd9218b8-cf1e-43ca-bd02-26767d1fdf99"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9845"
+      ]
+    },
+    "body": "[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\"]\n[\"Nullable(FixedString(2))\", \"Nullable(Enum8('a' = 1))\", \"Nullable(UUID)\", \"Nullable(IPv6)\", \"Nullable(Decimal(10, 2))\", \"Nullable(DateTime64(3, 'UTC'))\", \"Nullable(Date)\"]\n[null, null, null, null, null, null, null]\n"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT name, engine, total_rows FROM system.tables WHERE database = 'dbimp' ORDER BY name"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9990"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"20\",\"read_bytes\":\"1165\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"585490\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "86067b72-50e1-456a-b364-0e9d042ccd1d"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:55 GMT"
+      ]
+    },
+    "body": "[\"name\", \"engine\", \"total_rows\"]\n[\"String\", \"String\", \"Nullable(UInt64)\"]\n[\".inner_id.d5f5ab84-dafe-4353-9472-9cb80f9af1ac\", \"MergeTree\", 1]\n[\"dbimp_big\", \"MergeTree\", 5000]\n[\"dbimp_chk\", \"MergeTree\", 0]\n[\"dbimp_crud\", \"MergeTree\", 1]\n[\"dbimp_crud2\", \"MergeTree\", 0]\n[\"dbimp_cts\", \"Memory\", 0]\n[\"dbimp_def\", \"MergeTree\", 0]\n[\"dbimp_dict\", \"Dictionary\", null]\n[\"dbimp_fk\", \"MergeTree\", 1]\n[\"dbimp_log\", \"TinyLog\", 0]\n[\"dbimp_lw\", \"MergeTree\", 0]\n[\"dbimp_mem\", \"Memory\", 0]\n[\"dbimp_mv\", \"MaterializedView\", 1]\n[\"dbimp_pk\", \"MergeTree\", 2]\n[\"dbimp_pk2\", \"MergeTree\", 0]\n[\"dbimp_pk3\", \"MergeTree\", 0]\n[\"dbimp_rep\", \"ReplacingMergeTree\", 2]\n[\"dbimp_ttl2\", \"MergeTree\", 2]\n[\"dbimp_types\", \"MergeTree\", 3]\n[\"dbimp_view\", \"View\", null]\n"
+  }
+}

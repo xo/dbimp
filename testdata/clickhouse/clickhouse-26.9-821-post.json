@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_execution_time=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT sleep(4)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "ryvczymrivbostdx"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "7f2b9b57-4a7c-487b-b1fc-dae560e4178a"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "160"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9992"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"929491\",\"memory_usage\":\"3918511\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:50:03 GMT"
+      ]
+    },
+    "body": "Code: 160. DB::Exception: The maximum sleep time is 3000000 microseconds. Requested: 4000000 microseconds: while executing 'FUNCTION sleep(4_UInt8 :: 1) -> sleep(4_UInt8) UInt8 : 2'. (TOO_SLOW) (version 26.9.2.8 (official build))\n"
+  }
+}

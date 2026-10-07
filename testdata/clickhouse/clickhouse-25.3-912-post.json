@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&session_id=dbimp-s-dbimp_user",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "USE dbimp_other"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9997"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"403321\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "f1bf2577-d1aa-4232-9cec-64d1b49f05a9"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "497"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:37 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "Code: 497. DB::Exception: dbimp_user: Not enough privileges. To execute this query, it's necessary to have the grant SHOW DATABASES ON dbimp_other.*. (ACCESS_DENIED) (version 25.3.14.14 (official build))\n"
+  }
+}

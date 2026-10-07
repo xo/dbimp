@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_window_view=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE WINDOW VIEW dbimp.dbimp_win ENGINE = Memory AS SELECT count() AS c, tumbleStart(w) AS s FROM dbimp.dbimp_crud GROUP BY tumble(now(), INTERVAL 1 SECOND) AS w"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Keep-Alive": [
+        "timeout=10, max=9999"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "1"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:40 GMT"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "814dc8d6-5f31-4e30-a7d6-f5511cdd6185"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"839591\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 1. DB::Exception: Experimental WINDOW VIEW feature is not supported in the current infrastructure for query analysis (the setting 'allow_experimental_analyzer'). (UNSUPPORTED_METHOD) (version 25.8.33.6 (official build))\"]\n"
+  }
+}

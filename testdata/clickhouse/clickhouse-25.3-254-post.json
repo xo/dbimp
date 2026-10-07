@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT query_id, type, exception_code FROM system.query_log WHERE query_id LIKE 'dbimp-%' AND type != 'QueryStart' ORDER BY query_id, event_time_microseconds"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9989"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"460\",\"read_bytes\":\"26416\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"460\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"1817611\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:01 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "bf65eda1-158d-4418-9351-4894f63802c1"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "[\"query_id\", \"type\", \"exception_code\"]\n[\"String\", \"Enum8('QueryStart' = 1, 'QueryFinish' = 2, 'ExceptionBeforeStart' = 3, 'ExceptionWhileProcessing' = 4)\", \"Int32\"]\n[\"dbimp-cancel-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-getcancel-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-give-up-default\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-give-up-rows-default\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-kill-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-same-default\", \"ExceptionBeforeStart\", 216]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-setonly-default\", \"ExceptionWhileProcessing\", 210]\n"
+  }
+}

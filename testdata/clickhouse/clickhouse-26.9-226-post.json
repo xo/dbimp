@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=RowBinaryWithNamesAndTypes&max_block_size=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Exception-Tag": [
+        "lzrrsjnhkkypqhxt"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"6\",\"read_bytes\":\"48\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"699020\",\"memory_usage\":\"3940815\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:48:55 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "RowBinaryWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9774"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "Content-Disposition": [
+        "attachment; filename=\"result.RowBinaryWithNamesAndTypes\""
+      ],
+      "Content-Type": [
+        "application/octet-stream"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "8525d883-230d-4fea-888d-3804d5cfe9f3"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "395"
+      ]
+    },
+    "body": "\u0002\u0006number\u001athrowIf(equals(number, 5))\u0006UInt64\u0005UInt8\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0002\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000Code: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.number, 5_UInt8) :: 0) -> throwIf(equals(__table1.number, 5_UInt8)) UInt8 : 2'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 26.9.2.8 (official build))\n"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT toInt32(if(number = 3, 'x', toString(number))) AS n FROM numbers(6)"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "coifargnangspziy"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "118d9e13-d66c-4bcd-a8b4-6b8a96a727fd"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "6"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9994"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"4\",\"read_bytes\":\"32\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"6\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"748491\",\"memory_usage\":\"3956023\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:49:32 GMT"
+      ]
+    },
+    "body": "[\"n\"]\n[\"Int32\"]\n[0]\n[1]\nCode: 6. DB::Exception: Cannot parse string 'x' as Int32: syntax error at begin of string. Note: there are toInt32OrZero and toInt32OrNull functions, which returns zero/NULL instead of throwing exception: while executing 'FUNCTION toInt32(if(equals(__table1.number, 3_UInt8), 'x'_String, toString(__table1.number)) :: 3) -> toInt32(if(equals(__table1.number, 3_UInt8), 'x'_String, toString(__table1.number))) Int32 : 1'. (CANNOT_PARSE_TEXT) (version 26.9.2.8 (official build))\n"
+  }
+}

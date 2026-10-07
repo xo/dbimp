@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_chk VALUES (-1)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:38 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "b4e6054c-43e1-484a-bed6-2face11866d4"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "469"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9936"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"4\",\"written_rows\":\"1\",\"written_bytes\":\"4\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"360650\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 469. DB::Exception: Constraint `pos` for table dbimp.dbimp_chk (c7335377-3b6c-4a96-add0-fa71a8ffa737) is violated at row 1. Expression: (a > 0). Column values: a = -1. (VIOLATED_CONSTRAINT) (version 25.3.14.14 (official build))\"]\n"
+  }
+}

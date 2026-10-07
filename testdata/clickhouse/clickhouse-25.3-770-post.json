@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_crud (id) VALUES ('x')"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "dcd55f44ada5"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9807"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"491690\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:51:04 GMT"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "cb081756-4eb0-4664-b5c8-b743690f4971"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "6"
+      ]
+    },
+    "body": "[]\n[]\n[\"Code: 6. DB::Exception: Cannot parse string 'x' as UInt32: syntax error at begin of string. Note: there are toUInt32OrZero and toUInt32OrNull functions, which returns zero\\/NULL instead of throwing exception.: while executing 'FUNCTION if(isNull(-dummy-0) : 3, defaultValueOfTypeName('UInt32') :: 2, _CAST(-dummy-0, 'UInt32') :: 4) -> if(isNull(-dummy-0), defaultValueOfTypeName('UInt32'), _CAST(-dummy-0, 'UInt32')) UInt32 : 1': While executing ValuesBlockInputFormat. (CANNOT_PARSE_TEXT) (version 25.3.14.14 (official build))\"]\n"
+  }
+}

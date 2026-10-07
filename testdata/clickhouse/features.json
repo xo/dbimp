@@ -1,0 +1,1530 @@
+{
+  "driver": "clickhouse",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-07"
+    },
+    {
+      "source": "deepseek-v4-pro",
+      "kind": "model",
+      "date": "2026-10-07"
+    },
+    {
+      "source": "github.com/ClickHouse/clickhouse-go",
+      "kind": "driver",
+      "date": "2026-10-07"
+    },
+    {
+      "source": "github.com/ClickHouse/clickhouse-connect",
+      "kind": "driver",
+      "date": "2026-10-07"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-366-post.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-367-post.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-369-post.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-381-post.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-26.9-402-post.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-26.9-403-post.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "crud",
+      "name": "insert select",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-388-post.json",
+      "test": "TestIntegrationCRUD/insert_select"
+    },
+    {
+      "kind": "crud",
+      "name": "alter table update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-369-post.json",
+      "test": "TestIntegrationCRUD/alter_table_update"
+    },
+    {
+      "kind": "crud",
+      "name": "alter table delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-384-post.json",
+      "test": "TestIntegrationCRUD/alter_table_delete"
+    },
+    {
+      "kind": "crud",
+      "name": "lightweight delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-381-post.json",
+      "test": "TestIntegrationCRUD/lightweight_delete"
+    },
+    {
+      "kind": "crud",
+      "name": "lightweight update",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-372-post.json",
+      "test": "TestIntegrationCRUD/lightweight_update"
+    },
+    {
+      "kind": "crud",
+      "name": "25.3 lightweight update",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-25.3-366-post.json",
+      "test": "TestIntegrationCRUD/25.3_lightweight_update"
+    },
+    {
+      "kind": "crud",
+      "name": "async insert",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-394-post.json",
+      "test": "TestIntegrationCRUD/async_insert"
+    },
+    {
+      "kind": "crud",
+      "name": "truncate",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-365-post.json",
+      "test": "TestIntegrationCRUD/truncate"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-407-post.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-408-post.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-26.9-418-post.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-428-post.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-26.9-419-post.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-437-post.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "materialized view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-440-post.json",
+      "test": "TestIntegrationSchema/materialized_view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-444-post.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "materialized column",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-444-post.json",
+      "test": "TestIntegrationSchema/materialized_column"
+    },
+    {
+      "kind": "schema",
+      "name": "alias column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-444-post.json",
+      "test": "TestIntegrationSchema/alias_column"
+    },
+    {
+      "kind": "schema",
+      "name": "ephemeral column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-503-post.json",
+      "test": "TestIntegrationSchema/ephemeral_column"
+    },
+    {
+      "kind": "schema",
+      "name": "projection",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-433-post.json",
+      "test": "TestIntegrationSchema/projection"
+    },
+    {
+      "kind": "schema",
+      "name": "dictionary",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-453-post.json",
+      "test": "TestIntegrationSchema/dictionary"
+    },
+    {
+      "kind": "schema",
+      "name": "partition",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-514-post.json",
+      "test": "TestIntegrationSchema/partition"
+    },
+    {
+      "kind": "schema",
+      "name": "drop partition",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-515-post.json",
+      "test": "TestIntegrationSchema/drop_partition"
+    },
+    {
+      "kind": "schema",
+      "name": "codec",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-517-post.json",
+      "test": "TestIntegrationSchema/codec"
+    },
+    {
+      "kind": "schema",
+      "name": "replacing merge tree",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-426-post.json",
+      "test": "TestIntegrationSchema/replacing_merge_tree"
+    },
+    {
+      "kind": "schema",
+      "name": "collapsing merge tree",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-511-post.json",
+      "test": "TestIntegrationSchema/collapsing_merge_tree"
+    },
+    {
+      "kind": "schema",
+      "name": "kafka engine",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-518-post.json",
+      "test": "TestIntegrationSchema/kafka_engine"
+    },
+    {
+      "kind": "schema",
+      "name": "live view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-25.8-505-post.json",
+      "test": "TestIntegrationSchema/live_view"
+    },
+    {
+      "kind": "schema",
+      "name": "26.9 live view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-26.9-505-post.json",
+      "test": "TestIntegrationSchema/26.9_live_view"
+    },
+    {
+      "kind": "schema",
+      "name": "window view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-25.8-507-post.json",
+      "test": "TestIntegrationSchema/window_view"
+    },
+    {
+      "kind": "feature",
+      "name": "JSON format",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-045-post.json",
+      "test": "TestIntegrationFeatures/JSON_format"
+    },
+    {
+      "kind": "feature",
+      "name": "JSONEachRow format",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-046-post.json",
+      "test": "TestIntegrationFeatures/JSONEachRow_format"
+    },
+    {
+      "kind": "feature",
+      "name": "RowBinaryWithNamesAndTypes format",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-048-post.json",
+      "test": "TestIntegrationFeatures/RowBinaryWithNamesAndTypes_format"
+    },
+    {
+      "kind": "feature",
+      "name": "Native format",
+      "sources": [
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-050-post.json",
+      "test": "TestIntegrationFeatures/Native_format"
+    },
+    {
+      "kind": "feature",
+      "name": "Parquet format",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-542-post.json",
+      "test": "TestIntegrationFeatures/Parquet_format"
+    },
+    {
+      "kind": "feature",
+      "name": "CSV format",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-541-post.json",
+      "test": "TestIntegrationFeatures/CSV_format"
+    },
+    {
+      "kind": "feature",
+      "name": "Arrow format",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-052-post.json",
+      "test": "TestIntegrationFeatures/Arrow_format"
+    },
+    {
+      "kind": "feature",
+      "name": "format clause",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-028-post.json",
+      "test": "TestIntegrationFeatures/format_clause"
+    },
+    {
+      "kind": "feature",
+      "name": "default format",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-021-post.json",
+      "test": "TestIntegrationFeatures/default_format"
+    },
+    {
+      "kind": "feature",
+      "name": "final",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-426-post.json",
+      "test": "TestIntegrationFeatures/final"
+    },
+    {
+      "kind": "feature",
+      "name": "sample",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-531-post.json",
+      "test": "TestIntegrationFeatures/sample"
+    },
+    {
+      "kind": "feature",
+      "name": "prewhere",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-533-post.json",
+      "test": "TestIntegrationFeatures/prewhere"
+    },
+    {
+      "kind": "feature",
+      "name": "typed parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-159-post.json",
+      "test": "TestIntegrationFeatures/typed_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "query id",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-554-post.json",
+      "test": "TestIntegrationFeatures/query_id"
+    },
+    {
+      "kind": "feature",
+      "name": "session id",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-354-post.json",
+      "test": "TestIntegrationFeatures/session_id"
+    },
+    {
+      "kind": "feature",
+      "name": "temporary table",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-354-post.json",
+      "test": "TestIntegrationFeatures/temporary_table"
+    },
+    {
+      "kind": "feature",
+      "name": "kill query",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-250-post.json",
+      "test": "TestIntegrationFeatures/kill_query"
+    },
+    {
+      "kind": "feature",
+      "name": "x-clickhouse-user header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-032-post.json",
+      "test": "TestIntegrationFeatures/x-clickhouse-user_header"
+    },
+    {
+      "kind": "feature",
+      "name": "x-clickhouse-database header",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-033-post.json",
+      "test": "TestIntegrationFeatures/x-clickhouse-database_header"
+    },
+    {
+      "kind": "feature",
+      "name": "x-clickhouse-format header",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-346-post.json",
+      "test": "TestIntegrationFeatures/x-clickhouse-format_header"
+    },
+    {
+      "kind": "feature",
+      "name": "x-clickhouse-query-id header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-347-post.json",
+      "test": "TestIntegrationFeatures/x-clickhouse-query-id_header"
+    },
+    {
+      "kind": "feature",
+      "name": "x-clickhouse-summary header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-350-post.json",
+      "test": "TestIntegrationFeatures/x-clickhouse-summary_header"
+    },
+    {
+      "kind": "feature",
+      "name": "progress headers",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-199-post.json",
+      "test": "TestIntegrationFeatures/progress_headers"
+    },
+    {
+      "kind": "feature",
+      "name": "response compression",
+      "sources": [
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-322-post.json",
+      "test": "TestIntegrationFeatures/response_compression"
+    },
+    {
+      "kind": "feature",
+      "name": "request compression",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-332-post.json",
+      "test": "TestIntegrationFeatures/request_compression"
+    },
+    {
+      "kind": "feature",
+      "name": "native compression",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-331-post.json",
+      "test": "TestIntegrationFeatures/native_compression"
+    },
+    {
+      "kind": "feature",
+      "name": "transactions",
+      "sources": [
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-26.9-314-post.json",
+      "test": "TestIntegrationFeatures/transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "multi statement",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-26.9-286-post.json",
+      "test": "TestIntegrationFeatures/multi_statement"
+    },
+    {
+      "kind": "feature",
+      "name": "external tables",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-571-post.json",
+      "test": "TestIntegrationFeatures/external_tables"
+    },
+    {
+      "kind": "feature",
+      "name": "wait end of query",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-229-post.json",
+      "test": "TestIntegrationFeatures/wait_end_of_query"
+    },
+    {
+      "kind": "feature",
+      "name": "buffer size",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-203-post.json",
+      "test": "TestIntegrationFeatures/buffer_size"
+    },
+    {
+      "kind": "feature",
+      "name": "100 continue",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-344-post.json",
+      "test": "TestIntegrationFeatures/100_continue"
+    },
+    {
+      "kind": "feature",
+      "name": "quote 64 bit integers",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-066-post.json",
+      "test": "TestIntegrationFeatures/quote_64_bit_integers"
+    },
+    {
+      "kind": "feature",
+      "name": "ping endpoint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-037-get--ping.json",
+      "test": "TestIntegrationFeatures/ping_endpoint"
+    },
+    {
+      "kind": "feature",
+      "name": "replicas status endpoint",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-039-get--replicas-status.json",
+      "test": "TestIntegrationFeatures/replicas_status_endpoint"
+    },
+    {
+      "kind": "feature",
+      "name": "get statement",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-024-get.json",
+      "test": "TestIntegrationFeatures/get_statement"
+    },
+    {
+      "kind": "feature",
+      "name": "readonly",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-273-post.json",
+      "test": "TestIntegrationFeatures/readonly"
+    },
+    {
+      "kind": "feature",
+      "name": "max result rows",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-195-post.json",
+      "test": "TestIntegrationFeatures/max_result_rows"
+    },
+    {
+      "kind": "feature",
+      "name": "max execution time",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-255-post.json",
+      "test": "TestIntegrationFeatures/max_execution_time"
+    },
+    {
+      "kind": "feature",
+      "name": "Nullable",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-157-post.json",
+      "test": "TestIntegrationFeatures/Nullable"
+    },
+    {
+      "kind": "feature",
+      "name": "LowCardinality",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-113-post.json",
+      "test": "TestIntegrationFeatures/LowCardinality"
+    },
+    {
+      "kind": "feature",
+      "name": "SimpleAggregateFunction",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationFeatures/SimpleAggregateFunction"
+    },
+    {
+      "kind": "feature",
+      "name": "Nested",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-057-post.json",
+      "test": "TestIntegrationFeatures/Nested"
+    },
+    {
+      "kind": "feature",
+      "name": "26.9 exception tag",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-227-post.json",
+      "test": "TestIntegrationFeatures/26.9_exception_tag"
+    },
+    {
+      "kind": "feature",
+      "name": "25.8 exception tag",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-25.8-226-post.json",
+      "test": "TestIntegrationFeatures/25.8_exception_tag"
+    },
+    {
+      "kind": "feature",
+      "name": "url table function",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-519-post.json",
+      "test": "TestIntegrationFeatures/url_table_function"
+    },
+    {
+      "kind": "feature",
+      "name": "s3 table function",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-520-post.json",
+      "test": "TestIntegrationFeatures/s3_table_function"
+    },
+    {
+      "kind": "type",
+      "name": "Int8",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Int8"
+    },
+    {
+      "kind": "type",
+      "name": "Int16",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Int16"
+    },
+    {
+      "kind": "type",
+      "name": "Int32",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Int32"
+    },
+    {
+      "kind": "type",
+      "name": "Int64",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Int64"
+    },
+    {
+      "kind": "type",
+      "name": "Int128",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Int128"
+    },
+    {
+      "kind": "type",
+      "name": "Int256",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Int256"
+    },
+    {
+      "kind": "type",
+      "name": "UInt8",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/UInt8"
+    },
+    {
+      "kind": "type",
+      "name": "UInt16",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/UInt16"
+    },
+    {
+      "kind": "type",
+      "name": "UInt32",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/UInt32"
+    },
+    {
+      "kind": "type",
+      "name": "UInt64",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/UInt64"
+    },
+    {
+      "kind": "type",
+      "name": "UInt128",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/UInt128"
+    },
+    {
+      "kind": "type",
+      "name": "UInt256",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/UInt256"
+    },
+    {
+      "kind": "type",
+      "name": "Float32",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Float32"
+    },
+    {
+      "kind": "type",
+      "name": "Float64",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Float64"
+    },
+    {
+      "kind": "type",
+      "name": "Decimal",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Decimal"
+    },
+    {
+      "kind": "type",
+      "name": "Bool",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Bool"
+    },
+    {
+      "kind": "type",
+      "name": "String",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/String"
+    },
+    {
+      "kind": "type",
+      "name": "FixedString",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/FixedString"
+    },
+    {
+      "kind": "type",
+      "name": "Date",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Date"
+    },
+    {
+      "kind": "type",
+      "name": "Date32",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Date32"
+    },
+    {
+      "kind": "type",
+      "name": "DateTime",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/DateTime"
+    },
+    {
+      "kind": "type",
+      "name": "DateTime64",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/DateTime64"
+    },
+    {
+      "kind": "type",
+      "name": "Enum8",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Enum8"
+    },
+    {
+      "kind": "type",
+      "name": "Enum16",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Enum16"
+    },
+    {
+      "kind": "type",
+      "name": "UUID",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/UUID"
+    },
+    {
+      "kind": "type",
+      "name": "IPv4",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/IPv4"
+    },
+    {
+      "kind": "type",
+      "name": "IPv6",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/IPv6"
+    },
+    {
+      "kind": "type",
+      "name": "Array",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Array"
+    },
+    {
+      "kind": "type",
+      "name": "Tuple",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Tuple"
+    },
+    {
+      "kind": "type",
+      "name": "Map",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-065-post.json",
+      "test": "TestIntegrationRoundTrip/Map"
+    },
+    {
+      "kind": "type",
+      "name": "BFloat16",
+      "sources": [
+        "deepseek-v4-pro",
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-133-post.json",
+      "test": "TestIntegrationRoundTrip/BFloat16"
+    },
+    {
+      "kind": "type",
+      "name": "Time",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-128-post.json",
+      "test": "TestIntegrationRoundTrip/Time"
+    },
+    {
+      "kind": "type",
+      "name": "Time64",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-128-post.json",
+      "test": "TestIntegrationRoundTrip/Time64"
+    },
+    {
+      "kind": "type",
+      "name": "25.3 Time",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-25.3-128-post.json",
+      "test": "TestIntegrationRoundTrip/25.3_Time"
+    },
+    {
+      "kind": "type",
+      "name": "Interval",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-098-post.json",
+      "test": "TestIntegrationRoundTrip/Interval"
+    },
+    {
+      "kind": "type",
+      "name": "Nothing",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-099-post.json",
+      "test": "TestIntegrationRoundTrip/Nothing"
+    },
+    {
+      "kind": "type",
+      "name": "Variant",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-104-post.json",
+      "test": "TestIntegrationRoundTrip/Variant"
+    },
+    {
+      "kind": "type",
+      "name": "Dynamic",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-105-post.json",
+      "test": "TestIntegrationRoundTrip/Dynamic"
+    },
+    {
+      "kind": "type",
+      "name": "JSON",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-108-post.json",
+      "test": "TestIntegrationRoundTrip/JSON"
+    },
+    {
+      "kind": "type",
+      "name": "Point",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-121-post.json",
+      "test": "TestIntegrationRoundTrip/Point"
+    },
+    {
+      "kind": "type",
+      "name": "Ring",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-121-post.json",
+      "test": "TestIntegrationRoundTrip/Ring"
+    },
+    {
+      "kind": "type",
+      "name": "Polygon",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-121-post.json",
+      "test": "TestIntegrationRoundTrip/Polygon"
+    },
+    {
+      "kind": "type",
+      "name": "MultiPolygon",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-121-post.json",
+      "test": "TestIntegrationRoundTrip/MultiPolygon"
+    },
+    {
+      "kind": "type",
+      "name": "LineString",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-121-post.json",
+      "test": "TestIntegrationRoundTrip/LineString"
+    },
+    {
+      "kind": "type",
+      "name": "MultiLineString",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-121-post.json",
+      "test": "TestIntegrationRoundTrip/MultiLineString"
+    },
+    {
+      "kind": "type",
+      "name": "26.9 MultiPoint",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-139-post.json",
+      "test": "TestIntegrationRoundTrip/26.9_MultiPoint"
+    },
+    {
+      "kind": "type",
+      "name": "25.8 MultiPoint",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-25.8-138-post.json",
+      "test": "TestIntegrationRoundTrip/25.8_MultiPoint"
+    },
+    {
+      "kind": "type",
+      "name": "26.9 Geometry",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-141-post.json",
+      "test": "TestIntegrationRoundTrip/26.9_Geometry"
+    },
+    {
+      "kind": "type",
+      "name": "25.8 Geometry",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-25.8-140-post.json",
+      "test": "TestIntegrationRoundTrip/25.8_Geometry"
+    },
+    {
+      "kind": "type",
+      "name": "AggregateFunction",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-115-post.json",
+      "test": "TestIntegrationRoundTrip/AggregateFunction"
+    },
+    {
+      "kind": "type",
+      "name": "26.9 QBit",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "yes",
+      "evidence": "clickhouse-26.9-137-post.json",
+      "test": "TestIntegrationRoundTrip/26.9_QBit"
+    },
+    {
+      "kind": "type",
+      "name": "25.8 QBit",
+      "sources": [
+        "github.com/ClickHouse/clickhouse-go",
+        "github.com/ClickHouse/clickhouse-connect"
+      ],
+      "verdict": "no",
+      "evidence": "clickhouse-25.8-137-post.json",
+      "test": "TestIntegrationRoundTrip/25.8_QBit"
+    }
+  ]
+}

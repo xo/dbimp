@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (30, 'a', 1) RETURNING id"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9954"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "27"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "xczjnkyruezafpck"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"58366538\",\"memory_usage\":\"0\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:50:06 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "a5a94c94-eeb1-4fa4-843c-f97ea17a9c39"
+      ]
+    },
+    "body": "Code: 27. DB::Exception: Cannot parse input: expected '(' before: 'RETURNING id':  at row 1: While executing WaitForAsyncInsert. (CANNOT_PARSE_INPUT_ASSERTION_FAILED) (version 26.9.2.8 (official build))\n"
+  }
+}

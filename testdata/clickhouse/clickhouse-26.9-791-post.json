@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=Native&max_block_size=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Exception-Tag": [
+        "kmrlyfxfpaygsgnr"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "Content-Disposition": [
+        "attachment; filename=\"result.Native\""
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9579"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:49:32 GMT"
+      ],
+      "Content-Type": [
+        "application/octet-stream"
+      ],
+      "X-Clickhouse-Format": [
+        "Native"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "825f0262-5f41-4db5-8c42-ba9c1fee2f62"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"2\",\"read_bytes\":\"16\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"442880\",\"memory_usage\":\"3940639\"}"
+      ]
+    },
+    "body": "\u0002\u0002\u0006number\u0006UInt64\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001athrowIf(equals(number, 5))\u0005UInt8\u0000\u0000\u0002\u0002\u0006number\u0006UInt64\u0002\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001athrowIf(equals(number, 5))\u0005UInt8\u0000\u0000\r\n__exception__\r\nkmrlyfxfpaygsgnr\r\nCode: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.number, 5_UInt8) :: 0) -> throwIf(equals(__table1.number, 5_UInt8)) UInt8 : 2'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 26.9.2.8 (official build))\n278 kmrlyfxfpaygsgnr\r\n__exception__\r\n",
+    "truncated": true
+  }
+}

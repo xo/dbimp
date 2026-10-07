@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT query_id, type, exception_code FROM system.query_log WHERE query_id LIKE 'dbimp-%' AND type != 'QueryStart' ORDER BY query_id, event_time_microseconds"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"4482\",\"read_bytes\":\"253459\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"4482\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"2331641\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:47:50 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "2895f6ff4b2c"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "eae9e52d-f45f-4db3-99e3-3099efb9d156"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=10, max=9989"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "[\"query_id\", \"type\", \"exception_code\"]\n[\"String\", \"Enum8('QueryStart' = 1, 'QueryFinish' = 2, 'ExceptionBeforeStart' = 3, 'ExceptionWhileProcessing' = 4)\", \"Int32\"]\n[\"dbimp-cancel-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-cancel-dbimp_user\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-cancel-default\", \"QueryFinish\", 0]\n[\"dbimp-cancel-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-cancel-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-feature-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-feature-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-feature-default\", \"QueryFinish\", 0]\n[\"dbimp-feature-default\", \"QueryFinish\", 0]\n[\"dbimp-getcancel-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-getcancel-dbimp_user\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-getcancel-default\", \"QueryFinish\", 0]\n[\"dbimp-getcancel-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-getcancel-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-give-up-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-give-up-dbimp_user\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-give-up-default\", \"QueryFinish\", 0]\n[\"dbimp-give-up-default\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-give-up-default\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-give-up-rows-dbimp_user\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-give-up-rows-default\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-give-up-rows-default\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-header-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-header-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-header-default\", \"QueryFinish\", 0]\n[\"dbimp-header-default\", \"QueryFinish\", 0]\n[\"dbimp-id-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-id-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-id-default\", \"QueryFinish\", 0]\n[\"dbimp-id-default\", \"QueryFinish\", 0]\n[\"dbimp-kill-dbimp_user\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-kill-dbimp_user\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-kill-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-kill-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-kill-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-replace-dbimp_user\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-replace-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-replace-dbimp_user\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-replace-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-replace-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-replace-default\", \"QueryFinish\", 0]\n[\"dbimp-replace-default\", \"ExceptionWhileProcessing\", 394]\n[\"dbimp-replace-default\", \"QueryFinish\", 0]\n[\"dbimp-same-dbimp_user\", \"ExceptionBeforeStart\", 216]\n[\"dbimp-same-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-same-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-same-dbimp_user\", \"ExceptionBeforeStart\", 216]\n[\"dbimp-same-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-same-dbimp_user\", \"QueryFinish\", 0]\n[\"dbimp-same-default\", \"ExceptionBeforeStart\", 216]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-same-default\", \"ExceptionBeforeStart\", 216]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-same-default\", \"ExceptionBeforeStart\", 216]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-same-default\", \"QueryFinish\", 0]\n[\"dbimp-setonly-dbimp_user\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-setonly-default\", \"ExceptionWhileProcessing\", 210]\n[\"dbimp-setonly-default\", \"ExceptionWhileProcessing\", 210]\n"
+  }
+}

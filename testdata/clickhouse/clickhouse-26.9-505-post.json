@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&allow_experimental_live_view=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE LIVE VIEW dbimp.dbimp_live AS SELECT 1 AS a"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "2a9518ee-5b21-4db7-8c20-81d5f906e3c0"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "62"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "nsbbgfgmvvqzised"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"146360\",\"memory_usage\":\"0\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 01:49:30 GMT"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "e2519810ace2"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9853"
+      ]
+    },
+    "body": "Code: 62. DB::Exception: Syntax error: failed at position 8 (LIVE): LIVE VIEW dbimp.dbimp_live AS SELECT 1 AS a. Expected one of: TOKEN, OR REPLACE, TEMPORARY, TABLE, DATABASE, sql security, DEFINER, SQL SECURITY, MATERIALIZED, VIEW, DICTIONARY, USER, ROLE, QUOTA, POLICY, ROW POLICY, MASKING POLICY, SETTINGS PROFILE, PROFILE, FUNCTION, WORKLOAD, RESOURCE, NAMED COLLECTION, HANDLER, UNIQUE, INDEX, HYPOTHETICAL. (SYNTAX_ERROR) (version 26.9.2.8 (official build))\n"
+  }
+}
