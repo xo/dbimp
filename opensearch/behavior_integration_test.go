@@ -211,10 +211,38 @@ func TestIntegrationCursorsAreClosed(t *testing.T) {
 		if _, _, err := e.read(t, "SELECT n FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(100)); err != nil {
 			t.Fatal(err)
 		}
-		if after := openPITs(t, s); after != before {
+		if after := waitPITs(t, s, before); after != before {
 			t.Errorf("the cluster holds %d points in time after the rows closed, and held %d before: the driver left a cursor open", after, before)
 		}
 	})
+}
+
+// pitWait is the longest that waitPITs waits. It is far below the keep_alive
+// of one minute that the driver asks for, so a point in time that the driver
+// left open is still there when the wait ends.
+const pitWait = 15 * time.Second
+
+// waitPITs returns the count of points in time as soon as it is at most want,
+// or the last count when pitWait ends. The server can answer the close of a
+// cursor, or the last page of a statement, before it drops the point in time,
+// so a count right after the answer can be one too high.
+func waitPITs(t *testing.T, s *api, want int) int {
+	t.Helper()
+	ctx, cancel := context.WithTimeout(t.Context(), pitWait)
+	defer cancel()
+	tick := time.NewTicker(50 * time.Millisecond)
+	defer tick.Stop()
+	for {
+		n := openPITs(t, s)
+		if n <= want {
+			return n
+		}
+		select {
+		case <-ctx.Done():
+			return n
+		case <-tick.C:
+		}
+	}
 }
 
 // slowFilter is a filter whose script runs for a few seconds on the index of 300

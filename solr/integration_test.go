@@ -237,6 +237,38 @@ func (a *api) dropCollection(ctx context.Context, name string) error {
 	)
 }
 
+// orderedCommands is a body of the Schema API whose commands keep their order.
+// The server runs the commands in the order of the body, and a copy field needs
+// its fields to exist, but a Go map has no order.
+type orderedCommands []struct {
+	name  string
+	value any
+}
+
+// MarshalJSON writes the commands as one object, in order.
+func (o orderedCommands) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	buf.WriteByte('{')
+	for i, c := range o {
+		if i > 0 {
+			buf.WriteByte(',')
+		}
+		k, err := json.Marshal(c.name)
+		if err != nil {
+			return nil, err
+		}
+		v, err := json.Marshal(c.value)
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(k)
+		buf.WriteByte(':')
+		buf.Write(v)
+	}
+	buf.WriteByte('}')
+	return buf.Bytes(), nil
+}
+
 // fixture makes the collections of the run, and fills them.
 func fixture(ctx context.Context, a *api) error {
 	for _, name := range []string{collMain, collAuthors, collBooks, collReviews, collInf} {
@@ -256,8 +288,8 @@ func fixture(ctx context.Context, a *api) error {
 			{"name": "sortabletext", "class": "solr.SortableTextField"},
 			{"name": "bbox", "class": "solr.BBoxField", "geo": "true", "numberType": "pdouble", "distanceUnits": "kilometers"},
 		}}},
-		{collMain, f{
-			"add-field": []f{
+		{collMain, orderedCommands{
+			{"add-field", []f{
 				{"name": "n_i", "type": "pint"}, {"name": "n_l", "type": "plong"}, {"name": "n_f", "type": "pfloat"},
 				{"name": "n_d", "type": "pdouble"}, {"name": "n_b", "type": "boolean"}, {"name": "n_s", "type": "string"},
 				{"name": "n_t", "type": "text_general", "multiValued": false}, {"name": "n_st", "type": "sortabletext"},
@@ -267,8 +299,8 @@ func fixture(ctx context.Context, a *api) error {
 				{"name": "n_dts", "type": "pdates"}, {"name": "n_v", "type": "knn"}, {"name": "n_dr", "type": "daterange"},
 				{"name": "n_def", "type": "string", "default": "the default"}, {"name": "n_cp", "type": "strings"},
 				{"name": "n_rpt", "type": "location_rpt"}, {"name": "n_bbox", "type": "bbox"}, {"name": "n_pt", "type": "point"},
-			},
-			"add-copy-field": f{"source": "n_s", "dest": "n_cp"},
+			}},
+			{"add-copy-field", f{"source": "n_s", "dest": "n_cp"}},
 		}},
 		{collAuthors, f{"add-field": []f{{"name": "name", "type": "string"}}}},
 		{collBooks, f{"add-field": []f{{"name": "title", "type": "string"}, {"name": "author_id", "type": "string"}, {"name": "pubyear", "type": "pint"}}}},
