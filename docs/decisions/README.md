@@ -201,3 +201,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D178](D178-answers-for-drill-solr-elasticsearch-opensearch-and-dynamodb.md) | Answers for Drill, Solr, Elasticsearch, OpenSearch and DynamoDB | Decided |
 | [D179](D179-the-voltdb-driver-speaks-http.md) | The VoltDB driver speaks HTTP | Decided. Amended by D180 |
 | [D180](D180-voltdb-gets-no-driver-here.md) | VoltDB gets no driver here | Amends D179 |
+| [D181](D181-select-version-for-databases-with-no-query-for-it.md) | SELECT version() for databases with no query for it | Decided |

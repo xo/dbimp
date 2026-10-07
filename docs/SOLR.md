@@ -476,6 +476,17 @@ The integration tests of step 14 measured these facts on each release on
   runs, and each key has the case that the statement wrote (recorded: "names
   in another case").
 
+- The driver answers `SELECT version()` itself, because the SQL has no
+  statement for the version (D181). It sends `GET
+  /solr/admin/info/system?wt=json` and returns one row with the column
+  `version`, a string such as `9.10.1`, which is `lucene.solr-spec-version`.
+  It needs no collection, so a DSN with no path works for this statement.
+  Only a query returns the row, and `ExecContext` sends the statement to the
+  server. The driver ignores case, the white space around the statement, and
+  one final `;`. It takes no argument and no other text. An option such as
+  `WithDatabase` has no effect on it (`TestSelectVersion`,
+  `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
+
 ## Principals
 
 These facts were recorded on each release, as `dbmeta_user`, who has the
@@ -494,12 +505,16 @@ role `search`:
 - `dbmeta_user` can read the luke handler, `/solr/<collection>/admin/luke`,
   which names each field and its type, and can run a streaming expression
   (recorded: "the luke handler" and "a streaming expression").
-- SQL has no statement that gives the version (Gemini, not measured). So the
-  ordinary user cannot learn the version.
+- SQL has no statement that gives the version (Gemini, not measured). The
+  driver answers `SELECT version()` from the system handler (D181), so the
+  ordinary user gets the error of that request, an `*solr.Error` with
+  `HTTPStatus` 403, and the driver adds no other check.
 - Step 16: `usql` has no driver for Solr, so there is no statement of `usql`
   to run. `GET /solr/admin/info/system?wt=json` gave `lucene.solr-spec-version`
   to `admin` on each release, and HTTP 403 to `dbmeta_user` (measured by
-  `TestIntegrationVersion` on 2026-10-07).
+  `TestIntegrationVersion` on 2026-10-07). On 2026-10-08 the same test showed
+  that `SELECT version()` gives `9.10.1` to `admin` on 9.10.1, with or without
+  a collection in the DSN, and the HTTP 403 to `dbmeta_user`.
 
 ## Flavors
 
@@ -648,7 +663,8 @@ D166 hold the answers:
 5. The driver always sends `includeMetadata=true` (D166).
 6. The driver refuses a result whose columns share a name (D166).
 7. The ordinary user cannot learn the version, which waits for `dbmeta`
-   (D166).
+   (D166). The driver answers `SELECT version()` for the administrator only,
+   and the ordinary user gets the HTTP 403 (D181).
 
 The steps after step 9 met these questions. Ken closed question 8 on
 2026-10-07 (D178, item 4). Questions 9 to 15 still wait for Ken. The driver

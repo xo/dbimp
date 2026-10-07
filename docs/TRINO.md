@@ -725,6 +725,17 @@ These facts were recorded on each release:
   Both refuse `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `CREATE INDEX`,
   `DROP COLUMN`, `INSERT ... ON CONFLICT` and `MERGE` (recorded: the requests
   whose names start with `schema:` and `crud:`).
+- On Presto the driver answers `SELECT version()` itself, because Presto has
+  no function for the release (D181). It reads `nodeVersion.version` from `GET
+  /v1/info` and returns one row with the column `version`, a string as Presto
+  writes it, such as `0.299-7d50721`. It uses the answer that learned the
+  flavor when it has one, and otherwise it sends the request once for the
+  connector. Trino answers the statement itself, so on Trino the driver sends
+  it to the server. Only a query returns the row, and `ExecContext` sends the
+  statement to Presto, which refuses it. The driver ignores case, the white
+  space around the statement, and one final `;`. It takes no argument and no
+  other text (`TestSelectVersionOnPresto`, `TestSelectVersionOnTrino`,
+  `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
 
 ## Principals
 
@@ -748,6 +759,12 @@ These facts were recorded on each release:
   version function"). `SELECT node_version FROM system.runtime.nodes WHERE
   coordinator = true` answers `476`, `483` and `0.299-7d50721` (recorded: "the
   version of the coordinator").
+- On Presto, `SELECT version()` gave `0.299-7d50721` as the user `presto` and
+  as the user `alice`, with and without the key `flavor`, because `GET
+  /v1/info` needs no privilege (measured on 2026-10-08). So no user is refused,
+  and the case that D181 names for a refused user does not arise here. If a
+  proxy in front of the server refuses `GET /v1/info`, the user gets the error
+  of that request.
 
 ## Flavors
 
@@ -759,7 +776,7 @@ Transactions, Errors and Statements name.
 | --- | --- | --- |
 | Header prefix | `X-Trino-` | `X-Presto-` |
 | Version in `GET /v1/info` | `476`, `483` | `0.299-7d50721` |
-| `SELECT version()` | the version | fails, `Function version not registered` |
+| `SELECT version()` | the version | fails on the server with `Function version not registered`, and the driver answers it (D181) |
 | Version in `system.runtime.nodes` | `node_version` is `476` | `node_version` is `0.299-7d50721` |
 | `nextUri` | the token in the path | the number in the path, the token in `?slug=` |
 | Type signature | `arguments` with `kind` of `LONG`, `TYPE`, `NAMED_TYPE` | adds `typeArguments` and `literalArguments`, and `kind` of `LONG_LITERAL`, `TYPE_SIGNATURE`, `NAMED_TYPE_SIGNATURE` |

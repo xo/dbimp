@@ -22,6 +22,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `rows.go` | `ObjectRows`, `NewObjectRows`, `ContinueObjectRows`, `ArrayRows` and `NewArrayRows`, which read rows by D18 |
 | `values.go` | `IsNull`, `Int64`, `Float64`, `Bool`, `String`, `Decimal`, `Number` and `Any`, which turn a JSON value into a Go value, and `Assign` |
 | `civil.go` | `Date`, `LocalTime`, `OffsetTime`, `LocalDateTime`, `Interval` and `Vector`, the types of D138 and D139, with a `Parse` function for each of the first five |
+| `version.go` | `IsVersionQuery` and `NewVersionRows`, which a driver uses to answer `SELECT version()` when its product has no query for the release (D181) |
 | `placeholder.go` | `Syntax` and `Placeholder`, which find placeholders and bind arguments (D34) |
 | `options.go` | `Option`, `WithOptions`, `IsOption`, `Resolve`, `Unsupported` and `MarshalParams`, the machinery of the options of every driver (D109) |
 | `cbor.go` | `CBORDecoder`, `NewCBORDecoder`, `CBOREncoder`, `CBORHead`, and `CBORMajor` with its constants, which read and write CBOR (D49) |
@@ -143,6 +144,21 @@ hands a decimal as text, because a `*string`, a `*float64` and the `Scan`
 method of `apd.Decimal` take text. So `sql.Null[apd.Decimal]` works, a NULL
 in a `*string` is the error of `database/sql`, and a NULL in a
 `sql.Null[T]` is not valid.
+
+### The version of the server
+
+A driver answers `SELECT version()` itself only when its product has no SQL
+or query that returns the release (D181). `IsVersionQuery(query)` is true for
+that statement. It ignores case, the white space around the statement, and
+one final semicolon. White space must separate `SELECT` from `version()`, and
+none stands inside the parentheses. It accepts no argument, no comment and no
+other text, and it parses nothing, so any other statement goes to the
+product. `NewVersionRows(release)` returns the result as a `driver.Rows` with
+one row and the one column `version`, which holds `release` as the product
+writes it. The driver reads the release from the endpoint or the header that
+carries it, and a user that the product refuses gets the error of that
+request. The driver calls the two functions in `QueryContext`, and never in
+`ExecContext`.
 
 ### The types that Go lacks
 

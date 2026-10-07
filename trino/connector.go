@@ -48,6 +48,9 @@ type Connector struct {
 
 	mu     sync.Mutex
 	flavor string
+	// release is nodeVersion.version of GET /v1/info, as the server wrote it,
+	// and "" until a request read it (D181).
+	release string
 }
 
 // NewConnector returns a Connector for cfg. The connector keeps a copy of
@@ -120,17 +123,41 @@ func (c *Connector) detect(ctx context.Context) (string, error) {
 	if c.flavor != "" {
 		return c.flavor, nil
 	}
+	if err := c.info(ctx); err != nil {
+		return "", err
+	}
+	return c.flavor, nil
+}
+
+// version returns the release of the server for SELECT version() on Presto
+// (D181). It uses the answer that detect kept, and otherwise it asks GET
+// /v1/info and keeps the answer. The endpoint needs no privilege (measured).
+func (c *Connector) version(ctx context.Context) (string, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if c.release == "" {
+		if err := c.info(ctx); err != nil {
+			return "", err
+		}
+	}
+	return c.release, nil
+}
+
+// info sends GET /v1/info, and keeps the release and the flavor that its
+// answer names. The caller holds mu. If the DSN named the flavor, the flavor
+// stays as it is.
+func (c *Connector) info(ctx context.Context) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.base+"/v1/info", nil)
 	if err != nil {
-		return "", fmt.Errorf("making the request for the version: %w", err)
+		return fmt.Errorf("making the request for the version: %w", err)
 	}
 	dbimp.SetAuth(req, dbimp.AuthBasic, "", c.cfg.User, c.cfg.Password)
 	res, err := dbimp.Send(c.client, req)
 	if err != nil {
-		return "", err
+		return err
 	}
 	if err := checkStatus(res); err != nil {
-		return "", fmt.Errorf("asking the server for its version: %w", err)
+		return fmt.Errorf("asking the server for its version: %w", err)
 	}
 	defer res.Body.Close()
 	var info struct {
@@ -139,17 +166,20 @@ func (c *Connector) detect(ctx context.Context) (string, error) {
 		} `json:"nodeVersion"`
 	}
 	if err := json.UnmarshalRead(io.LimitReader(res.Body, maxAnswer), &info); err != nil {
-		return "", fmt.Errorf("reading the version of the server: %w", err)
+		return fmt.Errorf("reading the version of the server: %w", err)
 	}
 	version := info.NodeVersion.Version
 	if version == "" {
-		return "", fmt.Errorf("reading the version of the server: the answer holds none: %w", dbimp.ErrInvalidValue)
+		return fmt.Errorf("reading the version of the server: the answer holds none: %w", dbimp.ErrInvalidValue)
 	}
-	c.flavor = FlavorTrino
-	if strings.HasPrefix(version, "0.") {
-		c.flavor = FlavorPresto
+	c.release = version
+	if c.flavor == "" {
+		c.flavor = FlavorTrino
+		if strings.HasPrefix(version, "0.") {
+			c.flavor = FlavorPresto
+		}
 	}
-	return c.flavor, nil
+	return nil
 }
 
 // capabilitiesOf returns the value of the header of the client capabilities,

@@ -497,6 +497,16 @@ What the driver does (D167):
   (recorded: "a pivot in pages", "a histogram of an integer", "the score",
   "the escapes of ODBC" and "geo functions").
 
+- The driver answers `SELECT version()` itself, because SQL has no function
+  for the version (D181). It sends `GET /` and returns one row with the column
+  `version`, a string such as `9.5.3`, which is `version.number`. A request
+  that sends it is a query only. `ExecContext` sends the statement to the
+  server, which refuses it. The driver ignores case, the white space around
+  the statement, and one final `;`. It takes no argument and no other text,
+  so `SELECT version() FROM t`, `SELECT version(), 1`, a comment before the
+  statement, and two statements go to the server (`TestSelectVersion`,
+  `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
+
 ## Principals
 
 These facts were recorded as `dbmeta_user` on each release:
@@ -520,12 +530,15 @@ These facts were recorded as `dbmeta_user` on each release:
   and the user").
 
 The answer for step 16: `usql` has no driver for Elasticsearch, so it runs no
-statement for the version. The driver sends none either. `GET /` gives
-`version.number` to the administrator, and gives HTTP 403 to the ordinary
-user. `SELECT DATABASE(), USER()` works as both principals, and gives
-`docker-cluster` with `elastic` and with `dbmeta_user`. A version that the
-ordinary user can read waits for `dbmeta` (Open questions). These facts were
-measured on 8.19.22, 9.4.6 and 9.5.3 on 2026-10-07
+statement for the version. The driver answers `SELECT version()` from `GET /`
+(D181). `GET /` gives `version.number` to the administrator, and gives HTTP 403
+to the ordinary user, so the ordinary user gets the error of that request, an
+`*elasticsearch.Error` with `HTTPStatus` 403 and the type `security_exception`.
+The driver adds no other check. `SELECT DATABASE(), USER()` works as both
+principals, and gives `docker-cluster` with `elastic` and with `dbmeta_user`.
+A version that the ordinary user can read waits for `dbmeta` (Open questions).
+The first facts were measured on 8.19.22, 9.4.6 and 9.5.3 on 2026-10-07, and
+the statement of D181 on 9.5.3 on 2026-10-08
 (`TestIntegrationVersion` and `TestIntegrationPrincipals`). The same tests
 show that the ordinary user can page a result on each release.
 
@@ -680,7 +693,8 @@ answers:
    with no sign, and the DSN key lets the caller turn it on (D167, item 9).
 4. The ordinary user cannot read the version with `GET /`. The version waits
    for `dbmeta`, which can give `dbmeta_user` the privilege `monitor`. The
-   driver sends no request for the version.
+   driver sends `GET /` only for `SELECT version()` (D181), and the ordinary
+   user gets the HTTP 403 of that request.
 5. The page is 1000 rows by default, and the key `fetch_size` changes it
    (D167, item 2). A page cannot pass `index.max_result_window` of an index.
 

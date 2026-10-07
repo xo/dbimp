@@ -449,6 +449,41 @@ func TestIntegrationVersion(t *testing.T) {
 	if rel.isPresto() != strings.HasPrefix(rel.version, "0.") {
 		t.Errorf("the flavor is %q for the version %q", rel.flavor, rel.version)
 	}
+	// SELECT version() gives the release as the server writes it. Trino
+	// answers it itself, and the driver answers it on Presto from GET /v1/info
+	// (D181). That endpoint needs no privilege, so every user reads it (and
+	// no release here has an ordinary user).
+	for _, key := range []string{"", "flavor=" + rel.flavor} {
+		for _, user := range []string{"", "alice"} {
+			c := connect(t, rel.dsn, func(c *trino.Config) {
+				if key != "" {
+					c.Flavor = rel.flavor
+				}
+				if user != "" {
+					c.User = user
+				}
+			})
+			db := sql.OpenDB(c)
+			for _, query := range []string{"SELECT version()", "select VERSION();"} {
+				var got string
+				if err := db.QueryRowContext(t.Context(), query).Scan(&got); err != nil || got != rel.version {
+					t.Errorf("%s with the key %q and the user %q gave %q and %v, want %q", query, key, user, got, err, rel.version)
+				}
+			}
+			if got, err := preparedVersion(t, db); err != nil || got != rel.version {
+				t.Errorf("the prepared SELECT version() gave %q and %v, want %q", got, err, rel.version)
+			}
+			if rel.isPresto() {
+				// Any other statement goes to the server, which has no such
+				// function.
+				_, err := db.ExecContext(t.Context(), "SELECT version(), 1")
+				if perr, ok := errors.AsType[*trino.Error](err); !ok || !strings.Contains(perr.Message, "version") {
+					t.Errorf("SELECT version(), 1 gave %v, want the error of the server", err)
+				}
+			}
+			db.Close()
+		}
+	}
 	if !rel.isPresto() {
 		// Trino takes the user from the basic authentication that the driver
 		// sends, so it runs a statement that has the headers of Presto.
@@ -463,6 +498,19 @@ func TestIntegrationVersion(t *testing.T) {
 	if perr, ok := errors.AsType[*trino.Error](err); !ok || perr.HTTPStatus != 400 {
 		t.Errorf("a statement with the headers of Trino on %s gave %v, want HTTP 400", rel.name(), err)
 	}
+}
+
+// preparedVersion runs SELECT version() as a prepared statement.
+func preparedVersion(t *testing.T, db *sql.DB) (string, error) {
+	t.Helper()
+	stmt, err := db.PrepareContext(t.Context(), "SELECT version()")
+	if err != nil {
+		return "", err
+	}
+	defer stmt.Close()
+	var got string
+	err = stmt.QueryRowContext(t.Context()).Scan(&got)
+	return got, err
 }
 
 // equalValues reports whether a value read equals the value wanted. A NaN equals a

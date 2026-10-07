@@ -54,8 +54,16 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 	return driver.ErrSkip
 }
 
-// QueryContext satisfies driver.QueryerContext.
+// QueryContext satisfies driver.QueryerContext. It answers SELECT version()
+// itself (D181).
 func (c *conn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
+	if dbimp.IsVersionQuery(query) {
+		// An option does not apply to this statement, and an argument that
+		// is left over goes to the normal path, which refuses it.
+		if _, rest := resolve(ctx, &c.c.cfg, args); len(rest) == 0 {
+			return c.version(ctx)
+		}
+	}
 	r, err := c.query(ctx, query, args)
 	if err != nil {
 		return nil, err

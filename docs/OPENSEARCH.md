@@ -646,6 +646,19 @@ These facts were recorded on each release:
   "describe tables").
 - `1e308*10` reads as `1e308` with the alias `*10`, and gives 1e+308
   (recorded: "a division by zero and an overflow").
+- The driver answers `SELECT version()` itself, because SQL has no function
+  for the version (D181). It returns one row with the column `version`, a
+  string such as `3.9.0`. The release comes from the header
+  `X-OpenSearch-Version` of an answer that the connection read before, such
+  as `3.9.0` from `OpenSearch/3.9.0 (opensearch)`. If the connection has read
+  none, the driver sends `GET /`, and reads the header of that answer, or
+  `version.number` when the answer has no header. It sends no request when an
+  earlier answer carried the header. Only a query returns the row, and
+  `ExecContext` sends the statement to the server. The rules for the text are
+  the same as for Elasticsearch: it ignores case, the white space around the
+  statement, and one final `;`, and it takes no argument and no other text
+  (`TestSelectVersion`, `TestSelectVersionFromTheHeader`,
+  `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
 
 ## Principals
 
@@ -705,12 +718,18 @@ principal, with the integration tests:
   the ordinary user of 2.19.6 pages like the administrator and like the
   ordinary user of 3.9.0 (`TestIntegrationPages`). A `SELECT` with a `LIMIT`, a
   `GROUP BY` or an aggregate carries no page size, and reads.
-- `SELECT VERSION()` fails with HTTP 400 for both principals on both releases,
-  and `GET /` is refused to the ordinary user with HTTP 403 (`TestIntegrationVersion`).
-  `usql` has no driver for OpenSearch, so it runs no statement for the
-  version, and the answers of step 16 are these. The 3 series sends the header
-  `X-OpenSearch-Version` with each answer, also to the ordinary user, and the 2
-  series sends none.
+- The server fails `SELECT VERSION()` with HTTP 400 for both principals on both
+  releases, and `GET /` is refused to the ordinary user with HTTP 403
+  (`TestIntegrationVersion`). `usql` has no driver for OpenSearch, so it runs no
+  statement for the version, and the answers of step 16 are these. The 3 series
+  sends the header `X-OpenSearch-Version` with each answer, also to the
+  ordinary user, and the 2 series sends none.
+- The driver answers `SELECT VERSION()` itself (D181), and measured on
+  2026-10-08 each principal got this: the administrator of 2.19.6 and of 3.9.0
+  gets the release. The ordinary user of 3.9.0 gets `3.9.0` from the header,
+  also from the answer of `GET /` that is HTTP 403. The ordinary user of 2.19.6
+  gets the error of `GET /`, an `*opensearch.Error` with `HTTPStatus` 403, and
+  the driver adds no other check.
 
 ## Flavors
 

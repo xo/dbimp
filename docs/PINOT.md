@@ -572,6 +572,16 @@ the Broker gives the version.
 - `GET /version` on the Controller needs the permission `GET_VERSION` on the
   cluster (the source). The Controller of the `dbmeta` entry has no users,
   so the permission is not tested.
+- The driver does not answer `SELECT version()` itself, and no other
+  statement gives the version (D181). Pinot has no SQL for the release:
+  `SELECT version() FROM baseballStats` fails with 700 `Unsupported
+  function: version`. The driver speaks to the Broker, and the Broker carries
+  the release in no endpoint, no header and no answer of a query (measured on
+  `pinot-1.5.1` on 2026-10-08, as `admin` and as `dbmeta_user`): `GET
+  /version` is HTTP 404, and `GET /health` answers `OK`. Only `GET /version`
+  on the Controller carries it, and the Controller is a second server at a
+  second port, which the DSN does not name (see the open questions). So the
+  driver adds no support.
 
 ## Flavors
 
@@ -678,7 +688,13 @@ leads:
 
 ## Open questions
 
-None. Ken settled the `JSON` column that the multi-stage engine names
+Settled, from D181 on 2026-10-08: the release of Pinot is readable only on the
+Controller, which the DSN of the driver does not name (Principals). The
+driver adds no support for `SELECT version()`, and the DSN gets no key for the
+Controller. Ken decided this on 2026-10-08 (D181 item 10). The Controller of
+the `dbmeta` entry needs no user, so the rule for a refused user is untested.
+
+Settled: Ken settled the `JSON` column that the multi-stage engine names
 `STRING` on 2026-09-30: the driver follows the type that the server names,
 so a caller gets the text of that column by default, and the decoded value
 with `engine=single` (D130 and D135).

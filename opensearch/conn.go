@@ -16,6 +16,9 @@ import (
 // plugin has no sessions and no transactions.
 type conn struct {
 	c *Connector
+	// release is the release of the server, from the header
+	// X-OpenSearch-Version of an answer, and "" until one carried it.
+	release string
 }
 
 // ensure the interfaces.
@@ -62,8 +65,16 @@ func (c *conn) CheckNamedValue(nv *driver.NamedValue) error {
 	return driver.ErrSkip
 }
 
-// QueryContext satisfies driver.QueryerContext.
+// QueryContext satisfies driver.QueryerContext. It answers SELECT version()
+// itself (D181).
 func (c *conn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
+	if dbimp.IsVersionQuery(query) {
+		// An option does not apply to this statement, and an argument that
+		// is left over goes to the normal path, which refuses it.
+		if _, rest := resolve(ctx, &c.c.cfg, args); len(rest) == 0 {
+			return c.version(ctx)
+		}
+	}
 	r, err := c.query(ctx, query, args)
 	if err != nil {
 		return nil, err
@@ -151,6 +162,9 @@ func (c *conn) query(ctx context.Context, query string, args []driver.NamedValue
 	res, err := c.c.post(ctx, sqlPath, body, true)
 	if err != nil {
 		return nil, err
+	}
+	if release := releaseOf(res.Header); release != "" {
+		c.release = release
 	}
 	r := newRows(ctx, c.c, res.Body)
 	r.describe = describe(text)

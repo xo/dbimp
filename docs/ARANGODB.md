@@ -257,6 +257,12 @@ maps every kind onto its Go type (D135 and D137).
   read (measured, 007 and 126), and `VERSION()` in AQL. `RETURN VERSION()`,
   the statement that step 16 proposes to `usql`, gives `3.12.12` to the
   administrator (measured, 065) and to the ordinary user (measured, 181).
+- The driver does not answer `SELECT version()` itself (D181). AQL has the
+  function `VERSION()`, so the product has a query for the release, and D181
+  gives no support to a product that has one. On `arangodb-3.12.12` on
+  2026-10-08, `RETURN VERSION()` and `GET /_db/dbmeta/_api/version` both gave
+  `3.12.12` to `root` and to `dbmeta_user`. The driver sends every statement
+  to the server.
 
 ## Flavors
 

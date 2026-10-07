@@ -498,8 +498,9 @@ func formatTime(v sql.Null[time.Time]) string {
 // TestIntegrationVersion holds the answers of step 16: the version of the
 // server, which the administrator reads with GET /, and which the ordinary
 // user is refused with HTTP 403. SQL has no function for the version, so the
-// driver reads none, and DATABASE() and USER() work for both principals
-// (recorded: "the version" and "the database and the user").
+// driver answers SELECT version() itself from GET / (D181), and the ordinary
+// user gets the HTTP 403 of that request. DATABASE() and USER() work for both
+// principals (recorded: "the version" and "the database and the user").
 func TestIntegrationVersion(t *testing.T) {
 	forEach(t, func(t *testing.T, p principal, db *sql.DB) {
 		status, b, err := apiAs(t, p).do(t.Context(), http.MethodGet, "/", nil)
@@ -520,6 +521,36 @@ func TestIntegrationVersion(t *testing.T) {
 				t.Fatalf("GET / gave HTTP %d, %v: %s", status, err, b)
 			}
 			t.Logf("the version is %s", v.Version.Number)
+			for _, query := range []string{"SELECT version()", "select VERSION();"} {
+				var got string
+				if err := db.QueryRowContext(t.Context(), query).Scan(&got); err != nil {
+					t.Fatalf("%s: %v", query, err)
+				}
+				if got != v.Version.Number {
+					t.Errorf("%s gave %q, want %q", query, got, v.Version.Number)
+				}
+			}
+			stmt, err := db.PrepareContext(t.Context(), "SELECT version()")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer stmt.Close()
+			var got string
+			if err := stmt.QueryRowContext(t.Context()).Scan(&got); err != nil || got != v.Version.Number {
+				t.Errorf("the prepared SELECT version() gave %q and %v, want %q", got, err, v.Version.Number)
+			}
+		}
+		if p == ordinary {
+			var got string
+			err := db.QueryRowContext(t.Context(), "SELECT version()").Scan(&got)
+			if e, ok := errors.AsType[*elasticsearch.Error](err); !ok || e.HTTPStatus != http.StatusForbidden {
+				t.Errorf("SELECT version() as the ordinary user gave %q and %v, want HTTP 403", got, err)
+			}
+		}
+		// Any other statement goes to the server, which has no such function.
+		_, _, err = readAll(t, db, "SELECT version() FROM "+prefix+"none")
+		if e, ok := errors.AsType[*elasticsearch.Error](err); !ok || e.HTTPStatus != http.StatusBadRequest {
+			t.Errorf("SELECT version() with a FROM gave %v, want the HTTP 400 of the server", err)
 		}
 		var cluster, user string
 		if err := db.QueryRowContext(t.Context(), "SELECT DATABASE(), USER()").Scan(&cluster, &user); err != nil {

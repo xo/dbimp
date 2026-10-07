@@ -21,9 +21,11 @@ import (
 // TestIntegrationVersion holds the answers of step 16: the version of the
 // server, which the administrator reads with GET /, and which the ordinary user
 // is refused with HTTP 403. SQL has no function for the version, so the driver
-// reads none. The header X-OpenSearch-Version of the 3 series gives the
-// version to the ordinary user with every answer (recorded: "the version" and
-// "the version in SQL").
+// answers SELECT version() itself (D181). The header X-OpenSearch-Version of
+// the 3 series gives the version to the ordinary user with every answer,
+// including the HTTP 403 of GET /, so the ordinary user of the 3 series reads
+// it. The ordinary user of the 2 series gets the HTTP 403 (recorded: "the
+// version" and "the version in SQL").
 func TestIntegrationVersion(t *testing.T) {
 	version := serverVersion(t)
 	t.Logf("the version is %s", version)
@@ -38,9 +40,35 @@ func TestIntegrationVersion(t *testing.T) {
 		if e.p == admin && status != http.StatusOK {
 			t.Errorf("GET / as the administrator gave HTTP %d: %s", status, b)
 		}
-		_, _, err = e.read(t, "SELECT VERSION()")
-		if oe, ok := errors.AsType[*opensearch.Error](err); !ok || oe.HTTPStatus != http.StatusBadRequest {
-			t.Errorf("SELECT VERSION() gave %v, want HTTP 400", err)
+		refused := e.p == ordinary && e.old
+		for _, query := range []string{"SELECT version()", "select VERSION();"} {
+			var got string
+			err := e.db.QueryRowContext(t.Context(), query).Scan(&got)
+			if refused {
+				if oe, ok := errors.AsType[*opensearch.Error](err); !ok || oe.HTTPStatus != http.StatusForbidden {
+					t.Errorf("%s as the ordinary user of the 2 series gave %q and %v, want HTTP 403", query, got, err)
+				}
+				continue
+			}
+			if err != nil || got != version {
+				t.Errorf("%s gave %q and %v, want %q", query, got, err, version)
+			}
+		}
+		if !refused {
+			stmt, err := e.db.PrepareContext(t.Context(), "SELECT version()")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer stmt.Close()
+			var got string
+			if err := stmt.QueryRowContext(t.Context()).Scan(&got); err != nil || got != version {
+				t.Errorf("the prepared SELECT version() gave %q and %v, want %q", got, err, version)
+			}
+		}
+		// Any other statement goes to the server, which has no such function.
+		_, _, err = e.read(t, "SELECT VERSION(), 1")
+		if _, ok := errors.AsType[*opensearch.Error](err); !ok {
+			t.Errorf("SELECT VERSION(), 1 gave %v, want the error of the server", err)
 		}
 		_, h, _ := rawSQL(t, e.p, "/_plugins/_sql", map[string]any{"query": "SELECT 1"})
 		got := h.Get("X-Opensearch-Version")

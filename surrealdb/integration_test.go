@@ -899,7 +899,8 @@ func TestIntegrationTypes(t *testing.T) {
 }
 
 // TestIntegrationVersion reads the version with Version, as each principal,
-// which step 16 asks for. No statement of SurrealQL returns it (D57).
+// which step 16 asks for. No statement of SurrealQL returns it (D57), so the
+// driver answers SELECT version() itself with the same value (D181).
 func TestIntegrationVersion(t *testing.T) {
 	forEach(t, func(t *testing.T, p principal, db *sql.DB) {
 		c, err := db.Conn(t.Context())
@@ -916,6 +917,25 @@ func TestIntegrationVersion(t *testing.T) {
 			t.Fatalf("the version is %q, %v", v, err)
 		}
 		t.Logf("the %s user reads the version %s", p.name, v)
+		for _, query := range []string{"SELECT version()", "select VERSION();"} {
+			var got string
+			if err := db.QueryRowContext(t.Context(), query).Scan(&got); err != nil || got != v {
+				t.Errorf("%s gave %q and %v, want %q", query, got, err, v)
+			}
+		}
+		stmt, err := db.PrepareContext(t.Context(), "SELECT version()")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer stmt.Close()
+		var got string
+		if err := stmt.QueryRowContext(t.Context()).Scan(&got); err != nil || got != v {
+			t.Errorf("the prepared SELECT version() gave %q and %v, want %q", got, err, v)
+		}
+		// Any other statement goes to the server, which has no such function.
+		if _, err := queryErr(t, db, "SELECT version(), 1"); err == nil {
+			t.Error("SELECT version(), 1 gave no error, want the error of the server")
+		}
 	})
 }
 

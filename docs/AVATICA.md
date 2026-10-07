@@ -316,6 +316,16 @@ These facts were recorded on each release:
   no ordinary user (dbmeta D155).
 - `VALUES (DATABASE_VERSION())` gives the version of HSQLDB to both users
   (recorded: "the version").
+- The driver does not answer `SELECT version()` itself (D181), and the
+  decision for a driver with two flavors is an open question. On
+  `avatica-1.29.0` on 2026-10-08, `VALUES (DATABASE_VERSION())` gave the
+  version of HSQLDB, and the request `databaseProperties` gave `2.4.1` as
+  `GET_DATABASE_PRODUCT_VERSION` to `SA` and to `dbmeta_user`. On
+  `phoenix-2.0-5.0` on 2026-10-08, `SELECT version()`, `SELECT
+  DATABASE_VERSION()` and `VALUES (DATABASE_VERSION())` all failed, so
+  Phoenix has no SQL for the release, and `databaseProperties` gave `5.0` to
+  the user `phoenix`, the only user of that entry. The driver never sends
+  `databaseProperties`, and `openConnection` carries no release.
 
 ## Flavors
 
@@ -434,6 +444,15 @@ same day:
    back to their values before it, where D159 names `autoCommit` only. If
    the driver did not, the next statement outside the transaction would be
    read-only. Ken added this to D159.
+
+Open, from D181 on 2026-10-08:
+
+6. The standalone server runs HSQLDB, which has a query for the release, and
+   the Phoenix Query Server has none, but gives the release to the request
+   `databaseProperties` (Principals). D181 gives no support to a product that
+   has a query, and it does not say what to do for a driver with two
+   flavors. The driver adds nothing. Ken decided on 2026-10-08 that Avatica
+   gets no support on either flavor (D181 item 10).
 
 ## Compared with Couchbase
 

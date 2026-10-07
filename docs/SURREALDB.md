@@ -280,6 +280,16 @@ maps every kind onto its Go type (D135 and D137).
 - A comment with `--`, `#` or `/* */`, and a `$x` or a `;` inside a comment
   or a string, does not affect the statement (recorded).
 
+- The driver answers `SELECT version()` itself, because SurrealQL has no
+  statement for the version (D181). It sends the RPC method `version`, the
+  request of `surrealdb.Version`, and returns one row with the column
+  `version`, a string as the server writes it, such as `surrealdb-3.3.0`.
+  Only a query returns the row, and `ExecContext` sends the statement to the
+  server. The driver ignores case, the white space around the statement, and
+  one final `;`. It takes no argument and no other text. An option such as
+  `WithDatabase` has no effect on it (`TestSelectVersion`,
+  `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
+
 ## Principals
 
 - The ordinary user of `dbrun` is `dbmeta_user`, an `EDITOR` on the database
@@ -295,7 +305,11 @@ maps every kind onto its Go type (D135 and D137).
   `TestIntegrationVersion`, which step 16 asks for, and D57).
 - No statement of SurrealQL returns the version. `RETURN version()` and
   `RETURN surrealdb::version()` are parse errors on both lines (measured with
-  curl). `GET /version` returns it as plain text, with no credentials.
+  curl). `GET /version` returns it as plain text, with no credentials. The
+  driver answers `SELECT version()` with the RPC method, and not with `GET
+  /version`, because the method already has code and a recording (D181). On
+  3.3.0 the administrator and the ordinary user both got `surrealdb-3.3.0`
+  from `SELECT version()` on 2026-10-08.
 
 ## Flavors
 

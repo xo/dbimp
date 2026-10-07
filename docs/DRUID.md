@@ -482,6 +482,14 @@ These facts were recorded on each release:
   (recorded: "the version" and "the version of each service").
 - `dbmeta_user` reads `GET /druid/coordinator/v1/datasources` (recorded:
   "the datasources of the Coordinator").
+- The driver does not answer `SELECT version()` itself (D181). Druid has a
+  query for the release, `SELECT server_type, version FROM sys.servers`, and
+  D181 gives no support to a product that has one. On `druid-38.0.0` on
+  2026-10-08, `SELECT version()` and `SELECT DRUID_VERSION()` failed with
+  `No match found for function signature`, and `sys.servers` gave `38.0.0` to
+  `admin` and HTTP 403 to `dbmeta_user`. `GET /status` gave `38.0.0` to
+  `admin` and HTTP 403 to `dbmeta_user`. The driver sends every statement to
+  the server, so the ordinary user gets the error of the server.
 
 Step 16 ran the statement for the version through the driver, on 36.0.0 and
 37.0.0 on 2026-10-02 (`TestIntegrationVersion`). `usql` has no driver for

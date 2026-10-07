@@ -96,8 +96,21 @@ func (cn *conn) CheckNamedValue(nv *driver.NamedValue) error {
 	return driver.ErrSkip
 }
 
-// QueryContext satisfies driver.QueryerContext.
+// QueryContext satisfies driver.QueryerContext. On Presto it answers SELECT
+// version() itself (D181).
 func (cn *conn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
+	if cn.flavor == FlavorPresto && dbimp.IsVersionQuery(query) {
+		// Presto has no function for the release (D181), and Trino answers the
+		// statement itself. An option does not apply to this statement, and an
+		// argument that is left over goes to the normal path.
+		if _, rest := resolve(ctx, &cn.c.cfg, args); len(rest) == 0 {
+			release, err := cn.c.version(ctx)
+			if err != nil {
+				return nil, err
+			}
+			return dbimp.NewVersionRows(release), nil
+		}
+	}
 	r, err := cn.query(ctx, query, args)
 	if err != nil {
 		return nil, err

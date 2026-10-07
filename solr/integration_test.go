@@ -790,8 +790,9 @@ func isIncomplete(err error) bool {
 
 // TestIntegrationVersion holds step 16 of docs/DRIVER.md: only the
 // administrator reads the version, through the system handler, and the
-// ordinary user gets HTTP 403. The SQL of Solr has no statement for it
-// (recorded: "the version").
+// ordinary user gets HTTP 403. The SQL of Solr has no statement for it, so the
+// driver answers SELECT version() itself from that handler (D181), and the
+// ordinary user gets the error of the request (recorded: "the version").
 func TestIntegrationVersion(t *testing.T) {
 	status, body, err := apiAs(t, admin).do(t.Context(), http.MethodGet, "/solr/admin/info/system?wt=json", nil)
 	if err != nil || status != http.StatusOK {
@@ -803,11 +804,56 @@ func TestIntegrationVersion(t *testing.T) {
 		} `json:"lucene"`
 	}
 	if err := json.Unmarshal(body, &info); err != nil || info.Lucene.Version == "" {
-		t.Errorf("the version is %q and %v, want a version", info.Lucene.Version, err)
+		t.Fatalf("the version is %q and %v, want a version", info.Lucene.Version, err)
 	}
 	t.Logf("the administrator reads the version %s", info.Lucene.Version)
 	status, _, err = apiAs(t, ordinary).do(t.Context(), http.MethodGet, "/solr/admin/info/system?wt=json", nil)
 	if err != nil || status != http.StatusForbidden {
 		t.Errorf("the ordinary user got HTTP %d and %v for the version, want 403", status, err)
+	}
+	for _, collection := range []string{collMain, ""} {
+		for _, p := range principals {
+			name := p.name + " with the collection " + collection
+			if collection == "" {
+				name = p.name + " with no collection"
+			}
+			t.Run(name, func(t *testing.T) {
+				db := openAs(t, p, collection)
+				for _, query := range []string{"SELECT version()", "select VERSION();"} {
+					var got string
+					err := db.QueryRowContext(t.Context(), query).Scan(&got)
+					if p == ordinary {
+						if e, ok := errors.AsType[*solr.Error](err); !ok || e.HTTPStatus != http.StatusForbidden {
+							t.Errorf("%s as the ordinary user gave %q and %v, want HTTP 403", query, got, err)
+						}
+						continue
+					}
+					if err != nil || got != info.Lucene.Version {
+						t.Errorf("%s gave %q and %v, want %q", query, got, err, info.Lucene.Version)
+					}
+				}
+				if p == admin {
+					stmt, err := db.PrepareContext(t.Context(), "SELECT version()")
+					if err != nil {
+						t.Fatal(err)
+					}
+					defer stmt.Close()
+					var got string
+					if err := stmt.QueryRowContext(t.Context()).Scan(&got); err != nil || got != info.Lucene.Version {
+						t.Errorf("the prepared SELECT version() gave %q and %v, want %q", got, err, info.Lucene.Version)
+					}
+				}
+				// Any other statement goes to the server, which has no such
+				// function.
+				if collection == "" {
+					return
+				}
+				var got string
+				err := db.QueryRowContext(t.Context(), "SELECT version(), 1").Scan(&got)
+				if _, ok := errors.AsType[*solr.Error](err); !ok {
+					t.Errorf("SELECT version(), 1 gave %q and %v, want the error of the server", got, err)
+				}
+			})
+		}
 	}
 }
