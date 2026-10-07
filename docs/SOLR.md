@@ -1,7 +1,9 @@
 # Apache Solr
 
-This document holds what is known about Apache Solr, for its driver (W27 and
-D162). The headings are the template of [DRIVER.md](DRIVER.md).
+This document holds what is known about Apache Solr, for its driver (W27,
+D162 and D166). Steps 3 to 8a of [DRIVER.md](DRIVER.md) filled it, and steps
+10 to 17a finished it on 2026-10-07. The headings are the template of
+[DRIVER.md](DRIVER.md).
 
 Steps 5a to 7 measured Solr 9.9.0, 9.10.1 and 10.0.0 in SolrCloud mode, as
 `admin` and as `dbmeta_user`, on 2026-10-01 and 2026-10-02. A fact marked
@@ -100,6 +102,17 @@ These facts were recorded on each release:
   (measured on 10.0.0 on 2026-10-01, from `solr.log`). So the setup unloads
   that core, and each release was recorded on a fresh start.
 
+The integration tests of step 14 measured these facts on each release on
+2026-10-07:
+
+- The luke handler, `GET /solr/<collection>/admin/luke?show=schema&numTerms=0`,
+  answers JSON with a member name that repeats, such as `StopFilterFactory`
+  inside `schema.types.<type>.indexAnalyzer.filters`. A strict decoder fails
+  on it, so the driver reads it with the option that allows a repeated name.
+  The handler of an alias reads the collection of the alias.
+- Each write that the tests sent with `update?commit=true` was visible to the
+  next statement, as the principal read it. No test waited for it.
+
 These facts come from the sources, and are not measured:
 
 - The handler takes the connection parameters of Calcite that it allows,
@@ -120,6 +133,21 @@ These facts come from the sources, and are not measured:
   path `/solr` is part of every request.
 - A statement needs a collection in its path (Requests), and any collection
   that the user can read serves. Its `FROM` names the table.
+- D166 decides the DSN: `solr://user:password@host:8983/<collection>`. The
+  path names the collection whose handler takes the statement. The keys are
+  `tls` and `mode`, and the driver refuses every other key. The port stays
+  8983 with `tls=true`. `dbrun` prints the `url` `solr://user:password@host:port`
+  with no path (measured with `dbrun dsn --json` on 2026-10-07), so a test
+  adds the path of its collection, and a statement of a DSN with no path needs
+  `WithDatabase` (Open questions).
+- `mode` is `facet`, and the driver sends it as `aggregationMode`. A DSN
+  with `mode=map_reduce` fails with `dbimp.ErrNotSupported`, because that
+  mode cut a `GROUP BY` at 100 groups with no sign (Responses).
+  `WithParameter("aggregationMode", "map_reduce")` turns it on for one
+  statement, and the integration tests use that to show the cut.
+- The driver registers the name `solr` with no alias (D28). `dburl` has no
+  scheme for Solr yet, so the scheme `solr` is the name of the driver and not a
+  scheme of `dburl`.
 
 ## Responses
 
@@ -192,10 +220,15 @@ These facts come from the sources, and are not measured:
 
 The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
 maps every kind onto its Go type (D135 and D137). Step 8a wrote this table
-on 2026-10-02, and Ken has not reviewed it yet. A row names the class of the
-field type in the schema of Solr, because the result names none. The Go
-type and the database type assume that the driver learns the SQL type of
-each column from `metadata.COLUMNS` (below). That is a choice of step 9.
+on 2026-10-02, and Ken decided it in D166. A row names the class of the
+field type in the schema of Solr, because the result names none. The driver
+learns the SQL type of each column from `metadata.COLUMNS`, which is the
+database type of the table, and the class of the field type from the luke
+handler, which is what makes a `BoolField` a `bool`, a `BinaryField` a
+`[]byte` and a `UUIDField` a `uuid.UUID` (D166). `metadata.COLUMNS` alone
+cannot do that, because it names `VARCHAR` for each of them (Open questions).
+The cells for those three types name the luke handler for that reason, and
+the rest of the table is the table of step 8a.
 
 <!-- dbimp:types -->
 | Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
@@ -208,10 +241,10 @@ each column from `metadata.COLUMNS` (below). That is a choice of step 9.
 | LongPointField | integer | `int64` | `int64` | `BIGINT` | yes |
 | FloatPointField | float | `float64, from the text of the float32` | `float64` | `DOUBLE` | yes |
 | DoublePointField | float | `float64` | `float64` | `DOUBLE` | yes |
-| BoolField | boolean | `bool, from the text "true" or "false", by the field type in metadata.COLUMNS (D166)` | `bool` | `VARCHAR` | yes |
+| BoolField | boolean | `bool, from the text "true" or "false", by the field type of the luke handler (D166)` | `bool` | `VARCHAR` | yes |
 | DatePointField | timestamp | `time.Time, in UTC, with milliseconds` | `time.Time` | `TIMESTAMP` | yes |
-| BinaryField | binary | `[]byte, from the base64 text, by the field type in metadata.COLUMNS (D166)` | `[]uint8` | `VARCHAR` | yes |
-| UUIDField | uuid | `uuid.UUID, from its text, by the field type in metadata.COLUMNS (D166)` | `uuid.UUID` | `VARCHAR` | yes |
+| BinaryField | binary | `[]byte, from the base64 text, by the field type of the luke handler (D166)` | `[]uint8` | `VARCHAR` | yes |
+| UUIDField | uuid | `uuid.UUID, from its text, by the field type of the luke handler (D166)` | `uuid.UUID` | `VARCHAR` | yes |
 | LatLonPointSpatialField | string | `string, such as "45.5,-122.6"` | `string` | `VARCHAR` | yes |
 | SpatialRecursivePrefixTreeFieldType | string | `string, the WKT text` | `string` | `VARCHAR` | yes |
 | BBoxField | string | `string, such as "ENVELOPE(-10, 20, 15, 10)"` | `string` | `VARCHAR` | yes |
@@ -282,6 +315,22 @@ each type (recorded: "every type", unless a line names another request):
   null`, so no column holds a computed value (recorded: "an expression in the
   projection"). `SELECT 1 AS one` fails because `one` is a word of the
   grammar (recorded: "a literal in the projection").
+
+The round trip of step 14a measured these facts on each release on
+2026-10-07, with a field that the test added through the Schema API:
+
+- The type `text_general` is multi-valued unless the field says
+  `"multiValued": false`, so a field of that type that does not say it reads as
+  an array (SQL type `ANY`).
+- An atomic update that sets an empty string stores it, and a read gives `""`.
+  An add of a document drops an empty string, so the read gives NULL. The
+  round trip replaces the whole document for each update, so each value goes
+  through the add.
+- A `FloatPointField` with the value 3.4028235E38, and a `DoublePointField`
+  with the largest double, read back as they were written. An aggregate,
+  `sum` of a `LongPointField`, is a JSON integer.
+- A multi-valued field of integers, strings or booleans keeps the order of the
+  document when a statement has a `LIMIT`.
 
 These facts come from the sources, and are not measured:
 
@@ -411,6 +460,22 @@ These facts were recorded on each release:
   field `expr`, and answers in the same form as `/sql`, to both users
   (recorded: "a streaming expression").
 
+The integration tests of step 14 measured these facts on each release on
+2026-10-07:
+
+- A backslash in a literal is no escape: `'x\'` is the text `x\`. Only a
+  quote written twice stands for itself. The driver writes an argument so.
+- A field named like a word of the grammar, such as `year`, is a syntax error
+  until it is quoted with backticks.
+- An equality on a `StrField` takes `?` and `*` in its text as wildcards. A
+  text with `?` and spaces matched no document, and a longer text with
+  quotes, a backslash and spaces matched other documents (measured with `curl`
+  on 10.0.0 on 2026-10-07). An equality on text without those characters finds
+  the document.
+- A statement with names in other case, such as `SELECT ID, N_I FROM DBIMP`,
+  runs, and each key has the case that the statement wrote (recorded: "names
+  in another case").
+
 ## Principals
 
 These facts were recorded on each release, as `dbmeta_user`, who has the
@@ -431,6 +496,10 @@ role `search`:
   (recorded: "the luke handler" and "a streaming expression").
 - SQL has no statement that gives the version (Gemini, not measured). So the
   ordinary user cannot learn the version.
+- Step 16: `usql` has no driver for Solr, so there is no statement of `usql`
+  to run. `GET /solr/admin/info/system?wt=json` gave `lucene.solr-spec-version`
+  to `admin` on each release, and HTTP 403 to `dbmeta_user` (measured by
+  `TestIntegrationVersion` on 2026-10-07).
 
 ## Flavors
 
@@ -451,6 +520,26 @@ role `search`:
 Step 10 writes this table from the code.
 
 <!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping counts the documents of the collection of the DSN, which checks the credentials and the handler of SQL. The ordinary user cannot read the version. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because the SQL of Solr has no sessions. |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, a decimal, a dbimp.Date, a dbimp.LocalDateTime and a uuid.UUID, which the driver writes as literals (D166). |
+| `driver.QueryerContext` | yes | The server binds no argument, so the driver writes each one into the statement as a literal (D166). |
+| `driver.ExecerContext` | yes | Exec reads the result to its end. The SQL of Solr takes no write, so RowsAffected fails (D163). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because Solr has no transactions (D166). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, so an answer has one result. |
+| `driver.RowsColumnTypeScanType` | yes | The driver reads the type of each column from metadata.COLUMNS and the luke handler (D166). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The SQL type of metadata.COLUMNS, such as BIGINT, and empty for a column that it does not name, such as an aggregate. |
+| `driver.RowsColumnTypeLength` | no | The server names no length. |
+| `driver.RowsColumnTypeNullable` | yes | The server does not say whether a column can be NULL, and every type can be. |
+| `driver.RowsColumnTypePrecisionScale` | no | The server names no precision and no scale. |
 <!-- /dbimp:interfaces -->
 
 ## Faults
@@ -546,26 +635,212 @@ Step 8a asked both models on 2026-10-02 to review the type table against
 
 ## Open questions
 
-Each of these waits for Ken. Step 9 decides the rest with them.
+Ken settled the first seven questions of step 8a on 2026-10-02, and D163 and
+D166 hold the answers:
 
-1. SQL in Solr cannot write, and DRIVER.md says to stop at a server that
-   refuses insert, update or delete. Is a driver that only reads still a
-   target? If it is, does `ExecContext` refuse every statement, or does the
-   driver send writes to the update handler, which is not SQL?
-2. The result names no type. The table above takes the type of each column
-   from `metadata.COLUMNS`, matched through `includeMetadata`, which costs a
-   second query, or a cache for each collection. The other choice types each
-   value by its JSON token only, so a date is text and a `BIGINT` is a
-   number. Which one?
-3. A `BoolField`, a `BinaryField` and a `UUIDField` give a `string`, because
-   the SQL layer names each one `VARCHAR`, though the schema of Solr names
-   them boolean, binary and UUID. Is that the mapping?
-4. A `GROUP BY` in `map_reduce` mode can cut its result at 100 groups with no
-   sign (D21). Does the driver refuse `aggregationMode=map_reduce`, or
-   document the cut?
-5. With no rows and no `includeMetadata`, the result names no column (D18).
-   Does the driver always send `includeMetadata=true`?
-6. Two columns with one name give wrong values. Does the driver refuse a
-   result whose metadata names one alias twice?
-7. The ordinary user cannot learn the version. Is that acceptable for the
-   version statement of step 16?
+1. The driver reads only. It sends what the SQL takes, and returns the
+   refusal of the server for `INSERT`, `UPDATE` and `DELETE` (D163).
+2. The driver reads the type of each column from `metadata.COLUMNS`, once for
+   each table and connection (D166).
+3. A `BoolField` is a `bool`, a `BinaryField` a `[]byte` and a `UUIDField` a
+   `uuid.UUID` (D166).
+4. The driver refuses `aggregationMode=map_reduce` in the DSN (D166).
+5. The driver always sends `includeMetadata=true` (D166).
+6. The driver refuses a result whose columns share a name (D166).
+7. The ordinary user cannot learn the version, which waits for `dbmeta`
+   (D166).
+
+The steps after step 9 met these questions, which wait for Ken. The driver
+follows the first answer of each one, and says so:
+
+8. Closed by D178. D166 says that the driver reads the class of the field type from
+   `metadata.COLUMNS`. It cannot: `metadata.COLUMNS` names `VARCHAR` for a
+   boolean, a binary and a UUID, and `typeName` names the Java class of the
+   SQL type (recorded: "the types of the columns"). The class of the field
+   type is in the luke handler, which both principals can read (recorded:
+   "the luke handler"). The driver reads both, as two statements for each
+   table, and it keeps the schema for the connection. The type table names the
+   luke handler in the three cells that D166 names. If Ken wants no luke
+   request, a `BoolField`, a `BinaryField` and a `UUIDField` read as a
+   `string`, and the three cells change back.
+9. The path of the DSN names the collection, and `dbrun` prints a `url` with
+   no path (measured on 2026-10-07). The driver takes a DSN with no path, and
+   fails each statement that has no `WithDatabase` with
+   `dbimp.ErrInvalidValue`. The other choice is a DSN that must have a path.
+   `Ping` has the same rule, because it counts the documents of the
+   collection.
+10. `WithDatabase` names the collection of the path of one statement. The
+    other choice is `dbimp.ErrNotSupported`, as for Druid and Pinot, which have
+    no database to choose.
+11. `WithTimeout` fails with `dbimp.ErrNotSupported` for a timeout other than
+    zero, because `timeAllowed` cut nothing. The other choice is a deadline that
+    the driver sets on the request. A deadline of the context stops the request
+    already (D36).
+12. The driver finds the tables of a statement by a scan of its text for the
+    words `FROM` and `JOIN`. A table that the scan misses, or whose case differs
+    from the name of its collection, has no schema, and its columns read by their
+    JSON tokens: a `BoolField` is a `string` there. Solr matches the names of
+    tables without regard to case (recorded: "names in another case"), and the
+    driver asks `metadata.COLUMNS` and the luke handler for the name as the
+    statement wrote it. Whether each one answers a name in other case is not
+    measured. The other choice is a request for the collections that the
+    statement names, which the ordinary user cannot make (recorded: "the list
+    of collections").
+13. An equality on a `StrField` reads `*` and `?` in its text as wildcards, and
+    a text with spaces matched other documents (measured on 10.0.0 on
+    2026-10-07). The driver writes the literal that the caller gave, and the
+    server decides what it means. The other choice is a refusal of an argument
+    with `*` or `?`, which also refuses a wildcard that a caller writes on
+    purpose (feature "wildcard in equality").
+14. The driver exports `ErrCut`, as Druid does, for an answer that ends before
+    its tuple `EOF`. The error wraps `dbimp.ErrIncomplete` after a row.
+15. The driver stores no `context.Context`. The function that reads the types
+    of the columns takes the context of the statement, and the rows drop it before
+    `QueryContext` returns, so hard rule 4 needs no new exception.
+
+## Integration tests
+
+The tests that need a server are in `solr/integration_test.go`,
+`solr/features_integration_test.go` and `solr/roundtrip_integration_test.go`
+(steps 14 and 14a). They read `SOLR_DSN` for `admin` and `SOLR_ORDINARY_DSN`
+for `dbmeta_user`, which are the `url` of each principal in `dbrun` (D9). That
+`url` has the scheme `solr` and no path, and each test adds the path of the
+collection that it reads. A test skips when the variable that it needs is
+empty. Each test runs as each principal.
+
+- `TestMain` makes five collections, each with a configuration set of its own
+  that copies `_default`, so that a change of one schema does not reload
+  another collection. The main collection holds a document of every type and
+  300 more, as step 6 did, and an alias. Three collections hold a small catalog
+  of authors, books and reviews. One holds a document with `Infinity`. Each
+  name starts with `dbimp_it_` and the time of the run, and `TestMain` removes
+  the collections, the alias and the configuration sets at the end.
+- The administrator writes through the update handler and the Schema API,
+  because the SQL of Solr takes no write (D163), and the principal reads
+  through the driver. Each write commits, and the next statement sees it, so no
+  test sleeps.
+- `TestIntegrationCRUD` shows the refusal of `INSERT`, `UPDATE` and `DELETE`,
+  each of the five operations of the update handler, and the refusal of the
+  update handler to the ordinary user. It also makes the three collections of the
+  catalog: it adds the rows, reads them, reads the books of one author by the
+  indexed field `author_id`, updates, deletes by id and by query, and reads
+  until each collection is empty. Solr has no foreign key, so a field holds the
+  id of another row.
+- `TestIntegrationSchema` shows that `CREATE TABLE`, `CREATE INDEX` and
+  `CREATE VIEW` fail, and that a collection, an alias, a default value, a
+  dynamic field, a copy field, `metadata.TABLES` and `metadata.COLUMNS` work.
+  The Schema API answers HTTP 403 to the ordinary user, and the luke handler
+  does not.
+- `TestIntegrationFeatures` holds each other entry of `features.json`. An
+  entry that the survey marks no sends the operation and shows the refusal or
+  the effect: the cut of a `GROUP BY` in `map_reduce` mode, which the driver
+  refuses in the DSN, a statement with two columns of one name, a placeholder
+  that the server refuses while the driver binds it, a transaction, and a
+  cancel by an id that the server does not know.
+- `TestIntegrationRoundTrip` runs `dbimptest.RoundTrip` for each of the types
+  that `features.json` marks yes, and for a multi-valued field of three
+  kinds, and shows each type that it marks no. The server refuses `INSERT`,
+  `UPDATE` and `DELETE`, so the test adds a field through the Schema API,
+  writes each value as a document, and reads it with a select by the id. An
+  update replaces the document. Each value is written as a bound argument, and
+  the round trip logs that Solr has no literal of an insert and goes on.
+  `TestIntegrationArguments` and `TestIntegrationFeatures` hold the literals of
+  a query. An empty string, an empty array and empty bytes read as NULL.
+- `TestIntegrationEveryType`, `TestIntegrationScan`, `TestIntegrationErrors`,
+  `TestIntegrationContext`, `TestIntegrationConcurrent`,
+  `TestIntegrationLargeResult`, `TestIntegrationColumnTypes`,
+  `TestIntegrationOptions` and `TestIntegrationPing` read every type through
+  `Rows.Scan`, and hold the errors, the context, two queries at the same time,
+  a result with no limit and the options.
+- The ordinary user has the role `search`. It cannot write and cannot read the
+  Schema API, the list of collections or the version, and it can read the luke
+  handler and run a streaming expression (`TestIntegrationVersion` and the
+  tests above).
+
+All three releases passed on 2026-10-07 with the final code, as both
+principals:
+
+| Release | Tests that passed | Skipped | Failed |
+| --- | --- | --- | --- |
+| `solr-9.9.0` | 291 | 0 | 0 |
+| `solr-9.10.1` | 291 | 0 | 0 |
+| `solr-10.0.0` | 291 | 0 | 0 |
+
+The count is the lines `--- PASS` of `go test -v -run Integration`, subtests
+included. The releases gave the same answer to every test. A join worked on
+9.9.0, 9.10.1 and 10.0.0.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was
+written on 2026-10-07 from the staged code. A fact of Couchbase comes from
+[COUCHBASE.md](COUCHBASE.md), and a fact of Solr from the sections above.
+
+### The server
+
+| | Couchbase | Apache Solr |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /solr/<collection>/sql`, with the form field `stmt`, and `includeMetadata` and `aggregationMode` from the driver (Requests) |
+| Database | The key `query_context` of the body | The collection in the path of the request names the handler, and `FROM` names the table (The DSN) |
+| Language | SQL++, which is close to SQL | SQL, parsed by Calcite with the lexical rules of MySQL. The server only reads (Statements) |
+| DDL | In SQL++ | None. `CREATE TABLE`, `CREATE INDEX` and `CREATE VIEW` fail. A collection and a field go through the Collections API and the Schema API (Statements) |
+| Parameters | `?`, `$1` and `$name` | None. `?` fails with HTTP 500 and `:id` is a syntax error, so the driver writes each argument as a literal (Parameters) |
+| Framing | One body for the whole result, which does not page | One body for the whole result, `{"result-set":{"docs":[...]}}`, which ends with the tuple `EOF`. There is no cursor and no next page (Responses) |
+| Columns | `signature`, before the first row | The first tuple with `includeMetadata=true`, which names the fields and the alias of each. With none, a result with no rows names no column (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement |
+| Errors | Can come with HTTP 200, after some rows | HTTP 200 with the tuple `EOF` that holds `EXCEPTION`, before any row or after some. A status that is not 2xx comes with a page of HTML (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON with no type. The SQL type of a column is in `metadata.COLUMNS`, and the class of its field in the luke handler. A date is ISO 8601 text, a binary is base64, and a boolean is the text `"true"` (Types) |
+| Cancel | The server stops a query when the client leaves | No request cancels a statement of `/sql`. Whether the server stops one when the client leaves is not measured (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None. `BEGIN` is a syntax error, and the update handler cannot roll back in SolrCloud (Transactions) |
+| Authentication | Basic, or `creds` in the body | Basic |
+| Default port | 8093, or 18093 with TLS | 8983 |
+
+The differences that a caller sees:
+
+- Every write fails with the refusal of the server, because the SQL of Solr
+  takes none, and the driver does not send a write to the update handler
+  (D163).
+- A statement needs a collection, from the path of the DSN or from
+  `WithDatabase`, where Couchbase takes a statement with no `query_context`
+  (D166).
+- The server binds no argument. The driver writes each one into the text of
+  the statement as a literal, where Couchbase sends them to the server (D34
+  and D166).
+- A result with a column that appears twice is refused, and `aggregationMode`
+  `map_reduce` is refused in the DSN (D166).
+- The driver sends no cancel when the context ends, because Solr has no
+  request for it. Whether the server stops a statement when the client leaves is
+  not measured (D166).
+
+### The driver
+
+| | `couchbase` | `solr` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-07 | About 1300 lines in 8 files | About 1800 lines in 10 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `User`, `Password`, `Collection`, `Mode` |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`, as `WithQueryContext` does. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter` and `WithDatabase`, through `WithOptions` or an argument (D109). `WithTimeout` fails for a timeout other than zero, because `timeAllowed` cut nothing. `WithReadonly` changes nothing. `WithDatabase` names the collection of the path. `WithParameter` sets a field of the form, and replaces `includeMetadata` and `aggregationMode` |
+| Arguments | Sent to the server as `args` and `$name` | Written into the statement by `dbimp.Syntax.Bind`, as `NULL`, a number, `TRUE`, `FALSE`, a quoted text, a date in UTC with milliseconds, base64, a UUID and a decimal. A `?` or an `@name` is a placeholder, and one in a literal or a comment is not (`solr/literal.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature. `SELECT RAW` has a reader of its own | A reader of its own over `jsontext`, which reads one tuple at a time and keeps the order of the metadata (`solr/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | The same three methods, from `metadata.COLUMNS` and the luke handler, which the driver reads once for each table and connection (`solr/schema.go`) |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the column: `int64`, `float64`, `bool`, `string`, `time.Time`, `[]byte`, `uuid.UUID` and `[]any` for a multi-valued field. An aggregate reads by its JSON token (D166) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported`, because the SQL of Solr changes no rows (D163) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D166) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds only the schemas that it read |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The request carries the context, and `net/http` stops it. The driver sends no cancel (D166) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Message}`, which unwraps to `*dbimp.StatusError` for a status that is not 2xx, and `ErrCut` for an answer that ends before its tuple `EOF` |
+| Authentication | Basic | Basic, and the driver follows no redirect, so the credentials go to the host of the DSN only (D166) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, `ErrCut`, `Config`, `ModeFacet` and `Name` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a date, a binary value and a UUID too, where
+  Couchbase gives JSON shapes (D135 and D166).
+- A column costs no request when the connection knows its table, and the first
+  statement on a table sends two more requests, one to `metadata.COLUMNS` and
+  one to the luke handler (D166).
+- `WithReadonly` succeeds and does nothing, where Couchbase sends `readonly`,
+  because the SQL of Solr takes no write (D163).
+- `RowsAffected` always returns an error, where Couchbase counts every
+  statement by `mutationCount` (D163).
+- `WithTimeout` fails for a timeout other than zero, where Couchbase sends
+  `timeout` (D166).
