@@ -1467,6 +1467,38 @@ and the Go types, the DSN, transactions, redirects and flavors (D177), which
 ends step 9. `dbmeta` has staged the port 8123, an `api` address and the user
 `dbmeta_user`, which step 14 needs. The next step is step 10.
 
+Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
+
+- Steps 10 to 13: the package `clickhouse/`, its tables, the contract, the replay
+  tests over the recorded exchanges, the unit tests of the types, the parameters,
+  the stream, the cancel and the options, the tests of the DSN, and the fuzz test,
+  which ran for 60 seconds and found nothing.
+- Steps 14 and 14a: the integration tests passed on all three releases as both
+  principals, with 412 tests on `clickhouse-25.3` and 415 on `clickhouse-25.8` and
+  `clickhouse-26.9`, and 11 and 10 skipped for the release.
+- Step 15: no new job. The workflow sets `CLICKHOUSE_SECOND_ADDRESS`, which the
+  tests read, and its pin of `dbmeta` must move to the commit that holds the
+  staged change (CLICKHOUSE.md, Open questions).
+- Step 17a: `## Compared with Couchbase` is in CLICKHOUSE.md. Open questions 15 to
+  23 there wait for Ken.
+
+1. To `dburl`: the scheme `clickhouse` names `github.com/xo/dbimp/clickhouse`.
+   D177 settles the DSN: `clickhouse://user:password@host:8123/database`, with the
+   one key `tls`, the port 8443 with `tls=true`, and any other key refused. The
+   driver speaks HTTP only, so the generator writes the HTTP port 8123 where it
+   wrote 9000. The driver registers the name `clickhouse`, as `clickhouse-go` does,
+   so a program links one of the two (dburl D34).
+2. To `dbmeta`: commit the change that is staged, which publishes the HTTP port
+   8123 as `secondAddress`, prints `api` and makes `dbmeta_user`. The `url` of the
+   entry holds the native port today, and the DSN of this driver needs the HTTP
+   port. The workflow of `dbimp` then moves its pin to that commit.
+3. To `usql`: `drivers/clickhouse` imports `github.com/xo/dbimp/clickhouse` in
+   place of `clickhouse-go/v2`, and drops its `RowsAffected` that returns 0. The
+   driver gives `*clickhouse.Error` with the code 194 and 516 for a wrong password,
+   and `SELECT version()` gives the version.
+
+Do not send these requests before the tag of step 19 (step 20).
+
 Steps 2 to 9 went in on 2026-10-07: the recordings of `trino-476`,
 `trino-483` and `presto-0.299`, the survey, TRINO.md with its type table, and
 D175, which Ken decided the same day. The recorder gained the follow of an

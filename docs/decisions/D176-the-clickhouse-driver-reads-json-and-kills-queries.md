@@ -12,8 +12,10 @@ step 8a, the DSN, transactions, redirects and credentials, and the flavors.
    sends these settings on every request:
    `output_format_json_quote_64bit_integers=0`,
    `output_format_json_quote_denormals=1`, `date_time_output_format=iso`,
-   `output_format_json_named_tuples_as_objects=0` and
-   `http_write_exception_in_output_format=0`. The text allows invalid UTF-8,
+   `output_format_json_named_tuples_as_objects=0`,
+   `http_write_exception_in_output_format=0` and `enable_http_compression=0`.
+   The last one keeps 26.9 from holding the rows of a slow query in its
+   compressor, and a caller can turn it on with `WithParameter`. The text allows invalid UTF-8,
    and the driver keeps each number as text until it knows the type of the
    column. The driver reads no binary encoding, so it needs no approval under
    D13. The value of a `Variant` has no member type, a `Dynamic` and the paths

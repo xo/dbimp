@@ -296,7 +296,7 @@ These facts were recorded on each release:
   compressed form of its own (recorded: "a response of the native
   compression").
 - A request with `Content-Encoding: gzip` and a body that is not gzip answered
-  HTTP 500 with the code 271, and an unknown encoding answered HTTP 501 with
+  HTTP 500 with the code 354 on 25.3 and 25.8 and the code 271 on 26.9, and an unknown encoding answered HTTP 501 with
   the code 48 (recorded: "a request with a body that is not compressed but
   says it is" and "a request with an unknown content encoding"). A gzip body
   worked on each release (measured with `curl` on 2026-10-07).
@@ -1126,11 +1126,38 @@ later (recorded: "the headers of a response of a select").
 
 ## Interfaces
 
-Step 10 writes this table from the code. Not written yet.
+`clickhouse/tables_test.go` writes this table from the code (step 10).
 
-The facts that the table needs are in the sections above. A `Pinger` can send
-`GET /ping`, which answers `Ok.` and costs the server no query (recorded: "the
-ping endpoint").
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares, and each connection runs SELECT version() once (D177). |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping runs SELECT 1, which checks the user and the password. GET /ping needs neither. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because the driver sends no session, and the settings go with each request. |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, and the values that the driver binds with a type of their own: a uint64, a decimal, a big integer, the types of the root package, a UUID, an address, a list and a map (D176). |
+| `driver.QueryerContext` | yes | The driver binds each argument as a typed parameter of the server, {pN:Type} in the statement and param_pN in the query string (D176). |
+| `driver.ExecerContext` | yes | Exec reads the result to its end, and RowsAffected fails, because the server counts no row that a statement changed (D176). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because the server answers every BEGIN with HTTP 501 (D177). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, so an answer has one result. |
+| `driver.RowsColumnTypeScanType` | yes | The second line of the answer names the type of each column, with its arguments, and each type has one Go type (D135 and D177). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The type of a column in upper case, without its arguments and its wrappers, such as INT8 or DATETIME64. |
+| `driver.RowsColumnTypeLength` | yes | A FixedString has its length in its type. |
+| `driver.RowsColumnTypeNullable` | yes | A column can be NULL when its type is Nullable or holds a NULL of its own, and the type table says which types can. |
+| `driver.RowsColumnTypePrecisionScale` | yes | A Decimal has its precision and its scale in its type. |
+<!-- /dbimp:interfaces -->
+
+The facts that the table needs are in the sections above. `Ping` runs
+`SELECT 1`, which checks the user and the password. `GET /ping` answers `Ok.`
+and costs the server no query, but it takes no user and no password, so it does
+not show a wrong one (recorded: "the ping endpoint"). A connection holds no
+state on the server, so the driver has no `SessionResetter`. The driver sends no
+`session_id`, so a temporary table and a `SET` do not stay between two
+statements (see Open questions).
 
 ## Faults
 
@@ -1175,6 +1202,34 @@ read on 2026-10-07. None was measured against a server here.
   `X-ClickHouse-User` and `X-ClickHouse-Key` (clickhouse-go, `conn_http.go`).
   That works on each release when no `Authorization` header is sent (see
   Requests).
+
+The driver here repeats none of them. A test holds each one:
+
+- `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported`, and never 0
+  (`TestReplayNoColumns`).
+- `BeginTx` returns `dbimp.ErrNotSupported` (`TestContract`).
+- The transport sets no `ResponseHeaderTimeout`, and the deadline of the
+  context never becomes a setting. Only `WithTimeout` sends
+  `max_execution_time`, and only when the caller asks for it. A context that
+  ends sends `KILL QUERY` for the query (`TestKillsWhenTheContextEnds` and
+  `TestIntegrationCancel`).
+- Rows that the caller closes before the end close the body, so no connection
+  goes back to the pool with half a response, and the driver sends `KILL QUERY`
+  (`TestKillsWhenTheRowsCloseEarly`).
+- The marker of an error after some rows is read from the bytes that the
+  decoder holds and from the body, in both forms, and a marker that is cut short
+  is an error that wraps `dbimp.ErrIncomplete` (`TestStreamEnds` and
+  `TestRecordedTrailer`).
+- The driver has no batch. An `INSERT` is a statement that the caller writes,
+  and the driver never changes its text (`TestIntegrationCRUD`).
+- `CheckNamedValue` returns `driver.ErrSkip` for a value that it does not take
+  (`TestCheckNamedValue`).
+- Each kind has one Go type, so an `Interval` is a `dbimp.Interval`, and a
+  `Variant`, a `Dynamic` and a `JSON` are the decoded JSON value
+  (`TestScanTypesMatchDecode`).
+- The driver reads one row at a time, and holds no more than a row (`TestLargeResult`).
+- The driver sends the user and the password in the `Authorization` header only
+  (`TestRequest`).
 
 ## Second opinions
 
@@ -1333,14 +1388,18 @@ rules of D135, in separate conversations.
 These wait for Ken. Each is a fact that the recording shows and a choice that
 the recording cannot make.
 
-1. `dbrun` publishes the native port 9000 and not the HTTP port 8123. The
-   recording used a forwarder (see the start of this file). The entry of
-   ClickHouse in `dbmeta` needs the HTTP port as its second port (the field
-   `SecondPort` of `container.Server` and `second` of a product, which Pinot
-   and QuestDB use) and an `api` address for each release (dbmeta D167). It
-   needs an ordinary user in its `Init`, as DRIVER.md step 4 says, because
-   `dbrun dsn` names only `default`. The tests of step 14 need both. This is a
-   change in `dbmeta`, and I made none.
+1. Closed in `dbmeta`, as a change that is staged and not committed. The entry
+   of ClickHouse in `dbmeta` now publishes the HTTP port 8123 as the second
+   port, prints the `api` address of each release, and makes the ordinary user
+   `dbmeta_user`, who has `SELECT, INSERT, ALTER, CREATE DATABASE, CREATE TABLE,
+   CREATE VIEW, CREATE DICTIONARY, DROP DATABASE, DROP TABLE, DROP VIEW, DROP
+   DICTIONARY, TRUNCATE, OPTIMIZE` on the database `dbmeta` and `SELECT` on
+   `system.processes` (measured: `SHOW GRANTS` on 2026-10-07). The tests of step
+   14 ran on that checkout, with no change to it. The workflow of CI pins `dbmeta`
+   at a commit that lacks these changes, so Ken must move the pin to the commit
+   that holds them before the first run of CI, as the comment in the workflow
+   says. The tests read `CLICKHOUSE_SECOND_ADDRESS`, which the workflow sets from
+   `secondAddress`, to reach the HTTP port.
 2. Closed by D176. DRIVER.md says to ask Ken when a server refuses one of insert, select,
    update and delete. ClickHouse refuses `UPDATE ... SET` on a table that has
    no `_block_number` column, and on every table on 25.3, and it has `ALTER
@@ -1410,3 +1469,229 @@ the recording cannot make.
 14. Not measured: the quota header, a quota that stops a query, TLS, the
     behavior of a cluster, a request through a proxy, the keep-alive close
     race of an idle connection, `X-ClickHouse-SSL-Certificate-Auth`, and JWT.
+15. 26.9 compresses the answer by default for a client that accepts gzip, and
+    the compressor holds the rows of a query that produces them slowly. A query
+    of `sleepEachRow(0.2)` over 300 rows gave its first row to the driver after
+    about 60 seconds, when the query ended, on 26.9, and gave a row every 0.2
+    seconds on 25.3 and 25.8, and on 26.9 with `enable_http_compression=0`
+    (measured by the integration tests on 2026-10-07). The transport of
+    `dbimp.NewTransport` accepts gzip, as DRIVER.md says. Ken decided on
+    2026-10-07 that the driver sends `enable_http_compression=0` on every
+    request, as a sixth setting after the five of D176. A caller can still turn
+    it on with `WithParameter`. This costs the bandwidth of a large result.
+16. A bound argument has a Go type, and some types have none. A `Tuple` has no Go
+    type that the driver can bind, because `[]any` is an `Array` and a slice of
+    values of two types is an error, so a caller writes `JSONExtract(?, 'Tuple(...)')`
+    with JSON text, as the round trip does. A `Time` and a `Time64` are
+    `time.Duration` when read, but `database/sql` turns a `time.Duration` into an
+    `int64` of nanoseconds before the driver sees it, so a caller binds the text
+    `12:34:56`, as the round trip does. The driver can take a `time.Duration` in
+    `CheckNamedValue` and bind it as `Time64(9)`, which changes what a caller who
+    binds a `time.Duration` for an integer column gets.
+17. 26.9 refuses a `DateTime64` parameter in `ALTER TABLE ... UPDATE` for an
+    instant whose number of seconds has fewer than ten digits, such as the epoch
+    and anything before 2001, with the code 41. It stores the parameter in the
+    mutation as the string `'0'` and reads it back as the text of a time
+    (measured with `curl` on `clickhouse-26.9` on 2026-10-07). A `String`
+    parameter with `toDateTime64` and an `Int64` parameter with
+    `fromUnixTimestamp64Nano` update the same instant. The driver binds a
+    `time.Time` as `DateTime64(9, 'UTC')`, as D176 says, so a caller meets the
+    refusal. The round trip skips those updates on 26.9.
+18. `database/sql` closes the rows of `QueryRow` after the first row, with no
+    call of `Next` after it, so the driver cannot tell that the result had ended
+    and sends `KILL QUERY` for the query, as D176 says for rows closed before
+    the end. A `QueryRow` is then two requests, and the second one finds no
+    query. The driver can skip the cancel when it knows that the body is at its
+    end, which it cannot know without a read that can block.
+19. `WithReadonly(true)` sends `readonly=1`. The server then refuses a write and
+    a change of a setting in the text of the statement, and accepts the settings
+    in the query string, which are the settings of the driver (measured on all
+    three releases by `TestIntegrationFeatures`). D109 asks for an option
+    that says "write nothing", and `readonly=2` is the other choice, which
+    accepts a `SETTINGS` clause.
+20. A caller who writes the typed placeholder `{name:Type}` of ClickHouse in a
+    statement and passes `sql.Named("name", v)` gets `dbimp.ErrArguments`,
+    because the driver finds only `?` and `@name`. D176 says that the driver
+    writes the placeholders. The driver can read `{name:Type}` too and send
+    `param_name` with the text of the argument, which D176 does not say.
+21. `INSERT ... VALUES ({p1:Type})` can fail for a column of the type `Dynamic`,
+    because the parser of `VALUES` reads the braces as a map before it reads a
+    parameter (measured on 25.8: the column held the text `{p:Int64}`). `INSERT
+    ... SELECT ?, ?` works for every type, and the round trip uses it. The
+    driver does not change the text of a statement.
+22. The transport lets go of an idle connection after 5 seconds. The server closes
+    an idle connection after 10 seconds on 25.3 and 25.8, and after 30 on 26.9
+    (the header `Keep-Alive`), and the driver sends a `POST` once, so a request on
+    a connection that the server has just closed is an error. DRIVER.md says
+    that the connector builds its transport with `dbimp.NewTransport`, which
+    sets 90 seconds, and the connector changes that one field. The race itself
+    is not measured.
+23. Hard rule 4 of `AGENTS.md` lists the drivers that store a context. This driver
+    stores none: the rows and the watch of a query hold the function `ctx.Err` and a
+    closure, and the cancel runs with `context.WithoutCancel`. So `AGENTS.md`
+    needs no change for it.
+
+## Integration tests
+
+The integration tests of the driver read `CLICKHOUSE_DSN`, and
+`CLICKHOUSE_ORDINARY_DSN` for the ordinary user, and skip when `CLICKHOUSE_DSN`
+is empty. `CLICKHOUSE_SECOND_ADDRESS` replaces the host and the port of each
+DSN, because the `url` of `dbrun` holds the native port. The tests accept the
+`api` address of `dbrun` as well. They ran on 2026-10-07, one server at a time,
+with `-race`, on a fresh container of each release, against the checkout of
+`dbmeta` that holds the staged change (see Open questions):
+
+| Release | Passed | Skipped | Failed |
+| --- | --- | --- | --- |
+| `clickhouse-25.3` | 412 | 11 | 0 |
+| `clickhouse-25.8` | 415 | 10 | 0 |
+| `clickhouse-26.9` | 415 | 10 | 0 |
+
+A count is a test or a subtest, and each principal is a subtest. Each skip names
+the release that its entry is about, such as `TestIntegrationCRUD/25.3
+lightweight update`, which runs on 25.3 only. Every test that needs the tables of
+a run runs as the administrator, in a database of its own, and as the ordinary
+user `dbmeta_user`, in the database `dbmeta` that it can write, with the name of
+the run as the prefix of each table. `TestMain` drops the database of the run,
+looks for a table that a test left in either database, drops it, and fails.
+
+The round trip stores every type that `features.json` marks yes in a column of
+that type, with the values of DRIVER.md, as a bound argument and as a literal,
+and updates, reads and deletes each one (`TestIntegrationRoundTrip`). These types
+cannot go in a column in the plain way, and the round trip says how it stores
+each one:
+
+- `Nothing` cannot be the type of a column (the code 370). The table holds a
+  `Nullable(Int8)`, and the select makes a `Nullable(Nothing)` from the stored NULL
+  with `if(isNull(v), NULL, NULL)`, the one expression that has that type.
+- A `Tuple`, a geometry and a `QBit` have no Go type to bind, so the argument is
+  the JSON text of the value, and the statement reads it with `JSONExtract`.
+- A `Time` and a `Time64` take their text as the argument, because a
+  `time.Duration` becomes an `int64` (see Open questions).
+- An `Interval` is stored as the integer of the number of days, with
+  `toIntervalDay(?)`, in a column of the type `IntervalDay`.
+- A `Variant` has the members `Int64`, `String` and `Array(Int64)`, because the
+  server converts a value to a `Variant` only when its type is a member.
+- An `AggregateFunction` takes the integer that its state is made from, with
+  `sumState(toUInt32(?))`, and an update that sets it uses a subquery.
+
+These facts came from the integration tests. The recordings did not show them,
+and each is measured on the release that it names, on 2026-10-07:
+
+- The server closes the connection after it wrote the marker and the text of an
+  error after some rows, with no last chunk, on every release. The body then ends
+  with `io.ErrUnexpectedEOF` after the text, and the recorded exchanges have the
+  flag `truncated`. The driver takes the text and ignores that end
+  (`TestIntegrationErrorAfterRows`). A statement that writes about 20 MiB before
+  it fails gives the error after its rows with HTTP 200 on all three releases.
+- A `Time` and a `Time64` end with a `Z` on 25.8 when the driver sets
+  `date_time_output_format=iso`, such as `12:34:56Z`. The driver drops it. The
+  tests pass on 26.9 with or without it.
+- `readonly=1` refuses a write, and a `SETTINGS` clause in the text, and it
+  accepts the settings in the query string, such as `max_threads`, with the key
+  of `readonly` before or after them.
+- `ALTER TABLE ... UPDATE ... SETTINGS mutations_sync = 2` works, and so does the
+  setting in the query string. A parameter in a mutation works, and a parameter of
+  `Int64` out of the range of an `Int8` column wraps (300 became 44 on 25.8).
+- 25.3 refuses to update a column of the type `Dynamic` or `JSON` (the code 420).
+  A `JSON` column on 25.3 gives the number `1` for a number of the object and the
+  strings `"1.5"` for the numbers inside an array.
+- 26.9 refuses a `DateTime64` parameter in a mutation for an early instant (Open
+  questions).
+- On 25.3 the name `Time` is an alias of `Int64`, and `Time64` is an unknown type
+  (the code 50). On 25.8 the function `toTime` of a string is the old function
+  that takes a `DateTime`, so `CAST('12:34:56' AS Time)` writes the value.
+- A bound `Float64` of the largest `Float32` reads back as that value on every
+  release, where `toFloat32` of its text reads one step below on 25.3 and 25.8. A
+  bound `Float64` of `5e-324` reads as 0 on 25.3 and 25.8, as `toFloat64` of its
+  text does.
+- A mutation refuses an aggregate function (the code 184), and it takes the same
+  function in a scalar subquery.
+- `KILL QUERY ... SYNC` answers a row of `kill_status`, `query_id`, `user` and
+  `query`, and the killed query ends with the code 394.
+- The ordinary user cannot use `dictGet`, the Kafka engine, `url` or `s3` (the
+  code 497), and cannot create a database. On 26.9 the administrator gets the code
+  497 from `s3` too, because the server refuses to use its own credentials for a
+  user query.
+- The block of `Native` with `compress=1` starts with a checksum of 16 bytes and
+  the method, which is LZ4 (`0x82`) or ZSTD (`0x90`), and the test accepts both.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was
+written on 2026-10-07 from the staged code. A fact of Couchbase comes from
+[COUCHBASE.md](COUCHBASE.md), and a fact of ClickHouse from the sections above.
+
+### The server
+
+| | Couchbase | ClickHouse |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /` with the SQL text as the body, and the settings and the parameters in the query string (Requests) |
+| Database | The key `query_context` of the body | The query key `database`, or the header `X-ClickHouse-Database` (Requests) |
+| Language | SQL++, which is close to SQL | The SQL of ClickHouse, one statement for each request. A `;` at the end is accepted (Statements) |
+| DDL | In SQL++ | In SQL. A table has an engine, a primary key is a sort key and not a constraint, and there is no foreign key (Statements) |
+| Parameters | `?`, `$1` and `$name` | `{name:Type}` in the statement and `param_name` in the query string, each with a type (Parameters) |
+| Framing | One body for the whole result, which does not page | One body that streams, with a line for each row, and no paging (Responses) |
+| Columns | `signature`, before the first row | The first two lines of the body, the names and the exact type names, before the first row. A repeated name stays (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement (Responses) |
+| Errors | Can come with HTTP 200, after some rows | A status that follows the code, before the first byte. After some rows, the marker `__exception__` with HTTP 200, or the text with HTTP 500 on 26.9, and the connection closes (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON, with the type name of each column. With five settings every value is exact, except the member type of a `Variant` and the paths of a `JSON` (Types) |
+| Cancel | The server stops a query when the client leaves | A query can run on when the client leaves, and `KILL QUERY` with the `query_id` stops it (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None. `BEGIN` answers HTTP 501 (Transactions) |
+| Authentication | Basic, or `creds` in the body | Basic, or the headers `X-ClickHouse-User` and `X-ClickHouse-Key`, or the keys `user` and `password`. The server refuses two forms in one request (Requests) |
+| Default port | 8093, or 18093 with TLS | 8123, or 8443 with TLS |
+
+The differences that a caller sees:
+
+- A statement has no result count, and `RowsAffected` always gives an error
+  (D176).
+- The driver binds an argument as a typed parameter, and chooses the type from the
+  Go type of the argument. A `Tuple`, a `time.Duration` for a `Time` and a named
+  argument that matches `{name:Type}` have no form (D176 and Open questions).
+- An error after some rows reaches the caller after the rows, from the marker,
+  and wraps `dbimp.ErrIncomplete`. A status other than 200 is an error even when
+  rows came first (D176).
+- The server does not always stop a query when the client leaves, so the driver
+  sends `KILL QUERY` when the context ends and when the rows close early, and a
+  `QueryRow` sends it too (D176 and Open questions).
+- `UPDATE ... SET` goes to the server as the caller wrote it, and the server
+  refuses it on a table with no block number column. `ALTER TABLE ... UPDATE` works
+  on every release and runs in the background unless `mutations_sync` is 2 (D176).
+- There are no transactions, and `BeginTx` returns `dbimp.ErrNotSupported`
+  (D177).
+
+### The driver
+
+| | `couchbase` | `clickhouse` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-07 | About 1300 lines in 8 files | About 2700 lines in 10 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `User`, `Password`, `Database`. The DSN has the one key `tls` (D177) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter` and `WithDatabase`, through `WithOptions` or an argument (D109). `WithTimeout` sets `max_execution_time` in seconds with a fraction. `WithReadonly(true)` sets `readonly=1`. `WithParameter` sets a setting of the server, and a name that the driver sets itself takes the value of the caller. `WithDatabase` sets the key `database` |
+| Arguments | Sent to the server as `args` and `$name` | Written as typed parameters, `{pN:Type}` and `param_pN`, from the Go type of each argument. `?` and `@name` are placeholders. A struct, a list of values of two types, a decimal with no value and an integer of more than 256 bits are refused (`clickhouse/params.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own for the format, which reads the two lines of the header and then one row for each call, and reads the marker of an error from what the decoder holds and from the body (`clickhouse/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | The same, and `ColumnTypeLength` for a `FixedString` and `ColumnTypePrecisionScale` for a `Decimal`, from the type name. `ColumnTypeNullable` is true for a `Nullable` and for the types that hold a NULL of their own |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the column, as the type table says: `uint64`, `*big.Int` for 128 and 256 bits, `netip.Addr`, `time.Time` for an instant in the zone of the column, `time.Duration` for a `Time`, the types of the root package, and nested `[]any` for a geometry (D135 and D177) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` always give `dbimp.ErrNotSupported` (D176) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D177) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | Each query has a `query_id`. When the context ends before the driver read the whole answer, and when the caller closes the rows early, the driver sends `KILL QUERY ... SYNC` with a limit of 5 seconds (D176) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Code, Name, Message}`, which unwraps to `*dbimp.StatusError` when the error came with a status |
+| Authentication | Basic | Basic only, and the driver follows no redirect, so the credentials go to the host of the DSN only (D177) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, `Config`, `ParseDSN` and `NewConnector` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a time, a decimal, a UUID, an address and an interval
+  too, where Couchbase gives JSON shapes (D135 and D177).
+- An integer of 128 or 256 bits is a `*big.Int`, and an address is a
+  `netip.Addr` (D177).
+- A `Variant`, a `Dynamic` and a `JSON` give the decoded JSON value, with no member
+  type (D176).
+- `RowsAffected` always gives an error, where Couchbase counts every statement
+  with `mutationCount` (D176).
+- A connection runs `SELECT version()` when it opens, so an open sends one request
+  (D177).
+- `WithTimeout` sets `max_execution_time`, and the DSN has no key for it, where
+  Couchbase has `Timeout` in its configuration (D176).
+- A statement with a `FORMAT` clause is refused with `dbimp.ErrNotSupported`,
+  because the driver reads one format (D176).

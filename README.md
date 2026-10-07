@@ -40,7 +40,8 @@ which was first released in `v0.6.0`, `pinot`, which was first released in
 `v0.7.0`, `rqlite`, which was first released in `v0.8.0`, and `libsql`,
 which was first released in `v0.9.0`, `avatica`, which was first
 released in `v0.10.0`, `druid`, which was first released in `v0.11.0`, and
-`trino`, which was first released in `v0.12.0`.
+`trino`, which was first released in `v0.12.0`, and `clickhouse`, which no
+release holds yet.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
