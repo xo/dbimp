@@ -80,17 +80,11 @@ func TestIntegrationErrors(t *testing.T) {
 			t.Errorf("a union gave %v, want HTTP 200 with the status 500 in the body", err)
 		}
 		// With a page size, the row 121 fails on the second page, after 100
-		// rows. A principal that cannot read a cursor gets no page size, and the
-		// statement fails before any row (recorded: "a cast that fails in a
-		// row").
+		// rows (recorded: "a cast that fails in a row").
 		_, got, err := e.read(t, "SELECT n, CAST(s AS INT) FROM "+lead, opensearch.WithFetchSize(100))
 		oe, ok := errors.AsType[*opensearch.Error](err)
-		wantRows := 100
-		if e.cannotPage() {
-			wantRows = 0
-		}
-		if len(got) != wantRows || !ok || oe.Status != http.StatusBadRequest || oe.Type != "NumberFormatException" || errors.Is(err, dbimp.ErrIncomplete) != (wantRows > 0) {
-			t.Errorf("an error after some rows gave %d rows and %v, want %d rows and the error of HTTP 400 for the cast (D168)", len(got), err, wantRows)
+		if len(got) != 100 || !ok || oe.Status != http.StatusBadRequest || oe.Type != "NumberFormatException" || !errors.Is(err, dbimp.ErrIncomplete) {
+			t.Errorf("an error after some rows gave %d rows and %v, want 100 rows and the error of HTTP 400 for the cast (D168)", len(got), err)
 		}
 		u, err := url.Parse(dsn(t, e.p))
 		if err != nil {
@@ -127,23 +121,12 @@ func numbersOf(t *testing.T, rows [][]any) []int64 {
 // TestIntegrationPages holds D168 against the server: a result of 300 rows in
 // pages of every size reads each row once and in order, a LIMIT and a GROUP BY
 // have no page size and give their rows, and a page that the result window of
-// the index refuses is the error of the server. A principal that cannot read a
-// cursor reads the result in one page.
+// the index refuses is the error of the server.
 func TestIntegrationPages(t *testing.T) {
 	rows := rowsIndex(t)
 	forEach(t, func(t *testing.T, e *target) {
-		sizes := []int{1, 7, 100, 299, 300, 301, 1000}
-		if e.cannotPage() {
-			sizes = []int{1000}
-		}
-		for _, size := range sizes {
-			var got [][]any
-			var err error
-			if e.cannotPage() {
-				_, got, err = e.read(t, "SELECT n, s FROM "+rows+" ORDER BY n")
-			} else {
-				_, got, err = e.read(t, "SELECT n, s FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(size))
-			}
+		for _, size := range []int{1, 7, 100, 299, 300, 301, 1000} {
+			_, got, err := e.read(t, "SELECT n, s FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(size))
 			if err != nil || len(got) != 300 {
 				t.Fatalf("fetch_size %d: read %d rows and %v, want 300", size, len(got), err)
 			}
@@ -166,9 +149,6 @@ func TestIntegrationPages(t *testing.T) {
 		if err != nil || len(got) != 1 || got[0][0] != int64(300) {
 			t.Errorf("a count: read %v and %v, want 300 as a long", got, err)
 		}
-		if e.cannotPage() {
-			return
-		}
 		// A page larger than the result window of the index is the error of the
 		// server, before any row (recorded: "a fetch size above the window").
 		_, _, err = e.read(t, "SELECT n FROM "+rows, opensearch.WithFetchSize(20000))
@@ -190,11 +170,10 @@ func TestIntegrationCursorsAreClosed(t *testing.T) {
 	rows := rowsIndex(t)
 	s := newAdminAPI(t)
 	forEach(t, func(t *testing.T, e *target) {
-		e.skipCursor(t)
 		before := openPITs(t, s)
 		for _, read := range []int{1, 100, 101, 150, 299} {
 			func() {
-				r, err := e.db.QueryContext(e.ctx(t), "SELECT n FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(100))
+				r, err := e.db.QueryContext(t.Context(), "SELECT n FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(100))
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -337,9 +316,13 @@ func TestIntegrationPrincipals(t *testing.T) {
 		if oe, ok := errors.AsType[*opensearch.Error](err); !ok || !strings.Contains(oe.Reason, "no permissions for [indices:admin/mappings/get]") {
 			t.Errorf("the ordinary user read an index that it cannot read: %v, %v", got, err)
 		}
-		_, _, err = e.read(t, "SHOW TABLES LIKE '"+secretPrefix+"%'")
-		if oe, ok := errors.AsType[*opensearch.Error](err); !ok || !strings.Contains(oe.Reason, "no permissions for [indices:admin/get]") {
-			t.Errorf("SHOW TABLES of the ordinary user gave %v, want the refusal for indices:admin/get", err)
+		// Since dbmeta v0.4.0 the role holds indices:admin/get on every index, so
+		// SHOW TABLES gives the names of all the indices that match, and the
+		// secret index is one of them (measured on 2.19.6).
+		cols, tables, err := e.read(t, "SHOW TABLES LIKE '"+secretPrefix+"%'")
+		name := slices.Index(cols, "TABLE_NAME")
+		if err != nil || name < 0 || len(tables) != 1 || tables[0][name] != secret {
+			t.Errorf("SHOW TABLES of the ordinary user gave the columns %v, the rows %v and %v, want one row for %s", cols, tables, err, secret)
 		}
 		status, b, err := apiAs(t, e.p).do(t.Context(), http.MethodPut, "/"+prefix+"denied/_doc/1", map[string]any{"a": 1})
 		if err != nil || status != http.StatusForbidden || !strings.Contains(string(b), "security_exception") {
@@ -390,7 +373,7 @@ func TestIntegrationLiterals(t *testing.T) {
 			// The empty string is no literal that the server keeps as a column
 			// name, so each value has an alias.
 			var got any
-			err := e.db.QueryRowContext(e.ctx(t), "SELECT ? AS v", tt.in).Scan(&got)
+			err := e.db.QueryRowContext(t.Context(), "SELECT ? AS v", tt.in).Scan(&got)
 			if err != nil {
 				t.Errorf("%s: %v", tt.name, err)
 				continue
@@ -400,7 +383,7 @@ func TestIntegrationLiterals(t *testing.T) {
 			}
 		}
 		var got any
-		if err := e.db.QueryRowContext(e.ctx(t), "SELECT ? AS v", nil).Scan(&got); err != nil || got != nil {
+		if err := e.db.QueryRowContext(t.Context(), "SELECT ? AS v", nil).Scan(&got); err != nil || got != nil {
 			t.Errorf("NULL: the value is %#v and %v, want nil", got, err)
 		}
 		// Several arguments, each with an alias, keep their order.

@@ -144,3 +144,50 @@ func TestLegacyObjectInATextColumn(t *testing.T) {
 		t.Errorf("read %v and %v, want no row and dbimp.ErrInvalidValue", got, err)
 	}
 }
+
+// TestLegacyDescribeNumberInAKeywordColumn holds D178, item 17. The legacy
+// DESCRIBE TABLES of 2.19.6 names every column keyword and sends numbers in
+// some of them. The driver gives the number that arrived, an int64 for an
+// integer and a float64 for a fraction, and no error. The scan type stays the
+// type of the schema.
+func TestLegacyDescribeNumberInAKeywordColumn(t *testing.T) {
+	t.Parallel()
+	f := &fake{handle: func(w http.ResponseWriter, _ *http.Request, _ map[string]any) {
+		reply(w, http.StatusOK, `{"schema":[{"name":"COLUMN_NAME","type":"keyword"},{"name":"NUM_PREC_RADIX","type":"keyword"},{"name":"NULLABLE","type":"keyword"},{"name":"SCALE","type":"keyword"}],"datarows":[["n",10,2,1.5],["s",null,2,null]],"total":2,"size":2,"status":200}`)
+	}}
+	db := f.open(t, "", "")
+	_, got, err := readAll(t, db, "DESCRIBE TABLES LIKE t")
+	want := [][]any{{"n", int64(10), int64(2), float64(1.5)}, {"s", nil, int64(2), nil}}
+	if err != nil || !reflect.DeepEqual(got, want) {
+		t.Errorf("read %#v and %v, want %#v", got, err, want)
+	}
+	rows, err := db.QueryContext(t.Context(), "DESCRIBE TABLES LIKE t")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer rows.Close()
+	types, err := rows.ColumnTypes()
+	if err != nil || types[1].ScanType() != reflect.TypeFor[string]() {
+		t.Fatalf("the column types are %v and the error %v, want the scan type string", types, err)
+	}
+	for rows.Next() {
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// TestNumberInAKeywordColumnOfASelect holds that the rule of D178, item 17 is
+// for DESCRIBE alone: a number in a keyword column of a SELECT still fails the
+// row.
+func TestNumberInAKeywordColumnOfASelect(t *testing.T) {
+	t.Parallel()
+	f := &fake{handle: func(w http.ResponseWriter, _ *http.Request, _ map[string]any) {
+		reply(w, http.StatusOK, `{"schema":[{"name":"k","alias":"","type":"keyword"}],"datarows":[[10]],"total":1,"size":1,"status":200}`)
+	}}
+	db := f.open(t, "", "")
+	_, got, err := readAll(t, db, "SELECT k FROM t")
+	if !errors.Is(err, dbimp.ErrInvalidValue) || len(got) != 0 {
+		t.Errorf("read %v and %v, want no row and dbimp.ErrInvalidValue", got, err)
+	}
+}

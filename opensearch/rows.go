@@ -53,6 +53,11 @@ type rows struct {
 	next string
 	// status is the status that the body of the page names, for an error.
 	status int
+	// describe is true for a DESCRIBE statement. The legacy engine of 2.19.6
+	// names every column of its answer keyword and sends numbers in some of
+	// them (measured on 2026-10-08), and D178, item 17 reads each as the
+	// number that arrived.
+	describe bool
 	// read is true once a row reached the caller, so that an error after it
 	// wraps dbimp.ErrIncomplete (D107). done is true once the answer is read
 	// to its end or failed, and closed once Close ran.
@@ -243,7 +248,13 @@ func (r *rows) skipPage() string {
 // are decoded before the next call to the decoder, which reuses its buffer.
 func (r *rows) decodeRow() error {
 	for i, v := range r.vals {
-		val, err := decode(r.types[i], v)
+		var val any
+		var err error
+		if r.describe && r.types[i] == typeKeyword && v.Kind() == '0' {
+			val, err = dbimp.Number(v)
+		} else {
+			val, err = decode(r.types[i], v)
+		}
 		if err != nil {
 			return fmt.Errorf("reading the column %s: %w", r.cols[i], err)
 		}

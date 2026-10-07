@@ -1,10 +1,7 @@
 package opensearch_test
 
 import (
-	"errors"
-	"net/http"
 	"strconv"
-	"strings"
 	"sync"
 	"testing"
 
@@ -14,10 +11,10 @@ import (
 // TestIntegrationCaps holds the caps that D163 names, with the size limit of the
 // server lowered to 100 rows so that 300 rows pass it. A plain SELECT carries the
 // page size, and the driver reads every row. A statement with no page size is cut
-// at the size limit with no sign, and so is a LIMIT above it on the 3 series. The
-// ordinary user of the 2 series cannot read a cursor, so its plain SELECT is cut
-// too (recorded: "300 rows with a size limit of 100" and "a limit of 250 with a
-// size limit of 100").
+// at the size limit with no sign, and so is a LIMIT above it on the 3 series. Since
+// dbmeta v0.4.0 the ordinary user of the 2 series reads a cursor too (recorded:
+// "300 rows with a size limit of 100" and "a limit of 250 with a size limit of
+// 100").
 func TestIntegrationCaps(t *testing.T) {
 	rows := rowsIndex(t)
 	s := newAdminAPI(t)
@@ -31,17 +28,11 @@ func TestIntegrationCaps(t *testing.T) {
 			}
 			return len(got)
 		}
-		want := 300
-		if e.cannotPage() {
-			want = 100
+		if got := count("SELECT n FROM " + rows + " ORDER BY n"); got != 300 {
+			t.Errorf("a plain SELECT read %d rows, want 300", got)
 		}
-		if got := count("SELECT n FROM " + rows + " ORDER BY n"); got != want {
-			t.Errorf("a plain SELECT read %d rows, want %d", got, want)
-		}
-		if !e.cannotPage() {
-			if got := count("SELECT n FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(100)); got != 300 {
-				t.Errorf("a plain SELECT with the page size 100 read %d rows, want 300", got)
-			}
+		if got := count("SELECT n FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(100)); got != 300 {
+			t.Errorf("a plain SELECT with the page size 100 read %d rows, want 300", got)
 		}
 		if got := count("SELECT n FROM "+rows+" ORDER BY n", opensearch.WithParameter("fetch_size", 0)); got != 100 {
 			t.Errorf("a plain SELECT with no page size read %d rows, want 100: the size limit", got)
@@ -89,12 +80,8 @@ func TestIntegrationDefaultCaps(t *testing.T) {
 			}
 			return len(got)
 		}
-		want := 10050
-		if e.cannotPage() {
-			want = 10000
-		}
-		if got := count("SELECT n FROM " + big + " ORDER BY n"); got != want {
-			t.Errorf("a plain SELECT read %d rows, want %d", got, want)
+		if got := count("SELECT n FROM " + big + " ORDER BY n"); got != 10050 {
+			t.Errorf("a plain SELECT read %d rows, want 10050", got)
 		}
 		if got := count("SELECT n FROM "+big+" ORDER BY n", opensearch.WithParameter("fetch_size", 0)); got != 10000 {
 			t.Errorf("a plain SELECT with no page size read %d rows, want 10000: the size limit", got)
@@ -103,14 +90,7 @@ func TestIntegrationDefaultCaps(t *testing.T) {
 		if !e.old {
 			wantLimit = 10000
 		}
-		if e.cannotPage() {
-			// A LIMIT above the size limit reads through a scroll on the 2 series,
-			// which needs the same right as a cursor.
-			_, _, err := e.read(t, "SELECT n FROM "+big+" ORDER BY n LIMIT 10050")
-			if oe, ok := errors.AsType[*opensearch.Error](err); !ok || oe.Status != http.StatusForbidden || !strings.Contains(oe.Reason, "indices:data/read/search") {
-				t.Errorf("a LIMIT of 10050 gave %v, want HTTP 403 for indices:data/read/search", err)
-			}
-		} else if got := count("SELECT n FROM " + big + " ORDER BY n LIMIT 10050"); got != wantLimit {
+		if got := count("SELECT n FROM " + big + " ORDER BY n LIMIT 10050"); got != wantLimit {
 			t.Errorf("a LIMIT of 10050 read %d rows, want %d", got, wantLimit)
 		}
 		wantGroups := 10000

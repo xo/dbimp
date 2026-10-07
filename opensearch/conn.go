@@ -153,6 +153,7 @@ func (c *conn) query(ctx context.Context, query string, args []driver.NamedValue
 		return nil, err
 	}
 	r := newRows(ctx, c.c, res.Body)
+	r.describe = describe(text)
 	if err := r.open(); err != nil {
 		_ = r.Close()
 		return nil, err

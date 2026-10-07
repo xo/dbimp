@@ -45,8 +45,10 @@ env:
   # only, so the Elasticsearch tests need no other pin (W28 and D167). It
   # starts each OpenSearch release with the URL opensearch:// and the user
   # dbmeta_user, who reads the indices dbmeta* only, so the OpenSearch tests
-  # need no other pin either (W29 and D168).
-  DBMETA_COMMIT: 7cbe9bf14c732b4730c992a18003395bd73635dd
+  # need no other pin either (W29 and D168). 9388928 is the release v0.4.0 of
+  # dbmeta. It holds the wider OpenSearch role of dbmeta_user, tls=false in
+  # the DynamoDB DSNs and the Solr path /dbmeta in the Solr DSNs.
+  DBMETA_COMMIT: 938892840f0c0f09a5a0292f03a42833bb8b3378
   DBMETA_OWNER: dbimp-ci
   DBMETA_RUNNER: docker
 

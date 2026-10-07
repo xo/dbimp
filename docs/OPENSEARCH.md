@@ -6,7 +6,9 @@ This file holds what is known about OpenSearch, for the driver `opensearch`
 Steps 5a and 6 measured 2.19.6 on 2026-10-01 and 2026-10-02, and 3.9.0 on
 2026-10-07, as
 `admin`, the administrator, and as `dbmeta_user`, an ordinary user who can
-read the indices whose names start with `dbmeta`. A fact marked "recorded"
+read the indices whose names start with `dbmeta`. The role of that user is
+wider since dbmeta v0.4.0, and the Principals section gives the new facts,
+which were measured on 2.19.6 and 3.9.0 on 2026-10-08. A fact marked "recorded"
 is in `testdata/opensearch/`, and the name in quotes after it is the name of
 its request in `requests.json` there. The two releases gave the same
 answers, except where a line says otherwise. The recordings of 3.8.0 were
@@ -23,7 +25,10 @@ measured says so. The sources, each read on 2026-10-01, are these:
   `internal_users.yml` before the first start, because `admin` is a
   reserved user that the REST interface cannot change. Its `Init` makes the
   role `dbmeta_role`, which has `read`, `indices:admin/mappings/get` and
-  `indices:monitor/settings/get` on the indices `dbmeta*`, the user
+  `indices:monitor/settings/get` on the indices `dbmeta*`, and since v0.4.0
+  also `indices:admin/get` and `indices:data/read/search` on every index
+  (measured on 2.19.6 only by dbmeta, and also read from 3.9.0 on
+  2026-10-08), and `cluster:monitor/health`. It makes the user
   `dbmeta_user` with that role, and the index `dbmeta`. dbmeta D118 says
   that the SQL plugin needs `indices:monitor/settings/get` for a user that
   reads.
@@ -310,7 +315,9 @@ array is nil. A column whose type the driver does not know, such as `struct`
 in the legacy engine, gives the decoded JSON value, with the scan type `any`.
 A value that does not fit its type, such as a number in a `keyword` column,
 fails the row with `dbimp.ErrInvalidValue`, and the driver never gives it as
-text (hard rule 3, and Open questions, 15).
+text (hard rule 3, and Open questions, 15). The one exception is a `DESCRIBE`
+statement, whose number in a `keyword` column is the value that arrived, an
+`int64` or a `float64` (D178, item 17, and the facts below).
 
 These facts were recorded on each release, from the index `dbmeta_types`,
 which has one field of each mapping type and five documents (recorded:
@@ -430,10 +437,18 @@ not `SELECT`:
 - `DESCRIBE TABLES` on 2.19.6 names every column of its answer `keyword`, and
   sends numbers in some of them, such as 10 in `NUM_PREC_RADIX` and 2 in
   `NULLABLE`. On 3.9.0 it names those columns `integer` and `short`
-  (recorded: "describe tables"). So on 2.19.6 the driver fails the row with
-  `dbimp.ErrInvalidValue` for the column `NUM_PREC_RADIX`, and `SHOW TABLES`
-  reads (measured with `TestIntegrationSchema` on 2.19.6 and 3.9.0 on
-  2026-10-07). See Open questions, 15.
+  (recorded: "describe tables"). The driver read the 2.19.6 answer as an error
+  for the column `NUM_PREC_RADIX` until 2026-10-08, and `SHOW TABLES` read
+  (measured with `TestIntegrationSchema` on 2.19.6 and 3.9.0 on 2026-10-07).
+  Ken decided in D178, item 17, that the driver gives a number in a `keyword`
+  column of a `DESCRIBE` statement as the value that arrived, and the test
+  `TestLegacyDescribeNumberInAKeywordColumn` holds it. Measured on 2.19.6 on
+  2026-10-08, as the administrator and as the ordinary user: `NUM_PREC_RADIX`
+  is the `int64` 10, `NULLABLE` is the `int64` 2, and `ORDINAL_POSITION` is an
+  `int64` that counts from 0, so it differs from the JDBC documentation.
+  `ColumnTypeScanType` stays `string` for these columns, because the schema
+  names them `keyword`. A number in a `keyword` column of a `SELECT` still
+  fails the row (`TestNumberInAKeywordColumnOfASelect`).
 
 These facts were measured on 3.9.0 on 2026-10-07 with the integration tests:
 
@@ -636,6 +651,13 @@ These facts were recorded on each release:
 
 These facts were recorded as `dbmeta_user` on each release:
 
+- The role of the ordinary user changed in dbmeta v0.4.0. Besides the
+  indices `dbmeta*`, it holds `indices:admin/get` and
+  `indices:data/read/search` on every index, and `cluster:monitor/health`
+  (read from the role on 2.19.6 and 3.9.0 on 2026-10-08). The recordings
+  below that name the old role were made before the change. The facts that
+  carry the date 2026-10-08 are measured with the integration tests on the
+  new role, and the recordings are not made again.
 - The ordinary user runs SQL on the indices `dbmeta*` (recorded: "a
   statement"). `GET /_plugins/_security/authinfo` names its roles:
   `dbmeta_role` on each release, and `own_index` too on 2.19.6 (recorded:
@@ -643,17 +665,25 @@ These facts were recorded as `dbmeta_user` on each release:
 - An index outside `dbmeta*` fails with a refusal for
   `indices:admin/mappings/get` (recorded: "an index of the system"). See
   Errors for its status.
-- `SHOW TABLES LIKE %` fails for `indices:admin/get` (recorded: "show every
-  table"). `DESCRIBE TABLES` works on 2.19.6, and fails on 3.9.0 (recorded:
-  "describe tables").
-- A cursor fails on 2.19.6 with HTTP 403, `no permissions for
-  [indices:data/read/search]`, and works on 3.9.0 (recorded: "a cursor as
-  the ordinary user"). On 2.19.6 the cursor opens a point in time, whose
-  search names no index, so the grant on `dbmeta*` does not cover it. A user
-  with `indices:data/read/search` on `*` paged (measured with `curl` and
-  a role of its own on 2.19.6 on 2026-10-01, and then removed).
+- With the old role, `SHOW TABLES LIKE %` failed for `indices:admin/get`
+  (recorded: "show every table"), `DESCRIBE TABLES` worked on 2.19.6 and
+  failed on 3.9.0 (recorded: "describe tables"), and a cursor failed on 2.19.6
+  with HTTP 403, `no permissions for [indices:data/read/search]`, and worked
+  on 3.9.0 (recorded: "a cursor as the ordinary user"). The cursor of 2.19.6
+  opens a point in time, whose search names no index, so the grant on
+  `dbmeta*` did not cover it.
+- With the new role, measured on 2026-10-08: `SHOW TABLES` works for the
+  ordinary user on 2.19.6 and 3.9.0, and names every index that matches,
+  also an index outside `dbmeta*` (`TestIntegrationPrincipals`). `DESCRIBE
+  TABLES` works on 3.9.0, and on 2.19.6 it gives the same answer as for the
+  administrator (`TestIntegrationSchema`). A cursor works on both releases,
+  and so does a `LIMIT` above the size limit of 2.19.6, which reads through a
+  scroll (`TestIntegrationPages` and `TestIntegrationDefaultCaps`). Reading
+  an index outside `dbmeta*` still fails for `indices:admin/mappings/get`.
 - A join fails on 2.19.6 for `indices:admin/aliases/get`, and works on
-  3.9.0 (recorded: "a join").
+  3.9.0 (recorded: "a join"). The new role does not change this on 2.19.6,
+  and so a filter, a join and the legacy engine are still refused to the
+  ordinary user of 2.19.6 (measured on 2026-10-08).
 - PPL fails with HTTP 403 for `cluster:admin/opensearch/ppl` (recorded: "a
   statement in PPL").
 - `GET /` and `GET /_cat/plugins` fail with HTTP 403 for
@@ -667,12 +697,14 @@ These facts were recorded as `dbmeta_user` on each release:
 These facts were measured on 2.19.6 and 3.9.0 on 2026-10-07, as each
 principal, with the integration tests:
 
-- Every plain `SELECT` of the driver carries a page size, so the ordinary
-  user of 2.19.6 gets HTTP 403 for `indices:data/read/search` for each one,
-  until the caller turns the page size off with `WithParameter("fetch_size", 0)`.
-  The result is then cut at the size limit of the server with no sign. A
-  `SELECT` with a `LIMIT`, a `GROUP BY` or an aggregate carries no page size,
-  and reads. The ordinary user of 3.9.0 pages (`TestIntegrationPages`).
+- With the old role, every plain `SELECT` of the driver carried a page size,
+  so the ordinary user of 2.19.6 got HTTP 403 for `indices:data/read/search`
+  for each one, until the caller turned the page size off with
+  `WithParameter("fetch_size", 0)`, and the result was then cut at the size
+  limit of the server with no sign. With the new role, measured on 2026-10-08,
+  the ordinary user of 2.19.6 pages like the administrator and like the
+  ordinary user of 3.9.0 (`TestIntegrationPages`). A `SELECT` with a `LIMIT`, a
+  `GROUP BY` or an aggregate carries no page size, and reads.
 - `SELECT VERSION()` fails with HTTP 400 for both principals on both releases,
   and `GET /` is refused to the ordinary user with HTTP 403 (`TestIntegrationVersion`).
   `usql` has no driver for OpenSearch, so it runs no statement for the
@@ -848,8 +880,8 @@ the answers. The questions that D168 answers are these:
 5. The legacy engine. D168 names no form for its answers. See 15.
 6. An error that arrives with HTTP 200 reads its status from the body
    (D168, item 7).
-7. The ordinary user of 2.19.6 cannot page. D168 says that this waits for
-   `dbmeta`. See 13.
+7. The ordinary user of 2.19.6 can page since dbmeta v0.4.0. D168 said that
+   this waits for `dbmeta`. See 13.
 8. The release. Question 17 closes it. The driver sends no request for the
    release (D178, item 11, which amends D168, item 10).
 9. The driver writes each argument as a literal (D168, item 5).
@@ -880,13 +912,16 @@ These questions came from steps 10 to 17a. Ken closed questions 11, 13, 14 and
     doubt gets no page size and the server cuts its result at the size limit.
     The other choice is to send the page size to every `SELECT` and accept the
     legacy engine, or to never send it.
-13. The ordinary user of 2.19.6 gets HTTP 403 for each plain `SELECT`, because
+13. The ordinary user of 2.19.6 got HTTP 403 for each plain `SELECT`, because
     the page size opens a cursor and the cursor needs `indices:data/read/search`
     on every index (Principals). Ken decided on 2026-10-07 that the driver
     returns this error, does not send the statement again, and always sends a
     page size to a plain `SELECT` (D178, item 5). The caller turns paging off
     with `WithParameter("fetch_size", 0)`, and then reads at most 10000 rows with
-    no sign.
+    no sign. This decision stays: the driver still returns the 403 when the
+    server gives it. With the wider role of dbmeta v0.4.0 the server no longer
+    gives it to `dbmeta_user` on 2.19.6 (measured on 2026-10-08), so the
+    tests no longer expect it.
 14. The driver does not close the cursor of a page that the caller leaves
     after the context ended in the middle of the page, because it learns the
     cursor only at the end of the page. The server drops it when its
@@ -899,12 +934,14 @@ These questions came from steps 10 to 17a. Ken closed questions 11, 13, 14 and
     sends a `date` as the text of a timestamp on 2.19.6, sends a number or a
     boolean that the source holds as text under `integer` and `boolean`, and
     names a keyword in a `GROUP BY` `double`. `DESCRIBE TABLES` on 2.19.6 names
-    every column `keyword` and sends numbers (Types). D168 names no form, and
+    every column `keyword` and sends numbers (Types). D178, item 17 closes that
+    one case: the driver gives the number that arrived, and the other cases
+    still fail the row. D168 names no form, and
     hard rule 3 forbids text in place of a value, so the driver fails the row with
     `dbimp.ErrInvalidValue` and the name of the column
     (`TestLegacyObjectInATextColumn`, `TestReplayLegacyGroupBy`). The statements
     that reach it are one with a `filter`, one with a `LIMIT` that a caller gives
-    a page size with `WithParameter`, and `DESCRIBE TABLES` on 2.19.6. The other
+    a page size with `WithParameter`. The other
     choices are the decoded JSON value, or a conversion by the value.
 16. Closed by D178. `WithTimeout` fails with `dbimp.ErrNotSupported` for a time above zero, as
     D109 says for an option that the server cannot honor. The SQL plugin has no
@@ -932,23 +969,22 @@ These questions came from steps 10 to 17a. Ken closed questions 11, 13, 14 and
 The integration tests of the driver read `OPENSEARCH_DSN`, and
 `OPENSEARCH_ORDINARY_DSN` for the ordinary user, and skip when
 `OPENSEARCH_DSN` is empty. Each is the `url` of `dbrun`. The tests ran on
-2026-10-07, one server at a time, with `-race`, on a fresh container of each
+2026-10-08 against dbmeta v0.4.0, one server at a time, with `-race`, on a fresh container of each
 release:
 
 | Release | Passed | Skipped | Failed |
 | --- | --- | --- | --- |
-| `opensearch-2.19.6` | 347 | 34 | 0 |
-| `opensearch-3.9.0` | 361 | 20 | 0 |
+| `opensearch-2.19.6` | 352 | 26 | 0 |
+| `opensearch-3.9.0` | 360 | 18 | 0 |
 
 A count is a test or a subtest, and each principal is a subtest. A test skips
-for a difference between the releases, or for the ordinary user of 2.19.6, with
-the reason in its log. The tests make their indices as the administrator, with
+for a difference between the releases, or for the ordinary user of 2.19.6 when
+it needs the legacy engine, with the reason in its log. The tests make their indices as the administrator, with
 the name of the run as the prefix, and the prefix starts with `dbmeta` so that
 the ordinary user can read it. `TestMain` removes every index of the run, also
 when a test fails. SQL takes no write, so the administrator writes through the
-document API, and each principal reads through the driver. The ordinary user
-of 2.19.6 reads with `WithParameter("fetch_size", 0)`, because it cannot page
-(Open questions, 13).
+document API, and each principal reads through the driver. Since dbmeta v0.4.0 the ordinary user of 2.19.6 pages, so
+every principal reads with the page size of the driver (Open questions, 13).
 
 The round trip stores every type that `features.json` marks yes in a field of
 that type, with the values of DRIVER.md: NULL, the zero value, the smallest and
@@ -967,7 +1003,7 @@ query instead. These types need a note on how the round trip stores them:
   nanosecond.
 - A `half_float`, a `scaled_float` and an `integer_range` are named only by the
   legacy engine (Types), so their select carries the filter `match_all`, which the
-  ordinary user of 2.19.6 cannot use. Their tests skip for that principal.
+  ordinary user of 2.19.6 still cannot use. Their tests skip for that principal.
 - A `binary` value is stored as base64, and read as bytes.
 - The types that `features.json` marks no have a test of the refusal of the
   server. SQL leaves a field of such a type out of `SELECT *`. A type that
@@ -1057,5 +1093,5 @@ The differences that a caller sees:
   of Couchbase hold none (Open questions, 11).
 - `Close` before the end can read the rest of the current page to close the
   cursor, at most 256 KiB and for at most 5 seconds (Open questions, 14).
-- A statement with a page size of the driver fails for the ordinary user of
-  2.19.6 (Open questions, 13).
+- A statement with a page size of the driver fails for a user of 2.19.6 who has
+  no `indices:data/read/search` on every index (Open questions, 13).

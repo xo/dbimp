@@ -133,6 +133,16 @@ func plainSelect(query string) bool {
 	return first && from
 }
 
+// describe reports whether query is a DESCRIBE statement. The scan skips
+// comments. D178, item 17 reads a number in a keyword column of the answer of
+// DESCRIBE as the value that arrived (measured on 2.19.6).
+func describe(query string) bool {
+	for w := range words(query) {
+		return strings.EqualFold(w.text, "DESCRIBE")
+	}
+	return false
+}
+
 // legacyWords are the words of a statement that the server runs in the legacy
 // engine when it has a page size.
 var legacyWords = map[string]bool{

@@ -108,35 +108,16 @@ func forEach(t *testing.T, f func(t *testing.T, e *target)) {
 	}
 }
 
-// cannotPage is true when the principal cannot read a cursor: on 2.19.6 a
-// cursor opens a point in time, whose search names no index, and the grant of
-// the ordinary user on the indices dbmeta* does not cover it (recorded as
-// dbmeta_user: "a cursor as the ordinary user").
-func (e *target) cannotPage() bool {
-	return e.old && e.p == ordinary
-}
-
-// ctx returns the context of a statement of e. For a principal that cannot read
-// a cursor, it turns the page size off, which WithParameter does by replacing
-// the key fetch_size, and a result is then cut at the size limit of the server.
-func (e *target) ctx(t *testing.T) context.Context {
-	t.Helper()
-	if e.cannotPage() {
-		return opensearch.WithOptions(t.Context(), opensearch.WithParameter("fetch_size", 0))
-	}
-	return t.Context()
-}
-
 // read runs query as e, and reads its columns and every row into *any.
 func (e *target) read(t *testing.T, query string, args ...any) ([]string, [][]any, error) {
 	t.Helper()
-	return readAllContext(t, e.ctx(t), e.db, query, args...)
+	return readAllContext(t, t.Context(), e.db, query, args...)
 }
 
 // columns runs query as e, and returns the names and the types of its columns.
 func (e *target) columns(t *testing.T, query string, args ...any) ([]string, []*sql.ColumnType, error) {
 	t.Helper()
-	r, err := e.db.QueryContext(e.ctx(t), query, args...)
+	r, err := e.db.QueryContext(t.Context(), query, args...)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -150,14 +131,6 @@ func (e *target) columns(t *testing.T, query string, args ...any) ([]string, []*
 		return nil, nil, err
 	}
 	return cols, cts, r.Err()
-}
-
-// skipCursor skips the test of a cursor for a principal that cannot read one.
-func (e *target) skipCursor(t *testing.T) {
-	t.Helper()
-	if e.cannotPage() {
-		t.Skip("on the 2 series the ordinary user cannot read a cursor: it needs indices:data/read/search on every index (recorded: a cursor as the ordinary user)")
-	}
 }
 
 func TestMain(m *testing.M) {
@@ -595,7 +568,7 @@ func openPITs(t *testing.T, s *api) int {
 func TestIntegrationTypes(t *testing.T) {
 	name := typesIndex(t)
 	forEach(t, func(t *testing.T, e *target) {
-		rows, err := e.db.QueryContext(e.ctx(t), "SELECT id, bo, `by`, sh, i, l, hf, f, d, sf, k, t, tk, dt, dtn, dtf, tm, ip, bin, gp, o FROM "+name+" WHERE id < 4 ORDER BY id")
+		rows, err := e.db.QueryContext(t.Context(), "SELECT id, bo, `by`, sh, i, l, hf, f, d, sf, k, t, tk, dt, dtn, dtf, tm, ip, bin, gp, o FROM "+name+" WHERE id < 4 ORDER BY id")
 		if err != nil {
 			t.Fatal(err)
 		}

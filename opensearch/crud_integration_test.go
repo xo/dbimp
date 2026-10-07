@@ -10,7 +10,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/xo/dbimp"
 	"github.com/xo/dbimp/opensearch"
 )
 
@@ -26,7 +25,7 @@ func TestIntegrationCRUD(t *testing.T) {
 	// changed.
 	refused := func(t *testing.T, e *target, query string) {
 		t.Helper()
-		_, err := e.db.ExecContext(e.ctx(t), query)
+		_, err := e.db.ExecContext(t.Context(), query)
 		oe, ok := errors.AsType[*opensearch.Error](err)
 		if !ok || oe.HTTPStatus != http.StatusBadRequest || !strings.HasPrefix(oe.Type, "SQLFeature") {
 			t.Errorf("%s gave %v, want the refusal of HTTP 400 with SQLFeatureNotSupportedException", query, err)
@@ -160,7 +159,7 @@ func TestIntegrationSchema(t *testing.T) {
 		{"default value", "CREATE TABLE " + prefix + "new (a INT DEFAULT 1)"},
 	} {
 		feature(t, tt.name, func(t *testing.T, e *target) {
-			_, err := e.db.ExecContext(e.ctx(t), tt.query)
+			_, err := e.db.ExecContext(t.Context(), tt.query)
 			refusalOf(t, tt.query, err)
 			if status, _, err := apiAs(t, admin).do(t.Context(), http.MethodGet, "/"+url.PathEscape(prefix+"new"), nil); err != nil || status != http.StatusNotFound {
 				t.Errorf("after %s the index %snew has HTTP %d and %v, want none", tt.query, prefix, status, err)
@@ -170,12 +169,8 @@ func TestIntegrationSchema(t *testing.T) {
 
 	feature(t, "show tables", func(t *testing.T, e *target) {
 		cols, got, err := e.read(t, "SHOW TABLES LIKE "+rows)
-		if e.p == ordinary {
-			if oe, ok := errors.AsType[*opensearch.Error](err); !ok || oe.Status != http.StatusForbidden || !strings.Contains(oe.Reason, "indices:admin/get") {
-				t.Errorf("SHOW TABLES as the ordinary user gave %v, want the refusal for indices:admin/get (recorded: show tables)", err)
-			}
-			return
-		}
+		// The ordinary user has indices:admin/get on every index since dbmeta
+		// v0.4.0, so both principals read the answer.
 		name := slices.Index(cols, "TABLE_NAME")
 		if err != nil || name < 0 || len(got) != 1 || got[0][name] != rows {
 			t.Errorf("SHOW TABLES gave the columns %v, the rows %v and %v, want one row for %s", cols, got, err, rows)
@@ -184,20 +179,32 @@ func TestIntegrationSchema(t *testing.T) {
 
 	feature(t, "describe tables", func(t *testing.T, e *target) {
 		cols, got, err := e.read(t, "DESCRIBE TABLES LIKE "+rows)
-		if e.old && e.p == admin || e.old && e.p == ordinary {
+		if e.old {
 			// The 2 series names every column of the answer keyword, and sends
-			// numbers in some of them, such as NUM_PREC_RADIX (recorded:
-			// "describe tables"). The driver returns an error and no number in a
-			// string column (hard rule 3), and the open questions of
-			// docs/OPENSEARCH.md ask Ken for the form.
-			if !errors.Is(err, dbimp.ErrInvalidValue) || !strings.Contains(err.Error(), "NUM_PREC_RADIX") || len(got) != 0 {
-				t.Errorf("DESCRIBE TABLES on the 2 series gave the rows %v and %v, want dbimp.ErrInvalidValue for NUM_PREC_RADIX", got, err)
+			// numbers in some of them (recorded: "describe tables"). D178, item
+			// 17 reads such a number as the value that arrived, measured on
+			// 2.19.6 on 2026-10-08.
+			ordinal, nullable, radix := slices.Index(cols, "ORDINAL_POSITION"), slices.Index(cols, "NULLABLE"), slices.Index(cols, "NUM_PREC_RADIX")
+			if err != nil || len(got) == 0 || ordinal < 0 || nullable < 0 || radix < 0 {
+				t.Fatalf("DESCRIBE TABLES on the 2 series gave the columns %v, the rows %v and %v, want its rows", cols, got, err)
 			}
-			return
-		}
-		if e.p == ordinary && !e.old {
-			if oe, ok := errors.AsType[*opensearch.Error](err); !ok || oe.Status != http.StatusForbidden || !strings.Contains(oe.Reason, "indices:admin/get") {
-				t.Errorf("DESCRIBE TABLES as the ordinary user gave %v, want the refusal for indices:admin/get on the 3 series", err)
+			// ORDINAL_POSITION counts from 0 on 2.19.6, and not from 1 as the JDBC
+			// documentation says (measured on 2026-10-08).
+			seen := map[int64]bool{}
+			for _, r := range got {
+				n, ok := r[ordinal].(int64)
+				if !ok || n < 0 || seen[n] {
+					t.Errorf("ORDINAL_POSITION is %#v in %v, want a new int64 from 0", r[ordinal], r)
+				}
+				seen[n] = true
+				if _, ok := r[nullable].(int64); !ok {
+					t.Errorf("NULLABLE is %#v in %v, want an int64", r[nullable], r)
+				}
+				switch r[radix].(type) {
+				case nil, int64, float64:
+				default:
+					t.Errorf("NUM_PREC_RADIX is %#v in %v, want nil or a number", r[radix], r)
+				}
 			}
 			return
 		}

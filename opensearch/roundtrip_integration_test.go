@@ -276,9 +276,6 @@ func TestIntegrationRoundTrip(t *testing.T) {
 		for _, rt := range rtTypes() {
 			t.Run(rt.typ, func(t *testing.T) {
 				var opts []opensearch.Option
-				if e.cannotPage() {
-					opts = append(opts, opensearch.WithParameter("fetch_size", 0))
-				}
 				if rt.legacy {
 					if e.old && e.p == ordinary {
 						t.Skip("on the 2 series the ordinary user cannot use a filter, which names this type (recorded: a statement with a filter of the query DSL)")

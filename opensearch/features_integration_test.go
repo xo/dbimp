@@ -34,8 +34,9 @@ func (e *target) skipUnless(t *testing.T, old bool, reason string) {
 	}
 }
 
-// skipOrdinaryOld skips the test for the ordinary user of the 2 series, who
-// cannot read what the test needs.
+// skipOrdinaryOld skips the test for the ordinary user of the 2 series. The
+// legacy engine of 2.19.6 needs indices:admin/aliases/get, which the role of
+// dbmeta v0.4.0 does not hold (measured on 2.19.6).
 func (e *target) skipOrdinaryOld(t *testing.T, why string) {
 	t.Helper()
 	if e.old && e.p == ordinary {
@@ -75,7 +76,6 @@ func TestIntegrationFeatures(t *testing.T) {
 	s := newAdminAPI(t)
 
 	feature(t, "cursor paging with fetch size", func(t *testing.T, e *target) {
-		e.skipCursor(t)
 		_, got, err := e.read(t, "SELECT n FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(100))
 		if err != nil || len(got) != 300 {
 			t.Fatalf("read %d rows and %v, want 300", len(got), err)
@@ -90,7 +90,6 @@ func TestIntegrationFeatures(t *testing.T) {
 	})
 
 	feature(t, "close a cursor", func(t *testing.T, e *target) {
-		e.skipCursor(t)
 		_, _, first := rawJSON(t, e.p, "/_plugins/_sql", map[string]any{"query": "SELECT n FROM " + rows + " ORDER BY n", "fetch_size": 100})
 		cursor, _ := first["cursor"].(string)
 		for range 2 {
@@ -281,7 +280,6 @@ func TestIntegrationFeatures(t *testing.T) {
 	})
 
 	feature(t, "the nested function", func(t *testing.T, e *target) {
-		e.skipOrdinaryOld(t, "nested(): the legacy engine needs a right that it lacks")
 		cols, got, err := e.read(t, "SELECT id, nested(n.a) FROM "+types+" ORDER BY id")
 		want := [][]any{{int64(1), int64(1)}, {int64(1), int64(2)}, {int64(4), int64(3)}}
 		if err != nil || !slices.Equal(cols, []string{"id", "nested(n.a)"}) || !reflect.DeepEqual(got, want) {
@@ -362,7 +360,7 @@ func TestIntegrationFeatures(t *testing.T) {
 	})
 
 	feature(t, "a user function", func(t *testing.T, e *target) {
-		_, err := e.db.ExecContext(e.ctx(t), "CREATE FUNCTION f() RETURNS INT")
+		_, err := e.db.ExecContext(t.Context(), "CREATE FUNCTION f() RETURNS INT")
 		refusalOf(t, "CREATE FUNCTION", err)
 	})
 
@@ -428,7 +426,6 @@ func TestIntegrationFeatures(t *testing.T) {
 	}
 
 	feature(t, "an error on a later page", func(t *testing.T, e *target) {
-		e.skipCursor(t)
 		_, got, err := e.read(t, "SELECT n, CAST(s AS INT) FROM "+lead, opensearch.WithFetchSize(100))
 		if len(got) != 100 || !errors.Is(err, dbimp.ErrIncomplete) {
 			t.Errorf("read %d rows and %v, want 100 rows and dbimp.ErrIncomplete", len(got), err)
@@ -460,7 +457,7 @@ func TestIntegrationFeatures(t *testing.T) {
 		if _, err := e.db.BeginTx(t.Context(), nil); !errors.Is(err, dbimp.ErrNotSupported) {
 			t.Errorf("BeginTx gave %v, want dbimp.ErrNotSupported", err)
 		}
-		_, err := e.db.ExecContext(e.ctx(t), "BEGIN")
+		_, err := e.db.ExecContext(t.Context(), "BEGIN")
 		refusalOf(t, "BEGIN", err)
 	})
 
@@ -494,23 +491,9 @@ func TestIntegrationFeatures(t *testing.T) {
 		}
 	})
 
-	feature(t, "a cursor as the ordinary user on 2.19", func(t *testing.T, e *target) {
-		e.skipUnless(t, true, "the 3 series gives the ordinary user a cursor")
-		if e.p != ordinary {
-			t.Skip("the administrator reads a cursor")
-		}
-		// The driver sends the page size to every plain SELECT, so the ordinary
-		// user of the 2 series gets the refusal, until the caller turns the page
-		// size off with WithParameter.
-		_, _, err := readAllContext(t, t.Context(), e.db, "SELECT n FROM "+rows)
-		oe, ok := errors.AsType[*opensearch.Error](err)
-		if !ok || oe.HTTPStatus != http.StatusForbidden || !strings.Contains(oe.Reason, "indices:data/read/search") {
-			t.Errorf("a plain SELECT of the ordinary user gave %v, want HTTP 403 for indices:data/read/search", err)
-		}
-	})
-
-	feature(t, "a cursor as the ordinary user on 3", func(t *testing.T, e *target) {
-		e.skipUnless(t, false, "the 2 series refuses a cursor to the ordinary user")
+	feature(t, "a cursor as the ordinary user", func(t *testing.T, e *target) {
+		// The role holds indices:data/read/search on every index since dbmeta
+		// v0.4.0, so the ordinary user reads a cursor on both series.
 		_, got, err := readAllContext(t, t.Context(), e.db, "SELECT n FROM "+rows+" ORDER BY n", opensearch.WithFetchSize(100))
 		if err != nil || len(got) != 300 {
 			t.Errorf("a cursor read %d rows and %v, want 300", len(got), err)
