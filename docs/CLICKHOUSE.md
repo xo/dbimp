@@ -5,12 +5,14 @@ This file holds what is known about ClickHouse over HTTP, for the driver
 [DRIVER.md](DRIVER.md).
 
 Steps 5a to 8a measured `clickhouse-25.3`, `clickhouse-25.8` and
-`clickhouse-26.9` on 2026-10-07, as `default`, the administrator that `dbrun`
+`clickhouse-26.9` on 2026-10-07, and Step 6 recorded `clickhouse-26.8` on
+2026-10-08 (see Flavors), as `default`, the administrator that `dbrun`
 names, and as `dbimp_user`, an ordinary user that the setup of `requests.json`
 makes (see Principals). A fact marked "recorded" is in `testdata/clickhouse/`,
 and the name in quotes after it is the name of its request in `requests.json`
-there. The three releases gave the same answers, except where a line names a
-release. A fact marked "measured" names how it was measured. A fact marked
+there. The three releases of 2026-10-07 gave the same answers, except where a line
+names a release. A line that names only 25.3, 25.8 and 26.9 was not measured on
+26.8, unless the section Flavors says so. A fact marked "measured" names how it was measured. A fact marked
 "not measured" names its source. The sources, each read on 2026-10-07, are
 these:
 
@@ -1100,23 +1102,54 @@ These facts were recorded on each release:
 No other product is behind this interface. The driver serves ClickHouse only.
 The releases differ, and these are the differences that the recording shows:
 
-| Fact | 25.3 | 25.8 | 26.9 |
-| --- | --- | --- | --- |
-| `output_format_json_quote_64bit_integers` by default | 1 | 0 | 0 |
-| `http_write_exception_in_output_format` by default | 1 | 1 | 0 |
-| `enable_http_compression` by default | not measured | not measured | 1 |
-| Header `X-ClickHouse-Exception-Tag` | no | no | yes, on every answer |
-| `Keep-Alive` timeout | 10 | 10 | 30 |
-| An error after rows | row or marker, HTTP 200 | row or marker, HTTP 200 | text or marker with a tag, HTTP 500 or 200 |
-| Timeout of a query | error row, HTTP 200 | error row, HTTP 200 | HTTP 408 |
-| The code 497 | HTTP 500 | HTTP 500 | HTTP 403 |
-| `Time` and `Time64` | none | with `enable_time_time64_type` | by default |
-| `QBit`, `MultiPoint`, `Geometry` | none | none | yes |
-| `Nullable(Tuple)` and `Nullable(Point)` | no | no | yes |
-| `UPDATE ... SET` on a table with `enable_block_number_column` | syntax error | yes | yes |
-| `LIVE VIEW` | with a setting | with a setting | syntax error |
-| `Float32` max text and `toFloat64('5e-324')` | 3.4028233e38 and 0 | 3.4028233e38 and 0 | 3.4028235e38 and 5e-324 |
-| A query that writes rows, after the client left | gone | gone | still running after 3 seconds |
+| Fact | 25.3 | 25.8 | 26.8 | 26.9 |
+| --- | --- | --- | --- | --- |
+| `output_format_json_quote_64bit_integers` by default | 1 | 0 | 0 | 0 |
+| `http_write_exception_in_output_format` by default | 1 | 1 | 0 | 0 |
+| `enable_http_compression` by default | not measured | not measured | 1 | 1 |
+| Header `X-ClickHouse-Exception-Tag` | no | no | yes, on every answer | yes, on every answer |
+| `Keep-Alive` timeout | 10 | 10 | 30 | 30 |
+| An error after rows | row or marker, HTTP 200 | row or marker, HTTP 200 | text or marker with a tag, HTTP 500 or 200 | text or marker with a tag, HTTP 500 or 200 |
+| Timeout of a query | error row, HTTP 200 | error row, HTTP 200 | HTTP 408 | HTTP 408 |
+| The code 497 | HTTP 500 | HTTP 500 | HTTP 403 | HTTP 403 |
+| `Time` and `Time64` | none | with `enable_time_time64_type` | by default | by default |
+| `QBit`, `MultiPoint`, `Geometry` | none | none | yes | yes |
+| `Nullable(Tuple)` and `Nullable(Point)` | no | no | no, HTTP 400 and the code 44 | yes |
+| `UPDATE ... SET` on a table with `enable_block_number_column` | syntax error | yes | yes | yes |
+| `LIVE VIEW` | with a setting | with a setting | syntax error | syntax error |
+| `Float32` max text and `toFloat64('5e-324')` | 3.4028233e38 and 0 | 3.4028233e38 and 0 | 3.4028235e38 and 5e-324 | 3.4028235e38 and 5e-324 |
+| `WINDOW VIEW` | code 344, HTTP 500 | code 344, HTTP 500 | code 344, HTTP 500 | syntax error, HTTP 400 |
+| `getServerSetting` as the ordinary user | no such function, the code 46 | HTTP 200 | HTTP 200 | HTTP 403, the code 497 |
+| A query that writes rows, after the client left | gone | gone | still running after 3 seconds | still running after 3 seconds |
+
+Ken decided on 2026-10-08 to record `clickhouse-26.8`, which `dbmeta` v0.3.0
+added in the tier Nightly. It is `26.8.11.7` (recorded: "the version"). It
+gave the same answers as 26.9, except for the facts that this paragraph names.
+Each fact was recorded as both principals, and the name of its request is in
+quotes. 26.8 answers like 25.8 for a `WINDOW VIEW`: the code 344 and HTTP 500,
+and then the code 1 with the setting (recorded: "schema: a window view" and
+"schema: a window view with its setting"). 26.8 refuses `Nullable(Tuple)` and
+`Nullable(Point)` with the code 44 and HTTP 400 as plain text, and 25.3 and
+25.8 refuse them with the code 43 and an error row (recorded: "a nullable geo
+type"). The ordinary user can call `getServerSetting` on 26.8, which 26.9
+refuses with the code 497 (recorded: "the version, the full text"). 26.8
+sends the header `X-ClickHouse-Exception-Tag`, has `Time` by default, has
+`QBit`, `MultiPoint` and `Geometry`, answers HTTP 408 for the code 159 and HTTP
+500 with the code 497, and answers HTTP 500 for an error after rows, as 26.9
+does (recorded: "the headers of a response of a select", "type Time and Time64
+select", "type QBit", "type MultiPoint", "type Geometry", "max_execution_time",
+"a read of a system table with no grant" and "an error after rows, throwIf in
+JSONCompactEachRowWithNamesAndTypes"). The query of `sleepEachRow(0.2)` was
+still in `system.processes` 3 seconds after the client left, as on 26.9
+(recorded: "the query after the client gave up while rows flow"). A `curl`
+that left after 1 second a query of `sleepEachRow(0.5)` without
+`default_format` found the query gone after 3 seconds (measured on 2026-10-08),
+so the result depends on how the client leaves. See Open questions. The
+setting `enable_http_compression` is 1 and `enable_time_time64_type` is 1
+(measured with `SELECT value FROM system.settings` on 2026-10-08). The
+recording of 26.8 used `dbimp_user`, made by the setup of `requests.json`, and
+not the user `dbmeta_user` that `dbmeta` v0.3.0 makes. The setup still works on
+26.8, and the recorder ran it unchanged.
 
 The sources are in the sections above: the settings in "the settings of the
 quotes" (recorded), the tag and the `Keep-Alive` in "the headers of a response
@@ -1535,6 +1568,18 @@ make. D176 and D177 closed questions 1 to 11, and Ken decided question 15 on
     stores none: the rows and the watch of a query hold the function `ctx.Err` and a
     closure, and the cancel runs with `context.WithoutCancel`. So `AGENTS.md`
     needs no change for it.
+24. On 26.8, the recording says that a query was still running 3 seconds
+    after the client left, and a `curl` that left says that it was gone. Which
+    one holds for the driver depends on how the driver leaves a query. Ken must
+    say if D176 needs a new measurement with the driver itself.
+25. `tagged` in `conn.go` says that only 26.9 and later write the tagged form.
+    26.8 sends the header `X-ClickHouse-Exception-Tag` and answers HTTP 500 for
+    an error after rows, so the driver works on 26.8 through the header. The
+    fallback of `tagged` for a server that sends no header names 26.9, and
+    Ken must say if it names 26.8. The names of the steps and of the rows
+    `26.9 live view`, `26.9 exception tag`, `26.9 MultiPoint`, `26.9 Geometry`
+    and `26.9 QBit` also name 26.9, and they now hold for 26.8 too. A new name
+    changes `features.json` and `TYPES.md`, so Ken must say if it changes.
 
 ## Integration tests
 

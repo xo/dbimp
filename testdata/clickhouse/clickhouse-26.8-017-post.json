@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_types SELECT 1, -128, 255, -32768, 65535, -2147483648, 4294967295, -9223372036854775808, 18446744073709551615, toInt128('-170141183460469231731687303715884105728'), toUInt128('340282366920938463463374607431768211455'), toInt256('-57896044618658097711785492504343953926634992332820282019728792003956564819968'), toUInt256('115792089237316195423570985008687907853269984665640564039457584007913129639935'), toFloat32('3.4028234663852886e38'), 1.7976931348623157e308, toDecimal32('99999.9999', 4), toDecimal64('99999999.9999999999', 10), toDecimal128('123456789012345678.12345678901234567890', 20), toDecimal256('123456789012345678901234567890123456.1234567890123456789012345678901234567890', 40), true, 'héllo € 日本', unhex('ff80'), toFixedString('abcd', 4), toDate('2149-06-06'), toDate32('2299-12-31'), toDateTime('2106-02-07 06:28:15', 'UTC'), toDateTime64('2262-04-11 23:47:16.854775807', 9, 'UTC'), toDateTime('2026-10-07 12:00:00', 'Asia/Jakarta'), toDateTime64('2026-10-07 12:00:00.123', 3, 'America/New_York'), 'a', 'y', toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'), toIPv4('192.168.0.1'), toIPv6('2001:db8::1'), [1, 2, 3], [['a', 'b'], [], ['c']], [1, NULL, 3], (1, 'x'), (2, 'y'), map('k', 1, 'l', 2), map(1, ['p', 'q']), 'lc', 'lcn', 42, 'text', toDateTime64('2026-10-07 12:00:00.123', 3, 'UTC'), CAST(toInt32(42) AS Variant(Int32, String, Array(Int32))), CAST(7 AS Dynamic), CAST('{\"a\":1,\"b\":{\"c\":[1,2,\"x\"]},\"d\":null}' AS JSON), [1, 2], ['p', 'q'], 5, initializeAggregation('sumState', toUInt32(5))"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "e6f15bcc-54a6-48fa-8875-2e7131ecd0ad"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "sihotrzulkoeejyv"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"1\",\"written_bytes\":\"772\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"772\",\"elapsed_ns\":\"5561743\",\"memory_usage\":\"8354105\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9983"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:22 GMT"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ]
+    },
+    "body": ""
+  }
+}

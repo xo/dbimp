@@ -1,0 +1,62 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&enable_http_compression=1&max_block_size=2",
+    "header": {
+      "Accept-Encoding": [
+        "gzip"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "5530a9a6-3934-48b2-9e9f-22479444c1cc"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9919"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"6\",\"read_bytes\":\"48\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"1039450\",\"memory_usage\":\"3934983\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "gxzmurmqzkdhnhwd"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:54 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "395"
+      ],
+      "Content-Encoding": [
+        "gzip"
+      ]
+    },
+    "body": "",
+    "binary": "H4sIAAAAAAAA/4pWyivNTUotUtJRUCrJKMov90zTSC0sTcwp1oBI6CiYamoqxXJFK4V65pWYmYAUglgWSrFcAAAAAP//AA4A8f9bMCwgMF0KWzEsIDBdCgAOAPH/WzIsIDBdClszLCAwXQqMjkFLwzAcxe9+indrAy7YyXTmIOjsMCAtzHWCl5C2/7pATGaTuOGn14ned3rweD/eb+F7Eri8mXE83AtRHjraReOdwEbbRNjpEKhH9MjidvR7OWQYkuuOG5gA593ki0YvsN8aS6ADdSka94Zs2VSLtawr/IE5fSRtQ65U1K2lgrv03tJ4jplqpItzBiFwwTC5PZlg+E0ITDOO/P9RrR9X9YuSS7W5e2pKJZ9V9dO+lquaIf+kMRztp1d8zouCXyP3w2A6oy3aZGzP2Nk3AAAA//8DAGCyCTNwAQAA"
+  }
+}

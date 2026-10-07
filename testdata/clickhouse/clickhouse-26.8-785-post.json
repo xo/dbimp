@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompact&max_block_size=2",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number, throwIf(number = 5) FROM numbers(10)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Keep-Alive": [
+        "timeout=30, max=9582"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "3d9c0552-14be-438a-9766-5653098e70ee"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompact"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:59 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "395"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "dsweufkxtbruullp"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"6\",\"read_bytes\":\"48\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"10\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"1284721\",\"memory_usage\":\"3934551\"}"
+      ]
+    },
+    "body": "{\n\t\"meta\":\n\t[\n\t\t{\n\t\t\t\"name\": \"number\",\n\t\t\t\"type\": \"UInt64\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"throwIf(equals(number, 5))\",\n\t\t\t\"type\": \"UInt8\"\n\t\t}\n\t],\n\n\t\"data\":\n\t[\n\t\t[0, 0],\n\t\t[1, 0],\n\t\t[2, 0],\n\t\t[3, 0]Code: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(equals(__table1.number, 5_UInt8) :: 0) -> throwIf(equals(__table1.number, 5_UInt8)) UInt8 : 2'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 26.8.11.7 (official build))\n"
+  }
+}

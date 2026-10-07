@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_crud (id, name, v) VALUES (1, 'a', 1) ON DUPLICATE KEY UPDATE v = 2"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Clickhouse-Exception-Tag": [
+        "ggcxlseummvymaii"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "7a1dcb9b-dd3b-4c77-98d4-b22385d803c5"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "27"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"57334148\",\"memory_usage\":\"0\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:55 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9956"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ]
+    },
+    "body": "Code: 27. DB::Exception: Cannot parse input: expected '(' before: 'ON DUPLICATE KEY UPDATE v = 2':  at row 1: While executing WaitForAsyncInsert. (CANNOT_PARSE_INPUT_ASSERTION_FAILED) (version 26.8.11.7 (official build))\n"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=TabSeparated&query_id=dbimp-kill-default&max_block_size=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT sleepEachRow(0.2) FROM numbers(30)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"6\",\"read_bytes\":\"48\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"30\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"1203695884\",\"memory_usage\":\"9152746\"}"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "dbimp-kill-default"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:47 GMT"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "eynwxsaqyeyyqlur"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/tab-separated-values; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Format": [
+        "TabSeparated"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "394"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9998"
+      ]
+    },
+    "body": "0\n0\n0\n0\n0\nCode: 394. DB::Exception: Query was cancelled. (QUERY_WAS_CANCELLED) (version 26.8.11.7 (official build))\n"
+  }
+}

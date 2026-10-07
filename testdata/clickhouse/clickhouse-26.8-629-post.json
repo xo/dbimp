@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompact",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT * FROM dbimp.dbimp_types ORDER BY id"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"3\",\"read_bytes\":\"1584\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"3\",\"result_rows\":\"3\",\"result_bytes\":\"95801\",\"elapsed_ns\":\"2425361\",\"memory_usage\":\"10624070\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "59d2376a-f8d1-4508-86e5-5b0c0c83207a"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompact"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:58 GMT"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9738"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "hsxudwxcysaezeco"
+      ]
+    },
+    "body": "{\n\t\"meta\":\n\t[\n\t\t{\n\t\t\t\"name\": \"id\",\n\t\t\t\"type\": \"UInt32\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"i8\",\n\t\t\t\"type\": \"Int8\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"u8\",\n\t\t\t\"type\": \"UInt8\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"i16\",\n\t\t\t\"type\": \"Int16\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"u16\",\n\t\t\t\"type\": \"UInt16\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"i32\",\n\t\t\t\"type\": \"Int32\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"u32\",\n\t\t\t\"type\": \"UInt32\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"i64\",\n\t\t\t\"type\": \"Int64\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"u64\",\n\t\t\t\"type\": \"UInt64\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"i128\",\n\t\t\t\"type\": \"Int128\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"u128\",\n\t\t\t\"type\": \"UInt128\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"i256\",\n\t\t\t\"type\": \"Int256\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"u256\",\n\t\t\t\"type\": \"UInt256\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"f32\",\n\t\t\t\"type\": \"Float32\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"f64\",\n\t\t\t\"type\": \"Float64\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"d32\",\n\t\t\t\"type\": \"Decimal(9, 4)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"d64\",\n\t\t\t\"type\": \"Decimal(18, 10)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"d128\",\n\t\t\t\"type\": \"Decimal(38, 20)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"d256\",\n\t\t\t\"type\": \"Decimal(76, 40)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"b\",\n\t\t\t\"type\": \"Bool\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"s\",\n\t\t\t\"type\": \"String\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"sb\",\n\t\t\t\"type\": \"String\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"fs\",\n\t\t\t\"type\": \"FixedString(4)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"dt\",\n\t\t\t\"type\": \"Date\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"dt32\",\n\t\t\t\"type\": \"Date32\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"dtm\",\n\t\t\t\"type\": \"DateTime\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"dtm64\",\n\t\t\t\"type\": \"DateTime64(9)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"dtz\",\n\t\t\t\"type\": \"DateTime('Asia\\/Jakarta')\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"dt64z\",\n\t\t\t\"type\": \"DateTime64(3, 'America\\/New_York')\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"e8\",\n\t\t\t\"type\": \"Enum8('a' = 1, 'b' = 2)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"e16\",\n\t\t\t\"type\": \"Enum16('x' = 1000, 'y' = 2000)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"uu\",\n\t\t\t\"type\": \"UUID\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ip4\",\n\t\t\t\"type\": \"IPv4\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ip6\",\n\t\t\t\"type\": \"IPv6\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"arr\",\n\t\t\t\"type\": \"Array(Int32)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"arr2\",\n\t\t\t\"type\": \"Array(Array(String))\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"arrn\",\n\t\t\t\"type\": \"Array(Nullable(Int32))\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"tup\",\n\t\t\t\"type\": \"Tuple(Int32, String)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"tupn\",\n\t\t\t\"type\": \"Tuple(a Int32, b String)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"mp\",\n\t\t\t\"type\": \"Map(String, Int32)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"mpn\",\n\t\t\t\"type\": \"Map(Int32, Array(String))\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"lc\",\n\t\t\t\"type\": \"LowCardinality(String)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"lcn\",\n\t\t\t\"type\": \"LowCardinality(Nullable(String))\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"nl\",\n\t\t\t\"type\": \"Nullable(Int32)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"nls\",\n\t\t\t\"type\": \"Nullable(String)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"nld\",\n\t\t\t\"type\": \"Nullable(DateTime64(3))\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"var\",\n\t\t\t\"type\": \"Variant(Array(Int32), Int32, String)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"dyn\",\n\t\t\t\"type\": \"Dynamic\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"js\",\n\t\t\t\"type\": \"JSON\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"nest.a\",\n\t\t\t\"type\": \"Array(Int32)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"nest.b\",\n\t\t\t\"type\": \"Array(String)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"sagg\",\n\t\t\t\"type\": \"SimpleAggregateFunction(max, Int32)\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"agg\",\n\t\t\t\"type\": \"AggregateFunction(sum, UInt32)\"\n\t\t}\n\t],\n\n\t\"data\":\n\t[\n\t\t[1, -128, 255, -32768, 65535, -2147483648, 4294967295, -9223372036854775808, 18446744073709551615, -170141183460469231731687303715884105728, 340282366920938463463374607431768211455, -57896044618658097711785492504343953926634992332820282019728792003956564819968, 115792089237316195423570985008687907853269984665640564039457584007913129639935, 3.4028235e38, 1.7976931348623157e308, 99999.9999, 99999999.9999999999, 123456789012345678.1234567890123456789, 123456789012345678901234567890123456.123456789012345678901234567890123456789, true, \"héllo € 日本\", \"�\", \"abcd\", \"2149-06-06\", \"2299-12-31\", \"2106-02-07 06:28:15\", \"2262-04-11 23:47:16.854775807\", \"2026-10-07 12:00:00\", \"2026-10-07 12:00:00.123\", \"a\", \"y\", \"61f0c404-5cb3-11e7-907b-a6006ad3dba0\", \"192.168.0.1\", \"2001:db8::1\", [1,2,3], [[\"a\",\"b\"],[],[\"c\"]], [1,null,3], [1,\"x\"], {\"a\":2,\"b\":\"y\"}, {\"k\":1,\"l\":2}, {\"1\":[\"p\",\"q\"]}, \"lc\", \"lcn\", 42, \"text\", \"2026-10-07 12:00:00.123\", 42, 7, {\"a\":1,\"b\":{\"c\":[1,2,\"x\"]}}, [1,2], [\"p\",\"q\"], 5, \"\\u0005\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\"],\n\t\t[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, \"\", \"\", \"\\u0000\\u0000\\u0000\\u0000\", \"1970-01-01\", \"1900-01-01\", \"1970-01-01 00:00:00\", \"1970-01-01 00:00:00.000000000\", \"1970-01-01 07:00:00\", \"1969-12-31 19:00:00.000\", \"b\", \"x\", \"00000000-0000-0000-0000-000000000000\", \"0.0.0.0\", \"::\", [], [], [], [0,\"\"], {\"a\":0,\"b\":\"\"}, {}, {}, \"\", \"\", 0, \"\", \"1970-01-01 00:00:00.000\", \"s\", \"dyn\", {}, [], [], 0, \"\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\"],\n\t\t[3, 127, 1, 32767, 1, 2147483647, 1, 9223372036854775807, 1, 170141183460469231731687303715884105727, 1, 57896044618658097711785492504343953926634992332820282019728792003956564819967, 1, -1.5, null, -0.0001, 0.0000000001, -0.00000000000000000001, -0.0000000000000000000000000000000000000001, true, \"x\", \"\\u0000\", \"ab\\u0000\\u0000\", \"2026-02-28\", \"1969-12-31\", \"2026-03-28 19:30:00\", \"1969-12-31 23:59:59.999999999\", \"2026-10-07 12:00:00\", \"2026-11-01 01:30:00.000\", \"a\", \"y\", \"ffffffff-ffff-ffff-ffff-ffffffffffff\", \"255.255.255.255\", \"::ffff:1.2.3.4\", [-1], [[\"\"]], [null], [-1,\"z\"], {\"a\":-1,\"b\":\"z\"}, {\"\":0}, {\"0\":[\"\"]}, \"lc2\", null, null, null, null, [1,2], [1,2], {\"a\":\"str\"}, [7], [\"w\"], -5, \"\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\"]\n\t],\n\n\t\"rows\": 3,\n\n\t\"statistics\":\n\t{\n\t\t\"elapsed\": 0.002292814,\n\t\t\"rows_read\": 3,\n\t\t\"bytes_read\": 1584\n\t}\n}\n"
+  }
+}

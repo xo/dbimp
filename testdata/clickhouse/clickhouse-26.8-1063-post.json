@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE WINDOW VIEW dbimp.dbimp_win ENGINE = Memory AS SELECT count() AS c, tumbleStart(w) AS s FROM dbimp.dbimp_crud GROUP BY tumble(now(), INTERVAL 1 SECOND) AS w"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Keep-Alive": [
+        "timeout=30, max=9853"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "c84181f9-9946-4d71-83a6-cfd4fe1872c2"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "344"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"517901\",\"memory_usage\":\"0\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:31:31 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "tserzyvyyhwpqqhs"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ]
+    },
+    "body": "Code: 344. DB::Exception: Experimental WINDOW VIEW feature is not enabled (the setting 'allow_experimental_window_view'). (SUPPORT_IS_DISABLED) (version 26.8.11.7 (official build))\n"
+  }
+}

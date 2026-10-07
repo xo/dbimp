@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&session_id=dbimp-tx-dbimp_user",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "ROLLBACK"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"150440\",\"memory_usage\":\"0\"}"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "649"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "9e74ae1c-0c70-4c08-8389-d18b2975eccd"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9932"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "pdjpodtclxjygdyr"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:31:30 GMT"
+      ]
+    },
+    "body": "Code: 649. DB::Exception: There is no current transaction. (INVALID_TRANSACTION)\n"
+  }
+}

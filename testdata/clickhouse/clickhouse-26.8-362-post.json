@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&session_id=dbimp-s-default",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT a FROM tmp_a ORDER BY a"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "a203e887-3eb5-4bb8-84f9-fa7c1327262e"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "60"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "ifzjarqeqbfkmfin"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:55 GMT"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9994"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"440621\",\"memory_usage\":\"0\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ]
+    },
+    "body": "Code: 60. DB::Exception: Unknown table expression identifier 'tmp_a' in scope SELECT a FROM tmp_a ORDER BY a ASC. (UNKNOWN_TABLE)\n"
+  }
+}

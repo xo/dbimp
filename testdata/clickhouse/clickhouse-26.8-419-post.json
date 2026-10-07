@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE TABLE dbimp.dbimp_uq3 (a UInt32, INDEX i a TYPE unique GRANULARITY 1) ENGINE = MergeTree ORDER BY a"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"4210422\",\"memory_usage\":\"0\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "yxtxboyokbnpcfix"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "9e1b8e98-771e-473a-83c7-4ee41354ac7c"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9937"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "80"
+      ]
+    },
+    "body": "Code: 80. DB::Exception: Unknown Index type 'unique'. Available index types: hypothesis, text, vector_similarity, bloom_filter, sparse_grams, tokenbf_v1, ngrambf_v1, set, minmax: When validating secondary index `i`. (INCORRECT_QUERY) (version 26.8.11.7 (official build))\n"
+  }
+}

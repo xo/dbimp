@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompact",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT * FROM dbimp.nosuch"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "160ea957-9e78-4c03-bc2d-bac08e6c6482"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "60"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "tniaztgepliptiah"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompact"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"267070\",\"memory_usage\":\"0\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:59 GMT"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9595"
+      ]
+    },
+    "body": "Code: 60. DB::Exception: Unknown table expression identifier 'dbimp.nosuch' in scope SELECT * FROM dbimp.nosuch. (UNKNOWN_TABLE) (version 26.8.11.7 (official build))\n"
+  }
+}

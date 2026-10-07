@@ -612,7 +612,7 @@ func TestIntegrationWrongPassword(t *testing.T) {
 // TestIntegrationOrdinaryUser holds the privileges of the ordinary user that
 // dbrun makes: it cannot read system.users, and a read of what it has no grant
 // for is a refusal with the code 497, which is HTTP 500 on 25.3 and 25.8 and
-// HTTP 403 on 26.9 (measured).
+// HTTP 403 on 26.8 and 26.9 (measured).
 func TestIntegrationOrdinaryUser(t *testing.T) {
 	st := theState(t)
 	if st.ordinaryDB == "" {
@@ -621,7 +621,7 @@ func TestIntegrationOrdinaryUser(t *testing.T) {
 	e := newEnv(t, ordinary)
 	cerr := e.refusal(t, "SELECT name FROM system.users")
 	wantStatus := http.StatusInternalServerError
-	if e.atLeast(26, 9) {
+	if e.atLeast(26, 8) {
 		wantStatus = http.StatusForbidden
 	}
 	if cerr.Code != 497 || cerr.HTTPStatus != wantStatus {
@@ -701,7 +701,7 @@ func TestIntegrationLargeResults(t *testing.T) {
 // caller after exactly those rows, with the code of the server, and wraps
 // dbimp.ErrIncomplete. The statement writes about 20 MiB before the error, so the
 // status of HTTP is 200 by then, and the marker carries the error, with the tag on
-// 26.9 (measured).
+// 26.8 and 26.9 (measured).
 func TestIntegrationErrorAfterRows(t *testing.T) {
 	eachPrincipal(t, func(t *testing.T, e env) {
 		rows, err := e.db.QueryContext(t.Context(), "SELECT number, throwIf(number = 1500000) FROM numbers(2000000)",
@@ -809,7 +809,7 @@ func TestIntegrationConcurrent(t *testing.T) {
 }
 
 // TestIntegrationTimeout holds the option WithTimeout: the server stops a statement
-// that runs past it with the code 159, which is HTTP 408 on 26.9 and an error
+// that runs past it with the code 159, which is HTTP 408 on 26.8 and 26.9 and an error
 // after the rows on 25.3 and 25.8 (measured).
 func TestIntegrationTimeout(t *testing.T) {
 	eachPrincipal(t, func(t *testing.T, e env) {

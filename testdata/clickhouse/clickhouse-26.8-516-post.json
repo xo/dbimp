@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&http_max_tries=1&http_connection_timeout=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 1 FROM url('http://127.0.0.1:1/x', CSV, 'a Int8')"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"3701512\",\"memory_usage\":\"0\"}"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9840"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "liiyqkjyedqlmhuz"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "bf2c9e30-efdb-47c8-9fe8-8ade35b3c1d1"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "1000"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ]
+    },
+    "body": "Poco::Exception. Code: 1000, e.code() = 111, Connection refused (version 26.8.11.7 (official build))\n"
+  }
+}

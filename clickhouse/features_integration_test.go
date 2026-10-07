@@ -485,8 +485,8 @@ func TestIntegrationSchema(t *testing.T) {
 		}
 	})
 	step(t, "live view", func(t *testing.T, e env) {
-		if e.atLeast(26, 9) {
-			t.Skip("26.9 has no live view (the next subtest holds its refusal)")
+		if e.atLeast(26, 8) {
+			t.Skip("26.8 and 26.9 have no live view (the next subtest holds its refusal)")
 		}
 		cerr := e.refusal(t, "CREATE LIVE VIEW "+e.name("live")+" AS SELECT 1 AS a")
 		if cerr.Code != 344 {
@@ -500,11 +500,11 @@ func TestIntegrationSchema(t *testing.T) {
 		}
 	})
 	step(t, "26.9 live view", func(t *testing.T, e env) {
-		if !e.atLeast(26, 9) {
-			t.Skip("only 26.9 refuses a live view as a syntax error")
+		if !e.atLeast(26, 8) {
+			t.Skip("only 26.8 and 26.9 refuse a live view as a syntax error")
 		}
 		if cerr := e.refusal(t, "CREATE LIVE VIEW "+e.name("live")+" AS SELECT 1 AS a", clickhouse.WithParameter("allow_experimental_live_view", 1)); cerr.Code != 62 {
-			t.Errorf("a live view on 26.9 gave %+v, want the code 62", cerr)
+			t.Errorf("a live view on 26.8 and later gave %+v, want the code 62", cerr)
 		}
 	})
 	step(t, "window view", func(t *testing.T, e env) {
@@ -1010,8 +1010,8 @@ func TestIntegrationFeatures(t *testing.T) { //nolint:maintidx // One table of s
 		}
 	})
 	step(t, "26.9 exception tag", func(t *testing.T, e env) {
-		if !e.atLeast(26, 9) {
-			t.Skip("only 26.9 sends the header X-ClickHouse-Exception-Tag")
+		if !e.atLeast(26, 8) {
+			t.Skip("only 26.8 and 26.9 send the header X-ClickHouse-Exception-Tag")
 		}
 		r := e.post(t, "SELECT 1", nil)
 		if len(r.header.Get("X-Clickhouse-Exception-Tag")) != 16 {
@@ -1019,8 +1019,8 @@ func TestIntegrationFeatures(t *testing.T) { //nolint:maintidx // One table of s
 		}
 	})
 	step(t, "25.8 exception tag", func(t *testing.T, e env) {
-		if e.atLeast(26, 9) {
-			t.Skip("only the releases before 26.9 send no tag")
+		if e.atLeast(26, 8) {
+			t.Skip("only the releases before 26.8 send no tag")
 		}
 		r := e.post(t, "SELECT 1", nil)
 		if got := r.header.Get("X-Clickhouse-Exception-Tag"); got != "" {
@@ -1074,9 +1074,9 @@ func basic(user, password string) string {
 }
 
 // smallestFloat is what the server reads the text 5e-324 as: 0 on 25.3 and 25.8,
-// and the smallest float on 26.9 (measured).
+// and the smallest float on 26.8 and 26.9 (measured).
 func smallestFloat(e env) float64 {
-	if e.atLeast(26, 9) {
+	if e.atLeast(26, 8) {
 		return math.SmallestNonzeroFloat64
 	}
 	return 0

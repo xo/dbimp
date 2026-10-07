@@ -271,7 +271,7 @@ func TestLargeResult(t *testing.T) { //nolint:paralleltest // The test reads the
 }
 
 // TestIdleTimeout holds that the connector lets go of an idle connection before the
-// server does, which is after 10 seconds on 25.3 and 25.8 and 30 on 26.9 (the header
+// server does, which is after 10 seconds on 25.3 and 25.8 and 30 on 26.8 and 26.9 (the header
 // Keep-Alive, measured), because the driver sends a POST once and a POST on a
 // connection that the server just closed is an error.
 func TestIdleTimeout(t *testing.T) {

@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&max_block_size=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT number FROM numbers(3) UNION ALL SELECT throwIf(1)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "395"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9993"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"4\",\"read_bytes\":\"25\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"4\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"717711\",\"memory_usage\":\"3998655\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:59 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "d3ee0939-4a26-4268-a5db-16b6d615e18a"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "drjrrokgqxmgmvhv"
+      ]
+    },
+    "body": "[\"number\"]\n[\"UInt64\"]\n[0]\n[1]\nCode: 395. DB::Exception: Value passed to 'throwIf' function is non-zero: while executing 'FUNCTION throwIf(1_UInt8 :: 1) -> throwIf(1_UInt8) UInt8 : 3'. (FUNCTION_THROW_IF_VALUE_IS_NON_ZERO) (version 26.8.11.7 (official build))\n"
+  }
+}

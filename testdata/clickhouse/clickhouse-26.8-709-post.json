@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT CAST(NULL AS Nullable(Map(String, Int32))) AS a"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "01072e7a-c3ed-4d94-9643-10817ac49af7"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "ssujrgfnfnqhieqp"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"346770\",\"memory_usage\":\"0\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:58 GMT"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "43"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9658"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ]
+    },
+    "body": "Code: 43. DB::Exception: Nested type Map(String, Int32) cannot be inside Nullable type: In scope SELECT CAST(NULL, 'Nullable(Map(String, Int32))') AS a. (ILLEGAL_TYPE_OF_ARGUMENT) (version 26.8.11.7 (official build))\n"
+  }
+}

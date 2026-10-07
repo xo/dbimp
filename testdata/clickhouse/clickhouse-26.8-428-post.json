@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=TabSeparated",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "EXPLAIN indexes = 1 SELECT id FROM dbimp.dbimp_crud2 WHERE label = 'x'"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Exception-Tag": [
+        "iwwpkupsjhrwcgzg"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "TabSeparated"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9928"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/tab-separated-values; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"5\",\"read_bytes\":\"184\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"5\",\"result_bytes\":\"4608\",\"elapsed_ns\":\"512250\",\"memory_usage\":\"8031259\"}"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "1bd8c63c-0822-465a-99b1-39ec8921a2e2"
+      ]
+    },
+    "body": "Output: id\n\nFilter ((WHERE + Change column names to column identifiers))\n│  Filter column: label = \\'x\\'\n└──ReadNothing (Read from NullSource)\n"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT intDiv(1, 0)"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "ba6eba04-1c98-495c-9c31-d0ac5531ea6e"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"291410\",\"memory_usage\":\"0\"}"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "153"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:59 GMT"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "odczyyxjgiwgnkso"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9589"
+      ]
+    },
+    "body": "Code: 153. DB::Exception: Division by zero: In scope SELECT intDiv(1, 0). (ILLEGAL_DIVISION) (version 26.8.11.7 (official build))\n"
+  }
+}

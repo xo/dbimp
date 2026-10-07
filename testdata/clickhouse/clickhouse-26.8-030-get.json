@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&query=CREATE%20TABLE%20dbimp.dbimp_get%20%28a%20Int8%29%20ENGINE%20%3D%20Memory",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "164"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9970"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "51abe6c6-1694-4153-a3f5-572c267f261d"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "gqcexfaclbzvwgxd"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"274840\",\"memory_usage\":\"0\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:22 GMT"
+      ]
+    },
+    "body": "Code: 164. DB::Exception: default: Cannot execute query in readonly mode. For queries over HTTP, method GET implies readonly. You should use method POST for modifying queries. (READONLY) (version 26.8.11.7 (official build))\n"
+  }
+}

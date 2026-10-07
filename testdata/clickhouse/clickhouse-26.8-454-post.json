@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE SEQUENCE dbimp.s"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Keep-Alive": [
+        "timeout=30, max=9902"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "bf15512e-2071-45c1-b647-b08f36f2645e"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "tpcuiwagjhhjqbul"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"220960\",\"memory_usage\":\"0\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "62"
+      ]
+    },
+    "body": "Code: 62. DB::Exception: Syntax error: failed at position 8 (SEQUENCE): SEQUENCE dbimp.s. Expected one of: OR REPLACE, TEMPORARY, TABLE, DATABASE, sql security, DEFINER, SQL SECURITY, MATERIALIZED, VIEW, DICTIONARY, WINDOW, USER, ROLE, QUOTA, POLICY, ROW POLICY, MASKING POLICY, SETTINGS PROFILE, PROFILE, FUNCTION, WORKLOAD, RESOURCE, NAMED COLLECTION, HANDLER, UNIQUE, INDEX, HYPOTHETICAL. (SYNTAX_ERROR) (version 26.8.11.7 (official build))\n"
+  }
+}

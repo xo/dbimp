@@ -57,15 +57,18 @@ order:
    Avatica server and the Apache Phoenix Query Server (D74). Done, in
    `v0.10.0` (W24). Druid gets a driver of its own (D154). See
    [AVATICA.md](AVATICA.md).
-10. Apache Druid (W25 and D162).
-11. Apache Drill, over its REST interface (W26 and D165).
-12. Apache Solr, over Parallel SQL (W27 and D166).
-13. Elasticsearch (W28). OpenSearch gets a driver of its own (D162).
+10. Apache Druid (W25 and D162). Done, in `v0.11.0`.
+11. Apache Drill, over its REST interface (W26 and D165). Done, in `v0.14.0`.
+12. Apache Solr, over Parallel SQL (W27 and D166). Done, in `v0.14.0`.
+13. Elasticsearch (W28). OpenSearch gets a driver of its own (D162). Done, in
+    `v0.14.0`.
 14. OpenSearch (W29, D162 and D168). The driver is
-    `github.com/xo/dbimp/opensearch`.
-15. Amazon DynamoDB (W30). ScyllaDB Alternator gets no support (D163).
-16. Trino and Presto, in one driver with two flavors (W31 and D173).
-17. ClickHouse, over its HTTP interface (W32 and D174).
+    `github.com/xo/dbimp/opensearch`. Done, in `v0.14.0`.
+15. Amazon DynamoDB (W30). ScyllaDB Alternator gets no support (D163). Done,
+    in `v0.14.0`.
+16. Trino and Presto, in one driver with two flavors (W31 and D173). Done, in
+    `v0.12.0`.
+17. ClickHouse, over its HTTP interface (W32 and D174). Done, in `v0.13.0`.
 
 The other targets below keep their priority, and their place in the order
 is open.

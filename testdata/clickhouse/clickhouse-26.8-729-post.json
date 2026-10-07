@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_a=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT {a} AS a"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Clickhouse-Exception-Code": [
+        "62"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9638"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"172010\",\"memory_usage\":\"0\"}"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:58 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "450fdbfc-d0d4-42fb-8d76-5ae35b3484d9"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "puaossbpsyahaspu"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "Code: 62. DB::Exception: Syntax error: failed at position 10 (}): } AS a. Expected colon between name and type. (SYNTAX_ERROR) (version 26.8.11.7 (official build))\n"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_n=NULL",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT {n:Nullable(Int32)} AS n"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "xjzvvkavmlwpwanc"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "9c48de52-a38b-4c19-bd31-9c10c86092e9"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"198810\",\"memory_usage\":\"0\"}"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "457"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9643"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:58 GMT"
+      ]
+    },
+    "body": "Code: 457. DB::Exception: Value NULL cannot be parsed as Nullable(Int32) for query parameter 'n' because it isn't parsed completely: only 0 of 4 bytes was parsed: . (BAD_QUERY_PARAMETER) (version 26.8.11.7 (official build))\n"
+  }
+}

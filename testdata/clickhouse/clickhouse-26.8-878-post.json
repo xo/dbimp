@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&implicit_transaction=1&session_id=dbimp-tx2-dbimp_user",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 1"
+  },
+  "response": {
+    "status": 501,
+    "header": {
+      "X-Clickhouse-Query-Id": [
+        "5bf4f238-39b8-4bbb-bfbe-8a0b579bb613"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9931"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "lgpzpmvwnlsqcmhv"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:31:30 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "48"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"137910\",\"memory_usage\":\"0\"}"
+      ]
+    },
+    "body": "Code: 48. DB::Exception: Transactions are not supported: while starting a transaction with 'implicit_transaction'. (NOT_IMPLEMENTED)\n"
+  }
+}

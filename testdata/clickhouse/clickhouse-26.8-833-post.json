@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&readonly=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE TABLE dbimp.dbimp_ro (a Int8) ENGINE = Memory"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"197410\",\"memory_usage\":\"0\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:31:30 GMT"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "00bc3414-43c3-45eb-be85-f086a4d36747"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "164"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9976"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "crviuxrghguigfmv"
+      ]
+    },
+    "body": "Code: 164. DB::Exception: dbimp_user: Cannot execute query in readonly mode. (READONLY) (version 26.8.11.7 (official build))\n"
+  }
+}

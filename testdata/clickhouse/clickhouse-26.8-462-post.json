@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=TabSeparated",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SHOW CREATE TABLE dbimp.dbimp_pk"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Keep-Alive": [
+        "timeout=30, max=9894"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "mmjoomyijucvietx"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"168\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"1\",\"result_bytes\":\"4608\",\"elapsed_ns\":\"386450\",\"memory_usage\":\"8024259\"}"
+      ],
+      "Content-Type": [
+        "text/tab-separated-values; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "d9596e83-e2c1-4cff-be82-4c4d0a54cbf4"
+      ],
+      "X-Clickhouse-Format": [
+        "TabSeparated"
+      ]
+    },
+    "body": "CREATE TABLE dbimp.dbimp_pk\\n(\\n    `a` UInt32,\\n    `b` String,\\n    `c` Int32\\n)\\nENGINE = MergeTree\\nPRIMARY KEY a\\nORDER BY (a, b)\\nSETTINGS index_granularity = 8192\n"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "DESCRIBE TABLE dbimp.dbimp_types"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9893"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"53\",\"read_bytes\":\"3856\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"53\",\"result_bytes\":\"30843\",\"elapsed_ns\":\"315560\",\"memory_usage\":\"8057739\"}"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "b31c644e-2a3f-4c68-8a0e-de4f042380f4"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "nsrreowbgmqxdrjp"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ]
+    },
+    "body": "[\"name\", \"type\", \"default_type\", \"default_expression\", \"comment\", \"codec_expression\", \"ttl_expression\"]\n[\"String\", \"String\", \"String\", \"String\", \"String\", \"String\", \"String\"]\n[\"id\", \"UInt32\", \"\", \"\", \"\", \"\", \"\"]\n[\"i8\", \"Int8\", \"\", \"\", \"\", \"\", \"\"]\n[\"u8\", \"UInt8\", \"\", \"\", \"\", \"\", \"\"]\n[\"i16\", \"Int16\", \"\", \"\", \"\", \"\", \"\"]\n[\"u16\", \"UInt16\", \"\", \"\", \"\", \"\", \"\"]\n[\"i32\", \"Int32\", \"\", \"\", \"\", \"\", \"\"]\n[\"u32\", \"UInt32\", \"\", \"\", \"\", \"\", \"\"]\n[\"i64\", \"Int64\", \"\", \"\", \"\", \"\", \"\"]\n[\"u64\", \"UInt64\", \"\", \"\", \"\", \"\", \"\"]\n[\"i128\", \"Int128\", \"\", \"\", \"\", \"\", \"\"]\n[\"u128\", \"UInt128\", \"\", \"\", \"\", \"\", \"\"]\n[\"i256\", \"Int256\", \"\", \"\", \"\", \"\", \"\"]\n[\"u256\", \"UInt256\", \"\", \"\", \"\", \"\", \"\"]\n[\"f32\", \"Float32\", \"\", \"\", \"\", \"\", \"\"]\n[\"f64\", \"Float64\", \"\", \"\", \"\", \"\", \"\"]\n[\"d32\", \"Decimal(9, 4)\", \"\", \"\", \"\", \"\", \"\"]\n[\"d64\", \"Decimal(18, 10)\", \"\", \"\", \"\", \"\", \"\"]\n[\"d128\", \"Decimal(38, 20)\", \"\", \"\", \"\", \"\", \"\"]\n[\"d256\", \"Decimal(76, 40)\", \"\", \"\", \"\", \"\", \"\"]\n[\"b\", \"Bool\", \"\", \"\", \"\", \"\", \"\"]\n[\"s\", \"String\", \"\", \"\", \"\", \"\", \"\"]\n[\"sb\", \"String\", \"\", \"\", \"\", \"\", \"\"]\n[\"fs\", \"FixedString(4)\", \"\", \"\", \"\", \"\", \"\"]\n[\"dt\", \"Date\", \"\", \"\", \"\", \"\", \"\"]\n[\"dt32\", \"Date32\", \"\", \"\", \"\", \"\", \"\"]\n[\"dtm\", \"DateTime\", \"\", \"\", \"\", \"\", \"\"]\n[\"dtm64\", \"DateTime64(9)\", \"\", \"\", \"\", \"\", \"\"]\n[\"dtz\", \"DateTime('Asia\\/Jakarta')\", \"\", \"\", \"\", \"\", \"\"]\n[\"dt64z\", \"DateTime64(3, 'America\\/New_York')\", \"\", \"\", \"\", \"\", \"\"]\n[\"e8\", \"Enum8('a' = 1, 'b' = 2)\", \"\", \"\", \"\", \"\", \"\"]\n[\"e16\", \"Enum16('x' = 1000, 'y' = 2000)\", \"\", \"\", \"\", \"\", \"\"]\n[\"uu\", \"UUID\", \"\", \"\", \"\", \"\", \"\"]\n[\"ip4\", \"IPv4\", \"\", \"\", \"\", \"\", \"\"]\n[\"ip6\", \"IPv6\", \"\", \"\", \"\", \"\", \"\"]\n[\"arr\", \"Array(Int32)\", \"\", \"\", \"\", \"\", \"\"]\n[\"arr2\", \"Array(Array(String))\", \"\", \"\", \"\", \"\", \"\"]\n[\"arrn\", \"Array(Nullable(Int32))\", \"\", \"\", \"\", \"\", \"\"]\n[\"tup\", \"Tuple(Int32, String)\", \"\", \"\", \"\", \"\", \"\"]\n[\"tupn\", \"Tuple(\\n    a Int32,\\n    b String)\", \"\", \"\", \"\", \"\", \"\"]\n[\"mp\", \"Map(String, Int32)\", \"\", \"\", \"\", \"\", \"\"]\n[\"mpn\", \"Map(Int32, Array(String))\", \"\", \"\", \"\", \"\", \"\"]\n[\"lc\", \"LowCardinality(String)\", \"\", \"\", \"\", \"\", \"\"]\n[\"lcn\", \"LowCardinality(Nullable(String))\", \"\", \"\", \"\", \"\", \"\"]\n[\"nl\", \"Nullable(Int32)\", \"\", \"\", \"\", \"\", \"\"]\n[\"nls\", \"Nullable(String)\", \"\", \"\", \"\", \"\", \"\"]\n[\"nld\", \"Nullable(DateTime64(3))\", \"\", \"\", \"\", \"\", \"\"]\n[\"var\", \"Variant(Array(Int32), Int32, String)\", \"\", \"\", \"\", \"\", \"\"]\n[\"dyn\", \"Dynamic\", \"\", \"\", \"\", \"\", \"\"]\n[\"js\", \"JSON\", \"\", \"\", \"\", \"\", \"\"]\n[\"nest.a\", \"Array(Int32)\", \"\", \"\", \"\", \"\", \"\"]\n[\"nest.b\", \"Array(String)\", \"\", \"\", \"\", \"\", \"\"]\n[\"sagg\", \"SimpleAggregateFunction(max, Int32)\", \"\", \"\", \"\", \"\", \"\"]\n[\"agg\", \"AggregateFunction(sum, UInt32)\", \"\", \"\", \"\", \"\", \"\"]\n"
+  }
+}

@@ -27,6 +27,7 @@ const recorded = "../testdata/clickhouse"
 var releases = []struct{ name, version string }{
 	{"clickhouse-25.3", "25.3.14.14"},
 	{"clickhouse-25.8", "25.8.33.6"},
+	{"clickhouse-26.8", "26.8.11.7"},
 	{"clickhouse-26.9", "26.9.2.8"},
 }
 
@@ -234,9 +235,15 @@ func TestReplayErrorBeforeRows(t *testing.T) {
 	}
 }
 
+// http500 reports whether the release answers HTTP 500 for an error after some
+// rows, which 26.8 and 26.9 do (recorded).
+func http500(name string) bool {
+	return name == "clickhouse-26.8" || name == "clickhouse-26.9"
+}
+
 // TestReplayErrorAfterRows holds D176: on 25.3 and 25.8 an error after some rows
 // is the marker in a stream with HTTP 200, and it reaches the caller after the
-// rows, wrapped with dbimp.ErrIncomplete. On 26.9 the server answers HTTP 500
+// rows, wrapped with dbimp.ErrIncomplete. On 26.8 and 26.9 the server answers HTTP 500
 // with the rows before the text, and the status is an error even though rows
 // came first.
 func TestReplayErrorAfterRows(t *testing.T) {
@@ -247,7 +254,7 @@ func TestReplayErrorAfterRows(t *testing.T) {
 		// (measured), so the test takes the recording in which they did.
 		base := matcher("http_write_exception_in_output_format")
 		db := replayMatch(t, rel.name, func(r *http.Request, body []byte, ex *dbimptest.Exchange) bool {
-			return base(r, body, ex) && (rel.name == "clickhouse-26.9" || strings.Contains(ex.Response.Body, "3, 0]") || strings.Contains(ex.Response.Body, `3", 0]`) || string(body) == "SELECT version()")
+			return base(r, body, ex) && (http500(rel.name) || strings.Contains(ex.Response.Body, "3, 0]") || strings.Contains(ex.Response.Body, `3", 0]`) || string(body) == "SELECT version()")
 		})
 		_, rows, err := readAll(t, db, statement, WithParameter("max_block_size", 2))
 		if err == nil {
@@ -257,7 +264,7 @@ func TestReplayErrorAfterRows(t *testing.T) {
 		if e.Code != 395 || e.Name != "FUNCTION_THROW_IF_VALUE_IS_NON_ZERO" {
 			t.Errorf("%s: the error is %+v, want the code 395", rel.name, e)
 		}
-		if rel.name == "clickhouse-26.9" {
+		if http500(rel.name) {
 			if e.HTTPStatus != http.StatusInternalServerError || len(rows) != 0 || errors.Is(err, dbimp.ErrIncomplete) {
 				t.Errorf("%s: HTTP %d, %d rows and %v, want HTTP 500 as the error of QueryContext, with no row", rel.name, e.HTTPStatus, len(rows), err)
 			}

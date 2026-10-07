@@ -30,7 +30,9 @@ holds the second and the third. The fifth, in
 `avatica/`, was first released in `v0.10.0` (W24). The eleventh, in
 `druid/`, was first released in `v0.11.0` (W25). The twelfth, in
 `trino/`, was first released in `v0.12.0` (W31). The thirteenth, in
-`clickhouse/`, was first released in `v0.13.0` (W32). The
+`clickhouse/`, was first released in `v0.13.0` (W32). The fourteenth to the
+eighteenth, in `drill/`, `solr/`, `elasticsearch/`, `opensearch/` and
+`dynamodb/`, were first released in `v0.14.0` (W26 to W30). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

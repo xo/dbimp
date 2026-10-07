@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=TabSeparatedWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 1 AS a, 'x' AS b, NULL AS c, toInt64(-2) AS d, 1 AS a"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"16768\",\"elapsed_ns\":\"378470\",\"memory_usage\":\"8135539\"}"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "d4e90222-8a48-4f17-abc2-daaa392313ac"
+      ],
+      "X-Clickhouse-Format": [
+        "TabSeparatedWithNamesAndTypes"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Content-Type": [
+        "text/tab-separated-values; charset=UTF-8"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9755"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "pkzkhjcfjyzbpemy"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:58 GMT"
+      ]
+    },
+    "body": "a\tb\tc\td\ta\nUInt8\tString\tNullable(Nothing)\tInt64\tUInt8\n1\tx\t\\N\t-2\t1\n"
+  }
+}

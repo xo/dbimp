@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "INSERT INTO dbimp.dbimp_crud (id) VALUES ('x')"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "jviqvdjjnrdamhsv"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"53818915\",\"memory_usage\":\"0\"}"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9782"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "826b756a-b6a3-4f27-9f4f-9fc9095235e2"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "6"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:23 GMT"
+      ]
+    },
+    "body": "Code: 6. DB::Exception: Cannot parse string 'x' as UInt32: syntax error at begin of string. Note: there are toUInt32OrZero and toUInt32OrNull functions, which returns zero/NULL instead of throwing exception: while executing 'FUNCTION if(isNull(-dummy-0) : 3, defaultValueOfTypeName('UInt32') :: 2, _CAST(-dummy-0, 'UInt32') :: 4) -> if(isNull(-dummy-0), defaultValueOfTypeName('UInt32'), _CAST(-dummy-0, 'UInt32')) UInt32 : 1': While executing WaitForAsyncInsert. (CANNOT_PARSE_TEXT) (version 26.8.11.7 (official build))\n"
+  }
+}

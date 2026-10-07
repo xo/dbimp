@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&param_ids=%5B1%2C2%2C3%5D",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT id FROM dbimp.dbimp_big WHERE id IN {ids:Array(UInt64)} ORDER BY id"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9631"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"5000\",\"read_bytes\":\"40000\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"5000\",\"result_rows\":\"3\",\"result_bytes\":\"40128\",\"elapsed_ns\":\"1041811\",\"memory_usage\":\"8126189\"}"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "321be822-322a-4a04-b8bd-04de44fd9f52"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "vnqurvmchowjjfbz"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:59 GMT"
+      ]
+    },
+    "body": "[\"id\"]\n[\"UInt64\"]\n[1]\n[2]\n[3]\n"
+  }
+}

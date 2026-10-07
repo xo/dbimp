@@ -274,8 +274,10 @@ func (c roundTripCase) unavailable(r release) string {
 func roundTripCases(t *testing.T, rel release) map[string]roundTripCase {
 	t.Helper()
 	always := func(c rtCase) roundTripCase { return roundTripCase{cs: c} }
-	since := func(major, minor int, why string, c rtCase) roundTripCase {
-		return roundTripCase{cs: c, since: [2]int{major, minor}, why: why}
+	// since marks a case that needs the release major.8 or later, which is every
+	// first release that a type has.
+	since := func(major int, why string, c rtCase) roundTripCase {
+		return roundTripCase{cs: c, since: [2]int{major, 8}, why: why}
 	}
 	long := strings.Repeat("0123456789", 10000)
 	zero := time.Unix(0, 0).UTC()
@@ -284,7 +286,7 @@ func roundTripCases(t *testing.T, rel release) map[string]roundTripCase {
 	float32max := math.MaxFloat32
 	float32want := 3.4028235e38
 	float64min := 0.0
-	if rel.atLeast(26, 9) {
+	if rel.atLeast(26, 8) {
 		float64min = math.SmallestNonzeroFloat64
 	}
 	return map[string]roundTripCase{
@@ -437,7 +439,7 @@ func roundTripCases(t *testing.T, rel release) map[string]roundTripCase {
 			{name: "extremes", in: map[string]any{"a": int64(math.MinInt32), "b": int64(math.MaxInt32)}, want: map[string]any{"a": int64(math.MinInt32), "b": int64(math.MaxInt32)}, lit: "map('a', -2147483648, 'b', 2147483647)"},
 			{name: "keys with escapes", in: map[string]any{"k'\\\"": int64(1), "": int64(0), "é": int64(-1)}, want: map[string]any{"k'\\\"": int64(1), "": int64(0), "é": int64(-1)}, lit: `map('k\'\\"', 1, '', 0, 'é', -1)`},
 		}}),
-		"Time": since(25, 8, "25.3 has no Time", rtCase{
+		"Time": since(25, "25.3 has no Time", rtCase{
 			column:  "Time",
 			options: timeOptions(rel),
 			values: []rtValue{
@@ -447,7 +449,7 @@ func roundTripCases(t *testing.T, rel release) map[string]roundTripCase {
 				{name: "min", in: "-999:59:59", want: -(999*time.Hour + 59*time.Minute + 59*time.Second), lit: "CAST('-999:59:59' AS Time)"},
 			},
 		}),
-		"Time64": since(25, 8, "25.3 has no Time64", rtCase{
+		"Time64": since(25, "25.3 has no Time64", rtCase{
 			column:  "Time64(3)",
 			options: timeOptions(rel),
 			values: []rtValue{
@@ -507,8 +509,8 @@ func roundTripCases(t *testing.T, rel release) map[string]roundTripCase {
 		"MultiPolygon":    always(geo(rel, "Array(Array(Array(Tuple(Float64, Float64))))", [3]string{"[]", "[[[[0, 0], [1, 1]]]]", "[[[[0, 0], [10, 0], [10, 10], [0, 0]]], [[[20, 20], [21, 20], [21, 21], [20, 20]]]]"})),
 		"LineString":      always(geo(rel, "Array(Tuple(Float64, Float64))", [3]string{"[]", "[[0, 0], [1, 1]]", "[[0, 0], [1.5, 2.5], [-3, 4]]"})),
 		"MultiLineString": always(geo(rel, "Array(Array(Tuple(Float64, Float64)))", [3]string{"[]", "[[[0, 0], [1, 1]]]", "[[[0, 0], [1, 1]], [[2, 2], [3, 3], [4, 4]]]"})),
-		"26.9 MultiPoint": since(26, 9, "only 26.9 has MultiPoint", geo(rel, "Array(Tuple(Float64, Float64))", [3]string{"[]", "[[0, 0], [1, 1]]", "[[0, 0], [1.5, 2.5], [-3, 4]]"})),
-		"26.9 Geometry": since(26, 9, "only 26.9 has Geometry", rtCase{
+		"26.9 MultiPoint": since(26, "only 26.8 and 26.9 have MultiPoint", geo(rel, "Array(Tuple(Float64, Float64))", [3]string{"[]", "[[0, 0], [1, 1]]", "[[0, 0], [1.5, 2.5], [-3, 4]]"})),
+		"26.9 Geometry": since(26, "only 26.8 and 26.9 have Geometry", rtCase{
 			column: "Geometry",
 			// A Geometry converts only the types that it holds by name, so the point is a
 			// Point and not a tuple.
@@ -533,7 +535,7 @@ func roundTripCases(t *testing.T, rel release) map[string]roundTripCase {
 				{name: "large", in: int64(math.MaxUint32), want: []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0}, lit: "sumState(toUInt32(4294967295))"},
 			},
 		}),
-		"26.9 QBit": since(26, 9, "only 26.9 has QBit", rtCase{
+		"26.9 QBit": since(26, "only 26.8 and 26.9 have QBit", rtCase{
 			column: "QBit(Float32, 4)",
 			insert: func(tbl string) string {
 				return "INSERT INTO " + tbl + " (k, v) SELECT ?, CAST(JSONExtract(?, 'Array(Float32)') AS QBit(Float32, 4))"
@@ -548,9 +550,9 @@ func roundTripCases(t *testing.T, rel release) map[string]roundTripCase {
 }
 
 // timeOptions returns the options that make a column of the type Time: the
-// setting that 25.8 needs, and none for 26.9, which has the type by default.
+// setting that 25.8 needs, and none for 26.8 and 26.9, which have the type by default.
 func timeOptions(rel release) []clickhouse.Option {
-	if rel.atLeast(26, 9) {
+	if rel.atLeast(26, 8) {
 		return nil
 	}
 	return []clickhouse.Option{clickhouse.WithParameter("enable_time_time64_type", 1)}
@@ -563,19 +565,19 @@ func jsonText(name, text string, want any) rtValue {
 }
 
 // mutationInstant returns the check that skips the update to an instant before the
-// year 2001 on 26.9, which fails there. 26.9 stores a DateTime64 parameter of a
+// year 2001 on 26.8 and 26.9, which fails there. They store a DateTime64 parameter of a
 // mutation as a string of its number, such as '0' or '-2208988800', and reads it
 // back as the text of a time, which it refuses with the code 41, for an instant
 // whose number has fewer than ten digits. A caller who binds an instant in an
-// ALTER TABLE ... UPDATE on 26.9 meets the same refusal (measured, and see Faults in
+// ALTER TABLE ... UPDATE on 26.8 and 26.9 meets the same refusal (measured, and see Faults in
 // docs/CLICKHOUSE.md). The instants of the round trip after 2001 update fine.
 func mutationInstant(rel release) func(from, to dbimptest.Value) string {
-	if !rel.atLeast(26, 9) {
+	if !rel.atLeast(26, 8) {
 		return nil
 	}
 	return func(_, to dbimptest.Value) string {
 		if tm, ok := to.In.(time.Time); ok && tm.Unix() < 1_000_000_000 {
-			return "26.9 refuses a DateTime64 parameter in a mutation when the instant has fewer than ten digits (the code 41)"
+			return "26.8 and 26.9 refuse a DateTime64 parameter in a mutation when the instant has fewer than ten digits (the code 41)"
 		}
 		return ""
 	}
@@ -687,7 +689,7 @@ func TestIntegrationRoundTripUnavailable(t *testing.T) {
 		{"25.8 QBit", "QBit(Float32, 4)"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			if st.rel.atLeast(26, 9) {
+			if st.rel.atLeast(26, 8) {
 				t.Skip("the release has the type")
 			}
 			eachPrincipal(t, func(t *testing.T, e env) {
@@ -700,11 +702,11 @@ func TestIntegrationRoundTripUnavailable(t *testing.T) {
 		})
 	}
 	t.Run("25.8 Geometry", func(t *testing.T) {
-		if st.rel.atLeast(26, 9) {
+		if st.rel.atLeast(26, 8) {
 			t.Skip("the release has the type")
 		}
 		eachPrincipal(t, func(t *testing.T, e env) {
-			// The name Geometry is the name of a String before 26.9 (measured).
+			// The name Geometry is the name of a String before 26.8 (measured).
 			got := e.scalar(t, "SELECT toTypeName(CAST((1.5, 2.5)::Point AS Geometry))")
 			if got != "String" {
 				t.Errorf("the type Geometry is %v on this release, want String", got)

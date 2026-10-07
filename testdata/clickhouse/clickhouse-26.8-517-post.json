@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes&http_max_tries=1&s3_max_get_rps=0&s3_retry_attempts=1&http_connection_timeout=1",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT 1 FROM s3('http://127.0.0.1:1/bucket/key', 'CSV', 'a Int8')"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "497"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "3ec6eea1-4b51-4af0-8f2e-1754c8d846d4"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9839"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "odapjcemditrouku"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"1983451\",\"memory_usage\":\"0\"}"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ]
+    },
+    "body": "Code: 497. DB::Exception: S3 access from user queries is not allowed to use the server's own credentials (environment variables, instance metadata, IRSA, instance profile, or AWS config files). Provide explicit credentials, use NOSIGN for public buckets, grant access through an IAM role passed as extra_credentials(role_arn = '...'), or enable the setting `s3_allow_server_credentials_in_user_queries`. (ACCESS_DENIED) (version 26.8.11.7 (official build))\n"
+  }
+}

@@ -41,10 +41,8 @@ which was first released in `v0.6.0`, `pinot`, which was first released in
 which was first released in `v0.9.0`, `avatica`, which was first
 released in `v0.10.0`, `druid`, which was first released in `v0.11.0`,
 `trino`, which was first released in `v0.12.0`, `clickhouse`, which was
-first released in `v0.13.0`, `drill`, which no release holds yet,
-`solr`, which no release holds yet, `elasticsearch`, which no release holds
-yet, `opensearch`, which no release holds yet, and `dynamodb`, which no
-release holds yet.
+first released in `v0.13.0`, and `drill`, `solr`, `elasticsearch`,
+`opensearch` and `dynamodb`, which were first released in `v0.14.0`.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 

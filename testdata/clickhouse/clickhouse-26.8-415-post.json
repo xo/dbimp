@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "CREATE TABLE dbimp.dbimp_fk2 (a UInt32, p UInt32 REFERENCES dbimp.dbimp_pk (a)) ENGINE = MergeTree ORDER BY a"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"0\",\"read_bytes\":\"0\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"0\",\"result_rows\":\"0\",\"result_bytes\":\"0\",\"elapsed_ns\":\"324420\",\"memory_usage\":\"0\"}"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:56 GMT"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "qxpubxtduzclsqll"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Exception-Code": [
+        "62"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9941"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "b7dbbcbd-385f-4be4-a1cc-1a3179f9b60a"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ]
+    },
+    "body": "Code: 62. DB::Exception: Syntax error: failed at position 50 (REFERENCES): REFERENCES dbimp.dbimp_pk (a)) ENGINE = MergeTree ORDER BY a. Expected one of: SIGNED, UNSIGNED, COLLATE, NOT, NULL, DEFAULT, MATERIALIZED, ALIAS, EPHEMERAL, AUTO_INCREMENT, COMMENT, CODEC, STATISTICS, TTL, PRIMARY KEY, SETTINGS, token, Comma, ClosingRoundBracket. (SYNTAX_ERROR) (version 26.8.11.7 (official build))\n"
+  }
+}

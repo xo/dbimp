@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": "database=dbimp&default_format=JSONCompactEachRowWithNamesAndTypes",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "SELECT toDate('1970-01-01') AS d0, toDate('2149-06-06') AS d1, toDate32('1900-01-01') AS e0, toDate32('2299-12-31') AS e1, toDateTime('2106-02-07 06:28:15', 'UTC') AS t1, toDateTime64('1900-01-01 00:00:00', 0, 'UTC') AS t64"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Clickhouse-Summary": [
+        "{\"read_rows\":\"1\",\"read_bytes\":\"1\",\"written_rows\":\"0\",\"written_bytes\":\"0\",\"total_rows_to_read\":\"1\",\"result_rows\":\"1\",\"result_bytes\":\"792\",\"elapsed_ns\":\"402050\",\"memory_usage\":\"8183499\"}"
+      ],
+      "X-Clickhouse-Server-Display-Name": [
+        "3ff4f8886d76"
+      ],
+      "X-Clickhouse-Query-Id": [
+        "fb7d84fa-2bac-4cab-83f6-737918f0c65c"
+      ],
+      "Keep-Alive": [
+        "timeout=30, max=9906"
+      ],
+      "Date": [
+        "Wed, 07 Oct 2026 21:30:23 GMT"
+      ],
+      "Content-Type": [
+        "text/plain; charset=UTF-8"
+      ],
+      "X-Clickhouse-Timezone": [
+        "UTC"
+      ],
+      "X-Clickhouse-Exception-Tag": [
+        "ooimqenvssgvkaoo"
+      ],
+      "Connection": [
+        "Keep-Alive"
+      ],
+      "Access-Control-Expose-Headers": [
+        "X-ClickHouse-Query-Id,X-ClickHouse-Summary,X-ClickHouse-Server-Display-Name,X-ClickHouse-Format,X-ClickHouse-Timezone,X-ClickHouse-Exception-Code,X-ClickHouse-Exception-Tag"
+      ],
+      "X-Clickhouse-Format": [
+        "JSONCompactEachRowWithNamesAndTypes"
+      ]
+    },
+    "body": "[\"d0\", \"d1\", \"e0\", \"e1\", \"t1\", \"t64\"]\n[\"Date\", \"Date\", \"Date32\", \"Date32\", \"DateTime('UTC')\", \"DateTime64(0, 'UTC')\"]\n[\"1970-01-01\", \"2149-06-06\", \"1900-01-01\", \"2299-12-31\", \"2106-02-07 06:28:15\", \"1900-01-01 00:00:00\"]\n"
+  }
+}
