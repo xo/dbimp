@@ -451,16 +451,56 @@ func expand(body jsontext.Value, kept map[string]string) jsontext.Value {
 // expand writes in place of the string that names it.
 const rawPrefix = "\x00json:"
 
-// capture keeps the values of body that the request names.
+// headerPrefix starts a path of a capture that names a header of the
+// response, such as "header:X-Trino-Started-Transaction-Id", and not a value
+// of its body.
+const headerPrefix = "header:"
+
+// captureHeaders keeps the headers of h that a capture names, as
+// "header:Name". A header that the response does not have is not kept.
+func captureHeaders(h http.Header, paths map[string]string, kept map[string]string) {
+	for name, path := range paths {
+		if hn, ok := strings.CutPrefix(path, headerPrefix); ok {
+			if v := h.Get(hn); v != "" {
+				kept[name] = v
+			}
+		}
+	}
+}
+
+// hostless returns the path and the query of uri when it is an absolute URL,
+// such as the nextUri that Trino sends, because the script names the server
+// once and each request goes to it. Any other uri is returned as it is.
+func hostless(uri string) string {
+	if u, err := url.Parse(uri); err == nil && u.Host != "" {
+		return u.RequestURI()
+	}
+	return uri
+}
+
+// capture keeps the values of body that the request names. A response with
+// no body keeps none, and a member that the body does not have is not kept,
+// as the last page of Trino has no nextUri. The request that uses a value
+// that was not kept then fails, which shows the mistake.
 func capture(body []byte, paths map[string]string, kept map[string]string) error {
+	if len(bytes.TrimSpace(body)) == 0 {
+		return nil
+	}
 	var v any
 	if err := json.Unmarshal(body, &v); err != nil {
 		return fmt.Errorf("reading the response to capture: %w", err)
 	}
 	for name, path := range paths {
+		if strings.HasPrefix(path, headerPrefix) {
+			continue
+		}
 		cur, err := lookup(v, path)
 		if err != nil {
 			return fmt.Errorf("capturing %s: %w", name, err)
+		}
+		if cur == nil {
+			fmt.Printf("capturing %s: the response has nothing at %s\n", name, path)
+			continue
 		}
 		switch c := cur.(type) {
 		case string:
@@ -541,7 +581,7 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 	}
 	u := *base
 	u.User = nil
-	path, query, _ := strings.Cut(r.Path, "?")
+	path, query, _ := strings.Cut(hostless(r.Path), "?")
 	u.Path, u.RawQuery = path, query
 	// A signature of AWS covers the bytes of the body, so the body is
 	// built before the request.
@@ -607,6 +647,7 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		return fmt.Errorf("reading the response: %w", err)
 	}
 	if len(r.Capture) > 0 && kept != nil {
+		captureHeaders(res.Header, r.Capture, kept)
 		if err := capture(resBody, r.Capture, kept); err != nil {
 			return err
 		}
@@ -620,8 +661,12 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		if uri == "" {
 			return nil
 		}
-		if resBody, err = get(ctx, client, base, r, uri); err != nil {
+		var hdr http.Header
+		if resBody, hdr, err = get(ctx, client, base, r, uri); err != nil {
 			return fmt.Errorf("following %s: %w", uri, err)
+		}
+		if len(r.Capture) > 0 && kept != nil {
+			captureHeaders(hdr, r.Capture, kept)
 		}
 	}
 	return fmt.Errorf("following %s: more than %d pages", r.Follow, maxFollow)
@@ -685,14 +730,14 @@ func hmacSHA256(key []byte, s string) []byte {
 // get sends GET to the URI uri of a page that r follows, with the headers
 // and the credentials of r, and returns the body of the answer, which the
 // transport records.
-func get(ctx context.Context, client *http.Client, base *url.URL, r Request, uri string) ([]byte, error) {
+func get(ctx context.Context, client *http.Client, base *url.URL, r Request, uri string) ([]byte, http.Header, error) {
 	u := *base
 	u.User = nil
-	path, query, _ := strings.Cut(uri, "?")
+	path, query, _ := strings.Cut(hostless(uri), "?")
 	u.Path, u.RawQuery = path, query
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
-		return nil, fmt.Errorf("building the request: %w", err)
+		return nil, nil, fmt.Errorf("building the request: %w", err)
 	}
 	for key, vals := range r.Header {
 		if key == "Content-Type" {
@@ -708,15 +753,15 @@ func get(ctx context.Context, client *http.Client, base *url.URL, r Request, uri
 	}
 	res, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("sending the request: %w", err)
+		return nil, nil, fmt.Errorf("sending the request: %w", err)
 	}
 	defer res.Body.Close()
 	b, err := io.ReadAll(res.Body)
 	if err != nil {
-		return nil, fmt.Errorf("reading the response: %w", err)
+		return nil, nil, fmt.Errorf("reading the response: %w", err)
 	}
 	fmt.Printf("item %d, %s: GET %s: %s\n", r.Item, r.Name, path, res.Status)
-	return b, nil
+	return b, res.Header, nil
 }
 
 // forget removes the files and the entries that an earlier run wrote for

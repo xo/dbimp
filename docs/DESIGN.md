@@ -258,8 +258,13 @@ the headers that say where a SurrealDB user is defined. A request keeps a
 value of its response with `capture`, such as the id of a transaction of
 Neo4j, or a number, such as the id of a statement of Avatica, and a later
 request of the same principal writes it into its body, its path or a header
-as `{{name}}`. A kept object, such as the statement handle of Avatica, takes
-the place of the whole string `"{{name}}"` in a body, as JSON. A body can name `{{user}}` and `{{password}}`, the credentials
+as `{{name}}`. A path that starts with `header:`, such as
+`header:X-Trino-Started-Transaction-Id`, keeps a header of the response, and a
+response with no body or with no member at that path keeps none. A `path` or a
+followed address that is an absolute URL, such as the `nextUri` of Trino, goes
+to the server of the script with the path and the query of that URL. A kept
+object, such as the statement handle of Avatica, takes the place of the whole
+string `"{{name}}"` in a body, as JSON. A body can name `{{user}}` and `{{password}}`, the credentials
 of the URL of the principal, for a server that takes them in the body, such
 as the `info` of `openConnection` of Avatica, and the recorder writes each
 password in a body as `REDACTED`. A request with `releases` runs only on a release
