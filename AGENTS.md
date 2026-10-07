@@ -28,7 +28,8 @@ holds the second and the third. The fifth, in
 `rqlite/`, was first released in `v0.8.0` (W22). The ninth, in
 `libsql/`, was first released in `v0.9.0` (W23). The tenth, in
 `avatica/`, was first released in `v0.10.0` (W24). The eleventh, in
-`druid/`, was first released in `v0.11.0` (W25). The
+`druid/`, was first released in `v0.11.0` (W25). The twelfth, in
+`trino/`, was first released in `v0.12.0` (W31). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

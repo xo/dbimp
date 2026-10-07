@@ -35,7 +35,7 @@ the record.
 | Elasticsearch | W28 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D167 | Step 10, after the driver before it in D162 |
 | OpenSearch | W29 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D168 | Step 10, after the driver before it in D162 |
 | DynamoDB | W30 | Step 9: decided | Recordings, `features.json`, `docs/DYNAMODB.md` with its type table, and D169. D163 dropped Alternator | Step 10, after OpenSearch |
-| Trino and Presto | W31 | Step 17a: done | `trino/`, its tests, and TRINO.md with the comparison of step 17a, staged for Ken | Ken reviews the staged driver |
+| Trino and Presto | W31 | Released in `v0.12.0` | `trino/`, its tests, TRINO.md and D175. CI passed 30 of 30 jobs on the tagged commit | The `dburl`, `dbmeta` and `usql` sessions check their side against `v0.12.0` |
 | ClickHouse | W32 | Step 1: done | D174 and a draft `docs/CLICKHOUSE.md`. dbmeta measured the wire ports: they lose the type, so the HTTP driver goes ahead | An agent measures steps 2 to 8a over HTTP, with JSON and RowBinary |
 
 ## Next

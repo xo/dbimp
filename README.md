@@ -39,7 +39,8 @@ other three, `arangodb`, which was first released in `v0.5.0`, `databend`,
 which was first released in `v0.6.0`, `pinot`, which was first released in
 `v0.7.0`, `rqlite`, which was first released in `v0.8.0`, and `libsql`,
 which was first released in `v0.9.0`, `avatica`, which was first
-released in `v0.10.0`, and `druid`, which was first released in `v0.11.0`.
+released in `v0.10.0`, `druid`, which was first released in `v0.11.0`, and
+`trino`, which was first released in `v0.12.0`.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 

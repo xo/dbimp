@@ -1486,3 +1486,9 @@ Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
    `github.com/xo/dbimp/trino`. Its `Version` can read `GET /v1/info` or run
    `SELECT version()` on Trino, and Presto has no `version()`.
 
+Ken committed the driver as `79ed261`, and the removal of the `Row` type as
+`52cf9a2`. At Ken's word, the session tagged `v0.12.0` on `52cf9a2` after CI
+passed 30 of 30 jobs, and published it on 2026-10-07:
+https://github.com/xo/dbimp/releases/tag/v0.12.0. Step 20 sent the requests
+above on the same day.
+
