@@ -250,9 +250,10 @@ The limits of a result, as recorded:
   3.8.0 lacked (recorded on 3.9.0: "the settings of the SQL plugin").
 - On 3.9.0 the index `.plugins-ml-config` exists, so `SELECT * FROM
   .plugins-ml-config` gives HTTP 200 with five columns and no rows, where
-  3.8.0 gave HTTP 404, and `SHOW TABLES LIKE %` lists it. The row of a
-  `long` field that the source holds as 1.9 reads as NULL on 3.9.0, where
-  2.19.6 and 3.8.0 read 1 (recorded: "every type"). The driver decodes both
+  3.8.0 gave HTTP 404 (measured on 3.8.0 and not measured again), and
+  `SHOW TABLES LIKE %` lists it. The row of a `long` field that the source
+  holds as 1.9 reads as NULL on 3.9.0, where 2.19.6 reads 1 (recorded:
+  "every type") and 3.8.0 read 1 (measured on 3.8.0 and not measured again). The driver decodes both
   answers, so it needs no change.
 - A request with `Accept-Encoding: gzip` gets `Content-Encoding: gzip`
   (recorded: "a gzip answer"). No answer was a redirect, and no answer was
@@ -438,13 +439,14 @@ These facts were measured on 3.9.0 on 2026-10-07 with the integration tests:
 
 - The mapping type `semantic` exists on 3.9.0. It refuses a mapping with no
   model, with HTTP 400 and `model_id is required for the semantic field`. 3.8.0
-  gave the same answer (recorded: "make an index with one semantic"). So no
+  gave the same answer (measured on 3.8.0 and not measured again). So no
   test can make such a field, and SQL on it is not measured.
 - A `GROUP BY` of 10050 groups gives 10000 groups with no sign, and so does a
   `DISTINCT`, which is the cap of D163 on the 3 series (`TestIntegrationDefaultCaps`).
   The setting `plugins.query.buckets` of 100 cut a `GROUP BY` of 300 groups to
-  100 with no sign on 3.9.0, as it did on 3.8.0 (recorded: "300 groups with a
-  limit on groups of 100"). An earlier version of this line said that it did
+  100 with no sign on 3.9.0 (recorded: "300 groups with a
+  limit on groups of 100"), as it did on 3.8.0 (measured on 3.8.0 and not
+  measured again). An earlier version of this line said that it did
   not cut, from a test on 3.9.0 that no longer exists. The recording is the
   evidence.
 
@@ -848,24 +850,23 @@ the answers. The questions that D168 answers are these:
    (D168, item 7).
 7. The ordinary user of 2.19.6 cannot page. D168 says that this waits for
    `dbmeta`. See 13.
-8. The release. It comes from `GET /`, or from the header of 3.x, where an
-   answer differs between releases (D168, item 10). See 17.
+8. The release. Question 17 closes it. The driver sends no request for the
+   release (D178, item 11, which amends D168, item 10).
 9. The driver writes each argument as a literal (D168, item 5).
-10. Closed by D178. A statement that runs long. The measurement is in Cancellation and
+10. A statement that runs long. The measurement is in Cancellation and
     timeouts: the server runs it to its end after the client leaves. The
-    driver closes the request and the cursor only (D168, item 8). Whether the
-    driver should also call `POST /_tasks/<id>/_cancel`, which needs the id of
-    the task and a privilege that was not measured for the ordinary user, waits
-    for Ken.
+    driver closes the request and the cursor only (D168, item 8). Ken decided
+    on 2026-10-07 that the driver does not call `POST /_tasks/<id>/_cancel`
+    (D178, item 6).
 
-These questions came from steps 10 to 17a, and wait for Ken:
+These questions came from steps 10 to 17a. Ken closed questions 11, 13, 14 and
+17 on 2026-10-07 (D178). Questions 12, 15, 16 and 18 still wait for Ken:
 
-11. Closed by D178. Hard rule 4 of AGENTS.md lists the drivers whose rows can hold a context.
-    OpenSearch is not in it. The rows of this driver keep the context of the
-    statement, because the request for each next page needs it
-    (`opensearch/rows.go`). The driver stores a context nowhere else. Ken
-    decides whether to add OpenSearch to that rule, and which decision names
-    it. This is the same question as 6 of ELASTICSEARCH.md.
+11. The rows of this driver keep the context of the statement, because the
+    request for each next page needs it (`opensearch/rows.go`). The driver
+    stores a context nowhere else. Ken decided on 2026-10-07 that hard rule 4
+    of AGENTS.md names the rows of an OpenSearch query (D178, item 2). This is
+    the same question as 6 of ELASTICSEARCH.md.
 12. D168 says that each plain `SELECT` sends `fetch_size`, and does not say
     what plain means. The driver reads the statement without its literals,
     quoted names and comments. It is plain when it starts with `SELECT`, has a
@@ -879,21 +880,20 @@ These questions came from steps 10 to 17a, and wait for Ken:
     doubt gets no page size and the server cuts its result at the size limit.
     The other choice is to send the page size to every `SELECT` and accept the
     legacy engine, or to never send it.
-13. Closed by D178. The ordinary user of 2.19.6 gets HTTP 403 for each plain `SELECT`, because
+13. The ordinary user of 2.19.6 gets HTTP 403 for each plain `SELECT`, because
     the page size opens a cursor and the cursor needs `indices:data/read/search`
-    on every index (Principals). The caller turns paging off with
-    `WithParameter("fetch_size", 0)`, and then reads at most 10000 rows with no
-    sign. The choices are: `dbmeta` grants the right, which makes `dbmeta_user`
-    able to search every index; the DSN accepts `fetch_size=0`, which D168 does
-    not (the key is 1 or more); or the driver sends the statement again with no
-    page size after this error, which D8 refuses, because the first request
-    reached the server.
-14. Closed by D178. The driver does not close the cursor of a page that the caller leaves
+    on every index (Principals). Ken decided on 2026-10-07 that the driver
+    returns this error, does not send the statement again, and always sends a
+    page size to a plain `SELECT` (D178, item 5). The caller turns paging off
+    with `WithParameter("fetch_size", 0)`, and then reads at most 10000 rows with
+    no sign.
+14. The driver does not close the cursor of a page that the caller leaves
     after the context ended in the middle of the page, because it learns the
     cursor only at the end of the page. The server drops it when its
-    `keep_alive` of one minute ends (Responses). D168 says that the driver closes
-    the request and the cursor. It closes each cursor that it knows, including
-    one that it read before the context ended (`TestCancelAfterTheCursor`).
+    `keep_alive` of one minute ends (Responses). The driver closes each cursor
+    that it knows, including one that it read before the context ended
+    (`TestCancelAfterTheCursor`). Ken decided on 2026-10-07 that this is the
+    behavior (D178, item 6).
 15. A value that does not fit its type. The legacy engine names an object and a
     nested field `text` with an empty alias and sends an object or an array,
     sends a `date` as the text of a timestamp on 2.19.6, sends a number or a
@@ -912,16 +912,16 @@ These questions came from steps 10 to 17a, and wait for Ken:
     `WithDatabase` fails the same way. `WithParameter` applies to the first
     request of a statement and not to the request for each next page, which holds
     the cursor only.
-17. Closed by D178. `dbrun` starts 2.19.6 and 3.9.0 now, and `dbmeta` v0.3.0 and later no longer
+17. `dbrun` starts 2.19.6 and 3.9.0 now, and `dbmeta` v0.3.0 and later no longer
     lists 3.8.0. Step 6 was recorded again on 3.9.0 on 2026-10-07, and the
-    recordings of 3.8.0 were deleted. The integration tests ran on 2.19.6 and
-    3.9.0, and the replay tests read the recordings of 2.19.6 and 3.9.0. 3.9.0
-    differs from 3.8.0 in the facts under Types, the setting
-    `plugins.sql.complex_worker_pool.enabled`, and the index
-    `.plugins-ml-config`. The driver sends no request for the
-    release, because no answer that it reads differs between releases: the
-    types of an answer name themselves, and the legacy engine is reached by the
-    statement and not by the release.
+    recordings of 3.8.0 were deleted. Ken decided this (D178, item 7). The
+    integration tests ran on 2.19.6 and 3.9.0, and the replay tests read the
+    recordings of 2.19.6 and 3.9.0. 3.9.0 differs from 3.8.0 in the facts under
+    Types, the setting `plugins.sql.complex_worker_pool.enabled`, and the index
+    `.plugins-ml-config`. The driver sends no request for the release, because
+    no answer that it reads differs between releases: the types of an answer
+    name themselves, and the legacy engine is reached by the statement and not
+    by the release (D178, item 11).
 18. Steps 16 and 20 send three requests, which wait for the release (W29 in
     [BACKLOG.md](BACKLOG.md)). The `url` that `dbrun` prints already has the
     scheme `opensearch`, so the tests need no conversion, and the workflow

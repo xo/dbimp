@@ -684,20 +684,20 @@ answers:
 5. The page is 1000 rows by default, and the key `fetch_size` changes it
    (D167, item 2). A page cannot pass `index.max_result_window` of an index.
 
-These questions came from steps 10 to 17a, and wait for Ken:
+These questions came from steps 10 to 17a. Ken closed questions 6 and 7 on
+2026-10-07 (D178). Questions 8 to 13 still wait for Ken:
 
-6. Closed by D178. Hard rule 4 of AGENTS.md lists the drivers whose rows can hold a context.
-   Elasticsearch is not in it. The rows of this driver keep the context of the
-   statement, because the request for each next page needs it
-   (`elasticsearch/rows.go`). The driver does not store a context anywhere
-   else. Ken decides whether to add Elasticsearch to that rule, and which
-   decision names it.
-7. Closed by D178. D36 says that `Rows.Close` before the end reads nothing more, and D167
+6. The rows of this driver keep the context of the statement, because the
+   request for each next page needs it (`elasticsearch/rows.go`). The driver
+   does not store a context anywhere else. Ken decided on 2026-10-07 that hard
+   rule 4 of AGENTS.md names the rows of an Elasticsearch query (D178, item
+   2).
+7. D36 says that `Rows.Close` before the end reads nothing more, and D167
    says that the driver closes the cursor when the caller closes the rows
    early. The cursor follows the rows of its page, so `Close` reads the rest of
    the current page to learn it, at most 256 KiB and for at most 5 seconds
-   (Cancellation and timeouts). The other choice is to read nothing and leave
-   the cursor to the server, which drops it when its `keep_alive` ends. The
+   (Cancellation and timeouts). Ken decided on 2026-10-07 that the driver does
+   this, which differs from D36 for this driver (D178, item 3). The
    `keep_alive` default of 45 seconds is not measured.
 8. A `float` and a `half_float` arrive as the shortest text of a 32-bit float.
    The driver reads that text as a `float64`, so `6.1035156E-5` is 6.1035156e-05

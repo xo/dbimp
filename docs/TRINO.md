@@ -957,14 +957,20 @@ Step 8a, the review of the type table (Gemini and DeepSeek, 2026-10-07):
 
 ## Open questions
 
-These questions wait for Ken, except the second and the third:
+Ken released the driver in `v0.12.0`. D175 holds the answers to questions 1, 8,
+11 and 13 to 17, which Ken added on 2026-10-07, after step 17a (items 11 to 15
+of D175). Questions 2 and 3 are closed, and questions 4 to 7, 9, 10 and 18 are
+decided. Only question 12 still waits for Ken. The text of each question stays,
+so that the numbers do not change.
 
 1. The `memory` catalog of each `dbrun` image refuses `UPDATE`, `DELETE` and
    `MERGE`, and Presto refuses `TRUNCATE`. DRIVER.md says to stop and ask Ken
    when a server refuses one of insert, select, update and delete. Does the
    driver go on with `INSERT`, `SELECT` and `CREATE TABLE AS SELECT` only, or
    does `dbmeta` first add a catalog that supports row changes, such as
-   Iceberg with a file metastore, for each release?
+   Iceberg with a file metastore, for each release? D175 item 12 decides that
+   the tests cover `INSERT`, `SELECT` and `CREATE TABLE AS` on the `memory`
+   catalog, which refuses the rest on all three releases.
 2. The recorder could not follow an absolute `nextUri`, nor keep a response
    header. The session changed `dbimptest/cmd/record/main.go` on 2026-10-07:
    a `path` or a followed address that is an absolute URL goes to the server
@@ -981,38 +987,42 @@ These questions wait for Ken, except the second and the third:
 6. A JSON `null` and a SQL NULL are both `nil` (D175).
 7. `IPADDRESS` is the kind `other`, with a string (D175).
 8. A zone name that Go cannot load, in a `TIMESTAMP WITH TIME ZONE`, is an
-   open question for the driver tests, and is not decided.
+   error for that row, and names the zone (D175 item 14, and question 15).
 9. The driver decodes the `ARRAY`, `MAP` and `ROW` of Presto with the type of
    the column, so both flavors give the same Go values (D175).
 10. The decisions of step 9 are D175.
 
-These questions came with the driver, and wait for Ken:
+These questions came with the driver. D175 closes all but question 12, as each
+one says:
 
 11. A `DELETE` of the `nextUri` aborts a transaction (see Transactions), and
     D175 says to send it when the rows close early. The driver reads up to four
     small pages in place of the `DELETE` when its connection holds a
     transaction, so that `QueryRow` in a transaction keeps the transaction.
-    Does D175 change to say so, or does the driver always send the `DELETE`?
+    D175 item 13 decides that the driver reads up to four pages of at most 64
+    KiB each in a transaction, and sends the `DELETE` only for a larger result.
 12. `QueryContext` reads up to the first row, so that an error that comes before
     any row is the error of `QueryContext`, as step 12 of DRIVER.md says. D175
-    says only that the driver polls `nextUri`.
+    says only that the driver polls `nextUri`. This question still waits for
+    Ken.
 13. D175 gives `WithParameter` no meaning, because the servers take no body of
     keys. The driver sets a property of the session with it, as the keys
     `session.<name>` of the DSN do. `WithDatabase` sets the catalog, and
-    `WithSchema` sets the schema.
+    `WithSchema` sets the schema. D175 item 15 decides this.
 14. The driver sends the capabilities `PARAMETRIC_DATETIME`, `NUMBER` and
     `VARIANT` to every Trino, and none to Presto. D175 says to send `NUMBER`
     and `VARIANT` to a release that has them. A server does not name a
     capability that it does not know (see Types), so the result is the same,
-    and the driver needs no version to decide.
+    and the driver needs no version to decide. D175 item 11 decides this.
 15. A zone name that Go cannot load, in a `TIMESTAMP WITH TIME ZONE`, is an
     error of the row, because the value cannot be held without the zone
     (question 8). The driver imports no zone data, so a host with none fails
-    for each such value.
+    for each such value. D175 item 14 decides this.
 16. A zero `dbimp.Interval` is written as an `INTERVAL DAY TO SECOND` (see
-    Parameters), so it cannot go into a `YEAR TO MONTH` column.
+    Parameters), so it cannot go into a `YEAR TO MONTH` column. D175 item 15
+    decides this.
 17. The default `source` of a statement is `dbimp`, and the default time zone
-    is the one of the server. D175 names the keys and no default.
+    is the one of the server. D175 item 15 decides this.
 18. A `ROW` value is a `[]any` in the order of its fields, so a caller cannot
     read the field names from the value (D135 and D137). Ken decided on
     2026-10-07 to do nothing now, and to remove the `Row` type that held a

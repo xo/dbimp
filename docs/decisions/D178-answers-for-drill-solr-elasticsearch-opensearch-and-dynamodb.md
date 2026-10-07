@@ -1,9 +1,10 @@
-# D178. Answers for Drill, Solr, Elasticsearch and OpenSearch
+# D178. Answers for Drill, Solr, Elasticsearch, OpenSearch and DynamoDB
 
 Status: Decided.
 
 These are the answers to open questions of the drivers for Drill, Solr,
-Elasticsearch and OpenSearch (W26 to W29). Ken decided them on 2026-10-07.
+Elasticsearch, OpenSearch and DynamoDB (W26 to W30). Ken decided them on
+2026-10-07.
 
 1. Drill keeps the session cookie, as D165 item 10 says. The settings
    `autoLimit`, `defaultSchema` and `options` then stay in the session, so a
@@ -13,7 +14,7 @@ Elasticsearch and OpenSearch (W26 to W29). Ken decided them on 2026-10-07.
    question 9 of DRILL.md.
 2. The rows of an Elasticsearch query store a context, because the request for
    each next page needs it. Hard rule 4 of AGENTS.md names them, as it names
-   the rows of a Druid, a Trino and a Databend query. It is question 6 of
+   the rows of a Trino and a Databend query. It is question 6 of
    ELASTICSEARCH.md. The rows of an OpenSearch query keep the context for the
    same reason, and rule 4 names them too. It is question 11 of OPENSEARCH.md.
 3. `Rows.Close` of an Elasticsearch query before the end reads the rest of the
@@ -51,3 +52,10 @@ Elasticsearch and OpenSearch (W26 to W29). Ken decided them on 2026-10-07.
    `[]any`, which is a list when a caller writes it back. Ken decided on
    2026-10-07 to keep it for now, and it can be removed later, as the `Row`
    type of Trino was.
+10. The keys of the DynamoDB DSN are `tls`, `region` and `token`. The key
+    `token` holds the session token of temporary credentials, and it is empty
+    by default. This amends item 2 of D169. Ken decided on 2026-10-07 to add
+    the key `token`.
+11. The OpenSearch driver serves no flavor and sends no request for the
+    release. This amends item 10 of D168, which said that the release comes
+    from `GET /` or from a header.

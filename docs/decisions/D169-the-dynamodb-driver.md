@@ -11,7 +11,8 @@ that the driver serves no Alternator, and how it orders its columns.
    scheme `dynamodb` moves to this driver, as D28 and D30 say.
 2. The DSN is `dynamodb://key:secret@host:port?region=us-east-1`, with the
    endpoint as the host and no path. The keys are `tls` (true by default),
-   and `region`, which has no default and must be set. Any other key is
+   `region`, which has no default and must be set, and `token`, the session
+   token of temporary credentials, which is empty by default. Any other key is
    refused. The secret is the password of the URL (D94). Ken decided this form on
    2026-10-02, in place of the form of `dburl` today, whose host is the
    region and whose endpoint is a key.

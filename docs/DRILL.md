@@ -763,7 +763,8 @@ Step 8a asked both models on 2026-10-02 to review the mapping of the types:
 Ken decided questions 1 to 8 on 2026-10-02, and D165 holds each answer: D163
 and D165 answer 1, item 3 of D165 answers 2, item 4 answers 3, item 7 answers
 4, 5 and 6, item 8 answers 7, and item 10 answers 8. Questions 9 to 15 came
-up in steps 10 to 17a of 2026-10-07, and each one waits for Ken:
+up in steps 10 to 17a of 2026-10-07. Ken closed question 9 on the same day
+(D178, item 1). Questions 10 to 15 still wait for Ken:
 
 1. The server refuses `INSERT`, `UPDATE` and `DELETE`, and writes only with
    `CREATE TABLE AS` into `dfs.tmp` (recorded: "crud: insert", "crud:
@@ -795,7 +796,7 @@ up in steps 10 to 17a of 2026-10-07, and each one waits for Ken:
 8. Each request with basic authentication and no cookie makes a session on
    the server, which lives for 3600 seconds when idle (measured, under
    Requests). Whether a driver keeps the cookie is a choice of step 9.
-9. Closed by D178. The cookie of D165 item 10 keeps the settings of one request in the
+9. Closed by D178, item 1. The cookie of D165 item 10 keeps the settings of one request in the
    session. `defaultSchema`, `autoLimit` and each key of `options` stay for
    the next requests of the connection, and `autoLimit` cannot be reset by a
    request (see Requests, the facts of 2026-10-07). The settings of the DSN
@@ -809,7 +810,7 @@ up in steps 10 to 17a of 2026-10-07, and each one waits for Ken:
    carries a setting of one statement without the cookie, so that the setting
    ends with its own session, or send no cookie at all, which D165 rejected.
    Ken decided on 2026-10-07 to leave it and to name it in the documentation
-   (D178).
+   (D178, item 1). A caller clears the limit with `ALTER SESSION RESET ALL`.
 10. The profile of a query that failed has no error for a few milliseconds
     after the answer ends (see Errors). D165 item 7 says that the driver reads
     the message from the profile, and says nothing about the wait. The driver

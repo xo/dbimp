@@ -739,19 +739,20 @@ against [TYPES.md](TYPES.md) and D135, in separate conversations:
 
 ## Open questions
 
-Each one waits for Ken. The questions that step 1 to step 9 left are
-answered: D163 dropped Alternator, D169 decided the DSN, the type of `N`, NULL
-and a missing attribute, and the columns, and D162 and D169 fixed the rest.
-Ken closed questions 4 and 10 on 2026-10-07. Their text stays, with the
-answer, so that the numbers of the others do not change.
+The questions that step 1 to step 9 left are answered: D163 dropped
+Alternator, D169 decided the DSN, the type of `N`, NULL and a missing
+attribute, and the columns, and D162 and D169 fixed the rest. Ken closed
+questions 1, 4 and 10 on 2026-10-07 (D178 for question 1). Their text stays,
+with the answer, so that the numbers of the others do not change. Questions 2,
+3, 5, 6, 7, 8 and 9 still wait for Ken.
 
-1. Closed by D178. A list and a set are both a `[]any` when the driver reads them, and an
-   argument cannot tell them apart. D169 names the Go type of each wire type,
-   and it names no Go type for a set as an argument. The driver defines
-   `dynamodb.Set`, a `[]any` whose first element names the kind of the set:
-   `SS`, `NS` or `BS`. A caller that reads a set and writes it back gets a
-   `[]any`, which is a list. Does Ken want this type, a type for each kind of
-   set, or a set that is read in a type of its own?
+1. Closed by D178, item 9. A list and a set are both a `[]any` when the driver
+   reads them, and an argument cannot tell them apart. D169 names the Go type
+   of each wire type, and it names no Go type for a set as an argument. The
+   driver defines `dynamodb.Set`, a `[]any` whose first element names the kind
+   of the set: `SS`, `NS` or `BS`. A caller that reads a set and writes it back
+   gets a `[]any`, which is a list. Ken decided on 2026-10-07 to keep this
+   type for now. It can be removed later, as the `Row` type of Trino was.
 2. D169 does not say whether `RowsAffected` is known. `UPDATE` and `DELETE`
    give no count (Statements), so the driver returns an error that wraps
    `dbimp.ErrNotSupported` from `RowsAffected` and from `LastInsertId`.
@@ -861,5 +862,5 @@ The differences that a caller sees:
 - `RowsAffected` always returns an error, where Couchbase counts every
   statement by `mutationCount` (Open questions).
 - The rows of a result keep a context, for the pages, which Couchbase does not
-  need, because its result is one body (hard rule 4 of AGENTS.md, which does
-  not name DynamoDB yet).
+  need, because its result is one body (D178, item 8, and hard rule 4 of
+  AGENTS.md).

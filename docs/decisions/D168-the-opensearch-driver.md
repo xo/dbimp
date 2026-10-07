@@ -35,8 +35,8 @@ the driver is read only, and that it documents the caps of the server.
    statement when the client leaves is not measured.
 9. The driver follows no redirect, and sends the credentials to the host of
    the DSN only.
-10. The driver serves no flavor. The release comes from `GET /`, or from the
-    header of 3.8.0, where an answer differs between releases.
+10. The driver serves no flavor. It sends no request for the release (item 11
+    of D178 amends this item).
 11. The driver uses JSON only.
 
 On 2.19.6 the ordinary user of `dbmeta` cannot page, because a cursor needs

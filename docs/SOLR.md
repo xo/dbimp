@@ -650,19 +650,19 @@ D166 hold the answers:
 7. The ordinary user cannot learn the version, which waits for `dbmeta`
    (D166).
 
-The steps after step 9 met these questions, which wait for Ken. The driver
+The steps after step 9 met these questions. Ken closed question 8 on
+2026-10-07 (D178, item 4). Questions 9 to 15 still wait for Ken. The driver
 follows the first answer of each one, and says so:
 
-8. Closed by D178. D166 says that the driver reads the class of the field type from
-   `metadata.COLUMNS`. It cannot: `metadata.COLUMNS` names `VARCHAR` for a
+8. Closed by D178, item 4. D166 said that the driver reads the class of the
+   field type from `metadata.COLUMNS`. It cannot: `metadata.COLUMNS` names `VARCHAR` for a
    boolean, a binary and a UUID, and `typeName` names the Java class of the
    SQL type (recorded: "the types of the columns"). The class of the field
    type is in the luke handler, which both principals can read (recorded:
-   "the luke handler"). The driver reads both, as two statements for each
-   table, and it keeps the schema for the connection. The type table names the
-   luke handler in the three cells that D166 names. If Ken wants no luke
-   request, a `BoolField`, a `BinaryField` and a `UUIDField` read as a
-   `string`, and the three cells change back.
+   "the luke handler"). Ken decided on 2026-10-07 that the driver reads both, as
+   two statements for each table, and keeps the schema for the connection. The
+   type table names the luke handler in the three cells that D166 names. This
+   amends item 3 of D166.
 9. The path of the DSN names the collection, and `dbrun` prints a `url` with
    no path (measured on 2026-10-07). The driver takes a DSN with no path, and
    fails each statement that has no `WithDatabase` with

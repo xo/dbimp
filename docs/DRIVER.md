@@ -768,9 +768,10 @@ Record the evidence in `docs/<PRODUCT>.md`. Write a decision in
 
 ## Flavors
 
-Some products speak the same interface as another product. DynamoDB and
-ScyllaDB Alternator, and Trino and Presto, are examples. Elasticsearch and
-OpenSearch differ enough to get a driver each (D162). One driver serves the products of such a group, and these steps
+Some products speak the same interface as another product. Trino and
+Presto are the example (D173). D163 dropped ScyllaDB Alternator, so DynamoDB
+has no flavor. Elasticsearch and OpenSearch differ enough to get a driver
+each (D162). One driver serves the products of such a group, and these steps
 change:
 
 - Step 4: each flavor needs its own container entry, because each one has its

@@ -1412,7 +1412,7 @@ Apache Drill is a target after Avatica, by D162. Ken named it at step 1 on
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
 Steps 2 to 9 went in on 2026-10-02, and D165 holds the decisions. Steps 10 to
-17a went in on 2026-10-07, staged for Ken's review:
+17a went in on 2026-10-07, and were committed on 2026-10-07 as `1d18692`:
 
 - Steps 10 to 13: the package `drill/`, its tables, the contract, the replay
   tests over the recorded exchanges of both releases, the unit tests of the
@@ -1430,8 +1430,8 @@ Steps 2 to 9 went in on 2026-10-02, and D165 holds the decisions. Steps 10 to
 - Step 16: `usql` has no driver for Drill, so there is no statement of
   `usql` to run. `SELECT version FROM sys.version` gave the version to both
   principals on both releases (DRILL.md, Principals).
-- Step 17a: `## Compared with Couchbase` is in DRILL.md. Open questions 9 to
-  15 there wait for Ken.
+- Step 17a: `## Compared with Couchbase` is in DRILL.md. Question 9 there is
+  closed by D178, and open questions 10 to 15 wait for Ken.
 
 1. To `dburl`: the scheme `drill` names `github.com/xo/dbimp/drill`, with
    `RequiresCGO` false. D165 settles the DSN: `drill://user:password@host:8047`,
@@ -1460,7 +1460,7 @@ Apache Solr is a target after Avatica, by D162. Ken named it at step 1 on
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
 Steps 2 to 9 went in on 2026-10-02, and D166 holds the decisions. Steps 10 to
-17a went in on 2026-10-07, staged for Ken's review:
+17a went in on 2026-10-07, and were committed on 2026-10-07 as `8b5cf8f`:
 
 - Steps 10 to 13: the package `solr/`, its tables, the contract, the replay
   tests over the recorded exchanges of all three releases, the unit tests of the
@@ -1480,10 +1480,10 @@ Steps 2 to 9 went in on 2026-10-02, and D166 holds the decisions. Steps 10 to
 - Step 16: `usql` has no driver for Solr, so there is no statement of `usql` to
   run. The administrator reads the version at `/solr/admin/info/system`, and the
   ordinary user gets HTTP 403 (SOLR.md, Principals).
-- Step 17a: `## Compared with Couchbase` is in SOLR.md. Open questions 8 to 15
-  there wait for Ken. The first one is a difference from D166: the class of the
-  field type comes from the luke handler, because `metadata.COLUMNS` does not
-  name it.
+- Step 17a: `## Compared with Couchbase` is in SOLR.md. Question 8 there is
+  closed by D178 (item 4): the class of the field type comes from the luke
+  handler, because `metadata.COLUMNS` does not name it, which amends D166.
+  Open questions 9 to 15 wait for Ken.
 
 1. To `dburl`: add the scheme `solr` with `GoPackage`
    `github.com/xo/dbimp/solr` and `RequiresCGO` false. D166 settles the DSN:
@@ -1514,8 +1514,8 @@ Elasticsearch is a target after Avatica, by D162. Ken named it at step 1 on
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
 Steps 2 to 9 went in on 2026-10-01 and 2026-10-02, and Ken decided step 9 on
-2026-10-02 (D167). Steps 10 to 17a went in on 2026-10-07, staged for Ken's
-review:
+2026-10-02 (D167). Steps 10 to 17a went in on 2026-10-07, and were committed
+on 2026-10-07 as `d0753b1`:
 
 - Steps 10 to 13: the package `elasticsearch/`, its tables, the contract, the
   replay tests over the recorded exchanges of all three releases, the tests of
@@ -1527,8 +1527,8 @@ review:
   and the pin of `dbmeta` already starts each release with the user
   `dbmeta_user` and the URL `elasticsearch://`. Only the comment of the pin
   changed.
-- Step 17a: `## Compared with Couchbase` is in ELASTICSEARCH.md. Open questions 6
-  to 13 there wait for Ken.
+- Step 17a: `## Compared with Couchbase` is in ELASTICSEARCH.md. Questions 6 and 7
+  there are closed by D178, and open questions 8 to 13 wait for Ken.
 
 1. To `dburl`: add the scheme `elasticsearch`, which has none today, with the
    `GoPackage` `github.com/xo/dbimp/elasticsearch` and `RequiresCGO` false. D167
@@ -1553,25 +1553,27 @@ Do not send these requests before the tag of step 19 (step 20).
 
 OpenSearch is a target after Avatica, by D162. Ken named it at step 1 on
 2026-10-01. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
-[OPENSEARCH.md](OPENSEARCH.md), and the package is `opensearch`. `dbrun` starts `opensearch-2.19.6` and `opensearch-3.8.0`. `dburl` has no scheme for it, and `usql` has no driver.
+[OPENSEARCH.md](OPENSEARCH.md), and the package is `opensearch`. `dbrun` starts `opensearch-2.19.6` and `opensearch-3.9.0`. `dburl` has no scheme for it, and `usql` has no driver.
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
-Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
+Steps 10 to 17a went in on 2026-10-07, and were committed on 2026-10-07 as
+`2360739`:
 
 - Steps 10 to 13: the package `opensearch/`, its tables, the contract, the replay
-  tests over the recorded exchanges of 2.19.6 and 3.8.0, the unit tests of the
+  tests over the recorded exchanges of 2.19.6 and 3.9.0, the unit tests of the
   types, the literals, the pages, the options and the DSN, and the fuzz test,
   which ran for 60 seconds and found nothing.
 - Steps 14 and 14a: `dbrun` lists `opensearch-3.9.0` now and no longer lists
-  `opensearch-3.8.0`, which step 6 recorded, so the integration tests ran on
-  `opensearch-2.19.6` and `opensearch-3.9.0`. They passed as both principals,
+  `opensearch-3.8.0`, so step 6 was recorded again on 3.9.0, and the
+  integration tests ran on `opensearch-2.19.6` and `opensearch-3.9.0`. They passed as both principals,
   with 347 tests on 2.19.6 and 361 on 3.9.0, and 34 and 20 skipped for the
   release or for the ordinary user of 2.19.6.
 - Step 15: no new job. The workflow derives the driver from `testdata/opensearch/`
   and reads `OPENSEARCH_DSN` and `OPENSEARCH_ORDINARY_DSN` from its prefix, and
   only its comment changed. `actionlint` passes.
-- Step 17a: `## Compared with Couchbase` is in OPENSEARCH.md. Open questions 11 to
-  18 there wait for Ken.
+- Step 17a: `## Compared with Couchbase` is in OPENSEARCH.md. Questions 11, 13, 14
+  and 17 there are closed by D178, and open questions 12, 15, 16 and 18 wait
+  for Ken.
 
 1. To `dburl`: the scheme `opensearch` names `github.com/xo/dbimp/opensearch`. D168
    settles the DSN: `opensearch://user:password@host:9200`, with no path, the keys
@@ -1599,7 +1601,8 @@ Amazon DynamoDB is a target after Avatica, by D162. Ken named it at step 1 on
 [DYNAMODB.md](DYNAMODB.md), and the package is `dynamodb`. `dbrun` starts `dynamodb-3.2.0` and `dynamodb-3.3.1`, and ScyllaDB Alternator as `alternator-2025.1` and `alternator-2026.3`, which D163 dropped from the driver. DynamoDB Local checks no key, so it has no ordinary user. `usql` reaches DynamoDB through `btnguyen2k/godynamo`, under the `dburl` scheme `godynamo`, and this driver can replace it (D24).
 The six drivers of D162 go through step 9 together, before step 10 of any.
 
-Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
+Steps 10 to 17a went in on 2026-10-07, and were committed on 2026-10-07 as
+`ff1449c`:
 
 - Steps 10 to 13: the package `dynamodb/`, its tables, the contract, the
   replay tests of both releases, the tests of the pages, the options, the
@@ -1617,7 +1620,7 @@ Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
   add `tls=false` for a host on this machine.
 - Step 17a: `## Compared with Couchbase` is in DYNAMODB.md. The rows of the
   driver keep the context of the query for the request of each page after the
-  first, which hard rule 4 of AGENTS.md does not name yet.
+  first. D178 item 8 and hard rule 4 of AGENTS.md name them.
 
 The requests of step 16 wait for the tag of step 19:
 
@@ -1625,7 +1628,7 @@ The requests of step 16 wait for the tag of step 19:
    alias `dynamodb`, to `github.com/xo/dbimp/dynamodb`, set `RequiresCGO` to
    false, and rename the scheme to `dynamodb`, keeping `godynamo` as an alias
    (D28 and D30). The URL is `dynamodb://key:secret@host:port?region=r`, with
-   no path, and the keys `tls` and `region` (D169). The region is the key
+   no path, and the keys `tls`, `region` and `token` (D169). The region is the key
    `region` and no longer the host.
 2. To `dbmeta`: DynamoDB Local has no model yet (dbmeta D66). The URL of the
    entries has no `tls` key, and the driver turns TLS on by default, so the
@@ -1643,62 +1646,6 @@ flavor (D173). `dbrun` starts `trino-476`, `trino-483` and `presto-0.299`,
 which `dbmeta` reads already. `dburl` has the schemes `trino` and `presto`,
 and `usql` has a driver for each (`trinodb/trino-go-client` and
 `prestodb/presto-go-client`), which this driver can replace (D24).
-
-## W32. Write the ClickHouse driver
-
-ClickHouse is the next target after Trino and Presto, by D174. Ken named it
-on 2026-10-07 at step 1. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
-[CLICKHOUSE.md](CLICKHOUSE.md), and the package is `clickhouse`. `dbrun`
-starts `clickhouse-25.3`, `clickhouse-25.8` and `clickhouse-26.9`, which
-`dbmeta` reads already. `dburl` has the scheme `clickhouse`, with the alias
-`ch`, and names `ClickHouse/clickhouse-go/v2`, which `usql` uses. That client
-speaks the native protocol by default. This driver speaks HTTP only, so it
-replaces that client in `usql` only if it matches it for a caller (D24).
-
-Steps 2 to 8a went in on 2026-10-07, over HTTP, on `clickhouse-25.3`,
-`clickhouse-25.8` and `clickhouse-26.9`. Ken decided the format, the
-parameters, the end of a result, the cancel and `UPDATE` the same day (D176),
-and the Go types, the DSN, transactions, redirects and flavors (D177), which
-ends step 9. `dbmeta` has staged the port 8123, an `api` address and the user
-`dbmeta_user`, which step 14 needs. The next step is step 10.
-
-Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
-
-- Steps 10 to 13: the package `clickhouse/`, its tables, the contract, the replay
-  tests over the recorded exchanges, the unit tests of the types, the parameters,
-  the stream, the cancel and the options, the tests of the DSN, and the fuzz test,
-  which ran for 60 seconds and found nothing.
-- Steps 14 and 14a: the integration tests passed on all three releases as both
-  principals, with 412 tests on `clickhouse-25.3` and 415 on `clickhouse-25.8` and
-  `clickhouse-26.9`, and 11 and 10 skipped for the release.
-- Step 15: no new job. The workflow sets `CLICKHOUSE_SECOND_ADDRESS`, which the
-  tests read, and its pin of `dbmeta` must move to the commit that holds the
-  staged change (CLICKHOUSE.md, Open questions).
-- Step 17a: `## Compared with Couchbase` is in CLICKHOUSE.md. Open questions 15 to
-  23 there wait for Ken.
-
-1. To `dburl`: the scheme `clickhouse` names `github.com/xo/dbimp/clickhouse`.
-   D177 settles the DSN: `clickhouse://user:password@host:8123/database`, with the
-   one key `tls`, the port 8443 with `tls=true`, and any other key refused. The
-   driver speaks HTTP only, so the generator writes the HTTP port 8123 where it
-   wrote 9000. The driver registers the name `clickhouse`, as `clickhouse-go` does,
-   so a program links one of the two (dburl D34).
-2. To `dbmeta`: commit the change that is staged, which publishes the HTTP port
-   8123 as `secondAddress`, prints `api` and makes `dbmeta_user`. The `url` of the
-   entry holds the native port today, and the DSN of this driver needs the HTTP
-   port. The workflow of `dbimp` then moves its pin to that commit. This is
-   done: `dbmeta` released `v0.3.0` with it, and the pin is there.
-3. To `usql`: `drivers/clickhouse` imports `github.com/xo/dbimp/clickhouse` in
-   place of `clickhouse-go/v2`, and drops its `RowsAffected` that returns 0. The
-   driver gives `*clickhouse.Error` with the code 194 and 516 for a wrong password,
-   and `SELECT version()` gives the version.
-
-Do not send these requests before the tag of step 19 (step 20).
-
-Ken committed the driver as `db7a4eb`, and the pin of `dbmeta` at `v0.3.0` as
-`54d087b`. At Ken's word, the session tagged `v0.13.0` on `54d087b` after CI
-passed 32 of 32 jobs, and published it on 2026-10-07:
-https://github.com/xo/dbimp/releases/tag/v0.13.0. Step 20 waits for Ken.
 
 Steps 2 to 9 went in on 2026-10-07: the recordings of `trino-476`,
 `trino-483` and `presto-0.299`, the survey, TRINO.md with its type table, and
@@ -1732,3 +1679,58 @@ passed 30 of 30 jobs, and published it on 2026-10-07:
 https://github.com/xo/dbimp/releases/tag/v0.12.0. Step 20 sent the requests
 above on the same day.
 
+## W32. Write the ClickHouse driver
+
+ClickHouse is the next target after Trino and Presto, by D174. Ken named it
+on 2026-10-07 at step 1. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[CLICKHOUSE.md](CLICKHOUSE.md), and the package is `clickhouse`. `dbrun`
+starts `clickhouse-25.3`, `clickhouse-25.8` and `clickhouse-26.9`, which
+`dbmeta` reads already. `dburl` has the scheme `clickhouse`, with the alias
+`ch`, and names `ClickHouse/clickhouse-go/v2`, which `usql` uses. That client
+speaks the native protocol by default. This driver speaks HTTP only, so it
+replaces that client in `usql` only if it matches it for a caller (D24).
+
+Steps 2 to 8a went in on 2026-10-07, over HTTP, on `clickhouse-25.3`,
+`clickhouse-25.8` and `clickhouse-26.9`. Ken decided the format, the
+parameters, the end of a result, the cancel and `UPDATE` the same day (D176),
+and the Go types, the DSN, transactions, redirects and flavors (D177), which
+ends step 9. `dbmeta` v0.3.0 prints the port 8123, an `api` address and the user
+`dbmeta_user`, which step 14 needs. The next step is step 10.
+
+Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
+
+- Steps 10 to 13: the package `clickhouse/`, its tables, the contract, the replay
+  tests over the recorded exchanges, the unit tests of the types, the parameters,
+  the stream, the cancel and the options, the tests of the DSN, and the fuzz test,
+  which ran for 60 seconds and found nothing.
+- Steps 14 and 14a: the integration tests passed on all three releases as both
+  principals, with 412 tests on `clickhouse-25.3` and 415 on `clickhouse-25.8` and
+  `clickhouse-26.9`, and 11 and 10 skipped for the release.
+- Step 15: no new job. The workflow sets `CLICKHOUSE_SECOND_ADDRESS`, which the
+  tests read, and its pin of `dbmeta` must move to the commit that holds the
+  staged change (CLICKHOUSE.md, Open questions).
+- Step 17a: `## Compared with Couchbase` is in CLICKHOUSE.md. Question 15 there is
+  decided, and open questions 16 to 23 wait for Ken.
+
+1. To `dburl`: the scheme `clickhouse` names `github.com/xo/dbimp/clickhouse`.
+   D177 settles the DSN: `clickhouse://user:password@host:8123/database`, with the
+   one key `tls`, the port 8443 with `tls=true`, and any other key refused. The
+   driver speaks HTTP only, so the generator writes the HTTP port 8123 where it
+   wrote 9000. The driver registers the name `clickhouse`, as `clickhouse-go` does,
+   so a program links one of the two (dburl D34).
+2. To `dbmeta`: commit the change that is staged, which publishes the HTTP port
+   8123 as `secondAddress`, prints `api` and makes `dbmeta_user`. The `url` of the
+   entry holds the native port today, and the DSN of this driver needs the HTTP
+   port. The workflow of `dbimp` then moves its pin to that commit. This is
+   done: `dbmeta` released `v0.3.0` with it, and the pin is there.
+3. To `usql`: `drivers/clickhouse` imports `github.com/xo/dbimp/clickhouse` in
+   place of `clickhouse-go/v2`, and drops its `RowsAffected` that returns 0. The
+   driver gives `*clickhouse.Error` with the code 194 and 516 for a wrong password,
+   and `SELECT version()` gives the version.
+
+Do not send these requests before the tag of step 19 (step 20).
+
+Ken committed the driver as `db7a4eb`, and the pin of `dbmeta` at `v0.3.0` as
+`54d087b`. At Ken's word, the session tagged `v0.13.0` on `54d087b` after CI
+passed 32 of 32 jobs, and published it on 2026-10-07:
+https://github.com/xo/dbimp/releases/tag/v0.13.0. Step 20 waits for Ken.

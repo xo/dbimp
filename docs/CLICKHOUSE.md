@@ -29,8 +29,8 @@ these:
 - "The forwarder" is a Go program in the scratch folder of the measurement.
   See the next paragraph.
 
-`dbrun` publishes the native port 9000 of each release, and it does not
-publish the HTTP port 8123 (measured with `curl` on `clickhouse-25.8` on
+Before `dbmeta` v0.3.0, `dbrun` published the native port 9000 of each release,
+and it did not publish the HTTP port 8123 (measured with `curl` on `clickhouse-25.8` on
 2026-10-07: a request to the published port answered HTTP 400 with `Port 9000
 is for clickhouse-client program. You must use port 8123 for HTTP.`). The
 dbmeta entry says the same in its comment. The `podman ps` of the container
@@ -46,20 +46,25 @@ of `sleepEachRow` that writes rows ended within 3 seconds after the client
 left). The first version of the forwarder did not close that socket, and its
 recordings of a cancel were wrong, so every file in `testdata/clickhouse/` was
 recorded again with the second version. Every recorded exchange is a real
-answer of a real server. See Open questions for the change that `dbmeta`
-needs.
+answer of a real server. The paragraph above and the
+forwarder describe the situation before `dbmeta` v0.3.0, which now prints the
+port 8123, the `api` address and the user `dbmeta_user` (Open questions, 1).
+The recordings still hold the user `dbimp_user`, which is true, because Step 6
+ran before that release.
 
 ## Summary
 
 - ClickHouse is a column store for analytics. A table has an engine, and the
   engine `MergeTree` keeps rows sorted by the key `ORDER BY`. The server
   speaks several protocols, and the HTTP interface is one of them.
-- R holds for the server and fails for the HTTP port. `dbrun` starts
-  `clickhouse-25.3`, `clickhouse-25.8` and `clickhouse-26.9` from the image
-  `docker.io/clickhouse/clickhouse-server` (the dbmeta entry). It publishes
-  only the native port, and it names no ordinary user (measured: `dbrun dsn
-  --json clickhouse-25.8` on 2026-10-07 printed one principal, the
-  administrator, and no `api` address). See Open questions.
+- R holds for the server, and it held for the HTTP port from `dbmeta` v0.3.0.
+  `dbrun` starts `clickhouse-25.3`, `clickhouse-25.8` and `clickhouse-26.9`
+  from the image `docker.io/clickhouse/clickhouse-server` (the dbmeta entry).
+  Before `dbmeta` v0.3.0, it published only the native port, and it named no
+  ordinary user (measured: `dbrun dsn --json clickhouse-25.8` on 2026-10-07
+  printed one principal, the administrator, and no `api` address). Now it
+  prints the port 8123, the `api` address and the user `dbmeta_user`. See
+  Open questions, 1.
 - H and S hold. `POST /` with the SQL in the body answered HTTP 200 as both
   principals on each release (recorded: "a statement in the body"). The SQL is
   the dialect of ClickHouse.
@@ -1385,21 +1390,20 @@ rules of D135, in separate conversations.
 
 ## Open questions
 
-These wait for Ken. Each is a fact that the recording shows and a choice that
-the recording cannot make.
+Each is a fact that the recording shows and a choice that the recording cannot
+make. D176 and D177 closed questions 1 to 11, and Ken decided question 15 on
+2026-10-07. Questions 12 to 14 and 16 to 23 still wait for Ken.
 
-1. Closed in `dbmeta`, as a change that is staged and not committed. The entry
-   of ClickHouse in `dbmeta` now publishes the HTTP port 8123 as the second
-   port, prints the `api` address of each release, and makes the ordinary user
-   `dbmeta_user`, who has `SELECT, INSERT, ALTER, CREATE DATABASE, CREATE TABLE,
-   CREATE VIEW, CREATE DICTIONARY, DROP DATABASE, DROP TABLE, DROP VIEW, DROP
-   DICTIONARY, TRUNCATE, OPTIMIZE` on the database `dbmeta` and `SELECT` on
-   `system.processes` (measured: `SHOW GRANTS` on 2026-10-07). The tests of step
-   14 ran on that checkout, with no change to it. The workflow of CI pins `dbmeta`
-   at a commit that lacks these changes, so Ken must move the pin to the commit
-   that holds them before the first run of CI, as the comment in the workflow
-   says. The tests read `CLICKHOUSE_SECOND_ADDRESS`, which the workflow sets from
-   `secondAddress`, to reach the HTTP port.
+1. Closed in `dbmeta` v0.3.0, which Ken committed, and the workflow of CI pins
+   it. The entry of ClickHouse in `dbmeta` publishes the HTTP port 8123 as the
+   second port, prints the `api` address of each release, and makes the
+   ordinary user `dbmeta_user`, who has `SELECT, INSERT, ALTER, CREATE DATABASE,
+   CREATE TABLE, CREATE VIEW, CREATE DICTIONARY, DROP DATABASE, DROP TABLE, DROP
+   VIEW, DROP DICTIONARY, TRUNCATE, OPTIMIZE` on the database `dbmeta` and
+   `SELECT` on `system.processes` (measured: `SHOW GRANTS` on 2026-10-07). The
+   tests of step 14 ran on a checkout that held the change before the release,
+   with no change to it. The tests read `CLICKHOUSE_SECOND_ADDRESS`, which the
+   workflow sets from `secondAddress`, to reach the HTTP port.
 2. Closed by D176. DRIVER.md says to ask Ken when a server refuses one of insert, select,
    update and delete. ClickHouse refuses `UPDATE ... SET` on a table that has
    no `_block_number` column, and on every table on 25.3, and it has `ALTER
@@ -1421,12 +1425,12 @@ the recording cannot make.
    except `AggregateFunction` (with no length in the format, and
    `clickhouse-connect` does not read it either), and which needs Ken's
    approval (D13) and a decoder of about 1,200 lines. See Responses and Types.
-4. Closed by D177. The Go types of step 8a (item 4 of step 9): `Int128`, `Int256`, `UInt128`
-   and `UInt256` as the kind decimal; `FixedString` as the kind string; `IPv4`
-   and `IPv6` as the kind other; `Time` and `Time64` as the kind duration; the
-   geometries as nested `[]any`; `AggregateFunction` as the kind binary; and
-   `DateTime` and `DateTime64` as the kind timestamp. Each has an alternative
-   in Types.
+4. Closed by D177. The Go types of step 8a (item 4 of step 9) are these.
+   `Int128`, `Int256`, `UInt128` and `UInt256` are the kind decimal.
+   `FixedString` is the kind string. `IPv4` and `IPv6` are the kind other.
+   `Time` and `Time64` are the kind duration. The geometries are nested
+   `[]any`. `AggregateFunction` is the kind binary. `DateTime` and `DateTime64`
+   are the kind timestamp. Each has an alternative in Types.
 5. Closed by D176. The parameters (item 6). The server binds `{name:Type}` with a type, and
    has no `?`. The driver can write each argument as a typed parameter, with
    the type chosen from the Go type of the argument, or write each argument as
@@ -1447,8 +1451,9 @@ the recording cannot make.
    and `http://` or `https://` for the HTTP transports, and the driver here
    must read a URL whose scheme is `clickhouse` (D35). The names clash with
    `clickhouse-go`, which also registers `clickhouse`, so `usql` cannot link
-   both. `dburl` D34 waits for this driver. The keys, the port 8123 and the
-   TLS are not decided, and TLS is not measured.
+   both. `dburl` D34 waits for this driver. D177 item 2 decides the keys, the
+   port 8123 and the TLS: the one key `tls`, and the port 8443 with
+   `tls=true`.
 9. Closed by D177. Transactions (item 7): `BeginTx` returns `ErrNotSupported` (D20), as the
    server refuses every form with HTTP 501.
 10. Closed by D177. Redirects and credentials (item 10): no redirect was seen, and the
@@ -1538,8 +1543,8 @@ The integration tests of the driver read `CLICKHOUSE_DSN`, and
 is empty. `CLICKHOUSE_SECOND_ADDRESS` replaces the host and the port of each
 DSN, because the `url` of `dbrun` holds the native port. The tests accept the
 `api` address of `dbrun` as well. They ran on 2026-10-07, one server at a time,
-with `-race`, on a fresh container of each release, against the checkout of
-`dbmeta` that holds the staged change (see Open questions):
+with `-race`, on a fresh container of each release, against a checkout of
+`dbmeta` that held the change of question 1 before its release:
 
 | Release | Passed | Skipped | Failed |
 | --- | --- | --- | --- |
