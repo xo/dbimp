@@ -17,6 +17,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `url.go` | `ParseURL`, `NewQuery` and `Query`, for the DSN |
 | `http.go` | `NewTransport`, `NewClient` and `Send` |
 | `auth.go` | `AuthBasic`, `AuthBearer`, `Query.Auth` and `SetAuth`, which send the secret of a DSN as the key auth says (D94 and D116) |
+| `sigv4.go` | `SignV4`, which signs a request with AWS Signature Version 4, for DynamoDB and for the recorder. A caller that sends temporary credentials sets `X-Amz-Security-Token` first, and the signature covers it (D169) |
 | `stream.go` | `Stream` and `NewStream`, which read the body of a response |
 | `rows.go` | `ObjectRows`, `NewObjectRows`, `ContinueObjectRows`, `ArrayRows` and `NewArrayRows`, which read rows by D18 |
 | `values.go` | `IsNull`, `Int64`, `Float64`, `Bool`, `String`, `Decimal`, `Number` and `Any`, which turn a JSON value into a Go value, and `Assign` |
@@ -278,7 +279,7 @@ libSQL with a JWT (D94). A script with `"auth": "sigv4"`, a `region` and a
 `service` signs each request with AWS Signature Version 4, with the user of
 each URL as the access key and its password as the secret key, as DynamoDB
 takes them. It signs the host, `X-Amz-Date`, each header that the script
-sets, and the body. It replaces the files and the entries that an
+sets, and the body, with `dbimp.SignV4`. It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
 it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
 the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.

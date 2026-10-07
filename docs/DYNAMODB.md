@@ -1,9 +1,9 @@
 # Amazon DynamoDB
 
 This document holds what is known about Amazon DynamoDB, for its driver
-`dynamodb` (W30 and D162). ScyllaDB Alternator speaks the API of DynamoDB,
-and D162 names it a flavor. The headings are the template of
-[DRIVER.md](DRIVER.md).
+`dynamodb` (W30, D162 and D169). ScyllaDB Alternator speaks the API of
+DynamoDB. D162 named it a flavor, and D163 dropped it, because it runs no
+PartiQL. The headings are the template of [DRIVER.md](DRIVER.md).
 
 Steps 5a to 7 measured DynamoDB Local 3.2.0 and 3.3.1 as its one key, and
 Alternator 2025.1 and 2026.3 as `cassandra` and as `dbmeta_user`, on
@@ -49,8 +49,8 @@ read on 2026-10-01, are these:
   `BatchExecuteStatement` and `ExecuteTransaction` with
   `UnknownOperationException` on both releases (recorded: "a statement", "a
   batch of statements" and "a transaction of writes"). TARGETS.md names this
-  from the documents of Alternator, and the server agrees. See the open
-  questions.
+  from the documents of Alternator, and the server agrees. D163 dropped
+  Alternator from the driver for this reason.
 - [TARGETS.md](TARGETS.md) names DynamoDB as likely P2, because `usql`
   already has a driver (D24). D162 places it fifteenth in the order.
 - `dburl` has the scheme `godynamo`, with the aliases `dy`, `dyn`, `dynamo`
@@ -63,6 +63,12 @@ read on 2026-10-01, are these:
   (D24).
 - `dbmeta` has no model for DynamoDB. dbmeta D66 says that the emulator of
   DynamoDB has no SQL catalog.
+- The driver is `github.com/xo/dbimp/dynamodb` (W30 and D169). Step 14 ran
+  its integration tests on `dynamodb-3.2.0` and on `dynamodb-3.3.1` on
+  2026-10-07, and they passed on both (see Integration tests). DynamoDB Local
+  has no ordinary user, so the tests as that user skip with the reason. The
+  tests of the entries for Alternator skip too, because the driver does not
+  serve it (D163).
 
 ## Requests
 
@@ -110,7 +116,8 @@ These facts come from the sources, and are not measured:
 
 ## The DSN
 
-- Step 9 decides the URL (D27 and D35). Nothing here is measured.
+- Ken decided the URL of the driver on 2026-10-02 (D169), in place of the
+  form of `dburl` below. The next list is that form.
 - `dburl` writes, for the scheme `godynamo`, the string
   `Region=<host>;AkId=<user>;Secret_Key=<password>`, with each key of the
   query added as `;Key=value`. So the host of the URL is the region, and the
@@ -126,6 +133,36 @@ These facts come from the sources, and are not measured:
   The secret of Alternator is a hash of SHA-512 crypt, such as
   `$6$dbmetadbmeta$Tw/8k...`, so its `/` is escaped in the URL (measured
   with `dbrun dsn --json` on 2026-10-01).
+
+The driver reads this form (D27, D35 and D169):
+
+- The URL is `dynamodb://key:secret@host:port?region=us-east-1`. The host and
+  the port are the endpoint, such as `dynamodb.us-east-1.amazonaws.com` or
+  `127.0.0.1:8000`. The user is the access key, and the password is the
+  secret key (D94). Without a port, the port is the port of the scheme: 443
+  with TLS and 80 without it.
+- The key `tls` is true by default, and `region` has no default and must be
+  set. The key `token` is empty by default. It holds the session token of
+  temporary credentials, which the driver sends in the header
+  `X-Amz-Security-Token`, and the signature signs that header. The token is a
+  secret, like the password (D94), so no error message and no log holds it.
+  Ken decided this key on 2026-10-07. The URL has no path, because DynamoDB has no database to choose.
+  Every other key is refused, and so is a key that appears twice. A URL with
+  no user or no password is refused, because the signature needs both.
+- `dbrun` prints this form for both releases of DynamoDB Local, with no `tls`
+  key (measured with `dbrun dsn --json` on 2026-10-07). DynamoDB Local speaks
+  HTTP, so the integration tests add `tls=false` when the host is this
+  machine.
+- The key `token` is checked only against the behavior of DynamoDB Local
+  and against the test suite of AWS Signature Version 4. Local checks no
+  token and accepted a request that carried the header on `dynamodb-3.3.1`
+  (`TestIntegrationToken`). The vector "post-sts-header-before" of the suite
+  gave the signature that the signer gives (`TestSignV4OfASessionToken` in
+  the root package). The driver was not checked against the service of AWS.
+- Examples:
+  `dynamodb://key:secret@dynamodb.eu-west-2.amazonaws.com?region=eu-west-2`,
+  `dynamodb://key:secret@dynamodb.eu-west-2.amazonaws.com?region=eu-west-2&token=IQoJb3...`
+  and `dynamodb://dbmeta:P4ssw0rd%21x@127.0.0.1:55135?region=us-east-1&tls=false`.
 
 ## Responses
 
@@ -179,6 +216,15 @@ These facts were recorded on each release of DynamoDB Local:
   not valid").
 - `ORDER BY` needs a `WHERE` on the key (recorded: "crud: order by with no
   key" and "crud: order by the key of a hash table").
+- `ORDER BY sk DESC` with a `WHERE` on the hash key of a table with a sort
+  key fails with `InternalFailure` on both releases when an item matches, and
+  `ORDER BY sk` gives the items in order (measured by `TestIntegrationCRUD`
+  on 2026-10-07). The recording of the descending order ran on a table with
+  no matching item, and gave no item. `WHERE id IN [3, 1, 2] ORDER BY id
+  DESC` on a table with a hash key works (recorded).
+- A statement of more than 8192 characters fails with `Member must have
+  length less than or equal to 8192`, so a long value goes as an argument
+  (measured by `TestIntegrationRoundTrip` on both releases on 2026-10-07).
 - Neither flavor sends gzip to a request with `Accept-Encoding: gzip`
   (recorded: "a gzip answer" and "a gzip answer through the API"). DynamoDB
   Local sends `X-Amz-Crc32` with each answer, and Alternator does not.
@@ -194,7 +240,8 @@ These facts were recorded on Alternator:
 
 The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
 maps every kind onto its Go type (D135 and D137). Step 8a wrote this table,
-and it waits for the review of Ken. Step 10 will write it from the code.
+Ken reviewed it, and step 10 made it from the code. `TestTables` in
+`dynamodb/` writes it, and fails when the document holds another table.
 
 <!-- dbimp:types -->
 | Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
@@ -215,7 +262,15 @@ A column has no type in DynamoDB. Each value names its own type, and two
 items can hold two types in one attribute (recorded: "a type that a value
 can change"). So the scan type of each row is `interface {}`, and the
 database type is empty, as for SurrealDB. A value that is missing is not a
-type, and step 9 decides whether it is nil, as NULL is (D18).
+type, and D169 decides that it is nil, as NULL is (D18).
+
+A value has the Go type of this table in `Rows.Next`, in a scan into `*any`,
+and in the columns that `ColumnTypeScanType` names. A `*apd.Decimal`, a
+`[]any` and a `map[string]any` are not types of `driver.Value`, so the rows
+implement `driver.RowsColumnScanner`, which hands them to the scan with no
+conversion, and a caller scans them into `*any`. A list and a set are both a
+`[]any` when the driver reads them. A caller tells them apart by the column,
+because the driver gives no hint in the value.
 
 These facts were recorded on each release, from three items of every type
 (recorded: "every type", "empty values and the range of numbers" and "a row
@@ -307,6 +362,28 @@ These facts were recorded on each release of DynamoDB Local:
 - The API of items on Alternator takes named values in
   `ExpressionAttributeValues`, such as `:p` (recorded: "parameters through
   the API").
+- A `?` inside a set fails with `Unsupported data type in Bag`, so a set
+  goes as one parameter of the type `SS`, `NS` or `BS` (measured on 3.3.1
+  with `INSERT INTO t VALUE {'pk': ?, 'v': <<?>>}` on 2026-10-07).
+
+The driver sends each argument as the typed value of its Go type (D169):
+
+| Go type | Typed value |
+| --- | --- |
+| `nil` | `NULL` |
+| `string` | `S` |
+| `bool` | `BOOL` |
+| `[]byte` | `B`, in base64 |
+| an integer, a `float64` or a `float32` | `N`. `NaN` and an infinity are refused |
+| `*apd.Decimal` and `apd.Decimal` | `N`, with every digit. `NaN` and an infinity are refused |
+| `[]any` | `L`, of the typed values of its elements |
+| `map[string]any` | `M`, of the typed values of its values |
+| `dynamodb.Set` | `SS`, `NS` or `BS`, by the type of its first element. An empty set and a set of two kinds are refused |
+| any other type, such as a `time.Time` | An error that wraps `dbimp.ErrNotSupported`, because DynamoDB has no type for it |
+
+The driver counts the `?` of the statement, outside literals, quoted names
+and comments, and refuses a count of arguments that is not that count. It
+refuses a named argument. `TestParameters` holds both rules.
 
 ## Transactions
 
@@ -352,6 +429,11 @@ These facts come from the sources, and are not measured:
 - godynamo keeps the statements of a transaction on the client, and sends
   them in one `ExecuteTransaction` at `Commit`. A query in a transaction is
   not supported (godynamo, `conn.go` and `stmt_document.go`).
+
+The driver sends no transaction. `BeginTx` returns an error that wraps
+`dbimp.ErrNotSupported` (D20 and D169). `TestIntegrationFeatures` runs a
+batch, a transaction and a token through the API, because only the server is
+under test there.
 
 ## Errors
 
@@ -458,7 +540,10 @@ These facts were recorded on each release of DynamoDB Local:
   as each user", "a write as each user" and "a table as each user").
 - Neither flavor gives a version (Flavors). `usql` sends `SELECT version();`
   to a driver with no `Version`, and DynamoDB Local refuses it as a syntax
-  error (recorded: "the version statement of usql").
+  error (recorded: "the version statement of usql"). The driver sends that
+  statement as the administrator, and the answer is a `ValidationException`
+  (measured by `TestIntegrationVersion` on both releases on 2026-10-07).
+  DynamoDB Local has no ordinary user, so there is no answer for one.
 - On the first start of `alternator-2025.1`, `dbrun start` stopped with exit
   status 1, and a second `dbrun start` said that it was up. Alternator then
   answered `User not found: dbmeta_user`, so `Init` had not run. `dbrun
@@ -489,10 +574,38 @@ These facts were recorded on each release of DynamoDB Local:
   Alternator (Errors).
 - Neither flavor gives the version of its release (recorded under item 9).
 - The service of AWS was not measured, because it fails R.
+- D163 dropped Alternator from the driver. The recordings of its two releases
+  stay in `testdata/dynamodb/`, and the manifest names them. The workflow of
+  CI drops the releases of Alternator from the list of this driver, so
+  `dbrun` never starts them for its tests (`.github/workflows/test.yml`).
+  The subtests of `features.json` for Alternator skip with that reason.
 
 ## Interfaces
 
-Step 10 writes this table from the code.
+Step 10 wrote this table from the code. `TestTables` in `dynamodb/` makes it.
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping sends ListTables with a limit of one table, which costs little and checks the signature. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because every request carries its own signature. |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, a decimal, a Set, a list and a map, which the driver binds with a type of its own (D169). |
+| `driver.QueryerContext` | yes | The server binds each argument as a typed value (D169). |
+| `driver.ExecerContext` | yes | Exec reads the result to its end. The server gives no count of the items that a write changed, so RowsAffected fails. |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because DynamoDB runs a transaction only as one request of reads or of writes (D169). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its item is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, so an answer has one result. |
+| `driver.RowsColumnTypeScanType` | yes | A column has no type, so the scan type is any (D169). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | A column has no type, so the name is empty (D169). |
+| `driver.RowsColumnTypeLength` | no | A column has no type, so it has no length. |
+| `driver.RowsColumnTypeNullable` | yes | An item can lack any attribute, so every column can be NULL. |
+| `driver.RowsColumnTypePrecisionScale` | no | A column has no type, so it has no precision and no scale. |
+<!-- /dbimp:interfaces -->
 
 ## Faults
 
@@ -525,6 +638,51 @@ read on 2026-10-01):
 - It imports the SDK of AWS, which D13 does not allow here.
 - A `ConditionalCheckFailedException` of an `UPDATE` or a `DELETE` becomes
   success with no error (`stmt_document.go`).
+
+## Integration tests
+
+Step 14 ran `go test -race -count=1 -run Integration ./dynamodb/...` against
+each release that `dbrun list` names for DynamoDB, one at a time, started
+with `dbrun start` and removed after the run.
+
+| Release | Date | Result |
+| --- | --- | --- |
+| `dynamodb-3.2.0` | 2026-10-07 | Passed as the administrator |
+| `dynamodb-3.3.1` | 2026-10-07 | Passed as the administrator |
+
+What the tests do (step 14a):
+
+- The administrator is the one principal of these releases. The tests as the
+  ordinary user skip with the reason, because `DYNAMODB_ORDINARY_DSN` is empty
+  and the manifest says that DynamoDB Local has no ordinary user. Alternator has one,
+  which the driver does not serve (D163).
+- PartiQL has no DDL (D171), so each test makes its tables through the API
+  with `CreateTable`, and drops them in a cleanup. `TestMain` lists the
+  tables with the prefix of the run and drops any that is left. Each table
+  has a prefix of its own for each run.
+- `TestIntegrationCRUD` uses three tables, `crud` with a sort key, `plain`
+  with a hash key, and `indexed` with a global and a local secondary index.
+  It inserts, selects, updates, selects again, deletes and selects again, and
+  compares each value. It reads the item back after `RETURNING`, and sends
+  the statements that the server refuses (`UPSERT`, `INSERT ... RETURNING`
+  and an update of a missing item). DynamoDB has no foreign key.
+- `TestIntegrationSchema` makes a table, its keys, its indexes and a time to
+  live through the API, reads through each index, and sends each statement of
+  DDL that the server refuses.
+- `TestIntegrationFeatures` uses each feature that `features.json` marks yes
+  and sends each one that it marks no. It reads a result of 300 items across
+  two pages, a filter that gives pages with no item, a batch, a transaction
+  of writes and of reads, `EXISTS`, and a token.
+- `TestIntegrationRoundTrip` runs `dbimptest.RoundTrip` for each type of the
+  type table, as an argument and as a literal. DynamoDB has no literal for a
+  binary value, and the statement has at most 8192 characters, so the round
+  trip logs each value that has no literal and goes on with the argument.
+- `TestIntegrationCancel` ends a context before the first answer and shows
+  that the next statement works. `TestIntegrationPing` and
+  `TestIntegrationVersion` run as each principal.
+- The two releases gave the same answers to every test.
+- The two facts that the tests found are in Responses: `ORDER BY sk DESC` and
+  the limit of 8192 characters.
 
 ## Second opinions
 
@@ -581,25 +739,127 @@ against [TYPES.md](TYPES.md) and D135, in separate conversations:
 
 ## Open questions
 
-Each one waits for Ken.
+Each one waits for Ken. The questions that step 1 to step 9 left are
+answered: D163 dropped Alternator, D169 decided the DSN, the type of `N`, NULL
+and a missing attribute, and the columns, and D162 and D169 fixed the rest.
+Ken closed questions 4 and 10 on 2026-10-07. Their text stays, with the
+answer, so that the numbers of the others do not change.
 
-1. Alternator fails S, because it runs no PartiQL. D162 names it a flavor
-   of this driver. A driver that sends PartiQL serves DynamoDB Local and
-   the service of AWS only. Is Alternator dropped from this driver, or does
-   the driver speak the API of items as a second language? The second
-   language is JSON that a person types, such as a `Scan`, and no SQL.
-2. The row of DynamoDB in [TARGETS.md](TARGETS.md) does not yet name the
-   result of R, H and S, which this document holds.
-3. The scheme of `dburl` is `godynamo`, with `dynamodb` as an alias, and
-   the host of its URL is the region. D28 and D30 say that this driver
-   registers `dynamodb`, and D27 says that the URL is standard. The host
-   and the endpoint are a choice of step 9.
-4. A value has its own type, and a column has none. Step 8a maps `N` to
-   `*apd.Decimal`. The kind number would give an `int64` for an integer
-   that fits. Ken reviews this in step 8a.
-5. Step 9 decides whether a missing attribute and NULL are one value (D18),
-   where the columns come from for `SELECT *`, and whether `RowsAffected`
-   is known.
-6. The command `dbimptest/cmd/record` gained AWS Signature Version 4
-   signing for these recordings, and [DESIGN.md](DESIGN.md) does not
-   describe it yet.
+1. Closed by D178. A list and a set are both a `[]any` when the driver reads them, and an
+   argument cannot tell them apart. D169 names the Go type of each wire type,
+   and it names no Go type for a set as an argument. The driver defines
+   `dynamodb.Set`, a `[]any` whose first element names the kind of the set:
+   `SS`, `NS` or `BS`. A caller that reads a set and writes it back gets a
+   `[]any`, which is a list. Does Ken want this type, a type for each kind of
+   set, or a set that is read in a type of its own?
+2. D169 does not say whether `RowsAffected` is known. `UPDATE` and `DELETE`
+   give no count (Statements), so the driver returns an error that wraps
+   `dbimp.ErrNotSupported` from `RowsAffected` and from `LastInsertId`.
+3. The column of `SELECT *` and of `RETURNING` is named `""`, as the column
+   of one document in ArangoDB and in SurrealDB (D18, D89 and D101). D163 says
+   that it has no name from the server. Does Ken want another name?
+4. Closed on 2026-10-07. The service of AWS needs `X-Amz-Security-Token`
+   for temporary credentials, and D169 had no key for it. The DSN now has
+   the key `token` (The DSN). The driver checks it only against DynamoDB
+   Local and the test suite of AWS, not against the service of AWS.
+5. `dbrun` prints the DSN of DynamoDB Local with no `tls` key, and the DSN
+   turns TLS on by default (D169). The integration tests add `tls=false` for a
+   host on this machine. `dbmeta` can print `tls=false` for the two
+   releases.
+6. The manifest of `testdata/dynamodb/` records the releases of Alternator,
+   and the workflow reads the manifest to find the releases to start. The
+   workflow drops them for this driver with a test on the name of the driver
+   and of the product. A field in the manifest that names the releases which
+   the driver does not serve holds it better, and it needs a change in
+   `dbimptest`.
+7. `features.json` keeps the entries for Alternator, with the verdict from
+   step 6, and `TestEveryDriverHasItsFeatures` needs their test names. Each
+   subtest skips. Do the entries stay?
+8. An error of `ConditionalCheckFailedException` carries the item in `Item`
+   when the statement sets `ReturnValuesOnConditionCheckFailure` (recorded:
+   "crud: return the values when a condition fails"). The type `Error` keeps
+   no `Item`. Does it get one?
+9. DynamoDB Local fails `ORDER BY sk DESC` with `InternalFailure` when an
+   item matches (Responses). The driver sends the statement as it is. The
+   service of AWS was not measured.
+10. Closed on 2026-10-07. The signer moved from `dynamodb/sigv4.go` to the
+    root package as `dbimp.SignV4`, and the command `dbimptest/cmd/record`
+    uses it too, in place of its own copy. [DESIGN.md](DESIGN.md) describes
+    it. `TestSignV4` checks it against a vector of the test suite of AWS, in
+    the root package.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It
+was written on 2026-10-07 from the staged code. A fact of Couchbase comes
+from [COUCHBASE.md](COUCHBASE.md), and a fact of DynamoDB from the sections
+above.
+
+### The server
+
+| | Couchbase | Amazon DynamoDB |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /` with the header `X-Amz-Target`, such as `DynamoDB_20120810.ExecuteStatement`, and a JSON body with `Statement`, `Parameters` and `NextToken` (Requests) |
+| Database | The key `query_context` of the body | None. A statement names its table, and the endpoint holds every table (The DSN) |
+| Language | SQL++, which is close to SQL | PartiQL, with one table in each statement, and a `WHERE` that names the key for a write (Statements) |
+| DDL | In SQL++ | None in PartiQL. `CreateTable` and the other operations of the API make tables, indexes and a time to live (Requests and Statements) |
+| Parameters | `?`, `$1` and `$name` | `?` only, each a typed value in `Parameters`. The server takes too many values with no error (Parameters) |
+| Framing | One body for the whole result, which does not page | One JSON object for each page of at most 1 MB, with `Items` and `NextToken` when more follows. A page can hold no item and carry a token (Responses) |
+| Columns | `signature`, before the first row | None. An item holds the attributes that it has, in an order of its own. The columns come from the text of the statement (Responses and D163) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement, from the driver, because the server gives no order |
+| Errors | Can come with HTTP 200, after some rows | HTTP 400 with `__type` and `Message`, before any item. A page that fails after other pages is an error on that page (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | Typed values, such as `{"N": "1"}`. An exact decimal of 38 digits, binary, sets, lists and maps. No date, time or UUID (Types) |
+| Cancel | The server stops a query when the client leaves | No operation cancels a statement, and each request reads one page and ends fast (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | Only one request of reads or of writes, `ExecuteTransaction`. No statement opens a transaction across requests (Transactions) |
+| Authentication | Basic, or `creds` in the body | AWS Signature Version 4 on each request. DynamoDB Local checks no key (Principals) |
+| Default port | 8093, or 18093 with TLS | 443 for the service of AWS. `dbrun` publishes DynamoDB Local on a port of its own |
+
+The differences that a caller sees:
+
+- The columns of `SELECT *` are one column that holds each item as a
+  `map[string]any`, and a projection gives one column for each path, named
+  by the last part of the path (D163).
+- A missing attribute and NULL are one value, nil (D169).
+- A number is an `*apd.Decimal`, and a set is a `[]any` that an argument
+  cannot name, so a caller sends a `dynamodb.Set` (D169 and Open questions).
+- A caller must give the region, the access key and the secret key in the
+  DSN, and TLS is on by default (D169). A caller can add the session token
+  of temporary credentials as `token`.
+- The driver sends no write that changes a count, so `RowsAffected` always
+  fails (Open questions).
+- There are no transactions, and `BeginTx` returns `dbimp.ErrNotSupported`
+  (D169).
+- The driver follows `NextToken` to the end, one page at a time, as it reads
+  the rows (D169).
+
+### The driver
+
+| | `couchbase` | `dynamodb` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-07 | About 1300 lines in 8 files | About 1800 lines in 11 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `Region`, `User`, `Password`, `Token` |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter` and `WithDatabase`, through `WithOptions` or an argument (D109). `WithTimeout`, `WithReadonly` and `WithDatabase` give `dbimp.ErrNotSupported`, because the server has no such setting. `WithParameter` sets any key of `ExecuteStatement`, such as `ConsistentRead` and `Limit`, on every page |
+| Arguments | Sent to the server as `args` and `$name` | Sent as `Parameters`, each a typed value from its Go type. A named argument, a `time.Time` and a count that is not the count of the `?` are refused (`dynamodb/params.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own for the pages, which reads each item with `jsontext` and follows `NextToken` (`dynamodb/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | `ColumnTypeScanType` is always `any`, the database type is empty, and every column can be NULL |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of each value: `string`, `*apd.Decimal`, `[]byte`, `bool`, nil, `[]any` and `map[string]any` (D169) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported`, because the server gives no count |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D169) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same. The rows keep the context of the query for the request of each page after the first, as the rows of Databend do (D123 and D169) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Type, Message}`, which unwraps to `*dbimp.StatusError` |
+| Authentication | Basic | AWS Signature Version 4, which `dbimp.SignV4` in the root package signs, and the driver follows no redirect, so the signature goes to the host of the DSN only (D169) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error` and `Set` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a decimal and a set too, where Couchbase gives
+  JSON shapes (D135 and D169).
+- `WithTimeout` and `WithReadonly` fail with `dbimp.ErrNotSupported`, where
+  Couchbase sends `timeout` and `readonly`, because DynamoDB has no setting
+  for either (D109).
+- `RowsAffected` always returns an error, where Couchbase counts every
+  statement by `mutationCount` (Open questions).
+- The rows of a result keep a context, for the pages, which Couchbase does not
+  need, because its result is one body (hard rule 4 of AGENTS.md, which does
+  not name DynamoDB yet).
