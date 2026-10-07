@@ -36,7 +36,7 @@ the record.
 | OpenSearch | W29 | Step 9: decided | Recordings, `features.json`, the document with its type table, and D168 | Step 10, after the driver before it in D162 |
 | DynamoDB | W30 | Step 9: decided | Recordings, `features.json`, `docs/DYNAMODB.md` with its type table, and D169. D163 dropped Alternator | Step 10, after OpenSearch |
 | Trino and Presto | W31 | Released in `v0.12.0` | `trino/`, its tests, TRINO.md and D175. CI passed 30 of 30 jobs on the tagged commit | The `dburl`, `dbmeta` and `usql` sessions check their side against `v0.12.0` |
-| ClickHouse | W32 | Step 17a: staged for Ken | `clickhouse/`, its tests, the type table, the interface table, the sections Faults, Integration tests and Compared with Couchbase of CLICKHOUSE.md. The integration tests passed on 25.3, 25.8 and 26.9 as both principals. `dbmeta` has the HTTP port, `api` and `dbmeta_user` staged and not committed | Ken reviews the staged work and the open questions 15 to 23 of CLICKHOUSE.md. The pin of `dbmeta` in the workflow must move before the first run of CI |
+| ClickHouse | W32 | Released in `v0.13.0` | `clickhouse/`, its tests, CLICKHOUSE.md, D176 and D177. CI passed 32 of 32 jobs on the tagged commit, with the integration jobs of 25.8 and 26.9 | Step 20: the requests to `dburl` and `usql` (the request to `dbmeta` is done by its `v0.3.0`) |
 
 ## Next
 

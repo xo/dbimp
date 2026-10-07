@@ -29,7 +29,8 @@ holds the second and the third. The fifth, in
 `libsql/`, was first released in `v0.9.0` (W23). The tenth, in
 `avatica/`, was first released in `v0.10.0` (W24). The eleventh, in
 `druid/`, was first released in `v0.11.0` (W25). The twelfth, in
-`trino/`, was first released in `v0.12.0` (W31). The
+`trino/`, was first released in `v0.12.0` (W31). The thirteenth, in
+`clickhouse/`, was first released in `v0.13.0` (W32). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

@@ -1491,13 +1491,19 @@ Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
 2. To `dbmeta`: commit the change that is staged, which publishes the HTTP port
    8123 as `secondAddress`, prints `api` and makes `dbmeta_user`. The `url` of the
    entry holds the native port today, and the DSN of this driver needs the HTTP
-   port. The workflow of `dbimp` then moves its pin to that commit.
+   port. The workflow of `dbimp` then moves its pin to that commit. This is
+   done: `dbmeta` released `v0.3.0` with it, and the pin is there.
 3. To `usql`: `drivers/clickhouse` imports `github.com/xo/dbimp/clickhouse` in
    place of `clickhouse-go/v2`, and drops its `RowsAffected` that returns 0. The
    driver gives `*clickhouse.Error` with the code 194 and 516 for a wrong password,
    and `SELECT version()` gives the version.
 
 Do not send these requests before the tag of step 19 (step 20).
+
+Ken committed the driver as `db7a4eb`, and the pin of `dbmeta` at `v0.3.0` as
+`54d087b`. At Ken's word, the session tagged `v0.13.0` on `54d087b` after CI
+passed 32 of 32 jobs, and published it on 2026-10-07:
+https://github.com/xo/dbimp/releases/tag/v0.13.0. Step 20 waits for Ken.
 
 Steps 2 to 9 went in on 2026-10-07: the recordings of `trino-476`,
 `trino-483` and `presto-0.299`, the survey, TRINO.md with its type table, and
