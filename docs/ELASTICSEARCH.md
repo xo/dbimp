@@ -195,8 +195,9 @@ These facts come from the sources, and are not measured:
 
 The column Kind names the kind of each type in [TYPES.md](TYPES.md), which
 maps every kind onto its Go type (D135 and D137). Step 8a wrote this table
-on 2026-10-02 from the measurements below, for Ken to review. No code
-writes it yet (step 10).
+on 2026-10-02 from the measurements below, and Ken reviewed it. The code
+writes it now (step 10). Run `DBIMP_UPDATE=1 go test -run TestTables
+./elasticsearch` to write it.
 
 <!-- dbimp:types -->
 | Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
@@ -298,6 +299,32 @@ which has one field of each mapping type (recorded: "every type"):
   and "a double too large").
 - `AVG` gives a `double`, and `SUM` and `COUNT` a `long` (recorded: "the
   types of aggregates").
+
+These facts came from the integration tests, on each release, on 2026-10-07
+(`TestIntegrationRoundTrip`):
+
+- A `half_float` and a `float` arrive as the shortest text of a 32-bit
+  float, such as `6.1035156E-5` for 2 to the power of -14. The driver reads
+  that text as a `float64`, so the value is 6.1035156e-05, and not the exact
+  32-bit value. A value that has a short exact text, such as 65504.0, 0.5 and
+  0.25, comes back as it was stored.
+- A `geo_point`, a `geo_shape` and a `shape` arrive as WKT with a decimal
+  point in each number, whatever form the document held. A document with
+  `POINT (0 0)` reads back as `POINT (0.0 0.0)`, and one with `POINT (-71.34
+  41.12)` reads back as it was.
+- A `date_nanos` field holds the dates from 1970-01-01 to
+  2262-04-11T23:47:16.854775807Z, and the driver reads the last nanosecond.
+  A `date` field holds the years 1 to 9999, and its day reads back as the
+  day that was stored.
+- No field has an interval type. `INTERVAL 1 DAY * v` with a `long` field `v`
+  gives an `interval_day` with the value `PT72H` for 3, and NULL for a NULL.
+  Every unit gives its own type the same way. The round trip of each interval
+  type stores the number and reads the interval that the select makes.
+- A `time.Duration` holds at most about 292 years. `INTERVAL 1 DAY *
+  1048576` gives `PT25165824H`, which the driver refuses with an error that
+  wraps `dbimp.ErrInvalidValue`, for that row.
+- A `unsigned_long` stored as a JSON number keeps every digit, and its
+  update to a second value and back to the first keeps them too.
 
 These facts were recorded about fields that are not one value:
 
@@ -426,6 +453,24 @@ script in its `filter` for about two seconds:
 - `request_timeout` ends a statement on the server (recorded: "a request
   timeout"). See Errors for its status.
 
+What the driver does (D167):
+
+- When the context ends, the driver closes the request, and the server
+  cancels the task. After a statement whose context ended, no task of
+  `indices:data/read/sql` ran for more than 20 seconds on any release
+  (`TestIntegrationCancel`, 2026-10-07). The error is the error of the
+  context, and never `driver.ErrBadConn`.
+- When the caller closes the rows before the end, the driver closes the
+  cursor with `POST /_sql/close`. The cursor follows the rows of a page, so
+  `Close` reads the rest of the current page, at most 256 KiB and for at most
+  5 seconds, to learn it. A page that is larger leaves its cursor to the
+  server. Without this read, a cursor stays open until its `keep_alive`
+  ends. With it, the count `open_contexts` of `GET /_nodes/stats/indices/search`
+  was the same after five statements that the caller closed after 1, 100, 101,
+  150 and 249 rows (`TestIntegrationPages`, 2026-10-07).
+- When the context ends in the middle of a page, the driver does not know the
+  cursor, and closes none.
+
 ## Statements
 
 - Two statements in one text fail with HTTP 400, a parse error at the `;`.
@@ -474,6 +519,16 @@ These facts were recorded as `dbmeta_user` on each release:
   cluster and `USER()` the user, to both principals (recorded: "the database
   and the user").
 
+The answer for step 16: `usql` has no driver for Elasticsearch, so it runs no
+statement for the version. The driver sends none either. `GET /` gives
+`version.number` to the administrator, and gives HTTP 403 to the ordinary
+user. `SELECT DATABASE(), USER()` works as both principals, and gives
+`docker-cluster` with `elastic` and with `dbmeta_user`. A version that the
+ordinary user can read waits for `dbmeta` (Open questions). These facts were
+measured on 8.19.22, 9.4.6 and 9.5.3 on 2026-10-07
+(`TestIntegrationVersion` and `TestIntegrationPrincipals`). The same tests
+show that the ordinary user can page a result on each release.
+
 ## Flavors
 
 - OpenSearch forked from Elasticsearch 7.10, and gets a driver of its own
@@ -488,9 +543,46 @@ These facts were recorded as `dbmeta_user` on each release:
   adds `project_routing` (the Go client and the server message under
   Requests, not measured).
 
+The releases differ in these ways, which the integration tests hold
+(`TestIntegrationFeatures`, 2026-10-07):
+
+- A `catalog` that is not a configured cluster gives HTTP 404 with
+  `no_such_remote_cluster_exception` on 9.4.6 and 9.5.3. On 8.19.22 it gives
+  HTTP 403 with `security_exception`, and the root cause is
+  `no_such_remote_cluster_exception`, so the driver reports that type from
+  `RootType`.
+- `project_routing` is an unknown field on 8.19.22. On 9.4.6 and 9.5.3 it
+  fails because cross-project search is off.
+- A statement that passes its `request_timeout` gives HTTP 504 on 8.19.22 and
+  HTTP 429 on 9.4.6 and 9.5.3 (Errors).
+
 ## Interfaces
 
-No code exists yet. Step 10 writes this table from the code.
+The code writes this table (step 10). Run `DBIMP_UPDATE=1 go test -run
+TestTables ./elasticsearch` to write it.
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping runs SELECT 1, which checks the credentials. GET / needs the cluster privilege monitor, which the ordinary user lacks. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because the SQL API has no sessions. |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option and a uint64, which the driver refuses above the range of int64 (D167), and hands every other value to database/sql. |
+| `driver.QueryerContext` | yes | The server binds each argument from the array params (D167). |
+| `driver.ExecerContext` | yes | Exec reads the result to its end. SQL takes no write, so RowsAffected fails (D163). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because Elasticsearch has no transactions (D167). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, and its pages are one result. |
+| `driver.RowsColumnTypeScanType` | yes | The answer names the type of each column (D167). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The answer names the type of each column, which the driver writes in upper case, as SYS TYPES does. |
+| `driver.RowsColumnTypeLength` | no | The answer names no length. |
+| `driver.RowsColumnTypeNullable` | yes | The answer does not say whether a column can be NULL, and every type can be. |
+| `driver.RowsColumnTypePrecisionScale` | no | The answer names no precision and no scale, and there is no decimal type. |
+<!-- /dbimp:interfaces -->
 
 ## Faults
 
@@ -506,6 +598,13 @@ driver must not repeat:
 - The Python driver writes the parameters into the text (`apply_parameters`).
 - The Go client sends `index_using_frozen`, which the server refuses
   (recorded: "step 7: index_using_frozen").
+
+This driver does none of them. It reads each page one token at a time, and
+reads the next page only when `Rows.Next` needs it (`TestLargeResult` reads a
+result of 64 MiB in 128 pages, and the heap stays under 16 MiB). It gives a
+type that it does not know as the decoded JSON value, and logs nothing. It
+sends each argument in `params`, and never writes it into the text. It sends
+only the keys that the server knows.
 
 ## Second opinions
 
@@ -570,19 +669,183 @@ against [TYPES.md](TYPES.md) and D135:
 
 ## Open questions
 
-Each of these waits for Ken, at step 9 or before:
+Ken answered the five questions of step 8 on 2026-10-02, and D167 holds the
+answers:
 
-1. The mapping of the types (step 8a). The day-time intervals are
-   `time.Duration`, where the `INTERVAL` of Avatica is a `dbimp.Interval`.
-   `ip` and `version` are strings.
-2. A `uint64` argument above the range of `int64` is cut to a `long` by the
-   server with no error. The driver can send it as a string in
-   `CAST(? AS UNSIGNED_LONG)`, write it as a literal, or refuse it.
-3. A field with several values fails the statement unless
-   `field_multi_value_leniency` is true, and then gives the first value.
-   Whether the driver sets it, and whether a caller can, is a decision.
-4. The ordinary user cannot read the version with `GET /`. `usql` needs a
-   statement for the version (step 16).
-5. The server cuts no result short, and gives each page with a cursor. A
-   page cannot pass `index.max_result_window`, so the size of a page is a
-   decision.
+1. The mapping of the types is the table in Types. The day-time intervals are
+   `time.Duration`, and `ip` and `version` are strings (D167, item 3).
+2. The driver refuses a `uint64` above the range of `int64`, because the
+   server cuts it to the largest `long` with no sign (D167, item 5).
+3. The driver leaves `field_multi_value_leniency` off, so that no value is lost
+   with no sign, and the DSN key lets the caller turn it on (D167, item 9).
+4. The ordinary user cannot read the version with `GET /`. The version waits
+   for `dbmeta`, which can give `dbmeta_user` the privilege `monitor`. The
+   driver sends no request for the version.
+5. The page is 1000 rows by default, and the key `fetch_size` changes it
+   (D167, item 2). A page cannot pass `index.max_result_window` of an index.
+
+These questions came from steps 10 to 17a, and wait for Ken:
+
+6. Closed by D178. Hard rule 4 of AGENTS.md lists the drivers whose rows can hold a context.
+   Elasticsearch is not in it. The rows of this driver keep the context of the
+   statement, because the request for each next page needs it
+   (`elasticsearch/rows.go`). The driver does not store a context anywhere
+   else. Ken decides whether to add Elasticsearch to that rule, and which
+   decision names it.
+7. Closed by D178. D36 says that `Rows.Close` before the end reads nothing more, and D167
+   says that the driver closes the cursor when the caller closes the rows
+   early. The cursor follows the rows of its page, so `Close` reads the rest of
+   the current page to learn it, at most 256 KiB and for at most 5 seconds
+   (Cancellation and timeouts). The other choice is to read nothing and leave
+   the cursor to the server, which drops it when its `keep_alive` ends. The
+   `keep_alive` default of 45 seconds is not measured.
+8. A `float` and a `half_float` arrive as the shortest text of a 32-bit float.
+   The driver reads that text as a `float64`, so `6.1035156E-5` is 6.1035156e-05
+   and not 2 to the power of -14. The other choice is to read the text as a
+   `float32` and widen it, which gives the exact 32-bit value.
+9. A day-time interval of more than about 292 years cannot be a
+   `time.Duration`, and the driver fails the row with `dbimp.ErrInvalidValue`.
+   The other choices are to give a `dbimp.Interval` for such a value, or to
+   cap it.
+10. `WithDatabase` fails with `dbimp.ErrNotSupported`, because Elasticsearch has
+    no database to choose. The cluster is the catalog, and `WithCatalog` sets
+    it, as the key `catalog` does. `WithParameter` applies to the first request
+    of a statement and not to the request for each next page, which holds the
+    cursor, the leniency and the timeout only.
+11. A type that the driver does not know is the decoded JSON value, with the
+    scan type `any`. The server refuses every type that has no mapping in the
+    table, so no recorded column has such a type. The other choice is an error.
+12. OpenSearch will share little with this driver. Its answer names the columns
+    `schema` and the rows `datarows`, each of its cursors serves once, and its
+    errors have another shape (OPENSEARCH.md, Responses and Errors). Nothing
+    moved to the root package. `elasticsearch/rows.go` and
+    `elasticsearch/errors.go` hold the code that a second driver can take if
+    Ken wants it shared: the reader of pages, the bound on the read after
+    `Close`, and the reader of the error object.
+13. Steps 16 and 20 send three requests, which wait for the release (W28 in
+    [BACKLOG.md](BACKLOG.md)). The `url` that `dbrun` prints already has the
+    scheme `elasticsearch`, so the tests need no conversion, and the workflow
+    needs no change but its comment.
+
+## Integration tests
+
+The integration tests of the driver read `ELASTICSEARCH_DSN`, and
+`ELASTICSEARCH_ORDINARY_DSN` for the ordinary user, and skip when
+`ELASTICSEARCH_DSN` is empty. Each is the `url` of `dbrun`. The tests ran on
+2026-10-07, one server at a time, with `-race`, on a fresh container of each
+release:
+
+| Release | Passed | Skipped | Failed |
+| --- | --- | --- | --- |
+| `elasticsearch-8.19.22` | 362 | 0 | 0 |
+| `elasticsearch-9.4.6` | 362 | 0 | 0 |
+| `elasticsearch-9.5.3` | 362 | 0 | 0 |
+
+A count is a test or a subtest, and each principal is a subtest. The tests make
+their indices as the administrator, with the name of the run as the prefix,
+and the prefix starts with `dbmeta` so that the ordinary user can read it.
+`TestMain` removes every index of the run, also when a test fails. SQL takes no
+write, so the administrator writes through the document API, and each principal
+reads through the driver.
+
+The round trip stores every type that `features.json` marks yes in a field of
+that type, with the values of DRIVER.md: NULL, the zero value, the smallest and
+the largest value, an empty value, a long value, text outside ASCII, and the
+last digit of precision. It stores a value as a bound argument, then updates,
+reads and deletes it. It cannot store a value as a literal, because SQL has no
+`INSERT`, and each literal is logged as skipped inside the test
+(`TestIntegrationRoundTrip`). These types need a note on how the round trip
+stores them:
+
+- The type `null` has no field. The select is `SELECT NULL AS v`, which gives the
+  type `null`, with a row that stores a NULL in a `keyword` field.
+- A `date` and a `time` are made from a `date` field with `CAST(v AS DATE)` and
+  `CAST(v AS TIME)`, which is how SQL makes them (Types).
+- An interval has no field. The round trip stores a number in a `long` field, and
+  the select multiplies an interval by it (Types).
+- A `datetime` is stored in a `date_nanos` field, to keep every nanosecond.
+- A `binary` value is stored as base64, and read as bytes.
+- The types that `features.json` marks no, such as `dense_vector` and `nested`,
+  have a test of the refusal of the server, and `decimal` shows that a cast to
+  `DECIMAL` gives a `DOUBLE`.
+
+The tests also hold the statements of CRUD on three indices, the operations on
+a schema, every feature of the survey, the pages and the cursor, the cancel, the
+principals and the version, as each principal. The ones that the driver does not
+speak, such as the other formats of an answer, the async form and the list of
+tasks, go through the HTTP API as the administrator.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was
+written on 2026-10-07 from the staged code. A fact of Couchbase comes from
+[COUCHBASE.md](COUCHBASE.md), and a fact of Elasticsearch from the sections
+above.
+
+### The server
+
+| | Couchbase | Elasticsearch |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /_sql?format=json`, with `query`, `params` and the settings in the body. A later page sends `cursor` in place of `query` (Requests) |
+| Database | The key `query_context` of the body | None. A statement names its indices, and `catalog` names a cluster (Statements) |
+| Language | SQL++, which is close to SQL | SQL of its own, which reads only: `SELECT`, `SHOW`, `DESCRIBE` and `SYS` (Requests) |
+| DDL | In SQL++ | None. A write goes through the document API, and every statement of DDL is a parse error (Statements) |
+| Parameters | `?`, `$1` and `$name` | `?` only, from a JSON array of plain values. The server types each value from its JSON kind (Parameters) |
+| Framing | One body for the whole result, which does not page | One object for each page, with a `cursor` for the next page, and no `columns` after the first (Responses) |
+| Columns | `signature`, before the first row | `columns`, before the first row, with the type of each column. A repeated name stays (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement. `SELECT *` sorts the columns by name (Responses) |
+| Errors | Can come with HTTP 200, after some rows | A status that is not 2xx with a JSON object. Never HTTP 200. After some rows, the error is the answer to the request for a later page (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON, with a type name for each column. A time is ISO 8601 text, an interval is an ISO 8601 text, binary is base64 and a geometry is WKT (Types) |
+| Cancel | The server stops a query when the client leaves | The server cancels the task when the client leaves. A cursor stays open until it is closed or its `keep_alive` ends (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None. `BEGIN` is a parse error (Transactions) |
+| Authentication | Basic, or `creds` in the body | Basic, or an API key in `Authorization: ApiKey` (Requests) |
+| Default port | 8093, or 18093 with TLS | 9200, with and without TLS |
+
+The differences that a caller sees:
+
+- Every write fails with the parse error of the server, because SQL takes none
+  (D163).
+- A statement has no database, and `WithDatabase` fails (D167).
+- A result comes in pages, and an error on a later page fails the rows with
+  `dbimp.ErrIncomplete` after exactly the rows that arrived (D167).
+- The server cancels a statement when the client leaves, so the driver only
+  closes the request. The driver closes the cursor of rows that the caller
+  closes early (D167).
+- A field that holds several values fails the statement, unless the caller sets
+  `field_multi_value_leniency`, which then loses the other values (D167).
+- An object and a nested field cannot be selected as a column. A statement names
+  their subfields (Types).
+
+### The driver
+
+| | `couchbase` | `elasticsearch` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-07 | About 1300 lines in 8 files | About 1600 lines in 8 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `Auth`, `User`, `Password`, `FetchSize`, `TimeZone`, `FieldMultiValueLeniency`, `Catalog` (D167) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithDatabase` sets `query_context`, as `WithQueryContext` does. `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithFetchSize`, `WithTimeZone`, `WithFieldMultiValueLeniency` and `WithCatalog`, through `WithOptions` or an argument (D109). `WithTimeout` sends `request_timeout`. `WithReadonly` changes nothing, because every statement is read-only. `WithDatabase` gives `dbimp.ErrNotSupported`. `WithParameter` sets any key of the body of the first request |
+| Arguments | Sent to the server as `args` and `$name` | Sent as `params`, a JSON array of plain values. A `time.Time` is a string in ISO 8601 in UTC. A named argument, a `[]byte`, a `uint64` above `int64`, `NaN` and an infinity are refused (`elasticsearch/types.go` and `elasticsearch/conn.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | `dbimp.ArrayRows` for each page, and a reader of the members of the page around it, which follows the cursor (`elasticsearch/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | `ColumnTypeDatabaseTypeName`, the type in upper case, `ColumnTypeScanType` and `ColumnTypeNullable`. Every column can be NULL |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the column, as the type table says: `uint64` for `unsigned_long`, `time.Time`, `dbimp.Date`, `dbimp.OffsetTime`, `dbimp.Interval` for a period of months, `time.Duration` for a length of time, `[]byte` and `string` for a geometry (D135 and D167) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` and `LastInsertId` return `dbimp.ErrNotSupported`, because SQL changes no rows (D163) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D167) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same. The server cancels the task. Rows that the caller closes early close the cursor with `POST /_sql/close` and a limit of 5 seconds (D167) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Type, Reason, RootType, RootReason}`, which unwraps to `*dbimp.StatusError` |
+| Authentication | Basic | Basic, or an API key from the password with `auth=apikey`. The driver follows no redirect, so the credentials go to the host of the DSN only (D167) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, `Config`, `ParseDSN` and `NewConnector` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a time, an interval and a `uint64` too, where
+  Couchbase gives JSON shapes (D135 and D167).
+- The ten day-time intervals are a `time.Duration`, and the year-month intervals
+  are a `dbimp.Interval` (D167, item 3).
+- `RowsAffected` always returns an error, where Couchbase counts every
+  statement by `mutationCount` (D163).
+- `WithReadonly` succeeds and does nothing, where Couchbase sends `readonly`,
+  because SQL takes no write (D163).
+- The rows keep the context of the statement for the next page, where the rows
+  of Couchbase hold none (Open questions, 6).
+- `Close` before the end can read the rest of the current page to close the
+  cursor (Open questions, 7).
