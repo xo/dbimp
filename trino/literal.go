@@ -18,11 +18,6 @@ import (
 	"github.com/xo/dbimp"
 )
 
-// Row is a value that the driver sends as a ROW, such as ROW(1, 'x'). A []any
-// is an ARRAY, and neither server takes a bound parameter, so the type says
-// which one an argument means (D175).
-type Row []any
-
 // escape writes s as a URL does, with %20 for a space and %2B for a plus sign,
 // as the headers of the session and of the prepared statements hold their
 // values (measured). Presto reads a plus sign as a space.
@@ -100,18 +95,16 @@ func (w writer) literal(v any) (string, error) {
 		return w.interval(v)
 	case uuid.UUID:
 		return "UUID " + quote(v.String()), nil
-	case Row:
-		return w.list("ROW(", v, ")")
 	case []any:
-		return w.list("ARRAY[", v, "]")
+		return w.list(v)
 	case []string:
-		return w.list("ARRAY[", toAny(v), "]")
+		return w.list(toAny(v))
 	case []int64:
-		return w.list("ARRAY[", toAny(v), "]")
+		return w.list(toAny(v))
 	case []float64:
-		return w.list("ARRAY[", toAny(v), "]")
+		return w.list(toAny(v))
 	case []bool:
-		return w.list("ARRAY[", toAny(v), "]")
+		return w.list(toAny(v))
 	case map[string]any:
 		return w.mapping(v)
 	}
@@ -231,8 +224,8 @@ func (w writer) interval(iv dbimp.Interval) (string, error) {
 		ms/86400000, ms%86400000/3600000, ms%3600000/60000, ms%60000/1000, ms%1000), nil
 }
 
-// list writes the elements of a list between open and closing.
-func (w writer) list(open string, elems []any, closing string) (string, error) {
+// list writes the elements of a list as an ARRAY.
+func (w writer) list(elems []any) (string, error) {
 	parts := make([]string, len(elems))
 	for i, e := range elems {
 		lit, err := w.literal(e)
@@ -241,7 +234,7 @@ func (w writer) list(open string, elems []any, closing string) (string, error) {
 		}
 		parts[i] = lit
 	}
-	return open + strings.Join(parts, ", ") + closing, nil
+	return "ARRAY[" + strings.Join(parts, ", ") + "]", nil
 }
 
 // mapping writes a map as MAP(ARRAY[keys], ARRAY[values]), with the keys in
@@ -252,11 +245,11 @@ func (w writer) mapping(m map[string]any) (string, error) {
 	for i, k := range keys {
 		vals[i] = m[k]
 	}
-	ks, err := w.list("ARRAY[", toAny(keys), "]")
+	ks, err := w.list(toAny(keys))
 	if err != nil {
 		return "", err
 	}
-	vs, err := w.list("ARRAY[", vals, "]")
+	vs, err := w.list(vals)
 	if err != nil {
 		return "", err
 	}

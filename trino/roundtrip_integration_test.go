@@ -13,7 +13,6 @@ import (
 
 	"github.com/xo/dbimp"
 	"github.com/xo/dbimp/dbimptest"
-	"github.com/xo/dbimp/trino"
 )
 
 // rtValue is one value of a round trip: the value that the test writes as an
@@ -301,10 +300,14 @@ func roundTripCases(t *testing.T, e env) map[string]rtCase { //nolint:maintidx /
 		{name: "empty", in: map[string]any{}, want: map[string]any{}, lit: "CAST(MAP() AS map(varchar, integer))"},
 		{name: "unicode", in: map[string]any{"é": int64(-1), "日本": nil}, want: map[string]any{"é": int64(-1), "日本": nil}, lit: "MAP(ARRAY['é', '日本'], ARRAY[-1, NULL])"}, nul,
 	}}
-	cases["ROW"] = rtCase{column: "row(a integer, b varchar)", values: []rtValue{
-		{name: "both", in: trino.Row{int64(1), "x"}, want: []any{int64(1), "x"}, lit: "CAST(ROW(1, 'x') AS row(a integer, b varchar))"},
-		{name: "nulls", in: trino.Row{nil, nil}, want: []any{nil, nil}, lit: "CAST(ROW(NULL, NULL) AS row(a integer, b varchar))"},
-		{name: "extremes", in: trino.Row{int64(2147483647), "é"}, want: []any{int64(2147483647), "é"}, lit: "CAST(ROW(2147483647, 'é') AS row(a integer, b varchar))"}, nul,
+	// The driver sends no ROW as an argument, because a []any is an ARRAY, so
+	// the statement casts the JSON text that the argument holds.
+	cases["ROW"] = rtCase{column: "row(a integer, b varchar)", insert: func(tbl string) string {
+		return "INSERT INTO " + tbl + " SELECT ?, CAST(JSON_PARSE(?) AS row(a integer, b varchar))"
+	}, values: []rtValue{
+		{name: "both", in: `[1,"x"]`, want: []any{int64(1), "x"}, lit: "CAST(ROW(1, 'x') AS row(a integer, b varchar))"},
+		{name: "nulls", in: `[null,null]`, want: []any{nil, nil}, lit: "CAST(ROW(NULL, NULL) AS row(a integer, b varchar))"},
+		{name: "extremes", in: `[2147483647,"é"]`, want: []any{int64(2147483647), "é"}, lit: "CAST(ROW(2147483647, 'é') AS row(a integer, b varchar))"}, nul,
 	}}
 	cases["HYPERLOGLOG"] = sketch(t, e, "HyperLogLog", "approx_set(CAST(? AS bigint))")
 	cases["P4HYPERLOGLOG"] = sketch(t, e, "P4HyperLogLog", "CAST(approx_set(CAST(? AS bigint)) AS P4HyperLogLog)")

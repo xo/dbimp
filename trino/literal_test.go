@@ -63,8 +63,7 @@ func TestLiterals(t *testing.T) { //nolint:maintidx // One table of the literal 
 		{"ints", []int64{1, 2}, "ARRAY[1, 2]"},
 		{"floats", []float64{1.5}, "ARRAY[DOUBLE '1.5']"},
 		{"bools", []bool{true}, "ARRAY[TRUE]"},
-		{"a row", Row{int64(1), "x", nil}, "ROW(1, 'x', NULL)"},
-		{"a nested list", []any{[]any{int64(1)}, Row{[]string{"a"}}}, "ARRAY[ARRAY[1], ROW(ARRAY['a'])]"},
+		{"a nested list", []any{[]any{int64(1)}, []string{"a"}}, "ARRAY[ARRAY[1], ARRAY['a']]"},
 		{"a map", map[string]any{"b": int64(2), "a": []any{int64(1)}}, "MAP(ARRAY['a', 'b'], ARRAY[ARRAY[1], 2])"},
 		{"an empty map", map[string]any{}, "MAP()"},
 	} {

@@ -67,7 +67,7 @@ func (cn *conn) ResetSession(context.Context) error {
 // CheckNamedValue satisfies driver.NamedValueChecker. It keeps an Option,
 // which the statement takes out (D109), and the values that the driver writes
 // as a literal of their own type: a decimal, the types of the root package, a
-// UUID, a Row, a list and a map (D175). A nil pointer that implements
+// UUID, a list and a map (D175). A nil pointer that implements
 // driver.Valuer becomes nil. It hands every other value to the default
 // converter of database/sql.
 func (cn *conn) CheckNamedValue(nv *driver.NamedValue) error {
@@ -84,7 +84,7 @@ func (cn *conn) CheckNamedValue(nv *driver.NamedValue) error {
 		nv.Value = &v
 		return nil
 	case dbimp.Date, dbimp.LocalTime, dbimp.OffsetTime, dbimp.LocalDateTime, dbimp.Interval,
-		uuid.UUID, Row, []any, []string, []int64, []float64, []bool, map[string]any:
+		uuid.UUID, []any, []string, []int64, []float64, []bool, map[string]any:
 		return nil
 	}
 	if v, ok := nv.Value.(driver.Valuer); ok {

@@ -65,7 +65,7 @@ func TestTables(t *testing.T) {
 		"driver.Pinger":                         "Ping runs SELECT 1, which checks the user and the password. GET /v1/info needs neither.",
 		"driver.SessionResetter":                "A connection keeps the catalog, the schema, the properties of the session and the prepared statements that the servers ask for, so ResetSession gives each caller the state of the DSN (D175).",
 		"driver.Validator":                      "A connection holds nothing on the server, so it is always valid.",
-		"driver.NamedValueChecker":              "It keeps an Option, a decimal, the types of the root package, a UUID, a Row, a list and a map, which the driver writes as a literal of their own type (D175).",
+		"driver.NamedValueChecker":              "It keeps an Option, a decimal, the types of the root package, a UUID, a list and a map, which the driver writes as a literal of their own type (D175).",
 		"driver.QueryerContext":                 "The driver sends each argument as a literal of EXECUTE name USING, on a statement that it names in the prepared-statement header (D175).",
 		"driver.ExecerContext":                  "Exec reads the result to its end, and RowsAffected is the updateCount of the server, if it sent one.",
 		"driver.ConnPrepareContext":             "A prepared statement runs as its text, with its arguments, each time.",

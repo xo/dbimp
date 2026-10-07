@@ -826,7 +826,7 @@ The code writes this table, and a test makes sure that it is current.
 | `driver.Pinger` | yes | Ping runs SELECT 1, which checks the user and the password. GET /v1/info needs neither. |
 | `driver.SessionResetter` | yes | A connection keeps the catalog, the schema, the properties of the session and the prepared statements that the servers ask for, so ResetSession gives each caller the state of the DSN (D175). |
 | `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
-| `driver.NamedValueChecker` | yes | It keeps an Option, a decimal, the types of the root package, a UUID, a Row, a list and a map, which the driver writes as a literal of their own type (D175). |
+| `driver.NamedValueChecker` | yes | It keeps an Option, a decimal, the types of the root package, a UUID, a list and a map, which the driver writes as a literal of their own type (D175). |
 | `driver.QueryerContext` | yes | The driver sends each argument as a literal of EXECUTE name USING, on a statement that it names in the prepared-statement header (D175). |
 | `driver.ExecerContext` | yes | Exec reads the result to its end, and RowsAffected is the updateCount of the server, if it sent one. |
 | `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
@@ -1013,6 +1013,23 @@ These questions came with the driver, and wait for Ken:
     Parameters), so it cannot go into a `YEAR TO MONTH` column.
 17. The default `source` of a statement is `dbimp`, and the default time zone
     is the one of the server. D175 names the keys and no default.
+18. A `ROW` value is a `[]any` in the order of its fields, so a caller cannot
+    read the field names from the value (D135 and D137). Ken decided on
+    2026-10-07 to do nothing now, and to remove the `Row` type that held a
+    row argument. The names are in the type name of the column, such as
+    `row(a integer, b varchar)`, from `ColumnTypeDatabaseTypeName`. If a
+    caller needs the names later, there are three options:
+    - Do nothing more. A caller parses the type name of the column.
+    - Add a helper such as `trino.FieldNames(rows, i)` that parses that type
+      name and returns the names. It adds an export and changes no scanned
+      value. This is the option to try first.
+    - Add a named scan type, as the official client does with its `Row`
+      struct. A caller who wants the names scans into it. It breaks the rule
+      of one Go type for each kind (D135 and D137), so it needs a decision
+      from Ken first.
+    A row argument has no type either. A `[]any` is an `ARRAY`, so a caller
+    who needs to send a `ROW` writes `CAST(JSON_PARSE(?) AS row(...))` and
+    passes JSON text.
 
 ## Integration tests
 
@@ -1094,7 +1111,7 @@ The differences that a caller sees:
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The driver sends `DELETE` of the `nextUri` when the rows close early and when the context ends, with a limit of 5 seconds. The rows keep the context of the query, which is an exception to hard rule 4 (D175) |
 | Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Name, Type, Code, Message, Line, Column}`, which unwraps to `*dbimp.StatusError` for an error of the protocol |
 | Authentication | Basic | Basic, the user header, and no redirect, so the secret and the user go to the host of the DSN only. Each `nextUri` uses the host of the DSN (D175) |
-| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, `Row`, `Config`, `Flavor` and the two names of the flavors |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, `Config`, `Flavor` and the two names of the flavors |
 
 The differences that a caller sees:
 
