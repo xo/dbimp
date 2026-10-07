@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ]
+    },
+    "body": "-- first\nSELECT 7"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=60"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:54 GMT"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232354_00184_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232354_00184_cqrz9\",\"nextUri\":\"http://127.0.0.1:55039/v1/statement/queued/20261006_232354_00184_cqrz9/1?slug=xbe81875df01c4833800e4f45fa7041db\",\"stats\":{\"state\":\"WAITING_FOR_PREREQUISITES\",\"waitingForPrerequisites\":true,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0},\"warnings\":[]}\n"
+  }
+}

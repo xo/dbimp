@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ]
+    },
+    "body": "SELECT 1"
+  },
+  "response": {
+    "status": 401,
+    "header": {
+      "Www-Authenticate": [
+        "Basic realm=\"Trino\""
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:50 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "text/plain;charset=utf-8"
+      ]
+    },
+    "body": "Basic authentication or X-Trino-Original-User or X-Trino-User must be sent"
+  }
+}

@@ -64,6 +64,7 @@ order:
 14. OpenSearch (W29).
 15. Amazon DynamoDB (W30). ScyllaDB Alternator gets no support (D163).
 16. Trino and Presto, in one driver with two flavors (W31 and D173).
+17. ClickHouse, over its HTTP interface (W32 and D174).
 
 The other targets below keep their priority, and their place in the order
 is open.
@@ -152,9 +153,9 @@ that. D87 applies D17 to Milvus, PostgREST and ksqlDB.
 
 | Target | Notes |
 | --- | --- |
-| ClickHouse | `dbrun` starts it today (measured in `dbmeta`). `usql` already has a driver, so it is likely P2 (D24). 64-bit integers arrive quoted in JSON. `dburl` waits for a driver here before it settles the port and the TLS of ClickHouse over HTTP (dburl D34). |
+| ClickHouse | Seventeenth in the order (D174). The driver is `clickhouse` (W32). `dbrun` starts 25.3, 25.8 and 26.9 (measured in `dbmeta`). `usql` has a driver, `clickhouse-go/v2`, which speaks the native protocol, and this driver speaks HTTP (D24). See [CLICKHOUSE.md](CLICKHOUSE.md). 64-bit integers arrive quoted in JSON. `dburl` waits for a driver here before it settles the port and the TLS of ClickHouse over HTTP (dburl D34). |
 | Couchbase | `dbrun` starts it today (measured in `dbmeta`). The first driver (D23). The driver is `github.com/xo/dbimp/couchbase`. Couchbase Analytics is part of this target, and not a target of its own. See "Flavors" in [COUCHBASE.md](COUCHBASE.md). |
-| Trino and Presto | Sixteenth in the order (D173). The driver is `trino`, with Presto as a flavor (W31). `dbrun` starts Trino 476 and 483 and Presto 0.299 (measured in `dbmeta`). `usql` has a driver for each, which this driver can replace (D24). See [TRINO.md](TRINO.md). Results page through `nextUri`, and an error can arrive on a later page. `dburl` waits for a driver here before it settles their ports and their TLS (dburl D34). |
+| Trino and Presto | Sixteenth in the order (D173). The driver is `github.com/xo/dbimp/trino`, with Presto as a flavor (W31 and D175). `dbrun` starts Trino 476 and 483 and Presto 0.299 (measured in `dbmeta`). `usql` has a driver for each, which this driver can replace (D24). See [TRINO.md](TRINO.md). Results page through `nextUri`, and an error can arrive on a later page. `dburl` waits for a driver here before it settles their ports and their TLS (dburl D34). |
 | CrateDB | No driver here (D88). `usql` reaches it with `pgx` on the PostgreSQL wire protocol, which the `dbmeta` session measured on 6.4.5, and `dbmeta` reads it through a dialect of its own. The HTTP interface builds each whole result in the memory of the server, and has no paging. R: `dbrun` starts 6.3.7 and 6.4.5. See [CRATEDB.md](CRATEDB.md). |
 | ArangoDB | Next after InfluxDB, by D73 and D88. The driver is `github.com/xo/dbimp/arangodb`, from D89 to D94. R: `dbrun` starts 3.12.12. H: `POST /_api/cursor` on port 8529. S: yes, AQL, by D75. P1. See [ARANGODB.md](ARANGODB.md). |
 | QuestDB | No driver here (D170). It speaks the PostgreSQL wire protocol, which `usql` reaches with `pgx`. `/exec` returns a column list and binds no arguments. |

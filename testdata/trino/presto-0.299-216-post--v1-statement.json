@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ]
+    },
+    "body": "SELECT ARRAY[1, NULL, 3], MAP(ARRAY['a', 'b'], ARRAY[1, 2]), MAP(ARRAY[1, 2], ARRAY['x', 'y']), CAST(ROW(1, 'x', NULL) AS ROW(a integer, b varchar, c double)), ROW(1, 2), ARRAY[ARRAY[1], ARRAY[2, 3]], CAST(NULL AS array(integer)), ARRAY[DATE '2026-10-01'], ARRAY[TIMESTAMP '2026-10-01 12:34:56.789'], ARRAY[CAST(1.5 AS DECIMAL(5,2))], ARRAY[X'00ff'], MAP(ARRAY[DATE '2026-10-01'], ARRAY[1])"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Cache-Control": [
+        "max-age=60"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:24 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232324_00081_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232324_00081_cqrz9\",\"nextUri\":\"http://127.0.0.1:55039/v1/statement/queued/20261006_232324_00081_cqrz9/1?slug=xbfc7673d7d0a4521bc287424781f778f\",\"stats\":{\"state\":\"WAITING_FOR_PREREQUISITES\",\"waitingForPrerequisites\":true,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0},\"warnings\":[]}\n"
+  }
+}

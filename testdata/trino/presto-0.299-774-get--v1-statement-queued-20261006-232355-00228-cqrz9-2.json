@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232355_00228_cqrz9/2",
+    "query": "slug=x32e6f0cd15eb49aab15e577ed9c1aa75",
+    "header": {
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:55 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=299"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232355_00228_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232355_00228_cqrz9\",\"stats\":{\"state\":\"FAILED\",\"waitingForPrerequisites\":false,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":1,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0,\"runtimeStats\":{\"getColumnHandleTimeNanos\":{\"name\":\"getColumnHandleTimeNanos\",\"unit\":\"NANO\",\"sum\":12220,\"count\":2,\"max\":6650,\"min\":5570},\"systemAccessControl.getColumnMasks\":{\"name\":\"systemAccessControl.getColumnMasks\",\"unit\":\"NANO\",\"sum\":830,\"count\":1,\"max\":830,\"min\":830},\"systemAccessControl.checkCanSelectFromColumns\":{\"name\":\"systemAccessControl.checkCanSelectFromColumns\",\"unit\":\"NANO\",\"sum\":290,\"count\":1,\"max\":290,\"min\":290},\"analyzeTimeNanosOnCpu\":{\"name\":\"analyzeTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":524291,\"count\":1,\"max\":524291,\"min\":524291},\"checkAccessPermissionsTimeNanosOnCpu\":{\"name\":\"checkAccessPermissionsTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":183070,\"count\":1,\"max\":183070,\"min\":183070},\"systemAccessControl.checkCanSetUser\":{\"name\":\"systemAccessControl.checkCanSetUser\",\"unit\":\"NANO\",\"sum\":1010,\"count\":1,\"max\":1010,\"min\":1010},\"getIdentifierNormalizationTimeNanos\":{\"name\":\"getIdentifierNormalizationTimeNanos\",\"unit\":\"NANO\",\"sum\":22990,\"count\":8,\"max\":18740,\"min\":290},\"getColumnMetadataTimeNanos\":{\"name\":\"getColumnMetadataTimeNanos\",\"unit\":\"NANO\",\"sum\":10610,\"count\":2,\"max\":5470,\"min\":5140},\"getMaterializedViewTimeNanos\":{\"name\":\"getMaterializedViewTimeNanos\",\"unit\":\"NANO\",\"sum\":5860,\"count\":2,\"max\":3410,\"min\":2450},\"systemAccessControl.checkCanAccessCatalog\":{\"name\":\"systemAccessControl.checkCanAccessCatalog\",\"unit\":\"NANO\",\"sum\":760,\"count\":2,\"max\":630,\"min\":130},\"systemAccessControl.getRowFilters\":{\"name\":\"systemAccessControl.getRowFilters\",\"unit\":\"NANO\",\"sum\":950,\"count\":1,\"max\":950,\"min\":950},\"analyzeTimeNanos\":{\"name\":\"analyzeTimeNanos\",\"unit\":\"NANO\",\"sum\":546411,\"count\":1,\"max\":546411,\"min\":546411},\"systemAccessControl.checkCanDeleteFromTable\":{\"name\":\"systemAccessControl.checkCanDeleteFromTable\",\"unit\":\"NANO\",\"sum\":2450,\"count\":1,\"max\":2450,\"min\":2450},\"systemAccessControl.checkQueryIntegrity\":{\"name\":\"systemAccessControl.checkQueryIntegrity\",\"unit\":\"NANO\",\"sum\":460,\"count\":1,\"max\":460,\"min\":460},\"getViewTimeNanos\":{\"name\":\"getViewTimeNanos\",\"unit\":\"NANO\",\"sum\":17970,\"count\":2,\"max\":13260,\"min\":4710},\"getTableHandleTimeNanos\":{\"name\":\"getTableHandleTimeNanos\",\"unit\":\"NANO\",\"sum\":46390,\"count\":2,\"max\":41450,\"min\":4940},\"checkAccessPermissionsTimeNanos\":{\"name\":\"checkAccessPermissionsTimeNanos\",\"unit\":\"NANO\",\"sum\":184341,\"count\":1,\"max\":184341,\"min\":184341}}},\"error\":{\"message\":\"This connector does not support deletes\",\"errorCode\":13,\"errorName\":\"NOT_SUPPORTED\",\"errorType\":\"USER_ERROR\",\"retriable\":false,\"failureInfo\":{\"type\":\"com.facebook.presto.spi.PrestoException\",\"message\":\"This connector does not support deletes\",\"suppressed\":[],\"stack\":[\"com.facebook.presto.spi.connector.ConnectorMetadata.getDeleteRowIdColumnHandle(ConnectorMetadata.java:588)\",\"com.facebook.presto.spi.connector.ConnectorMetadata.getDeleteRowIdColumn(ConnectorMetadata.java:599)\",\"com.facebook.presto.metadata.MetadataManager.getDeleteRowIdColumn(MetadataManager.java:1027)\",\"com.facebook.presto.metadata.StatsRecordingMetadataManager.getDeleteRowIdColumn(StatsRecordingMetadataManager.java:336)\",\"com.facebook.presto.sql.planner.QueryPlanner.plan(QueryPlanner.java:308)\",\"com.facebook.presto.sql.planner.LogicalPlanner.createDeletePlan(LogicalPlanner.java:971)\",\"com.facebook.presto.sql.planner.LogicalPlanner.planStatementWithoutOutput(LogicalPlanner.java:234)\",\"com.facebook.presto.sql.planner.LogicalPlanner.planStatement(LogicalPlanner.java:203)\",\"com.facebook.presto.sql.planner.LogicalPlanner.plan(LogicalPlanner.java:187)\",\"com.facebook.presto.sql.analyzer.BuiltInQueryAnalyzer.plan(BuiltInQueryAnalyzer.java:114)\",\"com.facebook.presto.execution.SqlQueryExecution.lambda$doCreateLogicalPlanAndOptimize$5(SqlQueryExecution.java:587)\",\"com.facebook.presto.common.RuntimeStats.recordWallAndCpuTime(RuntimeStats.java:158)\",\"com.facebook.presto.execution.SqlQueryExecution.doCreateLogicalPlanAndOptimize(SqlQueryExecution.java:585)\",\"com.facebook.presto.common.RuntimeStats.recordWallAndCpuTime(RuntimeStats.java:158)\",\"com.facebook.presto.execution.SqlQueryExecution.createLogicalPlanAndOptimize(SqlQueryExecution.java:572)\",\"com.facebook.presto.execution.SqlQueryExecution.start(SqlQueryExecution.java:500)\",\"com.facebook.presto.$gen.Presto_0_299_7d50721____20261006_232305_1.run(Unknown Source)\",\"com.facebook.presto.execution.SqlQueryManager.createQuery(SqlQueryManager.java:326)\",\"com.facebook.presto.dispatcher.LocalDispatchQuery.lambda$startExecution$8(LocalDispatchQuery.java:217)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\",\"java.base/java.lang.Thread.run(Thread.java:840)\"]}},\"warnings\":[],\"updateType\":\"DELETE\"}\n"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Trino-Client-Capabilities": [
+        "PARAMETRIC_DATETIME"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ]
+    },
+    "body": "SELECT TIME '12:34:56.123456789012', TIME '12:34:56.1234 +05:30', TIMESTAMP '2026-10-01 12:34:56.123456789012', TIMESTAMP '2026-10-01 12:34:56.123456789012 UTC', TIMESTAMP '2026-10-01 12:34:56.789 +05:30', TIMESTAMP '1969-12-31 23:59:59.999999999999', TIMESTAMP '0001-01-01 00:00:00', TIMESTAMP '9999-12-31 23:59:59.999999999999'"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:22 GMT"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232522_00077_dup55\",\"infoUri\":\"http://127.0.0.1:55038/ui#/queries/20261006_232522_00077_dup55\",\"nextUri\":\"http://127.0.0.1:55038/v1/statement/queued/20261006_232522_00077_dup55/y360b62b703f8905a203ac147fb8235b4e47fa215/1\",\"stats\":{\"state\":\"QUEUED\",\"queued\":true,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"warnings\":[]}"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232552_00189_dup55/y479b3baa1a53d9293646d647d76b9470eecfe177/2",
+    "header": {
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-Transaction-Id": [
+        "f3c3ab8c-5fd7-4b0c-bab4-9f9f11b3b35a"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:52 GMT"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232552_00189_dup55\",\"infoUri\":\"http://127.0.0.1:55038/ui#/queries/20261006_232552_00189_dup55\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":1,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"Catalog only supports writes using autocommit: memory\",\"errorCode\":25,\"errorName\":\"AUTOCOMMIT_WRITE_CONFLICT\",\"errorType\":\"USER_ERROR\",\"failureInfo\":{\"type\":\"io.trino.spi.TrinoException\",\"message\":\"Catalog only supports writes using autocommit: memory\",\"suppressed\":[],\"stack\":[\"io.trino.transaction.InMemoryTransactionManager$TransactionMetadata.checkConnectorWrite(InMemoryTransactionManager.java:465)\",\"io.trino.transaction.InMemoryTransactionManager.checkConnectorWrite(InMemoryTransactionManager.java:258)\",\"io.trino.transaction.InMemoryTransactionManager.getCatalogMetadataForWrite(InMemoryTransactionManager.java:224)\",\"io.trino.metadata.MetadataManager.getCatalogMetadataForWrite(MetadataManager.java:2949)\",\"io.trino.metadata.MetadataManager.getInsertLayout(MetadataManager.java:1123)\",\"io.trino.tracing.TracingMetadata.getInsertLayout(TracingMetadata.java:669)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitInsert(StatementAnalyzer.java:653)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitInsert(StatementAnalyzer.java:545)\",\"io.trino.sql.tree.Insert.accept(Insert.java:63)\",\"io.trino.sql.tree.AstVisitor.process(AstVisitor.java:27)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.process(StatementAnalyzer.java:564)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:524)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:513)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:98)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:87)\",\"io.trino.execution.SqlQueryExecution.analyze(SqlQueryExecution.java:288)\",\"io.trino.execution.SqlQueryExecution.<init>(SqlQueryExecution.java:222)\",\"io.trino.execution.SqlQueryExecution$SqlQueryExecutionFactory.createQueryExecution(SqlQueryExecution.java:893)\",\"io.trino.dispatcher.LocalDispatchQueryFactory.lambda$createDispatchQuery$0(LocalDispatchQueryFactory.java:163)\",\"io.trino.$gen.Trino_483____20261006_232506_2.call(Unknown Source)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask.runInterruptibly(TrustedListenableFutureTask.java:128)\",\"com.google.common.util.concurrent.InterruptibleTask.run(InterruptibleTask.java:74)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask.run(TrustedListenableFutureTask.java:80)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)\",\"java.base/java.lang.Thread.run(Thread.java:1474)\"],\"errorInfo\":{\"code\":25,\"name\":\"AUTOCOMMIT_WRITE_CONFLICT\",\"type\":\"USER_ERROR\"}}},\"warnings\":[]}"
+  }
+}

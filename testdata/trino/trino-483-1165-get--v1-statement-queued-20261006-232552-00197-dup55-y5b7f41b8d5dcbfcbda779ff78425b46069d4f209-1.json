@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232552_00197_dup55/y5b7f41b8d5dcbfcbda779ff78425b46069d4f209/1",
+    "header": {
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-Transaction-Id": [
+        "f107f47c-1ff5-461c-9f3a-77a917044c67"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:52 GMT"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232552_00197_dup55\",\"infoUri\":\"http://127.0.0.1:55038/ui#/queries/20261006_232552_00197_dup55\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"Unknown transaction ID: f107f47c-1ff5-461c-9f3a-77a917044c67. Possibly expired? Commands ignored until end of transaction block\",\"errorCode\":20,\"errorName\":\"UNKNOWN_TRANSACTION\",\"errorType\":\"USER_ERROR\",\"failureInfo\":{\"type\":\"io.trino.NotInTransactionException\",\"message\":\"Unknown transaction ID: f107f47c-1ff5-461c-9f3a-77a917044c67. Possibly expired? Commands ignored until end of transaction block\",\"suppressed\":[],\"stack\":[\"io.trino.transaction.InMemoryTransactionManager.getTransactionMetadata(InMemoryTransactionManager.java:285)\",\"io.trino.transaction.InMemoryTransactionManager.checkAndSetActive(InMemoryTransactionManager.java:264)\",\"io.trino.execution.QueryStateMachine.lambda$beginWithTicker$0(QueryStateMachine.java:322)\",\"java.base/java.util.Optional.ifPresent(Optional.java:178)\",\"io.trino.execution.QueryStateMachine.beginWithTicker(QueryStateMachine.java:317)\",\"io.trino.execution.QueryStateMachine.begin(QueryStateMachine.java:273)\",\"io.trino.dispatcher.LocalDispatchQueryFactory.createDispatchQuery(LocalDispatchQueryFactory.java:126)\",\"io.trino.dispatcher.DispatchManager.createQueryInternal(DispatchManager.java:245)\",\"io.trino.dispatcher.DispatchManager.lambda$createQuery$0(DispatchManager.java:195)\",\"io.opentelemetry.context.Context.lambda$wrap$1(Context.java:242)\",\"io.airlift.concurrent.BoundedExecutor.drainQueue(BoundedExecutor.java:80)\",\"io.trino.$gen.Trino_483____20261006_232506_2.run(Unknown Source)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)\",\"java.base/java.lang.Thread.run(Thread.java:1474)\"],\"errorInfo\":{\"code\":20,\"name\":\"UNKNOWN_TRANSACTION\",\"type\":\"USER_ERROR\"}}},\"warnings\":[]}"
+  }
+}

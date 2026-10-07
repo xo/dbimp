@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232453_00267_x3v5n/yc8380f07564c55d5ce315a2169186fc637d097a1/2",
+    "header": {
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:24:53 GMT"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232453_00267_x3v5n\",\"infoUri\":\"http://127.0.0.1:55037/ui/query.html?20261006_232453_00267_x3v5n\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"This connector does not support analyze\",\"errorCode\":13,\"errorName\":\"NOT_SUPPORTED\",\"errorType\":\"USER_ERROR\",\"failureInfo\":{\"type\":\"io.trino.spi.TrinoException\",\"message\":\"This connector does not support analyze\",\"suppressed\":[],\"stack\":[\"io.trino.spi.connector.ConnectorMetadata.getStatisticsCollectionMetadata(ConnectorMetadata.java:703)\",\"io.trino.tracing.TracingConnectorMetadata.getStatisticsCollectionMetadata(TracingConnectorMetadata.java:595)\",\"io.trino.metadata.MetadataManager.getStatisticsCollectionMetadata(MetadataManager.java:1077)\",\"io.trino.tracing.TracingMetadata.getStatisticsCollectionMetadata(TracingMetadata.java:622)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitAnalyze(StatementAnalyzer.java:889)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitAnalyze(StatementAnalyzer.java:524)\",\"io.trino.sql.tree.Analyze.accept(Analyze.java:50)\",\"io.trino.sql.tree.AstVisitor.process(AstVisitor.java:27)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.process(StatementAnalyzer.java:543)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:503)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:492)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:98)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:87)\",\"io.trino.execution.SqlQueryExecution.analyze(SqlQueryExecution.java:285)\",\"io.trino.execution.SqlQueryExecution.<init>(SqlQueryExecution.java:218)\",\"io.trino.execution.SqlQueryExecution$SqlQueryExecutionFactory.createQueryExecution(SqlQueryExecution.java:884)\",\"io.trino.dispatcher.LocalDispatchQueryFactory.lambda$createDispatchQuery$0(LocalDispatchQueryFactory.java:158)\",\"io.trino.$gen.Trino_476____20261006_232406_2.call(Unknown Source)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask.runInterruptibly(TrustedListenableFutureTask.java:128)\",\"com.google.common.util.concurrent.InterruptibleTask.run(InterruptibleTask.java:74)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask.run(TrustedListenableFutureTask.java:80)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)\",\"java.base/java.lang.Thread.run(Thread.java:1447)\"],\"errorInfo\":{\"code\":13,\"name\":\"NOT_SUPPORTED\",\"type\":\"USER_ERROR\"}}},\"warnings\":[]}"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232354_00198_cqrz9/1",
+    "query": "slug=x1f851f45ac7e4ab5916626491cb478c5",
+    "header": {
+      "X-Presto-Transaction-Id": [
+        "442294cd-4aa9-43ad-903b-a1eb4ba3fd7a"
+      ],
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:54 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=300"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232354_00198_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232354_00198_cqrz9\",\"stats\":{\"state\":\"FAILED\",\"waitingForPrerequisites\":false,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"Unknown transaction ID: 442294cd-4aa9-43ad-903b-a1eb4ba3fd7a. Possibly expired? Commands ignored until end of transaction block\",\"errorCode\":20,\"errorName\":\"UNKNOWN_TRANSACTION\",\"errorType\":\"USER_ERROR\",\"retriable\":false,\"failureInfo\":{\"type\":\"com.facebook.presto.spi.PrestoException\",\"message\":\"Unknown transaction ID: 442294cd-4aa9-43ad-903b-a1eb4ba3fd7a. Possibly expired? Commands ignored until end of transaction block\",\"suppressed\":[],\"stack\":[\"com.facebook.presto.transaction.InMemoryTransactionManager.unknownTransactionError(InMemoryTransactionManager.java:349)\",\"com.facebook.presto.transaction.InMemoryTransactionManager.getTransactionMetadata(InMemoryTransactionManager.java:313)\",\"com.facebook.presto.transaction.InMemoryTransactionManager.checkAndSetActive(InMemoryTransactionManager.java:292)\",\"com.facebook.presto.transaction.TransactionManager.activateTransaction(TransactionManager.java:97)\",\"com.facebook.presto.dispatcher.DispatchManager.createQueryInternal(DispatchManager.java:303)\",\"com.facebook.presto.dispatcher.DispatchManager.lambda$createQuery$0(DispatchManager.java:245)\",\"com.facebook.airlift.concurrent.BoundedExecutor.drainQueue(BoundedExecutor.java:77)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\",\"java.base/java.lang.Thread.run(Thread.java:840)\"]}},\"warnings\":[]}\n"
+  }
+}

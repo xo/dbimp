@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ]
+    },
+    "body": "SELECT DATE '2026-10-01', DATE '9999-12-31', TIME '12:34:56.789', TIME '12:34:56.789 +05:30', TIMESTAMP '2026-10-01 12:34:56.789', TIMESTAMP '2026-10-01 12:34:56.789 Asia/Jakarta', TIMESTAMP '2026-10-01 12:34:56.789 +05:30', TIMESTAMP '1969-12-31 23:59:59.999', TIMESTAMP '0001-01-01 00:00:00.000', TIMESTAMP '9999-12-31 23:59:59.999'"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:24:23 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232423_00074_x3v5n\",\"infoUri\":\"http://127.0.0.1:55037/ui/query.html?20261006_232423_00074_x3v5n\",\"nextUri\":\"http://127.0.0.1:55037/v1/statement/queued/20261006_232423_00074_x3v5n/y341ceff1505d4e309149ce57ebc537cf66443699/1\",\"stats\":{\"state\":\"QUEUED\",\"queued\":true,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"warnings\":[]}"
+  }
+}

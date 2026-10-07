@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232355_00227_cqrz9/2",
+    "query": "slug=x8a69d2296edd4e888f435b3da6126c1d",
+    "header": {
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:55 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=299"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232355_00227_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232355_00227_cqrz9\",\"stats\":{\"state\":\"FAILED\",\"waitingForPrerequisites\":false,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":2,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0,\"runtimeStats\":{\"getColumnHandleTimeNanos\":{\"name\":\"getColumnHandleTimeNanos\",\"unit\":\"NANO\",\"sum\":19500,\"count\":2,\"max\":13510,\"min\":5990},\"systemAccessControl.checkCanSelectFromColumns\":{\"name\":\"systemAccessControl.checkCanSelectFromColumns\",\"unit\":\"NANO\",\"sum\":460,\"count\":1,\"max\":460,\"min\":460},\"analyzeTimeNanosOnCpu\":{\"name\":\"analyzeTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":1734810,\"count\":1,\"max\":1734810,\"min\":1734810},\"checkAccessPermissionsTimeNanosOnCpu\":{\"name\":\"checkAccessPermissionsTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":34240,\"count\":1,\"max\":34240,\"min\":34240},\"systemAccessControl.checkCanSetUser\":{\"name\":\"systemAccessControl.checkCanSetUser\",\"unit\":\"NANO\",\"sum\":1770,\"count\":1,\"max\":1770,\"min\":1770},\"getIdentifierNormalizationTimeNanos\":{\"name\":\"getIdentifierNormalizationTimeNanos\",\"unit\":\"NANO\",\"sum\":47341,\"count\":13,\"max\":33671,\"min\":280},\"getColumnMetadataTimeNanos\":{\"name\":\"getColumnMetadataTimeNanos\",\"unit\":\"NANO\",\"sum\":18850,\"count\":2,\"max\":13640,\"min\":5210},\"getMaterializedViewTimeNanos\":{\"name\":\"getMaterializedViewTimeNanos\",\"unit\":\"NANO\",\"sum\":14740,\"count\":2,\"max\":7540,\"min\":7200},\"systemAccessControl.checkCanAccessCatalog\":{\"name\":\"systemAccessControl.checkCanAccessCatalog\",\"unit\":\"NANO\",\"sum\":950,\"count\":2,\"max\":650,\"min\":300},\"analyzeTimeNanos\":{\"name\":\"analyzeTimeNanos\",\"unit\":\"NANO\",\"sum\":1749864,\"count\":1,\"max\":1749864,\"min\":1749864},\"systemAccessControl.checkQueryIntegrity\":{\"name\":\"systemAccessControl.checkQueryIntegrity\",\"unit\":\"NANO\",\"sum\":540,\"count\":1,\"max\":540,\"min\":540},\"systemAccessControl.checkCanUpdateTableColumns\":{\"name\":\"systemAccessControl.checkCanUpdateTableColumns\",\"unit\":\"NANO\",\"sum\":2010,\"count\":1,\"max\":2010,\"min\":2010},\"getViewTimeNanos\":{\"name\":\"getViewTimeNanos\",\"unit\":\"NANO\",\"sum\":57480,\"count\":2,\"max\":36800,\"min\":20680},\"getTableHandleTimeNanos\":{\"name\":\"getTableHandleTimeNanos\",\"unit\":\"NANO\",\"sum\":18950,\"count\":2,\"max\":13150,\"min\":5800},\"checkAccessPermissionsTimeNanos\":{\"name\":\"checkAccessPermissionsTimeNanos\",\"unit\":\"NANO\",\"sum\":34620,\"count\":1,\"max\":34620,\"min\":34620}}},\"error\":{\"message\":\"This connector does not support update\",\"errorCode\":13,\"errorName\":\"NOT_SUPPORTED\",\"errorType\":\"USER_ERROR\",\"retriable\":false,\"failureInfo\":{\"type\":\"com.facebook.presto.spi.PrestoException\",\"message\":\"This connector does not support update\",\"suppressed\":[],\"stack\":[\"com.facebook.presto.spi.connector.ConnectorMetadata.beginUpdate(ConnectorMetadata.java:683)\",\"com.facebook.presto.metadata.MetadataManager.beginUpdate(MetadataManager.java:1126)\",\"com.facebook.presto.metadata.StatsRecordingMetadataManager.beginUpdate(StatsRecordingMetadataManager.java:432)\",\"com.facebook.presto.sql.planner.QueryPlanner.plan(QueryPlanner.java:411)\",\"com.facebook.presto.sql.planner.LogicalPlanner.createUpdatePlan(LogicalPlanner.java:1004)\",\"com.facebook.presto.sql.planner.LogicalPlanner.planStatementWithoutOutput(LogicalPlanner.java:237)\",\"com.facebook.presto.sql.planner.LogicalPlanner.planStatement(LogicalPlanner.java:203)\",\"com.facebook.presto.sql.planner.LogicalPlanner.plan(LogicalPlanner.java:187)\",\"com.facebook.presto.sql.analyzer.BuiltInQueryAnalyzer.plan(BuiltInQueryAnalyzer.java:114)\",\"com.facebook.presto.execution.SqlQueryExecution.lambda$doCreateLogicalPlanAndOptimize$5(SqlQueryExecution.java:587)\",\"com.facebook.presto.common.RuntimeStats.recordWallAndCpuTime(RuntimeStats.java:158)\",\"com.facebook.presto.execution.SqlQueryExecution.doCreateLogicalPlanAndOptimize(SqlQueryExecution.java:585)\",\"com.facebook.presto.common.RuntimeStats.recordWallAndCpuTime(RuntimeStats.java:158)\",\"com.facebook.presto.execution.SqlQueryExecution.createLogicalPlanAndOptimize(SqlQueryExecution.java:572)\",\"com.facebook.presto.execution.SqlQueryExecution.start(SqlQueryExecution.java:500)\",\"com.facebook.presto.$gen.Presto_0_299_7d50721____20261006_232305_1.run(Unknown Source)\",\"com.facebook.presto.execution.SqlQueryManager.createQuery(SqlQueryManager.java:326)\",\"com.facebook.presto.dispatcher.LocalDispatchQuery.lambda$startExecution$8(LocalDispatchQuery.java:217)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\",\"java.base/java.lang.Thread.run(Thread.java:840)\"]}},\"warnings\":[],\"updateType\":\"UPDATE\"}\n"
+  }
+}

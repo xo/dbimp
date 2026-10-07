@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Trino-Prepared-Statement": [
+        "p1=SELECT%20%3Aa"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ]
+    },
+    "body": "EXECUTE p1 USING 1"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "text/plain;charset=iso-8859-1"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:23 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "Error 400 Bad Request: Invalid X-Trino-Prepared-Statement header: line 1:8: mismatched input ':'. Expecting: '*', 'ALL', 'DISTINCT', <expression>"
+  }
+}

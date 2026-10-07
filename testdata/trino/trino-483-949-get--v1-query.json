@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/query",
+    "query": "state=running",
+    "header": {
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:50 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "[{\"queryId\":\"20261006_232524_00146_dup55\",\"session\":{\"queryId\":\"20261006_232524_00146_dup55\",\"querySpan\":{},\"transactionId\":\"ef70cc86-922e-4837-b9f6-e2fda2a4d7c9\",\"clientTransactionSupport\":false,\"user\":\"trino\",\"originalUser\":\"trino\",\"setOriginalRoles\":[],\"groups\":[],\"originalUserGroups\":[],\"principal\":\"trino\",\"enabledRoles\":[],\"catalog\":\"memory\",\"schema\":\"default\",\"path\":{\"path\":[{\"catalogName\":\"system\",\"schemaName\":\"$query\"},{\"catalogName\":\"system\",\"schemaName\":\"builtin\"}],\"rawPath\":\"\"},\"timeZoneKey\":0,\"locale\":\"en_US\",\"remoteUserAddress\":\"192.168.1.5\",\"userAgent\":\"Go-http-client/1.1\",\"clientTags\":[],\"clientCapabilities\":[],\"resourceEstimates\":{},\"start\":\"2026-10-06T23:25:24.277285737Z\",\"systemProperties\":{},\"catalogProperties\":{},\"catalogRoles\":{},\"preparedStatements\":{},\"protocolName\":\"Trino\",\"timeZone\":\"UTC\"},\"resourceGroupId\":[\"global\"],\"state\":\"RUNNING\",\"scheduled\":true,\"self\":\"http://192.168.1.5:8080/v1/query/20261006_232524_00146_dup55\",\"query\":\"SELECT 1\",\"queryStats\":{\"createTime\":\"2026-10-06T23:25:24.277721008Z\",\"queuedTime\":\"134.58us\",\"resourceWaitingTime\":\"352.37us\",\"elapsedTime\":\"26.60s\",\"executionTime\":\"26.60s\",\"failedTasks\":0,\"totalDrivers\":1,\"queuedDrivers\":0,\"runningDrivers\":0,\"completedDrivers\":1,\"blockedDrivers\":0,\"processedInputPositions\":1,\"spilledDataSize\":\"0B\",\"physicalInputDataSize\":\"0B\",\"physicalWrittenDataSize\":\"0B\",\"internalNetworkInputDataSize\":\"0B\",\"cumulativeUserMemory\":2784623.724,\"failedCumulativeUserMemory\":0.0,\"userMemoryReservation\":\"120B\",\"totalMemoryReservation\":\"120B\",\"peakUserMemoryReservation\":\"120B\",\"peakTotalMemoryReservation\":\"120B\",\"planningTime\":\"1.72ms\",\"analysisTime\":\"343.29us\",\"totalCpuTime\":\"0.00ns\",\"failedCpuTime\":\"0.00ns\",\"totalScheduledTime\":\"0.00ns\",\"failedScheduledTime\":\"0.00ns\",\"finishingTime\":\"0.00s\",\"physicalInputReadTime\":\"0.00ns\",\"fullyBlocked\":false,\"blockedReasons\":[],\"progressPercentage\":100.0,\"runningPercentage\":0.0},\"queryType\":\"SELECT\",\"retryPolicy\":\"NONE\"}]"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232453_00210_x3v5n/yca47e5f2716e84491134ec5ee136fc7a8a4284cb/1",
+    "header": {
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-Session": [
+        "nosuch=1"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:24:53 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232453_00210_x3v5n\",\"infoUri\":\"http://127.0.0.1:55037/ui/query.html?20261006_232453_00210_x3v5n\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"Session property 'nosuch' does not exist\",\"errorCode\":14,\"errorName\":\"INVALID_SESSION_PROPERTY\",\"errorType\":\"USER_ERROR\",\"failureInfo\":{\"type\":\"io.trino.spi.TrinoException\",\"message\":\"Session property 'nosuch' does not exist\",\"suppressed\":[],\"stack\":[\"io.trino.metadata.SessionPropertyManager.lambda$validateSystemSessionProperty$0(SessionPropertyManager.java:191)\",\"java.base/java.util.Optional.orElseThrow(Optional.java:403)\",\"io.trino.metadata.SessionPropertyManager.validateSystemSessionProperty(SessionPropertyManager.java:191)\",\"io.trino.Session.validateSystemProperties(Session.java:639)\",\"io.trino.Session.beginTransactionId(Session.java:340)\",\"io.trino.execution.QueryStateMachine.beginWithTicker(QueryStateMachine.java:312)\",\"io.trino.execution.QueryStateMachine.begin(QueryStateMachine.java:255)\",\"io.trino.dispatcher.LocalDispatchQueryFactory.createDispatchQuery(LocalDispatchQueryFactory.java:122)\",\"io.trino.dispatcher.DispatchManager.createQueryInternal(DispatchManager.java:243)\",\"io.trino.dispatcher.DispatchManager.lambda$createQuery$0(DispatchManager.java:194)\",\"io.opentelemetry.context.Context.lambda$wrap$1(Context.java:241)\",\"io.airlift.concurrent.BoundedExecutor.drainQueue(BoundedExecutor.java:79)\",\"io.trino.$gen.Trino_476____20261006_232406_2.run(Unknown Source)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)\",\"java.base/java.lang.Thread.run(Thread.java:1447)\"],\"errorInfo\":{\"code\":14,\"name\":\"INVALID_SESSION_PROPERTY\",\"type\":\"USER_ERROR\"}}},\"warnings\":[]}"
+  }
+}

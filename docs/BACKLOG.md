@@ -45,7 +45,7 @@ from Ken on 2026-09-30, who asked for one table of every type of every
 driver after D135, and W21 from D138. W22 came from Ken on 2026-09-30,
 who named rqlite as the next target at step 1. W23 came from Ken on 2026-10-01,
 who named libSQL and Turso as the next target at step 1. W24 came from Ken on
-2026-10-01, who named Avatica as the next driver at step 1. W25 to W30 and W31 came
+2026-10-01, who named Avatica as the next driver at step 1. W25 to W31 and W32 came
 from Ken on 2026-10-01, who named Druid, Drill, Solr, Elasticsearch,
 OpenSearch and DynamoDB as the next six at step 1 (D162).
 
@@ -1448,4 +1448,41 @@ flavor (D173). `dbrun` starts `trino-476`, `trino-483` and `presto-0.299`,
 which `dbmeta` reads already. `dburl` has the schemes `trino` and `presto`,
 and `usql` has a driver for each (`trinodb/trino-go-client` and
 `prestodb/presto-go-client`), which this driver can replace (D24).
+
+## W32. Write the ClickHouse driver
+
+ClickHouse is the next target after Trino and Presto, by D174. Ken named it
+on 2026-10-07 at step 1. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[CLICKHOUSE.md](CLICKHOUSE.md), and the package is `clickhouse`. `dbrun`
+starts `clickhouse-25.3`, `clickhouse-25.8` and `clickhouse-26.9`, which
+`dbmeta` reads already. `dburl` has the scheme `clickhouse`, with the alias
+`ch`, and names `ClickHouse/clickhouse-go/v2`, which `usql` uses. That client
+speaks the native protocol by default. This driver speaks HTTP only, so it
+replaces that client in `usql` only if it matches it for a caller (D24).
+
+Steps 2 to 9 went in on 2026-10-07: the recordings of `trino-476`,
+`trino-483` and `presto-0.299`, the survey, TRINO.md with its type table, and
+D175, which Ken decided the same day. The recorder gained the follow of an
+absolute `nextUri` and the capture of a response header.
+
+Steps 10 to 17a went in on 2026-10-07, staged for Ken's review:
+
+- Steps 10 to 13: the package `trino/`, its tables, the contract, the replay
+  tests over the recorded polls, the unit tests of the values, the options and
+  the DSN, and the fuzz test, which ran for 60 seconds and found nothing.
+- Steps 14 and 14a: the integration tests passed on all three releases, 104
+  tests each, with 24 skipped for the flavor or the release.
+- Step 17a: `## Compared with Couchbase` is in TRINO.md.
+
+1. To `dburl`: the schemes `trino` and `presto` name `github.com/xo/dbimp/trino`
+   in dburl `v0.43.0`, as provisional. D175 settles the DSN:
+   `trino://user@host:8080/catalog/schema`, with the keys `tls`, `source`,
+   `timezone`, `timeout`, `session.<name>` and `flavor`, the port 8443 with
+   `tls=true`, and any other key refused. Please check both generators against
+   `trino.ParseDSN` at the tag.
+2. To `dbmeta`: the `url` of the Trino and Presto entries is the DSN of D175.
+   The images accept no password, so there is no ordinary user.
+3. To `usql`: `drivers/trino` and `drivers/presto` import
+   `github.com/xo/dbimp/trino`. Its `Version` can read `GET /v1/info` or run
+   `SELECT version()` on Trino, and Presto has no `version()`.
 

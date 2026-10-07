@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ]
+    },
+    "body": "CREATE TABLE dbimp_types AS SELECT * FROM (VALUES (1, TRUE, BIGINT '9223372036854775807', DOUBLE '1.5', DECIMAL '12345678901234567890123456789012345678', 'é''\"\\ x', X'00ff', DATE '2026-10-01', TIMESTAMP '2026-10-01 12:34:56.789', ARRAY[1, NULL, 3], MAP(ARRAY['a'], ARRAY[1]), CAST(ROW(1, 'x') AS ROW(a integer, b varchar)), JSON '{\"k\":[1,null]}', UUID '12345678-1234-5678-1234-567812345678'), (2, NULL, NULL, NULL, NULL, '', X'', NULL, NULL, NULL, NULL, NULL, NULL, NULL)) AS v(id, b, l, d, dec, s, bin, dt, ts, arr, m, r, j, u)"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:22 GMT"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232522_00056_dup55\",\"infoUri\":\"http://127.0.0.1:55038/ui#/queries/20261006_232522_00056_dup55\",\"nextUri\":\"http://127.0.0.1:55038/v1/statement/queued/20261006_232522_00056_dup55/y121cd0a8a82914a4b1311c2e3d9cb02164ca007b/1\",\"stats\":{\"state\":\"QUEUED\",\"queued\":true,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"warnings\":[]}"
+  }
+}

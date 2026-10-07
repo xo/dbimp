@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232453_00204_x3v5n/y73fedddcb98d90e2895a20b717940b825fa6aa89/2",
+    "header": {
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-Transaction-Id": [
+        "bc468787-d84d-4e1d-a4ad-33e88f816da0"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:24:53 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232453_00204_x3v5n\",\"infoUri\":\"http://127.0.0.1:55037/ui/query.html?20261006_232453_00204_x3v5n\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"Catalog only supports writes using autocommit: memory\",\"errorCode\":25,\"errorName\":\"AUTOCOMMIT_WRITE_CONFLICT\",\"errorType\":\"USER_ERROR\",\"failureInfo\":{\"type\":\"io.trino.spi.TrinoException\",\"message\":\"Catalog only supports writes using autocommit: memory\",\"suppressed\":[],\"stack\":[\"io.trino.transaction.InMemoryTransactionManager$TransactionMetadata.checkConnectorWrite(InMemoryTransactionManager.java:482)\",\"io.trino.transaction.InMemoryTransactionManager.checkConnectorWrite(InMemoryTransactionManager.java:259)\",\"io.trino.transaction.InMemoryTransactionManager.getCatalogMetadataForWrite(InMemoryTransactionManager.java:225)\",\"io.trino.transaction.InMemoryTransactionManager.getCatalogMetadataForWrite(InMemoryTransactionManager.java:237)\",\"io.trino.metadata.MetadataManager.getCatalogMetadataForWrite(MetadataManager.java:2737)\",\"io.trino.metadata.MetadataManager.createTable(MetadataManager.java:859)\",\"io.trino.tracing.TracingMetadata.createTable(TracingMetadata.java:403)\",\"io.trino.execution.CreateTableTask.internalExecute(CreateTableTask.java:297)\",\"io.trino.execution.CreateTableTask.execute(CreateTableTask.java:126)\",\"io.trino.execution.CreateTableTask.execute(CreateTableTask.java:92)\",\"io.trino.execution.DataDefinitionExecution.start(DataDefinitionExecution.java:152)\",\"io.trino.execution.SqlQueryManager.createQuery(SqlQueryManager.java:272)\",\"io.trino.dispatcher.LocalDispatchQuery.startExecution(LocalDispatchQuery.java:150)\",\"io.trino.dispatcher.LocalDispatchQuery.lambda$waitForMinimumWorkers$1(LocalDispatchQuery.java:134)\",\"io.airlift.concurrent.MoreFutures.lambda$addSuccessCallback$12(MoreFutures.java:570)\",\"io.airlift.concurrent.MoreFutures$3.onSuccess(MoreFutures.java:545)\",\"com.google.common.util.concurrent.Futures$CallbackListener.run(Futures.java:1132)\",\"io.trino.$gen.Trino_476____20261006_232406_2.run(Unknown Source)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)\",\"java.base/java.lang.Thread.run(Thread.java:1447)\"],\"errorInfo\":{\"code\":25,\"name\":\"AUTOCOMMIT_WRITE_CONFLICT\",\"type\":\"USER_ERROR\"}}},\"warnings\":[]}"
+  }
+}

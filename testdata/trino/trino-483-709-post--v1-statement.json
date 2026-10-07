@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Trino-Prepared-Statement": [
+        "s1=SELECT ? + 1"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ],
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ]
+    },
+    "body": "EXECUTE s1 USING 5"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:23 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "text/plain;charset=iso-8859-1"
+      ]
+    },
+    "body": "Error 400 Bad Request: Invalid X-Trino-Prepared-Statement header: line 1:12: mismatched input '1'. Expecting: '%', '*', '+', ',', '-', '.', '/', 'AND', 'AS', 'AT', 'EXCEPT', 'FETCH', 'FROM', 'GROUP', 'HAVING', 'INTERSECT', 'LIMIT', 'OFFSET', 'OR', 'ORDER', 'UNION', 'WHERE', 'WINDOW', '[', '||', <EOF>, <identifier>, <predicate>"
+  }
+}

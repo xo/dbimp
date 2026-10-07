@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232453_00226_x3v5n/y64bfe11455f03f60d6706665420c91920d6f705c/2",
+    "header": {
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:24:53 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232453_00226_x3v5n\",\"infoUri\":\"http://127.0.0.1:55037/ui/query.html?20261006_232453_00226_x3v5n\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":2,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"This connector does not support modifying table rows\",\"errorCode\":13,\"errorName\":\"NOT_SUPPORTED\",\"errorType\":\"USER_ERROR\",\"failureInfo\":{\"type\":\"io.trino.spi.TrinoException\",\"message\":\"This connector does not support modifying table rows\",\"suppressed\":[],\"stack\":[\"io.trino.spi.connector.ConnectorMetadata.getMergeRowIdColumnHandle(ConnectorMetadata.java:856)\",\"io.trino.tracing.TracingConnectorMetadata.getMergeRowIdColumnHandle(TracingConnectorMetadata.java:743)\",\"io.trino.metadata.MetadataManager.getMergeRowIdColumnHandle(MetadataManager.java:1273)\",\"io.trino.tracing.TracingMetadata.getMergeRowIdColumnHandle(TracingMetadata.java:795)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitTable(StatementAnalyzer.java:2298)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitTable(StatementAnalyzer.java:524)\",\"io.trino.sql.tree.Table.accept(Table.java:60)\",\"io.trino.sql.tree.AstVisitor.process(AstVisitor.java:27)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.process(StatementAnalyzer.java:543)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyzeForUpdate(StatementAnalyzer.java:509)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitUpdate(StatementAnalyzer.java:3480)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitUpdate(StatementAnalyzer.java:524)\",\"io.trino.sql.tree.Update.accept(Update.java:67)\",\"io.trino.sql.tree.AstVisitor.process(AstVisitor.java:27)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.process(StatementAnalyzer.java:543)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:503)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:492)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:98)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:87)\",\"io.trino.execution.SqlQueryExecution.analyze(SqlQueryExecution.java:285)\",\"io.trino.execution.SqlQueryExecution.<init>(SqlQueryExecution.java:218)\",\"io.trino.execution.SqlQueryExecution$SqlQueryExecutionFactory.createQueryExecution(SqlQueryExecution.java:884)\",\"io.trino.dispatcher.LocalDispatchQueryFactory.lambda$createDispatchQuery$0(LocalDispatchQueryFactory.java:158)\",\"io.trino.$gen.Trino_476____20261006_232406_2.call(Unknown Source)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask.runInterruptibly(TrustedListenableFutureTask.java:128)\",\"com.google.common.util.concurrent.InterruptibleTask.run(InterruptibleTask.java:74)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask.run(TrustedListenableFutureTask.java:80)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)\",\"java.base/java.lang.Thread.run(Thread.java:1447)\"],\"errorInfo\":{\"code\":13,\"name\":\"NOT_SUPPORTED\",\"type\":\"USER_ERROR\"}}},\"warnings\":[]}"
+  }
+}

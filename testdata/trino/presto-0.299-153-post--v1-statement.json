@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "X-Presto-Time-Zone": [
+        "Asia/Jakarta"
+      ]
+    },
+    "body": "SELECT current_timezone(), TIMESTAMP '2026-10-01 12:00:00 UTC' AT TIME ZONE 'UTC'"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:23 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=60"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232323_00067_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232323_00067_cqrz9\",\"nextUri\":\"http://127.0.0.1:55039/v1/statement/queued/20261006_232323_00067_cqrz9/1?slug=xdcf90d26ecae461aaf415b6621311887\",\"stats\":{\"state\":\"WAITING_FOR_PREREQUISITES\",\"waitingForPrerequisites\":true,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0},\"warnings\":[]}\n"
+  }
+}

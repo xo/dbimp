@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232326_00153_cqrz9/2",
+    "query": "slug=x982d186508a5413cac9ead4bb70f30f7",
+    "header": {
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "X-Presto-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:26 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=299"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232326_00153_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232326_00153_cqrz9\",\"stats\":{\"state\":\"FAILED\",\"waitingForPrerequisites\":false,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":1,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0,\"runtimeStats\":{\"validateIntermediatePlanTimeNanos\":{\"name\":\"validateIntermediatePlanTimeNanos\",\"unit\":\"NANO\",\"sum\":44720,\"count\":1,\"max\":44720,\"min\":44720},\"analyzeTimeNanos\":{\"name\":\"analyzeTimeNanos\",\"unit\":\"NANO\",\"sum\":593992,\"count\":1,\"max\":593992,\"min\":593992},\"analyzeTimeNanosOnCpu\":{\"name\":\"analyzeTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":593180,\"count\":1,\"max\":593180,\"min\":593180},\"logicalPlannerTimeNanosOnCpu\":{\"name\":\"logicalPlannerTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":221380,\"count\":1,\"max\":221380,\"min\":221380},\"checkAccessPermissionsTimeNanosOnCpu\":{\"name\":\"checkAccessPermissionsTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":18570,\"count\":1,\"max\":18570,\"min\":18570},\"validateIntermediatePlanTimeNanosOnCpu\":{\"name\":\"validateIntermediatePlanTimeNanosOnCpu\",\"unit\":\"NANO\",\"sum\":44780,\"count\":1,\"max\":44780,\"min\":44780},\"systemAccessControl.checkCanSetUser\":{\"name\":\"systemAccessControl.checkCanSetUser\",\"unit\":\"NANO\",\"sum\":650,\"count\":1,\"max\":650,\"min\":650},\"systemAccessControl.checkQueryIntegrity\":{\"name\":\"systemAccessControl.checkQueryIntegrity\",\"unit\":\"NANO\",\"sum\":800,\"count\":1,\"max\":800,\"min\":800},\"logicalPlannerTimeNanos\":{\"name\":\"logicalPlannerTimeNanos\",\"unit\":\"NANO\",\"sum\":221190,\"count\":1,\"max\":221190,\"min\":221190},\"checkAccessPermissionsTimeNanos\":{\"name\":\"checkAccessPermissionsTimeNanos\",\"unit\":\"NANO\",\"sum\":18580,\"count\":1,\"max\":18580,\"min\":18580}}},\"error\":{\"message\":\"Cannot cast \\u0027x\\u0027 to INT\",\"errorCode\":9,\"errorName\":\"INVALID_CAST_ARGUMENT\",\"errorType\":\"USER_ERROR\",\"retriable\":false,\"failureInfo\":{\"type\":\"com.facebook.presto.spi.PrestoException\",\"message\":\"Cannot cast \\u0027x\\u0027 to INT\",\"suppressed\":[],\"stack\":[\"com.facebook.presto.type.VarcharOperators.castToInteger(VarcharOperators.java:198)\",\"java.base/java.lang.invoke.MethodHandle.invokeWithArguments(MethodHandle.java:732)\",\"java.base/java.lang.invoke.MethodHandle.invokeWithArguments(MethodHandle.java:757)\",\"com.facebook.presto.sql.InterpretedFunctionInvoker.invoke(InterpretedFunctionInvoker.java:109)\",\"com.facebook.presto.sql.InterpretedFunctionInvoker.invoke(InterpretedFunctionInvoker.java:60)\",\"com.facebook.presto.sql.planner.RowExpressionInterpreter$Visitor.visitCall(RowExpressionInterpreter.java:278)\",\"com.facebook.presto.spi.relation.CallExpression.accept(CallExpression.java:130)\",\"com.facebook.presto.sql.planner.RowExpressionInterpreter.optimize(RowExpressionInterpreter.java:182)\",\"com.facebook.presto.sql.planner.RowExpressionInterpreter.optimize(RowExpressionInterpreter.java:173)\",\"com.facebook.presto.sql.relational.RowExpressionOptimizer.optimize(RowExpressionOptimizer.java:49)\",\"com.facebook.presto.sql.planner.iterative.rule.SimplifyRowExpressions$Rewriter.rewrite(SimplifyRowExpressions.java:98)\",\"com.facebook.presto.sql.planner.iterative.rule.SimplifyRowExpressions$Rewriter.rewrite(SimplifyRowExpressions.java:84)\",\"com.facebook.presto.sql.planner.iterative.rule.RowExpressionRewriteRuleSet$ProjectRowExpressionRewrite.apply(RowExpressionRewriteRuleSet.java:184)\",\"com.facebook.presto.sql.planner.iterative.rule.RowExpressionRewriteRuleSet$ProjectRowExpressionRewrite.apply(RowExpressionRewriteRuleSet.java:155)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.transform(IterativeOptimizer.java:238)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreNode(IterativeOptimizer.java:190)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreGroup(IterativeOptimizer.java:152)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreChildren(IterativeOptimizer.java:282)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreGroup(IterativeOptimizer.java:154)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreChildren(IterativeOptimizer.java:282)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreGroup(IterativeOptimizer.java:154)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreChildren(IterativeOptimizer.java:282)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreGroup(IterativeOptimizer.java:154)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreChildren(IterativeOptimizer.java:282)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.exploreGroup(IterativeOptimizer.java:154)\",\"com.facebook.presto.sql.planner.iterative.IterativeOptimizer.optimize(IterativeOptimizer.java:139)\",\"com.facebook.presto.sql.Optimizer.validateAndOptimizePlan(Optimizer.java:114)\",\"com.facebook.presto.execution.SqlQueryExecution.lambda$doCreateLogicalPlanAndOptimize$6(SqlQueryExecution.java:603)\",\"com.facebook.presto.common.RuntimeStats.recordWallAndCpuTime(RuntimeStats.java:158)\",\"com.facebook.presto.execution.SqlQueryExecution.doCreateLogicalPlanAndOptimize(SqlQueryExecution.java:601)\",\"com.facebook.presto.common.RuntimeStats.recordWallAndCpuTime(RuntimeStats.java:158)\",\"com.facebook.presto.execution.SqlQueryExecution.createLogicalPlanAndOptimize(SqlQueryExecution.java:572)\",\"com.facebook.presto.execution.SqlQueryExecution.start(SqlQueryExecution.java:500)\",\"com.facebook.presto.$gen.Presto_0_299_7d50721____20261006_232305_1.run(Unknown Source)\",\"com.facebook.presto.execution.SqlQueryManager.createQuery(SqlQueryManager.java:326)\",\"com.facebook.presto.dispatcher.LocalDispatchQuery.lambda$startExecution$8(LocalDispatchQuery.java:217)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\",\"java.base/java.lang.Thread.run(Thread.java:840)\"]}},\"warnings\":[]}\n"
+  }
+}

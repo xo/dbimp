@@ -1,0 +1,1395 @@
+{
+  "driver": "trino",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-07"
+    },
+    {
+      "source": "deepseek-v4-pro",
+      "kind": "model",
+      "date": "2026-10-07"
+    },
+    {
+      "source": "github.com/trinodb/trino-go-client",
+      "kind": "driver",
+      "date": "2026-10-07"
+    },
+    {
+      "source": "github.com/prestodb/presto-go-client",
+      "kind": "driver",
+      "date": "2026-10-07"
+    },
+    {
+      "source": "github.com/trinodb/trino-python-client",
+      "kind": "driver",
+      "date": "2026-10-07"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1196-get--v1-statement-executing-20261006-232453-00224-x3v5n-y8c2f231170c8a2b80b48c04612c4fce47a073bb4-1.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1204-get--v1-statement-executing-20261006-232453-00225-x3v5n-yd2fd957d5aed7b4f56c4dcde0105cd7344066935-1.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1209-get--v1-statement-queued-20261006-232453-00226-x3v5n-y64bfe11455f03f60d6706665420c91920d6f705c-2.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1212-get--v1-statement-queued-20261006-232453-00227-x3v5n-yde19605a19a4bcabad09ed56f5e7026a1540db8e-2.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1218-get--v1-statement-queued-20261006-232453-00229-x3v5n-yf6e0a6d6fbdd37574cc235c679e4dceade66b7bd-2.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1220-get--v1-statement-queued-20261006-232453-00230-x3v5n-y9811f2d0c5d38c9e5da518821135aa661ac50230-1.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "delete with no where",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1215-get--v1-statement-queued-20261006-232453-00228-x3v5n-ya2e622ed5bd92714a2554a3d12dad59f23f5653a-2.json",
+      "test": "TestIntegrationCRUD/delete_with_no_where"
+    },
+    {
+      "kind": "crud",
+      "name": "trino truncate",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1224-get--v1-statement-executing-20261006-232453-00231-x3v5n-y04cfac157b0af4ad5043280ec1f7aaa494753daf-0.json",
+      "test": "TestIntegrationCRUD/trino_truncate"
+    },
+    {
+      "kind": "crud",
+      "name": "presto truncate",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-785-get--v1-statement-queued-20261006-232355-00232-cqrz9-2.json",
+      "test": "TestIntegrationCRUD/presto_truncate"
+    },
+    {
+      "kind": "crud",
+      "name": "create table as select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1229-get--v1-statement-executing-20261006-232453-00232-x3v5n-ya735f0a0463e8471130e0a6215dfbb48664a8711-1.json",
+      "test": "TestIntegrationCRUD/create_table_as_select"
+    },
+    {
+      "kind": "crud",
+      "name": "insert from select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1242-get--v1-statement-executing-20261006-232453-00234-x3v5n-yaa3e74bc852ddcc1a9b5ecb16c79a68cb90de7e3-1.json",
+      "test": "TestIntegrationCRUD/insert_from_select"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1259-get--v1-statement-executing-20261006-232453-00237-x3v5n-ybc6a5e7c2ceb6c9ad4cb833aa0f1bc87dcec2638-0.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "trino not null",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1268-get--v1-statement-executing-20261006-232453-00239-x3v5n-yba728a1177be3f764462fbe2e2acf2e50860ebde-1.json",
+      "test": "TestIntegrationSchema/trino_not_null"
+    },
+    {
+      "kind": "schema",
+      "name": "presto not null",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-811-get--v1-statement-queued-20261006-232355-00239-cqrz9-2.json",
+      "test": "TestIntegrationSchema/presto_not_null"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1274-get--v1-statement-queued-20261006-232453-00241-x3v5n-y30d55dea7e864f0a70924254b17ae14e29b94b66-1.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1276-get--v1-statement-queued-20261006-232453-00242-x3v5n-y2129c6f3fa66ed41fabf646b6b54d016be90acac-1.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "unique",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1278-get--v1-statement-queued-20261006-232453-00243-x3v5n-y111b37849b4aae62017630c82361d54f85829586-1.json",
+      "test": "TestIntegrationSchema/unique"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1280-get--v1-statement-queued-20261006-232453-00244-x3v5n-y9e23d9e5a208d8c2b3acf2722984347861692826-1.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "trino 476 default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1282-get--v1-statement-queued-20261006-232453-00245-x3v5n-y611f9ca9957e98a87942b0e5571091b4e0e0aee4-1.json",
+      "test": "TestIntegrationSchema/trino_476_default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "trino 483 default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-483-1408-get--v1-statement-executing-20261006-232552-00247-dup55-y540a96a92ccdeae0084fec5c8a6fc3e90b9fb24e-1.json",
+      "test": "TestIntegrationSchema/trino_483_default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "presto default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-836-get--v1-statement-queued-20261006-232355-00248-cqrz9-2.json",
+      "test": "TestIntegrationSchema/presto_default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1292-get--v1-statement-executing-20261006-232453-00248-x3v5n-ya6f6ea411cbd9168678c0fb2a644cef88d3e8477-0.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "trino materialized view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1306-get--v1-statement-executing-20261006-232453-00251-x3v5n-y1db5cea46b29b3394cae45aa7ee38db55b668acd-0.json",
+      "test": "TestIntegrationSchema/trino_materialized_view"
+    },
+    {
+      "kind": "schema",
+      "name": "presto materialized view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "presto-0.299-919-get--v1-statement-queued-20261006-232355-00273-cqrz9-2.json",
+      "test": "TestIntegrationSchema/presto_materialized_view"
+    },
+    {
+      "kind": "schema",
+      "name": "trino comment",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1310-get--v1-statement-executing-20261006-232453-00252-x3v5n-ycc445580e946cd64e86a38567519b96383b6a846-0.json",
+      "test": "TestIntegrationSchema/trino_comment"
+    },
+    {
+      "kind": "schema",
+      "name": "presto comment",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-853-get--v1-statement-queued-20261006-232355-00253-cqrz9-1.json",
+      "test": "TestIntegrationSchema/presto_comment"
+    },
+    {
+      "kind": "schema",
+      "name": "trino add column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1318-get--v1-statement-executing-20261006-232453-00254-x3v5n-yee37fa9117dafe90fe26b9c15a26accec1ecd8ab-0.json",
+      "test": "TestIntegrationSchema/trino_add_column"
+    },
+    {
+      "kind": "schema",
+      "name": "presto add column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-858-get--v1-statement-queued-20261006-232355-00255-cqrz9-2.json",
+      "test": "TestIntegrationSchema/presto_add_column"
+    },
+    {
+      "kind": "schema",
+      "name": "trino rename column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1398-get--v1-statement-executing-20261006-232453-00269-x3v5n-y010b0daf4725c6ce2046df2d9bc0be771c31cec4-0.json",
+      "test": "TestIntegrationSchema/trino_rename_column"
+    },
+    {
+      "kind": "schema",
+      "name": "presto rename column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-910-get--v1-statement-queued-20261006-232355-00270-cqrz9-2.json",
+      "test": "TestIntegrationSchema/presto_rename_column"
+    },
+    {
+      "kind": "schema",
+      "name": "drop column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1405-get--v1-statement-queued-20261006-232453-00271-x3v5n-y76aa86b8ce01be3caa0afd2ad97f9fc1e4322e0c-2.json",
+      "test": "TestIntegrationSchema/drop_column"
+    },
+    {
+      "kind": "schema",
+      "name": "rename table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1329-get--v1-statement-executing-20261006-232453-00257-x3v5n-y00e972fdb1289729e3fd207b96210f48d6339f1a-0.json",
+      "test": "TestIntegrationSchema/rename_table"
+    },
+    {
+      "kind": "schema",
+      "name": "schema",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1337-get--v1-statement-executing-20261006-232453-00259-x3v5n-y625e8744d9ae416c23f4ed190af37b35b27f0992-0.json",
+      "test": "TestIntegrationSchema/schema"
+    },
+    {
+      "kind": "schema",
+      "name": "show create table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1367-get--v1-statement-executing-20261006-232453-00264-x3v5n-y05a5d455c0cf97956faa8a4891afe456212a153b-1.json",
+      "test": "TestIntegrationSchema/show_create_table"
+    },
+    {
+      "kind": "schema",
+      "name": "information schema columns",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1382-get--v1-statement-executing-20261006-232453-00266-x3v5n-y1e612af5ba4df3d38b781484940032e85748f936-1.json",
+      "test": "TestIntegrationSchema/information_schema_columns"
+    },
+    {
+      "kind": "feature",
+      "name": "trino execute immediate",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-python-client",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1483-get--v1-statement-executing-20261006-232454-00282-x3v5n-y2c188f1863c20cc7e16bf87282f1b96822cac600-1.json",
+      "test": "TestIntegrationFeatures/trino_execute_immediate"
+    },
+    {
+      "kind": "feature",
+      "name": "presto execute immediate",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-958-get--v1-statement-queued-20261006-232357-00283-cqrz9-1.json",
+      "test": "TestIntegrationFeatures/presto_execute_immediate"
+    },
+    {
+      "kind": "feature",
+      "name": "prepared statement header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client",
+        "github.com/prestodb/presto-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-613-get--v1-statement-executing-20261006-232424-00120-x3v5n-y003630b817e0a35d10e8d3aa40e85889f7204635-1.json",
+      "test": "TestIntegrationFeatures/prepared_statement_header"
+    },
+    {
+      "kind": "feature",
+      "name": "positional parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client",
+        "github.com/prestodb/presto-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-636-get--v1-statement-executing-20261006-232424-00124-x3v5n-ye87910684db84c0a578241cb5d84f699fc6fa37c-1.json",
+      "test": "TestIntegrationFeatures/positional_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "prepare",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-631-get--v1-statement-executing-20261006-232424-00123-x3v5n-yc6d8188b0e9ae11c707f640184493541edbea41a-0.json",
+      "test": "TestIntegrationFeatures/prepare"
+    },
+    {
+      "kind": "feature",
+      "name": "deallocate",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-702-get--v1-statement-executing-20261006-232424-00134-x3v5n-y381e0b8e9b9d7e8ec6f3ff86a3f8de3fc2d9998d-0.json",
+      "test": "TestIntegrationFeatures/deallocate"
+    },
+    {
+      "kind": "feature",
+      "name": "describe input",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-688-get--v1-statement-executing-20261006-232424-00132-x3v5n-y8c5daaa59b15018a129392b2808eb5207a193aec-1.json",
+      "test": "TestIntegrationFeatures/describe_input"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-640-post--v1-statement.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "trino parameter in limit",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-657-get--v1-statement-executing-20261006-232424-00128-x3v5n-yd084ec5b117df64c34668ffcaf3bdb637ff1fe2f-1.json",
+      "test": "TestIntegrationFeatures/trino_parameter_in_limit"
+    },
+    {
+      "kind": "feature",
+      "name": "presto parameter in limit",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-414-post--v1-statement.json",
+      "test": "TestIntegrationFeatures/presto_parameter_in_limit"
+    },
+    {
+      "kind": "feature",
+      "name": "start transaction",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client",
+        "github.com/prestodb/presto-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1016-get--v1-statement-executing-20261006-232453-00188-x3v5n-y4a68c6bf5eaae65231ebdb7150e3162dd8f08ef0-0.json",
+      "test": "TestIntegrationFeatures/start_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "start transaction with no header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1012-get--v1-statement-queued-20261006-232453-00187-x3v5n-y42c18b7697888359de1e048023a2baa9f2f46332-2.json",
+      "test": "TestIntegrationFeatures/start_transaction_with_no_header"
+    },
+    {
+      "kind": "feature",
+      "name": "read only transaction",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1041-get--v1-statement-executing-20261006-232453-00194-x3v5n-y4db596152db958a712abfc9925cc421ba9e7c601-1.json",
+      "test": "TestIntegrationFeatures/read_only_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "nested transaction",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1063-get--v1-statement-queued-20261006-232453-00199-x3v5n-y86f6ce6e2c20a3389c3ebdf547332fe3f06da43a-2.json",
+      "test": "TestIntegrationFeatures/nested_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "trino write in a transaction",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1019-get--v1-statement-queued-20261006-232453-00189-x3v5n-y67d380c47faa2d433124c47ac466b3e7c3e2ba29-2.json",
+      "test": "TestIntegrationFeatures/trino_write_in_a_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "presto write in a transaction",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "presto-0.299-649-get--v1-statement-queued-20261006-232354-00190-cqrz9-2.json",
+      "test": "TestIntegrationFeatures/presto_write_in_a_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "trino rollback of a write",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1019-get--v1-statement-queued-20261006-232453-00189-x3v5n-y67d380c47faa2d433124c47ac466b3e7c3e2ba29-2.json",
+      "test": "TestIntegrationFeatures/trino_rollback_of_a_write"
+    },
+    {
+      "kind": "feature",
+      "name": "presto rollback of a write",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-660-get--v1-statement-queued-20261006-232354-00193-cqrz9-2.json",
+      "test": "TestIntegrationFeatures/presto_rollback_of_a_write"
+    },
+    {
+      "kind": "feature",
+      "name": "session property",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1100-get--v1-statement-executing-20261006-232453-00208-x3v5n-y3c5c3ddcf95386fd2d00e1224c05737a3b5dd1d7-0.json",
+      "test": "TestIntegrationFeatures/session_property"
+    },
+    {
+      "kind": "feature",
+      "name": "session property header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1105-get--v1-statement-executing-20261006-232453-00209-x3v5n-y422f5230fccf6b6801f7dab2e6a25adc5a17f093-1.json",
+      "test": "TestIntegrationFeatures/session_property_header"
+    },
+    {
+      "kind": "feature",
+      "name": "use",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1118-get--v1-statement-executing-20261006-232453-00212-x3v5n-yc3ce772f30903516a3545cea9143fa3cc8aec57c-0.json",
+      "test": "TestIntegrationFeatures/use"
+    },
+    {
+      "kind": "feature",
+      "name": "trino set path",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1132-get--v1-statement-executing-20261006-232453-00215-x3v5n-y4701126fe40a2527778aa8df5c408aa805592e1e-0.json",
+      "test": "TestIntegrationFeatures/trino_set_path"
+    },
+    {
+      "kind": "feature",
+      "name": "presto set path",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-732-get--v1-statement-queued-20261006-232355-00216-cqrz9-1.json",
+      "test": "TestIntegrationFeatures/presto_set_path"
+    },
+    {
+      "kind": "feature",
+      "name": "trino set time zone",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1140-get--v1-statement-executing-20261006-232453-00217-x3v5n-y5dcb9878c77af1c49914d52a68c0e728b3c3b3b7-0.json",
+      "test": "TestIntegrationFeatures/trino_set_time_zone"
+    },
+    {
+      "kind": "feature",
+      "name": "presto set time zone",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-736-get--v1-statement-queued-20261006-232355-00218-cqrz9-1.json",
+      "test": "TestIntegrationFeatures/presto_set_time_zone"
+    },
+    {
+      "kind": "feature",
+      "name": "time zone header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client",
+        "github.com/prestodb/presto-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-225-get--v1-statement-executing-20261006-232423-00065-x3v5n-yd0ac394879d3dd85a350bf10e8ebe6a7a09c5297-1.json",
+      "test": "TestIntegrationFeatures/time_zone_header"
+    },
+    {
+      "kind": "feature",
+      "name": "roles",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-880-get--v1-statement-queued-20261006-232451-00166-x3v5n-yee197c255f1650b159978871979e74e3b5e52098-2.json",
+      "test": "TestIntegrationFeatures/roles"
+    },
+    {
+      "kind": "feature",
+      "name": "trino set session authorization",
+      "sources": [
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1136-get--v1-statement-executing-20261006-232453-00216-x3v5n-yd68a04ff8e980cc90885811487d8b383b4ca37cf-0.json",
+      "test": "TestIntegrationFeatures/trino_set_session_authorization"
+    },
+    {
+      "kind": "feature",
+      "name": "presto set session authorization",
+      "sources": [
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-734-get--v1-statement-queued-20261006-232355-00217-cqrz9-1.json",
+      "test": "TestIntegrationFeatures/presto_set_session_authorization"
+    },
+    {
+      "kind": "feature",
+      "name": "trino client capabilities",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-322-get--v1-statement-executing-20261006-232423-00077-x3v5n-y5cd78b0f3e423bc2c3faa275e93e587fd8376900-1.json",
+      "test": "TestIntegrationFeatures/trino_client_capabilities"
+    },
+    {
+      "kind": "feature",
+      "name": "presto client capabilities",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-279-get--v1-statement-queued-20261006-232324-00094-cqrz9-2.json",
+      "test": "TestIntegrationFeatures/presto_client_capabilities"
+    },
+    {
+      "kind": "feature",
+      "name": "query data encoding",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-1162-get--v1-statement-executing-20261006-232453-00220-x3v5n-yf962317d49499f616fcbe946defd8b468fb88b87-1.json",
+      "test": "TestIntegrationFeatures/query_data_encoding"
+    },
+    {
+      "kind": "feature",
+      "name": "trino target result size",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-766-get--v1-statement-executing-20261006-232425-00144-x3v5n-ya198bde8c2e26dbc7d2d664fac082f56b8ef7716-2.json",
+      "test": "TestIntegrationFeatures/trino_target_result_size"
+    },
+    {
+      "kind": "feature",
+      "name": "presto target result size",
+      "sources": [
+        "deepseek-v4-pro"
+      ],
+      "verdict": "yes",
+      "evidence": "presto-0.299-478-get--v1-statement-executing-20261006-232326-00145-cqrz9-1.json",
+      "test": "TestIntegrationFeatures/presto_target_result_size"
+    },
+    {
+      "kind": "feature",
+      "name": "trino page size header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-773-get--v1-statement-executing-20261006-232425-00145-x3v5n-ya2dc06f810e335bd489674a51eaf5bcc799098bb-2.json",
+      "test": "TestIntegrationFeatures/trino_page_size_header"
+    },
+    {
+      "kind": "feature",
+      "name": "presto page size header",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-483-get--v1-statement-queued-20261006-232326-00146-cqrz9-2.json",
+      "test": "TestIntegrationFeatures/presto_page_size_header"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel by next uri",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-839-delete--v1-statement-executing-20261006-232426-00161-x3v5n-ye7a0f29750458b9221d78973761dced23eb71605-1.json",
+      "test": "TestIntegrationFeatures/cancel_by_next_uri"
+    },
+    {
+      "kind": "feature",
+      "name": "cancel by query id",
+      "sources": [
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-847-delete--v1-query-20261006-232430-00162-x3v5n.json",
+      "test": "TestIntegrationFeatures/cancel_by_query_id"
+    },
+    {
+      "kind": "feature",
+      "name": "gzip",
+      "sources": [
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-1085-post--v1-statement.json",
+      "test": "TestIntegrationFeatures/gzip"
+    },
+    {
+      "kind": "feature",
+      "name": "trino password over http",
+      "sources": [
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-853-post--v1-statement.json",
+      "test": "TestIntegrationFeatures/trino_password_over_http"
+    },
+    {
+      "kind": "feature",
+      "name": "presto password over http",
+      "sources": [
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-553-get--v1-statement-queued-20261006-232352-00164-cqrz9-2.json",
+      "test": "TestIntegrationFeatures/presto_password_over_http"
+    },
+    {
+      "kind": "feature",
+      "name": "trino user from basic authentication",
+      "sources": [
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-859-get--v1-statement-executing-20261006-232451-00163-x3v5n-yf6fcba9fc294a2520e9e1041428c3c3df8661264-1.json",
+      "test": "TestIntegrationFeatures/trino_user_from_basic_authentication"
+    },
+    {
+      "kind": "feature",
+      "name": "presto user from basic authentication",
+      "sources": [
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-555-post--v1-statement.json",
+      "test": "TestIntegrationFeatures/presto_user_from_basic_authentication"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/TINYINT"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/SMALLINT"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/INTEGER"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/BIGINT"
+    },
+    {
+      "kind": "type",
+      "name": "REAL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/REAL"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/DOUBLE"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "CHAR",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/CHAR"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/VARCHAR"
+    },
+    {
+      "kind": "type",
+      "name": "VARBINARY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-288-get--v1-statement-executing-20261006-232423-00073-x3v5n-yd5ee04db73c7b7c90b51a62e88bbfa7849d40bd9-1.json",
+      "test": "TestIntegrationRoundTrip/VARBINARY"
+    },
+    {
+      "kind": "type",
+      "name": "JSON",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-330-get--v1-statement-executing-20261006-232423-00078-x3v5n-y69857d1125184e0d910ce8796026297c39ae03cb-1.json",
+      "test": "TestIntegrationRoundTrip/JSON"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL YEAR TO MONTH",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-330-get--v1-statement-executing-20261006-232423-00078-x3v5n-y69857d1125184e0d910ce8796026297c39ae03cb-1.json",
+      "test": "TestIntegrationRoundTrip/INTERVAL_YEAR_TO_MONTH"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL DAY TO SECOND",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-330-get--v1-statement-executing-20261006-232423-00078-x3v5n-y69857d1125184e0d910ce8796026297c39ae03cb-1.json",
+      "test": "TestIntegrationRoundTrip/INTERVAL_DAY_TO_SECOND"
+    },
+    {
+      "kind": "type",
+      "name": "UUID",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-330-get--v1-statement-executing-20261006-232423-00078-x3v5n-y69857d1125184e0d910ce8796026297c39ae03cb-1.json",
+      "test": "TestIntegrationRoundTrip/UUID"
+    },
+    {
+      "kind": "type",
+      "name": "IPADDRESS",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-330-get--v1-statement-executing-20261006-232423-00078-x3v5n-y69857d1125184e0d910ce8796026297c39ae03cb-1.json",
+      "test": "TestIntegrationRoundTrip/IPADDRESS"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-297-get--v1-statement-executing-20261006-232423-00074-x3v5n-ya556c5740a48975ff5158e8557d4655ec73a8d17-1.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "TIME",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-297-get--v1-statement-executing-20261006-232423-00074-x3v5n-ya556c5740a48975ff5158e8557d4655ec73a8d17-1.json",
+      "test": "TestIntegrationRoundTrip/TIME"
+    },
+    {
+      "kind": "type",
+      "name": "TIME WITH TIME ZONE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-297-get--v1-statement-executing-20261006-232423-00074-x3v5n-ya556c5740a48975ff5158e8557d4655ec73a8d17-1.json",
+      "test": "TestIntegrationRoundTrip/TIME_WITH_TIME_ZONE"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-297-get--v1-statement-executing-20261006-232423-00074-x3v5n-ya556c5740a48975ff5158e8557d4655ec73a8d17-1.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP WITH TIME ZONE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-297-get--v1-statement-executing-20261006-232423-00074-x3v5n-ya556c5740a48975ff5158e8557d4655ec73a8d17-1.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP_WITH_TIME_ZONE"
+    },
+    {
+      "kind": "type",
+      "name": "ARRAY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-339-get--v1-statement-executing-20261006-232423-00079-x3v5n-yc35d596fea62165eac51394efec34591bb427e7e-1.json",
+      "test": "TestIntegrationRoundTrip/ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "MAP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-339-get--v1-statement-executing-20261006-232423-00079-x3v5n-yc35d596fea62165eac51394efec34591bb427e7e-1.json",
+      "test": "TestIntegrationRoundTrip/MAP"
+    },
+    {
+      "kind": "type",
+      "name": "ROW",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/prestodb/presto-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-339-get--v1-statement-executing-20261006-232423-00079-x3v5n-yc35d596fea62165eac51394efec34591bb427e7e-1.json",
+      "test": "TestIntegrationRoundTrip/ROW"
+    },
+    {
+      "kind": "type",
+      "name": "HYPERLOGLOG",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-354-get--v1-statement-executing-20261006-232424-00081-x3v5n-y379ee80c47760b55cf36263a830cd9afbd93369f-1.json",
+      "test": "TestIntegrationRoundTrip/HYPERLOGLOG"
+    },
+    {
+      "kind": "type",
+      "name": "P4HYPERLOGLOG",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-364-get--v1-statement-executing-20261006-232424-00082-x3v5n-y2e56c0aa48ce873280a62929c36fe59926da5617-1.json",
+      "test": "TestIntegrationRoundTrip/P4HYPERLOGLOG"
+    },
+    {
+      "kind": "type",
+      "name": "SETDIGEST",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-374-get--v1-statement-executing-20261006-232424-00083-x3v5n-y7426e3d1cc0aed39680428ab209fede798ee660d-1.json",
+      "test": "TestIntegrationRoundTrip/SETDIGEST"
+    },
+    {
+      "kind": "type",
+      "name": "QDIGEST",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-383-get--v1-statement-executing-20261006-232424-00084-x3v5n-ye92a22b424a439a67d52b289740ec937fbf0c6ad-1.json",
+      "test": "TestIntegrationRoundTrip/QDIGEST"
+    },
+    {
+      "kind": "type",
+      "name": "TDIGEST",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-391-get--v1-statement-executing-20261006-232424-00085-x3v5n-yc91db27d1f5ac8c5a825c62c97c77fa82bdc606d-1.json",
+      "test": "TestIntegrationRoundTrip/TDIGEST"
+    },
+    {
+      "kind": "type",
+      "name": "GEOMETRY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-399-get--v1-statement-executing-20261006-232424-00086-x3v5n-y18ac6e7d9c85378316040c8bb0c8540cb34fc737-1.json",
+      "test": "TestIntegrationRoundTrip/GEOMETRY"
+    },
+    {
+      "kind": "type",
+      "name": "SPHERICALGEOGRAPHY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-399-get--v1-statement-executing-20261006-232424-00086-x3v5n-y18ac6e7d9c85378316040c8bb0c8540cb34fc737-1.json",
+      "test": "TestIntegrationRoundTrip/SPHERICALGEOGRAPHY"
+    },
+    {
+      "kind": "type",
+      "name": "UNKNOWN",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-476-415-get--v1-statement-executing-20261006-232424-00088-x3v5n-y340c48956dfcd09b502b498704333053d11222cd-1.json",
+      "test": "TestIntegrationRoundTrip/UNKNOWN"
+    },
+    {
+      "kind": "type",
+      "name": "trino 483 NUMBER",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-483-480-get--v1-statement-executing-20261006-232523-00092-dup55-y180bb123abfa67062e7ae118f4e554969e230341-1.json",
+      "test": "TestIntegrationRoundTrip/trino_483_NUMBER"
+    },
+    {
+      "kind": "type",
+      "name": "trino 476 NUMBER",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-437-get--v1-statement-queued-20261006-232424-00092-x3v5n-yb393a58c41ac9a48bbec38ad521643fc0cf6e3c9-2.json",
+      "test": "TestIntegrationRoundTrip/trino_476_NUMBER"
+    },
+    {
+      "kind": "type",
+      "name": "presto NUMBER",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client",
+        "github.com/trinodb/trino-python-client"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-279-get--v1-statement-queued-20261006-232324-00094-cqrz9-2.json",
+      "test": "TestIntegrationRoundTrip/presto_NUMBER"
+    },
+    {
+      "kind": "type",
+      "name": "trino 483 VARIANT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "yes",
+      "evidence": "trino-483-495-get--v1-statement-executing-20261006-232523-00094-dup55-ydadb68d39a3bb310cfec193465f075632dd944b1-1.json",
+      "test": "TestIntegrationRoundTrip/trino_483_VARIANT"
+    },
+    {
+      "kind": "type",
+      "name": "trino 476 VARIANT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "no",
+      "evidence": "trino-476-443-get--v1-statement-queued-20261006-232424-00094-x3v5n-ya1e37895c159df98f2a2852a042f8dd9159413f2-2.json",
+      "test": "TestIntegrationRoundTrip/trino_476_VARIANT"
+    },
+    {
+      "kind": "type",
+      "name": "presto VARIANT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-pro",
+        "github.com/trinodb/trino-go-client"
+      ],
+      "verdict": "no",
+      "evidence": "presto-0.299-285-get--v1-statement-queued-20261006-232324-00096-cqrz9-2.json",
+      "test": "TestIntegrationRoundTrip/presto_VARIANT"
+    }
+  ]
+}

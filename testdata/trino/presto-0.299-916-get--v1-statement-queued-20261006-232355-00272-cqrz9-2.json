@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232355_00272_cqrz9/2",
+    "query": "slug=x3dcb196f78ba477e84babc78948be908",
+    "header": {
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "X-Presto-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=300"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:55 GMT"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232355_00272_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232355_00272_cqrz9\",\"stats\":{\"state\":\"FAILED\",\"waitingForPrerequisites\":false,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0,\"runtimeStats\":{\"systemAccessControl.checkCanSetUser\":{\"name\":\"systemAccessControl.checkCanSetUser\",\"unit\":\"NANO\",\"sum\":410,\"count\":1,\"max\":410,\"min\":410},\"systemAccessControl.checkQueryIntegrity\":{\"name\":\"systemAccessControl.checkQueryIntegrity\",\"unit\":\"NANO\",\"sum\":310,\"count\":1,\"max\":310,\"min\":310},\"getIdentifierNormalizationTimeNanos\":{\"name\":\"getIdentifierNormalizationTimeNanos\",\"unit\":\"NANO\",\"sum\":12000,\"count\":6,\"max\":10190,\"min\":250},\"systemAccessControl.checkCanDropColumn\":{\"name\":\"systemAccessControl.checkCanDropColumn\",\"unit\":\"NANO\",\"sum\":590,\"count\":1,\"max\":590,\"min\":590},\"systemAccessControl.checkCanAccessCatalog\":{\"name\":\"systemAccessControl.checkCanAccessCatalog\",\"unit\":\"NANO\",\"sum\":230,\"count\":1,\"max\":230,\"min\":230}}},\"error\":{\"message\":\"This connector does not support dropping columns\",\"errorCode\":13,\"errorName\":\"NOT_SUPPORTED\",\"errorType\":\"USER_ERROR\",\"retriable\":false,\"failureInfo\":{\"type\":\"com.facebook.presto.spi.PrestoException\",\"message\":\"This connector does not support dropping columns\",\"suppressed\":[],\"stack\":[\"com.facebook.presto.spi.connector.ConnectorMetadata.dropColumn(ConnectorMetadata.java:433)\",\"com.facebook.presto.metadata.MetadataManager.dropColumn(MetadataManager.java:834)\",\"com.facebook.presto.execution.DropColumnTask.execute(DropColumnTask.java:93)\",\"com.facebook.presto.execution.DropColumnTask.execute(DropColumnTask.java:40)\",\"com.facebook.presto.execution.DDLDefinitionExecution.executeTask(DDLDefinitionExecution.java:66)\",\"com.facebook.presto.execution.DataDefinitionExecution.start(DataDefinitionExecution.java:217)\",\"com.facebook.presto.$gen.Presto_0_299_7d50721____20261006_232305_1.run(Unknown Source)\",\"com.facebook.presto.execution.SqlQueryManager.createQuery(SqlQueryManager.java:326)\",\"com.facebook.presto.dispatcher.LocalDispatchQuery.lambda$startExecution$8(LocalDispatchQuery.java:217)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\",\"java.base/java.lang.Thread.run(Thread.java:840)\"]}},\"warnings\":[],\"updateType\":\"DROP COLUMN\"}\n"
+  }
+}

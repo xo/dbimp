@@ -96,6 +96,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/DYNAMODB.md](docs/DYNAMODB.md) | What is known about Amazon DynamoDB and ScyllaDB Alternator, for its driver |
 | [docs/PROGRESS.md](docs/PROGRESS.md) | Where the work in progress stands, and how to resume it after a crash |
 | [docs/TRINO.md](docs/TRINO.md) | What is known about Trino and Presto, for their driver |
+| [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md) | What is known about ClickHouse over HTTP, for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects

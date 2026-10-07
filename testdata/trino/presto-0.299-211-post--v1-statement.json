@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ]
+    },
+    "body": "SELECT INTERVAL '1-2' YEAR TO MONTH, INTERVAL '3 04:05:06.789' DAY TO SECOND, INTERVAL '-1' DAY, JSON '{\"a\":[1,null]}', JSON 'null', JSON '\"x\"', UUID '12345678-1234-5678-1234-567812345678', IPADDRESS '10.0.0.1', IPADDRESS '::1'"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:24 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Cache-Control": [
+        "max-age=60"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232324_00080_cqrz9\",\"infoUri\":\"http://127.0.0.1:55039/ui/query.html?20261006_232324_00080_cqrz9\",\"nextUri\":\"http://127.0.0.1:55039/v1/statement/queued/20261006_232324_00080_cqrz9/1?slug=xd4b80ec68af24513b356ef008f3e53c6\",\"stats\":{\"state\":\"WAITING_FOR_PREREQUISITES\",\"waitingForPrerequisites\":true,\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"waitingForPrerequisitesTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"peakMemoryBytes\":0,\"peakTotalMemoryBytes\":0,\"peakTaskTotalMemoryBytes\":0,\"spilledBytes\":0},\"warnings\":[]}\n"
+  }
+}

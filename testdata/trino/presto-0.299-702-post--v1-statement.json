@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "Accept-Encoding": [
+        "gzip"
+      ],
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ]
+    },
+    "body": "SELECT n, z, s FROM dbimp_big WHERE n <= 5 ORDER BY n"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Cache-Control": [
+        "max-age=60"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Encoding": [
+        "gzip"
+      ],
+      "Content-Length": [
+        "354"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:54 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "",
+    "binary": "H4sIAAAAAAAA/32QXU/CMBSG7/0ZvSas+8YlhmgCZhcowogXxix1O0Bjt5Z+CEj473bORL5CetPznLfveU93iJYoQR72IhfjKPd8zw+DHGMPx3mxkt+3qINoPeczSa1uqbVIHMf14i62x03CEPu3jqHOyoDcdpe6Yv3rZjVs9FWzL9dRmmiooNaNrYHSuWLpuH3FzOJu0/PLsgwi18PBRxBHMYmKMCQQ4rDnxmFc2NmNr0LJ7vcCNsLrfZqlT4/58HmSjyeDyeBllk7TbDC14jWhmtaLIZdjCRJWhiqqwT7X0kAHtclQMidM2VIVSygNOyA1Lxs17iDNNWFTwahu6/bpAZCmru2oA1LwSjDQR6pCmIxWMKKM0ZasCWNn6GLqE1Wb4AQCI0KdUSF5AcryCV+fkIet/ttQAPkcQcXl9phlzeYXG0RdbiphR/9b75uNZPM5tnp739/8ALn+FBWxAgAA"
+  }
+}

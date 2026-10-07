@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/statement",
+    "header": {
+      "X-Presto-User": [
+        "trino"
+      ],
+      "X-Presto-Catalog": [
+        "memory"
+      ],
+      "X-Presto-Schema": [
+        "default"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "X-Presto-Prepared-Statement": [
+        "p1=SELECT%20n%20FROM%20dbimp_big%20ORDER%20BY%20n%20LIMIT%20%3F"
+      ]
+    },
+    "body": "EXECUTE p1 USING 2"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:23:25 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "text/plain"
+      ],
+      "Content-Length": [
+        "104"
+      ]
+    },
+    "body": "Invalid X-Presto-Prepared-Statement header: line 1:42: mismatched input '?'. Expecting: 'ALL', <integer>"
+  }
+}

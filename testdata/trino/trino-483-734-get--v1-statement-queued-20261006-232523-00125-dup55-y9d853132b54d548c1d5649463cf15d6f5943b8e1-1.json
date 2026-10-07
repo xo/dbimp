@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232523_00125_dup55/y9d853132b54d548c1d5649463cf15d6f5943b8e1/1",
+    "header": {
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-Prepared-Statement": [
+        "p1=SELECT%20%3F"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:23 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232523_00125_dup55\",\"infoUri\":\"http://127.0.0.1:55038/ui#/queries/20261006_232523_00125_dup55\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":0,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"line 1:1: Incorrect number of parameters: expected 1 but found 2\",\"errorCode\":80,\"errorName\":\"INVALID_PARAMETER_USAGE\",\"errorType\":\"USER_ERROR\",\"errorLocation\":{\"lineNumber\":1,\"columnNumber\":1},\"failureInfo\":{\"type\":\"io.trino.spi.TrinoException\",\"message\":\"line 1:1: Incorrect number of parameters: expected 1 but found 2\",\"suppressed\":[],\"stack\":[\"io.trino.sql.analyzer.SemanticExceptions.semanticException(SemanticExceptions.java:58)\",\"io.trino.sql.analyzer.SemanticExceptions.semanticException(SemanticExceptions.java:52)\",\"io.trino.execution.QueryPreparer.validateParameters(QueryPreparer.java:96)\",\"io.trino.execution.QueryPreparer.prepareQuery(QueryPreparer.java:87)\",\"io.trino.execution.QueryPreparer.prepareQuery(QueryPreparer.java:55)\",\"io.trino.dispatcher.DispatchManager.createQueryInternal(DispatchManager.java:226)\",\"io.trino.dispatcher.DispatchManager.lambda$createQuery$0(DispatchManager.java:195)\",\"io.opentelemetry.context.Context.lambda$wrap$1(Context.java:242)\",\"io.airlift.concurrent.BoundedExecutor.drainQueue(BoundedExecutor.java:80)\",\"io.trino.$gen.Trino_483____20261006_232506_2.run(Unknown Source)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)\",\"java.base/java.lang.Thread.run(Thread.java:1474)\"],\"errorInfo\":{\"code\":80,\"name\":\"INVALID_PARAMETER_USAGE\",\"type\":\"USER_ERROR\"},\"errorLocation\":{\"lineNumber\":1,\"columnNumber\":1}}},\"warnings\":[]}"
+  }
+}

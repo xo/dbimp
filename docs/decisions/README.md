@@ -194,3 +194,5 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D171](D171-no-ddl-in-the-drivers-and-a-read-only-sql-layer-later.md) | No DDL in the drivers, and a read only SQL layer later | Decided |
 | [D172](D172-druid-reads-a-few-types-of-the-round-trip-on-a-push.md) | Druid reads a few types of the round trip on a push | Decided |
 | [D173](D173-trino-and-presto-in-one-driver.md) | Trino and Presto in one driver | Decided |
+| [D174](D174-the-clickhouse-driver-speaks-http.md) | The ClickHouse driver speaks HTTP | Decided |
+| [D175](D175-the-trino-and-presto-driver.md) | The Trino and Presto driver | Decided |

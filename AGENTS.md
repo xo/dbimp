@@ -73,6 +73,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the OpenSearch driver | [docs/OPENSEARCH.md](docs/OPENSEARCH.md), then W29 and D162 |
 | writing the Amazon DynamoDB driver | [docs/DYNAMODB.md](docs/DYNAMODB.md), then W30 and D162 |
 | writing the Trino and Presto driver | [docs/TRINO.md](docs/TRINO.md), then W31, D162 and D173 |
+| writing the ClickHouse driver | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md), then W32 and D174 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |
@@ -114,10 +115,11 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    type that the database names for its column, and a string column gives a
    string. See D8 and D135.
 4. `context.Context` comes first, is named `ctx`, and is never stored in a
-   struct, except by a Couchbase, Neo4j, ArangoDB, Databend, libSQL or
-   Avatica transaction, by an Avatica connection, and by the rows of an
-   ArangoDB cursor, of a Databend query, of a libSQL cursor or of an Avatica
-   query (D45, D69, D90, D91, D122, D123, D149, D150, D157 and D159). The
+   struct, except by a Couchbase, Neo4j, ArangoDB, Databend, libSQL, Avatica
+   or Trino transaction, by an Avatica connection, and by the rows of an
+   ArangoDB cursor, of a Databend query, of a libSQL cursor, of an Avatica
+   query or of a Trino query (D45, D69, D90, D91, D122, D123, D149, D150, D157,
+   D159 and D175). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

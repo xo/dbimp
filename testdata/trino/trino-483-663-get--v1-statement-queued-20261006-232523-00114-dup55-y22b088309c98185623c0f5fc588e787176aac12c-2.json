@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/statement/queued/20261006_232523_00114_dup55/y22b088309c98185623c0f5fc588e787176aac12c/2",
+    "header": {
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-User": [
+        "trino"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:25:23 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"id\":\"20261006_232523_00114_dup55\",\"infoUri\":\"http://127.0.0.1:55038/ui#/queries/20261006_232523_00114_dup55\",\"stats\":{\"state\":\"FAILED\",\"queued\":false,\"scheduled\":false,\"nodes\":0,\"totalSplits\":0,\"queuedSplits\":0,\"runningSplits\":0,\"completedSplits\":0,\"planningTimeMillis\":0,\"analysisTimeMillis\":0,\"cpuTimeMillis\":0,\"wallTimeMillis\":0,\"queuedTimeMillis\":0,\"elapsedTimeMillis\":1,\"finishingTimeMillis\":0,\"physicalInputTimeMillis\":0,\"processedRows\":0,\"processedBytes\":0,\"physicalInputBytes\":0,\"physicalWrittenBytes\":0,\"internalNetworkInputBytes\":0,\"peakMemoryBytes\":0,\"spilledBytes\":0},\"error\":{\"message\":\"line 1:1: Column type is unknown: v\",\"errorCode\":60,\"errorName\":\"COLUMN_TYPE_UNKNOWN\",\"errorType\":\"USER_ERROR\",\"errorLocation\":{\"lineNumber\":1,\"columnNumber\":1},\"failureInfo\":{\"type\":\"io.trino.spi.TrinoException\",\"message\":\"line 1:1: Column type is unknown: v\",\"suppressed\":[],\"stack\":[\"io.trino.sql.analyzer.SemanticExceptions.semanticException(SemanticExceptions.java:58)\",\"io.trino.sql.analyzer.SemanticExceptions.semanticException(SemanticExceptions.java:52)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.validateColumns(StatementAnalyzer.java:1532)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitCreateTableAsSelect(StatementAnalyzer.java:997)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.visitCreateTableAsSelect(StatementAnalyzer.java:545)\",\"io.trino.sql.tree.CreateTableAsSelect.accept(CreateTableAsSelect.java:86)\",\"io.trino.sql.tree.AstVisitor.process(AstVisitor.java:27)\",\"io.trino.sql.analyzer.StatementAnalyzer$Visitor.process(StatementAnalyzer.java:564)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:524)\",\"io.trino.sql.analyzer.StatementAnalyzer.analyze(StatementAnalyzer.java:513)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:98)\",\"io.trino.sql.analyzer.Analyzer.analyze(Analyzer.java:87)\",\"io.trino.execution.SqlQueryExecution.analyze(SqlQueryExecution.java:288)\",\"io.trino.execution.SqlQueryExecution.<init>(SqlQueryExecution.java:222)\",\"io.trino.execution.SqlQueryExecution$SqlQueryExecutionFactory.createQueryExecution(SqlQueryExecution.java:893)\",\"io.trino.dispatcher.LocalDispatchQueryFactory.lambda$createDispatchQuery$0(LocalDispatchQueryFactory.java:163)\",\"io.trino.$gen.Trino_483____20261006_232506_2.call(Unknown Source)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask.runInterruptibly(TrustedListenableFutureTask.java:128)\",\"com.google.common.util.concurrent.InterruptibleTask.run(InterruptibleTask.java:74)\",\"com.google.common.util.concurrent.TrustedListenableFutureTask.run(TrustedListenableFutureTask.java:80)\",\"java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)\",\"java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)\",\"java.base/java.lang.Thread.run(Thread.java:1474)\"],\"errorInfo\":{\"code\":60,\"name\":\"COLUMN_TYPE_UNKNOWN\",\"type\":\"USER_ERROR\"},\"errorLocation\":{\"lineNumber\":1,\"columnNumber\":1}}},\"warnings\":[]}"
+  }
+}

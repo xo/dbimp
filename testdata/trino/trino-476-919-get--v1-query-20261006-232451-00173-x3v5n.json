@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/query/20261006_232451_00173_x3v5n",
+    "header": {
+      "X-Trino-Catalog": [
+        "memory"
+      ],
+      "X-Trino-Schema": [
+        "default"
+      ],
+      "X-Trino-User": [
+        "alice"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Tue, 06 Oct 2026 23:24:51 GMT"
+      ]
+    },
+    "body": "{\"queryId\":\"20261006_232451_00173_x3v5n\",\"session\":{\"queryId\":\"20261006_232451_00173_x3v5n\",\"querySpan\":{},\"transactionId\":\"c03cda9d-02d6-4ccd-bcb3-a0c3aea4ffd2\",\"clientTransactionSupport\":false,\"user\":\"trino\",\"originalUser\":\"trino\",\"setOriginalRoles\":[],\"groups\":[],\"originalUserGroups\":[],\"principal\":\"trino\",\"enabledRoles\":[],\"catalog\":\"memory\",\"schema\":\"default\",\"path\":{\"path\":[{\"catalogName\":\"system\",\"schemaName\":\"$query\"},{\"catalogName\":\"system\",\"schemaName\":\"builtin\"}],\"rawPath\":\"\"},\"timeZoneKey\":0,\"locale\":\"en_US\",\"remoteUserAddress\":\"192.168.1.5\",\"userAgent\":\"Go-http-client/1.1\",\"clientTags\":[],\"clientCapabilities\":[],\"resourceEstimates\":{},\"start\":\"2026-10-06T23:24:51.836687031Z\",\"systemProperties\":{},\"catalogProperties\":{},\"catalogRoles\":{},\"preparedStatements\":{},\"protocolName\":\"Trino\",\"timeZone\":\"UTC\"},\"state\":\"PLANNING\",\"self\":\"http://192.168.1.5:8080/v1/query/20261006_232451_00173_x3v5n\",\"fieldNames\":[],\"query\":\"SELECT a.n, b.n, rpad('x', 100, 'y') FROM dbimp_big a CROSS JOIN dbimp_big b\",\"queryStats\":{\"createTime\":\"2026-10-06T23:24:51.837Z\",\"executionStartTime\":\"2026-10-06T23:24:51.838Z\",\"lastHeartbeat\":\"2026-10-06T23:24:51.838Z\",\"elapsedTime\":\"2.54ms\",\"queuedTime\":\"89.41us\",\"resourceWaitingTime\":\"1.55ms\",\"dispatchingTime\":\"28.20us\",\"executionTime\":\"870.15us\",\"analysisTime\":\"1.52ms\",\"planningTime\":\"870.41us\",\"planningCpuTime\":\"2.55h\",\"startingTime\":\"0.00ms\",\"finishingTime\":\"0.00ms\",\"totalTasks\":0,\"runningTasks\":0,\"completedTasks\":0,\"failedTasks\":0,\"totalDrivers\":0,\"queuedDrivers\":0,\"runningDrivers\":0,\"blockedDrivers\":0,\"completedDrivers\":0,\"cumulativeUserMemory\":0.0,\"failedCumulativeUserMemory\":0.0,\"userMemoryReservation\":\"0B\",\"revocableMemoryReservation\":\"0B\",\"totalMemoryReservation\":\"0B\",\"peakUserMemoryReservation\":\"0B\",\"peakRevocableMemoryReservation\":\"0B\",\"peakTotalMemoryReservation\":\"0B\",\"peakTaskUserMemory\":\"0B\",\"peakTaskRevocableMemory\":\"0B\",\"peakTaskTotalMemory\":\"0B\",\"scheduled\":false,\"totalScheduledTime\":\"0.00ns\",\"failedScheduledTime\":\"0.00ns\",\"totalCpuTime\":\"0.00ns\",\"failedCpuTime\":\"0.00ns\",\"totalBlockedTime\":\"0.00ns\",\"fullyBlocked\":false,\"blockedReasons\":[],\"physicalInputDataSize\":\"0B\",\"failedPhysicalInputDataSize\":\"0B\",\"physicalInputPositions\":0,\"failedPhysicalInputPositions\":0,\"physicalInputReadTime\":\"0.00ns\",\"failedPhysicalInputReadTime\":\"0.00ns\",\"internalNetworkInputDataSize\":\"0B\",\"failedInternalNetworkInputDataSize\":\"0B\",\"internalNetworkInputPositions\":0,\"failedInternalNetworkInputPositions\":0,\"rawInputDataSize\":\"0B\",\"failedRawInputDataSize\":\"0B\",\"rawInputPositions\":0,\"failedRawInputPositions\":0,\"processedInputDataSize\":\"0B\",\"failedProcessedInputDataSize\":\"0B\",\"processedInputPositions\":0,\"failedProcessedInputPositions\":0,\"inputBlockedTime\":\"0.00ns\",\"failedInputBlockedTime\":\"0.00ns\",\"outputDataSize\":\"0B\",\"failedOutputDataSize\":\"0B\",\"outputPositions\":0,\"failedOutputPositions\":0,\"outputBlockedTime\":\"0.00ns\",\"failedOutputBlockedTime\":\"0.00ns\",\"physicalWrittenDataSize\":\"0B\",\"failedPhysicalWrittenDataSize\":\"0B\",\"stageGcStatistics\":[],\"dynamicFiltersStats\":{\"dynamicFilterDomainStats\":[],\"lazyDynamicFilters\":0,\"replicatedDynamicFilters\":0,\"totalDynamicFilters\":0,\"dynamicFiltersCompleted\":0},\"operatorSummaries\":[],\"optimizerRulesSummaries\":[{\"rule\":\"io.trino.sql.planner.iterative.rule.ExpressionRewriteRuleSet.ProjectExpressionRewrite\",\"invocations\":8,\"applied\":0,\"totalTime\":41081,\"failures\":0},{\"rule\":\"io.trino.sql.planner.iterative.rule.ExpressionRewriteRuleSet.JoinExpressionRewrite\",\"invocations\":2,\"applied\":0,\"totalTime\":7470,\"failures\":0}],\"logicalWrittenDataSize\":\"0B\",\"writtenPositions\":0,\"spilledDataSize\":\"0B\"},\"resetAuthorizationUser\":false,\"setOriginalRoles\":[],\"setSessionProperties\":{},\"resetSessionProperties\":[],\"setRoles\":{},\"addedPreparedStatements\":{},\"deallocatedPreparedStatements\":[],\"clearTransactionId\":false,\"warnings\":[],\"inputs\":[],\"referencedTables\":[{\"catalog\":\"memory\",\"schema\":\"default\",\"table\":\"dbimp_big\",\"authorization\":\"trino\",\"filters\":[],\"columns\":[{\"column\":\"n\"}],\"directlyReferenced\":true,\"referenceChain\":[]},{\"catalog\":\"memory\",\"schema\":\"default\",\"table\":\"dbimp_big\",\"authorization\":\"trino\",\"filters\":[],\"columns\":[{\"column\":\"n\"}],\"directlyReferenced\":true,\"referenceChain\":[]}],\"routines\":[{\"routine\":\"rpad\",\"authorization\":\"trino\"}],\"finalQueryInfo\":false,\"resourceGroupId\":[\"global\"],\"queryType\":\"SELECT\",\"retryPolicy\":\"NONE\",\"pruned\":false,\"version\":{\"version\":\"476\"},\"scheduled\":false}"
+  }
+}
