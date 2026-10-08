@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT 1.2345678901234567890123456789012345678::NUMBER(38,37)\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-accd-0000-d07900021eae?requestId=c464fc90-8e43-4ffa-a596-05f7f005f207&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-accd-0000-d07900021eae?requestId=68c5b309-c1b9-4dff-8c8f-e3d7fbde1a6c&partition=0>; rel=\"last\""
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:31 GMT"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "101"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 54\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"1.2345678901234567890123456789012345678::NUMBER(38,37)\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"precision\" : 38,\n      \"scale\" : 37,\n      \"nullable\" : false,\n      \"byteLength\" : null,\n      \"length\" : null,\n      \"type\" : \"fixed\"\n    } ]\n  },\n  \"data\" : [ [\"1.2345678901234567890123456789012345678\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-accd-0000-d07900021eae?requestId=a6879319-6ff2-417c-a39a-de682fc52d1d\",\n  \"requestId\" : \"a6879319-6ff2-417c-a39a-de682fc52d1d\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021eae\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499231574\n}"
+  }
+}

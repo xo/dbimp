@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"INSERT INTO dbimp_it_dml VALUES (?, ?)\",\"bindings\":{\"1\":{\"type\":\"FIXED\",\"value\":\"1\"},\"2\":{\"type\":\"TEXT\",\"value\":\"a\"}}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-accd-0000-d07900021ee2?requestId=98605191-b58b-4f0f-b686-ba907ff5dc02&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-accd-0000-d07900021ee2?requestId=949d0ebc-226f-46b7-ba9b-83b79081f9dc&partition=0>; rel=\"last\""
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "294"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:34 GMT"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 16\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"number of rows inserted\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"precision\" : 19,\n      \"scale\" : 0,\n      \"nullable\" : false,\n      \"byteLength\" : null,\n      \"length\" : null,\n      \"type\" : \"fixed\"\n    } ]\n  },\n  \"data\" : [ [\"1\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-accd-0000-d07900021ee2?requestId=6982825d-883a-47b7-bade-1bf18676c5ed\",\n  \"requestId\" : \"6982825d-883a-47b7-bade-1bf18676c5ed\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021ee2\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499234516,\n  \"stats\" : {\n    \"numRowsInserted\" : 1,\n    \"numRowsDeleted\" : 0,\n    \"numRowsUpdated\" : 0,\n    \"numDmlDuplicates\" : 0\n  }\n}"
+  }
+}

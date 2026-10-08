@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"CREATE USER dbimp_it_u\"}"
+  },
+  "response": {
+    "status": 422,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:50 GMT"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "83"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ]
+    },
+    "body": "{\n  \"code\" : \"003001\",\n  \"message\" : \"SQL access control error:\\nInsufficient privileges to operate on account '<locator>'. Your primary role <role> must have CREATE USER granted on ACCOUNT <locator>.\",\n  \"sqlState\" : \"42501\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024cee\"\n}"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT CURRENT_ROLE()\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c22?requestId=d5fb9727-6991-4c06-b377-8a953971af6b&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c22?requestId=6cbfb9d8-fac3-41f9-823b-ba191802ef5f&partition=0>; rel=\"last\""
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "80"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:29 GMT"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 19\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"CURRENT_ROLE()\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 134217728,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 134217728,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"<role>\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-ac43-0000-d07900024c22?requestId=23cda4c1-1609-4932-97f6-9be0e17615b2\",\n  \"requestId\" : \"23cda4c1-1609-4932-97f6-9be0e17615b2\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024c22\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499229990\n}"
+  }
+}

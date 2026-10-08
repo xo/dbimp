@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT * FROM dbimp_it_types WHERE 1 = 0\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c26?requestId=429458ae-a6e5-4790-9f70-dc0320e0ddf0&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c26?requestId=46a139fb-4583-4c28-9f89-564b35deae5a&partition=0>; rel=\"last\""
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "246"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:30 GMT"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 0,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 0,\n      \"uncompressedSize\" : 0\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"I\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 0,\n      \"precision\" : 38,\n      \"length\" : null,\n      \"type\" : \"fixed\"\n    }, {\n      \"name\" : \"N\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 2,\n      \"precision\" : 10,\n      \"length\" : null,\n      \"type\" : \"fixed\"\n    }, {\n      \"name\" : \"F\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"real\"\n    }, {\n      \"name\" : \"S\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : 67108864,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"B\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : 8388608,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 8388608,\n      \"type\" : \"binary\"\n    }, {\n      \"name\" : \"BO\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"boolean\"\n    }, {\n      \"name\" : \"D\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"date\"\n    }, {\n      \"name\" : \"TM\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 9,\n      \"precision\" : 0,\n      \"length\" : null,\n      \"type\" : \"time\"\n    }, {\n      \"name\" : \"TN\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 9,\n      \"precision\" : 0,\n      \"length\" : null,\n      \"type\" : \"timestamp_ntz\"\n    }, {\n      \"name\" : \"TL\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 9,\n      \"precision\" : 0,\n      \"length\" : null,\n      \"type\" : \"timestamp_ltz\"\n    }, {\n      \"name\" : \"TZ\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 9,\n      \"precision\" : 0,\n      \"length\" : null,\n      \"type\" : \"timestamp_tz\"\n    }, {\n      \"name\" : \"V\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"variant\"\n    }, {\n      \"name\" : \"O\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"object\"\n    }, {\n      \"name\" : \"A\",\n      \"database\" : \"DBMETA\",\n      \"schema\" : \"PUBLIC\",\n      \"table\" : \"DBIMP_IT_TYPES\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"array\"\n    }, {\n      \"name\" : \"G\",\n      \"extTypeName\" : \"GEOGRAPHY\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"object\"\n    }, {\n      \"name\" : \"GM\",\n      \"extTypeName\" : \"GEOMETRY\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"object\"\n    } ]\n  },\n  \"data\" : [ ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-ac43-0000-d07900024c26?requestId=56b1aab4-c4d3-4745-8ca6-dbde65c92137\",\n  \"requestId\" : \"56b1aab4-c4d3-4745-8ca6-dbde65c92137\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024c26\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499230793\n}"
+  }
+}

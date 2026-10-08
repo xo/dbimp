@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SHOW GRANTS TO ROLE <role>\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:41:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "156"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a11-0001-ac43-0000-d07900024e36?requestId=9275632d-824a-4ed7-a4fb-d4b5f27f8159&partition=0>; rel=\"first\",</api/v2/statements/01c79a11-0001-ac43-0000-d07900024e36?requestId=e0ea37a6-a7c2-4632-af26-80e440a8d7e8&partition=0>; rel=\"last\""
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 12,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 12,\n      \"uncompressedSize\" : 1341\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"created_on\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 3,\n      \"precision\" : 0,\n      \"length\" : null,\n      \"type\" : \"timestamp_ltz\"\n    }, {\n      \"name\" : \"privilege\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"granted_on\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"name\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"granted_to\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"grantee_name\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"grant_option\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"granted_by\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"1791428867.627\",\"USAGE\",\"DATABASE\",\"DBMETA\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791428873.084\",\"CREATE TABLE\",\"SCHEMA\",\"DBMETA.PUBLIC\",\"ROLE\",\"<role>\",\"false\",\"ACCOUNTADMIN\"],[\"1791428873.073\",\"USAGE\",\"SCHEMA\",\"DBMETA.PUBLIC\",\"ROLE\",\"<role>\",\"false\",\"ACCOUNTADMIN\"],[\"1791499258.962\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_CL\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791499259.843\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_CLONE\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791499253.372\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_DML\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791499258.064\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_FK\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791499256.596\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_M1\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791499256.789\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_M2\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791499257.809\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_PK\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791499228.646\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.PUBLIC.DBIMP_IT_TYPES\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791498180.228\",\"USAGE\",\"WAREHOUSE\",\"DBMETA_WH\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a11-0001-ac43-0000-d07900024e36?requestId=9b84f3b1-79ab-4d27-82d9-e7242ad81611\",\n  \"requestId\" : \"9b84f3b1-79ab-4d27-82d9-e7242ad81611\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a11-0001-ac43-0000-d07900024e36\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499260922\n}"
+  }
+}

@@ -1,0 +1,2343 @@
+{
+  "driver": "snowflake",
+  "auth": "bearer",
+  "header": {
+    "administrator": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    }
+  },
+  "requests": [
+    {
+      "item": 1,
+      "name": "setup: drop the table of types",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_types"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop the table of rows",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_dml"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_dt",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP DYNAMIC TABLE IF EXISTS dbimp_it_dt"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_mv",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP MATERIALIZED VIEW IF EXISTS dbimp_it_mv"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_st",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP STREAM IF EXISTS dbimp_it_st"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP VIEW IF EXISTS dbimp_it_view"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_seq",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP SEQUENCE IF EXISTS dbimp_it_seq"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_clone",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_clone"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_cl",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_cl"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_fk",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_fk"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_pk",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_pk"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_m1",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_m1"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_m2",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_m2"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create the table of types",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE TABLE dbimp_it_types (i NUMBER(38,0), n NUMBER(10,2), f FLOAT, s VARCHAR, b BINARY, bo BOOLEAN, d DATE, tm TIME(9), tn TIMESTAMP_NTZ(9), tl TIMESTAMP_LTZ(9), tz TIMESTAMP_TZ(9), v VARIANT, o OBJECT, a ARRAY, g GEOGRAPHY, gm GEOMETRY)"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: fill the table of types",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_types SELECT 12345678901234567890123456789012345678, 12345678.91, 1.5, 'héllo', TO_BINARY('DEADBEEF','HEX'), TRUE, '2026-10-09', '12:34:56.123456789', '2026-10-09 12:34:56.123456789', '2026-10-09 12:34:56.123456789 +0700', '2026-10-09 12:34:56.123456789 +0700', PARSE_JSON('{\"a\":1}'), OBJECT_CONSTRUCT('k','v'), ARRAY_CONSTRUCT(1,'x',NULL), TO_GEOGRAPHY('POINT(1 2)'), TO_GEOMETRY('POINT(3 4)')"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: add a row of NULLs",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_types (i) VALUES (NULL)"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create the table of rows",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE TABLE dbimp_it_dml (id NUMBER, name VARCHAR)"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a statement",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1 AS a, 'x' AS b"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a comment",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "/* a comment */ SELECT 1 -- and another"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement in a body with no statement",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with another role",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT CURRENT_ROLE()"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns of a result with rows",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT * FROM dbimp_it_types ORDER BY i NULLS LAST"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns of a result with no rows",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT * FROM dbimp_it_types WHERE 1 = 0"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns that share a name",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1 AS a, 2 AS a"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a column in lower case",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1 AS \"lower\""
+      }
+    },
+    {
+      "item": 3,
+      "name": "every type",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT * FROM dbimp_it_types ORDER BY i NULLS LAST"
+      }
+    },
+    {
+      "item": 3,
+      "name": "describe the table of types",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DESCRIBE TABLE dbimp_it_types"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a decimal beyond 38 digits",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1.2345678901234567890123456789012345678::NUMBER(38,37)"
+      }
+    },
+    {
+      "item": 3,
+      "name": "an integer beyond int64",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 9223372036854775808::NUMBER(38,0)"
+      }
+    },
+    {
+      "item": 3,
+      "name": "float special values",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 'NaN'::FLOAT, 'inf'::FLOAT, '-inf'::FLOAT"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a date before 1970",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT '1900-01-01'::DATE"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a timestamp with the zone of the session",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT CURRENT_TIMESTAMP()::TIMESTAMP_LTZ, CURRENT_TIMESTAMP()::STRING"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a number with a scale",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 12.50::NUMBER(10,4)"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a variant of each kind",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT PARSE_JSON('1'), PARSE_JSON('\"s\"'), PARSE_JSON('null'), PARSE_JSON('[1,{\"a\":2}]'), PARSE_JSON('{\"a\":[1,2]}')"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a vector",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT [1.0,2.0,3.0]::VECTOR(FLOAT,3)"
+      }
+    },
+    {
+      "item": 3,
+      "name": "an interval",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT TIMESTAMPDIFF('second', '2026-01-01'::TIMESTAMP_NTZ, '2026-01-02'::TIMESTAMP_NTZ)"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type FIXED",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": "42"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type REAL",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "REAL",
+            "value": "1.5"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type TEXT",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "TEXT",
+            "value": "hé"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type BOOLEAN",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "BOOLEAN",
+            "value": "true"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type DATE",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "DATE",
+            "value": "1791504000000"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type TIME",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "TIME",
+            "value": "45296123456789"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type TIMESTAMP_NTZ",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "TIMESTAMP_NTZ",
+            "value": "1791549296123456789"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type TIMESTAMP_LTZ",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "TIMESTAMP_LTZ",
+            "value": "1791549296123456789"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type TIMESTAMP_TZ",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "TIMESTAMP_TZ",
+            "value": "1791549296123456789 1860"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type BINARY",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "BINARY",
+            "value": "DEADBEEF"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of NULL",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "TEXT",
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding of the type VARIANT",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "VARIANT",
+            "value": "{\"a\":1}"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding that does not fit its type",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": "abc"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding that is not set",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?, ?",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": "1"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "more bindings than placeholders",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT ?",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": "1"
+          },
+          "2": {
+            "type": "FIXED",
+            "value": "2"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a numbered placeholder used twice",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT :1, :1",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": "7"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a named placeholder",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT :a",
+        "bindings": {
+          "a": {
+            "type": "FIXED",
+            "value": "7"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a binding in an insert",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_dml VALUES (?, ?)",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": "1"
+          },
+          "2": {
+            "type": "TEXT",
+            "value": "a"
+          }
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of 20000 rows",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT seq4() AS n, uuid_string() AS u FROM TABLE(GENERATOR(ROWCOUNT => 20000))"
+      },
+      "capture": {
+        "handle": "statementHandle"
+      }
+    },
+    {
+      "item": 5,
+      "name": "partition 1 of the large result",
+      "method": "GET",
+      "path": "/api/v2/statements/{{handle}}?partition=1"
+    },
+    {
+      "item": 5,
+      "name": "partition 2 of the large result",
+      "method": "GET",
+      "path": "/api/v2/statements/{{handle}}?partition=2"
+    },
+    {
+      "item": 5,
+      "name": "partition 3 of the large result",
+      "method": "GET",
+      "path": "/api/v2/statements/{{handle}}?partition=3"
+    },
+    {
+      "item": 5,
+      "name": "a partition that does not exist",
+      "method": "GET",
+      "path": "/api/v2/statements/{{handle}}?partition=9"
+    },
+    {
+      "item": 5,
+      "name": "the status of a finished statement",
+      "method": "GET",
+      "path": "/api/v2/statements/{{handle}}"
+    },
+    {
+      "item": 5,
+      "name": "a result with the longest string",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT REPEAT('x', 1000000) AS s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELEC 1"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a missing table",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT * FROM dbimp_it_nosuch"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1/0"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a conversion error",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 'abc'::NUMBER"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error after some rows were produced",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1/(n-5000) FROM (SELECT seq4() AS n FROM TABLE(GENERATOR(ROWCOUNT => 20000))) ORDER BY n"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a statement that reaches its timeout",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 2,
+        "statement": "SELECT SYSTEM$WAIT(10)"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a statement with no text",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown handle",
+      "method": "GET",
+      "path": "/api/v2/statements/00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "item": 6,
+      "name": "an invalid partition",
+      "method": "GET",
+      "path": "/api/v2/statements/{{handle}}?partition=x"
+    },
+    {
+      "item": 7,
+      "name": "an asynchronous statement",
+      "method": "POST",
+      "path": "/api/v2/statements?async=true",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT SYSTEM$WAIT(20)"
+      },
+      "capture": {
+        "slow": "statementHandle"
+      }
+    },
+    {
+      "item": 7,
+      "name": "the status while it runs",
+      "method": "GET",
+      "path": "/api/v2/statements/{{slow}}"
+    },
+    {
+      "item": 7,
+      "name": "cancel the statement",
+      "method": "POST",
+      "path": "/api/v2/statements/{{slow}}/cancel"
+    },
+    {
+      "item": 7,
+      "name": "the status after the cancel",
+      "method": "GET",
+      "path": "/api/v2/statements/{{slow}}",
+      "wait": "2s"
+    },
+    {
+      "item": 7,
+      "name": "cancel a statement that is gone",
+      "method": "POST",
+      "path": "/api/v2/statements/{{slow}}/cancel"
+    },
+    {
+      "item": 7,
+      "name": "an asynchronous statement that finishes",
+      "method": "POST",
+      "path": "/api/v2/statements?async=true",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT SYSTEM$WAIT(3)"
+      },
+      "capture": {
+        "fast": "statementHandle"
+      }
+    },
+    {
+      "item": 7,
+      "name": "the status when it has finished",
+      "method": "GET",
+      "path": "/api/v2/statements/{{fast}}",
+      "wait": "6s"
+    },
+    {
+      "item": 8,
+      "name": "a wrong token",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      },
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a schema that the role cannot read",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.USERS LIMIT 1"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a user that the role cannot create",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE USER dbimp_it_u"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a role that the user does not hold",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "ACCOUNTADMIN",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a warehouse that does not exist",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "NOSUCH_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT COUNT(*) FROM dbimp_it_types"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a database that does not exist",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "NOSUCH_DB",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT CURRENT_VERSION()"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the session facts",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT CURRENT_VERSION(), CURRENT_REGION(), CURRENT_USER(), CURRENT_ROLE(), CURRENT_WAREHOUSE(), CURRENT_DATABASE(), CURRENT_SCHEMA()"
+      }
+    },
+    {
+      "item": 10,
+      "name": "two statements and the count one",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1; SELECT 2"
+      }
+    },
+    {
+      "item": 10,
+      "name": "two statements and the count two",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1; SELECT 2",
+        "parameters": {
+          "MULTI_STATEMENT_COUNT": "2"
+        }
+      },
+      "capture": {
+        "multi": "statementHandle"
+      }
+    },
+    {
+      "item": 10,
+      "name": "the first statement of the two",
+      "method": "GET",
+      "path": "/api/v2/statements/{{multi}}?partition=0"
+    },
+    {
+      "item": 10,
+      "name": "two statements and the count zero",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1; SELECT 2",
+        "parameters": {
+          "MULTI_STATEMENT_COUNT": "0"
+        }
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement with a trailing semicolon",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1;"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a DML statement and its counts",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_dml VALUES (2,'b'),(3,'c')"
+      }
+    },
+    {
+      "item": 10,
+      "name": "an update and its counts",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "UPDATE dbimp_it_dml SET name = 'z' WHERE id < 3"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a delete and its counts",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DELETE FROM dbimp_it_dml WHERE id = 3"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a merge and its counts",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "MERGE INTO dbimp_it_dml t USING (SELECT 1 AS id, 'm' AS name) s ON t.id = s.id WHEN MATCHED THEN UPDATE SET name = s.name"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a truncate",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "TRUNCATE TABLE dbimp_it_dml"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a create table and its answer",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE TABLE dbimp_it_dml (id NUMBER, name VARCHAR)"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a drop of a missing table",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_nosuch"
+      }
+    },
+    {
+      "item": 10,
+      "name": "show the tables",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SHOW TABLES LIKE 'DBIMP_IT_%'"
+      }
+    },
+    {
+      "item": 11,
+      "name": "BEGIN alone",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "BEGIN"
+      }
+    },
+    {
+      "item": 11,
+      "name": "COMMIT alone",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "COMMIT"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a transaction in one request",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "BEGIN; INSERT INTO dbimp_it_dml VALUES (9,'t'); COMMIT",
+        "parameters": {
+          "MULTI_STATEMENT_COUNT": "3"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "a transaction that rolls back",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "BEGIN; INSERT INTO dbimp_it_dml VALUES (8,'r'); ROLLBACK",
+        "parameters": {
+          "MULTI_STATEMENT_COUNT": "3"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "the rows after the transaction",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT id, name FROM dbimp_it_dml ORDER BY id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the transaction of the session",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT CURRENT_TRANSACTION()"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a change of the session",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "ALTER SESSION SET TIMEZONE = 'UTC'"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the session after the change",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT CURRENT_TIMESTAMP()::STRING"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a parameter of the statement",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT CURRENT_TIMESTAMP()::STRING",
+        "parameters": {
+          "TIMEZONE": "UTC"
+        }
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request that accepts gzip",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      },
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      }
+    },
+    {
+      "item": 12,
+      "name": "a partition that accepts gzip",
+      "method": "GET",
+      "path": "/api/v2/statements/{{handle}}?partition=1",
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with no accept header",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      },
+      "header": {
+        "Accept": [
+          "*/*"
+        ]
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with another content type",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      },
+      "header": {
+        "Content-Type": [
+          "text/plain"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "insert overwrite",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT OVERWRITE INTO dbimp_it_dml VALUES (1,'o')"
+      }
+    },
+    {
+      "item": 1,
+      "name": "create the tables of a multi table insert",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE TABLE dbimp_it_m1 (id NUMBER)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "create the second table of a multi table insert",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE TABLE dbimp_it_m2 (id NUMBER)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a multi table insert",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT ALL INTO dbimp_it_m1 VALUES (id) INTO dbimp_it_m2 VALUES (id) SELECT 1 AS id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "copy into a table from a stage",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "COPY INTO dbimp_it_dml FROM @~/dbimp_it_none/"
+      }
+    },
+    {
+      "item": 1,
+      "name": "put a file into a stage",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "PUT file:///tmp/none.csv @~/dbimp_it/"
+      }
+    },
+    {
+      "item": 1,
+      "name": "create a table with keys and a default",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE TABLE dbimp_it_pk (id NUMBER PRIMARY KEY, u VARCHAR UNIQUE, d NUMBER DEFAULT 5)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "create a table with a foreign key",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE TABLE dbimp_it_fk (id NUMBER, pk NUMBER REFERENCES dbimp_it_pk(id))"
+      }
+    },
+    {
+      "item": 1,
+      "name": "are the keys enforced",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_pk (id, u) VALUES (1,'a'),(1,'a')"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the default value",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT d FROM dbimp_it_pk LIMIT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE VIEW dbimp_it_view AS SELECT id FROM dbimp_it_pk"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an index",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE INDEX dbimp_it_ix ON dbimp_it_pk (id)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a clustering key",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE TABLE dbimp_it_cl (id NUMBER) CLUSTER BY (id)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a materialized view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE MATERIALIZED VIEW dbimp_it_mv AS SELECT id FROM dbimp_it_pk"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a dynamic table",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE DYNAMIC TABLE dbimp_it_dt TARGET_LAG = '1 hour' WAREHOUSE = DBMETA_WH AS SELECT id FROM dbimp_it_pk"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a sequence",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE SEQUENCE dbimp_it_seq"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the next value of a sequence",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT dbimp_it_seq.NEXTVAL, dbimp_it_seq.NEXTVAL"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a stream",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE STREAM dbimp_it_st ON TABLE dbimp_it_pk"
+      }
+    },
+    {
+      "item": 1,
+      "name": "time travel",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT COUNT(*) FROM dbimp_it_dml AT(OFFSET => -1)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a clone",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE TABLE dbimp_it_clone CLONE dbimp_it_dml"
+      }
+    },
+    {
+      "item": 1,
+      "name": "flatten",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT value FROM TABLE(FLATTEN(INPUT => PARSE_JSON('[1,2]')))"
+      }
+    },
+    {
+      "item": 1,
+      "name": "qualify",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT id FROM dbimp_it_pk QUALIFY ROW_NUMBER() OVER (ORDER BY id) = 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a path in a variant",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT v:a, v:a::NUMBER FROM dbimp_it_types WHERE i IS NOT NULL"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the grants of the role",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SHOW GRANTS TO ROLE <role>"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a multi statement with child handles",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1 AS a; SELECT 2 AS b",
+        "parameters": {
+          "MULTI_STATEMENT_COUNT": "2"
+        }
+      },
+      "capture": {
+        "c0": "statementHandles.0",
+        "c1": "statementHandles.1"
+      }
+    },
+    {
+      "item": 10,
+      "name": "the first child handle",
+      "method": "GET",
+      "path": "/api/v2/statements/{{c0}}"
+    },
+    {
+      "item": 10,
+      "name": "the second child handle",
+      "method": "GET",
+      "path": "/api/v2/statements/{{c1}}"
+    },
+    {
+      "item": 4,
+      "name": "a batch insert with arrays of bindings",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_dml VALUES (?, ?)",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": [
+              "11",
+              "12",
+              "13"
+            ]
+          },
+          "2": {
+            "type": "TEXT",
+            "value": [
+              "a",
+              "b",
+              "c"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "the rows of the batch insert",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT id, name FROM dbimp_it_dml WHERE id > 10 ORDER BY id"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a batch insert with arrays of different lengths",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_dml VALUES (?, ?)",
+        "bindings": {
+          "1": {
+            "type": "FIXED",
+            "value": [
+              "21",
+              "22"
+            ]
+          },
+          "2": {
+            "type": "TEXT",
+            "value": [
+              "a"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a date output format of the statement",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT '2026-10-09'::DATE::STRING, '2026-10-09'::DATE",
+        "parameters": {
+          "DATE_OUTPUT_FORMAT": "DD/MM/YYYY"
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "a timestamp output format of the statement",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT '2026-10-09 01:02:03'::TIMESTAMP_NTZ::STRING",
+        "parameters": {
+          "TIMESTAMP_NTZ_OUTPUT_FORMAT": "YYYY/MM/DD HH24:MI"
+        }
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request that is retried with the same request id",
+      "method": "POST",
+      "path": "/api/v2/statements?requestId=11111111-1111-1111-1111-111111111111&retry=true",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      }
+    },
+    {
+      "item": 12,
+      "name": "the same request id again",
+      "method": "POST",
+      "path": "/api/v2/statements?requestId=11111111-1111-1111-1111-111111111111&retry=true",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_dt",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP DYNAMIC TABLE IF EXISTS dbimp_it_dt"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_mv",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP MATERIALIZED VIEW IF EXISTS dbimp_it_mv"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_st",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP STREAM IF EXISTS dbimp_it_st"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP VIEW IF EXISTS dbimp_it_view"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_seq",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP SEQUENCE IF EXISTS dbimp_it_seq"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_clone",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_clone"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_cl",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_cl"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_fk",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_fk"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_pk",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_pk"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_m1",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_m1"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_m2",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_m2"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the table of types",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_types"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the table of rows",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "PUBLIC",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_dml"
+      },
+      "phase": "teardown"
+    }
+  ]
+}

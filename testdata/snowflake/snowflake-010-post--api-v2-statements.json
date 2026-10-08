@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"DROP TABLE IF EXISTS dbimp_it_fk\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Envoy-Upstream-Service-Time": [
+        "84"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c0a?requestId=37698ae0-9090-4f51-862c-d8e72791f53e&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c0a?requestId=d9170bda-d633-488f-b564-7764f28749e9&partition=0>; rel=\"last\""
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:28 GMT"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 71\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"status\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"Drop statement executed successfully (DBIMP_IT_FK already dropped).\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-ac43-0000-d07900024c0a?requestId=5beb3e66-c6ec-4256-92c0-f3d6f2695d33\",\n  \"requestId\" : \"5beb3e66-c6ec-4256-92c0-f3d6f2695d33\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024c0a\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499228120\n}"
+  }
+}

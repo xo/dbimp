@@ -1,0 +1,70 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "query": "requestId=11111111-1111-1111-1111-111111111111&retry=true",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT 1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "180"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a11-0001-ac43-0000-d07900024e62?requestId=2e33694d-f498-4357-ac0a-2c7c140fd30f&partition=0>; rel=\"first\",</api/v2/statements/01c79a11-0001-ac43-0000-d07900024e62?requestId=fda5fe14-a8f9-476a-af1e-8c8c42ae092c&partition=0>; rel=\"last\""
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:41:02 GMT"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 5\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"1\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : false,\n      \"scale\" : 0,\n      \"precision\" : 1,\n      \"length\" : null,\n      \"type\" : \"fixed\"\n    } ]\n  },\n  \"data\" : [ [\"1\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a11-0001-ac43-0000-d07900024e62?requestId=11111111-1111-1111-1111-111111111111\",\n  \"requestId\" : \"11111111-1111-1111-1111-111111111111\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a11-0001-ac43-0000-d07900024e62\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499262742\n}"
+  }
+}

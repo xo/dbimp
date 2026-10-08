@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT value FROM TABLE(FLATTEN(INPUT => PARSE_JSON('[1,2]')))\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a11-0001-ac43-0000-d07900024e26?requestId=ae9d2868-12ee-43c4-808b-0f44d37bcf74&partition=0>; rel=\"first\",</api/v2/statements/01c79a11-0001-ac43-0000-d07900024e26?requestId=17d81f69-29a6-44a3-9e04-f43146be8f33&partition=0>; rel=\"last\""
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:41:00 GMT"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "93"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 2,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 2,\n      \"uncompressedSize\" : 23\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"VALUE\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"FLATTEN_STRUCT\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"variant\"\n    } ]\n  },\n  \"data\" : [ [\"1\"],\n[\"2\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a11-0001-ac43-0000-d07900024e26?requestId=2364c329-6094-494b-8492-ccc2f9d03495\",\n  \"requestId\" : \"2364c329-6094-494b-8492-ccc2f9d03495\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a11-0001-ac43-0000-d07900024e26\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499260489\n}"
+  }
+}

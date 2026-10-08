@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"CREATE TABLE dbimp_it_types (i NUMBER(38,0), n NUMBER(10,2), f FLOAT, s VARCHAR, b BINARY, bo BOOLEAN, d DATE, tm TIME(9), tn TIMESTAMP_NTZ(9), tl TIMESTAMP_LTZ(9), tz TIMESTAMP_TZ(9), v VARIANT, o OBJECT, a ARRAY, g GEOGRAPHY, gm GEOMETRY)\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:28 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "195"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-accd-0000-d07900021e9a?requestId=fac03806-13a9-42fb-8685-ee977ceeb72c&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-accd-0000-d07900021e9a?requestId=893afdbf-43a9-4458-9457-b412bf465826&partition=0>; rel=\"last\""
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 46\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"status\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"precision\" : null,\n      \"scale\" : null,\n      \"nullable\" : true,\n      \"byteLength\" : 16777216,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"Table DBIMP_IT_TYPES successfully created.\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-accd-0000-d07900021e9a?requestId=6c160b94-d938-40ef-aa89-793352ab46bc\",\n  \"requestId\" : \"6c160b94-d938-40ef-aa89-793352ab46bc\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021e9a\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499228542\n}"
+  }
+}

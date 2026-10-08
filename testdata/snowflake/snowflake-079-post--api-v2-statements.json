@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.USERS LIMIT 1\"}"
+  },
+  "response": {
+    "status": 422,
+    "header": {
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "145"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:50 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\n  \"code\" : \"002003\",\n  \"message\" : \"SQL compilation error:\\nSchema 'SNOWFLAKE.ACCOUNT_USAGE' does not exist or not authorized. Your primary role <role> or one of your secondary roles must have USAGE or any other privilege granted on SCHEMA SNOWFLAKE.ACCOUNT_USAGE.\",\n  \"sqlState\" : \"02000\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021f06\"\n}"
+  }
+}

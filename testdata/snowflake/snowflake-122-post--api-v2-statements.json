@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"CREATE OR REPLACE VIEW dbimp_it_view AS SELECT id FROM dbimp_it_pk\"}"
+  },
+  "response": {
+    "status": 422,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "80"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:58 GMT"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\n  \"code\" : \"003001\",\n  \"message\" : \"SQL access control error:\\nInsufficient privileges to operate on schema 'PUBLIC'. Your primary role <role> must have CREATE VIEW granted on SCHEMA DBMETA.PUBLIC.\",\n  \"sqlState\" : \"42501\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024de6\"\n}"
+  }
+}

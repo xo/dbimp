@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT * FROM dbimp_it_nosuch\"}"
+  },
+  "response": {
+    "status": 422,
+    "header": {
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:36 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "110"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ]
+    },
+    "body": "{\n  \"code\" : \"002003\",\n  \"message\" : \"SQL compilation error:\\nObject 'DBIMP_IT_NOSUCH' does not exist or not authorized. Your primary role <role> or one of your secondary roles must have at least one privilege granted on TABLE DBIMP_IT_NOSUCH.\",\n  \"sqlState\" : \"42S02\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021eee\"\n}"
+  }
+}

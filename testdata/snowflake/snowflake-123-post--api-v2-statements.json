@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"CREATE INDEX dbimp_it_ix ON dbimp_it_pk (id)\"}"
+  },
+  "response": {
+    "status": 422,
+    "header": {
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "85"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:58 GMT"
+      ]
+    },
+    "body": "{\n  \"code\" : \"000002\",\n  \"message\" : \"Unsupported feature 'SECONDARY INDEX'.\",\n  \"sqlState\" : \"0A000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024dee\"\n}"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"UPDATE dbimp_it_dml SET name = 'z' WHERE id < 3\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:51 GMT"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "330"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-ac43-0000-d07900024d2e?requestId=0f31dc01-5cf0-4624-9bad-9e5a39a2cc84&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-ac43-0000-d07900024d2e?requestId=f6b152ff-2766-4d5b-8bc4-a0f322cfa431&partition=0>; rel=\"last\""
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 20\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"number of rows updated\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : false,\n      \"scale\" : 0,\n      \"precision\" : 19,\n      \"length\" : null,\n      \"type\" : \"fixed\"\n    }, {\n      \"name\" : \"number of multi-joined rows updated\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : false,\n      \"scale\" : 0,\n      \"precision\" : 19,\n      \"length\" : null,\n      \"type\" : \"fixed\"\n    } ]\n  },\n  \"data\" : [ [\"2\",\"0\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-ac43-0000-d07900024d2e?requestId=d01d4ab0-d392-42ce-8ee3-b5d54feee166\",\n  \"requestId\" : \"d01d4ab0-d392-42ce-8ee3-b5d54feee166\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024d2e\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499251975,\n  \"stats\" : {\n    \"numRowsInserted\" : 0,\n    \"numRowsDeleted\" : 0,\n    \"numRowsUpdated\" : 2,\n    \"numDmlDuplicates\" : 0\n  }\n}"
+  }
+}

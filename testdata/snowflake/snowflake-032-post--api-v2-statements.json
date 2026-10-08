@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT CURRENT_TIMESTAMP()::TIMESTAMP_LTZ, CURRENT_TIMESTAMP()::STRING\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:32 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c3a?requestId=da8c46ca-b2da-4041-b5f1-6c3fa44ece87&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c3a?requestId=d83495de-8d75-46a6-837e-2514c1ce5e81&partition=0>; rel=\"last\""
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "90"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 56\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"CURRENT_TIMESTAMP()::TIMESTAMP_LTZ\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : false,\n      \"scale\" : 9,\n      \"precision\" : 0,\n      \"length\" : null,\n      \"type\" : \"timestamp_ltz\"\n    }, {\n      \"name\" : \"CURRENT_TIMESTAMP()::STRING\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 134217728,\n      \"nullable\" : false,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 134217728,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"1791499232.043000000\",\"2026-10-08 15:40:32.043 -0700\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-ac43-0000-d07900024c3a?requestId=859c2fb5-080f-47d2-8254-f713ebd34bd5\",\n  \"requestId\" : \"859c2fb5-080f-47d2-8254-f713ebd34bd5\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024c3a\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499232043\n}"
+  }
+}

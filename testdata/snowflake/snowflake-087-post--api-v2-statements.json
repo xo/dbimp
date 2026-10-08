@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT 1; SELECT 2\",\"parameters\":{\"MULTI_STATEMENT_COUNT\":\"2\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:50 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-accd-0000-d07900021f12?requestId=ecafee2c-a0ee-44c5-a050-5908ee4fd9e5&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-accd-0000-d07900021f12?requestId=78ee5578-572a-4b58-a7b0-a878a847bc02&partition=0>; rel=\"last\""
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "257"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 57\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"multiple statement execution\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"precision\" : null,\n      \"scale\" : null,\n      \"nullable\" : false,\n      \"byteLength\" : 134217728,\n      \"length\" : 134217728,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"Multiple statements executed successfully.\"] ],\n  \"code\" : \"090001\",\n  \"statementHandles\" : [ \"01c79a10-0001-accd-0000-d07900021f16\", \"01c79a10-0001-accd-0000-d07900021f1a\" ],\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-accd-0000-d07900021f12?requestId=47e3d34f-9c9c-4a3c-ad69-7032efcde5d5\",\n  \"requestId\" : \"47e3d34f-9c9c-4a3c-ad69-7032efcde5d5\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021f12\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499250868\n}"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"CREATE OR REPLACE TABLE dbimp_it_cl (id NUMBER) CLUSTER BY (id)\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-accd-0000-d07900021f82?requestId=c1c8dd6f-ee9d-4bf3-92d2-a67e4a2ff365&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-accd-0000-d07900021f82?requestId=df84c705-d560-4fe0-9124-a01288233974&partition=0>; rel=\"last\""
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "175"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:58 GMT"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 43\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"status\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"precision\" : null,\n      \"scale\" : null,\n      \"nullable\" : true,\n      \"byteLength\" : 16777216,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"Table DBIMP_IT_CL successfully created.\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-accd-0000-d07900021f82?requestId=8cbf6c54-5f9e-408d-a229-2c0a4cdbba21\",\n  \"requestId\" : \"8cbf6c54-5f9e-408d-a229-2c0a4cdbba21\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021f82\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499258870\n}"
+  }
+}

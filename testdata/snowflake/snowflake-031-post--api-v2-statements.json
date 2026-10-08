@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT '1900-01-01'::DATE\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c36?requestId=be648b6b-0749-4c0d-9099-a0603d5b6f42&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c36?requestId=a1344dd8-e51c-4f84-a6f0-23a4859fc3c3&partition=0>; rel=\"last\""
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:31 GMT"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "117"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 21\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"'1900-01-01'::DATE\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : false,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"date\"\n    } ]\n  },\n  \"data\" : [ [\"-25567\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-ac43-0000-d07900024c36?requestId=ff2ff180-2c39-49c3-aa01-3f4990d94e07\",\n  \"requestId\" : \"ff2ff180-2c39-49c3-aa01-3f4990d94e07\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024c36\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499231906\n}"
+  }
+}

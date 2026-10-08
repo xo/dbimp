@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT PARSE_JSON('1'), PARSE_JSON('\\\"s\\\"'), PARSE_JSON('null'), PARSE_JSON('[1,{\\\"a\\\":2}]'), PARSE_JSON('{\\\"a\\\":[1,2]}')\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:32 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "109"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499100870"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c3e?requestId=19a5bd4a-bb86-4c7b-b6ec-11b3a523d845&partition=0>; rel=\"first\",</api/v2/statements/01c79a10-0001-ac43-0000-d07900024c3e?requestId=99001358-85d5-433f-ae9e-6ffa48ddb148&partition=0>; rel=\"last\""
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 107\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"PARSE_JSON('1')\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"variant\"\n    }, {\n      \"name\" : \"PARSE_JSON('\\\"S\\\"')\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"variant\"\n    }, {\n      \"name\" : \"PARSE_JSON('NULL')\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"variant\"\n    }, {\n      \"name\" : \"PARSE_JSON('[1,{\\\"A\\\":2}]')\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"variant\"\n    }, {\n      \"name\" : \"PARSE_JSON('{\\\"A\\\":[1,2]}')\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : null,\n      \"type\" : \"variant\"\n    } ]\n  },\n  \"data\" : [ [\"1\",\"\\\"s\\\"\",\"null\",\"[\\n  1,\\n  {\\n    \\\"a\\\": 2\\n  }\\n]\",\"{\\n  \\\"a\\\": [\\n    1,\\n    2\\n  ]\\n}\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79a10-0001-ac43-0000-d07900024c3e?requestId=b7a09308-d29a-42b6-adcf-908d5e7f5eea\",\n  \"requestId\" : \"b7a09308-d29a-42b6-adcf-908d5e7f5eea\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024c3e\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791499232287\n}"
+  }
+}

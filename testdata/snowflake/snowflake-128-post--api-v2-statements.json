@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":60,\"statement\":\"SELECT dbimp_it_seq.NEXTVAL, dbimp_it_seq.NEXTVAL\"}"
+  },
+  "response": {
+    "status": 422,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "84"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:59 GMT"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"code\" : \"000904\",\n  \"message\" : \"SQL compilation error: error line 1 at position 7\\ninvalid identifier 'DBIMP_IT_SEQ.NEXTVAL'\",\n  \"sqlState\" : \"42000\",\n  \"statementHandle\" : \"01c79a10-0001-accd-0000-d07900021f86\"\n}"
+  }
+}

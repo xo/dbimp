@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"PUBLIC\",\"timeout\":2,\"statement\":\"SELECT SYSTEM$WAIT(10)\"}"
+  },
+  "response": {
+    "status": 408,
+    "header": {
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "3097"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261006.0.0.1791278271.awsapsoutheast3.1791499229870"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Date": [
+        "Thu, 08 Oct 2026 22:40:37 GMT"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"code\" : \"000630\",\n  \"message\" : \"Statement reached its statement or warehouse timeout of 2 second(s) and was canceled.\",\n  \"sqlState\" : \"57014\",\n  \"statementHandle\" : \"01c79a10-0001-ac43-0000-d07900024c76\"\n}"
+  }
+}
