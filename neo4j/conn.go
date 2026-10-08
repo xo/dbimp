@@ -274,6 +274,7 @@ func (c *conn) run(ctx context.Context, query string, args []driver.NamedValue) 
 		return nil, errors.Join(err, cerr)
 	}
 	r.w = w
+	r.ended = func() error { return context.Cause(ctx) }
 	return r, nil
 }
 

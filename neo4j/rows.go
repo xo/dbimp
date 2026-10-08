@@ -50,6 +50,9 @@ type rows struct {
 	// t is the transaction of the statement, or nil. An error of the server
 	// ends it (D65).
 	t *tx
+	// ended returns the cause of the end of the context of the statement, or
+	// nil while it lives. A closure holds the context, as the watch does.
+	ended func() error
 }
 
 // ensure the interfaces.
@@ -128,6 +131,14 @@ func (r *rows) NextRow() error {
 			if ferr = r.finish(); ferr != nil && !errors.Is(ferr, io.EOF) {
 				return r.end(ferr)
 			}
+		}
+	}
+	// When the context ends, the transport can close the connection before the
+	// read sees the end, and the read then fails with "use of closed network
+	// connection". The caller must see that its context ended (D36).
+	if r.ended != nil {
+		if cerr := r.ended(); cerr != nil && !errors.Is(err, cerr) {
+			err = fmt.Errorf("%w: %w", cerr, err)
 		}
 	}
 	return r.end(fmt.Errorf("reading a row: %w", err))
