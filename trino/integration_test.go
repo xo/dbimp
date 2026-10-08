@@ -464,7 +464,13 @@ func TestIntegrationVersion(t *testing.T) {
 				}
 			})
 			db := sql.OpenDB(c)
-			for _, query := range []string{"SELECT version()", "select VERSION();"} {
+			// Trino answers the statement itself, and refuses a final semicolon,
+			// which only the driver accepts on Presto (D181 item 8).
+			queries := []string{"SELECT version()", "select  VERSION()"}
+			if rel.isPresto() {
+				queries = append(queries, "select VERSION();")
+			}
+			for _, query := range queries {
 				var got string
 				if err := db.QueryRowContext(t.Context(), query).Scan(&got); err != nil || got != rel.version {
 					t.Errorf("%s with the key %q and the user %q gave %q and %v, want %q", query, key, user, got, err, rel.version)
