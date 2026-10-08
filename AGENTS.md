@@ -79,6 +79,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Trino and Presto driver | [docs/TRINO.md](docs/TRINO.md), then W31, D162 and D173 |
 | writing the ClickHouse driver | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md), then W32 and D174 |
 | asking why VoltDB has no driver here | [docs/VOLTDB.md](docs/VOLTDB.md), then D180 |
+| measuring Snowflake for a driver | [docs/SNOWFLAKE.md](docs/SNOWFLAKE.md), then W34 and D182 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |
@@ -183,10 +184,10 @@ crosses between them. Each one is checked out next to this one.
 | `xo/usql` | The command line client. A driver is `drivers/<name>/<name>.go` there, and [usql/docs/DRIVER.md](https://github.com/xo/usql/blob/main/docs/DRIVER.md) is the reference |
 | `xo/dbmeta` | Database metadata queries. It also holds `dbrun`, which starts every test server |
 | `xo/dbtpl` | Code generation from database schemas, which reads through `dbmeta` |
-| `xo/cql` | The `database/sql` driver for Cassandra, and the nearest example of a driver repository |
+| `xo/cassandra` | The `database/sql` driver for Cassandra, and the nearest example of a driver repository. It was `xo/cql` until October 2026, and a reference to `cql` in an older document names it |
 | `xo/n1ql` | The old `database/sql` driver for Couchbase. The `couchbase` driver here replaces it, and it gets no new code (D23) |
 
-`dburl`, `dbmeta`, `cql`, `n1ql` and this repository record decisions as
+`dburl`, `dbmeta`, `cassandra`, `n1ql` and this repository record decisions as
 numbered entries, `D1`, `D2` and so on. Each repository has its own series. Name
 the repository when you cite a decision of another one, as in "dbmeta D61". Work
 items are a separate series, `W1`, `W2` and so on. Do not mix the two series in

@@ -6,7 +6,7 @@ follow it too.
 
 The rules live in `AGENTS.md`, and the reasons live in [decisions/](decisions/README.md).
 This file is the checklist, and it points at both. It follows the shape of
-`dbmeta/docs/DIALECT.md`. It takes the lessons that the `dbmeta`, `cql` and
+`dbmeta/docs/DIALECT.md`. It takes the lessons that the `dbmeta`, `cassandra` and
 `n1ql` sessions reported, and the review by Gemini and DeepSeek, all on
 2026-09-27.
 
@@ -413,7 +413,7 @@ Make the package with `init`, which registers the driver, and with stubs
 that return an error. Then write the unit tests. They run against
 `dbimptest.Replay`, which replays the files from step 6. A test reads a
 recorded file, and never a response written into the test as a string. The
-response then decodes through the real decoder, as `xo/cql` runs the real
+response then decodes through the real decoder, as `xo/cassandra` runs the real
 encoding of gocql in its fake.
 
 Each driver also calls `dbimptest.RunContract`, with bodies in the form of
@@ -500,7 +500,7 @@ The DSN is a standard URL, parsed with `net/url` (D27), which the driver reads
 with `dbimp.ParseURL` and `dbimp.NewQuery`. Write a test that parses each DSN
 from step 9 and formats it again, with `RoundTrip` in its name, and a fuzz test
 for the parser, whose name starts with `Fuzz`. Both found real faults in
-`xo/cql` on the first day: a host that is an IPv6 address, TLS turned on with no
+`xo/cassandra` on the first day: a host that is an IPv6 address, TLS turned on with no
 settings, and an empty host.
 
 Gate: `TestEveryDriverTestsItsDSN` passes, both tests pass, and the fuzz test
@@ -605,7 +605,7 @@ no job. The job `releases` reads the products from the folders under
 written in the workflow (dbmeta D69). A push runs the releases that `dbmeta`
 calls tested, and the nightly run adds the ones it calls nightly. A release
 in the Staged tier runs by its cadence (dbmeta D120). The workflow checks
-out a pinned commit of `dbmeta` from its main branch, as in `cql` D20 and
+out a pinned commit of `dbmeta` from its main branch, as in `cassandra` D20 and
 `n1ql` D28. If the driver needs a change in `dbrun`, such as the `url` of
 its DSN, move the pin to the commit of `dbmeta` that holds it.
 
@@ -637,7 +637,7 @@ it after step 19 publishes that release:
    or a second dialect, keeps its own `Name` and `Dialect`, and its
    generator returns the registered name of the package (D98).
 2. The `dbmeta` session measures its model on the new package, as dbmeta D93
-   did when Cassandra moved to `xo/cql`. `dbmeta` passes before a release of
+   did when Cassandra moved to `xo/cql`, now `xo/cassandra`. `dbmeta` passes before a release of
    `usql` uses the driver.
 3. The `usql` session changes `usql/drivers/<name>/<name>.go` to import the
    driver, and removes any code that worked around a fault of the old driver.

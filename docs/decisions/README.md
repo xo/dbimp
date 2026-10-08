@@ -202,3 +202,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D179](D179-the-voltdb-driver-speaks-http.md) | The VoltDB driver speaks HTTP | Decided. Amended by D180 |
 | [D180](D180-voltdb-gets-no-driver-here.md) | VoltDB gets no driver here | Amends D179 |
 | [D181](D181-select-version-for-databases-with-no-query-for-it.md) | SELECT version() for databases with no query for it | Decided |
+| [D182](D182-snowflake-is-measured-for-an-http-driver.md) | Snowflake is measured for an HTTP driver | Decided |

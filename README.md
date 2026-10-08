@@ -101,6 +101,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/TRINO.md](docs/TRINO.md) | What is known about Trino and Presto, for their driver |
 | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md) | What is known about ClickHouse over HTTP, for its driver |
 | [docs/VOLTDB.md](docs/VOLTDB.md) | What is known about VoltDB, and why it has no driver here |
+| [docs/SNOWFLAKE.md](docs/SNOWFLAKE.md) | What is known about Snowflake over its SQL REST API, for a driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects
@@ -115,7 +116,7 @@ repository:
 | [dbmeta](https://github.com/xo/dbmeta) | Reads the metadata of a database: its schemas, tables, columns and the rest. Its command `dbrun` starts the servers that the tests of `dbimp` use |
 | [dbtpl](https://github.com/xo/dbtpl) | Generates Go code from the schema of a database. It reads the schema through `dbmeta` |
 | [dbimp](https://github.com/xo/dbimp) | This repository: `database/sql` drivers for databases that have no idiomatic Go driver |
-| [cql](https://github.com/xo/cql) | The `database/sql` driver for Cassandra |
+| [cassandra](https://github.com/xo/cassandra) | The `database/sql` driver for Cassandra, formerly `cql` |
 | [tblfmt](https://github.com/xo/tblfmt) | Writes a result set as a text table, one row at a time. `usql` uses it |
 | [rline](https://github.com/xo/rline) | A readline package for Go, which reads a line of text that a person edits. `usql` uses it |
 | [transit](https://github.com/xo/transit) | A Go port of tree-sitter, a parser of source code. `rline` uses it to highlight syntax, and `usql` to complete statements |

@@ -279,7 +279,9 @@ as `{{name}}`. A path that starts with `header:`, such as
 `header:X-Trino-Started-Transaction-Id`, keeps a header of the response, and a
 response with no body or with no member at that path keeps none. A `path` or a
 followed address that is an absolute URL, such as the `nextUri` of Trino, goes
-to the server of the script with the path and the query of that URL. A kept
+to the server of the script with the path and the query of that URL. A page
+that a request follows carries the same credentials as the first request: basic
+authentication, a Bearer token or a Signature Version 4 signature. A kept
 object, such as the statement handle of Avatica, takes the place of the whole
 string `"{{name}}"` in a body, as JSON. A body can name `{{user}}` and `{{password}}`, the credentials
 of the URL of the principal, for a server that takes them in the body, such

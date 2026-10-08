@@ -1742,3 +1742,13 @@ VoltDB was the next target after ClickHouse, by D179. Ken named it on
 serves an HTTP interface, so Ken decided on the same day that dbimp writes no
 driver for it (D180). [VOLTDB.md](VOLTDB.md) holds the facts. `usql` keeps its
 driver on the native protocol.
+
+## W34. Measure Snowflake for a driver
+
+Ken asked on 2026-10-08, by D182, for a measurement of Snowflake over its SQL
+REST API. Follow [DRIVER.md](DRIVER.md) steps 2 to 8a. Step 3 goes in
+[SNOWFLAKE.md](SNOWFLAKE.md), and the package would be `snowflake`. `dbrun`
+names the entry `snowflake`, a hosted service with a live trial account, and
+`dburl` has the scheme `snowflake` and names `snowflakedb/gosnowflake`, which
+`usql` uses. Whether a driver is possible is the result of step 2.
+

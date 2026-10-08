@@ -611,20 +611,7 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 			req.Header.Add(key, val)
 		}
 	}
-	if user := base.User; user != nil {
-		pass, _ := user.Password()
-		if r.Auth == "wrong" {
-			pass += "-wrong"
-		}
-		switch r.auth {
-		case dbimp.AuthBearer:
-			req.Header.Set("Authorization", "Bearer "+pass)
-		case authSigV4:
-			dbimp.SignV4(req, payload, user.Username(), pass, r.region, r.service, time.Now())
-		default:
-			req.SetBasicAuth(user.Username(), pass)
-		}
-	}
+	authorize(req, base, r, payload, r.Auth == "wrong")
 	res, err := client.Do(req)
 	switch {
 	case err != nil && r.Timeout != "":
@@ -672,6 +659,29 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 // Signature Version 4.
 const authSigV4 = "sigv4"
 
+// authorize sets the credentials of the URL base on req, in the form that r names:
+// a Bearer token, a Signature Version 4 signature of payload, or basic
+// authentication. A request of a page that r follows carries the same form as the
+// first request. If wrong is true, the password is not the one of the URL.
+func authorize(req *http.Request, base *url.URL, r Request, payload []byte, wrong bool) {
+	user := base.User
+	if user == nil {
+		return
+	}
+	pass, _ := user.Password()
+	if wrong {
+		pass += "-wrong"
+	}
+	switch r.auth {
+	case dbimp.AuthBearer:
+		req.Header.Set("Authorization", "Bearer "+pass)
+	case authSigV4:
+		dbimp.SignV4(req, payload, user.Username(), pass, r.region, r.service, time.Now())
+	default:
+		req.SetBasicAuth(user.Username(), pass)
+	}
+}
+
 // get sends GET to the URI uri of a page that r follows, with the headers
 // and the credentials of r, and returns the body of the answer, which the
 // transport records.
@@ -692,10 +702,7 @@ func get(ctx context.Context, client *http.Client, base *url.URL, r Request, uri
 			req.Header.Add(key, val)
 		}
 	}
-	if user := base.User; user != nil {
-		pass, _ := user.Password()
-		req.SetBasicAuth(user.Username(), pass)
-	}
+	authorize(req, base, r, nil, false)
 	res, err := client.Do(req)
 	if err != nil {
 		return nil, nil, fmt.Errorf("sending the request: %w", err)
