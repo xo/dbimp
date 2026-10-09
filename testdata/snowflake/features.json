@@ -7,6 +7,11 @@
       "date": "2026-10-08"
     },
     {
+      "source": "kimi-k3",
+      "kind": "model",
+      "date": "2026-10-09"
+    },
+    {
       "source": "github.com/snowflakedb/gosnowflake",
       "kind": "driver",
       "date": "2026-10-08"
@@ -18,6 +23,7 @@
       "name": "insert",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -29,6 +35,7 @@
       "name": "select",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -40,6 +47,7 @@
       "name": "update",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -51,6 +59,7 @@
       "name": "delete",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -61,7 +70,8 @@
       "kind": "crud",
       "name": "merge",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationCRUD/merge",
@@ -81,7 +91,8 @@
       "kind": "crud",
       "name": "multi table insert",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationCRUD/multi_table_insert",
@@ -91,7 +102,8 @@
       "kind": "crud",
       "name": "copy into",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationCRUD/copy_into",
@@ -101,7 +113,8 @@
       "kind": "schema",
       "name": "table",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationSchema/table",
@@ -111,7 +124,8 @@
       "kind": "schema",
       "name": "primary key",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationSchema/primary_key",
@@ -121,7 +135,8 @@
       "kind": "schema",
       "name": "foreign key",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationSchema/foreign_key",
@@ -131,7 +146,8 @@
       "kind": "schema",
       "name": "unique constraint",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationSchema/unique_constraint",
@@ -141,16 +157,19 @@
       "kind": "schema",
       "name": "view",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
-      "verdict": "not measured",
-      "test": "TestIntegrationSchema/view"
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/view",
+      "evidence": "snowflake-167-post--api-v2-statements.json"
     },
     {
       "kind": "schema",
       "name": "default value",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationSchema/default_value",
@@ -160,7 +179,8 @@
       "kind": "schema",
       "name": "index",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "no",
       "test": "TestIntegrationSchema/index",
@@ -170,7 +190,8 @@
       "kind": "schema",
       "name": "clustering key",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationSchema/clustering_key",
@@ -180,7 +201,8 @@
       "kind": "schema",
       "name": "materialized view",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "no",
       "test": "TestIntegrationSchema/materialized_view",
@@ -190,34 +212,41 @@
       "kind": "schema",
       "name": "dynamic table",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
-      "verdict": "not measured",
-      "test": "TestIntegrationSchema/dynamic_table"
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/dynamic_table",
+      "evidence": "snowflake-173-post--api-v2-statements.json"
     },
     {
       "kind": "schema",
       "name": "sequence",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
-      "verdict": "not measured",
-      "test": "TestIntegrationSchema/sequence"
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/sequence",
+      "evidence": "snowflake-169-post--api-v2-statements.json"
     },
     {
       "kind": "schema",
       "name": "stream",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
-      "verdict": "not measured",
-      "test": "TestIntegrationSchema/stream"
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/stream",
+      "evidence": "snowflake-171-post--api-v2-statements.json"
     },
     {
       "kind": "feature",
       "name": "time travel",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationFeatures/time_travel",
@@ -227,7 +256,8 @@
       "kind": "feature",
       "name": "clone",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationFeatures/clone",
@@ -237,7 +267,8 @@
       "kind": "feature",
       "name": "flatten",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationFeatures/flatten",
@@ -247,7 +278,8 @@
       "kind": "feature",
       "name": "qualify",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationFeatures/qualify",
@@ -257,7 +289,8 @@
       "kind": "feature",
       "name": "variant path",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationFeatures/variant_path",
@@ -267,7 +300,8 @@
       "kind": "feature",
       "name": "multi statement count",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationFeatures/multi_statement_count",
@@ -278,6 +312,7 @@
       "name": "async execution",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -288,7 +323,8 @@
       "kind": "feature",
       "name": "result partitions",
       "sources": [
-        "gemini-3.1-pro-preview"
+        "gemini-3.1-pro-preview",
+        "kimi-k3"
       ],
       "verdict": "yes",
       "test": "TestIntegrationFeatures/result_partitions",
@@ -296,13 +332,26 @@
     },
     {
       "kind": "type",
-      "name": "FIXED",
+      "name": "FIXED INTEGER",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
-      "test": "TestIntegrationRoundTrip/FIXED",
+      "test": "TestIntegrationRoundTrip/FIXED_INTEGER",
+      "evidence": "snowflake-026-post--api-v2-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "FIXED DECIMAL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "kimi-k3",
+        "github.com/snowflakedb/gosnowflake"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/FIXED_DECIMAL",
       "evidence": "snowflake-026-post--api-v2-statements.json"
     },
     {
@@ -310,6 +359,7 @@
       "name": "REAL",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -321,6 +371,7 @@
       "name": "TEXT",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -332,6 +383,7 @@
       "name": "BOOLEAN",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -343,6 +395,7 @@
       "name": "DATE",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -354,6 +407,7 @@
       "name": "TIME",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -365,6 +419,7 @@
       "name": "TIMESTAMP_NTZ",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -376,6 +431,7 @@
       "name": "TIMESTAMP_LTZ",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -387,6 +443,7 @@
       "name": "TIMESTAMP_TZ",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -398,6 +455,7 @@
       "name": "BINARY",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -409,6 +467,7 @@
       "name": "VARIANT",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -420,6 +479,7 @@
       "name": "OBJECT",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -431,6 +491,7 @@
       "name": "ARRAY",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -442,6 +503,7 @@
       "name": "GEOGRAPHY",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -453,6 +515,7 @@
       "name": "GEOMETRY",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",
@@ -464,6 +527,7 @@
       "name": "VECTOR",
       "sources": [
         "gemini-3.1-pro-preview",
+        "kimi-k3",
         "github.com/snowflakedb/gosnowflake"
       ],
       "verdict": "yes",

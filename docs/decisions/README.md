@@ -203,3 +203,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D180](D180-voltdb-gets-no-driver-here.md) | VoltDB gets no driver here | Amends D179 |
 | [D181](D181-select-version-for-databases-with-no-query-for-it.md) | SELECT version() for databases with no query for it | Decided |
 | [D182](D182-snowflake-is-measured-for-an-http-driver.md) | Snowflake is measured for an HTTP driver | Decided |
+| [D183](D183-the-snowflake-driver.md) | The Snowflake driver | Decided |

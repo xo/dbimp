@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"DBIMP\",\"timeout\":60,\"statement\":\"SHOW GRANTS TO ROLE <role>\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc16?requestId=3aea3ddc-05e8-43a4-983e-0e177bf6c77c&partition=0>; rel=\"first\",</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc16?requestId=ea76f4b0-0d46-486c-a383-0d8aa3066295&partition=0>; rel=\"last\""
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "200"
+      ],
+      "Date": [
+        "Fri, 09 Oct 2026 21:01:18 GMT"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261008.0.0.1791451115.awsapsoutheast3.1791579554631"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 15,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 15,\n      \"uncompressedSize\" : 1626\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"created_on\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : null,\n      \"nullable\" : true,\n      \"scale\" : 3,\n      \"precision\" : 0,\n      \"length\" : null,\n      \"type\" : \"timestamp_ltz\"\n    }, {\n      \"name\" : \"privilege\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"granted_on\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"name\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"granted_to\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"grantee_name\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"grant_option\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    }, {\n      \"name\" : \"granted_by\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"1791428867.627\",\"USAGE\",\"DATABASE\",\"DBMETA\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791579677.427\",\"OWNERSHIP\",\"DYNAMIC_TABLE\",\"DBMETA.DBIMP.DBIMP_IT_DT\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791579611.633\",\"CREATE DYNAMIC TABLE\",\"SCHEMA\",\"DBMETA.DBIMP\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791579611.668\",\"CREATE SEQUENCE\",\"SCHEMA\",\"DBMETA.DBIMP\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791579611.613\",\"CREATE STREAM\",\"SCHEMA\",\"DBMETA.DBIMP\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791579611.644\",\"CREATE TABLE\",\"SCHEMA\",\"DBMETA.DBIMP\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791579611.656\",\"CREATE VIEW\",\"SCHEMA\",\"DBMETA.DBIMP\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791579611.625\",\"USAGE\",\"SCHEMA\",\"DBMETA.DBIMP\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"],[\"1791428873.084\",\"CREATE TABLE\",\"SCHEMA\",\"DBMETA.PUBLIC\",\"ROLE\",\"<role>\",\"false\",\"ACCOUNTADMIN\"],[\"1791428873.073\",\"USAGE\",\"SCHEMA\",\"DBMETA.PUBLIC\",\"ROLE\",\"<role>\",\"false\",\"ACCOUNTADMIN\"],[\"1791579676.819\",\"OWNERSHIP\",\"SEQUENCE\",\"DBMETA.DBIMP.DBIMP_IT_SEQ\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791579677.104\",\"OWNERSHIP\",\"STREAM\",\"DBMETA.DBIMP.DBIMP_IT_ST\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791579675.664\",\"OWNERSHIP\",\"TABLE\",\"DBMETA.DBIMP.DBIMP_IT_PK\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791579676.462\",\"OWNERSHIP\",\"VIEW\",\"DBMETA.DBIMP.DBIMP_IT_VIEW\",\"ROLE\",\"<role>\",\"true\",\"<role>\"],[\"1791498180.228\",\"USAGE\",\"WAREHOUSE\",\"DBMETA_WH\",\"ROLE\",\"<role>\",\"false\",\"DBMETA_ROLE\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc16?requestId=18eb1fae-3734-439f-9c07-7674770f1e8f\",\n  \"requestId\" : \"18eb1fae-3734-439f-9c07-7674770f1e8f\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79f4d-0001-ac43-0000-d0790002dc16\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791579678583\n}"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"DBIMP\",\"timeout\":60,\"statement\":\"CREATE OR REPLACE SEQUENCE dbimp_it_seq\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "Date": [
+        "Fri, 09 Oct 2026 21:01:16 GMT"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "92"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dbfa?requestId=75a98693-da99-4481-88a2-1bca0a665297&partition=0>; rel=\"first\",</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dbfa?requestId=b9596e90-4950-436c-9ae0-41e889966985&partition=0>; rel=\"last\""
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261008.0.0.1791451115.awsapsoutheast3.1791579554631"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 47\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"status\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"Sequence DBIMP_IT_SEQ successfully created.\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dbfa?requestId=61322e29-d3e3-416e-bff7-8591fd1e44b9\",\n  \"requestId\" : \"61322e29-d3e3-416e-bff7-8591fd1e44b9\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79f4d-0001-ac43-0000-d0790002dbfa\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791579676750\n}"
+  }
+}

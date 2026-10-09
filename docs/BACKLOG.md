@@ -1752,3 +1752,10 @@ names the entry `snowflake`, a hosted service with a live trial account, and
 `dburl` has the scheme `snowflake` and names `snowflakedb/gosnowflake`, which
 `usql` uses. Whether a driver is possible is the result of step 2.
 
+
+Steps 2 to 9 are done (D183). Ken asked for the driver on 2026-10-09. Steps 10 to
+17a are written and staged: the package `snowflake/`, its tests, and the
+sections Interfaces, Faults, Integration tests and Compared with Couchbase of
+[SNOWFLAKE.md](SNOWFLAKE.md). The integration tests never ran, because the work
+had no account. The workflow leaves a hosted driver out of its jobs. Open
+questions 6 to 17 of SNOWFLAKE.md wait for Ken. Steps 18 to 20 wait for Ken too.

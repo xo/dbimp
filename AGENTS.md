@@ -124,9 +124,9 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    struct, except by a Couchbase, Neo4j, ArangoDB, Databend, libSQL, Avatica
    or Trino transaction, by an Avatica connection, and by the rows of an
    ArangoDB cursor, of a Databend query, of a libSQL cursor, of an Avatica
-   query, of a Trino query, of an Elasticsearch query, of an OpenSearch query or
-   of a DynamoDB query (D45, D69, D90, D91, D122, D123, D149, D150, D157, D159,
-   D175 and D178). The
+   query, of a Trino query, of an Elasticsearch query, of an OpenSearch query, of
+   a DynamoDB query or of a Snowflake query (D45, D69, D90, D91, D122, D123,
+   D149, D150, D157, D159, D175, D178 and D183). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

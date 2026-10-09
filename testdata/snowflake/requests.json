@@ -2338,6 +2338,327 @@
         "statement": "DROP TABLE IF EXISTS dbimp_it_dml"
       },
       "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_dt",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP DYNAMIC TABLE IF EXISTS dbimp_it_dt"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_st",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP STREAM IF EXISTS dbimp_it_st"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_seq",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP SEQUENCE IF EXISTS dbimp_it_seq"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP VIEW IF EXISTS dbimp_it_view"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_pk",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_pk"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create the table of the four",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "CREATE TABLE dbimp_it_pk (id NUMBER)"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: turn on change tracking",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "ALTER TABLE dbimp_it_pk SET CHANGE_TRACKING = TRUE"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: fill the table",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "INSERT INTO dbimp_it_pk VALUES (1),(2)"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE VIEW dbimp_it_view AS SELECT id FROM dbimp_it_pk"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the rows of the view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "SELECT id FROM dbimp_it_view ORDER BY id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a sequence",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE SEQUENCE dbimp_it_seq"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the next value of a sequence",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "SELECT dbimp_it_seq.NEXTVAL, dbimp_it_seq.NEXTVAL"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a stream",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE STREAM dbimp_it_st ON TABLE dbimp_it_pk"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the rows of the stream",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "SELECT id, METADATA$ACTION FROM dbimp_it_st ORDER BY id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a dynamic table",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "CREATE OR REPLACE DYNAMIC TABLE dbimp_it_dt TARGET_LAG = '1 hour' WAREHOUSE = DBMETA_WH AS SELECT id FROM dbimp_it_pk"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the rows of the dynamic table",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "SELECT id FROM dbimp_it_dt ORDER BY id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the grants of the role on the schema",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "SHOW GRANTS TO ROLE <role>"
+      }
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_dt",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP DYNAMIC TABLE IF EXISTS dbimp_it_dt"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_st",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP STREAM IF EXISTS dbimp_it_st"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_seq",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP SEQUENCE IF EXISTS dbimp_it_seq"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_view",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP VIEW IF EXISTS dbimp_it_view"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_pk",
+      "method": "POST",
+      "path": "/api/v2/statements",
+      "body": {
+        "warehouse": "DBMETA_WH",
+        "role": "<role>",
+        "database": "DBMETA",
+        "schema": "DBIMP",
+        "timeout": 60,
+        "statement": "DROP TABLE IF EXISTS dbimp_it_pk"
+      },
+      "phase": "teardown"
     }
   ]
 }

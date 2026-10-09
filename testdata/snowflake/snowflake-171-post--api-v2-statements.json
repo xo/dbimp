@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"DBIMP\",\"timeout\":60,\"statement\":\"CREATE OR REPLACE STREAM dbimp_it_st ON TABLE dbimp_it_pk\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Date": [
+        "Fri, 09 Oct 2026 21:01:16 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc02?requestId=f0da6df2-fa55-48f1-9c64-b2f9209d7eec&partition=0>; rel=\"first\",</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc02?requestId=90dabf73-155d-47bb-b96b-faff9d42306f&partition=0>; rel=\"last\""
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "144"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261008.0.0.1791451115.awsapsoutheast3.1791579554631"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 44\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"status\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"Stream DBIMP_IT_ST successfully created.\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc02?requestId=11319bc2-9a50-430e-8441-9f094748c0d4\",\n  \"requestId\" : \"11319bc2-9a50-430e-8441-9f094748c0d4\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79f4d-0001-ac43-0000-d0790002dc02\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791579676988\n}"
+  }
+}

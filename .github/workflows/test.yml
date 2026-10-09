@@ -113,7 +113,11 @@ jobs:
       # dbmeta model reads is in the tiers tested and nightly, and any other
       # is Staged, with the tier that it would have as its cadence (dbmeta
       # D120). A driver with no release fails the job, so that a change in
-      # dbmeta never drops the tests of a driver without a word.
+      # dbmeta never drops the tests of a driver without a word. A driver of a
+      # hosted service has no release, because dbrun does not start a hosted
+      # service, and it has no secret in CI, so the list of hosted drivers
+      # leaves it out, and its integration tests run where a person supplies an
+      # account (D183 item 13).
       - name: List
         id: list
         run: |
@@ -122,7 +126,8 @@ jobs:
             cadences='["tested","nightly"]'
           fi
           tiers=$(echo "$cadences" | jq -r 'join(" ")')
-          drivers=$(for d in testdata/*/; do d=$(basename "$d"); if [ -d "$d" ]; then echo "$d"; fi; done | jq -R . | jq -sc .)
+          hosted='["snowflake"]'
+          drivers=$(for d in testdata/*/; do d=$(basename "$d"); if [ -d "$d" ]; then echo "$d"; fi; done | jq -R . | jq -sc --argjson hosted "$hosted" 'map(select(. as $d | $hosted | index($d) | not))')
           list=$(cd dbmeta/test && go run ./cmd/dbrun list --json $tiers staged)
           recorded=$(for d in $(echo "$drivers" | jq -r '.[]'); do
             jq -c --arg d "$d" '[.entries[].release | {release: ., driver: $d}]' "testdata/$d/manifest.json"

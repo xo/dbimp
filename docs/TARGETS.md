@@ -213,9 +213,15 @@ Fails S:
 Fails R:
 
 - SingleStore: Ken chose that `dbrun` gets no entry for it (dbmeta D118).
-- Snowflake, BigQuery and Databricks: cloud only. A community emulator for
-  BigQuery exists, and it can move BigQuery up if it answers the same. `usql`
-  has drivers for all three (D24).
+- Snowflake: cloud only, and the one server is a hosted trial account. Ken asked
+  for a driver on 2026-10-09 (D182 and D183). The driver is
+  `github.com/xo/dbimp/snowflake` (W34). It speaks the SQL REST API, and its
+  integration tests run only where a person supplies an account. See
+  [SNOWFLAKE.md](SNOWFLAKE.md). `usql` has a driver, which the new one can
+  replace (D24).
+- BigQuery and Databricks: cloud only. A community emulator for BigQuery
+  exists, and it can move BigQuery up if it answers the same. `usql` has
+  drivers for both (D24).
 - Neon: cloud only. A local copy needs a proxy and PostgreSQL.
 - PlanetScale: cloud only, and `psdb.v1alpha1` is the internal protocol of
   its serverless driver, not a documented public API.

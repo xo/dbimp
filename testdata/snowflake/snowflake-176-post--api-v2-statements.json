@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/v2/statements",
+    "header": {
+      "X-Snowflake-Authorization-Token-Type": [
+        "KEYPAIR_JWT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse\":\"DBMETA_WH\",\"role\":\"<role>\",\"database\":\"DBMETA\",\"schema\":\"DBIMP\",\"timeout\":60,\"statement\":\"DROP DYNAMIC TABLE IF EXISTS dbimp_it_dt\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Envoy-Attempt-Count": [
+        "1"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Xss-Protection": [
+        "1; mode=block"
+      ],
+      "Vary": [
+        "Accept-Encoding, User-Agent"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "Link": [
+        "</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc1a?requestId=65ff5e62-697f-4fc8-8bb8-569f54c7caf4&partition=0>; rel=\"first\",</api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc1a?requestId=b7cde489-915c-4cf0-97af-27a738b6b9fc&partition=0>; rel=\"last\""
+      ],
+      "X-Frame-Options": [
+        "deny"
+      ],
+      "X-Envoy-Upstream-Service-Time": [
+        "146"
+      ],
+      "Server": [
+        "SF-LB-T1"
+      ],
+      "X-Snowflake-Fe-Instance": [
+        "-"
+      ],
+      "X-Snowflake-Fe-Config": [
+        "v20261008.0.0.1791451115.awsapsoutheast3.1791579554631"
+      ],
+      "Expect-Ct": [
+        "enforce, max-age=3600"
+      ],
+      "Date": [
+        "Fri, 09 Oct 2026 21:01:18 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\n  \"resultSetMetaData\" : {\n    \"numRows\" : 1,\n    \"format\" : \"jsonv2\",\n    \"partitionInfo\" : [ {\n      \"rowCount\" : 1,\n      \"uncompressedSize\" : 37\n    } ],\n    \"rowType\" : [ {\n      \"name\" : \"status\",\n      \"database\" : \"\",\n      \"schema\" : \"\",\n      \"table\" : \"\",\n      \"collation\" : null,\n      \"byteLength\" : 16777216,\n      \"nullable\" : true,\n      \"scale\" : null,\n      \"precision\" : null,\n      \"length\" : 16777216,\n      \"type\" : \"text\"\n    } ]\n  },\n  \"data\" : [ [\"DBIMP_IT_DT successfully dropped.\"] ],\n  \"code\" : \"090001\",\n  \"statementStatusUrl\" : \"/api/v2/statements/01c79f4d-0001-ac43-0000-d0790002dc1a?requestId=7a7379d3-201f-4206-8a16-2b6f6ca39ef2\",\n  \"requestId\" : \"7a7379d3-201f-4206-8a16-2b6f6ca39ef2\",\n  \"sqlState\" : \"00000\",\n  \"statementHandle\" : \"01c79f4d-0001-ac43-0000-d0790002dc1a\",\n  \"message\" : \"Statement executed successfully.\",\n  \"createdOn\" : 1791579678808\n}"
+  }
+}

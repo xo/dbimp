@@ -42,7 +42,8 @@ which was first released in `v0.9.0`, `avatica`, which was first
 released in `v0.10.0`, `druid`, which was first released in `v0.11.0`,
 `trino`, which was first released in `v0.12.0`, `clickhouse`, which was
 first released in `v0.13.0`, and `drill`, `solr`, `elasticsearch`,
-`opensearch` and `dynamodb`, which were first released in `v0.14.0`.
+`opensearch` and `dynamodb`, which were first released in `v0.14.0`. The
+driver `snowflake` is written and waits for review.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -101,7 +102,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/TRINO.md](docs/TRINO.md) | What is known about Trino and Presto, for their driver |
 | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md) | What is known about ClickHouse over HTTP, for its driver |
 | [docs/VOLTDB.md](docs/VOLTDB.md) | What is known about VoltDB, and why it has no driver here |
-| [docs/SNOWFLAKE.md](docs/SNOWFLAKE.md) | What is known about Snowflake over its SQL REST API, for a driver |
+| [docs/SNOWFLAKE.md](docs/SNOWFLAKE.md) | What is known about Snowflake over its SQL REST API, for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects
