@@ -1,7 +1,7 @@
 # Google Cloud Spanner
 
-This file holds what is known about Google Cloud Spanner over its REST API, for a
-possible driver `spanner` (W38, D185 and D187). The headings are the template of
+This file holds what is known about Google Cloud Spanner over its REST API, for the
+driver `spanner` (W38, D185, D187 and D191). The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with how and when, or "not measured", with its source.
 
@@ -960,6 +960,13 @@ The one principal is a service account with `roles/spanner.databaseAdmin` on the
 - Version and metadata:
   - `getDatabase` answers `state`, `createTime`, `versionRetentionPeriod` of `1h`,
     `earliestVersionTime`, `encryptionInfo` and `databaseDialect` (recorded: "getDatabase").
+  - The version that `usql` runs: none. `usql/drivers/spanner/spanner.go` registers
+    `drivers.Driver{}` with no `Version` function (read 2026-10-10), so `usql` sends no
+    statement for the version of this product. `dbmeta` runs the query of the next item. As the
+    one login it got `"9"` (recorded: "the greatest optimizer version"). The manifest has no
+    ordinary user, so the answer for another user is not measured. The driver answers no
+    `SELECT version()` itself, because D181 allows that only for a product that has no query
+    for its release, and `SPANNER_SYS` has one (D191 item 11).
   - There is no version function (recorded: "a version function"). `dbmeta` reads the
     highest optimizer version from `SPANNER_SYS.SUPPORTED_OPTIMIZER_VERSIONS` (source:
     `dbmeta/models/spanner/spanner.go`). The table has nine rows, versions 1 to 9, with a
@@ -993,7 +1000,30 @@ The one principal is a service account with `roles/spanner.databaseAdmin` on the
 
 ## Interfaces
 
-Not written yet. Step 10 generates the table from the code.
+`spanner/tables_test.go` writes this table from the code (step 10).
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, the token that the driver gets with the key file of the DSN, and the multiplexed session of each database (D191). |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. A multiplexed session cannot be deleted, so the server ends it. |
+| `driver.Pinger` | yes | Ping runs SELECT 1, which checks the token, the session and the login, and costs little. |
+| `driver.SessionResetter` | no | A connection holds a transaction only, and database/sql ends it before it reuses the connection (D102). The session is the connector's, and it holds no state. |
+| `driver.Validator` | no | A connection holds nothing on the server that can go bad. A session that the server loses is dropped by the connector, and the statement that found it returns driver.ErrBadConn. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, and the values that the driver binds with a type of its own: a decimal, a dbimp.Date, a dbimp.Interval, a UUID, a map for JSON, and a slice for an ARRAY (D191). |
+| `driver.QueryerContext` | yes | The statement goes to executeStreamingSql with its arguments as named parameters with their types (D191). |
+| `driver.ExecerContext` | yes | Exec reads the result to its end with no decoding, and RowsAffected is rowCountExact, or an error that wraps dbimp.ErrNotSupported when the answer has no count (D178). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx calls beginTransaction, for a read-write or a read-only transaction. An ABORTED answer returns ErrAborted (D191). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, because the server refuses several (recorded: "two statements in one request"). |
+| `driver.RowsColumnTypeScanType` | yes | The metadata names the type of each column, and each type has one Go type (D135 and D191). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The code of the type in upper case, such as INT64. An array is ARRAY. |
+| `driver.RowsColumnTypeLength` | no | The wire type carries no length, because the length of STRING(100) is in the catalog and not in the metadata. |
+| `driver.RowsColumnTypeNullable` | yes | The metadata names no nullability, so every column can be NULL (D18). |
+| `driver.RowsColumnTypePrecisionScale` | yes | A NUMERIC column has a precision of 38 and a scale of 9. |
+<!-- /dbimp:interfaces -->
 
 ## Faults
 
@@ -1114,8 +1144,11 @@ each one with its answer.
    when the server answers `NOT_FOUND`.
 6. Transactions: decided, D191. `BeginTx` calls `beginTransaction`. An `ABORTED` answer goes
    to the caller, and a commit of a read only transaction sends nothing.
-7. Parameters: decided, D191. The driver turns `?` into `@p1`, `@p2` and always sends
-   `paramTypes`. A caller can write `@name`. A statement that mixes both is an error.
+7. Parameters: decided, D191, with one exception from D195 item 2. The driver turns `?`
+   into `@p1`, `@p2` and sends `paramTypes`, except that a nil argument has no type,
+   because the server infers it. `TestIntegrationNullParameters` checks a NULL for each type,
+   and the driver sends `STRING` for a NULL that the server refuses. A caller can write
+   `@name`. A statement that mixes both is an error.
 8. Several statements: decided, D191. The driver refuses them, as the server does.
 9. DDL: decided, D191. The driver sends a DDL statement to `updateDatabaseDdl` and polls
    the operation until it is done. When the context ends, it calls `operations:cancel`.
@@ -1127,10 +1160,21 @@ each one with its answer.
     covered in the first version. `ENUM` and `PROTO` return an error that names the column,
     a `TOKENLIST` column cannot be selected, and the driver refuses a PostgreSQL database
     when it connects.
-13. The matrix in `TYPES.md` has no column for Spanner yet. The test that writes it fails until
-    it runs with `DBIMP_UPDATE=1`.
-14. The tests that `features.json` names do not exist yet. The gate that reads them runs when
-    the package `spanner/` exists.
+13. The matrix in `TYPES.md`: the type table above has its column there, and
+    `TestTheTypeMatrixIsCurrent` holds that it is current.
+14. The tests that `features.json` names exist in `spanner/`, and
+    `TestEveryDriverHasItsFeatures` holds that. See "Integration tests".
+15. The choices of the package: decided, D191 item 12 and D195. They are the keys of
+    the DSN, `WithTimeout`, a lost session as `driver.ErrBadConn`, the mappings of the
+    parameters, and the isolation levels. A DML statement outside a transaction commits
+    when its rows end or close, also on an early close of `THEN RETURN` rows (D195 item
+    3). Rule 4 of `AGENTS.md` names the Spanner transaction and the rows of such a
+    statement (D194).
+16. DML on the stream: not measured. The driver sends DML to `executeStreamingSql`, as D191
+    item 11 says for every result. The recordings sent DML to `executeSql` only. The
+    reference of `PartialResultSet` says that `stats` carries the count of a DML statement.
+    `TestIntegrationDMLCount` checks the count live. If the stream gives none, DML goes to
+    `executeSql`.
 
 ### Leads for a third run
 
@@ -1153,3 +1197,145 @@ with a valid name or a second value.
 - A vector index. The time that a row deletion policy takes to delete a row.
 - A body in gzip with a real gzip stream.
 - A 429, a 503 and a 504, if the service gives one.
+
+## Integration tests
+
+The integration tests of the driver read `SPANNER_DSN` and skip when it is empty (hard
+rule 9). The variable holds the DSN of D191 with the path to the key file of the service
+account that `dbsetup` made:
+
+    SPANNER_DSN='spanner:///PROJECT/INSTANCE/DATABASE?credential_file=/path/to/key.json'
+
+The tests also run on the Cloud Spanner emulator, when `dbmeta` has its entry (D187 and
+D191 item 2). The DSN of the emulator is `spanner://localhost:9020/PROJECT/INSTANCE/DATABASE`,
+and it needs no key file. `dbrun` starts no hosted service, and the workflow has no job
+and no secret for it. A person runs the tests with the login that `dbsetup` made:
+
+    go test -race -count=1 -run Integration -v ./spanner/...
+
+The login is one service account with `roles/spanner.databaseAdmin` on one database and no
+role on the instance, so each test runs as that account only, and the manifest has no
+ordinary user. The tests make their tables, indexes, views, sequences, change streams and
+schemas in the database of the DSN, with the name of the run as the prefix of each one
+(`dbimp_it_` and eight characters). Each test drops what it makes, even when it fails.
+`TestMain` looks for an object of the run that a test left, drops it and fails. A DDL
+statement takes seconds on the hosted service, so the tests run one after the other, and
+the whole run takes some minutes.
+
+The tests were written on 2026-10-10 with no credential, and they have not run against the
+service yet. The tests and what each one holds:
+
+- `TestIntegrationConnect`: the ping, the type of each column, and several connections that
+  share one session.
+- `TestIntegrationErrors`: a syntax error, a missing table, a duplicate key, and an error
+  after some rows.
+- `TestIntegrationContext`: a deadline that ends while a query runs, and while a DDL
+  statement runs.
+- `TestIntegrationNullParameters`: a NULL with no type for each column type and for a nil slice,
+  in a `SELECT` and in an `INSERT` (D195 item 2).
+- `TestIntegrationIsolationLevels`: a transaction at each level that the driver allows.
+- `TestIntegrationDMLCount`: the count of a DML statement outside and inside a transaction.
+- `TestIntegrationTransactionRetry`: four transactions that add one to a row, and a caller
+  that runs a transaction again when the error wraps `ErrAborted`.
+- `TestIntegrationCRUD`, `TestIntegrationSchema` and `TestIntegrationFeatures`: the entries of
+  `features.json`, in the order that the file names them. The driver sends SQL only, so a
+  mutation, a read by key, a partitioned statement, a batch, a partition and a session call
+  are not reachable, and their subtests skip with that reason. A feature that is a member of a
+  request, such as `queryMode` or `directedReadOptions`, goes through `WithParameter`.
+- `TestIntegrationRoundTrip`: every type that `features.json` marks yes, with
+  `dbimptest.RoundTrip`, as a bound argument and as a literal. A column cannot have the type
+  `INTERVAL`, so its values go in as the text of a `STRING` column that the statements turn into
+  an `INTERVAL`. The two types that the survey marks no, `STRUCT` and `TOKENLIST`, have a test of
+  their refusal.
+
+The replay tests run with no credential. They answer from the recorded exchanges, and
+`TestReplayEveryType` reads the exchange "the rows of every type on the stream" through the
+real decoder (step 14a). The recorder sent most statements to `executeSql`, and the driver sends
+`executeStreamingSql`, so the fake server of the replay tests turns the `ResultSet` of such an
+exchange into the one message of a stream. It sends a recorded stream as it is. The other tests of
+the package use fake servers that the tests start, and a key that `crypto/rsa` makes for each run.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was written on
+2026-10-10 from the staged code. A fact of Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and
+a fact of Spanner from the sections above.
+
+### The server
+
+| | Couchbase | Spanner |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /v1/{session}:executeStreamingSql`, with `sql`, `params`, `paramTypes`, `transaction` and `seqno`. A session comes first, and a DDL statement goes to `PATCH /v1/{database}/ddl` (Requests) |
+| Database | The key `query_context` of the body | The path of the request: `projects/{project}/instances/{instance}/databases/{database}` (Requests) |
+| Language | SQL++, which is close to SQL | GoogleSQL, one statement for each request. `MERGE` and `TRUNCATE TABLE` are refused (Statements) |
+| DDL | In SQL++ | In its own call, `updateDatabaseDdl`, which answers a long running operation that the client reads until it is done. `executeSql` refuses DDL (Statements) |
+| Parameters | `?`, `$1` and `$name` | `@name` only, with a type for each parameter. `?` is refused (Parameters) |
+| Framing | One body for the whole result, which does not page | A JSON array of messages. Each message holds a flat list of values, and the first one holds the columns. The server splits a value of more than about 1 MiB across messages (Responses) |
+| Columns | `signature`, before the first row | `metadata.rowType.fields` of the first message, which can come after the values of that message (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement (Responses) |
+| Errors | Can come with HTTP 200, after some rows | HTTP 400, 403, 404, 409 or 501 with a JSON object, or HTTP 200 with an element that holds `error` after some rows. `ABORTED` is HTTP 409 with a `retryDelay` (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON, with a type for each column. An `INT64` and a `NUMERIC` are strings, `BYTES` is base64, `FLOAT64` has three values that are strings (Types) |
+| Cancel | The server stops a query when the client leaves | Not measured for a query. `operations:cancel` stops a DDL operation (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | `beginTransaction` and `commit` or `rollback`, with an id of its own, `seqno` and, on a multiplexed session, a precommit token (Transactions) |
+| Authentication | Basic | A Bearer token from a JWT that the client signs with the RSA key of a service account (Requests) |
+| Default port | 8093, or 18093 with TLS | 443 with TLS at `spanner.googleapis.com`. The emulator serves REST on 9020 (The DSN) |
+
+The differences that a caller sees:
+
+- A transaction is `beginTransaction`, and an `ABORTED` answer goes to the caller as an error that wraps
+  `ErrAborted`, with the delay that the server asks for. The caller runs the whole transaction again
+  (D191 item 6).
+- A DML statement outside a transaction needs one, so the driver begins it and commits it (D191 item 6).
+- A DDL statement waits for its operation, costs a request for each poll, and cancels the operation when
+  the context ends (D191 items 4 and 8).
+- The driver reads every result with `executeStreamingSql`, and joins the pieces of a value that the server
+  splits, so a `BYTES` value arrives whole (D191 item 11).
+- A `?` becomes `@p1`, and a caller can write `@name` with `sql.Named`. A statement that mixes both forms is
+  an error (D191 item 7).
+- The credential is the path to a key file, never the text of a key (D191 item 5).
+
+### The driver
+
+| | `couchbase` | `spanner` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-10 | About 1300 lines in 8 files | About 3100 lines in 9 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `Project`, `Instance`, `Database`, `CredentialFile` and `Token`. The DSN has the keys `credential_file` and `tls` (D191) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter` and `WithDatabase`, through `WithOptions` or an argument (D109). `WithTimeout` with a positive value fails with `dbimp.ErrNotSupported`. `WithReadonly(true)` runs the statement in a read-only transaction. `WithParameter` sets a member of the body of the statement, and of `beginTransaction` and `commit` for a transaction |
+| Arguments | Sent to the server as `args` and `$name` | Named parameters with a type for each: `INT64`, `FLOAT32`, `FLOAT64`, `NUMERIC`, `BOOL`, `STRING`, `BYTES`, `DATE`, `TIMESTAMP`, `JSON`, `UUID`, `INTERVAL` and `ARRAY`. A slice is an `ARRAY`, a map is `JSON`. A NULL has no type (`spanner/params.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own, which reads the messages of the array, joins the pieces of a value, and cuts the flat list of values by the number of columns (`spanner/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | The same, and `ColumnTypePrecisionScale` for a `NUMERIC` column. The metadata has no length |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the column, as the type table says: `int64`, `float64`, `*apd.Decimal`, `bool`, `string`, `[]byte`, `dbimp.Date`, `time.Time`, the decoded JSON value, `uuid.UUID`, `dbimp.Interval` and `[]any` (D135 and D191) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` from `stats.rowCountExact`, or `dbimp.ErrNotSupported` when the answer has none. `LastInsertId` always gives `dbimp.ErrNotSupported`, and `THEN RETURN` gives the key |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` calls `beginTransaction`, for read-write, read-only and repeatable read. A read-only transaction sends no commit |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds a transaction only, and the session belongs to the connector |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same for a query. A DDL statement also calls `operations:cancel` on its operation, with a limit of 5 seconds (D191 item 4) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Code, Status, Message, RetryDelay}`, which unwraps to `*dbimp.StatusError`, and the sentinels `ErrAborted`, `ErrSessionNotFound` and `ErrCanceled` |
+| Authentication | Basic | A JWT of the key file, signed in the package with RS256, and an access token that the driver renews five minutes before its end. The driver follows no redirect, so the token goes to the host of the DSN only (D191 items 5 and 11). A caller can pass its own token with `Config.Token` |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, the three sentinels, `Config`, `ParseDSN` and `NewConnector` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a date, a decimal, a UUID and an interval too, where Couchbase gives JSON shapes
+  (D135 and D191).
+- A transaction keeps its context from `BeginTx` until `Commit` or `Rollback`, because `database/sql`
+  gives those two no context (D45 and rule 4 of `AGENTS.md`).
+- The rows of a DML statement that has no transaction of the caller hold a function that commits with
+  the context of the statement, when the caller closes them or reads them to the end (D191 item 6).
+- The driver sends one request for the database and one for the session at the first connection of a
+  connector, and no request while a session lives (D191 items 3 and 10).
+- The driver sends a request for each poll of a DDL operation, where Couchbase sends one request (D191
+  item 8).
+- `WithTimeout` fails with `dbimp.ErrNotSupported`, where Couchbase sends a timeout to the server (D109
+  and "Cancellation and timeouts").
+- `WithParameter` sets a member of the body, and a member of the request that begins a transaction or
+  commits one, where Couchbase replaces a key of its one body.
+- A DSN needs a path with three names and, for a server with TLS, a key file (D191 items
+  5 and 12). The key `tls` defaults to false for localhost and a loopback address.
+- A nil argument has no type in the request, and a nil slice is a typed NULL array
+  (D195 item 2 and D191 item 12).
+- A lost session returns `driver.ErrBadConn`, so `database/sql` tries the statement again on a
+  new session (D191 item 12).
+- `RepeatableRead` sends `isolationLevel`, and returns `dbimp.ErrNotSupported` if the service
+  refuses it (D191 item 12). `TestIntegrationIsolationLevels` measures it.
+- The Spanner transaction and the rows of a DML statement store a context, and rule 4 of
+  `AGENTS.md` names them (D194).
