@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT CAST('NaN' AS FLOAT64) AS nan, CAST('inf' AS FLOAT64) AS pinf, CAST('-inf' AS FLOAT64) AS ninf\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Grpc-Metadata-Content-Type": [
+        "application/grpc"
+      ],
+      "Grpc-Metadata-Grpc-Accept-Encoding": [
+        "identity, deflate, gzip"
+      ]
+    },
+    "body": "{\"result\":{\"metadata\":{\"rowType\":{\"fields\":[{\"name\":\"nan\",\"type\":{\"code\":\"FLOAT64\"}},{\"name\":\"pinf\",\"type\":{\"code\":\"FLOAT64\"}},{\"name\":\"ninf\",\"type\":{\"code\":\"FLOAT64\"}}]}},\"values\":[\"NaN\",\"Infinity\",\"-Infinity\"]}}\n"
+  }
+}

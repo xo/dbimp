@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT id FROM emu_t WHERE id IN UNNEST(@ids) ORDER BY id\",\"params\":{\"ids\":[\"1\",\"2\"]},\"paramTypes\":{\"ids\":{\"code\":\"ARRAY\",\"arrayElementType\":{\"code\":\"INT64\"}}}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Grpc-Metadata-Content-Type": [
+        "application/grpc"
+      ],
+      "Grpc-Metadata-Grpc-Accept-Encoding": [
+        "identity, deflate, gzip"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ]
+    },
+    "body": "{\"result\":{\"metadata\":{\"rowType\":{\"fields\":[{\"name\":\"id\",\"type\":{\"code\":\"INT64\"}}]},\"undeclaredParameters\":{\"fields\":[{\"name\":\"ids\",\"type\":{\"code\":\"ARRAY\",\"arrayElementType\":{\"code\":\"INT64\"}}}]}},\"values\":[\"1\",\"2\"]}}\n"
+  }
+}

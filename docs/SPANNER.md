@@ -41,15 +41,14 @@ them:
 ## Summary
 
 - Product: Google Cloud Spanner, a hosted, distributed SQL database. Name in `dbrun`:
-  none that serves REST today. `dbrun` starts `spanner-2026.r4-lts`, which is
-  Spanner Omni and serves gRPC only. See "Measured on Omni" under Requests.
-  `dbmeta` is switching back to the Cloud Spanner emulator, which serves REST on
-  port 9020, and the entry does not exist yet (D187, source: Ken, 2026-10-10, not
-  measured).
-- R: not met today. No `dbrun` release serves the REST API of Spanner. The hosted
-  service needs a Google Cloud project with billing and a service account, so CI
-  cannot test it without a secret. The Cloud Spanner emulator will meet R when
-  `dbmeta` has its entry (D187). The measurement is then repeated on it.
+  `spanneremulator`, the Cloud Spanner emulator, release `spanneremulator-1.5.58`,
+  which serves REST. `dbrun` also starts `spanner-2026.r4-lts`, which is Spanner Omni
+  and serves gRPC only. See "Measured on Omni" and "Measured on the emulator" under
+  Requests.
+- R: met on the emulator. The release `spanneremulator-1.5.58` of `dbrun` serves the
+  REST API of Spanner on one port and needs no credential, and CI runs the integration
+  tests on it (D196). The hosted service needs a Google Cloud project with billing and
+  a service account, so CI does not test it, and a person runs the tests on it.
 - H: met on the hosted service. `https://spanner.googleapis.com/v1/...` takes HTTP
   and JSON, and it answered every statement that the script sent (recorded: "a
   statement with no transaction", "a statement on the stream"). It needs no
@@ -218,8 +217,100 @@ file exists.
   "Spanner" on `/` and 404 on the paths of the REST API. Omni has no REST flag
   (reported by `dbmeta`, not measured here).
 - The classic emulator serves REST on port 9020 and gRPC on port 9010 (source: the
-  documentation of the emulator, not measured). Whether it answers as the hosted
-  service does is not measured.
+  documentation of the emulator). It answers as the hosted service does in most things,
+  and differs in the form of a stream and of an error. See the next section.
+
+### Measured on the emulator
+
+The `dbimp` session measured the release `spanneremulator-1.5.58` of `dbrun` on 2026-10-11, with
+`curl` and with the recorder (D196). The script is small, 86 requests, and the files start with
+`spanner-spanneremulator-1.5.58-`. The manifest lists them under the release
+`spanneremulator-1.5.58`. The project, the instance and the database are all `dbmeta`, the user of
+the URL is `admin`, and the emulator checks no credential. A request with no header gets the same
+answer as any other, so the manifest holds an absent reason for item 8. The facts:
+
+- The emulator answers `executeStreamingSql` as one JSON object for each message, separated by new
+  lines, and each object wraps its message in the member `result`. The hosted service answers one
+  JSON array of messages (recorded: "a statement on the stream", on the emulator). The driver
+  reads both. It reads the first token, which is `[` for the array and `{` for the objects. A
+  message of the emulator never has `last`, `resumeToken` or `chunkedValue` in the recordings. The
+  emulator sent 5000 rows (recorded: "5000 rows on the stream") and a string of 100 KB (recorded:
+  "a result of one string of 100 KB on the stream") as one message each.
+- The rows of a result come in an order that the emulator chooses. `SELECT 1 AS a, "x" AS b UNION
+  ALL SELECT 2, "y"` gave the row 2 and then the row 1. A test sorts its rows.
+- An error comes before the first row, always. The emulator answers HTTP 400 with the body
+  `{"error": {"code": 11, "message": "division by zero: 1 / 0"}}`, also when the division comes at
+  the row 3500 or 5000 (recorded: "a division by zero in row 3500 of 4000, unsorted, on the
+  stream"). So the emulator never sent `{"error": ...}` after a row. The driver reads that form
+  too, and `TestEmulatorStreamErrorAfterRows` holds it with a body that the test writes.
+- The body of an error has three forms, and the driver turns each into an `*Error` with the HTTP
+  status:
+  - `{"error": {"code", "message", "details"}}` with no member `status`, so the driver names the
+    status from the gRPC number (recorded: "a division by zero" is HTTP 400 and code 11, "a
+    session that does not exist" is HTTP 404 and code 5, the abort is HTTP 409 and code 10).
+  - `{"code": 5, "message": "..."}` with no member `error`. The gateway writes it for the DDL call
+    and for a call that is not a stream (recorded: "a DDL statement that drops a table that does
+    not exist", "an operation that does not exist"). One more, `{"code": 13, "message": "failed
+    to marshal error message"}` with HTTP 500, is a fault of the gateway for a failed `executeSql`
+    and for a duplicate key in a mutation (recorded: "a statement with executeSql and an error",
+    "a duplicate key"). `{"code": 12}` with HTTP 501 is the answer to `operations:cancel`.
+  - An empty body with HTTP 400. It is the answer to a syntax error, an unknown table, an unknown
+    column, a parameter with `?`, two statements in one request and `SELECT VERSION()` (recorded:
+    "a syntax error", "an unknown table", "an unknown column", "a positional parameter", "two
+    statements in one request", "a version function"). The text of the `*Error` is then `Bad
+    Request`. A statement that breaks a constraint of the schema also gets HTTP 400 or 409 and no
+    name, so a caller reads the HTTP status.
+- The emulator has no `ABORTED` from a conflict of rows. It allows one read-write transaction at a
+  time, and it aborts the older one when a second one writes: HTTP 409, code 10, and the text
+  "Transaction ... aborted due to active transaction ... The emulator only supports one
+  transaction at a time." (recorded: "the older transaction updates the same row"). The error has
+  no `retryDelay`. `ErrAborted` holds for it. A DDL statement also fails with `FAILED_PRECONDITION`
+  while a read-write transaction is open.
+- A commit on a multiplexed session needs the member `precommitToken`. The emulator answers a
+  statement of a transaction with `"precommitToken": {}`, with no token in it, and it commits only
+  when the commit carries that member, also empty. A commit with no member answered
+  `{"precommitToken": {}}` and no `commitTimestamp`, and it left the transaction open, so the next
+  write aborted. The driver now sends the member once an answer carried it, with a token or
+  without one. The hosted service always gave a token, so it is not affected.
+- The emulator limits a result. `GENERATE_ARRAY` takes at most 16000 elements, and `REPEAT` makes at
+  most 1 MB (recorded: "16001 rows on the stream", "a result of one string of 3 MB on the stream",
+  both HTTP 400 with code 11). A query that returns a `STRUCT` as a column gets HTTP 501 and the
+  message "Unsupported query shape" (recorded: "ARRAY and STRUCT").
+- A DDL statement is done when the call answers. `updateDatabaseDdl` returned an operation with
+  `done: true`, and the poll saw the same (recorded: "setup: create the table"). The operation names
+  are `_auto4` and so on. `operations:cancel` answers HTTP 501.
+- A session name is short, such as `projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/12`.
+  A deleted session answers `NOT_FOUND` with the detail `ResourceInfo`, as the hosted service does
+  (recorded: "a statement after the session is deleted").
+- Parameters bound by name work as on the hosted service. A parameter with no `paramTypes` took its
+  type from the statement, and the emulator reported it in `undeclaredParameters` in the metadata
+  (recorded: "a parameter with no paramTypes"). A parameter that is missing gave HTTP 400 with the
+  code 3 and "Incomplete query parameters p".
+- The commit with `returnCommitStats` gave no `commitStats`. The emulator answered the same
+  `commitTimestamp` for a second commit of the same transaction (recorded: "commit again").
+- A read in a read-only transaction at a time that the client names gave a stale row in the
+  integration test, and an empty HTTP 400 for a time before the schema, so the emulator does not
+  honor `readTimestamp` as the service does. The test that holds it skips on the emulator.
+
+What the integration tests skip on the emulator, each with its reason in the skip message
+(`hostedOnly` in `spanner/integration_test.go`):
+
+- `positional_parameters` and `multi_statement_request`: the emulator refuses them with HTTP 400 and
+  no body, so the tests cannot read the text of the refusal, and the service answers HTTP 501 for
+  two statements.
+- `interval_column`: the emulator fails `CREATE TABLE` with an `INTERVAL` column with `INTERNAL` and
+  not with the code 12.
+- `null_filtered_index`: the emulator refuses `FORCE_INDEX` on a null filtered index.
+- `read_timestamp`: see above.
+- The DDL half of `TestIntegrationContext`: the emulator finishes a DDL statement at once, so the
+  operation cannot be canceled. The query half runs, with a join of two arrays, because an array of
+  more than 16000 elements is an error.
+
+Two tests change what they expect, and do not skip. `TestIntegrationErrors` and the subtests that
+check a status name (`statusIs` in `spanner/features_integration_test.go`) accept an error with no
+name and the HTTP status that the name stands for, because the emulator sends no body. The subtest
+`streaming_result` reads 16000 rows and not 20000. All other tests pass on the emulator as they
+stand.
 
 ## The DSN
 
@@ -994,8 +1085,9 @@ The one principal is a service account with `roles/spanner.databaseAdmin` on the
   recorded has the first (recorded: "getDatabase"). The second is not measured, and its
   types and its parameters (`$1`) differ (source: the documentation, not measured).
 - Spanner Omni and the Cloud Spanner emulator speak gRPC, and the emulator also serves
-  REST. See "Measured on Omni". Whether a driver can tell the hosted service from the
-  emulator is not measured. The Go client has settings for an experimental host (source:
+  REST. See "Measured on Omni" and "Measured on the emulator". The driver reads the form of
+  the stream from its first token, so it needs no flag to tell the two apart. The tests tell
+  them apart by the loopback host of the DSN. The Go client has settings for an experimental host (source:
   `go-sql-spanner` `isExperimentalHost`, read 2026-10-10).
 
 ## Interfaces
@@ -1133,8 +1225,9 @@ Ken decided the proposals of step 9 on 2026-10-10 (decided, D191). The list belo
 each one with its answer.
 
 1. R and the tests: decided, D191. Development uses the hosted instance. The integration
-   tests run on the Cloud Spanner emulator when `dbmeta` has its entry (D187), and on the
-   hosted instance only where a person supplies it.
+   tests run on the Cloud Spanner emulator, which `dbmeta` v0.13.0 starts as
+   `spanneremulator-1.5.58` (D187 and D196), and on the hosted instance only where a person
+   supplies it.
 2. Reading a result: decided, D191. The driver reads every result with `executeStreamingSql`
    and joins the pieces of a `chunkedValue` as plain text before it decodes base64.
 3. An error after rows: decided, D191. A broken stream returns its error. The driver reads
@@ -1176,6 +1269,12 @@ each one with its answer.
     `TestIntegrationDMLCount` checks the count live. If the stream gives none, DML goes to
     `executeSql`.
 
+17. The emulator: Ken asked on 2026-10-11 that the Spanner integration tests run on the emulator
+    of `dbmeta` (D187 item 2). D196 holds what the `dbimp` session did: the driver reads both forms
+    of the stream, the CI job runs the release `spanneremulator-1.5.58`, and some tests skip with
+    a reason. Open: the emulator sent no error after a row, and the hosted service has not run the
+    new code (D196 item 7).
+
 ### Leads for a third run
 
 These are facts that the recordings of the second pass do not settle. Each needs one request
@@ -1206,10 +1305,15 @@ account that `dbsetup` made:
 
     SPANNER_DSN='spanner:///PROJECT/INSTANCE/DATABASE?credential_file=/path/to/key.json'
 
-The tests also run on the Cloud Spanner emulator, when `dbmeta` has its entry (D187 and
-D191 item 2). The DSN of the emulator is `spanner://localhost:9020/PROJECT/INSTANCE/DATABASE`,
-and it needs no key file. `dbrun` starts no hosted service, and the workflow has no job
-and no secret for it. A person runs the tests with the login that `dbsetup` made:
+The tests also run on the Cloud Spanner emulator (D187, D191 item 2 and D196). `dbrun`
+starts it as the release `spanneremulator-1.5.58`, and `dbrun dsn --json` prints its URL,
+`spanner://admin@127.0.0.1:PORT/dbmeta/dbmeta/dbmeta`. The emulator needs no key file, and the
+driver ignores the user of the URL (D195 item 6). A host on a loopback address is the emulator to
+the tests, and a test that needs the service skips there (see "Measured on the emulator"). The
+workflow runs the job of that release with `SPANNER_DSN` set to that URL. It runs no job for the
+product `spanner`, which is Spanner Omni and speaks gRPC only. `dbrun` starts no hosted service,
+and the workflow has no secret for it. A person runs the tests on the hosted service with the
+login that `dbsetup` made:
 
     go test -race -count=1 -run Integration -v ./spanner/...
 
@@ -1222,8 +1326,9 @@ schemas in the database of the DSN, with the name of the run as the prefix of ea
 statement takes seconds on the hosted service, so the tests run one after the other, and
 the whole run takes some minutes.
 
-The tests were written on 2026-10-10 with no credential, and they have not run against the
-service yet. The tests and what each one holds:
+The tests were written on 2026-10-10 with no credential. On 2026-10-11 they ran on the emulator
+and passed, with the skips that "Measured on the emulator" lists. They have not run against the
+hosted service yet. The tests and what each one holds:
 
 - `TestIntegrationConnect`: the ping, the type of each column, and several connections that
   share one session.

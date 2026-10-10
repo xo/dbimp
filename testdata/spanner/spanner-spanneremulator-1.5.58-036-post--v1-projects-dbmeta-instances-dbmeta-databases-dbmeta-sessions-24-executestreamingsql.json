@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT 1 / 0 AS v\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"code\":11,\"message\":\"division by zero: 1 / 0\"}}\n"
+  }
+}

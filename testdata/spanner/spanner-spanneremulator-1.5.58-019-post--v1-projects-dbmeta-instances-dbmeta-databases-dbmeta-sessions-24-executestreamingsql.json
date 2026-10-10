@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT [1, 2, 3] AS a, ARRAY<STRING>[] AS e, [CAST(NULL AS INT64), 1] AS n, STRUCT(1 AS a, 'x' AS b) AS s, ARRAY(SELECT AS STRUCT 1 AS a, 'x' AS b) AS sa\"}"
+  },
+  "response": {
+    "status": 501,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"code\":12,\"message\":\"Unsupported query shape: A struct value cannot be returned as a column value. Rewrite the query to flatten the struct fields in the result.\"}}\n"
+  }
+}

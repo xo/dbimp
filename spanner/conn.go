@@ -384,6 +384,11 @@ type txn struct {
 	seq atomic.Int64
 	mu  sync.Mutex
 	pre precommit
+	// hasPre is true once an answer held the member precommitToken, also with
+	// no token in it, as the emulator answers on a multiplexed session. The
+	// commit then sends the member, and the emulator commits only when it comes
+	// (D196).
+	hasPre bool
 }
 
 // nextSeq returns the number of the next statement of the transaction, as the
@@ -396,12 +401,13 @@ func (t *txn) nextSeq() string {
 // setPrecommit keeps the precommit token with the highest seqNum. A commit on
 // a multiplexed session sends it. A nil transaction keeps nothing.
 func (t *txn) setPrecommit(p precommit) {
-	if t == nil || p.Token == "" {
+	if t == nil {
 		return
 	}
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	if p.SeqNum >= t.pre.SeqNum {
+	t.hasPre = true
+	if p.Token != "" && p.SeqNum >= t.pre.SeqNum {
 		t.pre = p
 	}
 }
@@ -410,7 +416,7 @@ func (t *txn) setPrecommit(p precommit) {
 func (t *txn) precommitToken() *precommit {
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	if t.pre.Token == "" {
+	if !t.hasPre {
 		return nil
 	}
 	p := t.pre

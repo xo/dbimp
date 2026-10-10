@@ -40,7 +40,7 @@ type exchange struct {
 
 // recorded holds every recorded exchange, read once, in the order of the files.
 var recorded = sync.OnceValues(func() ([]exchange, error) {
-	paths, err := filepath.Glob(filepath.Join(testdata, "spanner-*.json"))
+	paths, err := filepath.Glob(filepath.Join(testdata, "spanner-[0-9]*.json"))
 	if err != nil {
 		return nil, err
 	}

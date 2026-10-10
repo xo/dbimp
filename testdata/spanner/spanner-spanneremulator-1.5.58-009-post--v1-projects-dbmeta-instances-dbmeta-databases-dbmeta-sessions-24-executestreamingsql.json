@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT 1 AS a, 'x' AS b, 2.5 AS c UNION ALL SELECT 2, 'y', 3.5 UNION ALL SELECT 3, 'z', 4.5\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Grpc-Metadata-Grpc-Accept-Encoding": [
+        "identity, deflate, gzip"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Grpc-Metadata-Content-Type": [
+        "application/grpc"
+      ]
+    },
+    "body": "{\"result\":{\"metadata\":{\"rowType\":{\"fields\":[{\"name\":\"a\",\"type\":{\"code\":\"INT64\"}},{\"name\":\"b\",\"type\":{\"code\":\"STRING\"}},{\"name\":\"c\",\"type\":{\"code\":\"FLOAT64\"}}]}},\"values\":[\"2\",\"y\",3.5,\"1\",\"x\",2.5,\"3\",\"z\",4.5]}}\n"
+  }
+}

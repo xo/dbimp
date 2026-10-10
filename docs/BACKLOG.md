@@ -1898,8 +1898,15 @@ Steps 2 to 9 are done (D191). Ken asked for the driver on 2026-10-10. Steps 10 t
 17a are written and staged: the package `spanner/`, its tests, and the sections
 Interfaces, Integration tests and Compared with Couchbase of
 [SPANNER.md](SPANNER.md). The integration tests never ran, because the work had
-no credential. The workflow leaves a hosted driver out of its jobs. Steps 18 to 20
-wait for Ken.
+no credential. Steps 18 to 20 wait for Ken.
+
+Ken asked on 2026-10-11 that the Spanner integration tests run on the emulator of
+`dbmeta` (D187 item 2). D196 holds the work: the driver reads the stream and the errors
+of the emulator, the recordings of the release `spanneremulator-1.5.58` are in
+`testdata/spanner/`, and the workflow runs the integration tests on that release and no
+longer lists `spanner` as hosted. The integration tests passed on the emulator, with
+the skips that [SPANNER.md](SPANNER.md) lists. They did not run on the hosted service
+after the change.
 
 The requests of step 16, which nobody sent yet, because a request names a release
 and step 20 sends it after step 19:

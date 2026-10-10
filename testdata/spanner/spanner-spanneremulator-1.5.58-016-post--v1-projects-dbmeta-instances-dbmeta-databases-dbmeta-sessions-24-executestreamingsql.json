@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT 'h\\u00e9llo \\u4e16\\u754c' AS u, b'\\\\x00\\\\xff' AS b, DATE '0001-01-01' AS d, TIMESTAMP '2024-01-02T03:04:05.123456789Z' AS ts\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Grpc-Metadata-Content-Type": [
+        "application/grpc"
+      ],
+      "Grpc-Metadata-Grpc-Accept-Encoding": [
+        "identity, deflate, gzip"
+      ]
+    },
+    "body": "{\"result\":{\"metadata\":{\"rowType\":{\"fields\":[{\"name\":\"u\",\"type\":{\"code\":\"STRING\"}},{\"name\":\"b\",\"type\":{\"code\":\"BYTES\"}},{\"name\":\"d\",\"type\":{\"code\":\"DATE\"}},{\"name\":\"ts\",\"type\":{\"code\":\"TIMESTAMP\"}}]}},\"values\":[\"héllo 世界\",\"AP8=\",\"0001-01-01\",\"2024-01-02T03:04:05.123456789Z\"]}}\n"
+  }
+}

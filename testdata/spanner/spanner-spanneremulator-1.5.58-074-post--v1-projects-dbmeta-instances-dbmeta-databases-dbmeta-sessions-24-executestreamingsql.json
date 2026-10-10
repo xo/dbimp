@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"INSERT INTO emu_t (id, s) VALUES (103, 'x')\",\"transaction\":{\"id\":\"MTc5MTY2ODYwNTMxOTIxMg==\"},\"seqno\":\"1\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"code\":3,\"message\":\"DML statements can only be performed in a read-write or partitioned-dml transaction. Current transaction type is ReadOnly.\"}}\n"
+  }
+}

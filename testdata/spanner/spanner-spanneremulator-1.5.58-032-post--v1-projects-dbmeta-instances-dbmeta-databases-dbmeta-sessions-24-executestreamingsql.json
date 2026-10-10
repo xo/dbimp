@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT REPEAT('x', 3000000) AS big\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ]
+    },
+    "body": "{\"error\":{\"code\":11,\"message\":\"Output of REPEAT exceeds max allowed output size of 1MB\"}}\n"
+  }
+}

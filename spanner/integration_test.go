@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"net"
 	"os"
 	"reflect"
 	"strings"
@@ -23,9 +24,11 @@ import (
 // spanner://localhost:9020/project/instance/database, which needs no credential. A
 // test skips when SPANNER_DSN is empty (hard rule 9). The hosted service is not one
 // that dbrun starts, so a person runs these tests with the login that dbsetup made for
-// this work, and the workflow of CI has no job for them until dbmeta has the entry of
-// the emulator (D187 and D191 item 2). The login is one service account with one role
-// on one database and no role on the instance, so each test runs as that account only.
+// this work. CI runs them on the emulator that dbrun starts, release
+// spanneremulator-1.5.58 (D196). The host of the DSN tells them apart: a loopback
+// host is the emulator, and a test that needs the service calls hostedOnly. The login
+// of the service is one service account with one role on one database and no role on
+// the instance, so each test runs as that account only.
 //
 // The tests make their tables, indexes, views, sequences, change streams and schemas in
 // the database of the DSN, with the name of this run for a prefix. A test drops what it
@@ -56,6 +59,30 @@ func dsn(t testing.TB) string {
 		t.Skipf("%s is empty, so there is no database to test against", envDSN)
 	}
 	return v
+}
+
+// isEmulator reports whether the DSN names the emulator, which is a server on a
+// loopback address.
+func isEmulator(t testing.TB) bool {
+	t.Helper()
+	cfg, err := spanner.ParseDSN(dsn(t))
+	if err != nil {
+		t.Fatalf("reading %s: %v", envDSN, err)
+	}
+	if cfg.Host == "localhost" {
+		return true
+	}
+	ip := net.ParseIP(cfg.Host)
+	return ip != nil && ip.IsLoopback()
+}
+
+// hostedOnly skips the test on the emulator, with the reason that
+// docs/SPANNER.md gives in the section on the emulator.
+func hostedOnly(t testing.TB, why string) {
+	t.Helper()
+	if isEmulator(t) {
+		t.Skipf("the emulator differs from the service here, so the test needs the service: %s", why)
+	}
 }
 
 // connect returns a database on the database of the DSN.
@@ -295,20 +322,24 @@ func TestIntegrationConnect(t *testing.T) {
 // message of a stream, and a message with real line breaks.
 func TestIntegrationErrors(t *testing.T) {
 	db := connect(t)
+	// The emulator answers a syntax error and a missing table with HTTP 400 and no
+	// body, so the error has the HTTP status and no name (docs/SPANNER.md, "The
+	// emulator").
+	emu := isEmulator(t)
 	err := failure(t, db, "SELEC 1")
 	serr, ok := errors.AsType[*spanner.Error](err)
-	if !ok || serr.Status != "INVALID_ARGUMENT" || serr.HTTPStatus != 400 || strings.Contains(serr.Message, `\n`) {
+	if !ok || serr.HTTPStatus != 400 || !emu && serr.Status != "INVALID_ARGUMENT" || strings.Contains(serr.Message, `\n`) {
 		t.Errorf("a syntax error gave %v, want an *spanner.Error INVALID_ARGUMENT with HTTP 400", err)
 	}
 	err = failure(t, db, "SELECT * FROM "+name("nosuch"))
-	if serr, ok := errors.AsType[*spanner.Error](err); !ok || !strings.Contains(serr.Message, "Table not found") {
+	if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.HTTPStatus != 400 || !emu && !strings.Contains(serr.Message, "Table not found") {
 		t.Errorf("a missing table gave %v", err)
 	}
 	tbl := name("err_dup")
 	ddl(t, db, "CREATE TABLE "+tbl+" (id INT64 NOT NULL) PRIMARY KEY (id)", "DROP TABLE "+tbl)
 	exec(t, db, "INSERT INTO "+tbl+" (id) VALUES (1)")
 	_, err = db.ExecContext(t.Context(), "INSERT INTO "+tbl+" (id) VALUES (1)")
-	if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.Status != "ALREADY_EXISTS" || serr.HTTPStatus != 409 {
+	if serr, ok := errors.AsType[*spanner.Error](err); !ok || !emu && serr.Status != "ALREADY_EXISTS" || serr.HTTPStatus != 409 {
 		t.Errorf("a duplicate key gave %v, want ALREADY_EXISTS with HTTP 409", err)
 	}
 	// An error after some rows: the server sends the rows, and then the error.
@@ -351,10 +382,18 @@ func TestIntegrationContext(t *testing.T) {
 	db := connect(t)
 	ctx, cancel := context.WithTimeout(t.Context(), 300*time.Millisecond)
 	defer cancel()
-	err := drain(ctx, db, "SELECT x, REPEAT('y', 1000) AS pad FROM UNNEST(GENERATE_ARRAY(1, 2000000)) AS x")
+	// The emulator limits an array to 16000 elements, so its query joins two.
+	q := "SELECT x, REPEAT('y', 1000) AS pad FROM UNNEST(GENERATE_ARRAY(1, 2000000)) AS x"
+	if isEmulator(t) {
+		q = "SELECT x, REPEAT('y', 200) AS pad FROM UNNEST(GENERATE_ARRAY(1, 16000)) AS x, UNNEST(GENERATE_ARRAY(1, 30)) AS y"
+	}
+	err := drain(ctx, db, q)
 	if err == nil || !errors.Is(err, context.DeadlineExceeded) {
 		t.Errorf("a query that outlived its context gave %v, want context.DeadlineExceeded", err)
 	}
+	// The emulator runs a DDL statement to its end before it answers, so the
+	// context cannot end during the operation, and it has no cancel for one.
+	hostedOnly(t, "the emulator finishes a DDL statement at once, so no operation is there to cancel")
 	tbl := name("ctx")
 	ctx2, cancel2 := context.WithTimeout(t.Context(), 50*time.Millisecond)
 	defer cancel2()

@@ -187,11 +187,19 @@ func parseError(body string) *Error {
 func readWireError(text string) (wireError, bool) {
 	var one struct {
 		Error *wireError `json:"error"`
+		// Code and Message are the members of a gateway fault, which the
+		// emulator answers with HTTP 500 and no member error (recorded:
+		// "the emulator gateway fault").
+		Code    int    `json:"code"`
+		Message string `json:"message"`
 	}
 	switch {
 	case strings.HasPrefix(text, "{"):
 		if json.Unmarshal([]byte(text), &one) != nil {
 			return wireError{}, false
+		}
+		if one.Error == nil && one.Message != "" {
+			return wireError{Code: one.Code, Message: one.Message}, true
 		}
 	case strings.HasPrefix(text, "["):
 		var many []struct {

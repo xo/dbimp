@@ -47,8 +47,12 @@ env:
   # dbmeta_user, who reads the indices dbmeta* only, so the OpenSearch tests
   # need no other pin either (W29 and D168). 9388928 is the release v0.4.0 of
   # dbmeta. It holds the wider OpenSearch role of dbmeta_user, tls=false in
-  # the DynamoDB DSNs and the Solr path /dbmeta in the Solr DSNs.
-  DBMETA_COMMIT: 938892840f0c0f09a5a0292f03a42833bb8b3378
+  # the DynamoDB DSNs and the Solr path /dbmeta in the Solr DSNs. 54f7dec is
+  # the release v0.13.0 of dbmeta. It holds the entry of the Cloud Spanner
+  # emulator, which the Spanner tests run on (D196), a list of BigQuery
+  # releases with 0.8.1 only, and the URL of the Cosmos DB emulator with
+  # the key as its password.
+  DBMETA_COMMIT: 54f7dec02322ab3198b02225c79208386cb437a3
   DBMETA_OWNER: dbimp-ci
   DBMETA_RUNNER: docker
 
@@ -117,7 +121,12 @@ jobs:
       # hosted service has no release, because dbrun does not start a hosted
       # service, and it has no secret in CI, so the list of hosted drivers
       # leaves it out, and its integration tests run where a person supplies an
-      # account (D183 item 13).
+      # account (D183 item 13). The Spanner driver runs on the Cloud Spanner
+      # emulator, which dbrun starts as the product spanneremulator, so it is
+      # not in the list of hosted drivers (D196). The product spanner of dbrun
+      # is Spanner Omni, which speaks gRPC only and no REST, so the driver
+      # does not own it, and the list of emulated drivers stops the rule that a
+      # driver owns the product of its own name.
       - name: List
         id: list
         run: |
@@ -126,14 +135,15 @@ jobs:
             cadences='["tested","nightly"]'
           fi
           tiers=$(echo "$cadences" | jq -r 'join(" ")')
-          hosted='["snowflake","databricks","athena","spanner"]'
+          hosted='["snowflake","databricks","athena"]'
+          emulated='["spanner"]'
           drivers=$(for d in testdata/*/; do d=$(basename "$d"); if [ -d "$d" ]; then echo "$d"; fi; done | jq -R . | jq -sc --argjson hosted "$hosted" 'map(select(. as $d | $hosted | index($d) | not))')
           list=$(cd dbmeta/test && go run ./cmd/dbrun list --json $tiers staged)
           recorded=$(for d in $(echo "$drivers" | jq -r '.[]'); do
             jq -c --arg d "$d" '[.entries[].release | {release: ., driver: $d}]' "testdata/$d/manifest.json"
           done | jq -sc 'add | unique')
-          owners=$(echo "$list" | jq -c --argjson drivers "$drivers" --argjson recorded "$recorded" \
-            '[$drivers[] | {product: ., driver: .}] + [.[] as $e | $recorded[] | select(.release == $e.name) | {product: $e.product, driver}] | unique')
+          owners=$(echo "$list" | jq -c --argjson drivers "$drivers" --argjson emulated "$emulated" --argjson recorded "$recorded" \
+            '[$drivers[] | select(. as $d | $emulated | index($d) | not) | {product: ., driver: .}] + [.[] as $e | $recorded[] | select(.release == $e.name) | {product: $e.product, driver}] | unique')
           releases=$(echo "$list" | jq -c --argjson owners "$owners" --argjson cadences "$cadences" \
             '[.[] | . as $e | $owners[] | select(.product == $e.product)
               | select($e.tier != "staged" or ($e.cadence as $c | $cadences | index($c)))

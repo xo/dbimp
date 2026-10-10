@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT table_name, table_type, parent_table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_name LIKE 'emu_t%' ORDER BY table_name\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Grpc-Metadata-Content-Type": [
+        "application/grpc"
+      ],
+      "Grpc-Metadata-Grpc-Accept-Encoding": [
+        "identity, deflate, gzip"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ]
+    },
+    "body": "{\"result\":{\"metadata\":{\"rowType\":{\"fields\":[{\"name\":\"table_name\",\"type\":{\"code\":\"STRING\"}},{\"name\":\"table_type\",\"type\":{\"code\":\"STRING\"}},{\"name\":\"parent_table_name\",\"type\":{\"code\":\"STRING\"}}]}},\"values\":[\"emu_t\",\"BASE TABLE\",null]}}\n"
+  }
+}

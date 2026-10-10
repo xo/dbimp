@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT table_name, column_name, ordinal_position, is_nullable, spanner_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'emu_t' ORDER BY ordinal_position\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Grpc-Metadata-Content-Type": [
+        "application/grpc"
+      ],
+      "Grpc-Metadata-Grpc-Accept-Encoding": [
+        "identity, deflate, gzip"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ]
+    },
+    "body": "{\"result\":{\"metadata\":{\"rowType\":{\"fields\":[{\"name\":\"table_name\",\"type\":{\"code\":\"STRING\"}},{\"name\":\"column_name\",\"type\":{\"code\":\"STRING\"}},{\"name\":\"ordinal_position\",\"type\":{\"code\":\"INT64\"}},{\"name\":\"is_nullable\",\"type\":{\"code\":\"STRING\"}},{\"name\":\"spanner_type\",\"type\":{\"code\":\"STRING\"}}]}},\"values\":[\"emu_t\",\"id\",\"1\",\"NO\",\"INT64\",\"emu_t\",\"s\",\"2\",\"YES\",\"STRING(100)\",\"emu_t\",\"n\",\"3\",\"YES\",\"INT64\",\"emu_t\",\"f\",\"4\",\"YES\",\"FLOAT64\",\"emu_t\",\"b\",\"5\",\"YES\",\"BYTES(100)\",\"emu_t\",\"ts\",\"6\",\"YES\",\"TIMESTAMP\",\"emu_t\",\"d\",\"7\",\"YES\",\"DATE\",\"emu_t\",\"bo\",\"8\",\"YES\",\"BOOL\",\"emu_t\",\"nu\",\"9\",\"YES\",\"NUMERIC\",\"emu_t\",\"j\",\"10\",\"YES\",\"JSON\"]}}\n"
+  }
+}

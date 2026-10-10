@@ -65,7 +65,12 @@ type rows struct {
 	types []wireType
 
 	// The state of the read of the array of messages.
-	started  bool
+	started bool
+	// seq is true for the form of the emulator, a sequence of objects that
+	// each wrap one message in the member result, and inWrap is true while a
+	// wrapper is open.
+	seq      bool
+	inWrap   bool
 	inElem   bool
 	inValues bool
 	// chunked is true when the message that is open has chunkedValue.
@@ -245,6 +250,11 @@ func (r *rows) affected() (int64, bool) {
 func (r *rows) advance() error {
 	switch {
 	case !r.started:
+		// The first token names the form of the body.
+		if r.dec.PeekKind() == '{' {
+			r.started, r.seq = true, true
+			return nil
+		}
 		if err := expect(r.dec, '['); err != nil {
 			return fmt.Errorf("reading the answer: %w", err)
 		}
@@ -254,6 +264,8 @@ func (r *rows) advance() error {
 		return r.readValue()
 	case r.inElem:
 		return r.readMember()
+	case r.seq:
+		return r.advanceSeq()
 	}
 	switch r.dec.PeekKind() {
 	case ']':
@@ -269,6 +281,53 @@ func (r *rows) advance() error {
 	return nil
 }
 
+// advanceSeq reads one step of the sequence of objects that the emulator
+// sends: the start or the end of a wrapper, or its member result, which holds
+// a message, or its member error (recorded: "the emulator stream"). The
+// sequence ends with the body.
+func (r *rows) advanceSeq() error {
+	if !r.inWrap {
+		switch r.dec.PeekKind() {
+		case '{':
+			_, err := r.dec.ReadToken()
+			r.inWrap = true
+			return err
+		case 0:
+			if _, err := r.dec.ReadToken(); !isEOF(err) {
+				return fmt.Errorf("reading the answer: %w", err)
+			}
+			return r.finishResult()
+		}
+		return expect(r.dec, '{')
+	}
+	tok, err := r.dec.ReadToken()
+	if err != nil {
+		return fmt.Errorf("reading a message: %w", err)
+	}
+	if tok.Kind() == '}' {
+		r.inWrap = false
+		return nil
+	}
+	switch name := tok.String(); name {
+	case "result":
+		if err := expect(r.dec, '{'); err != nil {
+			return fmt.Errorf("reading a message: %w", err)
+		}
+		r.inElem, r.chunked = true, false
+	case "error":
+		var w wireError
+		if err := json.UnmarshalDecode(r.dec, &w); err != nil {
+			return fmt.Errorf("reading the error: %w", err)
+		}
+		return newErr(w)
+	default:
+		if err := r.dec.SkipValue(); err != nil {
+			return fmt.Errorf("reading the member %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
 // endArray reads the end of the array and of the body, and makes sure that no
 // value waits to be joined.
 func (r *rows) endArray() error {
@@ -278,6 +337,12 @@ func (r *rows) endArray() error {
 	if err := r.s.End(); err != nil {
 		return err
 	}
+	return r.finishResult()
+}
+
+// finishResult ends the result after the last message, and makes sure that no
+// value waits to be joined.
+func (r *rows) finishResult() error {
 	if r.hasPartial || r.hasHeld || len(r.early) > 0 {
 		return fmt.Errorf("reading the end of the answer: a value is cut: %w", dbimp.ErrInvalidValue)
 	}

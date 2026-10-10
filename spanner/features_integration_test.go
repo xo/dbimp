@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -33,9 +34,34 @@ func refusedBy(t testing.TB, err error, text string) {
 		return
 	}
 	serr, ok := errors.AsType[*spanner.Error](err)
-	if !ok || serr.Status != "INVALID_ARGUMENT" || !strings.Contains(serr.Message, text) {
+	// The emulator words its refusals in its own way, or sends none, so the test
+	// checks the status only (docs/SPANNER.md, "The emulator").
+	if !ok || !statusIs(t, err, "INVALID_ARGUMENT") || !isEmulator(t) && !strings.Contains(serr.Message, text) {
 		t.Errorf("the refusal is %v, want INVALID_ARGUMENT and the text %q", err, text)
 	}
+}
+
+// emulatorHTTP is the HTTP status that the emulator writes for a status, when it
+// writes the refusal with no body and so with no name.
+var emulatorHTTP = map[string]int{
+	"ALREADY_EXISTS":      409,
+	"FAILED_PRECONDITION": 400,
+	"INVALID_ARGUMENT":    400,
+	"OUT_OF_RANGE":        400,
+}
+
+// statusIs reports whether err is an error of the server with the status. On the
+// emulator, an error that has no name has the HTTP status that the name stands for.
+func statusIs(t testing.TB, err error, status string) bool {
+	t.Helper()
+	serr, ok := errors.AsType[*spanner.Error](err)
+	switch {
+	case !ok:
+		return false
+	case serr.Status == status:
+		return true
+	}
+	return isEmulator(t) && serr.Status == "" && serr.HTTPStatus == emulatorHTTP[status]
 }
 
 // TestIntegrationCRUD inserts, selects, updates and deletes rows in three tables,
@@ -72,7 +98,7 @@ func TestIntegrationCRUD(t *testing.T) {
 		// A foreign key that names no parent is refused, and the refusal rolls the
 		// insert back.
 		_, err := db.ExecContext(t.Context(), "INSERT INTO "+child+" (id, parent_id) VALUES (99, 999)")
-		if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.Status != "FAILED_PRECONDITION" {
+		if !statusIs(t, err, "FAILED_PRECONDITION") {
 			t.Errorf("a child with no parent gave %v, want FAILED_PRECONDITION", err)
 		}
 		if n := count(t, db, "SELECT COUNT(*) FROM "+child+" WHERE id = 99"); n != 0 {
@@ -116,7 +142,7 @@ func TestIntegrationCRUD(t *testing.T) {
 	t.Run("delete", func(t *testing.T) {
 		// A parent that a child refers to cannot go, and the child can.
 		_, err := db.ExecContext(t.Context(), "DELETE FROM "+parent+" WHERE id = 1")
-		if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.Status != "FAILED_PRECONDITION" {
+		if !statusIs(t, err, "FAILED_PRECONDITION") {
 			t.Errorf("a parent with children gave %v, want FAILED_PRECONDITION", err)
 		}
 		if n := affected(t, db, "DELETE FROM "+child+" WHERE parent_id = ?", int64(1)); n != 2 {
@@ -212,7 +238,7 @@ func TestIntegrationSchema(t *testing.T) {
 			t.Errorf("the primary key is %#v, want id", got)
 		}
 		_, err := db.ExecContext(t.Context(), "INSERT INTO "+main+" (id) VALUES (1)")
-		if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.Status != "ALREADY_EXISTS" {
+		if !statusIs(t, err, "ALREADY_EXISTS") {
 			t.Errorf("a duplicate key gave %v, want ALREADY_EXISTS", err)
 		}
 	})
@@ -235,7 +261,7 @@ func TestIntegrationSchema(t *testing.T) {
 		ddl(t, db, "CREATE TABLE "+ref+" (id INT64 NOT NULL, mid INT64, CONSTRAINT "+name("sch_fk")+" FOREIGN KEY (mid) REFERENCES "+main+" (id)) PRIMARY KEY (id)", "DROP TABLE "+ref)
 		exec(t, db, "INSERT INTO "+ref+" (id, mid) VALUES (1, 1)")
 		_, err := db.ExecContext(t.Context(), "INSERT INTO "+ref+" (id, mid) VALUES (2, 999)")
-		if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.Status != "FAILED_PRECONDITION" {
+		if !statusIs(t, err, "FAILED_PRECONDITION") {
 			t.Errorf("a missing parent gave %v, want FAILED_PRECONDITION", err)
 		}
 		got := rowsOf(t, db, "SELECT constraint_type FROM information_schema.table_constraints WHERE table_name = @t AND constraint_type = 'FOREIGN KEY'", sql.Named("t", ref))
@@ -248,7 +274,7 @@ func TestIntegrationSchema(t *testing.T) {
 		ddl(t, db, "CREATE TABLE "+chk+" (id INT64 NOT NULL, qty INT64, CONSTRAINT "+name("sch_pos")+" CHECK (qty > 0)) PRIMARY KEY (id)", "DROP TABLE "+chk)
 		exec(t, db, "INSERT INTO "+chk+" (id, qty) VALUES (1, 5)")
 		_, err := db.ExecContext(t.Context(), "INSERT INTO "+chk+" (id, qty) VALUES (2, -1)")
-		if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.Status != "OUT_OF_RANGE" {
+		if !statusIs(t, err, "OUT_OF_RANGE") {
 			t.Errorf("a row that breaks the check gave %v, want OUT_OF_RANGE", err)
 		}
 	})
@@ -265,11 +291,12 @@ func TestIntegrationSchema(t *testing.T) {
 		idx := name("sch_uniq")
 		ddl(t, db, "CREATE UNIQUE INDEX "+idx+" ON "+main+" (s)", "DROP INDEX "+idx)
 		_, err := db.ExecContext(t.Context(), "INSERT INTO "+main+" (id, s) VALUES (100, 'a')")
-		if serr, ok := errors.AsType[*spanner.Error](err); !ok || serr.Status != "ALREADY_EXISTS" {
+		if !statusIs(t, err, "ALREADY_EXISTS") {
 			t.Errorf("a duplicate in a unique index gave %v, want ALREADY_EXISTS", err)
 		}
 	})
 	t.Run("null_filtered_index", func(t *testing.T) {
+		hostedOnly(t, "the emulator refuses FORCE_INDEX on a null filtered index that it cannot prove to hold the rows")
 		idx := name("sch_nf")
 		ddl(t, db, "CREATE NULL_FILTERED INDEX "+idx+" ON "+main+" (n)", "DROP INDEX "+idx)
 		if n := count(t, db, "SELECT COUNT(*) FROM "+main+"@{FORCE_INDEX="+idx+"} WHERE n IS NOT NULL"); n != 2 {
@@ -421,6 +448,7 @@ func TestIntegrationFeatures(t *testing.T) {
 		}
 	})
 	t.Run("positional_parameters", func(t *testing.T) {
+		hostedOnly(t, "the emulator refuses a ? with HTTP 400 and no body, so the test cannot read its text")
 		// The driver writes ? as @p1. WithParameter sends a ? as it stands.
 		err := failure(t, db, "SELECT 1", spanner.WithParameter("sql", "SELECT ? AS p"), spanner.WithParameter("params", map[string]any{"p": "1"}), spanner.WithParameter("paramTypes", map[string]any{"p": map[string]any{"code": "INT64"}}))
 		refusedBy(t, err, "Positional parameters are not supported")
@@ -466,6 +494,7 @@ func TestIntegrationFeatures(t *testing.T) {
 		t.Skip("the driver makes its session with no label (D191 item 3), so a caller cannot set one.")
 	})
 	t.Run("multi_statement_request", func(t *testing.T) {
+		hostedOnly(t, "the emulator refuses two statements with HTTP 400 and no body, and the service answers HTTP 501")
 		err := failure(t, db, "SELECT 1; SELECT 2")
 		serr, ok := errors.AsType[*spanner.Error](err)
 		if !ok || serr.HTTPStatus != 501 || !strings.Contains(serr.Message, "single statements") {
@@ -509,6 +538,7 @@ func TestIntegrationFeatures(t *testing.T) {
 		}
 	})
 	t.Run("read_timestamp", func(t *testing.T) {
+		hostedOnly(t, "the emulator answered a read at the time of the client with a row that a DELETE had removed, and refuses a read at an earlier time with HTTP 400 and no body")
 		ts := time.Now().UTC().Format(time.RFC3339Nano)
 		ctx := spanner.WithOptions(t.Context(), spanner.WithParameter("transaction", map[string]any{
 			"singleUse": map[string]any{"readOnly": map[string]any{"readTimestamp": ts}},
@@ -687,7 +717,12 @@ func TestIntegrationFeatures(t *testing.T) {
 		}
 	})
 	t.Run("streaming_result", func(t *testing.T) {
-		rows, err := db.QueryContext(t.Context(), "SELECT x, REPEAT('y', 200) AS pad FROM UNNEST(GENERATE_ARRAY(1, 20000)) AS x ORDER BY x")
+		// The emulator limits GENERATE_ARRAY to 16000 elements.
+		streamRows := int64(20000)
+		if isEmulator(t) {
+			streamRows = 16000
+		}
+		rows, err := db.QueryContext(t.Context(), fmt.Sprintf("SELECT x, REPEAT('y', 200) AS pad FROM UNNEST(GENERATE_ARRAY(1, %d)) AS x ORDER BY x", streamRows))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -705,8 +740,8 @@ func TestIntegrationFeatures(t *testing.T) {
 				t.Fatalf("row %d is %d with %d characters, want %d with 200", n, x, len(pad), n)
 			}
 		}
-		if err := rows.Err(); err != nil || n != 20000 {
-			t.Errorf("read %d rows, error %v, want 20000", n, err)
+		if err := rows.Err(); err != nil || n != streamRows {
+			t.Errorf("read %d rows, error %v, want %d", n, err, streamRows)
 		}
 	})
 	t.Run("resume_token_in_the_stream", func(t *testing.T) {
@@ -822,6 +857,7 @@ func TestIntegrationFeatures(t *testing.T) {
 		}
 	})
 	t.Run("interval_column", func(t *testing.T) {
+		hostedOnly(t, "the emulator fails a CREATE TABLE with an INTERVAL column with INTERNAL, and not with the code 12")
 		// A column cannot have the type INTERVAL. The call passes, and the operation
 		// fails with the code 12.
 		tbl := name("feat_iv")

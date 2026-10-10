@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbmeta/instances/dbmeta/databases/dbmeta/sessions/24:executeStreamingSql",
+    "header": {},
+    "body": "{\"sql\":\"SELECT x, REPEAT('y', 500) AS pad, 1 / (x - 3500) AS v FROM UNNEST(GENERATE_ARRAY(1, 4000)) AS x\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 21:50:00 GMT"
+      ]
+    },
+    "body": "{\"error\":{\"code\":11,\"message\":\"division by zero: 1 / 0\"}}\n"
+  }
+}
