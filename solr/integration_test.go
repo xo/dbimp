@@ -807,10 +807,14 @@ func TestIntegrationVersion(t *testing.T) {
 		t.Fatalf("the version is %q and %v, want a version", info.Lucene.Version, err)
 	}
 	t.Logf("the administrator reads the version %s", info.Lucene.Version)
+	// The ordinary user that dbmeta makes can read the release since dbmeta
+	// 893681d, and it could not before, so both answers are valid, and the driver
+	// must agree with the server.
 	status, _, err = apiAs(t, ordinary).do(t.Context(), http.MethodGet, "/solr/admin/info/system?wt=json", nil)
-	if err != nil || status != http.StatusForbidden {
-		t.Errorf("the ordinary user got HTTP %d and %v for the version, want 403", status, err)
+	if err != nil || status != http.StatusForbidden && status != http.StatusOK {
+		t.Errorf("the ordinary user got HTTP %d and %v for the version, want 200 or 403", status, err)
 	}
+	ordinaryReads := status == http.StatusOK
 	for _, collection := range []string{collMain, ""} {
 		for _, p := range principals {
 			name := p.name + " with the collection " + collection
@@ -822,7 +826,7 @@ func TestIntegrationVersion(t *testing.T) {
 				for _, query := range []string{"SELECT version()", "select VERSION();"} {
 					var got string
 					err := db.QueryRowContext(t.Context(), query).Scan(&got)
-					if p == ordinary {
+					if p == ordinary && !ordinaryReads {
 						if e, ok := errors.AsType[*solr.Error](err); !ok || e.HTTPStatus != http.StatusForbidden {
 							t.Errorf("%s as the ordinary user gave %q and %v, want HTTP 403", query, got, err)
 						}

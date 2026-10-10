@@ -41,3 +41,13 @@ them on 2026-10-11.
    `dbmeta` puts a user in every URL to name the principal, and the emulator checks
    nothing. This amends item 12 of D191, which refused user information. Ken
    decided it on 2026-10-11.
+7. The BigQuery driver sends no Authorization header when the DSN has an endpoint
+   and no key file and no token, because that is an emulator, which has no login.
+   The url that `dbrun` prints for the emulator has no `disable_auth`, and CI ran
+   the integration tests with that url. This is a choice of the main session,
+   which Ken can change. The key `disable_auth` still works.
+8. The tests of Elasticsearch, OpenSearch and Solr accept the answers of both
+   kinds of ordinary user for the version. `dbmeta` 893681d let that user read the
+   release, and CI moved to a `dbmeta` that holds it, so a 403 is no longer the
+   only valid answer. The driver must agree with the server.
+

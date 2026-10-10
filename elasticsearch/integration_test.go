@@ -507,9 +507,18 @@ func TestIntegrationVersion(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if p == ordinary {
-			if status != http.StatusForbidden {
-				t.Errorf("GET / as the ordinary user gave HTTP %d, want 403: %s", status, b)
+		// The ordinary user that dbmeta makes can read the release since dbmeta
+		// 893681d, and it could not before, so both answers are valid, and the
+		// driver must agree with the server.
+		refused := p == ordinary && status == http.StatusForbidden
+		if p == ordinary && status != http.StatusForbidden && status != http.StatusOK {
+			t.Errorf("GET / as the ordinary user gave HTTP %d, want 200 or 403: %s", status, b)
+		}
+		if refused {
+			var got string
+			err := db.QueryRowContext(t.Context(), "SELECT version()").Scan(&got)
+			if e, ok := errors.AsType[*elasticsearch.Error](err); !ok || e.HTTPStatus != http.StatusForbidden {
+				t.Errorf("SELECT version() as the ordinary user gave %q and %v, want HTTP 403", got, err)
 			}
 		} else {
 			var v struct {
@@ -538,13 +547,6 @@ func TestIntegrationVersion(t *testing.T) {
 			var got string
 			if err := stmt.QueryRowContext(t.Context()).Scan(&got); err != nil || got != v.Version.Number {
 				t.Errorf("the prepared SELECT version() gave %q and %v, want %q", got, err, v.Version.Number)
-			}
-		}
-		if p == ordinary {
-			var got string
-			err := db.QueryRowContext(t.Context(), "SELECT version()").Scan(&got)
-			if e, ok := errors.AsType[*elasticsearch.Error](err); !ok || e.HTTPStatus != http.StatusForbidden {
-				t.Errorf("SELECT version() as the ordinary user gave %q and %v, want HTTP 403", got, err)
 			}
 		}
 		// Any other statement goes to the server, which has no such function.

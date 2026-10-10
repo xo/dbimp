@@ -185,7 +185,8 @@ func (s *signer) sign(now time.Time, scope string) (string, error) {
 }
 
 // bearer returns the access token for the Authorization header, and "" when the
-// connector sends no token. It exchanges a new assertion when it has no token,
+// connector sends no token, which is the case for an emulator that has no key
+// file, a token or an explicit disable_auth. It exchanges a new assertion when it has no token,
 // and when the old one has less than five minutes left (D189). A token that the
 // caller set is never renewed.
 func (c *Connector) bearer(ctx context.Context) (string, error) {
@@ -194,6 +195,10 @@ func (c *Connector) bearer(ctx context.Context) (string, error) {
 		return "", nil
 	case c.cfg.AccessToken != "":
 		return c.cfg.AccessToken, nil
+	case c.cfg.Endpoint != "" && c.signer == nil && c.signErr == nil:
+		// An endpoint with no key file and no token is an emulator, which has no
+		// login (D195 item 7).
+		return "", nil
 	case c.signErr != nil:
 		return "", c.signErr
 	case c.signer == nil:

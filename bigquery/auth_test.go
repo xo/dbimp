@@ -336,6 +336,23 @@ func TestDisableAuthSendsNoHeader(t *testing.T) {
 	}
 }
 
+// TestEndpointWithNoKeyIsAnEmulator holds that a DSN with an endpoint and no key
+// file or token sends no Authorization header, as the url that dbrun prints for
+// the emulator has no disable_auth (D195 item 7).
+func TestEndpointWithNoKeyIsAnEmulator(t *testing.T) {
+	t.Parallel()
+	api := &apiServer{t: t}
+	srv := httptest.NewServer(api)
+	t.Cleanup(srv.Close)
+	db := open(t, Config{Project: testProject, Endpoint: srv.URL}, srv.URL)
+	if _, err := db.ExecContext(t.Context(), "SELECT 1 AS a, 'x' AS b"); err != nil {
+		t.Fatal(err)
+	}
+	if got := api.authorizations(); len(got) != 1 || got[0] != "" {
+		t.Errorf("the Authorization headers are %v, want none", got)
+	}
+}
+
 // TestNoCredential holds that a connector with no way to log in fails the
 // statement with ErrNoCredential, and sends nothing.
 func TestNoCredential(t *testing.T) {

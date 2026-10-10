@@ -34,13 +34,16 @@ func TestIntegrationVersion(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if e.p == ordinary && status != http.StatusForbidden {
-			t.Errorf("GET / as the ordinary user gave HTTP %d, want 403: %s", status, b)
+		// The ordinary user that dbmeta makes can read the release since dbmeta
+		// 893681d, and it could not before, so both answers are valid, and the
+		// driver must agree with the server.
+		if e.p == ordinary && status != http.StatusForbidden && status != http.StatusOK {
+			t.Errorf("GET / as the ordinary user gave HTTP %d, want 200 or 403: %s", status, b)
 		}
 		if e.p == admin && status != http.StatusOK {
 			t.Errorf("GET / as the administrator gave HTTP %d: %s", status, b)
 		}
-		refused := e.p == ordinary && e.old
+		refused := e.p == ordinary && e.old && status == http.StatusForbidden
 		for _, query := range []string{"SELECT version()", "select VERSION();"} {
 			var got string
 			err := e.db.QueryRowContext(t.Context(), query).Scan(&got)
