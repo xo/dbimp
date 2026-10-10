@@ -47,6 +47,8 @@ func TestDecode(t *testing.T) {
 		{"empty binary", col(wireBinary, -1, -1), "", []byte{}},
 		{"lower case binary", col(wireBinary, -1, -1), "deadbeef", []byte{0xDE, 0xAD, 0xBE, 0xEF}},
 		{"false", col(wireBoolean, -1, -1), "false", false},
+		{"a boolean as 1", col(wireBoolean, -1, -1), "1", true},
+		{"a boolean as 0", col(wireBoolean, -1, -1), "0", false},
 		{"the first date", col(wireDate, -1, -1), "-719162", dbimp.Date{Year: 1, Month: time.January, Day: 1}},
 		{"the last date", col(wireDate, -1, -1), "2932896", dbimp.Date{Year: 9999, Month: time.December, Day: 31}},
 		{"the epoch", col(wireDate, -1, -1), "0", dbimp.Date{Year: 1970, Month: time.January, Day: 1}},

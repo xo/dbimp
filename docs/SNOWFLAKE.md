@@ -159,7 +159,10 @@ The type name is the `type` member of the `rowType` entry. Each value is text.
   type").
 - `binary` is hex text in upper case, such as `DEADBEEF` (recorded: "every
   type").
-- `boolean` is `true` or `false`.
+- `boolean` is `true` or `false`. In the last `SELECT` of a piped statement
+  (`SHOW ... ->> SELECT ... FROM $1`) the same column is `1` or `0`, with the
+  type still `boolean` (reported by `dbmeta`, measured through this driver on
+  2026-10-10). The driver reads both forms.
 - `date` is the number of days since 1970-01-01, such as `20735` and `-25567`
   for 1900-01-01 (recorded: "every type" and "a date before 1970").
 - `time` is seconds with a fraction, such as `45296.123456789`, and `scale`
@@ -682,6 +685,14 @@ These are facts of the service and faults of the first version, measured on
   match column data type`. A `TIMESTAMP_LTZ` binding, or a `CAST(? AS
   TIMESTAMP_LTZ)` in the statement, works. The driver still binds a `time.Time`
   as `TIMESTAMP_TZ` (D183 item 6), and the test casts.
+- The pipe operator is accepted by the SQL API: `SHOW PRIMARY KEYS IN DATABASE
+  ->> SELECT ... FROM $1` ran through the driver (reported by `dbmeta`,
+  2026-10-10). A bind parameter after the pipe is refused by the server. `USE` is
+  refused (`391911`, `Command not supported by SQL API: USE`), so each statement
+  runs in its own session and a `TEMPORARY` table does not last between
+  statements. A login with no database in the path of the DSN gets `391918
+  (22000)`, which asks for the database in the body or in the parameter
+  `DATABASE`, where `gosnowflake` gave `090105`.
 - A cleanup that runs in `t.Cleanup` must not use `t.Context()`, which has ended
   by then: the first version left a view, a sequence, a stream and a dynamic table
   in the schema, and the leftovers were dropped by hand. The tests use

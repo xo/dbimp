@@ -99,3 +99,8 @@ JSON with no Arrow.
     - `WithParameter` refuses the nine parameters that change the text of a
       value, and a column of a type that the driver has no Go type for fails
       the row with `dbimp.ErrNotSupported` (D135).
+16. The driver reads the text `1` and `0` as a `bool`, besides `true` and
+    `false`, in a column of the type `boolean`. The server writes a boolean that
+    way in the last `SELECT` of a piped statement. This follows the choice of
+    D178 item 17 to read the value that arrives, and it is a fix of the first
+    version (reported by `dbmeta` on 2026-10-10).

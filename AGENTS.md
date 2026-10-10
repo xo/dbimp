@@ -32,7 +32,8 @@ holds the second and the third. The fifth, in
 `trino/`, was first released in `v0.12.0` (W31). The thirteenth, in
 `clickhouse/`, was first released in `v0.13.0` (W32). The fourteenth to the
 eighteenth, in `drill/`, `solr/`, `elasticsearch/`, `opensearch/` and
-`dynamodb/`, were first released in `v0.14.0` (W26 to W30). The
+`dynamodb/`, were first released in `v0.14.0` (W26 to W30). The nineteenth, in
+`snowflake/`, was first released in `v0.16.0` (W34). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

@@ -94,10 +94,13 @@ func decode(c column, v jsontext.Value, loc *time.Location) (any, error) {
 		}
 		return b, nil
 	case wireBoolean:
+		// The server writes a boolean as true and false, and as 1 and 0 in the
+		// last SELECT of a piped statement, whose column still has the type
+		// boolean (reported by dbmeta, 2026-10-10).
 		switch s {
-		case "true":
+		case "true", "1":
 			return true, nil
-		case "false":
+		case "false", "0":
 			return false, nil
 		}
 		return nil, fmt.Errorf("reading %q as a boolean: %w", s, dbimp.ErrInvalidValue)

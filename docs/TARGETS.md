@@ -216,9 +216,9 @@ Fails R:
 - Snowflake: cloud only, and the one server is a hosted trial account. Ken asked
   for a driver on 2026-10-09 (D182 and D183). The driver is
   `github.com/xo/dbimp/snowflake` (W34). It speaks the SQL REST API, and its
-  integration tests run only where a person supplies an account. See
-  [SNOWFLAKE.md](SNOWFLAKE.md). `usql` has a driver, which the new one can
-  replace (D24).
+  integration tests run only where a person supplies an account. Done, in
+  `v0.16.0`. See [SNOWFLAKE.md](SNOWFLAKE.md). `usql` has a driver, which the
+  new one can replace (D24).
 - BigQuery and Databricks: cloud only. A community emulator for BigQuery
   exists, and it can move BigQuery up if it answers the same. `usql` has
   drivers for both (D24).
