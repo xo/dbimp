@@ -69,22 +69,21 @@ order:
 16. Trino and Presto, in one driver with two flavors (W31 and D173). Done, in
     `v0.12.0`.
 17. ClickHouse, over its HTTP interface (W32 and D174). Done, in `v0.13.0`.
-18. Google BigQuery, over its REST API (W35, D184 and D189). The driver is
-    `github.com/xo/dbimp/bigquery`, written and staged. Its integration tests run
-    on the service where a person supplies a project and a key file, and on the
-    emulator release `bigquery-0.8.1`.
-19. Azure Cosmos DB, over its REST API (W36, D184 and D190). The driver is
-    `github.com/xo/dbimp/cosmos`. It reads only. Written and staged, with no
-    release yet. See [COSMOS.md](COSMOS.md).
-20. Amazon Athena, over its API (W37, D184 and D192). The driver is
-    `github.com/xo/dbimp/athena`. Steps 10 to 17a are done, and its live
-    integration tests wait for an account.
-21. Databricks, over its SQL Statement Execution API (W39, D188 and D193). The
-    driver is `github.com/xo/dbimp/databricks`. It reads the format `JSON_ARRAY`
-    with the disposition `INLINE` only. Its integration tests run only where a
-    person supplies a workspace. Not released yet. See
-    [DATABRICKS.md](DATABRICKS.md). `usql` has a driver, which the new one can
-    replace (D24).
+18. Google BigQuery, over its REST API (W35, D184 and D189). Done, in `v0.17.0`. The driver is `github.com/xo/dbimp/bigquery`.
+    Its integration tests run on the emulator release `bigquery-0.8.1`, and on the
+    service where a person supplies a project and a key file. See
+    [BIGQUERY.md](BIGQUERY.md).
+19. Azure Cosmos DB, over its REST API (W36, D184 and D190). Done, in `v0.17.0`. The driver is `github.com/xo/dbimp/cosmos`.
+    It reads documents and answers catalog statements (W41). See
+    [COSMOS.md](COSMOS.md).
+20. Amazon Athena, over its API (W37, D184 and D192). Done, in `v0.17.0`. The driver
+    is `github.com/xo/dbimp/athena`. Its integration tests run only where a person
+    supplies an account. See
+    [ATHENA.md](ATHENA.md).
+21. Databricks, over its SQL Statement Execution API (W39, D188 and D193). Done,
+    in `v0.17.0`. The driver is `github.com/xo/dbimp/databricks`. Its integration
+    tests run only where a person supplies a workspace. See [DATABRICKS.md](DATABRICKS.md). `usql` has a driver, which the
+    new one can replace (D24).
 
 The other targets below keep their priority, and their place in the order
 is open.
@@ -262,7 +261,7 @@ nothing about these targets is measured:
   HTTP interface. See [VOLTDB.md](VOLTDB.md).
 - Amazon Athena, which is cloud only. Ken moved it into the order on 2026-10-10
   (D184).
-- Google Cloud Spanner, measured on the hosted service (D187). Spanner Omni serves
+- Google Cloud Spanner, over its REST API (W38, D185 and D191). Done, in `v0.17.0`. The driver is `github.com/xo/dbimp/spanner`. It was measured on the hosted service (D187). Spanner Omni serves
   gRPC and no REST API, so D186 had closed it. The driver is
   `github.com/xo/dbimp/spanner` (W38 and D191). It speaks the REST API with JSON, and
   its integration tests run only where a person supplies a key file. Written and

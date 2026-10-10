@@ -33,8 +33,9 @@ holds the second and the third. The fifth, in
 `clickhouse/`, was first released in `v0.13.0` (W32). The fourteenth to the
 eighteenth, in `drill/`, `solr/`, `elasticsearch/`, `opensearch/` and
 `dynamodb/`, were first released in `v0.14.0` (W26 to W30). The nineteenth, in
-`snowflake/`, was first released in `v0.16.0` (W34). The driver in `cosmos/`
-(W36) is written and staged, and it has no release yet. The
+`snowflake/`, was first released in `v0.16.0` (W34). The twentieth to the
+twenty-fourth, in `databricks/`, `bigquery/`, `athena/`, `cosmos/` and `spanner/`,
+were first released in `v0.17.0` (W35 to W39). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

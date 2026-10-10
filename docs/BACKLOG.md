@@ -1760,7 +1760,7 @@ sections Interfaces, Faults, Integration tests and Compared with Couchbase of
 had no account. The workflow leaves a hosted driver out of its jobs. Open
 questions 6 to 17 of SNOWFLAKE.md wait for Ken. Steps 18 to 20 wait for Ken too.
 
-## W35. Write the Google BigQuery driver
+## W35. Write the Google BigQuery driver. Done.
 
 Ken asked for it on 2026-10-10, by D184. Follow [DRIVER.md](DRIVER.md). Step 3
 goes in [BIGQUERY.md](BIGQUERY.md), and the package is `bigquery`. `dbrun`
@@ -1799,7 +1799,7 @@ The requests of step 16 follow. Do not send them before the tag of step 19
    transactions, so a `\begin` fails with `dbimp.ErrNotSupported`, where the old
    driver returned a transaction whose `Commit` and `Rollback` did nothing.
 
-## W36. Write the Azure Cosmos DB driver
+## W36. Write the Azure Cosmos DB driver. Done.
 
 Ken asked for it on 2026-10-10, by D184. Follow [DRIVER.md](DRIVER.md). Step 3
 goes in [COSMOS.md](COSMOS.md), and the package is `cosmos`. `dbrun` starts
@@ -1837,7 +1837,7 @@ driver with an empty `drivers.Driver{}`.
   one. The driver strips a trailing semicolon, so `usql` needs no hook for it.
   Remove `gocosmos` from `go.mod`.
 
-## W37. Write the Amazon Athena driver
+## W37. Write the Amazon Athena driver. Done.
 
 Ken asked for it on 2026-10-10, by D184. Follow [DRIVER.md](DRIVER.md). Step 3
 goes in [ATHENA.md](ATHENA.md), and the package is `athena`. Athena has no
@@ -1885,7 +1885,7 @@ sends them after the release is public, and names its tag.
    trailing semicolon"). A statement of two parts is refused by the server, so
    `usql` splits its input before it sends it.
 
-## W38. Write the Google Cloud Spanner driver. Reopened.
+## W38. Write the Google Cloud Spanner driver. Done.
 
 Ken asked for it on 2026-10-10, by D185. Step 2 found that the only server of
 `dbrun`, Spanner Omni, serves gRPC and no REST API, so Ken decided on the same
@@ -1931,7 +1931,7 @@ and step 20 sends it after step 19:
 
 Do not send these requests before the tag of step 19 (step 20).
 
-## W39. Write the Databricks driver
+## W39. Write the Databricks driver. Done.
 
 Ken asked for it on 2026-10-10, by D188. Follow [DRIVER.md](DRIVER.md). Step 3
 goes in [DATABRICKS.md](DATABRICKS.md), and the package is `databricks`.
@@ -1987,7 +1987,7 @@ first. The `gocosmos` statements and a JSON command are the two known forms
 been named. The root package holds code that drivers share (D4), so a parser
 that two drivers use goes there.
 
-## W41. Add the catalog statements of the Cosmos DB driver
+## W41. Add the catalog statements of the Cosmos DB driver. Done.
 
 `dbmeta` asked on 2026-10-11, and Ken decided the same day (D190 item 17), that
 the `cosmos` driver answers read-only catalog statements, so that a `dbmeta` model
