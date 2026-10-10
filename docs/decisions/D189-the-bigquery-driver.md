@@ -1,6 +1,6 @@
 # D189. The BigQuery driver
 
-Status: Decided.
+Status: Decided. Amended by D195.
 
 These are the answers to the step 9 questions of [BIGQUERY.md](../BIGQUERY.md)
 (W35). Ken decided them on 2026-10-10.

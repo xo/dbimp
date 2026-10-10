@@ -52,3 +52,20 @@ These are the answers to the step 9 questions of [ATHENA.md](../ATHENA.md)
     `TIMESTAMP` is a `dbimp.LocalDateTime`, `DATE` is a `dbimp.Date`, `DECIMAL` is
     a `*apd.Decimal`, `VARBINARY` is a `[]byte`, `JSON` is a decoded value and
     `UNKNOWN` is nil. Ken decided this on 2026-10-10.
+12. The Athena driver makes three more choices, which Ken accepted on 2026-10-11:
+    - The region is the label after `athena` or `athena-fips` in the host, and a
+      host with no such label is refused.
+    - A DSN with no key and no secret makes `Connect` fail with
+      `ErrNoCredentials`, because the driver reads no environment (D7).
+    - The driver calls `GetQueryResults` for every statement, DDL too, because
+      `UpdateCount` comes with it. When a poll of `GetQueryExecution` fails and the
+      query has not ended, the driver sends `StopQueryExecution`, as it does when
+      the context ends.
+13. Ken accepted three more choices on 2026-10-11:
+    - When an argument literal is longer than 1024 bytes, the driver writes all the
+      arguments into the text of the statement and sends no `ExecutionParameters`,
+      because the service refuses a parameter over 1024 characters.
+    - A row of `DESCRIBE` that has fewer values than the columns gets NULL for the
+      missing ones.
+    - `WithTimeout` above zero and `WithReadonly(true)` return
+      `dbimp.ErrNotSupported`.

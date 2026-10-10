@@ -1769,6 +1769,36 @@ starts `bigquery-0.7.2` and `bigquery-0.8.1`, the community emulator, which
 driver on `gorm.io/driver/bigquery`, which pulls in the Arrow-based Storage
 Read API. This driver uses the REST API with JSON only.
 
+Steps 2 to 9 are done (D189). Steps 10 to 17a are written and staged: the package
+`bigquery/`, its tests, the type table, the interface table, and the sections
+Interfaces, Integration tests and Compared with Couchbase of
+[BIGQUERY.md](BIGQUERY.md). The unit tests replay the recordings of the service
+and of the emulator `bigquery-0.8.1`. The integration tests never ran, because
+the work had no project and no emulator. The open questions of BIGQUERY.md
+wait for Ken. Steps 18 to 20 wait for Ken too.
+
+The requests of step 16 follow. Do not send them before the tag of step 19
+(step 20).
+
+1. To `dburl`: the scheme `bigquery` names `github.com/xo/dbimp/bigquery`, and
+   its generator writes the URL of D189: `bigquery://<project>/<dataset>`, with
+   the path `/<location>/<dataset>` when the location is set, and the keys
+   `credential_file`, `disable_auth`, `endpoint`, `location`, `scopes`, `timeout`
+   and `max_results`. The driver registers the name `bigquery`, and the alias
+   `bq` stays in `dburl` (D30). `RequiresCGO` is false. The driver refuses a
+   password in the URL, so the generator must never write one.
+2. To `dbmeta`: measure its model on the new package when the model exists. The
+   `url` that `dbrun` prints for `bigquery-0.8.1` has the form that the driver
+   reads: `bigquery://admin@dbmeta/dbmeta?endpoint=...&disable_auth=true`. The
+   driver does not support `bigquery-0.7.2` (D189 item 4), so say whether the
+   entry for it stays.
+3. To `usql`: `drivers/bigquery` imports `github.com/xo/dbimp/bigquery` in place
+   of `gorm.io/driver/bigquery/driver`, which drops the Google Cloud SDK and Arrow
+   v15 from `go.mod`. `usql` has no `Version` function for BigQuery, and the
+   service has no statement for the release, so it needs none. The driver has no
+   transactions, so a `\begin` fails with `dbimp.ErrNotSupported`, where the old
+   driver returned a transaction whose `Commit` and `Rollback` did nothing.
+
 ## W36. Write the Azure Cosmos DB driver
 
 Ken asked for it on 2026-10-10, by D184. Follow [DRIVER.md](DRIVER.md). Step 3
@@ -1778,6 +1808,34 @@ has a driver on `btnguyen2k/gocosmos`. The `usql` session reported on
 2026-10-10 that its old hook stripped a trailing semicolon from every
 statement, because Cosmos DB refuses it. Step 2 measures that, and step 9 says
 whether the driver accepts a trailing semicolon.
+
+Steps 2 to 9 are done (D190). Steps 10 to 17a are written and staged: the package
+`cosmos/`, its tests, and the sections Interfaces, Integration tests and Compared
+with Couchbase of [COSMOS.md](COSMOS.md). The integration tests never ran,
+because the work had no account and no emulator. The workflow needs no change,
+because `dbrun` starts the emulator and the job reads `COSMOS_DSN`. Open questions
+4 to 10 of COSMOS.md wait for Ken. Steps 18 to 20 wait for Ken too.
+
+The requests of step 16. Nothing is sent before the release (step 20). The
+statement that `usql` runs for the version is none, because its file registers the
+driver with an empty `drivers.Driver{}`.
+
+- To `dburl`: the scheme `cosmos` already names `github.com/xo/dbimp/cosmos`. Make
+  its generator write the DSN of D190, `cosmos://x:<key>@<host>/<database>/<container>`,
+  with the master key as the password, and let a URL that has no user and a key
+  as the user stay valid for the old tests. The key `insecure=true` accepts the
+  certificate of the emulator. Set `RequiresCGO` to false.
+- To `dbmeta`: `dbrun dsn --json cosmos-EN20260907` prints the key as the user and
+  the key `InsecureSkipVerify=true`. Print the DSN of D190 instead:
+  `cosmos://x:<key>@127.0.0.1:<port>/?insecure=true`, with the key escaped. The
+  integration tests turn the old form into the new one, so the change is not
+  urgent. `dbmeta` builds no model for this product (dbmeta D194), so it has
+  nothing to measure on the new package.
+- To `usql`: change `drivers/cosmos/cosmos.go` to import `github.com/xo/dbimp/cosmos`
+  in place of `github.com/btnguyen2k/gocosmos`. The new driver reads only, so
+  `usql` loses the statements that `gocosmos` parsed for writes until W40 gives
+  one. The driver strips a trailing semicolon, so `usql` needs no hook for it.
+  Remove `gocosmos` from `go.mod`.
 
 ## W37. Write the Amazon Athena driver
 
@@ -1790,6 +1848,43 @@ LIMIT 1`, because Athena is Trino underneath (D181 gives a product with such a
 query no `SELECT version()`). The measurement needs an account of Amazon, which `dbsetup` provisions when Ken
 asks (dbmeta D117). The `dynamodb` driver signs requests already.
 
+Steps 2 to 9 are done (D192). Steps 10 to 17a are written and staged: the package
+`athena/`, its tests, and the sections Interfaces, Integration tests and Compared
+with Couchbase of [ATHENA.md](ATHENA.md). The integration tests never ran,
+because the work had no account. The workflow leaves a hosted driver out of its
+jobs, as for Snowflake. Steps 18 to 20 wait for Ken.
+
+The requests of step 16 are written here, and nobody has sent them. Step 20
+sends them after the release is public, and names its tag.
+
+1. The `dburl` session sets the `GoPackage` of the scheme `athena` to
+   `github.com/xo/dbimp/athena` (it is that already), and `RequiresCGO` to false.
+   It makes the generator write the URL of D192 item 10, which is
+   `athena://[key:secret@]athena.<region>.amazonaws.com/<database>`, with the
+   keys `workgroup`, `output`, `token` and `catalog`. `GenSchemeHost("athena")`
+   writes the scheme and the host only. The host must hold the label `athena`
+   and then the region, because the driver reads the region from the host.
+   `awsathena`, `s3` and `aws` stay aliases of `athena` (D30), because the driver
+   registers the one name `athena`.
+2. The `dbmeta` session measures its model on the new package, as dbmeta D93 did
+   when Cassandra moved. This work did not read `dbmeta`, so the session finds
+   out whether it has a model for Athena. The facts that the model needs are in
+   [ATHENA.md](ATHENA.md): the first row of a `SELECT` is a header row that the
+   driver drops, `DESCRIBE` gives one value in the first column and NULL in the
+   others, `ARRAY`, `MAP` and `ROW` are the text of the server in a `string`, and
+   `DECIMAL` is an `*apd.Decimal`. `dbmeta` passes before a release of `usql`
+   uses the driver.
+3. The `usql` session changes `drivers/athena/athena.go` to import
+   `github.com/xo/dbimp/athena` in place of `github.com/uber/athenadriver/go`.
+   The registered name is `athena`, and `dburl` keeps `awsathena` as an alias. It
+   removes the `Version` function, because the server refuses
+   `SELECT node_version FROM system.runtime.nodes LIMIT 1` with HTTP 400 and the
+   text "Queries of this type are not supported", and the driver answers no
+   version request (D181 and D192 item 6). It removes the hook that strips a
+   trailing semicolon, because the server accepts one (recorded: "a select with a
+   trailing semicolon"). A statement of two parts is refused by the server, so
+   `usql` splits its input before it sends it.
+
 ## W38. Write the Google Cloud Spanner driver. Reopened.
 
 Ken asked for it on 2026-10-10, by D185. Step 2 found that the only server of
@@ -1799,6 +1894,43 @@ drivers are built on the hosted services, so D187 reopens it. The measurement
 runs on the hosted instance, and again on the Cloud Spanner emulator when
 `dbmeta` has its entry. [SPANNER.md](SPANNER.md) holds the facts.
 
+Steps 2 to 9 are done (D191). Ken asked for the driver on 2026-10-10. Steps 10 to
+17a are written and staged: the package `spanner/`, its tests, and the sections
+Interfaces, Integration tests and Compared with Couchbase of
+[SPANNER.md](SPANNER.md). The integration tests never ran, because the work had
+no credential. The workflow leaves a hosted driver out of its jobs. Steps 18 to 20
+wait for Ken.
+
+The requests of step 16, which nobody sent yet, because a request names a release
+and step 20 sends it after step 19:
+
+1. To `dburl`: the scheme `spanner` names `github.com/xo/dbimp/spanner`, and
+   `RequiresCGO` is false (D5 and D14). The driver registers the name `spanner`,
+   which is the `Name` of the scheme. The generator writes the URL of D191:
+   `spanner://host:port/project/instance/database`, with the host and the port left
+   out for the hosted service. The driver refuses user information, so the generator
+   writes none, and the credential is the query key `credential_file`, which holds the
+   path to the key file of a service account. The driver reads the one other key `tls`,
+   which defaults to true for a host that is not localhost or a loopback address. The
+   emulator is `spanner://localhost:9020/project/instance/database`, and the driver
+   uses port 9020 and no TLS for it.
+2. To `dbmeta`: measure the model of Spanner on the new package, as `dbmeta` D93 did
+   for Cassandra. Its version query, `SELECT CAST(MAX(version) AS STRING) AS version
+   FROM spanner_sys.supported_optimizer_versions`, answered `"9"` on the hosted
+   service. The driver reads no other statement as a version. Add the entry of the
+   Cloud Spanner emulator, which serves REST on port 9020, so that `dbrun` starts it
+   and the integration tests run in CI (D187 and D191 item 2). The `url` of that entry
+   is the DSN of the driver.
+3. To `usql`: `drivers/spanner/spanner.go` imports `github.com/xo/dbimp/spanner` in
+   place of `github.com/googleapis/go-sql-spanner`. That drops gRPC, the Google Cloud
+   SDK and the protos of Envoy from `go.mod` (`usql` BACKLOG item 17.4). The hook sets
+   no `Version` function today, and it needs none. A user gives the key file as the
+   query key `credential_file`. The types of the values change, as the section Faults of
+   [SPANNER.md](SPANNER.md) says: a `NULL` of a `JSON` column is nil, a `DATE` and a
+   `UUID` have their own types, and an `ARRAY` of `STRUCT` or of `INTERVAL` reads.
+
+Do not send these requests before the tag of step 19 (step 20).
+
 ## W39. Write the Databricks driver
 
 Ken asked for it on 2026-10-10, by D188. Follow [DRIVER.md](DRIVER.md). Step 3
@@ -1807,6 +1939,41 @@ Databricks has no emulator and no entry in `dbrun`. `usql` has a driver on
 `databricks/databricks-sql-go`. The measurement needs a workspace and a SQL
 warehouse, which `dbsetup` provisions (dbmeta D117). The API is
 `POST /api/2.0/sql/statements`, with a personal access token as a Bearer value.
+
+Steps 2 to 9 are done (D188 and D193). Steps 10 to 17a are written and staged: the
+package `databricks/`, its tests, and the sections Interfaces, Integration tests
+and Compared with Couchbase of [DATABRICKS.md](DATABRICKS.md). The unit tests run
+on the 331 recorded exchanges. The integration tests never ran, because the work
+had no workspace. The workflow leaves a hosted driver out of its jobs. Open
+questions 6 to 15 of DATABRICKS.md are choices of the package that wait for Ken.
+Steps 18 to 20 wait for Ken too.
+
+The version for step 16: `usql` runs no statement for the version on this driver.
+`SELECT version()` answers `4.2.0` and a hash to the one login, and the driver gives
+no answer of its own (D181). The requests below wait for the release. Nothing is
+sent.
+
+- To `dburl`: set the `GoPackage` of the scheme `databricks` to
+  `github.com/xo/dbimp/databricks`, and set `RequiresCGO` to false (D5 and D14). Make
+  `genSchemeSuffix("databricks", ".cloud.databricks.com", true)` write the URL of D193
+  item 4: `databricks://token:<token>@<host>/<warehouse id>?catalog=&schema=`, with the
+  token as the password and the id of the warehouse as the only segment of the path.
+  The driver reads no `http_path` such as `/sql/1.0/warehouses/<id>`, and no key
+  `timeout` that has no unit, such as `maxRows`. The driver registers one name,
+  `databricks`, so the aliases `br`, `brick`, `bricks` and `databrick` stay in `dburl`
+  (D30).
+- To `dbmeta`: measure its model on the new package, as dbmeta D93 did for
+  Cassandra. `dbmeta` reads the dialect `databricks` and the entry of the hosted
+  service already. The driver has no transaction, so a model that needs one must run
+  each statement alone, and the session does not last, so a `USE` in one statement
+  does not reach the next. `SHOW TABLES` and `information_schema` answer with the
+  principal that owns the schema only (DATABRICKS.md, Principals).
+- To `usql`: change `usql/drivers/databricks/databricks.go` to import
+  `github.com/xo/dbimp/databricks` in place of `github.com/databricks/databricks-sql-go`,
+  and drop `databricks-sql-go` and its Arrow dependencies from `go.mod` (D24). The
+  error hook reads `sql_state` through `*databricks.Error`, with `errors.As`, in place of
+  `DBExecutionError`. `\copy` inserts with no transaction, because `BeginTx` fails
+  with `dbimp.ErrNotSupported` (D20).
 
 ## W40. Write a small parser for INSERT, UPDATE and DELETE
 
@@ -1819,4 +1986,17 @@ first. The `gocosmos` statements and a JSON command are the two known forms
 (W36 and [COSMOS.md](COSMOS.md)). Other drivers that might need it have not
 been named. The root package holds code that drivers share (D4), so a parser
 that two drivers use goes there.
+
+## W41. Add the catalog statements of the Cosmos DB driver
+
+`dbmeta` asked on 2026-10-11, and Ken decided the same day (D190 item 17), that
+the `cosmos` driver answers read-only catalog statements, so that a `dbmeta` model
+reads databases, containers, the partition key, the policies, the stored
+procedures, the triggers, the functions, the throughput, the users and the
+permissions on the driver that `dburl` names. A statement is a `SELECT` against
+a reserved name such as `$containers`. Write the columns in
+[COSMOS.md](COSMOS.md), the statements with tests on recorded exchanges and on
+the emulator and the hosted account, and tell `dbmeta` the forms, the columns,
+the tag and the DSN. The keys of the hosted account of `dbmeta` reach every
+database of the account, so a test uses names of its own.
 

@@ -43,7 +43,8 @@ released in `v0.10.0`, `druid`, which was first released in `v0.11.0`,
 `trino`, which was first released in `v0.12.0`, `clickhouse`, which was
 first released in `v0.13.0`, and `drill`, `solr`, `elasticsearch`,
 `opensearch` and `dynamodb`, which were first released in `v0.14.0`, and
-`snowflake`, which was first released in `v0.16.0`.
+`snowflake`, which was first released in `v0.16.0`. The driver `cosmos` is
+written and has no release yet.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -107,7 +108,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/COSMOS.md](docs/COSMOS.md) | What is known about Azure Cosmos DB over its REST API, for its driver |
 | [docs/ATHENA.md](docs/ATHENA.md) | What is known about Amazon Athena over its API, for its driver |
 | [docs/DATABRICKS.md](docs/DATABRICKS.md) | What is known about Databricks over its SQL Statement Execution API, for its driver |
-| [docs/SPANNER.md](docs/SPANNER.md) | What is known about Google Cloud Spanner, and why it has no driver here |
+| [docs/SPANNER.md](docs/SPANNER.md) | What is known about Google Cloud Spanner over its REST API, for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects

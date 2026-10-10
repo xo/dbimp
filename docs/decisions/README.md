@@ -209,8 +209,10 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D186](D186-spanner-gets-no-driver-here.md) | Spanner gets no driver here | Amends D185. Amended by D187 |
 | [D187](D187-spanner-is-measured-on-the-hosted-service.md) | Spanner is measured on the hosted service | Amends D186 |
 | [D188](D188-databricks-is-a-target.md) | Databricks is a target | Decided |
-| [D189](D189-the-bigquery-driver.md) | The BigQuery driver | Decided |
+| [D189](D189-the-bigquery-driver.md) | The BigQuery driver | Decided. Amended by D195 |
 | [D190](D190-the-cosmos-db-driver.md) | The Cosmos DB driver | Decided |
-| [D191](D191-the-spanner-driver.md) | The Spanner driver | Decided |
+| [D191](D191-the-spanner-driver.md) | The Spanner driver | Decided. Amended by D195 |
 | [D192](D192-the-athena-driver.md) | The Athena driver | Decided |
 | [D193](D193-the-databricks-driver.md) | The Databricks driver | Decided |
+| [D194](D194-rule-4-names-three-more-drivers.md) | Rule 4 names three more drivers | Decided |
+| [D195](D195-answers-for-bigquery-and-spanner-after-the-live-run.md) | Answers for BigQuery and Spanner after the live run | Decided. Amends D189 and D191 |

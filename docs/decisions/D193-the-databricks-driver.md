@@ -53,3 +53,21 @@ These are the answers to the step 9 questions of
 11. The host in the DSN is written as the workspace names it, and the driver uses
     HTTPS on port 443. A key of the query, such as `tls=false`, lets a test use a
     plain HTTP server.
+12. Ken accepted these choices of the driver on 2026-10-11:
+    - A nil argument is sent with the type `VOID`. A live run accepted it.
+    - When the deadline of the context is under 50 seconds, the driver sends
+      `wait_timeout` of `0s` and polls, so that it can cancel the statement.
+    - The key `timeout` and `WithTimeout` are a limit of the client with no
+      default, and they cancel the statement on the server.
+    - `WithDatabase` sets the schema. `WithCatalog` and `WithSchema` also exist.
+      `WithReadonly(true)` returns `dbimp.ErrNotSupported`.
+    - The user of the DSN is empty or `token`, the path is one warehouse id, and
+      `tls=false` selects HTTP.
+    - A TIMESTAMP parameter goes in UTC, cut to microseconds. An interval with
+      both months and days is refused.
+    - `Exec` reads the whole answer only when the first column is
+      `num_affected_rows`.
+    - A truncated result, a result of more than one chunk and external links are
+      errors before any row.
+    - An unknown scalar type reads as a string, and a complex type that the driver
+      cannot parse is an error.

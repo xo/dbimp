@@ -61,3 +61,20 @@ These are the answers of Ken to the step 9 questions of
 13. The tests for the refusal of the gateway (the 400 and the 429) read a second
     variable, `COSMOS_HOSTED_DSN`, and skip when it is empty (rule 9). The tests
     of the emulator read the normal variable.
+14. `Exec` always fails with `ErrNotSupported`, also for a `SELECT`, because the
+    driver reads only. A caller uses `Query`. Ken decided this on 2026-10-11.
+15. A query whose rows are not objects, such as `SELECT VALUE c.n`, has one column
+    named `$1`, which is the name that the service gives an expression with no
+    alias.
+16. The keys of the DSN query are `tls`, `insecure`, `pagesize` and `partitionkey`.
+    The path can be empty or can hold only the database, and `WithDatabase` and
+    `WithContainer` fill what is missing. `partitionkey` sets the value of the
+    partition key that a query uses, so that the query stays in one partition.
+17. The driver answers read-only catalog statements, one flat set of rows for
+    each, through `QueryContext`. A statement is a `SELECT` against a reserved
+    name: `$databases`, `$containers`, `$stored_procedures`, `$triggers`,
+    `$functions`, `$offers`, `$users`, `$permissions` and `$account`, with a
+    `WHERE` on the names of the database and of the container. The columns are
+    in COSMOS.md. This is for `dbmeta`, which needs the partition key, the policies
+    and the throughput of a container, and which keeps to the driver that `dburl`
+    names. Ken decided this on 2026-10-11. The driver still writes nothing (W40).

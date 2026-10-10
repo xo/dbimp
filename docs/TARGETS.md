@@ -69,10 +69,22 @@ order:
 16. Trino and Presto, in one driver with two flavors (W31 and D173). Done, in
     `v0.12.0`.
 17. ClickHouse, over its HTTP interface (W32 and D174). Done, in `v0.13.0`.
-18. Google BigQuery, over its REST API (W35 and D184). Step 2 has not measured it.
-19. Azure Cosmos DB, over its REST API (W36 and D184). Step 2 has not measured it.
-20. Amazon Athena, over its API (W37 and D184). Step 2 has not measured it.
-21. Databricks, over its SQL Statement Execution API (W39 and D188). Step 2 has not measured it.
+18. Google BigQuery, over its REST API (W35, D184 and D189). The driver is
+    `github.com/xo/dbimp/bigquery`, written and staged. Its integration tests run
+    on the service where a person supplies a project and a key file, and on the
+    emulator release `bigquery-0.8.1`.
+19. Azure Cosmos DB, over its REST API (W36, D184 and D190). The driver is
+    `github.com/xo/dbimp/cosmos`. It reads only. Written and staged, with no
+    release yet. See [COSMOS.md](COSMOS.md).
+20. Amazon Athena, over its API (W37, D184 and D192). The driver is
+    `github.com/xo/dbimp/athena`. Steps 10 to 17a are done, and its live
+    integration tests wait for an account.
+21. Databricks, over its SQL Statement Execution API (W39, D188 and D193). The
+    driver is `github.com/xo/dbimp/databricks`. It reads the format `JSON_ARRAY`
+    with the disposition `INLINE` only. Its integration tests run only where a
+    person supplies a workspace. Not released yet. See
+    [DATABRICKS.md](DATABRICKS.md). `usql` has a driver, which the new one can
+    replace (D24).
 
 The other targets below keep their priority, and their place in the order
 is open.
@@ -225,7 +237,9 @@ Fails R:
   new one can replace (D24).
 - BigQuery and Databricks: cloud only. A community emulator for BigQuery
   exists. Ken moved BigQuery into the order on 2026-10-10 (D184), and
-  Databricks on the same day (D188). `usql` has drivers for both (D24).
+  Databricks on the same day (D188). The BigQuery driver is
+  `github.com/xo/dbimp/bigquery` (W35 and D189). See [BIGQUERY.md](BIGQUERY.md).
+  `usql` has drivers for both (D24).
 - Neon: cloud only. A local copy needs a proxy and PostgreSQL.
 - PlanetScale: cloud only, and `psdb.v1alpha1` is the internal protocol of
   its serverless driver, not a documented public API.
@@ -249,7 +263,11 @@ nothing about these targets is measured:
 - Amazon Athena, which is cloud only. Ken moved it into the order on 2026-10-10
   (D184).
 - Google Cloud Spanner, measured on the hosted service (D187). Spanner Omni serves
-  gRPC and no REST API, so D186 had closed it. See [SPANNER.md](SPANNER.md).
+  gRPC and no REST API, so D186 had closed it. The driver is
+  `github.com/xo/dbimp/spanner` (W38 and D191). It speaks the REST API with JSON, and
+  its integration tests run only where a person supplies a key file. Written and
+  staged, with no release yet. See [SPANNER.md](SPANNER.md). `usql` has a driver on
+  gRPC, which the new one can replace (D24).
 - Prometheus, with PromQL.
 - VictoriaMetrics, with PromQL.
 - Loki, with LogQL.

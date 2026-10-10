@@ -1,6 +1,6 @@
 # D191. The Spanner driver
 
-Status: Decided.
+Status: Decided. Amended by D195.
 
 These are the answers to the step 9 questions of [SPANNER.md](../SPANNER.md)
 (W38). Ken decided them on 2026-10-10. They build on D185 and D187.
@@ -48,3 +48,20 @@ These are the answers to the step 9 questions of [SPANNER.md](../SPANNER.md)
       501.
     - The Bearer token goes only to the configured host.
     - The driver serves no flavor and sends no request for a version.
+12. The Spanner driver makes these choices, which Ken accepted on 2026-10-11:
+    - The keys of the DSN query are `credential_file` and `tls`. User information
+      is refused. `tls` is false for `localhost` and a loopback address, and true
+      for any other host. The default port is 443 with TLS and 9020 without.
+    - `WithTimeout` above zero returns `dbimp.ErrNotSupported`, because the REST API
+      has no timeout on the server.
+    - A session that the server lost (HTTP 404 `NOT_FOUND` on a session) is dropped
+      and the error wraps `driver.ErrBadConn`, so that `database/sql` tries again on
+      a new session. Inside a transaction the driver does not try again.
+    - A `float32` binds as FLOAT32, a slice binds as ARRAY (a nil slice is a typed
+      NULL array), and a map or a `jsontext.Value` binds as JSON. A STRUCT parameter
+      is refused with an error that says so. A zero `dbimp.Interval` is sent as
+      `P0Y`.
+    - `RepeatableRead` sends `isolationLevel: REPEATABLE_READ` in `beginTransaction`.
+      A live test measures it, and the level returns `ErrNotSupported` if the
+      service refuses the member. `Default` and `Serializable` send nothing, and the
+      other levels return `ErrNotSupported`.

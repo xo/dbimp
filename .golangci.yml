@@ -135,6 +135,9 @@ linters:
         - (*github.com/xo/dbimp/opensearch.rows).Close
         - (*github.com/xo/dbimp/dynamodb.rows).Close
         - (*github.com/xo/dbimp/snowflake.rows).Close
+        - (*github.com/xo/dbimp/databricks.rows).Close
+        - (*github.com/xo/dbimp/athena.rows).Close
+        - (*github.com/xo/dbimp/bigquery.rows).Close
         - (database/sql/driver.Rows).Close
         # The stream of a body, closed after the part that matters was read.
         - (*github.com/xo/dbimp.Stream).Close
@@ -227,6 +230,33 @@ linters:
       # such as _element_id and neo4j_version, which the driver cannot
       # rename.
       - path: neo4j/
+        linters:
+          - tagliatelle
+      # The tags of the Cosmos DB driver are the names that the server sends,
+      # such as Documents and Errors, which the driver cannot rename.
+      - path: cosmos/
+        linters:
+          - tagliatelle
+      # The tags of the Databricks driver are the names that the server sends,
+      # such as warehouse_id, wait_timeout and error_code, which the driver
+      # cannot rename.
+      - path: databricks/
+        linters:
+          - tagliatelle
+      # The tags of the Athena driver are the names that the server sends, such
+      # as QueryExecutionId, NextToken and __type, which the driver cannot
+      # rename.
+      - path: athena/
+        linters:
+          - tagliatelle
+      # The tags of the Spanner driver are the names that Google writes, such as
+      # private_key and token_uri, which the driver cannot rename.
+      - path: spanner/
+        linters:
+          - tagliatelle
+      # The tags of the BigQuery key file are the names that Google writes,
+      # such as private_key and token_uri, which the driver cannot rename.
+      - path: bigquery/auth\.go
         linters:
           - tagliatelle
       # The tags of the InfluxDB driver are the names that the server sends,
