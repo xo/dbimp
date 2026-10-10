@@ -455,8 +455,9 @@ differ for the integers: `TINYINT` is `BYTE`, `SMALLINT` is `SHORT` and `BIGINT`
   `BINARY`, `ARRAY`, `MAP` and `STRUCT` as `sql.RawBytes`, and an `INTERVAL` as `string`
   (read of `internal/rows/rows.go`, 2026-10-10).
 
-The mapping is in the table below. The table was written by hand for step 8a. Step 10 will
-generate it from the code. Ken decided the mapping in D193 items 6 and 7.
+The mapping is in the table below. The table was written by hand for step 8a, and `TestTables`
+generates it from the code now. Ken decided the mapping in D193 items 6 and 7. A column type that this table does not
+name, such as `CHAR(n)`, `VARCHAR(n)` or `TIME`, reads as a `string`, which is the text that the server sent.
 
 <!-- dbimp:types -->
 | Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
@@ -777,7 +778,13 @@ The server binds parameters. The request carries `parameters`, a list of objects
   - Create a table there: `INSUFFICIENT_PERMISSIONS`, `USE SCHEMA` (recorded: "a create table in the schema of another
     user"). Create a schema: `PERMISSION_DENIED`, `CREATE SCHEMA` (recorded: "a create schema").
   - Read the configuration of the warehouses: HTTP 403 (recorded: "the configuration of the warehouses").
-- The version is open to the principal (recorded: "the version").
+- The version is open to the principal (recorded: "the version"). `usql` runs no statement for the version on this
+  driver, because `usql` registers it with an error hook only (read of `usql/drivers/databricks/databricks.go`,
+  2026-10-10). So the statement that `usql` runs is none. The statement that a person would run is `SELECT version()`,
+  and it answers `4.2.0` and the build hash to the one login that was recorded. There is no ordinary user to compare
+  with, because the manifest says that a hosted workspace has one login for this work. The driver gives no answer of its
+  own to `SELECT version()`, and the server answers it (D181 and `TestReplayVersion`). The requests to `dburl`, `dbmeta`
+  and `usql` are written in W39 of [BACKLOG.md](BACKLOG.md). Nothing is sent.
 - A principal that has no right to use the warehouse gets HTTP 403 (recorded: "a missing warehouse").
 - A personal access token is the only credential that was sent. The token of a service principal for OAuth has
   `all-apis` as its scope (not measured, source: documentation).
@@ -789,7 +796,31 @@ host (see The DSN), and only AWS was measured. A host on Azure or Google Cloud i
 
 ## Interfaces
 
-Not written yet. Step 10 generates the table.
+The table is generated from the code of `databricks/` by `TestTables`. Run the test with
+`DBIMP_UPDATE=1` to write it. Each row says whether the driver implements the interface, and why.
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares, and sends the token of the DSN as a Bearer token to the host of the DSN only (D193). |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping runs SELECT 1, which checks the token and the warehouse, and wakes a warehouse that stopped. It costs little. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because each request is its own session (measured). |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, and the values that the driver binds with a type of their own: a decimal, a dbimp.Date, a dbimp.LocalDateTime, a dbimp.Interval, and a list and a map that fail with dbimp.ErrArguments (D193). |
+| `driver.QueryerContext` | yes | The statement goes to POST /api/2.0/sql/statements with its arguments as typed parameters, which the server binds to its ? and its :name (D193). |
+| `driver.ExecerContext` | yes | Exec reads the row of num_affected_rows, and RowsAffected is its value, or an error that wraps dbimp.ErrNotSupported when the answer has no such row (D178 and D193). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because the API has no session and a transaction does not last across requests (D20 and D193). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, so an answer has one result. A script answers with the result of its last statement. |
+| `driver.RowsColumnTypeScanType` | yes | The manifest names the type of each column in type_text, and each type has one Go type (D135 and D193). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The name of the type in upper case, with no parameters, such as DECIMAL. Each interval reports INTERVAL. |
+| `driver.RowsColumnTypeLength` | no | The manifest has no length for a string or a binary column (measured). |
+| `driver.RowsColumnTypeNullable` | yes | The manifest has no nullability, so every column can be NULL and the second result is false (measured). |
+| `driver.RowsColumnTypePrecisionScale` | yes | A DECIMAL column has its precision and its scale in the manifest. |
+<!-- /dbimp:interfaces -->
 
 ## Faults
 
@@ -940,6 +971,146 @@ Ken decided the step 9 items on 2026-10-10, in D193. These are the answers, and 
    443 and `http` for a test is not decided.
 3. The recordings contain presigned link URLs. Their signatures were redacted by the main session.
 4. The leads for a second live pass, in Second opinions, stay open.
-5. The tests that `features.json` names do not exist yet. The gate that reads them runs when the package `databricks/`
-   exists. The type table has a row that the matrix of `TYPES.md` does not have yet, and the test that writes the matrix
-   fails until it runs with `DBIMP_UPDATE=1`.
+5. The tests that `features.json` names exist now, in `databricks/features_integration_test.go` and
+   `databricks/roundtrip_integration_test.go`. They have not run on a workspace yet (see Integration tests).
+
+The package made these choices where no document answered. Each one is for Ken to confirm or to change:
+
+6. The type of a NULL parameter. A `nil` argument has no Go type, so the driver sends the type `VOID`. No recording shows
+   what the server does with it. The other choice is `STRING`, which fails for a column of a number under ANSI mode,
+   because a string is not assigned to a number. The first live run settles it (see Integration tests).
+7. The wait of a statement. The driver sends `wait_timeout` of 50 seconds. When the context of the caller ends in less
+   than 50 seconds, it sends `0s` and polls, because the answer holds the id of the statement, and the driver needs the
+   id to cancel the statement. D193 item 8 says 50 seconds and does not name this case. When the context has no deadline,
+   or a long one, the wait is 50 seconds. A context that is canceled with no deadline can still leave a statement that runs
+   on the server, until it ends, because the driver learns the id only from the answer.
+8. The key `timeout` and the option `WithTimeout` are the longest time that the driver waits for one statement. The default
+   is none. D193 item 8 says that the default must allow the 15 seconds that a stopped warehouse takes to wake, and no limit
+   allows it. The driver cancels the statement on the server when the time ends.
+9. `WithDatabase` sets the schema, as `WithSchema` does, because Spark calls a schema a database (recorded: "the catalog
+   and the schema"). `WithCatalog` sets the catalog. `WithReadonly(true)` fails with `dbimp.ErrNotSupported`.
+10. `WithParameter` sets a member of the body, and replaces the member of the driver with the same name. It refuses
+    `warehouse_id`, `statement`, `parameters`, `wait_timeout`, `on_wait_timeout`, `row_limit`, `byte_limit`,
+    `disposition` and `format`. A `row_limit` or a `byte_limit` makes the server cut the result, and D193 item 2 says that
+    the driver returns an error for a result that was cut.
+11. The user name of the DSN is `token` or empty, and the DSN has no other. The path is one name, with or without a slash
+    at its end, and the driver does not check its form, because the server checks it (recorded: "a warehouse id that is
+    not valid"). The key `tls=false` makes the driver use HTTP, for a fake server of a test.
+12. A `TIMESTAMP` parameter is the instant in UTC, written with at most six digits of fraction, and the driver cuts the
+    nanoseconds. The session zone is UTC (recorded: "the time zone of the session"). An interval parameter fails when it
+    holds months and days together, because Spark has no such interval, and when it holds a part of a microsecond.
+13. `ColumnTypeNullable` returns `true` and `false`: the column can be NULL, and the driver does not know. The manifest
+    has no nullability (recorded: "the rows of every type").
+14. `Exec` of a statement whose answer has the column `num_affected_rows` reads the whole answer, and returns its first
+    value as the count. `Exec` of any other statement closes the answer at once, and the count is not known.
+15. The rows of the driver hold the function that cancels the context of the timeout, and no context, because the driver
+    polls inside `QueryContext` and the statement has ended when the rows exist. So Databricks needs no change in rule 4
+    of `AGENTS.md`.
+
+## Integration tests
+
+The integration tests of the driver read `DATABRICKS_DSN` and skip when it is empty (hard rule 9). The variable holds the
+DSN of D193, with the token as the password and the warehouse id as the path:
+
+    DATABRICKS_DSN='databricks://token:TOKEN@dbc-XXXXXXXX-XXXX.cloud.databricks.com/WAREHOUSE_ID?catalog=workspace&schema=dbimp'
+
+`dbrun` does not start Databricks, and the workflow has no job for it and no secret (D193 item 10). A person runs the tests
+on a workspace with a login that owns the schema of the DSN, which was the service principal of the recordings:
+
+    go test -race -count=1 -run Integration -v ./databricks/...
+
+The login is one service principal, so each test runs as that principal only, and the manifest has no ordinary user. The
+tests make their tables, views and functions in the catalog and the schema of the DSN, with the name of the run as the
+prefix (`dbimp_it_` and eight characters). `TestMain` looks for an object of the run that a test left, drops it and fails.
+The warehouse of the free workspace stops after 10 minutes, so the first statement waits about 15 seconds. The workspace
+has a daily quota of compute that `dbmeta` shares, and the round trip of every type sends about 1500 statements, so a person
+runs the tests once a day at most. The tests were written on 2026-10-10 with no workspace, and they have not run. The
+tests and what each one holds:
+
+- `TestIntegrationConnect`: the login, `Ping`, the version, and the catalog and the schema of a statement and of an option.
+- `TestIntegrationErrors`: an error of the engine before any row, a statement that fails in its last row, a warehouse that
+  the login cannot use, and a wrong token.
+- `TestIntegrationTransactions`: `BeginTx` and a `COMMIT` after a `BEGIN TRANSACTION` in another request.
+- `TestIntegrationContext`: a deadline and `WithTimeout` that end while a long statement runs. The driver cancels it.
+- `TestIntegrationParameters`: each Go type that the driver binds, a NULL in a column of a number, and the refusal of a byte
+  slice, a list and a map.
+- `TestIntegrationCRUD`, `TestIntegrationSchema` and `TestIntegrationFeatures`: the entries of `features.json`, in the order
+  that the file names them. A feature that the driver does not expose, such as a limit of rows, the format of a result and
+  the cancel of a statement, goes through the REST API with the token of the DSN.
+- `TestIntegrationRoundTrip`: every type that `features.json` marks yes, with `dbimptest.RoundTrip`, as a bound argument and
+  as a literal. A byte slice, a list, a map, an interval and a geometry cannot go in as a Go value or in a table of Delta, so
+  the test binds text and the statement turns it into the type. The `VOID` type is a NULL literal that a select reads from a
+  table of text.
+
+The first live run must settle these facts, which no recording holds:
+
+- The type `VOID` for a NULL parameter, and a NULL parameter in `unhex`, `from_json` and `parse_json`.
+- A date and a timestamp of the year 1 in a table of Delta, which Spark can refuse when it writes to Parquet.
+- A cast of the text `INTERVAL '1-2' YEAR TO MONTH` back to an interval, which the test uses to store an interval in a column
+  of text.
+- `ST_GEOMFROMTEXT` and `ST_GEOGFROMTEXT` on the warehouse, and the text of a geography that they return.
+- The `SHOW USER FUNCTIONS` statement that `TestMain` uses to find a function that a test left.
+- A statement that runs long enough to be canceled while it runs. All 331 recorded statements ended in about 5 seconds.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was written on 2026-10-10 from the staged code.
+A fact of Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and a fact of Databricks from the sections above.
+
+### The server
+
+| | Couchbase | Databricks |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /api/2.0/sql/statements`, with `warehouse_id`, `statement`, `catalog`, `schema`, `wait_timeout` and `parameters` (Requests) |
+| Database | The key `query_context` of the body | The members `catalog` and `schema` of the body, and the warehouse in `warehouse_id` (Requests) |
+| Language | SQL++, which is close to SQL | Spark SQL as Databricks runs it, with ANSI mode on. One statement for each request, or a script in `BEGIN ... END` (Statements) |
+| DDL | In SQL++ | In SQL. A key is declared and not enforced (Statements) |
+| Parameters | `?`, `$1` and `$name` | `?` and `:name`, each with a type and a text value in `parameters`. The server refuses BINARY, ARRAY, MAP and STRUCT (Parameters) |
+| Framing | One body for the whole result, which does not page | One JSON object, with the status, then the manifest, then the rows of the first chunk in `result.data_array`. A result of more than one chunk, and a result of external links, are not read (Responses) |
+| Columns | `signature`, before the first row | `manifest.schema.columns`, before the first row, with the name, the position and the type of each column (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement (Responses) |
+| Errors | Can come with HTTP 200, after some rows | A statement that fails is HTTP 200 and the state `FAILED`, before any row, with `error_code`, `sql_state` and a message. A request that the server refuses has HTTP 400, 403 or 404 (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON, and every value is a string or null, with the type text of the column. A complex value is JSON text with every leaf as text (Types) |
+| Cancel | The server stops a query when the client leaves | A statement runs on when the client leaves, and `POST /api/2.0/sql/statements/<id>/cancel` stops it. The client knows the id only from the answer (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None across requests. Each request is its own session (Transactions) |
+| Authentication | Basic | A personal access token, as a Bearer token. A client id and a secret can come later (Requests) |
+| Default port | 8093, or 18093 with TLS | 443, with TLS always (The DSN) |
+
+The differences that a caller sees:
+
+- A statement can end after the first answer, so the driver polls it by its id until it succeeds. A statement that takes a
+  long time costs a request each interval (D193 item 8).
+- The session does not last. `SET`, `USE`, a temporary view and a variable do not reach the next statement (D193 item 5).
+- A result that the server cuts, and a result of more than one chunk, are errors before any row (D193 item 2).
+- A timestamp has three digits of fraction (D193 item 3).
+- A transaction has no form (D20 and D193 item 5).
+
+### The driver
+
+| | `couchbase` | `databricks` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-10 | About 1300 lines in 8 files | About 2500 lines in 9 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `Token`, `Warehouse`, `Catalog`, `Schema`, `Timeout` and `Insecure`. The DSN has the keys `catalog`, `schema`, `timeout` and `tls` (D193) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithSchema` and `WithCatalog`, through `WithOptions` or an argument (D109). `WithParameter` sets a key of the body and refuses nine. `WithReadonly(true)` fails with `dbimp.ErrNotSupported` |
+| Arguments | Sent to the server as `args` and `$name` | Typed parameters, from the Go type of each argument: `BIGINT`, `DOUBLE`, `STRING`, `BOOLEAN`, `DATE`, `TIMESTAMP`, `TIMESTAMP_NTZ`, `DECIMAL(p,s)`, `INTERVAL` and `VOID` for nil. A byte slice, a list and a map fail with `dbimp.ErrArguments` (`databricks/params.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own, which reads the status, the manifest and the member `result`, then one row for each call (`databricks/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | The same, and `ColumnTypePrecisionScale` for a `DECIMAL` column. `ColumnTypeNullable` returns `true` and `false`, because the manifest has no nullability |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the column, as the type table says. A list, a map and a struct are decoded by the type text of the column, with every leaf decoded by its type (D135 and D193) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` from `num_affected_rows`, or `dbimp.ErrNotSupported` when the answer has none. `LastInsertId` always gives `dbimp.ErrNotSupported` (D178 item 14) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D193 item 5) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The request carries the context. When the context ends while the driver polls, the driver sends the cancel by the id, with a limit of 5 seconds. When it ends during the first request, the driver has no id, so it asks for no wait when the deadline is near (D193 item 8 and question 7) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Code, SQLState, Message, StatementID}`, which unwraps to `*dbimp.StatusError` for an HTTP status, and the sentinels `ErrCanceled`, `ErrClosed`, `ErrTruncated` and `ErrCut` |
+| Authentication | Basic | A Bearer token, which the driver sends only to the host of the DSN. The driver follows no redirect (D193 item 9) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, the four sentinels, `Config`, `ParseDSN` and `NewConnector` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a date, a decimal and an interval too, where Couchbase gives JSON shapes (D135 and D193).
+- A list, a map and a struct keep the types of their leaves, and a map loses the type of its keys (D193 item 7).
+- `RowsAffected` gives an error for DDL, and the count for a statement that changes rows (D178 item 14).
+- The driver sends one request to start a statement and one request for each poll, where Couchbase sends one (D193 item 8).
+- `WithParameter` replaces a member of the body, as in Couchbase, and refuses nine of them (question 10).
+- A DSN needs a token and a warehouse id (D193 item 4).
+- The key `timeout` is a duration with a unit, such as `5m`, and a bare number is refused (question 8).
+- A `NULL` argument has the type `VOID`, which the first live run must settle (question 6).
