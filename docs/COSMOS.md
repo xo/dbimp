@@ -5,7 +5,9 @@ possible driver `cosmos` (W36 and D184). The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with the date, or "not measured", with its source.
 
-Step 6 ran twice on 2026-10-10, with one script, `requests.json`. The script
+Step 6 ran twice on 2026-10-10, with one script, `requests.json`. The main
+session recorded both runs a second time with an updated script that adds a
+burst of reads (item 12), and this file describes the second recording. The script
 makes the database `dbimp_it` with the containers `kv`, `bulk`, `hier`, `uk`
 and `nopolicy`, and it seeds `bulk` with 2,500 documents through 25 batches. It
 drops the database at its end.
@@ -18,16 +20,18 @@ drops the database at its end.
   is the API for NoSQL on the free tier, in the region East US, with 400 request
   units a second. The release name is `cosmos`. The run created the database
   with the header `X-Ms-Offer-Throughput: 400`, so its containers share that
-  throughput (recorded: "setup: create the database"). It waited 1 to 2 seconds
-  between the batches that seed `bulk`.
+  throughput (recorded: "setup: create the database"). It waited 2 seconds
+  after each batch that seeds `bulk`.
 
-The files under `testdata/cosmos/` are the hosted run, named `cosmos-001-...`
-to `cosmos-217-...`. The files of the emulator run, named
-`cosmos-EN20260907-...`, are not in that folder (read of the folder,
-2026-10-10), although `manifest.json` still lists them. A request name in
-quotes is the `name` in `requests.json`, and it names a file of the hosted run
-unless the text says "emulator". Every fact that the text marks "emulator" was
-recorded in the first run, and no file in the folder shows it now.
+The files under `testdata/cosmos/` are 248 files of the hosted run, named
+`cosmos-001-...` to `cosmos-248-...`, and 248 files of the emulator run, named
+`cosmos-EN20260907-001-...` to `cosmos-EN20260907-248-...`. The recorder numbers
+the setup first and the teardown last, so a file number is not a step of the
+script. This file cites a request by its name. A request name in quotes is the
+`name` in `requests.json`, and it names a file of the hosted run unless the text
+says "emulator". The 30 reads of the burst ran at the same time, and the recorder
+numbered their files in the order that the answers came, so the name of a burst
+read does not give its file number.
 
 The recorder signs each request with the master key, and it replaces the key
 with `REDACTED` in every file. No file holds the key, and this file names no
@@ -70,8 +74,10 @@ which is which.
   partition query). The language has no `INSERT`, `UPDATE` or `DELETE`, and
   both servers answer each with HTTP 400 (recorded: "a statement of INSERT", "a
   statement of UPDATE", "a statement of DELETE"). A write is a REST request on a
-  document, so a statement that writes needs a language that the driver
-  defines. The priority is Ken's to set (TARGETS.md has the row, W36).
+  document. Decided, D190: the driver reads only, and `Exec` returns the error of
+  D20 for a statement that writes. W40 records the need for a small parser for
+  `INSERT`, `UPDATE` and `DELETE`. The priority of the driver is Ken's to set
+  (TARGETS.md has the row, W36).
 - Whether it can be a driver: yes, and no condition of "When it cannot be a
   driver" holds. The columns are not known before the first row, but D18
   supplies them (see Responses). A result is a list that arrives in pages by the
@@ -85,10 +91,10 @@ which is which.
   page", "an ordered query with a page of 2", "offset and limit past the end",
   "distinct value"). It refuses a `GROUP BY` and an aggregate with no `VALUE` with
   another HTTP 400 (recorded: "a group by", "an aggregate of every kind"). So a
-  driver that sends a statement as it is fails on these. The driver either runs
-  that part of the query itself, or sends only a query that names one partition
-  key, or refuses the rest. That is a question for Ken. The facts are under
-  The cross partition query.
+  driver that sends a statement as it is fails on these. Decided, D190: the
+  driver sends a query as it is, does not plan or merge a query across
+  partitions, and returns the HTTP 400 of the gateway. The caller names the
+  partition key. The facts are under The cross partition query.
 - What the emulator did that the hosted account does not, and the reverse:
   - Signature. The emulator did not look at it. A request with no signature
     answered HTTP 200 (emulator, "a request that the recorder sends with no
@@ -118,10 +124,12 @@ which is which.
   - HTTP 304. The emulator answered HTTP 200 to `If-None-Match`. The hosted
     account answered HTTP 304 (recorded: "lead: read with the etag that the
     document has").
-  - HTTP 429. The emulator cannot give it. The hosted account gave none: 25
-    batches of 100 documents cost 704.76 request units each on a container with
-    400 request units a second, with 1 to 2 seconds between them, and none was
-    refused (recorded: "setup: seed the container bulk, batch 25"). Not measured.
+  - HTTP 429. The emulator gave none for the burst of 30 reads (emulator, "lead:
+    a burst of reads, number 1" to "number 30"). The hosted account answered 14
+    of the 30 with HTTP 429 (recorded: the same names). See Errors. The 25
+    batches that seed `bulk` cost 704.76 request units each on 400 request units
+    a second, with 2 seconds after each, and none was refused (recorded: "setup:
+    seed the container bulk, batch 25").
   - Page sizes. See Responses.
   - The size of a request unit. The emulator charged `1` for every answer. The
     hosted account gave real charges, such as 1 for a point read and 2.26 for a
@@ -373,7 +381,9 @@ first page with the default size", "the second page"). A driver must treat it
 as opaque text. The last page had none (recorded: "the third page"). A
 continuation with a range header was not measured.
 
-What a driver must do, as far as the recordings go:
+If a driver ran a cross partition query itself, it must do these steps, as far as
+the recordings go. Decided, D190: the driver does none of this. It sends the
+query as it is and returns the HTTP 400:
 
 1. Send the query. If the answer is HTTP 200, read the pages.
 2. If the answer is HTTP 400 with substatus 1004, read `additionalErrorInfo`,
@@ -397,8 +407,7 @@ What a driver must do, as far as the recordings go:
    - A bare aggregate with no `VALUE`: the gateway refuses it without a plan.
      Whether the plan request takes it is not measured.
 
-A driver that runs a query only for one partition key, or for one range, avoids
-the merge. The recordings prove that only for `COUNT`.
+A query that names one partition key, or one range, avoids the merge. The recordings prove that only for `COUNT`.
 
 ## The DSN
 
@@ -407,7 +416,10 @@ the merge. The recordings prove that only for `COUNT`.
   `dburl/dsn.go`, 2026-10-10). The URL of `dbrun` for the emulator is
   `cosmos://<key, percent encoded>@127.0.0.1:<port>/?InsecureSkipVerify=true`,
   which holds the key as the user name (measured, `dbrun dsn --json`,
-  2026-10-10). D94 says that the secret is the password of the URL.
+  2026-10-10). D94 says that the secret is the password of the URL. Decided,
+  D190: the DSN is `cosmos://x:<key>@host/<db>/<container>`, the master key is
+  the password, TLS verification is on, and a key of the query lets a caller
+  accept the certificate of the emulator.
 - What a client needs to reach the hosted account (recorded: every request of the
   hosted run):
   - The endpoint of the account, `https://<account>.documents.azure.com:443/`
@@ -471,6 +483,10 @@ the merge. The recordings prove that only for `COUNT`.
     stored order (recorded: "select star of one document"). The emulator sorted
     the keys by length and then by name (emulator). The ordering of `gocosmos` is
     no help, because it sorts the column names itself.
+  - Decided, D190: the columns of a row are the keys of the first row. A later row
+    with no such key gives `nil` for it, and a later row with a key that the first
+    row lacks makes the driver return an error that names the key. The facts
+    behind it are in the next item.
   - Ways that a driver can know the columns, as facts: the keys of the first
     document (it misses a key that the first row lacks), the union of the keys
     of all rows (it needs the whole result), the text of the statement (it
@@ -558,8 +574,27 @@ can change its type from one row to the next.
 | undefined | null | `nil` | `interface {}` | `` | yes |
 <!-- /dbimp:types -->
 
-This table is the proposal of step 8a. Ken has not reviewed it. Step 10
-generates it from the code.
+This table is the proposal of step 8a. Step 10 generates it from the code. Ken
+decided these rows in D190, and the table needs no change for them:
+
+- Number. Decided, D190: an integer that fits is an `int64`, a number with a
+  fraction or an exponent is a `float64`, and an integer that is too large for
+  `int64` and has no exponent is a `*apd.Decimal`. The driver reads the exponent
+  with three digits, such as `e+019`, with its own parser. A value that a query
+  computes is a double with 53 bits and can lose digits before the driver sees
+  it.
+- Nested value. Decided, D190: a nested array is a `[]any` and a nested object
+  is a `map[string]any`. A map loses the order of its keys, so only the columns
+  of the top level keep the order of the statement.
+- Typed strings. Decided, D190: a date, a UUID, a binary value and a decimal are
+  plain strings. A UUID scans into a `uuid.UUID` through its own `Scan` method.
+  A date is a `string` that the caller parses. A binary value is a `[]byte` that
+  holds its base64 text, which the caller decodes.
+- `undefined`. Decided, D190: it is `nil`, as a missing attribute is (D18).
+- GeoJSON. Decided, D190: it is an ordinary object, so a `map[string]any`. It
+  was not measured.
+
+Ken has not reviewed the rest of the table.
 
 - A number is JSON text. The measurements on the hosted account (recorded: "numbers
   beyond 2^53 and the numbers that JSON loses", "read the numbers back", "select
@@ -605,8 +640,9 @@ generates it from the code.
   hosted account (recorded: "lead: select value of an array with a missing
   attribute"). A parameter that has no value is not defined (recorded: "a
   parameter with no value"). The driver gets `nil` for a key that is not in the
-  document only if it chose a list of columns, so D18 decides it (see Open
-  questions).
+  document only if it chose a list of columns, so D18 decides it. Decided,
+  D190: a missing key is `nil`, an `undefined` value is `nil`, and an extra key in
+  a later row is an error.
 - Empty. An empty string, an empty array and an empty object are kept
   (recorded: "the document of every JSON type").
 - Dates, UUIDs, binary values and decimals have no type. They are JSON strings,
@@ -734,7 +770,24 @@ generates it from the code.
   "a number that cannot be represented"). Both were HTTP 403 on the emulator,
   with "Failed to parse Json request" (emulator).
 - Status codes recorded on the hosted account: 200, 201, 204, 207, 304, 400,
-  401, 403, 404, 405, 409, 412, 413. Not seen: 410, 429, 500, 503.
+  401, 403, 404, 405, 409, 412, 413, 429. Not seen: 410, 500, 503.
+  - 429 is a read that arrives while the container has no request units left
+    (recorded: "lead: a burst of reads, number 1" to "number 30"). 30 reads of
+    `SELECT * FROM c` on `bulk`, each with `X-Ms-Max-Item-Count: 5000`, were sent
+    as background requests so that they ran at the same time. Each served read
+    returned 2,500 rows and cost 38.14 request units. 16 answered HTTP 200 and 14
+    answered HTTP 429 (files 217 to 221, 234, 235 and 237 to 243). The answer is
+    HTTP 429 with the header `X-Ms-Substatus: 3200`, the header
+    `X-Ms-Retry-After-Ms` with 286, 287, 302 or 500 (milliseconds), and the
+    header `X-Ms-Request-Charge: 0.38`. It has no `Retry-After` header. The body
+    is `{"code":"TooManyRequests","message":"Message: {\"Errors\":[\"Request
+    rate is large. More Request Units may be needed, so no changes were made.
+    Please retry this request later. Learn more: http://aka.ms/cosmosdb-error-429\"]}
+    \r\nActivityId: ..."}`. The text "no changes were made" says that the request
+    did not run. The retry that worked: "lead: a read after the burst" waited 6
+    seconds and then answered HTTP 200 with 2,500 rows and 38.14 request units. No
+    recording retries inside the time that `X-Ms-Retry-After-Ms` names. The
+    emulator answered HTTP 200 to all 31 reads and charged `1` (emulator).
   - 304 is a read with `If-None-Match` and the etag that the document has. The
     answer has the header `Etag` and no body (recorded: "lead: read with the etag
     that the document has").
@@ -768,14 +821,12 @@ generates it from the code.
   - HTTP 401 for a wrong signature, and HTTP 403 for an expired one. The recorder
     cannot build them (not measured, source: Microsoft, "Querying Azure Cosmos DB
     resources using the REST API").
-  - HTTP 429, with the header `x-ms-retry-after-ms` and the substatus. No answer
-    of the hosted run had a header with `retry` in its name. A script that sends
-    more than 400 request units a second for a longer time is the lead (not
-    measured, source: models, see Second opinions).
   - HTTP 410 for a split of a partition (not measured, source: model).
 - Which errors mean that the request did not reach the server. A refusal of
-  HTTP 429 does not run the request, so a driver can send it again after the
-  wait (not measured, source: models). `driver.ErrBadConn` fits a connection
+  HTTP 429 does not run the request, because the text says "no changes were
+  made", so a driver can send it again after the wait that
+  `X-Ms-Retry-After-Ms` names (recorded: "lead: a burst of reads, number 1", and
+  the read after the burst). `driver.ErrBadConn` fits a connection
   that broke before the request went out. No run showed such a case.
 
 ## Cancellation and timeouts
@@ -811,7 +862,8 @@ otherwise.
   400 with the code `SC1010` and the text "Syntax error, invalid token ';'"
   (recorded: "a trailing semicolon"). This confirms what the `usql` session
   reported, on both servers. A semicolon between two statements is the same error, so one request
-  runs one statement (recorded: "two statements in one request").
+  runs one statement (recorded: "two statements in one request"). Decided, D190:
+  the driver strips one trailing semicolon from a statement.
 - A comment that starts with `--` works, and it runs to the end of the line
   (recorded: "a line comment", "a line comment and a new line"). A comment of the
   form `/* */` is HTTP 400 (recorded: "a block comment"). A comment that ends
@@ -963,8 +1015,8 @@ fact.
   - A wrong key gives HTTP 401: a script that signed with a wrong key got HTTP
     200 (measured, 2026-10-10, not recorded). A request with no signature got
     HTTP 200 (recorded: "a request that the recorder sends with no signature").
-  - HTTP 429 with `x-ms-retry-after-ms`: not producible on the emulator. Not
-    measured.
+  - HTTP 429 with `x-ms-retry-after-ms`: not producible on the emulator, and
+    produced on the hosted account (see Errors).
   - A compressed request body: not measured, because the recorder sends text.
 - The same leads on the hosted account (each is "recorded"):
   - `X-Ms-Cosmos-Batch` is the header of a batch: wrong ("a batch with the header
@@ -991,7 +1043,9 @@ fact.
     of an ordered query").
   - A date in the header that is out of the window gives HTTP 403, and a wrong key
     gives HTTP 401: not measured. The recorder cannot build the request.
-  - HTTP 429 with `x-ms-retry-after-ms`: not seen (see Errors).
+  - HTTP 429 with `x-ms-retry-after-ms`: right on the hosted account, with the
+    header `X-Ms-Retry-After-Ms` and the substatus 3200 ("lead: a burst of reads,
+    number 1").
   - A compressed request body: not measured, because the recorder sends text.
 - The mapping of the types, reviewed on 2026-10-10.
   - Gemini said that no row is wrong. It said to decode an integer as `int64`,
@@ -1043,45 +1097,24 @@ query. Each answer is a lead, not a fact. Nothing below was run.
 
 ## Open questions
 
-These wait for Ken. The facts are above, and the proposals are in the report of
-step 6.
+Ken decided many questions of step 9 in D190 (see the marks "decided, D190"
+above): no merge across partitions, a read only driver (W40), the columns, the
+DSN, the semicolon, the emulator in CI and the mappings of the types. These are
+what D190 leaves, for Ken to read in this document.
 
-1. How much of the cross partition query does the driver run itself? The hosted
-   gateway refuses an aggregate, `TOP`, `ORDER BY`, `OFFSET LIMIT`, `DISTINCT`
-   and `GROUP BY` over a container, unless the query names one partition key or
-   one range (recorded, see The cross partition query). The choices are:
-   - Send the statement as it is, and return the refusal. A plain `SELECT` and
-     any query that names one partition key still work. The recordings prove the
-     partition key only for `COUNT`.
-   - Send the plan request, then send the query once for each range with the
-     header of the range, and merge. The account of the run had one range, so the
-     recordings show no merge. It needs a container with more than one range to
-     test, which the free tier does not give. Ken decides whether a test that
-     costs money is worth it.
-   - Merge only some forms, such as `COUNT`, and refuse the rest.
-2. The SQL of Cosmos DB cannot write. Which language does the driver define for
-   an insert, an update and a delete: the statements of `gocosmos`, JSON
-   documents as statements, or none (a read-only driver)?
-3. How does the driver know the columns, with no metadata? The keys of the first
-   row, the text of the `SELECT` list, or `SELECT VALUE`? The hosted account
-   keeps the order of the statement in a projection, so the text of the list
-   gives a true order.
-4. Does a missing attribute (`undefined`) map to `nil`, as D18 reads, or does
-   it stay out of the row?
-5. How does the DSN name the container, and where does the key go: the user
-   (as `dburl` writes it) or the password (as D94 says)? The endpoint of a hosted
-   account is a host with the port 443, and an emulator is a host with a port
-   and a certificate that no authority signed.
-6. Does the driver accept a trailing semicolon, or strip it (W36)? Both servers
-   refuse it.
-7. The mapping of the types of step 8a, with `undefined` and with a number
-   that has no type on the wire. The hosted account writes `e+019` for a large
-   exponent, and a lone surrogate does not read back.
-8. Which server does the integration test of the driver use? The emulator differs
-   from the hosted account in the plan, in the refusal of a cross partition
-   query, in the order of the keys, in the page size, in HTTP 304 and in the
-   signature. A test on the emulator alone can pass where the hosted account
-   fails. A test on the hosted account needs the key of Ken.
+1. Which `X-Ms-Version` does the driver send? The recorder sends `2018-12-31`,
+   and the hosted account refused a container with two partition key paths at
+   that version (recorded: "setup: create the container hier"). A newer version
+   was not tried, and it can change other answers.
+2. The rest of the table of types and the other proposals of step 9 are not
+   reviewed. The table above holds the rows of D190 and the proposal for the
+   others.
+3. The emulator is the server of CI (D190), and it answers an aggregate, a
+   `TOP`, an `ORDER BY`, an `OFFSET LIMIT`, a `DISTINCT` and a `GROUP BY` across
+   partitions that the hosted gateway refuses. Does a test of the refusal of the
+   hosted gateway run only where a person supplies an account, and how does the
+   test skip? The emulator also differs in the order of the keys of a `SELECT`,
+   in the page size, in HTTP 304 and 429, and in the signature (see the Summary).
 
 Leads that no recording settled, for a later run on the hosted account:
 
@@ -1091,10 +1124,11 @@ Leads that no recording settled, for a later run on the hosted account:
 - A write that fires the trigger, and a stored procedure that writes.
 - `SUM`, `MIN`, `MAX` and `AVG` with `VALUE`, and `ORDER BY`, `TOP`, `OFFSET
   LIMIT`, `DISTINCT` and `GROUP BY`, each with the header of the range and with
-  the header of one partition key, and with the `rewrittenQuery`.
+  the header of one partition key, and with the `rewrittenQuery`. D190 means that
+  the driver does not need them.
 - A bare aggregate with no `VALUE` sent to the plan request.
 - A shorter list in the header of the features.
-- A burst above 400 request units a second, for HTTP 429.
+- A retry that waits exactly the time of `X-Ms-Retry-After-Ms`.
 - A request with a wrong key and one with a date out of the window, which needs
   a recorder that can build them.
 - A next query that the gateway serves, after an abandoned query.

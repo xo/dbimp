@@ -12,17 +12,19 @@
   "response": {
     "status": 403,
     "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
       "Date": [
-        "Sat, 10 Oct 2026 06:44:48 GMT"
+        "Sat, 10 Oct 2026 08:53:41 GMT"
       ],
       "X-Xss-Protection": [
         "0"
-      ],
-      "Server": [
-        "ESF"
-      ],
-      "X-Frame-Options": [
-        "SAMEORIGIN"
       ],
       "X-Content-Type-Options": [
         "nosniff"
@@ -30,13 +32,11 @@
       "Alt-Svc": [
         "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
       ],
-      "Vary": [
-        "Origin",
-        "X-Origin",
-        "Referer"
-      ],
       "Content-Type": [
         "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
       ]
     },
     "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Job dbimp-project:nosuchjob: Permission bigquery.jobs.update denied on job dbimp-project:nosuchjob (or it may not exist).\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Job dbimp-project:nosuchjob: Permission bigquery.jobs.update denied on job dbimp-project:nosuchjob (or it may not exist).\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"

@@ -45,3 +45,10 @@ These are the answers to the step 9 questions of [ATHENA.md](../ATHENA.md)
       TRANSACTION`.
     - A request holds one statement, because two give HTTP 400.
     - The driver serves no flavor.
+11. The type table of ATHENA.md stands for the rows that item 3 and item 7 do not
+    cover. Both INTERVAL types are a `dbimp.Interval`, `IPADDRESS` is a
+    `netip.Addr` (D177), `UUID` is a `uuid.UUID`, `GEOMETRY` is a string of WKT,
+    `TIME WITH TIME ZONE` is a `dbimp.OffsetTime`, `TIME` is a `dbimp.LocalTime`,
+    `TIMESTAMP` is a `dbimp.LocalDateTime`, `DATE` is a `dbimp.Date`, `DECIMAL` is
+    a `*apd.Decimal`, `VARBINARY` is a `[]byte`, `JSON` is a decoded value and
+    `UNKNOWN` is nil. Ken decided this on 2026-10-10.

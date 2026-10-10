@@ -3,37 +3,37 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "X-Amz-Target": [
-        "AmazonAthena.GetQueryExecution"
-      ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
       "X-Amz-Date": [
-        "20261010T061830Z"
+        "20261010T085852Z"
       ],
       "Authorization": [
         "REDACTED"
       ]
     },
-    "body": "{\"QueryExecutionId\":\"a29b2520-c498-4866-9139-624d0c64b030\"}"
+    "body": "{\"QueryExecutionId\":\"53c22d5f-60c3-4d18-b3c4-5a214160302a\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Content-Length": [
-        "2218"
-      ],
-      "X-Amzn-Requestid": [
-        "a4274490-6a99-422b-aaf4-d257627e735d"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 06:18:31 GMT"
-      ],
       "Content-Type": [
         "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "2223"
+      ],
+      "X-Amzn-Requestid": [
+        "fb92f7e1-305f-4c51-8c22-6805f5b488ca"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:58:54 GMT"
       ]
     },
-    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,200000000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"a29b2520-c498-4866-9139-624d0c64b030\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a29b2520-c498-4866-9139-624d0c64b030.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":56,\"QueryPlanningTimeInMillis\":26,\"QueryQueueTimeInMillis\":63,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":41,\"ServiceProcessingTimeInMillis\":104,\"TotalExecutionTimeInMillis\":264},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"ErrorType\":1106,\"Retryable\":false},\"CompletionDateTime\":1.79161310611E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"SubmissionDateTime\":1.791613105846E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a29b2520-c498-4866-9139-624d0c64b030.csv\",\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,200000000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"a29b2520-c498-4866-9139-624d0c64b030\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a29b2520-c498-4866-9139-624d0c64b030.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":56,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.79161310611E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"SubmissionDateTime\":1.791613105846E9},\"WorkGroup\":\"dbimp\"}}"
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,200000000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"53c22d5f-60c3-4d18-b3c4-5a214160302a\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/53c22d5f-60c3-4d18-b3c4-5a214160302a.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":161,\"QueryPlanningTimeInMillis\":89,\"QueryQueueTimeInMillis\":55,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":222,\"ServiceProcessingTimeInMillis\":145,\"TotalExecutionTimeInMillis\":583},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"ErrorType\":1106,\"Retryable\":false},\"CompletionDateTime\":1.791622728544E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"SubmissionDateTime\":1.791622727961E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/53c22d5f-60c3-4d18-b3c4-5a214160302a.csv\",\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,200000000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"53c22d5f-60c3-4d18-b3c4-5a214160302a\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/53c22d5f-60c3-4d18-b3c4-5a214160302a.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":161,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791622728544E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"SubmissionDateTime\":1.791622727961E9},\"WorkGroup\":\"dbimp\"}}"
   }
 }

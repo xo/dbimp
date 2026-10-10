@@ -7,13 +7,19 @@
         "REDACTED"
       ]
     },
-    "body": "{\"query\":\"DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_sn_r2\",\"useLegacySql\":false}"
+    "body": "{\"query\":\"SELECT id, doc FROM `dbimp-project`.dbimp_test.dbimp_it_extb ORDER BY id\",\"useLegacySql\":false,\"useQueryCache\":false}"
   },
   "response": {
-    "status": 400,
+    "status": 200,
     "header": {
       "Date": [
-        "Sat, 10 Oct 2026 06:47:23 GMT"
+        "Sat, 10 Oct 2026 08:56:31 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
       ],
       "X-Frame-Options": [
         "SAMEORIGIN"
@@ -24,21 +30,15 @@
       "Alt-Svc": [
         "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
       ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
       "Vary": [
         "Origin",
         "X-Origin",
         "Referer"
-      ],
-      "Server": [
-        "ESF"
-      ],
-      "X-Xss-Protection": [
-        "0"
-      ],
-      "Content-Type": [
-        "application/json; charset=UTF-8"
       ]
     },
-    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Cannot drop dbimp-project:dbimp_test.dbimp_it_sn_r2 which has type SNAPSHOT. A table was expected.\",\n    \"errors\": [\n      {\n        \"message\": \"Cannot drop dbimp-project:dbimp_test.dbimp_it_sn_r2 which has type SNAPSHOT. A table was expected.\",\n        \"domain\": \"global\",\n        \"reason\": \"invalid\"\n      }\n    ],\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"id\",\n        \"type\": \"INTEGER\",\n        \"mode\": \"NULLABLE\"\n      },\n      {\n        \"name\": \"doc\",\n        \"type\": \"STRING\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_w67FDDc4NdLgxd5-mre7DIPNALRL\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"1\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": \"2\"\n        },\n        {\n          \"v\": \"gamma delta\"\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"14\",\n  \"jobComplete\": true,\n  \"cacheHit\": false,\n  \"queryId\": \"job_w67FDDc4NdLgxd5-mre7DIPNALRL\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"10485760\",\n  \"totalSlotMs\": \"99\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791622591491\",\n  \"startTime\": \"1791622591657\",\n  \"endTime\": \"1791622591954\",\n  \"pageRowCount\": \"1\",\n  \"statementType\": \"SELECT\"\n}\n"
   }
 }

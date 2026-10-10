@@ -3,32 +3,32 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/bulk/docs",
     "header": {
-      "X-Ms-Continuation": [
-        "[{\"token\":\"-RID:~0vIeAKkLR2PQBwAAAAAAAA==#RT:2#TRC:2000#ISV:2#IEO:65599#QCF:8\",\"range\":{\"min\":\"\",\"max\":\"FF\"}}]"
-      ],
       "Content-Type": [
         "application/query+json"
       ],
       "X-Ms-Version": [
         "2018-12-31"
       ],
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 09:03:43 gmt"
+      ],
       "X-Ms-Documentdb-Isquery": [
         "True"
       ],
-      "Authorization": [
-        "REDACTED"
-      ],
-      "X-Ms-Date": [
-        "sat, 10 oct 2026 05:02:46 gmt"
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
       ],
       "X-Ms-Max-Item-Count": [
         "2"
       ],
+      "X-Ms-Continuation": [
+        "[{\"token\":\"-RID:~DJB7AKjNIUTQBwAAAAAAAA==#RT:2#TRC:2000#ISV:2#IEO:65599#QCF:8\",\"range\":{\"min\":\"\",\"max\":\"FF\"}}]"
+      ],
       "Accept": [
         "application/json"
       ],
-      "X-Ms-Documentdb-Query-Enablecrosspartition": [
-        "True"
+      "Authorization": [
+        "REDACTED"
       ]
     },
     "body": "{\"query\":\"SELECT TOP 5 c.id FROM c\"}"
@@ -36,12 +36,6 @@
   "response": {
     "status": 400,
     "header": {
-      "X-Ms-Gatewayversion": [
-        "version=2.14.0"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 05:02:46 GMT"
-      ],
       "Content-Type": [
         "application/json"
       ],
@@ -49,15 +43,21 @@
         "Microsoft-HTTPAPI/2.0"
       ],
       "X-Ms-Activity-Id": [
-        "dfaf110b-836a-4134-a697-f9afdd02828a"
+        "ebedf338-50cc-4461-a7b8-98f94f8f4f2c"
       ],
       "X-Ms-Substatus": [
         "1004"
       ],
       "Strict-Transport-Security": [
         "max-age=31536000"
+      ],
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 09:03:42 GMT"
       ]
     },
-    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: dfaf110b-836a-4134-a697-f9afdd02828a, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":5,\\\"offset\\\":null,\\\"limit\\\":null,\\\"orderBy\\\":[],\\\"orderByExpressions\\\":[],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
+    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: ebedf338-50cc-4461-a7b8-98f94f8f4f2c, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":5,\\\"offset\\\":null,\\\"limit\\\":null,\\\"orderBy\\\":[],\\\"orderByExpressions\\\":[],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
   }
 }

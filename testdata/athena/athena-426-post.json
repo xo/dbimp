@@ -6,34 +6,34 @@
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
-      "X-Amz-Target": [
-        "AmazonAthena.StartQueryExecution"
-      ],
       "X-Amz-Date": [
-        "20261010T062707Z"
+        "20261010T090727Z"
       ],
       "Authorization": [
         "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
       ]
     },
-    "body": "{\"QueryString\":\"DROP TABLE IF EXISTS dbimp_it_pk2\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0149-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+    "body": "{\"QueryString\":\"SHOW DATABASES IN \\\"dbimp-cw\\\"\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r5-622254-0148-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
+      "Content-Length": [
+        "298"
+      ],
+      "X-Amzn-Requestid": [
+        "1d56f933-cc88-4ea8-9c3f-5adca7cc2fca"
+      ],
       "Date": [
-        "Sat, 10 Oct 2026 06:27:07 GMT"
+        "Sat, 10 Oct 2026 09:07:27 GMT"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
-      ],
-      "Content-Length": [
-        "59"
-      ],
-      "X-Amzn-Requestid": [
-        "be867db7-4ef8-4cbc-ab34-7d5e1b7ba38f"
       ]
     },
-    "body": "{\"QueryExecutionId\":\"d5551ddc-77f3-4c4f-bb81-5e13d9b13a95\"}"
+    "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"line 1:6: mismatched input 'DATABASES'. Expecting: 'CATALOGS', 'COLUMNS', 'CREATE', 'CURRENT', 'FUNCTIONS', 'GRANTS', 'ROLE', 'ROLES', 'SCHEMAS', 'SESSION', 'STATS', 'TABLES', 'VIEWS'\"}"
   }
 }

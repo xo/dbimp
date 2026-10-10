@@ -11,17 +11,23 @@ recordings are under `testdata/bigquery/`, and `testdata/bigquery/requests.json`
 is the script. The script in the repository is the hosted variant.
 
 - Hosted service. The release name in the manifest is `bigquery`, and the files
-  are `bigquery-NNN`. The recorder sent 418 requests in 4 minutes and 44 seconds,
+  are `bigquery-NNN`. The recorder sent 452 requests in 5 minutes and 25 seconds,
   as one login: a service account that has the scope
   `https://www.googleapis.com/auth/bigquery`. The project id is replaced by
   `dbimp-project` in every file, and the dataset is `dbimp_test`, in the
-  multi-region `US`. The account can run queries and can create tables, views,
-  routines, clones and snapshots in that dataset. It cannot create or drop a
-  dataset (recorded: bigquery-359 and bigquery-413), it cannot read
-  `INFORMATION_SCHEMA.SCHEMATA` and `JOBS` (recorded: bigquery-059 and
-  bigquery-064), and it cannot delete a snapshot (recorded: bigquery-416). A table
-  that a request made expires after seven days (recorded: bigquery-062, where
-  `TABLE_OPTIONS` shows `expiration_timestamp`).
+  multi-region `US`. The account can run queries, and it can create tables, views,
+  routines, clones, datasets (`CREATE SCHEMA` and `datasets.insert`), and it can
+  drop a dataset that it made with `DROP SCHEMA ... CASCADE` (recorded:
+  bigquery-226, bigquery-359, bigquery-394, bigquery-397, bigquery-398 and
+  bigquery-446). It reads `INFORMATION_SCHEMA.JOBS_BY_PROJECT` (recorded:
+  bigquery-399) and it writes and reads the bucket `gs://dbimp-project-scratch`
+  (recorded: bigquery-405 and bigquery-407). It cannot read
+  `INFORMATION_SCHEMA.SCHEMATA` and `JOBS` (recorded: bigquery-059, bigquery-064
+  and bigquery-396), and it cannot delete a snapshot (recorded: bigquery-450). The
+  service account was given the rights to create datasets, to read all jobs and to
+  write the bucket before the latest pass. A table that a request made expires
+  after seven days (recorded: bigquery-062, where `TABLE_OPTIONS` shows
+  `expiration_timestamp`).
 - Emulator. The release names are `bigquery-0.7.2` and `bigquery-0.8.1`, and the
   files are `bigquery-0.7.2-NNN` and `bigquery-0.8.1-NNN`. The emulator checks no
   credential, so it is one login. The emulator makes the project `dbmeta` and the
@@ -42,28 +48,31 @@ is the script. The script in the repository is the hosted variant.
 The files are of the latest hosted pass. An earlier pass wrote the project id
 `dbimp-project` with a hyphen and no backticks, which GoogleSQL refuses in many
 statements, and its slow queries ran from the cache. The latest pass writes the
-name in backticks, runs heavy queries with the cache off, and sends a request with
-no token and a request with a wrong token. Four facts of the latest pass matter
-when a reader compares the numbers:
+name in backticks, runs heavy queries with the cache off, sends a request with no
+token and requests with a token that is wrong, and has the widened rights. Four
+facts of the latest pass matter when a reader compares the numbers:
 
-- The dataset kept objects of earlier passes. So `CREATE TABLE ... CLONE`,
-  `CREATE SNAPSHOT TABLE`, `CREATE FUNCTION`, `CREATE TABLE FUNCTION` and `CREATE
-  PROCEDURE` answered HTTP 409 or 400 with `Already Exists` (recorded: bigquery-299,
-  bigquery-300, bigquery-301, bigquery-303 and bigquery-304). `INFORMATION_SCHEMA`
-  shows the objects: a `CLONE`, two `SNAPSHOT` tables and the routines `FUNCTION`,
-  `TABLE FUNCTION` and `PROCEDURE` (recorded: bigquery-060 and bigquery-065). That
-  proves that the objects exist, but this pass did not record their creation.
+- The dataset was clean at the start, so the pass records the creation of a
+  clone, a function, a table function and a procedure (recorded: bigquery-299,
+  bigquery-301, bigquery-303 and bigquery-304). Two snapshots of earlier passes
+  stay: `CREATE SNAPSHOT TABLE` answered HTTP 409 `duplicate` (recorded:
+  bigquery-300), and `INFORMATION_SCHEMA` lists them as `SNAPSHOT` (recorded:
+  bigquery-060). So the creation of a snapshot is not recorded in this pass.
 - The first request for a wildcard table has a second backtick by mistake and
   answered `Invalid empty identifier` (recorded: bigquery-315). A later request
   for two like tables is right (recorded: bigquery-393).
-- The teardown drops what it can. It cannot drop the snapshots
-  `dbimp_it_sn` and `dbimp_it_sn_r2`, because the account lacks
-  `bigquery.tables.deleteSnapshot` (recorded: bigquery-410 and bigquery-416). It
-  never drops the routines `dbimp_it_tf` and `dbimp_it_proc`. These four objects
-  stay in the dataset, and a person with the right must drop the snapshots.
-- A table of an earlier pass, `dbimp_it_kv`, had no column `s`, so the request
-  that made a table with `tables.insert` answered HTTP 409 and the streamed row
-  answered `no such field: s` (recorded: bigquery-360 and bigquery-361).
+- The teardown drops what it can. It cannot drop the snapshots `dbimp_it_sn` and
+  `dbimp_it_sn_r2`, because the account lacks `bigquery.tables.deleteSnapshot`
+  (recorded: bigquery-438 and bigquery-450). It never drops the dataset
+  `dbimp_it_ds2` that `datasets.insert` made, and it never drops the routines
+  `dbimp_it_tf` and `dbimp_it_proc`. These objects stay, and a person with the
+  right must drop the snapshots.
+- The table `dbimp_it_kv` comes from the request with a foreign key (recorded:
+  bigquery-289) and has only the column `id`. So the request that made the same
+  table with `tables.insert` answered HTTP 409, and the row with a column `s`
+  that was streamed into it answered `no such field: s` (recorded: bigquery-360
+  and bigquery-361). The later streaming insert uses a table of its own
+  (recorded: bigquery-417 and bigquery-418).
 
 ## Summary
 
@@ -133,8 +142,10 @@ when a reader compares the numbers:
   - It writes `NaN`, `Infinity` and `-Infinity` as text, a `TIMESTAMP` as a
     double with an exponent, and refuses a NULL element in an array.
   - It has time travel, a materialized view, a clone, a snapshot, routines, a
-    foreign key and a wildcard table.
-  - It answers HTTP 401 for a request with no token.
+    foreign key, a wildcard table, datasets that a statement creates and drops,
+    a search index, an external table over a bucket, `EXPORT DATA` and `LOAD
+    DATA`.
+  - It answers HTTP 401 for a request with no token and for a token that is wrong.
 - Scheme in `dburl`: `Name` is `bigquery`, the alias is `bq`, the generator is
   `GenSchemeHost("bigquery")`, and the `Dialect` is `bigquery`. `GoPackage` is
   `github.com/xo/dbimp/bigquery`. The generator rewrites the scheme and
@@ -216,15 +227,17 @@ it, and the emulator fact stays there with the word "emulator".
   session echoes `sessionInfo` (recorded: bigquery-384 to bigquery-388). An id
   that is not a session answers HTTP 400, the reason `invalid` and `Invalid input
   session id.` (recorded: bigquery-277). `CALL BQ.ABORT_SESSION()` ends the
-  session (recorded: bigquery-390). Emulator: it answers no `sessionInfo`.
+  session (recorded: bigquery-390 and bigquery-416). Emulator: it answers no `sessionInfo`.
 - Transactions. In a script, `BEGIN TRANSACTION; INSERT ...; ROLLBACK
   TRANSACTION` answered HTTP 200 and the row was not in the table afterwards
   (recorded: bigquery-266 and bigquery-267). In a session across requests, `BEGIN
   TRANSACTION`, an `INSERT`, a `SELECT` that saw the row, `ROLLBACK TRANSACTION`
   and a `SELECT` that saw no row all worked, and a `SELECT` outside the session
-  saw no row either (recorded: bigquery-384 to bigquery-389). The statement types
-  are `BEGIN_TRANSACTION` and `ROLLBACK_TRANSACTION` (recorded: bigquery-384 and
-  bigquery-387). A script with an error inside the transaction answered HTTP 400
+  saw no row either (recorded: bigquery-384 to bigquery-389). A second session
+  with `BEGIN TRANSACTION`, an `INSERT` and `COMMIT TRANSACTION` kept the row, and
+  a `SELECT` outside the session saw it (recorded: bigquery-411 to bigquery-415).
+  The statement types are `BEGIN_TRANSACTION`, `ROLLBACK_TRANSACTION` and
+  `COMMIT_TRANSACTION` (recorded: bigquery-384, bigquery-387 and bigquery-414). A script with an error inside the transaction answered HTTP 400
   and left no row (recorded: bigquery-268 and bigquery-269). A `BEGIN ... EXCEPTION
   WHEN ERROR THEN ROLLBACK` block rolled back (recorded: bigquery-270 and
   bigquery-271). `BEGIN TRANSACTION`, `COMMIT TRANSACTION` and `ROLLBACK
@@ -233,11 +246,12 @@ it, and the emulator fact stays there with the word "emulator".
   bigquery-272 to bigquery-274). Emulator: it refuses `ROLLBACK` and it answers
   200 for a lone `BEGIN`.
 - Cancel. `jobs.cancel` of a running job answered HTTP 200 with the job still
-  `RUNNING` (recorded: bigquery-210). A `jobs.get` after that showed `state`
-  `DONE` with `errorResult` of the reason `stopped` and `Job execution was
-  cancelled: User requested cancellation` (recorded: bigquery-211). The
-  `getQueryResults` of the job answered HTTP 499 with the status `CANCELLED` and
-  the reason `stopped` (recorded: bigquery-212). `jobs.cancel` of a job that had
+  `RUNNING` (recorded: bigquery-210). A `jobs.get` right after that
+  still showed `state` `RUNNING` (recorded: bigquery-211). The `getQueryResults`
+  of the job answered HTTP 499 with the status `CANCELLED`, the reason `stopped`
+  and `Job execution was cancelled: User requested cancellation` (recorded:
+  bigquery-212). So the cancel takes effect a little after its answer, and the
+  state that `jobs.get` shows can lag. `jobs.cancel` of a job that had
   ended answered HTTP 200 (recorded: bigquery-213). A cancel of a job that does
   not exist answers HTTP 403 `accessDenied` with `Permission bigquery.jobs.update
   denied on job ... (or it may not exist)` (recorded: bigquery-214). Emulator:
@@ -277,16 +291,41 @@ it, and the emulator fact stays there with the word "emulator".
 - `INT64` overflow answers HTTP 400, `invalidQuery` and `Integer Overflow`
   (recorded: bigquery-074 and bigquery-188). Emulator: it wrapped.
 - Time travel, materialized views, clones, snapshots, routines and foreign keys
-  exist (recorded: bigquery-316, bigquery-296, bigquery-060, bigquery-065 and
-  bigquery-289). A `CALL` of a procedure ran and answered its result (recorded:
-  bigquery-355). On the service, `PRIMARY KEY ... NOT ENFORCED`, `DEFAULT`,
+  exist (recorded: bigquery-316, bigquery-296, bigquery-299, bigquery-060,
+  bigquery-301, bigquery-303, bigquery-304 and bigquery-289). A `CALL` of a
+  procedure ran and answered its result (recorded: bigquery-355). On the service, `PRIMARY KEY ... NOT ENFORCED`, `DEFAULT`,
   `PARTITION BY` and `CLUSTER BY` work (recorded: bigquery-288 and bigquery-291).
   `UNIQUE` is not a constraint (recorded: bigquery-290). `ALTER TABLE DROP
-  COLUMN` works (recorded: bigquery-311). A search index and a vector index are
-  known to the service: it refused the index of the script because the table has
-  no text column and no vector column, in messages that name the index
-  (recorded: bigquery-297 and bigquery-298). Emulator: it refused time travel, the
+  COLUMN` works (recorded: bigquery-311). `CREATE SEARCH INDEX` on a text column
+  worked, and `SEARCH(doc, 'alpha')` found the row (recorded: bigquery-402 and
+  bigquery-404). `CREATE VECTOR INDEX` on an `ARRAY<FLOAT64>` column was refused
+  because the table has 2 rows and the `IVF` type needs at least 5000: `Total
+  rows 2 is smaller than min allowed 5000` (recorded: bigquery-403). So the
+  service knows the vector index, and a working one is not recorded. Emulator: it refused time travel, the
   materialized view, the clone and the snapshot, and its `DROP COLUMN` failed.
+- Datasets. `CREATE SCHEMA` made a dataset, a table went into it, and `DROP
+  SCHEMA ... CASCADE` dropped it (recorded: bigquery-394, bigquery-395 and
+  bigquery-398). `datasets.insert` made a dataset (recorded: bigquery-359 and
+  bigquery-397). A `DROP SCHEMA` of a dataset that does not exist answers HTTP 403
+  `accessDenied` and `Permission bigquery.datasets.delete denied ... (or it may not
+  exist)` (recorded: bigquery-441 and bigquery-447). `GRANT` on a dataset that does
+  not exist answers HTTP 403 (recorded: bigquery-357). The list of datasets shows
+  the new datasets (recorded: bigquery-227 and bigquery-378). `SELECT` from
+  `INFORMATION_SCHEMA.SCHEMATA` is refused for the account, with and without the
+  region (recorded: bigquery-059 and bigquery-396), so the way to list datasets is
+  `datasets.list`. `JOBS_BY_PROJECT` with the region `region-us` is readable
+  (recorded: bigquery-399), and `JOBS` of the project is refused (recorded:
+  bigquery-064). Emulator: it refused `DROP SCHEMA` and `datasets.insert` made a
+  dataset.
+- Cloud Storage. `EXPORT DATA` to the bucket answered HTTP 200 with the
+  `statementType` `EXPORT_DATA` (recorded: bigquery-405). `LOAD DATA` from the
+  exported files answered `LOAD_DATA` and loaded rows (recorded: bigquery-407).
+  The load read 1 row of 2, because the export wrote no header and the load
+  skipped the first line (recorded: bigquery-408). `CREATE EXTERNAL TABLE` over the
+  files worked, and a `SELECT` from it answered the same row (recorded:
+  bigquery-409 and bigquery-410). A missing bucket answers HTTP 404 `Not found:
+  Files` (recorded: bigquery-313, bigquery-314 and bigquery-305). Emulator:
+  `EXPORT DATA` failed or exported nothing, and `LOAD DATA` loaded nothing.
 - Two part names. `CREATE TABLE dataset.table` works on the service (recorded:
   bigquery-200). Emulator: it refused the name.
 - Script variables do not leak. After a script that declared `dbimp_v`, the same
@@ -313,15 +352,19 @@ it, and the emulator fact stays there with the word "emulator".
   10 MB (recorded: bigquery-060, where `totalBytesProcessed` is `"10485760"`).
   Emulator: `SCHEMATA`, `TABLES`, `COLUMNS` and `TABLE_OPTIONS` only.
 - Rates. The 418 requests ran in 4 minutes and 44 seconds, and none answered HTTP
-  429 or the reason `rateLimitExceeded` (recorded: bigquery-001 to bigquery-418,
+  429 or the reason `rateLimitExceeded` (recorded: bigquery-001 to bigquery-452,
   by the `Date` headers). The limits of the service are not met by this load.
 - Login. A request with no `Authorization` header answered HTTP 401, the status
   `UNAUTHENTICATED`, the reason `required`, `Login Required.` with the location
   `Authorization`, and an `ErrorInfo` with the reason `CREDENTIALS_MISSING`
   (recorded: bigquery-219). A request whose token had `-wrong` added to its end
-  answered HTTP 200 (recorded: bigquery-220). So the service did not refuse a good
-  token with a suffix. This does not show how it treats a token that is wrong from
-  the start, and the suffix may be dropped by the service. An API key that is wrong,
+  answered HTTP 200 (recorded: bigquery-220), so the service did not refuse a good
+  token with a suffix. A token that is wholly wrong answered HTTP 401, the status
+  `UNAUTHENTICATED`, the reason `authError`, `Invalid Credentials` with the
+  location `Authorization`, and `Request had invalid authentication credentials.
+  Expected OAuth 2 access token, login cookie or other valid authentication
+  credential.` on a query and on a read of the datasets (recorded: bigquery-420
+  and bigquery-421). An API key that is wrong,
   sent with the real token, answered HTTP 400 `badRequest` and `API key not valid.
   Please pass a valid API key.` (recorded: bigquery-221). So the service checks a
   key before it reads the token. A key that is right is not measured. Emulator: it
@@ -339,10 +382,15 @@ it, and the emulator fact stays there with the word "emulator".
 - Session facts. `SESSION_USER()` answered the email of the service account
   (recorded: bigquery-231). `@@project_id` answered the project, `@@dataset_id`
   answered NULL and `@@time_zone` answered `UTC` (recorded: bigquery-230).
-- Streaming. `tabledata.insertAll` answered HTTP 200 with `insertErrors` for a row
-  whose field does not exist, with the index, the reason `invalid`, the location
-  of the field and `no such field: s.` (recorded: bigquery-361). A row that is
-  right is not recorded in this pass.
+- Streaming. `tabledata.insertAll` of two rows into a table of its own answered
+  HTTP 200 with no `insertErrors` (recorded: bigquery-418). A row whose field does
+  not exist answered HTTP 200 with `insertErrors`, the index, the reason `invalid`,
+  the location of the field and `no such field: s.` (recorded: bigquery-361). So a
+  caller must read `insertErrors` and not the HTTP code.
+- Children of a script. `jobs.list` with `parentJobId` of a job that is not a
+  script answered an empty list (recorded: bigquery-345 and bigquery-419). The job
+  of the request was a plain `SELECT` (recorded: bigquery-262), so the children of
+  a real script are not recorded.
 
 The answers that this run did not show are in Open questions.
 
@@ -431,7 +479,7 @@ The answers that this run did not show are in Open questions.
     answered (recorded: bigquery-054, bigquery-055, bigquery-051, bigquery-052,
     bigquery-360, bigquery-363, bigquery-058 and bigquery-361, where `tables.insert`
     answered HTTP 409 because the table existed). `datasets.insert`
-    answered HTTP 403 for lack of the right (recorded: bigquery-359). `tabledata.list`
+    made a dataset (recorded: bigquery-359 and bigquery-397). `tabledata.list`
     gives the rows in the order of the storage and not the order of the insert
     (recorded: bigquery-178), and it takes `selectedFields` and `startIndex`
     (recorded: bigquery-348 and bigquery-349). `tables.list` takes `maxResults` and
@@ -444,9 +492,10 @@ The answers that this run did not show are in Open questions.
   `selfLink` of a job, whatever port `dbrun` publishes.
 - Authentication: the hosted service took the real token. A request with no
   token answered HTTP 401 (recorded: bigquery-219). A request whose token had
-  `-wrong` added at its end answered HTTP 200 (recorded: bigquery-220), so a token
-  that is wrong from its start is still not recorded. A key that is wrong answered
-  HTTP 400 (recorded: bigquery-221). Emulator: it took every request with no
+  `-wrong` added at its end answered HTTP 200 (recorded: bigquery-220), so the service
+  seems to read only the start of a token. A token that is wholly wrong
+  answered HTTP 401 on a query and on a read (recorded: bigquery-420 and
+  bigquery-421). A key that is wrong answered HTTP 400 (recorded: bigquery-221). Emulator: it took every request with no
   credential, with a Bearer token that is wrong, and with an API key that is
   wrong. See The DSN for the login.
 - `Content-Encoding`: the hosted service answers a gzip body of the answer when
@@ -539,12 +588,12 @@ Not decided. These are the facts that a DSN must carry.
   not send one by accident. What a right key does is not measured. BigQuery needs
   a token for a private dataset, so a key alone is not a login (source: the
   documentation of Google, not measured).
-- D94 says that the secret of a driver here is the password of the URL. A key
-  file is about 2 KB, and the private key of a service account is a PEM text. The
-  driver can take the key from a path or from the password, and it must exchange
-  it for a token and sign a new JWT before the token ends. Whether the secret
-  goes in the password, in a path or in the environment is a question for step 9
-  (see Open questions).
+- Decided, D189: the secret is a path to a key file, in a key of the DSN query such
+  as `credential_file`. The driver reads the file, signs a JWT with RS256 for the
+  token endpoint that the file names, and exchanges it. The key text never sits
+  in a URL. A caller can also pass a ready access token through a connector. This
+  is the alternative to D94 for a secret that is a JSON file. A key file is about 2
+  KB, and the private key of a service account is a PEM text.
 - The cost of the login in the driver: an RSA signature and one extra HTTPS
   request, both in the standard library (`crypto/rsa`, `crypto/x509`,
   `encoding/pem` and `net/http`). No dependency is needed. The driver must cache
@@ -573,7 +622,7 @@ Not decided. These are the facts that a DSN must carry.
   not promise it, and Gemini said that real clients never rely on it. A driver
   that reads the answer one token at a time and needs `schema` before `rows`
   must hold the rows, or read the schema from `getQueryResults`, when `rows` comes
-  first. This is a question for step 9.
+  first. D189 does not cover this, and it is an open question below.
 - A query that is not done answers HTTP 200 with `jobComplete` `false`, the
   `jobReference`, `queryId`, `jobCreationReason`, `location`, `creationTime`,
   `startTime` and `statementType`, and no `schema`, no `totalRows` and no `rows`
@@ -793,11 +842,11 @@ Step 10 will generate it from the code.
 | GEOGRAPHY | geometry | `string` | `string` | `GEOGRAPHY` | yes |
 | INTERVAL | interval | `dbimp.Interval` | `dbimp.Interval` | `INTERVAL` | yes |
 | ARRAY | array | `[]any` | `[]interface {}` | `ARRAY` | no |
-| RECORD | tuple | `[]any` | `[]interface {}` | `RECORD` | yes |
+| RECORD | tuple | `map[string]any` | `map[string]interface {}` | `RECORD` | yes |
 | RANGE | range | `string` | `string` | `RANGE` | yes |
 <!-- /dbimp:types -->
 
-Notes on the mapping, which step 9 must settle:
+Notes on the mapping. D189 settled the notes that name it:
 
 - `FLOAT` needs a reader that accepts `NaN`, `Infinity` and `-Infinity`, and the
   exponent form of Java such as `1.0E308`. `strconv.ParseFloat` reads all of
@@ -819,8 +868,9 @@ Notes on the mapping, which step 9 must settle:
 - `GEOGRAPHY` arrives as WKT. The kind geometry leaves the Go type to the
   decision of the driver, and the table gives `string`, as Databend does
   (`TYPES.md`).
-- `RECORD` is a tuple because a struct can have two members with one name and
-  members with no name. The names are in the schema, and the driver has no
+- `RECORD` has the kind tuple in the table because a struct can have two members
+  with one name and members with no name. Decided, D189: the Go value is a
+  `map[string]any`, as the table shows. The names are in the schema, and the driver has no
   column type method that returns them.
 - `RANGE` has no kind of its own for the bounds. The kind range gives the text
   of the server. The schema gives the element type, so a later driver can parse
@@ -829,8 +879,18 @@ Notes on the mapping, which step 9 must settle:
   (recorded: bigquery-070). A NULL element cannot arrive, because the service
   refuses it (recorded: bigquery-093), so a driver need not handle one.
 - `JSON` arrives as text, and the value `null` of JSON arrives as `"null"`, which
-  differs from a NULL. Whether the Go value is the decoded JSON or the text is a
-  question for Ken (see Open questions).
+  differs from a NULL. Decided, D189: a JSON column is a decoded Go value, and a
+  JSON null stays distinct from a SQL NULL.
+- Decided, D189: a `STRUCT` column is a `map[string]any`. A struct whose members
+  repeat a name or have none makes the driver return an error that names the
+  column. The default of that error is the choice of the decision, and Ken can
+  change it. The note on the tuple above gives the reason that the names can
+  repeat.
+- Decided, D189: the driver asks for timestamps as `ISO8601_STRING`. The recording
+  shows the form with a `Z` and six digits (recorded: bigquery-342), and the
+  year 9999 is not recorded in that form, so the integration test must check it.
+  The integer form is exact (recorded: bigquery-379) and is the fallback if the
+  ISO form loses digits.
 
 ## Parameters
 
@@ -937,21 +997,23 @@ the driver. The hosted service checks it, as the next facts show.
   `SELECT` with no session saw no row (recorded: bigquery-389). `CALL
   BQ.ABORT_SESSION()` ended the session (recorded: bigquery-390). Every answer in
   the session carries `sessionInfo.sessionId`, and the statement types are
-  `BEGIN_TRANSACTION` and `ROLLBACK_TRANSACTION`. A request with a `session_id`
+  `BEGIN_TRANSACTION`, `ROLLBACK_TRANSACTION` and `COMMIT_TRANSACTION`. A request
+  with a `session_id`
   that does not exist answered HTTP 400 and `Invalid input session id.`
   (recorded: bigquery-277). The run kept the id with the capture rule of the
-  recorder, which a driver does with a variable. A `COMMIT` in a session is not recorded.
-  The service ends an idle session by itself (source: the documentation of
+  recorder, which a driver does with a variable. A `COMMIT` in a second session kept the row
+  and a `SELECT` outside the session saw it (recorded: bigquery-411 to
+  bigquery-415). The service ends an idle session by itself (source: the documentation of
   BigQuery, not measured).
 - The isolation of a transaction, the effect of a session on the cache and the
   lifetime of a session are not measured. The documentation says that a multi
   statement transaction lasts for one script or one session (source: Gemini, not
   measured). The Go driver of `usql` returns a transaction whose `Commit` and
   `Rollback` do nothing (see Faults).
-- So a `BeginTx` on this driver is possible as a session: the driver creates it
-  on `BeginTx`, sends `BEGIN TRANSACTION` and the id on each statement, and ends
-  the transaction with `COMMIT TRANSACTION` or `ROLLBACK TRANSACTION`. The choice
-  is for step 9 (see Open questions).
+- Decided, D189: `BeginTx` returns the error of D20 for the first release. A
+  transaction in one script request still works, because the driver sends the text
+  as is. A session across requests works on the service, as the recordings show,
+  and a later release can add it.
 
 ## Errors
 
@@ -973,6 +1035,8 @@ the driver. The hosted service checks it, as the next facts show.
     bigquery-093) and a failed `ASSERT` (recorded: bigquery-356).
   - `required`, 401, with `UNAUTHENTICATED`: a request with no `Authorization`
     header (recorded: bigquery-219).
+  - `authError`, 401, with `UNAUTHENTICATED`: a token that is wholly wrong
+    (recorded: bigquery-420 and bigquery-421).
   - `bytesBilledLimitExceeded`, 400: a scan that bills more than
     `maximumBytesBilled` (recorded: bigquery-204).
   - `stopped`, 499, with `CANCELLED`: the `getQueryResults` of a job that was
@@ -987,7 +1051,7 @@ the driver. The hosted service checks it, as the next facts show.
     the message names it, such as `bigquery.datasets.get`, `bigquery.jobs.create`,
     `bigquery.jobs.update`, `bigquery.datasets.create`, `bigquery.datasets.delete`
     and `bigquery.tables.deleteSnapshot` (recorded: bigquery-059, bigquery-194,
-    bigquery-214, bigquery-359, bigquery-413 and bigquery-416). A query on a
+    bigquery-214, bigquery-359, bigquery-441 and bigquery-450). A query on a
     dataset that does not exist answered this reason and the message `or perhaps
     it does not exist` (recorded: bigquery-183). A driver cannot tell a missing
     dataset from a missing right.
@@ -1002,7 +1066,7 @@ the driver. The hosted service checks it, as the next facts show.
     that is not valid, a session id that is not valid, a reservation that is not
     enabled and a drop of the wrong kind of table (recorded: bigquery-140,
     bigquery-152, bigquery-206, bigquery-173, bigquery-277, bigquery-333 and
-    bigquery-410).
+    bigquery-438).
   - `required`, 400: no `query` in the body, or an empty body (recorded:
     bigquery-190 and bigquery-192). `parseError`, 400: a body that is not JSON
     (recorded: bigquery-191). `badRequest`, 400: a key that is not valid, a
@@ -1057,11 +1121,11 @@ the driver. The hosted service checks it, as the next facts show.
   `notFound` (recorded: bigquery-203). `CREATE OR REPLACE TABLE` worked for a
   table that exists (recorded: bigquery-287). `DROP TABLE` of a snapshot answered
   HTTP 400 and `invalid` with `Cannot drop ... which has type SNAPSHOT. A table
-  was expected.` (recorded: bigquery-410). `DROP SNAPSHOT TABLE` answered HTTP
-  403 `accessDenied` for the account (recorded: bigquery-416). Emulator: `CREATE OR REPLACE TABLE`
+  was expected.` (recorded: bigquery-438). `DROP SNAPSHOT TABLE` answered HTTP
+  403 `accessDenied` for the account (recorded: bigquery-450). Emulator: `CREATE OR REPLACE TABLE`
   answered `duplicate`, and `DROP TABLE IF EXISTS` failed on 0.7.2.
 - A limit on the rate of requests: none came in 418 requests over 4 minutes and
-  44 seconds (recorded: bigquery-001 to bigquery-418). The service answers HTTP
+  44 seconds (recorded: bigquery-001 to bigquery-452). The service answers HTTP
   403 or 429 with the reason `rateLimitExceeded` (source: the document of error
   messages).
 - An error that means that the request did not reach the server: a failure to
@@ -1091,10 +1155,10 @@ the driver. The hosted service checks it, as the next facts show.
 - `jobs.insert` of the same heavy query answered `state` `RUNNING`, and `jobs.get`
   answered `RUNNING` (recorded: bigquery-209 and bigquery-208). `jobs.cancel`
   answered HTTP 200 with a `jobCancelResponse` whose job was still `RUNNING`
-  (recorded: bigquery-210). The next `jobs.get` answered `DONE` with `errorResult`
-  of the reason `stopped` and `Job execution was cancelled: User requested
-  cancellation` (recorded: bigquery-211). `getQueryResults` of the job answered
-  HTTP 499 with the status `CANCELLED` (recorded: bigquery-212). So a cancel is
+  (recorded: bigquery-210). The next `jobs.get` still answered `RUNNING` (recorded: bigquery-211), and
+  `getQueryResults` of the job answered HTTP 499 with the status `CANCELLED`, the
+  reason `stopped` and `Job execution was cancelled: User requested cancellation`
+  (recorded: bigquery-212). So a cancel is
   asynchronous: the answer comes first, and the job stops a little later. The
   service says the same, and that a cancelled job can still cost money (source:
   the REST reference of `jobs.cancel`, 2026-10-10).
@@ -1178,12 +1242,15 @@ the driver. The hosted service checks it, as the next facts show.
   bigquery-368). `MERGE` worked with a table and with a query as the source
   (recorded: bigquery-029 and bigquery-366). `TRUNCATE TABLE` worked (recorded:
   bigquery-030). Emulator: `MERGE` with a query as the source failed.
-- `EXPORT DATA` and `LOAD DATA` are statements of the service. With a bucket
-  that does not exist they answered HTTP 404 and `Not found: Files
+- `EXPORT DATA` to the bucket answered `EXPORT_DATA`, and `LOAD DATA` from the
+  exported files answered `LOAD_DATA` and loaded rows (recorded: bigquery-405 and
+  bigquery-407). The load read 1 row of 2, because the export wrote no header and
+  the load skipped the first line (recorded: bigquery-408). With a bucket that does
+  not exist they answered HTTP 404 and `Not found: Files
   gs://nosuch/x000000000000` and `Not found: URI gs://nosuch` (recorded:
-  bigquery-313 and bigquery-314). Emulator: `EXPORT DATA` failed for lack of credentials on 0.8.1 and
-  succeeded on 0.7.2 with the rows of the query and no export, and `LOAD DATA`
-  answered HTTP 200 and loaded nothing.
+  bigquery-313 and bigquery-314). Emulator: `EXPORT DATA` failed for lack of
+  credentials on 0.8.1 and succeeded on 0.7.2 with the rows of the query and no
+  export, and `LOAD DATA` answered HTTP 200 and loaded nothing.
 - DDL that worked on the service: `CREATE TABLE`, `CREATE TABLE ... AS SELECT`,
   `CREATE OR REPLACE TABLE`, `PRIMARY KEY ... NOT ENFORCED`, `DEFAULT`,
   `PARTITION BY`, `CLUSTER BY`, `CREATE VIEW`, `CREATE MATERIALIZED VIEW`,
@@ -1191,30 +1258,23 @@ the driver. The hosted service checks it, as the next facts show.
   `RENAME TO` and `DROP COLUMN` (recorded: bigquery-024, bigquery-286,
   bigquery-287, bigquery-288, bigquery-291, bigquery-294, bigquery-296,
   bigquery-308, bigquery-309 and bigquery-311), and `CREATE TABLE` with a `FOREIGN
-  KEY ... NOT ENFORCED` (recorded: bigquery-289). The clone and the snapshot
-  exist: `CREATE TABLE ... CLONE` and `CREATE SNAPSHOT TABLE` answered HTTP 409
-  `duplicate` for objects that earlier passes made, and `INFORMATION_SCHEMA` lists
-  them as `CLONE` and `SNAPSHOT` (recorded: bigquery-299, bigquery-300 and
-  bigquery-060). The routines exist in the same way: `CREATE FUNCTION` and
-  `CREATE TABLE FUNCTION` answered `duplicate`, `CREATE PROCEDURE` answered
-  `Already Exists`, and `ROUTINES` lists a `FUNCTION`, a `TABLE FUNCTION` and a
-  `PROCEDURE` (recorded: bigquery-301, bigquery-303, bigquery-304 and
-  bigquery-065). A `CALL` of the procedure ran and answered `1` (recorded:
-  bigquery-355). A view that the script made had no rows, because its table had
-  none (recorded: bigquery-295). `UNIQUE` is not a constraint of BigQuery: the
-  service refused it with a syntax error (recorded: bigquery-290). `CREATE SEARCH
-  INDEX` on a table with no text column answered HTTP 400 and `There is no index
-  fields generated by the given SearchIndexConfiguration`, and `CREATE VECTOR
-  INDEX` on an integer column answered `The vector index field must be either the
-  generated embedding column or the array of double` (recorded: bigquery-297 and
-  bigquery-298). Both refusals name the index, so the service knows them. A
-  working index needs a table with a text column and a table with a vector
-  column. The account cannot create or drop a dataset: `CREATE SCHEMA`, `DROP
-  SCHEMA` and `GRANT` answered HTTP 403 (recorded: bigquery-306, bigquery-307 and
-  bigquery-357), as did `datasets.insert` (recorded: bigquery-359).
-  `CREATE EXTERNAL TABLE` with a file that does not exist answered HTTP 404 and
-  `Not found: Files gs://nosuch/x.csv`, so the service knows the statement
-  (recorded: bigquery-305).
+  KEY ... NOT ENFORCED` (recorded: bigquery-289). The clone, the function, the table
+  function and the procedure were created in this pass (recorded: bigquery-299,
+  bigquery-301, bigquery-303 and bigquery-304). The snapshot exists:
+  `CREATE SNAPSHOT TABLE` answered HTTP 409 `duplicate` for a snapshot of an
+  earlier pass, and `INFORMATION_SCHEMA` lists two as `SNAPSHOT` (recorded:
+  bigquery-300 and bigquery-060). A `CALL` of the procedure ran and answered `1`
+  (recorded: bigquery-355). A view that the script made had no rows, because its
+  table had none (recorded: bigquery-295). `UNIQUE` is not a constraint of
+  BigQuery: the service refused it with a syntax error (recorded: bigquery-290).
+  `CREATE SEARCH INDEX` on a text column worked and `SEARCH()` found the row
+  (recorded: bigquery-402 and bigquery-404). `CREATE VECTOR INDEX` was refused
+  because the table has fewer than 5000 rows (recorded: bigquery-403). `CREATE
+  SCHEMA`, `DROP SCHEMA ... CASCADE` and `datasets.insert` worked (recorded:
+  bigquery-394, bigquery-398 and bigquery-397), and a `GRANT` on a dataset that
+  does not exist answered HTTP 403 (recorded: bigquery-357). `CREATE EXTERNAL
+  TABLE` over the exported files worked and a `SELECT` from it answered the row
+  (recorded: bigquery-409 and bigquery-410).
 - `INFORMATION_SCHEMA`: `<dataset>.INFORMATION_SCHEMA.TABLES`, `COLUMNS`,
   `TABLE_OPTIONS`, `VIEWS`, `ROUTINES`, `KEY_COLUMN_USAGE` and
   `COLUMN_FIELD_PATHS` answered (recorded: bigquery-060 to bigquery-063,
@@ -1222,7 +1282,9 @@ the driver. The hosted service checks it, as the next facts show.
   keys of the constraints (`pk$`) in `KEY_COLUMN_USAGE` (recorded: bigquery-066),
   and the type names of GoogleSQL in `data_type`, such as `INT64` (recorded:
   bigquery-060 and bigquery-061). The level of the project, `SCHEMATA` and `JOBS`,
-  answered HTTP 403 (recorded: bigquery-059 and bigquery-064). Emulator:
+  answered HTTP 403 (recorded: bigquery-059 and bigquery-064), and `SCHEMATA` of
+  the region answered HTTP 403 too (recorded: bigquery-396). `JOBS_BY_PROJECT` of
+  the region `region-us` answered the jobs (recorded: bigquery-399). Emulator:
   `SCHEMATA` answered the dataset, and `VIEWS`, `ROUTINES`, `JOBS` and
   `KEY_COLUMN_USAGE` did not exist.
 - The REST API lists tables and datasets. `tables.list` answered
@@ -1235,9 +1297,8 @@ the driver. The hosted service checks it, as the next facts show.
   `destinationTable`). Emulator: it kept a visible dataset for each job that
   `jobs.insert` made.
 - `tabledata.insertAll` answered HTTP 200 with `insertErrors` for a row with an
-  unknown field (recorded: bigquery-361). The streamed row that a query reads at
-  once is not recorded in this pass, because `dbimp_it_kv` had no column `s`
-  (recorded: bigquery-362). `tables.insert` answered HTTP 409 for a table that
+  unknown field (recorded: bigquery-361). The rows that the streaming insert of
+  bigquery-418 wrote are not read back by a query in this pass. `tables.insert` answered HTTP 409 for a table that
   existed (recorded: bigquery-360), and `tables.delete` answered HTTP 204 (recorded: bigquery-363).
 
 ## Principals
@@ -1247,21 +1308,23 @@ the driver. The hosted service checks it, as the next facts show.
   manifest says that no ordinary user exists for this work, and the hosted
   entries carry the principal `administrator`. No hosted request ran as a second
   user, so no ordinary user is recorded.
-- The rights of the account show in the refusals: it can run a query
-  (`bigquery.jobs.create`), read and write the tables of the dataset, and list the
-  datasets. It cannot read the system tables of the project (`bigquery.datasets.get`
-  at the level of the project, recorded: bigquery-059), it cannot create a dataset
-  (`bigquery.datasets.create`, recorded: bigquery-359), it cannot update a job that
-  it did not make or that does not exist (`bigquery.jobs.update`, recorded:
-  bigquery-214), and it cannot use another project (`bigquery.jobs.create` in that
-  project, recorded: bigquery-194). The roles of the account are not recorded.
-  It cannot delete a dataset (`bigquery.datasets.delete`, recorded:
-  bigquery-413) and it cannot delete a snapshot (`bigquery.tables.deleteSnapshot`,
-  recorded: bigquery-416). The rights that would settle the leads are
-  `bigquery.datasets.create` and `bigquery.datasets.delete` (a dataset),
-  `bigquery.tables.deleteSnapshot` (the snapshots of earlier passes),
-  `bigquery.datasets.get` at the project (the system tables), and a write right on
-  a bucket of Cloud Storage (`EXPORT DATA`, `LOAD DATA` and an external table).
+- The rights of the account show in the refusals and the successes. It can run a
+  query (`bigquery.jobs.create`), read and write the tables of the dataset, create
+  routines, clones and datasets, and drop a dataset that it made (recorded:
+  bigquery-394, bigquery-397, bigquery-398 and bigquery-446). It reads
+  `JOBS_BY_PROJECT` (recorded: bigquery-399), and it writes and reads the bucket
+  (recorded: bigquery-405 and bigquery-407). It cannot read `SCHEMATA` of the
+  project or of the region (`bigquery.datasets.get` at the dataset level, recorded:
+  bigquery-059 and bigquery-396), it cannot read `JOBS` of the project (recorded:
+  bigquery-064), it cannot update a job that it did not make or that does not
+  exist (`bigquery.jobs.update`, recorded: bigquery-214), it cannot use another
+  project (`bigquery.jobs.create` in that project, recorded: bigquery-194), and it
+  cannot delete a snapshot (`bigquery.tables.deleteSnapshot`, recorded:
+  bigquery-450). A drop of a dataset that does not exist answers HTTP 403 with
+  `bigquery.datasets.delete` (recorded: bigquery-441 and bigquery-447), so a
+  refusal does not tell a missing dataset from a missing right. The roles of the
+  account are not recorded. The right that would settle the snapshots is
+  `bigquery.tables.deleteSnapshot`.
 - The version: the service has no statement for it. `SELECT @@version` failed with
   `Unrecognized name: @@version` (recorded: bigquery-229). The discovery document
   names the revision `20260922` of the REST API on the service (recorded:
@@ -1436,7 +1499,7 @@ which this driver must not repeat (read of the source in the module cache,
   - `JSON` must not go through a `float64`, or a large number loses digits. The Go
     type of the kind json decodes with the decoder of D25, which keeps a number
     exact when its type is a decimal or an integer. It suggested a `string` or a
-    `[]byte` for a JSON column, which is a different kind and a decision for step 9.
+    `[]byte` for a JSON column, which is a different kind. Decided, D189: a decoded Go value.
   - A `TIMESTAMP` of float seconds must not be read through a `float64`, because a
     value of 16 digits can lose its last digit. The driver must split the text at
     the point, or send `useInt64Timestamp`. This is true of the text that the
@@ -1447,7 +1510,7 @@ which this driver must not repeat (read of the source in the module cache,
     empty array for a NULL array.
   - A `STRUCT` as `[]any` drops the field names. It keeps the order, the duplicate
     names and the unnamed members. A caller reads the names from the schema, so a
-    custom type that holds both is a choice for step 9.
+    custom type that holds both is a choice. Decided, D189: a `map[string]any`.
   - A NULL cannot be inside an array of a query result (the same claim as the
     first review, not measured on the service, and refuted on the emulator).
   - It found no kind wrong.
@@ -1481,84 +1544,52 @@ which this driver must not repeat (read of the source in the module cache,
 
 ## Open questions
 
-Ken decided on 2026-10-10 that a driver is built on the hosted service where it
-needs to be. The service is measured, and the questions below are what is still
-open. The leads that a later run can close come first.
+Ken decided the step 9 questions on 2026-10-10 in D189 (the package, the secret,
+`BeginTx`, the emulator releases, the timestamp form, several statements, JSON and
+STRUCT, and the other proposals). The sections above say "decided, D189" where a
+proposal stood. What is still open follows. The leads that a later run can close
+come first.
 
-1. What the hosted run did not show, and what it needs. These need a change of the
-   script only, and no new right:
+1. The timestamp form at the year 9999. D189 item 5 chooses `ISO8601_STRING`, and
+   the recordings show the form with a `Z` and six digits for one value (recorded:
+   bigquery-342) but not for `9999-12-31 23:59:59.999999`. The integration test
+   must check it. If the ISO form loses a digit, the answer is for Ken, and the
+   integer form is exact (recorded: bigquery-379).
+2. R and CI. D189 item 4 supports the emulator release `bigquery-0.8.1` and the
+   hosted service. It does not say whether CI runs the emulator only, or also the
+   service with a secret and a project that `dbsetup` provisions (D184, dbmeta
+   D117). The emulator differs from the service in the places that the section
+   Hosted and emulator lists, so it can run the tests of shape but not the tests of
+   the errors, the transactions, the sessions, the paging, the cancel and the
+   types. The service needs a key, a billing project, and it bills at least 10 MB
+   for a scan and for a read of `INFORMATION_SCHEMA`.
+3. The error for a struct whose members repeat a name or have none (D189 item 7).
+   The default is an error that names the column, and Ken can change it.
+4. What the hosted run still did not show, and what it needs. All of these need a
+   change of the script, and none needs a new right:
    - A poll that ends with `jobComplete: true`. The run polled once. A script must
-     poll `getQueryResults` until the heavy query ends, and then cancel or finish
-     it. It must also cancel the jobs of bigquery-215 and bigquery-216.
-   - A token that is wrong from its start. The suffix `-wrong` on a good token was
-     accepted (recorded: bigquery-220). The script needs `auth` of `none` with an
-     `Authorization` header that holds a different text.
+     poll `getQueryResults` until a heavy query ends, and cancel the jobs of
+     bigquery-215 and bigquery-216, which still run and cost money.
+   - A script with several statements, listed with `parentJobId`. The request that
+     lists children named a plain `SELECT` (recorded: bigquery-262 and
+     bigquery-419), so the children of a real script and `numChildJobs` are not
+     recorded. D189 item 6 leaves the child jobs for a later release.
    - A gzip request body that is right. The recorder cannot send one.
-   - A script with several statements, listed with `parentJobId`, so that
-     `numChildJobs` and the child jobs are recorded.
-   - A streamed row with `tabledata.insertAll` that is right, on a table that the
-     script makes itself. `dbimp_it_kv` came from an earlier pass.
-   - A `COMMIT` in a session.
-   - A search index on a table with a text column, and a vector index on a table
-     with a vector column.
-   - A teardown that drops the routines `dbimp_it_tf` and `dbimp_it_proc`, and a
-     clean dataset, so that the creation of a clone, a snapshot, a function, a
-     table function and a procedure is recorded and not a duplicate.
+   - A vector index that works. The table needs at least 5000 rows (recorded:
+     bigquery-403).
    - A request with a valid API key.
-   Four leads need a right or a resource. `bigquery.datasets.create` and
-   `bigquery.datasets.delete` would record `CREATE SCHEMA`, `DROP SCHEMA`, `GRANT`
-   and `datasets.insert`. `bigquery.tables.deleteSnapshot` would drop `dbimp_it_sn`
-   and `dbimp_it_sn_r2`, and a person with it must drop them before the dataset is
-   clean. `bigquery.datasets.get` at the project would open
-   `INFORMATION_SCHEMA.SCHEMATA`, and `bigquery.jobs.listAll` would open `JOBS`. A
-   bucket of Cloud Storage that the account can write would settle `EXPORT DATA`,
-   `LOAD DATA` and an external table, which the run knows only by the answer `Not
-   found: Files`.
-2. R and CI. Whether CI uses the emulator only, or also the service with a secret
-   and a project that `dbsetup` provisions (D184, dbmeta D117). The emulator
-   differs from the service in the places that the section Hosted and emulator
-   lists, so it can run the tests of shape but not the tests of the errors, the
-   transactions, the sessions, the paging, the cancel and the types. The service
-   needs a key, a billing project, and it bills at least 10 MB for a scan and for
-   a read of `INFORMATION_SCHEMA`.
-3. The secret of the DSN. D94 says that the secret is the password of the URL. The
-   service account key is a file of about 2 KB with a PEM key, and the driver must
-   sign a JWT with it and exchange it for a token. The choices are a path in the
-   URL, the text of the key in a query key (which breaks D94), the key in the
-   password, an access token in the password, or the environment. The choice is
-   for step 9.
-4. Which transactions `BeginTx` offers. The service rolls back in a script and in
-   a session across requests, and it refuses `BEGIN` alone on a plain connection.
-   The driver can open a session with `createSession` for a transaction, and send
-   the `session_id` on every statement of that transaction. The choice is for step
-   9, and D20 holds the rule.
-5. How the driver treats a request of several statements. The service answers the
-   last result only, and a client can read the others from child jobs. The choice
-   is for step 9 (as Snowflake, D183 item 15).
-6. Whether the driver sends positional or named parameters. Both work on the
-   service, and the mode must match the entries. The emulator reads a positional
-   `?` as an `INT64` in a `SELECT`, so a test of the driver on the emulator fails
-   for a positional string.
-7. Whether the driver supports both releases of the emulator and how it tells them
-   apart, because 0.7.2 cannot read a `jobs.query` job and 0.8.1 can. The emulator
-   has no version statement, and neither has the service. Whether to support the
-   emulator at all is part of question 2.
-8. Whether the driver reads a result with a job and `getQueryResults`, or with
-   `jobCreationMode` `JOB_CREATION_OPTIONAL`, which can return no job. A result of
-   more than one page, a result that is not done, a cancel and a session need the
-   job.
-9. The form of a `TIMESTAMP`. The default is a lossy double with an exponent. The
-   choices are `useInt64Timestamp` (exact, recorded, and the choice of the Go
-   client) or `timestampOutputFormat` of `ISO8601_STRING` (recorded, with a `Z`,
-   and exactness at the year 9999 is not recorded). The first is the likely
-   choice, but Ken decides.
-10. Whether `JSON` is a decoded value or a text, and the kinds of `RECORD` (tuple),
-    `GEOGRAPHY` (string) and `RANGE` (string). The step 8a review had two models of
-    one vendor, because the others timed out, and the review of the hosted section
-    had one model. These need Ken's review, as step 8a says.
-11. Whether the driver must read `rows` that come before `schema`. The hosted
-    service sent `schema` first in this run, and the documents do not promise it.
-12. The tests that `features.json` names do not exist yet. The gate that reads them
-    runs when the package `bigquery/` exists. The type table above has a column
-    that the matrix of `TYPES.md` does not have yet, and the test that writes the
-    matrix fails until it runs with `DBIMP_UPDATE=1`.
+   - The creation of a snapshot. The two snapshots of earlier passes stay, because
+     the account lacks `bigquery.tables.deleteSnapshot` (recorded: bigquery-450). A
+     person with that right must drop `dbimp_it_sn` and `dbimp_it_sn_r2`, and the
+     script needs a unique snapshot name or a teardown that works.
+   - A teardown that drops the dataset `dbimp_it_ds2` and the routines
+     `dbimp_it_tf` and `dbimp_it_proc`.
+   - A load from the exported files that reads both rows. The export wrote no
+     header, so the load must not skip a line (recorded: bigquery-408).
+5. Whether the driver must read `rows` that come before `schema`. The hosted
+   service sent `schema` first in this run, and the documents do not promise it
+   (see Responses). D189 does not cover it.
+6. The tests that `features.json` names do not exist yet. The gate that reads them
+   runs when the package `bigquery/` exists. The type table above has a column
+   that the matrix of `TYPES.md` does not have yet, and the test that writes the
+   matrix fails until it runs with `DBIMP_UPDATE=1`.

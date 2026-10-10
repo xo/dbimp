@@ -3,6 +3,12 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 09:03:54 gmt"
+      ],
       "X-Ms-Version": [
         "2018-12-31"
       ],
@@ -15,14 +21,8 @@
       "X-Ms-Documentdb-Isquery": [
         "True"
       ],
-      "Accept": [
-        "application/json"
-      ],
       "X-Ms-Documentdb-Query-Enablecrosspartition": [
         "True"
-      ],
-      "X-Ms-Date": [
-        "sat, 10 oct 2026 05:02:57 gmt"
       ]
     },
     "body": "{\"query\":\"SELECT c.id FROM c ORDER BY c.id OFFSET 1 LIMIT 2\"}"
@@ -34,7 +34,7 @@
         "Microsoft-HTTPAPI/2.0"
       ],
       "X-Ms-Activity-Id": [
-        "1bfe11bc-eedd-4832-a860-9c99d6abc4c5"
+        "b0a15c0b-7cbc-42e6-a98c-0d03b4699274"
       ],
       "X-Ms-Substatus": [
         "1004"
@@ -46,12 +46,12 @@
         "version=2.14.0"
       ],
       "Date": [
-        "Sat, 10 Oct 2026 05:02:57 GMT"
+        "Sat, 10 Oct 2026 09:03:54 GMT"
       ],
       "Content-Type": [
         "application/json"
       ]
     },
-    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: 1bfe11bc-eedd-4832-a860-9c99d6abc4c5, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":null,\\\"offset\\\":1,\\\"limit\\\":2,\\\"orderBy\\\":[\\\"Ascending\\\"],\\\"orderByExpressions\\\":[\\\"c.id\\\"],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"SELECT c._rid, [{\\\\\\\"item\\\\\\\": c.id}] AS orderByItems, {\\\\\\\"id\\\\\\\": c.id} AS payload\\\\nFROM c\\\\nWHERE ({documentdb-formattableorderbyquery-filter})\\\\nORDER BY c.id\\\\nOFFSET 0 LIMIT 3\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
+    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: b0a15c0b-7cbc-42e6-a98c-0d03b4699274, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":null,\\\"offset\\\":1,\\\"limit\\\":2,\\\"orderBy\\\":[\\\"Ascending\\\"],\\\"orderByExpressions\\\":[\\\"c.id\\\"],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"SELECT c._rid, [{\\\\\\\"item\\\\\\\": c.id}] AS orderByItems, {\\\\\\\"id\\\\\\\": c.id} AS payload\\\\nFROM c\\\\nWHERE ({documentdb-formattableorderbyquery-filter})\\\\nORDER BY c.id\\\\nOFFSET 0 LIMIT 3\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
   }
 }

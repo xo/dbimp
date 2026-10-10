@@ -3,37 +3,37 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "X-Amz-Target": [
-        "AmazonAthena.StartQueryExecution"
-      ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryResults"
+      ],
       "X-Amz-Date": [
-        "20261010T062656Z"
+        "20261010T090713Z"
       ],
       "Authorization": [
         "REDACTED"
       ]
     },
-    "body": "{\"QueryString\":\"DROP TABLE IF EXISTS dbimp_it_part\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0147-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+    "body": "{\"QueryExecutionId\":\"c363e98f-f9f4-43ed-a519-d590e19cf4cc\"}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
-      "Content-Length": [
-        "59"
-      ],
-      "X-Amzn-Requestid": [
-        "d8f2975e-acd5-4d36-892d-849ec9925af3"
-      ],
       "Date": [
-        "Sat, 10 Oct 2026 06:26:56 GMT"
+        "Sat, 10 Oct 2026 09:07:13 GMT"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "193"
+      ],
+      "X-Amzn-Requestid": [
+        "ce42caaa-3bb0-4019-85cd-f2a9d2011024"
       ]
     },
-    "body": "{\"QueryExecutionId\":\"ac8c6f26-f39b-404f-a82a-7a389f9dc56b\"}"
+    "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"INVALID_QUERY_EXECUTION_STATE\",\"ErrorCode\":\"INVALID_QUERY_EXECUTION_STATE\",\"Message\":\"Query has not yet finished. Current state: RUNNING\"}"
   }
 }

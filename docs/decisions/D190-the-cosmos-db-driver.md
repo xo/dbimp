@@ -1,10 +1,9 @@
 # D190. The Cosmos DB driver
 
-Status: Decided in part.
+Status: Decided.
 
-These are the answers of Ken to some step 9 questions of
-[COSMOS.md](../COSMOS.md) (W36). He decided them on 2026-10-10. The other
-proposals of step 9 are open, because Ken wants to read the document first.
+These are the answers of Ken to the step 9 questions of
+[COSMOS.md](../COSMOS.md) (W36). He decided them on 2026-10-10.
 
 1. The driver sends a query as it is, and it does not plan or merge a query
    across partitions. The real gateway answers an aggregate, `TOP`, `ORDER BY`,
@@ -43,4 +42,22 @@ proposals of step 9 are open, because Ken wants to read the document first.
 10. A value that is `undefined` is nil, as a missing attribute is (D18). A
     GeoJSON value is an ordinary object, so it is a `map[string]any`. It was not
     measured.
-
+11. The driver sends the version `2018-12-31` in `X-Ms-Version`. It is the version
+    measured from end to end. A container with a hierarchical partition key was
+    refused at that version, so the first release does not support such a
+    container.
+12. The other proposals of step 9 stand as COSMOS.md writes them:
+    - The package is `cosmos`, and it registers the name `cosmos` with no alias.
+    - Parameters are named, such as `@p`.
+    - `BeginTx` returns the error of D20, because a batch is atomic only inside
+      one request and needs a write language (W40).
+    - When the context ends, the driver abandons the request, because Cosmos DB
+      has no call to cancel one.
+    - The master key signs each request, and it goes only to the configured host.
+    - TLS verification is on, and a key of the query accepts the certificate of the
+      emulator.
+    - The driver serves no flavor, sends no request for a version and uses no
+      binary encoding.
+13. The tests for the refusal of the gateway (the 400 and the 429) read a second
+    variable, `COSMOS_HOSTED_DSN`, and skip when it is empty (rule 9). The tests
+    of the emulator read the normal variable.

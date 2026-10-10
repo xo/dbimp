@@ -3,14 +3,17 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
-      "X-Ms-Date": [
-        "sat, 10 oct 2026 05:03:14 gmt"
-      ],
       "X-Ms-Version": [
         "2018-12-31"
       ],
       "Authorization": [
         "REDACTED"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "Accept": [
+        "application/json"
       ],
       "Content-Type": [
         "application/query+json"
@@ -18,11 +21,8 @@
       "X-Ms-Documentdb-Isquery": [
         "True"
       ],
-      "X-Ms-Documentdb-Query-Enablecrosspartition": [
-        "True"
-      ],
-      "Accept": [
-        "application/json"
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 09:04:11 gmt"
       ]
     },
     "body": "{\"query\":\"SELECT ABC(1) AS x FROM c\"}"
@@ -30,15 +30,6 @@
   "response": {
     "status": 400,
     "header": {
-      "Content-Type": [
-        "application/json"
-      ],
-      "Server": [
-        "Microsoft-HTTPAPI/2.0"
-      ],
-      "X-Ms-Activity-Id": [
-        "1400c752-4185-4235-ba1c-f354a94226f6"
-      ],
       "Strict-Transport-Security": [
         "max-age=31536000"
       ],
@@ -46,9 +37,18 @@
         "version=2.14.0"
       ],
       "Date": [
-        "Sat, 10 Oct 2026 05:03:13 GMT"
+        "Sat, 10 Oct 2026 09:04:11 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "Microsoft-HTTPAPI/2.0"
+      ],
+      "X-Ms-Activity-Id": [
+        "02ff4d01-1744-4493-8268-7b77118d700b"
       ]
     },
-    "body": "{\"code\":\"BadRequest\",\"message\":\"Message: {\\\"errors\\\":[{\\\"severity\\\":\\\"Error\\\",\\\"location\\\":{\\\"start\\\":7,\\\"end\\\":10},\\\"code\\\":\\\"SC2005\\\",\\\"message\\\":\\\"'ABC' is not a recognized built-in function name.\\\"}]}\\r\\nActivityId: 1400c752-4185-4235-ba1c-f354a94226f6, Microsoft.Azure.Documents.Common/2.14.0\"}"
+    "body": "{\"code\":\"BadRequest\",\"message\":\"Message: {\\\"errors\\\":[{\\\"severity\\\":\\\"Error\\\",\\\"location\\\":{\\\"start\\\":7,\\\"end\\\":10},\\\"code\\\":\\\"SC2005\\\",\\\"message\\\":\\\"'ABC' is not a recognized built-in function name.\\\"}]}\\r\\nActivityId: 02ff4d01-1744-4493-8268-7b77118d700b, Microsoft.Azure.Documents.Common/2.14.0\"}"
   }
 }

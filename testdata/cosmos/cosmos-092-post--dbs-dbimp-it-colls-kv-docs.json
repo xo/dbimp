@@ -3,17 +3,11 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
-      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+      "X-Ms-Documentdb-Isquery": [
         "True"
       ],
-      "Accept": [
-        "application/json"
-      ],
-      "Content-Type": [
-        "application/query+json"
-      ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:02:26 gmt"
+        "sat, 10 oct 2026 09:03:22 gmt"
       ],
       "X-Ms-Version": [
         "2018-12-31"
@@ -21,8 +15,14 @@
       "Authorization": [
         "REDACTED"
       ],
-      "X-Ms-Documentdb-Isquery": [
+      "Accept": [
+        "application/json"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
         "True"
+      ],
+      "Content-Type": [
+        "application/query+json"
       ]
     },
     "body": "{\"query\":\"SELECT TOP @n c.id FROM c\",\"parameters\":[{\"name\":\"@n\",\"value\":2}]}"
@@ -30,11 +30,17 @@
   "response": {
     "status": 400,
     "header": {
+      "X-Ms-Substatus": [
+        "1004"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000"
+      ],
       "X-Ms-Gatewayversion": [
         "version=2.14.0"
       ],
       "Date": [
-        "Sat, 10 Oct 2026 05:02:26 GMT"
+        "Sat, 10 Oct 2026 09:03:21 GMT"
       ],
       "Content-Type": [
         "application/json"
@@ -43,15 +49,9 @@
         "Microsoft-HTTPAPI/2.0"
       ],
       "X-Ms-Activity-Id": [
-        "4726c4bf-1cef-4a58-9401-215471ecd5a0"
-      ],
-      "X-Ms-Substatus": [
-        "1004"
-      ],
-      "Strict-Transport-Security": [
-        "max-age=31536000"
+        "a9ad2b60-8af9-4ab0-8503-51ad590a2d3d"
       ]
     },
-    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: 4726c4bf-1cef-4a58-9401-215471ecd5a0, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":2,\\\"offset\\\":null,\\\"limit\\\":null,\\\"orderBy\\\":[],\\\"orderByExpressions\\\":[],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
+    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: a9ad2b60-8af9-4ab0-8503-51ad590a2d3d, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":2,\\\"offset\\\":null,\\\"limit\\\":null,\\\"orderBy\\\":[],\\\"orderByExpressions\\\":[],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
   }
 }

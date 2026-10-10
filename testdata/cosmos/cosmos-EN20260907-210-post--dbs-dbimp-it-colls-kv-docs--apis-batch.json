@@ -3,8 +3,17 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs/_apis/batch",
     "header": {
+      "X-Ms-Cosmos-Batch-Atomic": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Partitionkey": [
+        "[\"b\"]"
+      ],
+      "Accept": [
+        "application/json"
+      ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:32:50 gmt"
+        "sat, 10 oct 2026 09:11:16 gmt"
       ],
       "X-Ms-Version": [
         "2018-12-31"
@@ -17,15 +26,6 @@
       ],
       "X-Ms-Cosmos-Is-Batch-Request": [
         "True"
-      ],
-      "X-Ms-Cosmos-Batch-Atomic": [
-        "True"
-      ],
-      "X-Ms-Documentdb-Partitionkey": [
-        "[\"b\"]"
-      ],
-      "Accept": [
-        "application/json"
       ]
     },
     "body": "[{\"operationType\":\"Create\",\"resourceBody\":{\"id\":\"b12\",\"pk\":\"b\"}}]"
@@ -33,26 +33,26 @@
   "response": {
     "status": 400,
     "header": {
-      "Access-Control-Max-Age": [
-        "3600"
-      ],
       "Access-Control-Allow-Methods": [
         "GET, POST, PUT, PATCH, DELETE, OPTIONS"
       ],
-      "Access-Control-Allow-Headers": [
-        "*"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 05:32:50 GMT"
-      ],
-      "Content-Length": [
-        "99"
+      "Content-Type": [
+        "application/json"
       ],
       "Access-Control-Allow-Origin": [
         "*"
       ],
-      "Content-Type": [
-        "application/json"
+      "Date": [
+        "Sat, 10 Oct 2026 09:11:16 GMT"
+      ],
+      "Content-Length": [
+        "99"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Access-Control-Max-Age": [
+        "3600"
       ]
     },
     "body": "{\"error\":\"Invalid path or method\",\"path\":\"/dbs/dbimp_it/colls/kv/docs/_apis/batch\",\"method\":\"POST\"}"

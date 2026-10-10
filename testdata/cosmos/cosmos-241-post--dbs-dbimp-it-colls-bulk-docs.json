@@ -1,0 +1,102 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/bulk/docs",
+    "header": {
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "X-Ms-Max-Item-Count": [
+        "5000"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 09:04:47 gmt"
+      ]
+    },
+    "body": "{\"query\":\"SELECT * FROM c\"}"
+  },
+  "response": {
+    "status": 429,
+    "header": {
+      "X-Ms-Xp-Role": [
+        "2"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 09:04:47 GMT"
+      ],
+      "X-Ms-Number-Of-Read-Regions": [
+        "0"
+      ],
+      "X-Ms-Cosmos-Internal-Partition-Id": [
+        "2d1776d8-c13a-45f2-ab59-280291ab6752"
+      ],
+      "Lsn": [
+        "51"
+      ],
+      "X-Ms-Request-Charge": [
+        "0.38"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "0.023"
+      ],
+      "X-Ms-Schemaversion": [
+        "1.21"
+      ],
+      "X-Ms-Activity-Id": [
+        "84054a18-a45f-41f7-abd3-723ca6d2c83a"
+      ],
+      "X-Ms-Global-Committed-Lsn": [
+        "51"
+      ],
+      "X-Ms-Substatus": [
+        "3200"
+      ],
+      "X-Ms-Transport-Request-Id": [
+        "26"
+      ],
+      "X-Ms-Retry-After-Ms": [
+        "500"
+      ],
+      "X-Ms-Cosmos-Physical-Partition-Id": [
+        "7e27f4e1-4a7b-4461-8d61-dbad089ddd84"
+      ],
+      "X-Ms-Cosmos-Global-Nregion-Committed-Glsn": [
+        "51"
+      ],
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
+      ],
+      "Server": [
+        "Microsoft-HTTPAPI/2.0"
+      ],
+      "X-Ms-Cosmos-Llsn": [
+        "51"
+      ],
+      "X-Ms-Serviceversion": [
+        "version=2.14.0.0"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000"
+      ]
+    },
+    "body": "{\"code\":\"TooManyRequests\",\"message\":\"Message: {\\\"Errors\\\":[\\\"Request rate is large. More Request Units may be needed, so no changes were made. Please retry this request later. Learn more: http://aka.ms/cosmosdb-error-429\\\"]}\\r\\nActivityId: 84054a18-a45f-41f7-abd3-723ca6d2c83a, Request URI: /apps/e637ba6b-1887-41c4-8e75-0d2e2f299141/services/ab80dc84-86da-4507-ad68-1b4dbf291972/partitions/2d1776d8-c13a-45f2-ab59-280291ab6752/replicas/134356476605846144s/, RequestStats: , SDK: Microsoft.Azure.Documents.Common/2.14.0\"}"
+  }
+}

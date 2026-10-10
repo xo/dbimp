@@ -3,11 +3,11 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
-      "X-Ms-Version": [
-        "2018-12-31"
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
       ],
-      "Authorization": [
-        "REDACTED"
+      "Accept": [
+        "application/json"
       ],
       "Content-Type": [
         "application/query+json"
@@ -15,14 +15,14 @@
       "X-Ms-Documentdb-Isquery": [
         "True"
       ],
-      "X-Ms-Documentdb-Query-Enablecrosspartition": [
-        "True"
-      ],
-      "Accept": [
-        "application/json"
-      ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:32:43 gmt"
+        "sat, 10 oct 2026 09:11:10 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
     "body": "{\"query\":\"SELECT 1/0 AS x, 1 AS y\"}"
@@ -30,8 +30,17 @@
   "response": {
     "status": 400,
     "header": {
-      "X-Ms-Activity-Id": [
-        "fb943ea2-03cf-8c9c-f4b1-78c5b4463071"
+      "Server": [
+        "PGSQL"
+      ],
+      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
+        "100"
+      ],
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
+      ],
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
       ],
       "Access-Control-Allow-Methods": [
         "GET, POST, PUT, PATCH, DELETE, OPTIONS"
@@ -39,56 +48,47 @@
       "X-Ms-Session-Token": [
         "0:0#0"
       ],
-      "X-Ms-Item-Count": [
-        "0"
-      ],
-      "Access-Control-Allow-Headers": [
-        "*"
-      ],
-      "Content-Location": [
-        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
-      ],
-      "Content-Type": [
-        "application/json"
-      ],
-      "X-Ms-Gatewayversion": [
-        "2.0.0-unknown"
-      ],
-      "Server": [
-        "PGSQL"
-      ],
-      "X-Ms-Request-Charge": [
-        "1"
-      ],
-      "X-Ms-Resource-Usage": [
-        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
-      ],
-      "Access-Control-Allow-Origin": [
-        "*"
-      ],
-      "X-Ms-Request-Duration-Ms": [
-        "0.77"
+      "X-Ms-Activity-Id": [
+        "0871abcb-d82f-4689-c60f-f24f70f95978"
       ],
       "Content-Length": [
         "205"
       ],
-      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
-        "100"
+      "Access-Control-Allow-Origin": [
+        "*"
       ],
-      "X-Ms-Interopandsdk-Time-Ms": [
-        "15"
+      "X-Ms-Request-Charge": [
+        "1"
       ],
-      "X-Ms-Resource-Quota": [
-        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      "X-Ms-Gatewayversion": [
+        "2.0.0-unknown"
       ],
-      "Date": [
-        "Sat, 10 Oct 2026 05:32:43 GMT"
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "0.43"
+      ],
+      "X-Ms-Item-Count": [
+        "0"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
       ],
       "Access-Control-Max-Age": [
         "3600"
       ],
-      "X-Ms-Documentdb-Partitionkeyrangeid": [
-        "0"
+      "X-Ms-Resource-Quota": [
+        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 09:11:10 GMT"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
       ]
     },
     "body": "{\n  \"errors\": [\n    {\n      \"code\": 4001,\n      \"message\": \"The response content contains a numeric value that cannot be represented in JSON (e.g. Infinity and NaN).\",\n      \"severity\": \"Error\"\n    }\n  ]\n}"

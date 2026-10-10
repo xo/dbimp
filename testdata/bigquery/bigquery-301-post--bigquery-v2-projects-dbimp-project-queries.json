@@ -10,35 +10,35 @@
     "body": "{\"query\":\"CREATE FUNCTION `dbimp-project`.dbimp_test.dbimp_it_f(x INT64) RETURNS INT64 AS (x + 1)\",\"useLegacySql\":false}"
   },
   "response": {
-    "status": 409,
+    "status": 200,
     "header": {
-      "X-Frame-Options": [
-        "SAMEORIGIN"
-      ],
-      "X-Content-Type-Options": [
-        "nosniff"
-      ],
       "Alt-Svc": [
         "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
       ],
       "Vary": [
         "Origin",
         "X-Origin",
         "Referer"
       ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:54:52 GMT"
+      ],
       "Server": [
         "ESF"
       ],
-      "X-Xss-Protection": [
-        "0"
-      ],
-      "Content-Type": [
-        "application/json; charset=UTF-8"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 06:46:02 GMT"
+      "X-Content-Type-Options": [
+        "nosniff"
       ]
     },
-    "body": "{\n  \"error\": {\n    \"code\": 409,\n    \"message\": \"Already Exists: Routine dbimp-project.dbimp_test.dbimp_it_f\",\n    \"errors\": [\n      {\n        \"message\": \"Already Exists: Routine dbimp-project.dbimp_test.dbimp_it_f\",\n        \"domain\": \"global\",\n        \"reason\": \"duplicate\"\n      }\n    ],\n    \"status\": \"ALREADY_EXISTS\"\n  }\n}\n"
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_2-67zHOF7WpNSHnl6Wb-EfcaZ_Cx\",\n    \"location\": \"US\"\n  },\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": false,\n  \"queryId\": \"job_2-67zHOF7WpNSHnl6Wb-EfcaZ_Cx\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"totalSlotMs\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791622492305\",\n  \"startTime\": \"1791622492393\",\n  \"endTime\": \"1791622492470\",\n  \"statementType\": \"CREATE_FUNCTION\"\n}\n"
   }
 }

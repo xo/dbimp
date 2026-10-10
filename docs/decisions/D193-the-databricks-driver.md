@@ -46,3 +46,10 @@ These are the answers to the step 9 questions of
    - The Bearer token goes only to the configured host, and the driver never
      sends it to an external link.
    - The driver serves no flavor.
+10. The integration tests run on a workspace only where a person supplies it, in
+    the variable `DATABRICKS_DSN`, and skip when it is empty (rule 9). The unit
+    tests run on the recorded exchanges. The free workspace has a daily compute
+    quota that `dbmeta` shares.
+11. The host in the DSN is written as the workspace names it, and the driver uses
+    HTTPS on port 443. A key of the query, such as `tls=false`, lets a test use a
+    plain HTTP server.

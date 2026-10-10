@@ -3,9 +3,6 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "X-Amz-Target": [
         "AmazonAthena.StartQueryExecution"
       ],
@@ -13,25 +10,28 @@
         "application/x-amz-json-1.1"
       ],
       "X-Amz-Date": [
-        "20261010T061124Z"
+        "20261010T085207Z"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"QueryString\":\"SELECT 1; SELECT 2\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0008-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+    "body": "{\"QueryString\":\"SELECT 1; SELECT 2\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r5-622254-0008-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
   },
   "response": {
     "status": 400,
     "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 08:52:07 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
       "Content-Length": [
         "173"
       ],
       "X-Amzn-Requestid": [
-        "45028256-1fec-482a-8057-73b135b31371"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 06:11:24 GMT"
-      ],
-      "Content-Type": [
-        "application/x-amz-json-1.1"
+        "b0a7b0da-ed48-4484-8b09-73b7ad580d0b"
       ]
     },
     "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"Only one sql statement is allowed. Got: SELECT 1; SELECT 2\"}"

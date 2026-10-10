@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"DROP SNAPSHOT TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_sn_r2\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:56:53 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Table dbimp-project:dbimp_test.dbimp_it_sn_r2: Permission bigquery.tables.deleteSnapshot denied on table dbimp-project:dbimp_test.dbimp_it_sn_r2 (or it may not exist).\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Table dbimp-project:dbimp_test.dbimp_it_sn_r2: Permission bigquery.tables.deleteSnapshot denied on table dbimp-project:dbimp_test.dbimp_it_sn_r2 (or it may not exist).\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
+  }
+}

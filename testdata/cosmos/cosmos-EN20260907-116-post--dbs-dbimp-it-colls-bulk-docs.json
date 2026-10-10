@@ -6,23 +6,23 @@
       "X-Ms-Documentdb-Isquery": [
         "True"
       ],
-      "Accept": [
-        "application/json"
-      ],
       "X-Ms-Cosmos-Is-Query-Plan-Request": [
         "True"
       ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:32:40 gmt"
+        "sat, 10 oct 2026 09:11:07 gmt"
       ],
       "X-Ms-Version": [
         "2018-12-31"
       ],
       "Authorization": [
         "REDACTED"
-      ],
-      "Content-Type": [
-        "application/query+json"
       ]
     },
     "body": "{\"query\":\"SELECT VALUE COUNT(1) FROM c\"}"
@@ -30,35 +30,47 @@
   "response": {
     "status": 200,
     "header": {
-      "Access-Control-Allow-Methods": [
-        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      "X-Ms-Gatewayversion": [
+        "2.0.0-unknown"
       ],
-      "X-Ms-Session-Token": [
-        "0:0#0"
-      ],
-      "X-Ms-Resource-Usage": [
-        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
-      ],
-      "Server": [
-        "PGSQL"
-      ],
-      "X-Ms-Request-Duration-Ms": [
-        "1.12"
+      "Date": [
+        "Sat, 10 Oct 2026 09:11:07 GMT"
       ],
       "Access-Control-Allow-Origin": [
         "*"
       ],
-      "Content-Location": [
-        "https://127.0.0.1:55137/dbs/dbimp_it/colls/bulk/docs"
+      "Access-Control-Allow-Headers": [
+        "*"
       ],
       "X-Ms-Resource-Quota": [
         "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
       ],
-      "X-Ms-Gatewayversion": [
-        "2.0.0-unknown"
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
+      ],
+      "Server": [
+        "PGSQL"
       ],
       "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
         "100"
+      ],
+      "Access-Control-Max-Age": [
+        "3600"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      ],
+      "X-Ms-Activity-Id": [
+        "7a18c894-cd7b-204b-5baa-ca4726c7cec3"
+      ],
+      "X-Ms-Session-Token": [
+        "0:0#0"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/bulk/docs"
       ],
       "X-Ms-Item-Count": [
         "0"
@@ -66,29 +78,17 @@
       "X-Ms-Request-Charge": [
         "1"
       ],
-      "Access-Control-Max-Age": [
-        "3600"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 05:32:40 GMT"
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
       ],
       "Content-Length": [
         "675"
       ],
-      "X-Ms-Activity-Id": [
-        "ed3090b8-4c7d-4fbc-9841-39080154328e"
+      "X-Ms-Request-Duration-Ms": [
+        "0.85"
       ],
-      "X-Ms-Interopandsdk-Time-Ms": [
-        "15"
-      ],
-      "Content-Type": [
-        "application/json"
-      ],
-      "Access-Control-Allow-Headers": [
-        "*"
-      ],
-      "X-Ms-Documentdb-Partitionkeyrangeid": [
-        "0"
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
       ]
     },
     "body": "{\n  \"partitionedQueryExecutionInfoVersion\": 2,\n  \"queryInfo\": {\n    \"distinctType\": \"None\",\n    \"top\": null,\n    \"offset\": null,\n    \"limit\": null,\n    \"rewrittenQuery\": \"SELECT VALUE COUNT(1) FROM c /*cosmos_emulator_aggregate*/\",\n    \"orderBy\": [],\n    \"orderByExpressions\": [],\n    \"groupByExpressions\": [],\n    \"groupByAliases\": [],\n    \"groupByAliasToAggregateType\": {},\n    \"aggregates\": [\n      \"Count\"\n    ],\n    \"hasSelectValue\": true,\n    \"dCountInfo\": null,\n    \"hasNonStreamingOrderBy\": false\n  },\n  \"queryRanges\": [\n    {\n      \"min\": \"\",\n      \"max\": \"FF\",\n      \"isMinInclusive\": true,\n      \"isMaxInclusive\": false\n    }\n  ],\n  \"hybridSearchQueryInfo\": null\n}"

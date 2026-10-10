@@ -3,35 +3,35 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "X-Amz-Target": [
-        "AmazonAthena.StartQueryExecution"
+      "X-Amz-Date": [
+        "20261010T090456Z"
+      ],
+      "Authorization": [
+        "REDACTED"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
-      "X-Amz-Date": [
-        "20261010T062454Z"
-      ],
-      "Authorization": [
-        "REDACTED"
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
       ]
     },
-    "body": "{\"QueryString\":\"CREATE EXTERNAL TABLE dbimp_it_pk (id int, PRIMARY KEY (id)) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_pk/'\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0130-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+    "body": "{\"QueryString\":\"CREATE EXTERNAL TABLE dbimp_it_pk (id int, PRIMARY KEY (id)) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_pk/'\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r5-622254-0130-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
   },
   "response": {
     "status": 400,
     "header": {
-      "Content-Type": [
-        "application/x-amz-json-1.1"
-      ],
       "Content-Length": [
         "242"
       ],
       "X-Amzn-Requestid": [
-        "d83a3414-242e-4718-9af0-e6f06228b229"
+        "74d984f6-c705-434c-b78c-d22b4571ec7e"
       ],
       "Date": [
-        "Sat, 10 Oct 2026 06:24:54 GMT"
+        "Sat, 10 Oct 2026 09:04:57 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
       ]
     },
     "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"line 1:8: mismatched input 'EXTERNAL'. Expecting: 'MATERIALIZED', 'MULTI', 'OR', 'PROTECTED', 'ROLE', 'SCHEMA', 'TABLE', 'VIEW'\"}"

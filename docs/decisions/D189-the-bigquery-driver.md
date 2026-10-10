@@ -20,16 +20,17 @@ These are the answers to the step 9 questions of [BIGQUERY.md](../BIGQUERY.md)
    result of a `jobs.query` job.
 5. The driver asks for timestamps as `ISO8601_STRING`. The measurement did not
    check this form at the year 9999, so the integration test must check it, and
-   the answer of Ken is open if it loses digits.
+   the driver then switches to `useInt64Timestamp`, which is exact, and tells
+   Ken. Ken decided this on 2026-10-10.
 6. A request with several statements returns the rows of the last statement, as
    the service does. BIGQUERY.md says so. Child jobs through `parentJobId` can
    come later.
 7. A JSON column is a decoded Go value, and a JSON null stays distinct from a SQL
    NULL because it arrives as the text `null`. A STRUCT column is a
    `map[string]any`. A struct whose members repeat a name or have none makes the
-   driver return an error that names the column. Ken chose the map, and the
-   error for these members is the default of this decision, which Ken can
-   change.
+   driver return an error that names the column. Ken chose the map, and
+   he decided on 2026-10-10 to keep the error. A caller who needs such a struct
+   casts it in SQL, for example with `TO_JSON_STRING`.
 8. The other proposals of step 9 stand as BIGQUERY.md writes them:
    - A NULL and a missing value are both nil.
    - Parameters are named `@p`, bound by the server, with an explicit

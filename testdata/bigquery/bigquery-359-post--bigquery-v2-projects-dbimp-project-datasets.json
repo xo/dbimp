@@ -10,35 +10,38 @@
     "body": "{\"datasetReference\":{\"projectId\":\"dbimp-project\",\"datasetId\":\"dbimp_it_ds2\"}}"
   },
   "response": {
-    "status": 403,
+    "status": 200,
     "header": {
-      "X-Content-Type-Options": [
-        "nosniff"
-      ],
-      "Alt-Svc": [
-        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      "Content-Type": [
+        "application/json; charset=UTF-8"
       ],
       "Vary": [
         "Origin",
         "X-Origin",
         "Referer"
       ],
-      "Content-Type": [
-        "application/json; charset=UTF-8"
-      ],
-      "Server": [
-        "ESF"
+      "X-Xss-Protection": [
+        "0"
       ],
       "X-Frame-Options": [
         "SAMEORIGIN"
       ],
-      "Date": [
-        "Sat, 10 Oct 2026 06:46:37 GMT"
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
       ],
-      "X-Xss-Protection": [
-        "0"
+      "Etag": [
+        "ghSY4OuV5aBSP6OT039kig=="
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:55:31 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
       ]
     },
-    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Project dbimp-project: User does not have bigquery.datasets.create permission in project dbimp-project.\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Project dbimp-project: User does not have bigquery.datasets.create permission in project dbimp-project.\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
+    "body": "{\n  \"kind\": \"bigquery#dataset\",\n  \"etag\": \"ghSY4OuV5aBSP6OT039kig==\",\n  \"id\": \"dbimp-project:dbimp_it_ds2\",\n  \"selfLink\": \"https://bigquery.googleapis.com/bigquery/v2/projects/dbimp-project/datasets/dbimp_it_ds2\",\n  \"datasetReference\": {\n    \"datasetId\": \"dbimp_it_ds2\",\n    \"projectId\": \"dbimp-project\"\n  },\n  \"access\": [\n    {\n      \"role\": \"WRITER\",\n      \"specialGroup\": \"projectWriters\"\n    },\n    {\n      \"role\": \"OWNER\",\n      \"specialGroup\": \"projectOwners\"\n    },\n    {\n      \"role\": \"OWNER\",\n      \"userByEmail\": \"dbimp-bq@dbimp-project.iam.gserviceaccount.com\"\n    },\n    {\n      \"role\": \"READER\",\n      \"specialGroup\": \"projectReaders\"\n    }\n  ],\n  \"creationTime\": \"1791622531749\",\n  \"lastModifiedTime\": \"1791622531749\",\n  \"location\": \"US\",\n  \"type\": \"DEFAULT\"\n}\n"
   }
 }

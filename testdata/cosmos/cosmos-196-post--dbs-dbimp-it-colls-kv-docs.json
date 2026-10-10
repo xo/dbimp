@@ -9,6 +9,9 @@
       "Authorization": [
         "REDACTED"
       ],
+      "Content-Type": [
+        "application/json"
+      ],
       "X-Ms-Cosmos-Is-Batch-Request": [
         "True"
       ],
@@ -18,14 +21,11 @@
       "X-Ms-Documentdb-Partitionkey": [
         "[\"b\"]"
       ],
-      "Content-Type": [
-        "application/json"
-      ],
       "Accept": [
         "application/json"
       ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:03:34 gmt"
+        "sat, 10 oct 2026 09:04:35 gmt"
       ]
     },
     "body": "[{\"operationType\":\"Read\",\"id\":\"b1\"},{\"operationType\":\"Upsert\",\"resourceBody\":{\"id\":\"b1\",\"pk\":\"b\",\"n\":99}},{\"operationType\":\"Replace\",\"id\":\"b2\",\"resourceBody\":{\"id\":\"b2\",\"pk\":\"b\",\"n\":98}},{\"operationType\":\"Patch\",\"id\":\"b2\",\"resourceBody\":{\"operations\":[{\"op\":\"set\",\"path\":\"/n\",\"value\":1}]}},{\"operationType\":\"Delete\",\"id\":\"b2\"}]"
@@ -33,14 +33,47 @@
   "response": {
     "status": 200,
     "header": {
-      "X-Ms-Session-Token": [
-        "0:-1#49"
+      "X-Ms-Cosmos-Physical-Partition-Id": [
+        "7e27f4e1-4a7b-4461-8d61-dbad089ddd84"
       ],
-      "Date": [
-        "Sat, 10 Oct 2026 05:03:34 GMT"
+      "X-Ms-Schemaversion": [
+        "1.21"
+      ],
+      "X-Ms-Serviceversion": [
+        "version=2.14.0.0"
+      ],
+      "X-Ms-Alt-Content-Path": [
+        "dbs/dbimp_it/colls/kv"
+      ],
+      "X-Ms-Global-Committed-Lsn": [
+        "48"
+      ],
+      "X-Ms-Item-Count": [
+        "5"
+      ],
+      "X-Ms-Current-Write-Quorum": [
+        "3"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "6.741"
+      ],
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
+      ],
+      "X-Ms-Cosmos-Quorum-Acked-Llsn": [
+        "48"
+      ],
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
       ],
       "X-Ms-Activity-Id": [
-        "b7f4f264-9348-451b-b347-63cc571f8838"
+        "d7bf080d-306a-433d-baf3-41d47ea86c2c"
+      ],
+      "X-Ms-Cosmos-Internal-Partition-Id": [
+        "2d1776d8-c13a-45f2-ab59-280291ab6752"
+      ],
+      "X-Ms-Request-Charge": [
+        "39.03"
       ],
       "X-Ms-Quorum-Acked-Lsn": [
         "48"
@@ -48,82 +81,49 @@
       "Lsn": [
         "49"
       ],
-      "X-Ms-Alt-Content-Path": [
-        "dbs/dbimp_it/colls/kv"
-      ],
-      "X-Ms-Serviceversion": [
-        "version=2.14.0.0"
-      ],
-      "X-Ms-Current-Replica-Set-Size": [
-        "4"
-      ],
-      "X-Ms-Cosmos-Internal-Partition-Id": [
-        "5986ac1c-7847-4d24-b10a-d0a28805e13c"
-      ],
-      "Strict-Transport-Security": [
-        "max-age=31536000"
+      "X-Ms-Xp-Role": [
+        "1"
       ],
       "X-Ms-Cosmos-Llsn": [
         "49"
       ],
-      "X-Ms-Gatewayversion": [
-        "version=2.14.0"
+      "X-Ms-Transport-Request-Id": [
+        "99"
       ],
-      "Server": [
-        "Microsoft-HTTPAPI/2.0"
+      "Strict-Transport-Security": [
+        "max-age=31536000"
       ],
-      "X-Ms-Cosmos-Quorum-Acked-Llsn": [
-        "48"
-      ],
-      "Pragma": [
-        "no-cache"
-      ],
-      "X-Ms-Item-Count": [
-        "5"
-      ],
-      "X-Ms-Request-Charge": [
-        "39.03"
-      ],
-      "Cache-Control": [
-        "no-store, no-cache"
-      ],
-      "X-Ms-Last-State-Change-Utc": [
-        "Sat, 10 Oct 2026 02:42:47.461 GMT"
-      ],
-      "X-Ms-Cosmos-Physical-Partition-Id": [
-        "16651a0d-c5b4-40d0-a2f1-0b340ac2ae08"
-      ],
-      "X-Ms-Request-Duration-Ms": [
-        "8.22"
-      ],
-      "X-Ms-Content-Path": [
-        "0vIeANM4C0M="
+      "X-Ms-Session-Token": [
+        "0:-1#49"
       ],
       "Content-Type": [
         "application/json"
       ],
-      "X-Ms-Current-Write-Quorum": [
-        "3"
+      "X-Ms-Current-Replica-Set-Size": [
+        "4"
       ],
-      "X-Ms-Transport-Request-Id": [
-        "107"
+      "Pragma": [
+        "no-cache"
       ],
-      "X-Ms-Schemaversion": [
-        "1.21"
+      "X-Ms-Content-Path": [
+        "DJB7AI1lZHo="
       ],
-      "X-Ms-Global-Committed-Lsn": [
-        "48"
-      ],
-      "X-Ms-Xp-Role": [
-        "1"
-      ],
-      "X-Ms-Documentdb-Partitionkeyrangeid": [
-        "0"
+      "X-Ms-Last-State-Change-Utc": [
+        "Mon, 05 Oct 2026 04:20:58.370 GMT"
       ],
       "X-Ms-Number-Of-Read-Regions": [
         "0"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 09:04:35 GMT"
+      ],
+      "Cache-Control": [
+        "no-store, no-cache"
+      ],
+      "Server": [
+        "Microsoft-HTTPAPI/2.0"
       ]
     },
-    "body": "[{\"statusCode\":200,\"requestCharge\":1,\"eTag\":\"\\\"b7008d8a-0000-0100-0000-6ac9c7260000\\\"\",\"resourceBody\":{\"id\":\"b1\",\"pk\":\"b\",\"n\":10,\"_rid\":\"0vIeANM4C0MIAAAAAAAAAA==\",\"_self\":\"dbs/0vIeAA==/colls/0vIeANM4C0M=/docs/0vIeANM4C0MIAAAAAAAAAA==/\",\"_etag\":\"\\\"b7008d8a-0000-0100-0000-6ac9c7260000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791608614}},{\"statusCode\":200,\"requestCharge\":10.666666666666666,\"eTag\":\"\\\"b700978a-0000-0100-0000-6ac9c7260000\\\"\",\"resourceBody\":{\"id\":\"b1\",\"pk\":\"b\",\"n\":99,\"_rid\":\"0vIeANM4C0MIAAAAAAAAAA==\",\"_self\":\"dbs/0vIeAA==/colls/0vIeANM4C0M=/docs/0vIeANM4C0MIAAAAAAAAAA==/\",\"_etag\":\"\\\"b700978a-0000-0100-0000-6ac9c7260000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791608614}},{\"statusCode\":200,\"requestCharge\":10.666666666666666,\"eTag\":\"\\\"b700988a-0000-0100-0000-6ac9c7260000\\\"\",\"resourceBody\":{\"id\":\"b2\",\"pk\":\"b\",\"n\":98,\"_rid\":\"0vIeANM4C0MJAAAAAAAAAA==\",\"_self\":\"dbs/0vIeAA==/colls/0vIeANM4C0M=/docs/0vIeANM4C0MJAAAAAAAAAA==/\",\"_etag\":\"\\\"b700988a-0000-0100-0000-6ac9c7260000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791608614}},{\"statusCode\":200,\"requestCharge\":10.600778676250373,\"eTag\":\"\\\"b700998a-0000-0100-0000-6ac9c7260000\\\"\",\"resourceBody\":{\"id\":\"b2\",\"pk\":\"b\",\"n\":1,\"_rid\":\"0vIeANM4C0MJAAAAAAAAAA==\",\"_self\":\"dbs/0vIeAA==/colls/0vIeANM4C0M=/docs/0vIeANM4C0MJAAAAAAAAAA==/\",\"_etag\":\"\\\"b700998a-0000-0100-0000-6ac9c7260000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791608614}},{\"statusCode\":204,\"requestCharge\":6.0952380952380949}]"
+    "body": "[{\"statusCode\":200,\"requestCharge\":1,\"eTag\":\"\\\"6201d95e-0000-0100-0000-6ac9ffa20000\\\"\",\"resourceBody\":{\"id\":\"b1\",\"pk\":\"b\",\"n\":10,\"_rid\":\"DJB7AI1lZHoIAAAAAAAAAA==\",\"_self\":\"dbs/DJB7AA==/colls/DJB7AI1lZHo=/docs/DJB7AI1lZHoIAAAAAAAAAA==/\",\"_etag\":\"\\\"6201d95e-0000-0100-0000-6ac9ffa20000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791623074}},{\"statusCode\":200,\"requestCharge\":10.666666666666666,\"eTag\":\"\\\"6201dd5e-0000-0100-0000-6ac9ffa30000\\\"\",\"resourceBody\":{\"id\":\"b1\",\"pk\":\"b\",\"n\":99,\"_rid\":\"DJB7AI1lZHoIAAAAAAAAAA==\",\"_self\":\"dbs/DJB7AA==/colls/DJB7AI1lZHo=/docs/DJB7AI1lZHoIAAAAAAAAAA==/\",\"_etag\":\"\\\"6201dd5e-0000-0100-0000-6ac9ffa30000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791623075}},{\"statusCode\":200,\"requestCharge\":10.666666666666666,\"eTag\":\"\\\"6201de5e-0000-0100-0000-6ac9ffa30000\\\"\",\"resourceBody\":{\"id\":\"b2\",\"pk\":\"b\",\"n\":98,\"_rid\":\"DJB7AI1lZHoJAAAAAAAAAA==\",\"_self\":\"dbs/DJB7AA==/colls/DJB7AI1lZHo=/docs/DJB7AI1lZHoJAAAAAAAAAA==/\",\"_etag\":\"\\\"6201de5e-0000-0100-0000-6ac9ffa30000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791623075}},{\"statusCode\":200,\"requestCharge\":10.600778676250373,\"eTag\":\"\\\"6201df5e-0000-0100-0000-6ac9ffa30000\\\"\",\"resourceBody\":{\"id\":\"b2\",\"pk\":\"b\",\"n\":1,\"_rid\":\"DJB7AI1lZHoJAAAAAAAAAA==\",\"_self\":\"dbs/DJB7AA==/colls/DJB7AI1lZHo=/docs/DJB7AI1lZHoJAAAAAAAAAA==/\",\"_etag\":\"\\\"6201df5e-0000-0100-0000-6ac9ffa30000\\\"\",\"_attachments\":\"attachments/\",\"_ts\":1791623075}},{\"statusCode\":204,\"requestCharge\":6.0952380952380949}]"
   }
 }

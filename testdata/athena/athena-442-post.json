@@ -3,37 +3,37 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "X-Amz-Target": [
-        "AmazonAthena.DeletePreparedStatement"
-      ],
-      "Content-Type": [
-        "application/x-amz-json-1.1"
-      ],
       "X-Amz-Date": [
-        "20261010T062745Z"
+        "20261010T090817Z"
       ],
       "Authorization": [
         "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetDataCatalog"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
       ]
     },
-    "body": "{\"StatementName\":\"dbimp_ps2\",\"WorkGroup\":\"dbimp\"}"
+    "body": "{\"Name\":\"dbimp-cw\"}"
   },
   "response": {
     "status": 200,
     "header": {
       "X-Amzn-Requestid": [
-        "16444919-fc46-4297-9060-1a789657e18a"
+        "1e1d789e-6f0e-4242-8117-5fd6e14043a5"
       ],
       "Date": [
-        "Sat, 10 Oct 2026 06:27:45 GMT"
+        "Sat, 10 Oct 2026 09:08:18 GMT"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
       "Content-Length": [
-        "2"
+        "296"
       ]
     },
-    "body": "{}"
+    "body": "{\"DataCatalog\":{\"Description\":\"dbimp federation test: CloudWatch Logs\",\"Name\":\"dbimp-cw\",\"Parameters\":{\"catalog\":\"dbimp-cw\",\"metadata-function\":\"arn:aws:lambda:us-east-1:111122223333:function:dbimp-cw\",\"record-function\":\"arn:aws:lambda:us-east-1:111122223333:function:dbimp-cw\"},\"Type\":\"LAMBDA\"}}"
   }
 }

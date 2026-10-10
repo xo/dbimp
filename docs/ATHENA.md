@@ -7,16 +7,20 @@ quotes, "measured", with how and when, or "not measured", with its source.
 
 Step 6 recorded the service on 2026-10-10 in the region `us-east-1`, as one
 login: an IAM user with the right to run queries in one workgroup and to write
-to one bucket. The recorder signed each request with SigV4. Step 6 ran four times on
-that day. The first pass had 255 requests. The second
-pass had 391 requests, which were the 255 of the first pass, with the same
-names, and 136 new ones. The third pass had 446 requests, which were the 391 of
-the second pass, with the same names, and 55 new ones. The folder holds the
-fourth pass only. It has the same 446 requests and names as the third pass,
-except that the request of `UNLOAD` has a new target, the two requests for
-result reuse select from a table, and the two requests for statistics and for
-a batch get use the ids of `SELECT` statements. The IAM user of the second, the
-third and the fourth pass also had the rights for `athena:CreatePreparedStatement`,
+to one bucket. The recorder signed each request with SigV4. Step 6 ran five times on
+that day. The first pass had 255 requests. The second pass had 391 requests,
+which were the 255 of the first pass, with the same names, and 136 new ones. The
+third pass had 446 requests, which were the 391 of the second pass, with the
+same names, and 55 new ones. The fourth pass had the same 446 requests, with a
+new target for `UNLOAD`, a table in the two requests for result reuse, and the
+ids of `SELECT` statements in the requests for statistics and for a batch get.
+The folder holds the fifth pass only. It has 473 requests, which are the 446 of
+the fourth pass and 27 new ones for the federated catalog. The fifth pass ran
+after `dbsetup` made the Lambda connector and the data catalog `dbimp-cw`, and
+gave the user the rights `athena:GetDataCatalog` and for the Lambda function.
+The request that named a catalog that does not exist kept its recording under
+the new name "a federated query on a catalog that does not exist". The IAM user
+of the second to the fifth pass also had the rights for `athena:CreatePreparedStatement`,
 `athena:GetPreparedStatement`, `athena:DeletePreparedStatement`,
 `athena:ListDatabases`, `athena:ListQueryExecutions`,
 `athena:GetQueryRuntimeStatistics`, `athena:BatchGetQueryExecution` and for
@@ -25,9 +29,10 @@ the Glue partitions and `glue:UpdateTable`. The recordings are under
 response. The recorder runs the requests of the phase `setup` first and the
 requests of the phase `teardown` last, so the file numbers do not follow the
 order of the list in `requests.json`. A name is the safe way to find a request.
-The files 1 to 381 of the fourth pass hold the same requests, in the same order,
-as the files 1 to 381 of the second pass. The files 382 to 419 hold the new
-requests of the fourth pass, and the files 420 to 446 hold the teardown. The account id is `111122223333` in every file, and the recorder
+The files 1 to 419 hold the same requests, in the same order, as the files 1 to
+419 of the fourth pass, except that the files 400 and 401 hold the renamed
+request. The files 420 to 446 hold the new requests of the federated catalog,
+and the files 447 to 473 hold the teardown. The account id is `111122223333` in every file, and the recorder
 redacts each id of a query execution that it captured, so a message can hold
 `{{id8}}`. The workgroup is `dbimp`, the Glue database is `dbimp_test`, and the
 bucket is `dbimp-athena-111122223333-us-east-1`. Athena has no release that a
@@ -35,7 +40,7 @@ person picks. The effective engine was "Athena engine version 3" (recorded:
 "the workgroup").
 
 The names of the requests in quotes are the names in `requests.json` (item 11
-holds the new ones, and the third and the fourth pass added only to item 11). A request
+holds the new ones, and the third to the fifth pass added only to item 11). A request
 that has two or more steps has names that end with ": the execution" for the
 `GetQueryExecution` call and ": the results" for the `GetQueryResults` call.
 
@@ -64,7 +69,8 @@ Sources, each read on 2026-10-10:
 - R: fails. Athena is a hosted service with no emulator, and `dbrun` has no
   entry for it. The measurement needs a real account and its credentials. This
   is the same shape as Snowflake (D182). Whether CI can hold a key pair and pay
-  for each query is not measured. It is question 1 below.
+  for each query is decided, D192 item 2: the integration tests run only where a
+  person supplies the account.
 - H: holds. Every call is `POST /` over HTTPS with a JSON body and a JSON answer
   (recorded: "a select"). No binary encoding is needed.
 - S: holds. The statements are SQL of Trino and Hive DDL. They answered `SELECT`,
@@ -88,7 +94,7 @@ Sources, each read on 2026-10-10:
 - Condition at risk: "The result cannot be read one row at a time". A page is a
   JSON body of at most 1000 rows, so the driver reads a page whole and then a
   row at a time. The size of a page for very wide rows is not measured. The
-  facts of the second to the fourth pass that move the design are these: the
+  facts of the second to the fifth pass that move the design are these: the
   same `ClientRequestToken` with the same query returns the same
   `QueryExecutionId`, a NULL and an empty string differ on the wire,
   `INFORMATION_SCHEMA`, `CREATE TABLE AS SELECT` and a prepared statement all
@@ -136,18 +142,22 @@ Sources, each read on 2026-10-10:
      `ExecutionParameters`. It answers `{"QueryExecutionId": "<uuid>"}` at once,
      before the query runs (recorded: "a select").
   2. `GetQueryExecution` with `QueryExecutionId`, until the state ends. The
-     states that the recording shows are `RUNNING`, `SUCCEEDED`, `FAILED` and
-     `CANCELLED`. A poll at once after the start, on a query that ran for 6.5
-     seconds, answered `RUNNING`, so the recorder never saw `QUEUED` (recorded:
-     "a long statement for the states", "the state of the long statement after
-     0s", "the state of the long statement after 3s", "the state of the long
-     statement after 5s"). A second query, which the recorder wrote to run for
-     about a minute, was `RUNNING` in all three polls. `StopQueryExecution` followed
-     the third poll, 6 seconds after the start. The next poll answered
-     `CANCELLED` with `StateChangeReason` "Query cancelled by user". The query
-     had ended 6.2 seconds after its start, so the stop took effect within about
-     a second. `QueryExecutionDetail` spells the state `CANCELED` with one L,
-     and `QueryExecution` spells it `CANCELLED`.
+     states that the recording shows are `QUEUED`, `RUNNING`, `SUCCEEDED`,
+     `FAILED` and `CANCELLED`. The poll at once after the start of a query that
+     ran for 8.8 seconds answered `QUEUED`, with only `QueryQueueTimeInMillis`
+     and `TotalExecutionTimeInMillis` (293 ms) in `Statistics`. In the same
+     answer the object `QueryExecutionDetail` said `RUNNING`. The next two polls
+     answered `RUNNING` and the poll 9 seconds after the start answered
+     `SUCCEEDED` (recorded: "a long statement for the states: the execution",
+     "the state of the long statement after 0s", "the state of the long
+     statement after 3s", "the state of the long statement after 5s"). A second
+     query, which the recorder wrote to run for about a minute, was `RUNNING` in
+     all three polls. `StopQueryExecution` followed the third poll, 6 seconds
+     after the start. The next poll answered `CANCELLED` with
+     `StateChangeReason` "Query cancelled by user". The query had ended 6.1
+     seconds after its start, so the stop took effect within about a second.
+     `QueryExecutionDetail` spells the state `CANCELED` with one L, and
+     `QueryExecution` spells it `CANCELLED`.
      A `CANCELLED` answer has no `AthenaError` (recorded: "a statement that
      runs about a minute", "the state of the minute statement after 5s", "stop
      the minute statement", "the minute statement after the stop"). The SDK
@@ -156,12 +166,11 @@ Sources, each read on 2026-10-10:
      `EngineExecutionTimeInMillis` at first, and its `Stats` object in
      `QueryExecutionDetail` is empty. The later `RUNNING` answer, after 3
      seconds, had `DataScannedInBytes` and `EngineExecutionTimeInMillis`. The
-     time of the succeeded queries in `TotalExecutionTimeInMillis` was from 247
-     to 6458 ms for `DML` (the longest is the query of 6.5 seconds), from 264 to
-     3180 ms for `DDL` (the longest is the drop of the Iceberg table) and from
-     175 to 2285 ms for `UTILITY` (recorded: every execution). The first
-     Iceberg `UPDATE` took 2913 ms (recorded: "an update of the iceberg
-     table").
+     time of the succeeded queries in `TotalExecutionTimeInMillis` was from 242
+     to 8800 ms for `DML` (the longest is the query of 8.8 seconds), from 274 to
+     4134 ms for `DDL` (the longest is `MSCK REPAIR TABLE`) and from 212 to 2326
+     ms for `UTILITY` (recorded: every execution). The first Iceberg `UPDATE`
+     took 1472 ms (recorded: "an update of the iceberg table").
   3. `GetQueryResults` with `QueryExecutionId`, and `MaxResults` and `NextToken`
      for the pages after the first.
 - `ClientRequestToken` was 40 characters in the recording. The SDK says that
@@ -179,8 +188,12 @@ Sources, each read on 2026-10-10:
   `awsdatacatalog` (recorded: "a catalog in the context"). A request with a
   `Catalog` that does not exist, `dbimp_nosuch`, also ran and succeeded, and
   the execution echoed that name. The statement touched no table, as in the
-  case of a missing database (recorded: "a missing catalog"). What a table
-  name does with a missing catalog is not measured.
+  case of a missing database (recorded: "a missing catalog"). A table
+  name with a catalog that does not exist answered like a missing right (see
+  Statements, the federated query). The context with the catalog `dbimp-cw` and
+  the database `/aws/lambda/dbimp-cw` found the table `all_log_streams`, and the
+  execution echoed both names (recorded: "a federated query with the catalog in
+  the context: the execution").
 - `ResultConfiguration` is `OutputLocation`, an S3 URI. The workgroup of this
   work sets `EnforceWorkGroupConfiguration` to true and its own
   `OutputLocation` (recorded: "the workgroup"). A request that sent another
@@ -197,10 +210,10 @@ Sources, each read on 2026-10-10:
   request with `ResultReuseByAgeConfiguration` of `Enabled` true and
   `MaxAgeInMinutes` 60 was accepted, and the answer echoed it. The recorder
   sent `SELECT id FROM dbimp_it_ext` twice with that member. The first run
-  reported `ReusedPreviousResult` false and scanned 212 bytes. The second run
+  reported `ReusedPreviousResult` false and scanned 272 bytes. The second run
   had its own `QueryExecutionId` and reported `ReusedPreviousResult` true. It
   scanned 0 bytes, its `OutputLocation` was the location of the first run, and
-  its 19 rows were the rows of the first run (recorded: "a result reuse: the
+  its 23 rows were the rows of the first run (recorded: "a result reuse: the
   execution", "a result reuse again: the execution", "a result reuse: the
   results", "a result reuse again: the results"). A query over a table was
   reused.
@@ -240,7 +253,7 @@ What a driver needs, as facts and with no choice:
   Athena.
 - Database of the Glue Data Catalog, sent as `QueryExecutionContext.Database`.
 - Catalog, if it is not `AwsDataCatalog`. The request accepts the member (see
-  Requests). Whether a table is found in another catalog is not measured.
+  Requests). A table is found in another catalog, as the federated query shows (see Statements).
 - Output location, an S3 URI. It is optional when the workgroup sets one. The
   SDK says that a workgroup that enforces its configuration overrides the
   request (the SDK, `StartQueryExecutionInput`).
@@ -282,10 +295,12 @@ What a driver needs, as facts and with no choice:
   `ResultReuseInformation` and, for some queries, `QueryPlanningTimeInMillis`.
   An `UNLOAD` adds `DataManifestLocation`, the S3 location of a manifest
   (recorded: "unload: the execution"). `SELECT 1` scanned 0 bytes, and a
-  `SELECT` of 17 rows from the external table scanned 184 bytes (recorded:
+  `SELECT` of 21 rows from the external table scanned 244 bytes (recorded:
   "a select", "a select from the external table"). The most that any query
-  scanned was 888 bytes, for the select of three identical rows from the typed
-  table, and the select from the Iceberg table scanned 586 (recorded: "select
+  scanned was 41934 bytes, for the count over the federated table. The next
+  most was 1184 bytes, for the select of four identical rows from the typed
+  table, and the select from the Iceberg table scanned 586 (recorded: "a
+  federated query with the catalog in the context: the execution", "select
   typed rows", "the iceberg rows after").
 - `GetQueryResults` answers `ResultSet`, `UpdateCount` and, for some
   statements, `Output`. `ResultSet` holds the same data in two forms:
@@ -293,7 +308,7 @@ What a driver needs, as facts and with no choice:
     `{"Data": [{"VarCharValue": "1"}]}`. This is the form that the SDK names.
   - `ColumnInfos` with `ResultRows`, where each row is `{"Data": ["1"]}` and a
     NULL is JSON `null`. The SDK does not name this form.
-  Both forms were equal in all 90 recorded results, with the same
+  Both forms were equal in all 93 recorded results, with the same
   `ColumnInfo` in `ColumnInfos` and in `ResultSetMetadata` (recorded: "every
   type in one row", and each other result). A driver must read one of them.
 - Where the names and the order of the columns come from: `ColumnInfo` of the
@@ -444,7 +459,7 @@ named "the type of ..." for item 3. The names of the requests are in
   comma and a space. So the text of the array above cannot be told from an
   array of three elements (recorded: "commas and quotes in an array, a map and a
   row: the results"). A NULL element, a space, a brace and a nested container
-  in the text are not measured. See question 4.
+  in the text are not measured. Decided, D192 item 3: the driver does not parse it.
 - `json` is the JSON text that was written, `{"a":1}`.
 - `ipaddress` is `2001:db8::1`. `uuid` is the 36 character text.
 - `interval day to second` is `1 00:00:00.000` and `interval year to month` is
@@ -461,12 +476,12 @@ named "the type of ..." for item 3. The names of the requests are in
   recording.
 
 The mapping of step 8a follows. The Go types are the types of the kinds of
-[TYPES.md](TYPES.md). The row of each of `ARRAY`, `MAP` and `ROW` is a proposal
-that question 4 asks Ken to settle, and the row of each interval and of
-`IPADDRESS` follows the sibling Trino driver or the kind that D177 added. The
+[TYPES.md](TYPES.md). The row of each of `ARRAY`, `MAP` and `ROW` is decided,
+D192 item 3, and the row of each interval and of
+`IPADDRESS` follows the sibling Trino driver or the kind that D177 added (decided, D192 item 11). The
 row of `TIME WITH TIME ZONE` uses the kind that D139 added, and the row of
 `TIMESTAMP WITH TIME ZONE` follows the Trino driver for the zone that a text
-names, with question 6.
+names (decided, D192 item 7).
 
 <!-- dbimp:types -->
 | Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
@@ -500,12 +515,12 @@ names, with question 6.
 | UNKNOWN | null | `nil` | `interface {}` | `UNKNOWN` | yes |
 <!-- /dbimp:types -->
 
-Doubtful rows, which Ken must review (question 4, question 5 and question 6):
+Rows that were doubtful, all decided in D192 (items 3, 7 and 10):
 
 - `ARRAY`, `MAP` and `ROW`: the text is not JSON and the types of the elements
   are not in `ColumnInfo`. The text of an `array<string>` has no quotes, so
   `[p, q]` cannot say whether an element is a string, and an element that holds
-  a comma cannot be told apart. The fourth pass settled that the text has no
+  a comma cannot be told apart. The fifth pass settled that the text has no
   escape: `[a,b, c"d]` is the array of the two strings `a,b` and `c"d`. The kind `other` returns the text, which D135
   allows for a type that has no Go type. Both models agreed that parsing is
   unsafe. The alternative is a list or a map of strings that a parser reads
@@ -518,7 +533,7 @@ Doubtful rows, which Ken must review (question 4, question 5 and question 6):
 - `GEOMETRY` as the text is the form that the Databend and Trino drivers use.
 - `TIMESTAMP WITH TIME ZONE` has two forms of zone in the text, an offset and a
   name such as `Europe/Paris`. A name with no offset needs the zone database
-  of the host (question 6).
+  of the host (decided, D192 item 7).
 - `TIME WITH TIME ZONE` as `dbimp.OffsetTime` follows D139. The text with a
   fraction and of the offset zero are not measured. Presto wrote the offset zero
   as `UTC` in the Trino driver ([TRINO.md](TRINO.md)), and Athena is not measured for it.
@@ -626,7 +641,9 @@ An error has one of six forms.
      results of an unknown execution").
    - `INVALID_QUERY_EXECUTION_STATE`, for `GetQueryResults` on a query that
      failed. The message is "Query did not finish successfully. Final query
-     state: FAILED" (recorded: "an error after some rows: the results").
+     state: FAILED" (recorded: "an error after some rows: the results"). On a
+     query that was still running the message is "Query has not yet finished.
+     Current state: RUNNING" (recorded: "a federated query: the results").
    - `IDEMPOTENT_PARAMETER_MISMATCH`, for a token that was used with another
      query (recorded: "a client request token that is used twice").
    - `RESULT_NOT_FOUND`, for `GetQueryResults` on a query that was cancelled
@@ -652,14 +669,14 @@ An error has one of six forms.
    | 1106 | `INVALID_FUNCTION_ARGUMENT` | "a statement that runs long" |
    | 1200 | `NOT_SUPPORTED` | "an update of the external table", "iceberg time travel by version" |
    | 1500 | the right `glue:GetDatabase` | "a table in a database that does not exist" |
-   | 9999 | the right `athena:GetDataCatalog` | "a federated query" |
+   | 9999 | the right `athena:GetDataCatalog` | "a federated query on a catalog that does not exist" |
    | 1301 | `TABLE_NOT_FOUND` | "a missing table" |
    | 1303 | `FUNCTION_NOT_FOUND` | "version function" |
 
    The type 1500 is for the messages `Insufficient permissions to execute the
    query` and `You are not authorized`, which the missing rights of the user
    caused. The first pass had it. The second pass had the rights and had none.
-   The fourth pass has one, for the missing right that is named in the table.
+   The fifth pass has one, for the missing right that is named in the table.
    The type 9999 is "Unknown error occurred." in `ErrorMessage`, with the text
    about the right in `StateChangeReason`.
 
@@ -699,7 +716,7 @@ An error has one of six forms.
   and can throttle the account of Ken.
 - The workgroup limit `BytesScannedCutoffPerQuery` stops a query that scans more.
   What the state and the message are is not measured. The most that any
-  recorded query scanned was 888 bytes, and a test of 100 MiB needs a table
+  recorded query scanned was 41934 bytes, and a test of 100 MiB needs a table
   of that size, which the work did not create.
 - `GetQueryRuntimeStatistics` answered `QueryRuntimeStatistics` with a
   `Timeline` of five times and no other member for a `SELECT`, the same numbers
@@ -717,7 +734,7 @@ An error has one of six forms.
   that was running, it ended the query. The query that the recorder wrote to
   run for about a minute was `RUNNING` 6 seconds after its start. The stop
   followed at once, and the next poll answered `CANCELLED`, "Query cancelled by
-  user", with a completion 6.2 seconds after the start (recorded: "a statement
+  user", with a completion 6.1 seconds after the start (recorded: "a statement
   that runs about a minute", "the state of the minute statement after 5s",
   "stop the minute statement", "the minute statement after the stop"). The
   answer to the call does not say whether the query was running. The state
@@ -728,8 +745,8 @@ An error has one of six forms.
   stayed as it was. One query had failed (recorded: "stop the statement", "the
   execution after the stop", "stop a statement that has ended"), and the other
   had succeeded (recorded: "stop the long statement", "the long statement after
-  the stop"). The second ran for 6.5 seconds, and the poll after 5 seconds,
-  which came 11 seconds after the start, had already seen `SUCCEEDED`. A `GetQueryResults` after that stop returned the whole result,
+  the stop"). The second ran for 8.8 seconds, and the poll after 5 seconds,
+  which came 9 seconds after the start, had already seen `SUCCEEDED`. A `GetQueryResults` after that stop returned the whole result,
   2500000000 for the count (recorded: "the results of the stopped statement").
   The call is accepted for any query that exists.
 - The first long statement of the first pass failed at once with
@@ -776,11 +793,12 @@ An error has one of six forms.
 - `DROP TABLE` of an external table leaves its data files in S3. The first
   `SELECT` from the new external table, which had a location that held files
   from earlier runs, returned six data rows in the second pass where the
-  statement had inserted three, each row twice. In the fourth pass it returned
-  17 rows: each of the ids 1, 2 and 3 four times, and the ids 4 and 5 twice
-  each, which earlier runs had written (recorded: "a select from the external
-  table"). The same leftover files repeated the rows of the typed table, three
-  times, and of the table of empty strings and NULLs, three times each
+  statement had inserted three, each row twice. In the fifth pass it returned
+  21 rows: each of the ids 1, 2 and 3 five times, and the ids 4 and 5 three
+  times each, which earlier runs had written (recorded: "a select from the
+  external table"). The same leftover files repeated the rows of the typed
+  table, four times, and of the table of empty strings and NULLs, four times
+  each
   (recorded: "select typed rows", "select the empty string and the null"). A test that uses an external table
   must use a new location in S3 for each run.
 - DDL: `CREATE EXTERNAL TABLE`, `CREATE TABLE` with `table_type` of `ICEBERG`
@@ -816,57 +834,65 @@ An error has one of six forms.
   `bigint` snapshot id was not sent (recorded: "iceberg time travel by
   timestamp", "iceberg time travel by version", "the history of an iceberg
   table").
-- A federated query, `SELECT * FROM "lambda:dbimp_nosuch".dbimp.t`, was
-  accepted at the start and then failed with `ErrorType` 9999: "You are not
-  authorized to perform: athena:GetDataCatalog". The user lacks that right, and
-  the catalog does not exist, so the answer says nothing about the feature
-  (recorded: "a federated query").
-- `CREATE TABLE ... AS SELECT` with `external_location` answered HTTP 400,
-  `INVALID_INPUT`, because the workgroup enforces one output location (recorded:
-  "a create table as select"). The same statement with no `external_location`
-  ran, with `StatementType` `DDL` and `SubstatementType` `CREATE_TABLE_AS_SELECT`
-  (recorded: "a create table as select with no location").
-- `UNLOAD (SELECT 1 AS id) TO 's3://<bucket>/unload/<new prefix>/' WITH
-  (format='PARQUET')` is a `DML` statement of the substatement type `UNLOAD`. It
-  succeeded. The result has the column `rows` of the type `bigint`, no rows and
-  `UpdateCount` 1, and the statistics hold a `DataManifestLocation` (recorded:
-  "unload", "unload: the execution", "unload: the results"). The target must
-  not exist. An earlier pass sent a target that existed, and the execution
-  failed with `HIVE_PATH_ALREADY_EXISTS: Target directory already exists`
-  (ErrorType 1109). That answer is not in the recording. A test needs a new
-  prefix for each run, because the teardown does not touch S3.
-- A view works. `CREATE OR REPLACE VIEW ... AS SELECT 1 AS a` was `DDL` with
-  `CREATE_VIEW`, the select from it gave the row, and `DROP VIEW IF EXISTS`
-  was `DROP_VIEW` (recorded: "create a view", "select the view", "drop the
-  view").
-- Partitions work. `INSERT INTO` a partitioned Hive table wrote one partition,
-  `MSCK REPAIR TABLE` ran as `DDL` with `MSCK_REPAIR` and an empty result,
-  `SHOW PARTITIONS` gave `p=a`, and `ALTER TABLE ... ADD IF NOT EXISTS
-  PARTITION` was `DDL` with `ALTER_TABLE_ADD_PARTITION` (recorded: "insert
-  into the partitioned table", "msck repair table", "show partitions", "alter
-  table add partition").
-- `INSERT OVERWRITE INTO` is a syntax error at the start of the query. The
-  parser expects `INTO` after `INSERT` (recorded: "insert overwrite"). The
-  table was a partitioned Hive table, and the error comes from the parser, so
-  it does not depend on the table.
-- `SHOW TABLES IN <database>`, `SHOW CREATE TABLE`, `DESCRIBE`, `SHOW COLUMNS`,
-  `SHOW PARTITIONS` and `EXPLAIN` ran (recorded: "show tables", "show create
-  table", "describe the table", "show columns", "show partitions",
-  "explain"). The rows of `EXPLAIN` are the lines of the plan, with the column
-  `Query Plan` of the type `varchar`.
-- `INFORMATION_SCHEMA` works. `information_schema.tables` and
-  `information_schema.columns` answered rows, with the types in the names of
-  Trino (`integer` and `varchar` for the Hive types `int` and `string`)
-  (recorded: "information schema tables", "information schema columns again",
-  "information schema columns"). The first pass failed because the user
-  lacked `glue:GetDatabases`. A query of it scanned from 78 to 128 bytes.
-  `SHOW COLUMNS` and `DESCRIBE` give the Hive names (recorded: "show columns",
-  "describe the table").
-- `SELECT version()` failed with `FUNCTION_NOT_FOUND`, and `system.runtime.nodes`
-  is refused (recorded: "version function", "the node version").
-- `USE` is refused (recorded: "a use statement"), so the database comes from
-  `QueryExecutionContext` or from a name with the database in front.
-- Data scanned is billed (see Principals). The recording scanned at most 888
+- Federated queries. The recorder used a data catalog `dbimp-cw` of the type
+  `LAMBDA` (recorded: "get the federated data catalog"), with one database,
+  `/aws/lambda/dbimp-cw`, and one table, `all_log_streams`. The names of the
+  catalog and of the database need quotes in a statement.
+  - `SELECT count(*) AS c FROM "dbimp-cw"."/aws/lambda/dbimp-cw".all_log_streams`
+    was accepted at the start. Its single poll answered `RUNNING`, 13.7 seconds
+    after the start, and `GetQueryResults` answered HTTP 400,
+    `INVALID_QUERY_EXECUTION_STATE`, "Query has not yet finished. Current
+    state: RUNNING". The recording has no later poll, so the final state of this
+    query is not measured. The cause of the delay is not measured. A cold start
+    of the Lambda function is one guess (recorded: "a federated query", "a
+    federated query: the execution", "a federated query: the results").
+  - The same count with `Catalog` `dbimp-cw` and `Database` `/aws/lambda/dbimp-cw`
+    in `QueryExecutionContext`, and `FROM all_log_streams`, succeeded in 5994 ms.
+    It scanned 41934 bytes. The result is one column `c` of the type `bigint`,
+    with the header row and the value 220 (recorded: "a federated query with the
+    catalog in the context", "a federated query with the catalog in the context:
+    the execution", "a federated query with the catalog in the context: the
+    results"). The statement type is `DML`, as for a table of Glue.
+  - `SHOW TABLES` with that context ran as `UTILITY` with `SHOW_TABLES`. The
+    column is `tab_name`, and the 8 rows are 7 tables with names such as
+    `2026/10/10/[$LATEST]<hex>`, one for each log stream, and `all_log_streams`
+    (recorded: "show tables with the catalog in the context: the results").
+  - `SHOW DATABASES IN "dbimp-cw"` answered HTTP 400, `MALFORMED_QUERY`, "line 1:6:
+    mismatched input 'DATABASES'". The list of words that can follow `SHOW`
+    names `SCHEMAS` and `CATALOGS`, and those were not sent (recorded: "show
+    databases in the federated catalog"). `SHOW TABLES IN "dbimp-cw"."/aws/lambda/dbimp-cw"`
+    answered HTTP 400, `MALFORMED_QUERY`, at the quoted catalog name (recorded:
+    "show tables in the federated catalog"). `DESCRIBE` with the name of three
+    parts answered HTTP 400, `MALFORMED_QUERY`, "no viable alternative at input
+    'DESCRIBE "dbimp-cw"'" (recorded: "describe a federated table"). A `SELECT`
+    takes the name of three parts (see the first item).
+  - `SELECT table_name FROM "dbimp-cw".information_schema.tables LIMIT 5`
+    succeeded and scanned 67 bytes. The rows were the tables of the
+    `information_schema` of the catalog, `columns`, `tables`, `views`,
+    `schemata` and `table_privileges`, with the type `varchar` (recorded:
+    "information schema of the federated catalog: the results").
+  - The calls of the Athena API for a catalog: `GetDataCatalog` answered
+    `DataCatalog` with `Name`, `Description`, `Type` `LAMBDA` and `Parameters`
+    (`catalog`, `metadata-function` and `record-function`, the last two the ARNs
+    of the function). `ListDatabases` with `CatalogName` answered the one database,
+    and `GetDatabase` answered `Database` with its `Name` only. `ListTableMetadata`
+    answered `TableMetadataList` for the same 8 tables, with no `NextToken`,
+    and `GetTableMetadata` answered `TableMetadata` for `all_log_streams`: the
+    columns `time` of `bigint` and `message` of `varchar`, the partition key
+    `log_stream` of `varchar`, and `TableType` `EXTERNAL`. `ListDataCatalogs`
+    answered HTTP 400, `AccessDeniedException`, because the user lacks
+    `athena:ListDataCatalogs` (recorded: "get the federated data catalog",
+    "list the databases of the federated catalog", "get a database of the
+    federated catalog", "list the tables of the federated catalog", "get a table
+    of the federated catalog", "list the data catalogs").
+  - A catalog that does not exist, `lambda:dbimp_nosuch`, answered like a missing
+    right: the query was accepted at the start and then `FAILED` with
+    `ErrorType` 9999 and `ErrorCategory` 3, "You are not authorized to perform:
+    athena:GetDataCatalog on the resource". The answer is the same although the
+    user now has the right for the catalog `dbimp-cw`. So a missing catalog
+    cannot be told from a missing right (recorded: "a federated query on a
+    catalog that does not exist: the execution").
+- Data scanned is billed (see Principals). The recording scanned at most 41934
   bytes for a statement.
 
 ## Principals
@@ -888,11 +914,12 @@ An error has one of six forms.
   `dbimp_test` (recorded: "list the databases"). `ListQueryExecutions` gave
   ids of five executions, a `NextToken` and no other member (recorded: "list
   executions").
-- The user still lacked two rights in the fourth pass:
-  `athena:GetDataCatalog`, which a federated query needs, and
-  `glue:GetDatabase` on the database `dbimp_nosuch` (recorded: "a federated
-  query: the execution", "a table in a database that does not exist: the
-  execution").
+- The user still lacked two rights in the fifth pass: `athena:ListDataCatalogs`
+  and `glue:GetDatabase` on the database `dbimp_nosuch` (recorded: "list the
+  data catalogs", "a table in a database that does not exist: the execution").
+  `dbsetup` gave the user `athena:GetDataCatalog` and the right for the Lambda
+  function, and the calls that use them worked (recorded: "get the federated
+  data catalog", "a federated query with the catalog in the context").
 - The version is not a query. `GetWorkGroup` gives
   `EngineVersion.EffectiveEngineVersion` of "Athena engine version 3" and
   `SelectedEngineVersion` of `AUTO` (recorded: "the engine version of the
@@ -971,7 +998,7 @@ Faults of the service:
   only, and `UNLOAD`, `MSCK REPAIR TABLE`, federated queries, partition
   projection, workgroups, result reuse, prepared statements and time travel as
   features of Athena. It said that there is no primary key, foreign key, index,
-  unique constraint or default value. The fourth pass agrees: each was refused
+  unique constraint or default value. The fifth pass agrees: each was refused
   (recorded: "a primary key on a hive table", "a foreign key", "an index", "a
   unique column", "a default value"). The recording agrees for `UPDATE`,
   `DELETE` and `MERGE`, which a Hive table refused and an Iceberg table ran
@@ -1001,7 +1028,9 @@ Faults of the service:
   server said:
   - Stop a query in the state `QUEUED` or `RUNNING`, and expect `CANCELLED`.
     True for `RUNNING` (recorded: "stop the minute statement", "the minute
-    statement after the stop"). `QUEUED` was not seen.
+    statement after the stop"). A stop in the state `QUEUED` was not sent, but
+    `QUEUED` was seen (recorded: "a long statement for the states: the
+    execution").
   - Send the same token with the same query, and expect the same
     `QueryExecutionId`. True (recorded: "the same token and the same query 1",
     "the same token and the same query 2").
@@ -1039,8 +1068,8 @@ Faults of the service:
   caching. It gave no request to send, so each is a topic and not a lead. The
   second pass settled NULL against an empty string (they differ), `CTAS` (works
   with no location), views (work) and `EXECUTE ... USING` (works). The
-  fourth pass settled `CANCELLED` (seen) and time travel (works by a timestamp).
-  The fourth pass settled result reuse (a reuse was seen for a query over a
+  fifth pass settled `CANCELLED` (seen) and time travel (works by a timestamp).
+  The fifth pass settled result reuse (a reuse was seen for a query over a
   table) and `UNLOAD` (it succeeded with a new target). Throttling and `QUEUED`
   are not measured.
 - Gemini (2026-10-10) reviewed the type mapping against TYPES.md. It said that
@@ -1055,7 +1084,7 @@ Faults of the service:
   zone must be a `time.Time`, which is false by D138. It said that `array` is
   JSON, which is false for strings, because the text has no quotes (the
   second pass confirmed it: an `array<string>` gave `[p, q]`, recorded:
-  "select typed rows"). The fourth pass showed that the text has no quotes and no
+  "select typed rows"). The fifth pass showed that the text has no quotes and no
   escape even for an element with a comma or a quote (recorded: "commas and
   quotes in an array, a map and a row: the results"). It agreed on `other` for `map` and `row`. It wanted a `net.IP`, and the kind of
   D177 is `netip.Addr`.
@@ -1066,89 +1095,68 @@ Faults of the service:
 
 ## Open questions
 
-1. R and the account. Athena has no emulator, so every integration test needs a
-   real account, a key pair and a bucket, and each query costs money for the
-   data that it scans. The fourth pass of 446 requests scanned at most 888
-   bytes for one query, so the cost of the data was close to nothing, and the
-   cost of a test is the number of queries. Can CI hold the key pair and pay?
-   The alternative is unit tests with the recorded answers and an integration
-   test that runs where a person supplies an account, as for Snowflake (D182).
-   Ken decides.
-2. A fifth pass. The fourth pass settled most leads of the second pass (see the
-   end of this file). Some need a new request, and some need more than the
-   login has: a temporary credential for `X-Amz-Security-Token`, a burst of
-   calls, a table of 100 MiB, and a Lambda connector with the right
-   `athena:GetDataCatalog`. Ken decides whether to run again.
-3. The version. The service has no query for it. The engine is in `GetWorkGroup`
-   and the user needs `athena:GetWorkGroup`. D181 says that a driver answers
-   `SELECT version()` only when its product has no query. The options are an
-   answer from `GetWorkGroup` and no answer. Ken decides.
-4. `ARRAY`, `MAP` and `ROW`. The text is not JSON and has no types of the
-   elements. The second pass added that an `array<string>` has no quotes
-   (`[p, q]`) and that a Hive `struct` is a `row`. The fourth pass added that
-   there is no escape: a comma or a quote in an element is written as it is, so
-   a parser cannot be exact. The proposal is the kind
-   `other` with the text. The alternative is a parser that gives a list or a
-   map of strings, which guesses the types of the elements. A second
-   alternative is a rewrite of the statement with `CAST(... AS JSON)`, which
-   the driver cannot do for a column that it does not parse. Ken decides.
-5. The intervals, `IPADDRESS` and `GEOMETRY`. See the doubtful rows in Types.
-   `TIME WITH TIME ZONE` is now a row, as `dbimp.OffsetTime`.
-6. Zone names. A `TIMESTAMP WITH TIME ZONE` with a named zone has the name and
-   no offset, such as `2026-10-10 12:34:56 Europe/Paris`. A `time.Time` needs
-   `time.LoadLocation`, which reads the zone database of the host, and the
-   program can embed one with `time/tzdata`. The alternative is to keep the
-   text. Ken decides.
-7. The header row. The rule that the recording supports is: the first row of the
-   first page of a `DML` statement that has columns is the header row, and
-   `EXECUTE` and `EXPLAIN` are `DML` too. The alternative is the comparison of
-   names of athenadriver, which misreads a table whose first row repeats its
-   names. Ken decides.
-8. The writer of literals for `ExecutionParameters` and for `EXECUTE ...
-   USING`, and whether a statement with a `?` that the server cannot bind needs
-   the parser of the root package (D34). Both routes take SQL text, so the
-   driver writes a literal for each Go type. The rules of Trino for a string
-   and a binary literal are not measured.
-9. Polling. How long to wait between calls of `GetQueryExecution`, and whether a
-   statement that has no result (DDL) can stop at the state. The fourth pass saw
-   `RUNNING` at once, `RUNNING` again 5 seconds after the start and `SUCCEEDED`
-   in a poll 11 seconds after it, for a query that ran 6.5 seconds. It never saw
-   `QUEUED`. The recording waited a fixed time.
-10. `ClientRequestToken`. The same token with the same query returns the same
-    `QueryExecutionId`, so the driver can send a token for each statement and
-    send the same one when it repeats a start after a failed reply. The driver
-    must make a new token for each new statement. A repeat on a broken
-    connection is not measured.
-11. Cancel. `StopQueryExecution` on the context end, with a context that does not
-    end. Hard rule 4 and D36. The call on a running query ended it in the state
-    `CANCELLED`, and `GetQueryResults` of it is HTTP 400, `RESULT_NOT_FOUND`.
-    The driver can read `CANCELLED` as the end of a query that it stopped. The
-    answer of the call does not say whether the query was running, so the
-    driver reads the state after the call. Ken decides what the driver returns
-    for a `CANCELLED` query that it did not stop.
-12. Billing. A driver that opens a result of a large table can scan terabytes.
-    Whether the driver sets a limit, or leaves it to the workgroup, is not
-    measured.
-13. Data in S3. `DROP TABLE` of an external table leaves its files, and `UNLOAD`
-    refuses a directory that exists. An integration test needs a new prefix in
-    S3 for each run, or a clean up that the driver cannot do, because S3 is
-    not Athena. The recordings show the cost: the old files repeated the rows
-    of three tables up to four times. `UNLOAD` needs a new prefix for each run,
-    and the fourth pass sent one. Ken decides how the test does this. The
-    teardown deletes the prepared statements `dbimp_p` and `dbimp_ps2`.
+Ken decided the questions of step 9 on 2026-10-10, in D192. These earlier
+questions are answered, each as "decided, D192":
 
-### The leads of the fourth live pass
+1. The account and CI (R). Decided, D192 item 2: the integration tests run on a
+   hosted account only where a person supplies it, as for Snowflake (D182), and
+   they skip when the DSN variable is empty.
+2. The version. Decided, D192 item 6: the driver gives no answer to a version
+   request, as D181 says.
+3. `ARRAY`, `MAP` and `ROW`. Decided, D192 item 3: the value is the text of the
+   server, in a `string`, of the kind `other`, and the driver does not parse it.
+4. The intervals, `IPADDRESS`, `GEOMETRY` and `TIME WITH TIME ZONE`. Decided,
+   D192 item 10: the proposals stand as the type table writes them.
+5. Zone names. Decided, D192 item 7: a `TIMESTAMP WITH TIME ZONE` with a named
+   zone is a `time.Time` in that zone, from `time.LoadLocation`, and the driver
+   imports `time/tzdata`.
+6. The header row. Decided, D192 item 10: the driver skips the header row by the
+   statement type.
+7. The literals for `ExecutionParameters`. Decided, D192 item 4: the driver
+   binds with `ExecutionParameters`, keeps each `?` in the text, writes each
+   value as an escaped SQL literal, and does not use a prepared statement. So
+   the parser of the root package (D34) is not needed.
+8. Polling. Decided, D192 item 8: the driver polls `GetQueryExecution` from
+   100 ms and backs off to 1 s.
+9. `ClientRequestToken`. Decided, D192 item 10: the driver sends a new token for
+   each statement.
+10. Cancel. Decided, D192 items 5, 8 and 10: the driver calls
+    `StopQueryExecution` when the context ends, a `CANCELLED` query is an error
+    that names the state and its reason, also when the driver did not stop it,
+    and the rows of a query store the context (hard rule 4).
+11. The federated pass. Decided, D192 item 9, and done: the fifth pass ran with
+    the catalog and the Lambda connector of `dbsetup`.
 
-The second pass ended with 12 leads for a third pass. The third and the fourth
-pass answered them as follows, in the order of the old list, with the new leads
-after it.
+D192 leaves these open. Ken decides:
+
+1. The rules for the escaped literal of D192 item 4. The writer of literals
+   needs the rule for a string and for a binary value, and the rules of Trino
+   are not measured.
+2. Billing. A driver that opens a result of a large table can scan terabytes.
+   Whether the driver sets a limit, or leaves it to the workgroup, is not
+   measured.
+3. Data in S3 for the tests. `DROP TABLE` of an external table leaves its files,
+   and `UNLOAD` refuses a directory that exists. A test needs a new prefix in S3
+   for each run, or a clean up that the driver cannot do, because S3 is not
+   Athena. The recordings show the cost: the old files repeated the rows of
+   three tables up to five times. How the test makes the prefix is not decided.
+4. Polling a statement that has no result. Whether a DDL statement can stop at
+   the state is not measured.
+5. A repeat of a start on a broken connection, with the same token, is not
+   measured.
+
+### The leads of the fifth live pass
+
+The second pass ended with 12 leads for a third pass. The later passes answered
+them as follows, in the order of the old list.
 
 1. A query that runs for a minute, stopped after a few seconds. Settled. The
    state was `CANCELLED`, with "Query cancelled by user" (recorded: "stop the
    minute statement", "the minute statement after the stop"). The query was
    `RUNNING` in the three polls before the stop.
-2. The state `QUEUED`. Not settled. The recorder started no burst, and no poll
-   saw `QUEUED`.
+2. The state `QUEUED`. Settled. The first poll of the long statement answered
+   `QUEUED` (recorded: "a long statement for the states: the execution"). A stop
+   in that state was not sent.
 3. A reuse with `ReusedPreviousResult` true. Settled. A query over a table, run
    twice, reported false and then true (recorded: "a result reuse: the
    execution", "a result reuse again: the execution").
@@ -1158,8 +1166,9 @@ after it.
 5. `GetQueryRuntimeStatistics` and `BatchGetQueryExecution` with a real id.
    Settled for the id of a `SELECT` (recorded: "the statistics of an
    execution", "batch get"). The id of a DDL statement was not sent.
-6. A `Catalog` that does not exist, with a table name. Not settled. No request
-   was sent.
+6. A `Catalog` that does not exist, with a table name. Not settled. A federated
+   name that does not exist answered like a missing right (recorded: "a
+   federated query on a catalog that does not exist: the execution").
 7. The text of an array, a map and a row for a string that holds a comma or a
    quote. Settled. The text has no escape (recorded: "commas and quotes in an
    array, a map and a row: the results"). A space, a brace and a NULL element
@@ -1175,7 +1184,7 @@ after it.
 12. A query string of 262144 bytes of two byte characters. Not settled. No
     request was sent.
 
-The other leads that the fourth pass answered, each with the request:
+The other leads that the later passes answered, each with the request:
 
 - A primary key, a unique column, a foreign key, a default value and a `NOT
   NULL` column on a Hive external table: each was refused at the start, with
@@ -1189,8 +1198,9 @@ The other leads that the fourth pass answered, each with the request:
   table").
 - Partition projection: the table with the properties ran (recorded: "a table
   with partition projection").
-- A federated query: failed on the right `athena:GetDataCatalog` (recorded: "a
-  federated query: the execution").
+- A federated query: it runs with the catalog in the context, and the calls for
+  the catalog work except `ListDataCatalogs` (recorded: "a federated query with
+  the catalog in the context: the results", "get the federated data catalog").
 - Iceberg time travel by a timestamp ran. By the version `1` it failed on the
   type of the version. The `$history` table ran (recorded: "iceberg time travel
   by timestamp", "iceberg time travel by version", "the history of an iceberg
@@ -1198,27 +1208,28 @@ The other leads that the fourth pass answered, each with the request:
 - A table in a database that does not exist: failed on the right `glue:GetDatabase`
   (recorded: "a table in a database that does not exist: the execution").
 
-The leads for a fifth pass, each with a new request:
+The leads that no pass has settled, each with a new request:
 
-1. The state `QUEUED`: start more queries at once than the workgroup runs.
-2. `GetQueryRuntimeStatistics` and `BatchGetQueryExecution` with the id of a DDL
+1. `GetQueryRuntimeStatistics` and `BatchGetQueryExecution` with the id of a DDL
    statement.
-3. The `UNLOAD` of many rows, and the files that it writes.
-4. A `Catalog` that does not exist, with a table name in the statement.
-5. The text of an array, a map and a row for a string that holds a space, a brace
+2. The `UNLOAD` of many rows, and the files that it writes.
+3. A `Catalog` that does not exist, with a table name in the statement.
+4. The text of an array, a map and a row for a string that holds a space, a brace
    or a NULL element, and for a nested container.
-6. A `time with time zone` and a `timestamp with time zone` with a fraction and
+5. A `time with time zone` and a `timestamp with time zone` with a fraction and
    at offset zero, and a column of each type in a table.
-7. The smallest value of each integer type, `1E-10` and a decimal of 38 digits.
-8. A parameter in `INSERT` and in DDL, and the most parameters.
-9. The temporary credential, the burst, the limit of 100 MiB, and the
-    timeouts of a query.
-10. A query string of 262144 bytes of two byte characters, to learn whether the
-    server counts bytes or characters.
-11. A federated query with a Lambda connector and the right
-    `athena:GetDataCatalog`.
-12. `FOR VERSION AS OF` with a `bigint` snapshot id, and the rows of the `$history`
+6. The smallest value of each integer type, `1E-10` and a decimal of 38 digits.
+7. A parameter in `INSERT` and in DDL, and the most parameters.
+8. The temporary credential, the burst, the limit of 100 MiB, and the
+   timeouts of a query.
+9. A query string of 262144 bytes of two byte characters, to learn whether the
+   server counts bytes or characters.
+10. `FOR VERSION AS OF` with a `bigint` snapshot id, and the rows of the `$history`
     table and of the time travel queries.
-13. An `INSERT` and a `SELECT` on the bucketed table and on the table with
+11. An `INSERT` and a `SELECT` on the bucketed table and on the table with
     partition projection.
-14. `NOT NULL`, `UNIQUE`, `DEFAULT` and a foreign key on an Iceberg table.
+12. `NOT NULL`, `UNIQUE`, `DEFAULT` and a foreign key on an Iceberg table.
+13. A stop of a query in the state `QUEUED`.
+14. The final state of the first federated query, which was still `RUNNING` at its
+    only poll, `SHOW SCHEMAS` in the federated catalog, and the rows of
+    `all_log_streams`.

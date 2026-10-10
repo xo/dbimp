@@ -7,38 +7,38 @@
         "REDACTED"
       ]
     },
-    "body": "{\"query\":\"DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_big\",\"useLegacySql\":false}"
+    "body": "{\"query\":\"SELECT schema_name FROM `dbimp-project`.`region-us`.INFORMATION_SCHEMA.SCHEMATA ORDER BY schema_name\",\"useLegacySql\":false}"
   },
   "response": {
-    "status": 200,
+    "status": 403,
     "header": {
-      "Server": [
-        "ESF"
-      ],
       "X-Frame-Options": [
         "SAMEORIGIN"
       ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:56:17 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
       "Alt-Svc": [
         "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
-      ],
-      "Content-Type": [
-        "application/json; charset=UTF-8"
       ],
       "Vary": [
         "Origin",
         "X-Origin",
         "Referer"
       ],
-      "Date": [
-        "Sat, 10 Oct 2026 06:47:15 GMT"
+      "Content-Type": [
+        "application/json; charset=UTF-8"
       ],
-      "X-Xss-Protection": [
-        "0"
-      ],
-      "X-Content-Type-Options": [
-        "nosniff"
+      "Server": [
+        "ESF"
       ]
     },
-    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_l1ONkxUApjkv8WXfkv_lZvV0KP7q\",\n    \"location\": \"US\"\n  },\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": false,\n  \"queryId\": \"job_l1ONkxUApjkv8WXfkv_lZvV0KP7q\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"totalSlotMs\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614834879\",\n  \"startTime\": \"1791614835004\",\n  \"endTime\": \"1791614835121\",\n  \"statementType\": \"DROP_TABLE\"\n}\n"
+    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Table dbimp-project:region-us.INFORMATION_SCHEMA.SCHEMATA: User does not have the required permissions ('bigquery.datasets.get' permission(s) at the dataset level) to query system entity dbimp-project:region-us.INFORMATION_SCHEMA.SCHEMATA.\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Table dbimp-project:region-us.INFORMATION_SCHEMA.SCHEMATA: User does not have the required permissions ('bigquery.datasets.get' permission(s) at the dataset level) to query system entity dbimp-project:region-us.INFORMATION_SCHEMA.SCHEMATA.\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
   }
 }

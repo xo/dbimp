@@ -4,36 +4,36 @@
     "path": "/",
     "header": {
       "X-Amz-Date": [
-        "20261010T062745Z"
+        "20261010T090817Z"
       ],
       "Authorization": [
         "REDACTED"
       ],
       "X-Amz-Target": [
-        "AmazonAthena.DeletePreparedStatement"
+        "AmazonAthena.ListDataCatalogs"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ]
     },
-    "body": "{\"StatementName\":\"dbimp_ps\",\"WorkGroup\":\"dbimp\"}"
+    "body": "{}"
   },
   "response": {
     "status": 400,
     "header": {
-      "X-Amzn-Requestid": [
-        "283306ce-4733-4c69-a2d4-5dc385d4b0c8"
-      ],
       "Date": [
-        "Sat, 10 Oct 2026 06:27:45 GMT"
+        "Sat, 10 Oct 2026 09:08:17 GMT"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
       "Content-Length": [
-        "110"
+        "225"
+      ],
+      "X-Amzn-Requestid": [
+        "2f1d3ebd-aa0e-49f0-a35c-c922d33fb6dd"
       ]
     },
-    "body": "{\"__type\":\"ResourceNotFoundException\",\"Message\":\"PreparedStatement dbimp_ps was not found in WorkGroup dbimp\"}"
+    "body": "{\"__type\":\"AccessDeniedException\",\"Message\":\"User: arn:aws:iam::111122223333:user/dbimp-athena is not authorized to perform: athena:ListDataCatalogs because no identity-based policy allows the athena:ListDataCatalogs action\"}"
   }
 }

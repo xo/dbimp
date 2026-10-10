@@ -210,7 +210,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D187](D187-spanner-is-measured-on-the-hosted-service.md) | Spanner is measured on the hosted service | Amends D186 |
 | [D188](D188-databricks-is-a-target.md) | Databricks is a target | Decided |
 | [D189](D189-the-bigquery-driver.md) | The BigQuery driver | Decided |
-| [D190](D190-the-cosmos-db-driver.md) | The Cosmos DB driver | Decided in part |
+| [D190](D190-the-cosmos-db-driver.md) | The Cosmos DB driver | Decided |
 | [D191](D191-the-spanner-driver.md) | The Spanner driver | Decided |
 | [D192](D192-the-athena-driver.md) | The Athena driver | Decided |
 | [D193](D193-the-databricks-driver.md) | The Databricks driver | Decided |

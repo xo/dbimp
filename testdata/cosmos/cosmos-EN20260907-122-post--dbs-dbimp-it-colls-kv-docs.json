@@ -3,17 +3,17 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 09:11:07 gmt"
+      ],
       "X-Ms-Version": [
         "2018-12-31"
       ],
       "Authorization": [
         "REDACTED"
-      ],
-      "Content-Type": [
-        "application/query+json"
-      ],
-      "X-Ms-Documentdb-Isquery": [
-        "True"
       ],
       "X-Ms-Documentdb-Query-Enablecrosspartition": [
         "True"
@@ -21,8 +21,8 @@
       "Accept": [
         "application/json"
       ],
-      "X-Ms-Date": [
-        "sat, 10 oct 2026 05:32:40 gmt"
+      "Content-Type": [
+        "application/query+json"
       ]
     },
     "body": "{\"query\":\"SELECT t FROM c JOIN t IN c.arr WHERE c.id = 'ty1'\"}"
@@ -30,65 +30,65 @@
   "response": {
     "status": 200,
     "header": {
-      "X-Ms-Request-Duration-Ms": [
-        "1.41"
-      ],
       "X-Ms-Item-Count": [
         "4"
       ],
-      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
-        "100"
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Length": [
+        "225"
+      ],
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
+      ],
+      "X-Ms-Resource-Quota": [
+        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
       ],
       "Access-Control-Max-Age": [
         "3600"
       ],
-      "Content-Type": [
-        "application/json"
-      ],
       "X-Ms-Activity-Id": [
-        "57c32019-10fa-8d22-44c0-b7e9e24517ee"
+        "b371d6a3-ee14-bd34-be44-dd38dfd597be"
       ],
-      "X-Ms-Session-Token": [
-        "0:0#0"
+      "X-Ms-Gatewayversion": [
+        "2.0.0-unknown"
+      ],
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
       ],
       "X-Ms-Documentdb-Partitionkeyrangeid": [
         "0"
       ],
+      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
+        "100"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Ms-Session-Token": [
+        "0:0#0"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "0.94"
+      ],
       "Server": [
         "PGSQL"
       ],
-      "X-Ms-Interopandsdk-Time-Ms": [
-        "15"
+      "Date": [
+        "Sat, 10 Oct 2026 09:11:07 GMT"
       ],
       "X-Ms-Request-Charge": [
         "1"
       ],
       "Access-Control-Allow-Methods": [
         "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-      ],
-      "Content-Location": [
-        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
-      ],
-      "X-Ms-Gatewayversion": [
-        "2.0.0-unknown"
-      ],
-      "Access-Control-Allow-Origin": [
-        "*"
-      ],
-      "X-Ms-Resource-Quota": [
-        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 05:32:40 GMT"
-      ],
-      "Content-Length": [
-        "225"
-      ],
-      "Access-Control-Allow-Headers": [
-        "*"
-      ],
-      "X-Ms-Resource-Usage": [
-        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
       ]
     },
     "body": "{\n  \"_count\": 4,\n  \"Documents\": [\n    {\n      \"t\": 1\n    },\n    {\n      \"t\": \"a\"\n    },\n    {\n      \"t\": null\n    },\n    {\n      \"t\": [\n        2\n      ]\n    }\n  ],\n  \"_rid\": \"prwTAOZU-Sk=\",\n  \"_attachments\": \"attachments/\"\n}"

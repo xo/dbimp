@@ -3,27 +3,24 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "Authorization": [
-        "REDACTED"
-      ],
       "X-Amz-Target": [
         "AmazonAthena.GetQueryExecution"
       ],
+      "X-Amz-Date": [
+        "20261010T090647Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
       "Content-Type": [
         "application/x-amz-json-1.1"
-      ],
-      "X-Amz-Date": [
-        "20261010T062640Z"
       ]
     },
-    "body": "{\"QueryExecutionId\":\"47eb154e-f6e7-450a-82d4-d038d46b9a88\"}"
+    "body": "{\"QueryExecutionId\":\"4f1813c1-7ab1-47e4-8456-e45568a673e9\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "Date": [
-        "Sat, 10 Oct 2026 06:26:41 GMT"
-      ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
@@ -31,9 +28,12 @@
         "1531"
       ],
       "X-Amzn-Requestid": [
-        "f7c8d826-fa95-48bf-8cd5-8310f52cb310"
+        "1a139312-57b4-42e6-8745-fb91782113b3"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 09:06:47 GMT"
       ]
     },
-    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m) CROSS JOIN UNNEST(sequence(1,50000)) AS v(o)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"47eb154e-f6e7-450a-82d4-d038d46b9a88\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/47eb154e-f6e7-450a-82d4-d038d46b9a88.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"QueryQueueTimeInMillis\":96,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":166,\"TotalExecutionTimeInMillis\":301},\"Status\":{\"State\":\"RUNNING\",\"SubmissionDateTime\":1.791613600808E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/47eb154e-f6e7-450a-82d4-d038d46b9a88.csv\",\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m) CROSS JOIN UNNEST(sequence(1,50000)) AS v(o)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"47eb154e-f6e7-450a-82d4-d038d46b9a88\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/47eb154e-f6e7-450a-82d4-d038d46b9a88.csv\"},\"Stats\":{},\"Status\":{\"State\":\"RUNNING\",\"SubmissionDateTime\":1.791613600808E9},\"WorkGroup\":\"dbimp\"}}"
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m) CROSS JOIN UNNEST(sequence(1,50000)) AS v(o)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"4f1813c1-7ab1-47e4-8456-e45568a673e9\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/4f1813c1-7ab1-47e4-8456-e45568a673e9.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"QueryQueueTimeInMillis\":92,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":191,\"TotalExecutionTimeInMillis\":310},\"Status\":{\"State\":\"RUNNING\",\"SubmissionDateTime\":1.791623207038E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/4f1813c1-7ab1-47e4-8456-e45568a673e9.csv\",\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m) CROSS JOIN UNNEST(sequence(1,50000)) AS v(o)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"4f1813c1-7ab1-47e4-8456-e45568a673e9\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/4f1813c1-7ab1-47e4-8456-e45568a673e9.csv\"},\"Stats\":{},\"Status\":{\"State\":\"RUNNING\",\"SubmissionDateTime\":1.791623207038E9},\"WorkGroup\":\"dbimp\"}}"
   }
 }

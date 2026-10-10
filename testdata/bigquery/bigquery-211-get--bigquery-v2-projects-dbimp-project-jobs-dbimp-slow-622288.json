@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-slow-622288",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Etag": [
+        "dJicmYa5PlqkCIrd1riYJQ=="
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:53:33 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#job\",\n  \"etag\": \"dJicmYa5PlqkCIrd1riYJQ==\",\n  \"id\": \"dbimp-project:US.dbimp-slow-622288\",\n  \"selfLink\": \"https://bigquery.googleapis.com/bigquery/v2/projects/dbimp-project/jobs/dbimp-slow-622288?location=US\",\n  \"user_email\": \"dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"configuration\": {\n    \"query\": {\n      \"query\": \"SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 1000000)) AS a CROSS JOIN UNNEST(GENERATE_ARRAY(1, 30000)) AS b\",\n      \"destinationTable\": {\n        \"projectId\": \"dbimp-project\",\n        \"datasetId\": \"_40527c17d17179741086159c93a628e0402d0825\",\n        \"tableId\": \"anone360c922_68f3_4a1f_a47b_dda2a85d42c8\"\n      },\n      \"writeDisposition\": \"WRITE_TRUNCATE\",\n      \"priority\": \"INTERACTIVE\",\n      \"useQueryCache\": false,\n      \"useLegacySql\": false\n    },\n    \"jobType\": \"QUERY\"\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"dbimp-slow-622288\",\n    \"location\": \"US\"\n  },\n  \"statistics\": {\n    \"creationTime\": \"1791622405448\",\n    \"startTime\": \"1791622405463\",\n    \"query\": {\n      \"queryPlan\": [\n        {\n          \"name\": \"S00: Input\",\n          \"id\": \"0\",\n          \"startMs\": \"1791622405798\",\n          \"endMs\": \"1791622405890\",\n          \"waitMsAvg\": \"0\",\n          \"waitMsMax\": \"0\",\n          \"readMsAvg\": \"0\",\n          \"readMsMax\": \"0\",\n          \"computeMsAvg\": \"133\",\n          \"computeMsMax\": \"133\",\n          \"writeMsAvg\": \"9\",\n          \"writeMsMax\": \"9\",\n          \"shuffleOutputBytes\": \"0\",\n          \"shuffleOutputBytesSpilled\": \"0\",\n          \"recordsRead\": \"0\",\n          \"recordsWritten\": \"1\",\n          \"parallelInputs\": \"1\",\n          \"completedParallelInputs\": \"1\",\n          \"status\": \"COMPLETE\",\n          \"steps\": [\n            {\n              \"kind\": \"COMPUTE\",\n              \"substeps\": [\n                \"$10 := generate_array(1, 1000000)\"\n              ]\n            },\n            {\n              \"kind\": \"WRITE\",\n              \"substeps\": [\n                \"$10\",\n                \"TO __stage00_output\"\n              ]\n            }\n          ],\n          \"slotMs\": \"157\",\n          \"computeMode\": \"BIGQUERY\"\n        },\n        {\n          \"name\": \"S01: Output\",\n          \"id\": \"1\",\n          \"startMs\": \"1791622405897\",\n          \"inputStages\": [\n            \"0\"\n          ],\n          \"waitMsAvg\": \"0\",\n          \"waitMsMax\": \"0\",\n          \"readMsAvg\": \"0\",\n          \"readMsMax\": \"0\",\n          \"computeMsAvg\": \"0\",\n          \"computeMsMax\": \"0\",\n          \"writeMsAvg\": \"0\",\n          \"writeMsMax\": \"0\",\n          \"shuffleOutputBytes\": \"0\",\n          \"shuffleOutputBytesSpilled\": \"0\",\n          \"recordsRead\": \"0\",\n          \"recordsWritten\": \"0\",\n          \"parallelInputs\": \"1\",\n          \"completedParallelInputs\": \"0\",\n          \"status\": \"RUNNING\",\n          \"steps\": [\n            {\n              \"kind\": \"READ\",\n              \"substeps\": [\n                \"$10\",\n                \"FROM __stage00_output\"\n              ]\n            },\n            {\n              \"kind\": \"AGGREGATE\",\n              \"substeps\": [\n                \"$1 := SUM_OF_COUNTS($20)\"\n              ]\n            },\n            {\n              \"kind\": \"AGGREGATE\",\n              \"substeps\": [\n                \"$20 := COUNT_STAR()\"\n              ]\n            },\n            {\n              \"kind\": \"COMPUTE\",\n              \"substeps\": [\n                \"$30 := generate_array(1, 30000)\"\n              ]\n            },\n            {\n              \"kind\": \"WRITE\",\n              \"substeps\": [\n                \"$1\",\n                \"TO __stage01_output\"\n              ]\n            }\n          ],\n          \"slotMs\": \"0\",\n          \"computeMode\": \"BIGQUERY\"\n        }\n      ],\n      \"estimatedBytesProcessed\": \"0\",\n      \"timeline\": [\n        {\n          \"elapsedMs\": \"537\",\n          \"totalSlotMs\": \"3659\",\n          \"pendingUnits\": \"1\",\n          \"completedUnits\": \"1\",\n          \"activeUnits\": \"1\",\n          \"estimatedRunnableUnits\": \"0\"\n        }\n      ],\n      \"totalSlotMs\": \"3659\",\n      \"statementType\": \"SELECT\"\n    },\n    \"totalSlotMs\": \"3659\"\n  },\n  \"status\": {\n    \"state\": \"RUNNING\"\n  },\n  \"principal_subject\": \"serviceAccount:dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  }\n}\n"
+  }
+}

@@ -3,35 +3,35 @@
     "method": "POST",
     "path": "/",
     "header": {
+      "X-Amz-Date": [
+        "20261010T090132Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
       "X-Amz-Target": [
         "AmazonAthena.StartQueryExecution"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
-      ],
-      "X-Amz-Date": [
-        "20261010T062111Z"
-      ],
-      "Authorization": [
-        "REDACTED"
       ]
     },
-    "body": "{\"QueryString\":\"INSERT OVERWRITE INTO dbimp_it_part SELECT 2, 'a'\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0105-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+    "body": "{\"QueryString\":\"INSERT OVERWRITE INTO dbimp_it_part SELECT 2, 'a'\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r5-622254-0105-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
   },
   "response": {
     "status": 400,
     "header": {
-      "X-Amzn-Requestid": [
-        "3263f0ba-27e0-48f2-901a-87fca5fca158"
-      ],
       "Date": [
-        "Sat, 10 Oct 2026 06:21:11 GMT"
+        "Sat, 10 Oct 2026 09:01:32 GMT"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
       "Content-Length": [
         "172"
+      ],
+      "X-Amzn-Requestid": [
+        "99e373f9-0a7f-490f-b1cb-582c8e6d258d"
       ]
     },
     "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"line 1:8: mismatched input 'OVERWRITE'. Expecting: 'INTO'\"}"

@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-slow-622288/cancel",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Etag": [
+        "vlF0KUv8iBh2cibHk9sDBQ=="
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:53:27 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#jobCancelResponse\",\n  \"job\": {\n    \"kind\": \"bigquery#job\",\n    \"etag\": \"vlF0KUv8iBh2cibHk9sDBQ==\",\n    \"id\": \"dbimp-project:US.dbimp-slow-622288\",\n    \"selfLink\": \"https://bigquery.googleapis.com/bigquery/v2/projects/dbimp-project/jobs/dbimp-slow-622288?location=US\",\n    \"configuration\": {\n      \"query\": {\n        \"query\": \"SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 1000000)) AS a CROSS JOIN UNNEST(GENERATE_ARRAY(1, 30000)) AS b\",\n        \"destinationTable\": {\n          \"projectId\": \"dbimp-project\",\n          \"datasetId\": \"_40527c17d17179741086159c93a628e0402d0825\",\n          \"tableId\": \"anone360c922_68f3_4a1f_a47b_dda2a85d42c8\"\n        },\n        \"writeDisposition\": \"WRITE_TRUNCATE\",\n        \"priority\": \"INTERACTIVE\",\n        \"useQueryCache\": false,\n        \"useLegacySql\": false\n      },\n      \"jobType\": \"QUERY\"\n    },\n    \"jobReference\": {\n      \"projectId\": \"dbimp-project\",\n      \"jobId\": \"dbimp-slow-622288\",\n      \"location\": \"US\"\n    },\n    \"statistics\": {\n      \"creationTime\": \"1791622405448\",\n      \"startTime\": \"1791622405463\",\n      \"query\": {\n        \"statementType\": \"SELECT\"\n      }\n    },\n    \"status\": {\n      \"state\": \"RUNNING\"\n    },\n    \"jobCreationReason\": {\n      \"code\": \"REQUESTED\"\n    }\n  }\n}\n"
+  }
+}

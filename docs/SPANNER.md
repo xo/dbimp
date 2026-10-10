@@ -508,7 +508,7 @@ will generate it from the code.
 | ARRAY | array | `[]any` | `[]interface {}` | `ARRAY` | yes |
 <!-- /dbimp:types -->
 
-Notes on the mapping, which step 9 must settle:
+Notes on the mapping (decided, D191):
 
 - `FLOAT32` has the kind float, and the kind has the Go type `float64`, as ClickHouse
   `Float32` does. The wire text is the widened `float32`, so `0.1` shows as
@@ -1099,58 +1099,34 @@ The driver of `usql` is `go-sql-spanner` v1.26.0. Read of `rows.go`, 2026-10-10:
 
 ## Open questions
 
-1. R. No `dbrun` release serves REST today, and the hosted service needs an account and a
-   secret. When `dbmeta` has the entry for the Cloud Spanner emulator, the measurement is
-   repeated on it (D187). Until then, the integration tests need a service account, as
-   those of Snowflake do. Ken decides whether a test in CI can use a secret.
-2. Reading a result. Proposal: read every result with `executeStreamingSql`. The server
-   refuses a result of more than 10 MB on `executeSql`, and the stream has the same rows
-   with one code path. The driver joins the pieces of a value, as text, before it decodes
-   them. Alternative: use `executeSql` for a small result and switch to the stream above a
-   size, which needs a guess of the size.
-3. An error after rows. Proposal: the driver reads every element, hands rows to the caller
-   as they are complete, drops a row that is not complete, and returns the error from
-   `Rows.Err` when an element holds `error`, whatever the HTTP status. Alternative: read
-   the whole stream before it returns a row, which holds the result in memory and breaks D25.
-4. A resume. The server resumes a stream from a `resumeToken`, and the resumed stream has
-   no `metadata`. Proposal: the first version does not resume, and a network error ends
-   the result with an error. Alternative: resume from the last token, which needs the same
-   statement, the same parameters and the same session, and the code to keep the columns
-   and the token.
-5. The session. Proposal: one multiplexed session for each connector, made at the first use.
-   It needs no keep alive for seven days and no pool, and a read write transaction works
-   with the precommit token. Alternative: one session for each `database/sql` connection,
-   which has the lifetime of one hour and needs a keep alive and a delete. A 404 "Session not
-   found" on a statement means that the session is lost, and the driver makes a new one.
-6. Transactions. Proposal: `BeginTx` calls `beginTransaction` with `readWrite`, or
-   `readOnly` for `TxOptions.ReadOnly`. A `Commit` of a read only transaction sends nothing.
-   An `ABORTED` error reaches the caller, who retries. The driver sends `seqno` on every
-   statement of a read write transaction, counted from 1. Alternative: begin the transaction
-   at the first statement with `begin` inline, which saves a call. Outside a transaction a
-   DML statement needs its own read write transaction, so the driver begins one with `begin`
-   inline and commits it (a statement and a commit, two calls).
-7. Parameters. Proposal: turn `?` into `@p1`, `@p2` with the parser of the root package
-   (D34), and send `paramTypes` always, from the Go type of the argument. Alternative: refuse
-   `?`.
-8. Several statements. Proposal: refuse them with an error, as the server does (HTTP 501).
-   Alternative: split them with the parser and send each one, as the `usql` driver does.
-9. DDL. The server refuses a DDL statement on `executeSql`. Proposal: the driver finds a DDL
-   statement with the parser, calls `updateDatabaseDdl` and polls the operation until
-   `done`, and it returns the `error` of the operation. Alternative: return after the call and
-   let the caller poll. A cancel of the context can call `operations:cancel`, which stops an
-   operation that runs, or leave the operation to run. Ken decides which.
-10. The credentials in the DSN. A key file cannot be a part of a URL under D94. Choices: a
-    path in a query key, the text of the key in an environment variable that the DSN names, or
-    an access token that the caller makes. Ken decides. The server accepted a token with
-    text added to its end, so a test cannot use that to show a refusal.
-11. The types that are doubtful: `JSON` (decoded value or text), `FLOAT32` (`float64` or
-    `float32`, the wire text is the widened `float32`), `INTERVAL` (a column cannot have it,
-    a nanosecond is not measured) and a `STRUCT` inside an `ARRAY` (a tuple, with no names). Two
-    models of two vendors advised the text for `JSON`. The kind `json` of `TYPES.md` says a
-    decoded value.
-12. `ENUM`, `PROTO` and the PostgreSQL dialect are not measured. `TOKENLIST` is refused in a
-    result, so a table that has one can be read when the statement leaves the column out. Ken
-    decides whether the first version covers the unmeasured types or refuses them.
+Ken decided the proposals of step 9 on 2026-10-10 (decided, D191). The list below holds
+each one with its answer.
+
+1. R and the tests: decided, D191. Development uses the hosted instance. The integration
+   tests run on the Cloud Spanner emulator when `dbmeta` has its entry (D187), and on the
+   hosted instance only where a person supplies it.
+2. Reading a result: decided, D191. The driver reads every result with `executeStreamingSql`
+   and joins the pieces of a `chunkedValue` as plain text before it decodes base64.
+3. An error after rows: decided, D191. A broken stream returns its error. The driver reads
+   each element and takes an element with `error` as the end of the result.
+4. A resume: decided, D191. The driver does not resume a stream with the `resumeToken`.
+5. The session: decided, D191. One multiplexed session for each connector, and a new one
+   when the server answers `NOT_FOUND`.
+6. Transactions: decided, D191. `BeginTx` calls `beginTransaction`. An `ABORTED` answer goes
+   to the caller, and a commit of a read only transaction sends nothing.
+7. Parameters: decided, D191. The driver turns `?` into `@p1`, `@p2` and always sends
+   `paramTypes`. A caller can write `@name`. A statement that mixes both is an error.
+8. Several statements: decided, D191. The driver refuses them, as the server does.
+9. DDL: decided, D191. The driver sends a DDL statement to `updateDatabaseDdl` and polls
+   the operation until it is done. When the context ends, it calls `operations:cancel`.
+10. The credentials: decided, D191. A path to a key file in a key of the DSN query. The
+    driver signs the JWT. A caller can pass an access token through a connector.
+11. The doubtful types: decided, D191. `JSON` is a decoded value, `FLOAT32` is a `float64`
+    and `INTERVAL` is a `dbimp.Interval`. The table above agrees.
+12. `ENUM`, `PROTO`, `TOKENLIST` and the PostgreSQL dialect: decided, D191. They are not
+    covered in the first version. `ENUM` and `PROTO` return an error that names the column,
+    a `TOKENLIST` column cannot be selected, and the driver refuses a PostgreSQL database
+    when it connects.
 13. The matrix in `TYPES.md` has no column for Spanner yet. The test that writes it fails until
     it runs with `DBIMP_UPDATE=1`.
 14. The tests that `features.json` names do not exist yet. The gate that reads them runs when

@@ -3,8 +3,17 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:32:40 gmt"
+        "sat, 10 oct 2026 09:11:07 gmt"
       ],
       "X-Ms-Version": [
         "2018-12-31"
@@ -12,17 +21,8 @@
       "Authorization": [
         "REDACTED"
       ],
-      "X-Ms-Documentdb-Query-Enablecrosspartition": [
-        "True"
-      ],
       "Accept": [
         "application/json"
-      ],
-      "Content-Type": [
-        "application/query+json"
-      ],
-      "X-Ms-Documentdb-Isquery": [
-        "True"
       ]
     },
     "body": "{\"query\":\"SELECT c.id, (SELECT VALUE COUNT(1) FROM t IN c.arr) AS n FROM c WHERE c.id = 'ty1'\"}"
@@ -30,65 +30,65 @@
   "response": {
     "status": 200,
     "header": {
-      "X-Ms-Request-Duration-Ms": [
-        "1.33"
+      "Date": [
+        "Sat, 10 Oct 2026 09:11:07 GMT"
       ],
-      "Content-Location": [
-        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
       ],
-      "X-Ms-Documentdb-Partitionkeyrangeid": [
-        "0"
+      "Access-Control-Allow-Origin": [
+        "*"
       ],
       "X-Ms-Request-Charge": [
         "1"
       ],
-      "X-Ms-Resource-Quota": [
-        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
       ],
-      "X-Ms-Activity-Id": [
-        "730d2e18-4576-b083-9a68-0ae30bc1b61f"
+      "Server": [
+        "PGSQL"
       ],
-      "X-Ms-Session-Token": [
-        "0:0#0"
+      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
+        "100"
       ],
-      "Access-Control-Allow-Origin": [
+      "Access-Control-Allow-Headers": [
         "*"
       ],
       "Content-Length": [
         "143"
       ],
-      "Server": [
-        "PGSQL"
-      ],
-      "Access-Control-Allow-Methods": [
-        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-      ],
-      "X-Ms-Item-Count": [
-        "1"
-      ],
-      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
-        "100"
-      ],
-      "X-Ms-Resource-Usage": [
-        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 05:32:40 GMT"
-      ],
-      "Access-Control-Max-Age": [
-        "3600"
+      "X-Ms-Activity-Id": [
+        "7e86e869-5887-fb78-ab6f-43ce1c532d84"
       ],
       "Content-Type": [
         "application/json"
       ],
-      "X-Ms-Interopandsdk-Time-Ms": [
-        "15"
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
       ],
-      "Access-Control-Allow-Headers": [
-        "*"
+      "X-Ms-Item-Count": [
+        "1"
+      ],
+      "Access-Control-Max-Age": [
+        "3600"
+      ],
+      "X-Ms-Session-Token": [
+        "0:0#0"
       ],
       "X-Ms-Gatewayversion": [
         "2.0.0-unknown"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
+      ],
+      "X-Ms-Resource-Quota": [
+        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "0.93"
+      ],
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
       ]
     },
     "body": "{\n  \"_count\": 1,\n  \"Documents\": [\n    {\n      \"n\": 4,\n      \"id\": \"ty1\"\n    }\n  ],\n  \"_rid\": \"prwTAOZU-Sk=\",\n  \"_attachments\": \"attachments/\"\n}"

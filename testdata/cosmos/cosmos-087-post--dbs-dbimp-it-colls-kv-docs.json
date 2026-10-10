@@ -3,12 +3,6 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
-      "X-Ms-Version": [
-        "2018-12-31"
-      ],
-      "Authorization": [
-        "REDACTED"
-      ],
       "Content-Type": [
         "application/query+json"
       ],
@@ -22,7 +16,13 @@
         "application/json"
       ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:02:24 gmt"
+        "sat, 10 oct 2026 09:03:21 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
     "body": "{\"query\":\"SELECT @p AS v\",\"parameters\":[{\"name\":\"@p\",\"value\":1},{\"name\":\"@p\",\"value\":2}]}"
@@ -30,8 +30,11 @@
   "response": {
     "status": 400,
     "header": {
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
+      ],
       "Date": [
-        "Sat, 10 Oct 2026 05:02:24 GMT"
+        "Sat, 10 Oct 2026 09:03:20 GMT"
       ],
       "Content-Type": [
         "application/json"
@@ -40,15 +43,12 @@
         "Microsoft-HTTPAPI/2.0"
       ],
       "X-Ms-Activity-Id": [
-        "5ad39bc0-afe4-4515-993f-b0888afed549"
+        "05be2ed4-514b-49aa-bf4a-11a325d13f1b"
       ],
       "Strict-Transport-Security": [
         "max-age=31536000"
-      ],
-      "X-Ms-Gatewayversion": [
-        "version=2.14.0"
       ]
     },
-    "body": "{\"code\":\"BadRequest\",\"message\":\"Message: {\\\"Errors\\\":[\\\"Invalid query. Specified duplicate parameter name '@p'.\\\"]}\\r\\nActivityId: 5ad39bc0-afe4-4515-993f-b0888afed549, Microsoft.Azure.Documents.Common/2.14.0\"}"
+    "body": "{\"code\":\"BadRequest\",\"message\":\"Message: {\\\"Errors\\\":[\\\"Invalid query. Specified duplicate parameter name '@p'.\\\"]}\\r\\nActivityId: 05be2ed4-514b-49aa-bf4a-11a325d13f1b, Microsoft.Azure.Documents.Common/2.14.0\"}"
   }
 }

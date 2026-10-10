@@ -3,11 +3,8 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/bulk/docs",
     "header": {
-      "Content-Type": [
-        "application/query+json"
-      ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:02:51 gmt"
+        "sat, 10 oct 2026 09:03:48 gmt"
       ],
       "X-Ms-Version": [
         "2018-12-31"
@@ -15,11 +12,14 @@
       "Authorization": [
         "REDACTED"
       ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
       "Accept": [
         "application/json"
       ],
-      "X-Ms-Documentdb-Isquery": [
-        "True"
+      "Content-Type": [
+        "application/query+json"
       ]
     },
     "body": "{\"query\":\"SELECT VALUE COUNT(1) FROM c\"}"
@@ -27,25 +27,25 @@
   "response": {
     "status": 400,
     "header": {
-      "X-Ms-Activity-Id": [
-        "47ff6ab0-338d-4857-98bc-39d1ea996ded"
-      ],
-      "Strict-Transport-Security": [
-        "max-age=31536000"
-      ],
-      "X-Ms-Gatewayversion": [
-        "version=2.14.0"
-      ],
       "Date": [
-        "Sat, 10 Oct 2026 05:02:51 GMT"
+        "Sat, 10 Oct 2026 09:03:48 GMT"
       ],
       "Content-Type": [
         "application/json"
       ],
       "Server": [
         "Microsoft-HTTPAPI/2.0"
+      ],
+      "X-Ms-Activity-Id": [
+        "cc07edad-f38b-4d32-8ce0-06563aa6826d"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000"
+      ],
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
       ]
     },
-    "body": "{\"code\":\"BadRequest\",\"message\":\"Cross partition query is required but disabled. Please set x-ms-documentdb-query-enablecrosspartition to true, specify x-ms-documentdb-partitionkey, or revise your query to avoid this exception.\\r\\nActivityId: 47ff6ab0-338d-4857-98bc-39d1ea996ded, Microsoft.Azure.Documents.Common/2.14.0\"}"
+    "body": "{\"code\":\"BadRequest\",\"message\":\"Cross partition query is required but disabled. Please set x-ms-documentdb-query-enablecrosspartition to true, specify x-ms-documentdb-partitionkey, or revise your query to avoid this exception.\\r\\nActivityId: cc07edad-f38b-4d32-8ce0-06563aa6826d, Microsoft.Azure.Documents.Common/2.14.0\"}"
   }
 }

@@ -3,37 +3,37 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "Content-Type": [
-        "application/x-amz-json-1.1"
-      ],
-      "X-Amz-Target": [
-        "AmazonAthena.StartQueryExecution"
-      ],
       "X-Amz-Date": [
-        "20261010T062751Z"
+        "20261010T090818Z"
       ],
       "Authorization": [
         "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.ListTableMetadata"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
       ]
     },
-    "body": "{\"QueryString\":\"DROP TABLE IF EXISTS dbimp_it_ice\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0157-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+    "body": "{\"CatalogName\":\"dbimp-cw\",\"DatabaseName\":\"/aws/lambda/dbimp-cw\"}"
   },
   "response": {
     "status": 200,
     "header": {
+      "Content-Length": [
+        "1778"
+      ],
+      "X-Amzn-Requestid": [
+        "4964eac4-adb1-406a-b631-f00b5949ab84"
+      ],
       "Date": [
-        "Sat, 10 Oct 2026 06:27:52 GMT"
+        "Sat, 10 Oct 2026 09:08:19 GMT"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
-      ],
-      "Content-Length": [
-        "59"
-      ],
-      "X-Amzn-Requestid": [
-        "5dcc1c8b-08b8-4cd4-b1ce-2d7b9db7d35b"
       ]
     },
-    "body": "{\"QueryExecutionId\":\"38341c55-917f-43fa-967e-ebb8ad8796c3\"}"
+    "body": "{\"TableMetadataList\":[{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"2026/10/10/[$LATEST]1b580bc05e2c491eb0c45494d5903a33\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"},{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"2026/10/10/[$LATEST]4cf398d7992a4dcd9fa0450ea31cbca9\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"},{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"2026/10/10/[$LATEST]5731d9926b1f4cf0a9bed87e502659a3\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"},{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"2026/10/10/[$LATEST]5ccb997f265843df904778db38f2f0fd\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"},{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"2026/10/10/[$LATEST]7fa5c36778e84500bfb670e32d347817\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"},{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"2026/10/10/[$LATEST]bc5bed364d2145bc99e827c63235eebd\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"},{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"2026/10/10/[$LATEST]d331c77f2d2d43c28a6775a9a65d3af9\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"},{\"Columns\":[{\"Name\":\"time\",\"Type\":\"bigint\"},{\"Name\":\"message\",\"Type\":\"varchar\"}],\"Name\":\"all_log_streams\",\"PartitionKeys\":[{\"Name\":\"log_stream\",\"Type\":\"varchar\"}],\"TableType\":\"EXTERNAL\"}]}"
   }
 }

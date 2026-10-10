@@ -3,14 +3,14 @@
     "method": "POST",
     "path": "/dbs/dbimp_it/colls/kv/docs",
     "header": {
-      "X-Ms-Documentdb-Query-Enablecrosspartition": [
-        "True"
-      ],
       "Accept": [
         "application/json"
       ],
+      "Content-Type": [
+        "application/query+json"
+      ],
       "X-Ms-Date": [
-        "sat, 10 oct 2026 05:02:57 gmt"
+        "sat, 10 oct 2026 09:03:54 gmt"
       ],
       "X-Ms-Version": [
         "2018-12-31"
@@ -18,10 +18,10 @@
       "Authorization": [
         "REDACTED"
       ],
-      "Content-Type": [
-        "application/query+json"
-      ],
       "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
         "True"
       ]
     },
@@ -30,14 +30,11 @@
   "response": {
     "status": 400,
     "header": {
-      "Strict-Transport-Security": [
-        "max-age=31536000"
-      ],
       "X-Ms-Gatewayversion": [
         "version=2.14.0"
       ],
       "Date": [
-        "Sat, 10 Oct 2026 05:02:57 GMT"
+        "Sat, 10 Oct 2026 09:03:54 GMT"
       ],
       "Content-Type": [
         "application/json"
@@ -46,12 +43,15 @@
         "Microsoft-HTTPAPI/2.0"
       ],
       "X-Ms-Activity-Id": [
-        "466e3cb6-24bb-4598-a620-e4132d355173"
+        "18379d18-d3bf-49a9-ac5e-5559fa78e086"
       ],
       "X-Ms-Substatus": [
         "1004"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000"
       ]
     },
-    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: 466e3cb6-24bb-4598-a620-e4132d355173, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":2,\\\"offset\\\":null,\\\"limit\\\":null,\\\"orderBy\\\":[\\\"Ascending\\\"],\\\"orderByExpressions\\\":[\\\"c.id\\\"],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"SELECT TOP 2 c._rid, [{\\\\\\\"item\\\\\\\": c.id}] AS orderByItems, {\\\\\\\"id\\\\\\\": c.id} AS payload\\\\nFROM c\\\\nWHERE ({documentdb-formattableorderbyquery-filter})\\\\nORDER BY c.id\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
+    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: 18379d18-d3bf-49a9-ac5e-5559fa78e086, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":2,\\\"offset\\\":null,\\\"limit\\\":null,\\\"orderBy\\\":[\\\"Ascending\\\"],\\\"orderByExpressions\\\":[\\\"c.id\\\"],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"SELECT TOP 2 c._rid, [{\\\\\\\"item\\\\\\\": c.id}] AS orderByItems, {\\\\\\\"id\\\\\\\": c.id} AS payload\\\\nFROM c\\\\nWHERE ({documentdb-formattableorderbyquery-filter})\\\\nORDER BY c.id\\\",\\\"hasSelectValue\\\":false,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
   }
 }

@@ -3,37 +3,37 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "Content-Type": [
-        "application/x-amz-json-1.1"
-      ],
       "X-Amz-Target": [
         "AmazonAthena.GetQueryExecution"
       ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
       "X-Amz-Date": [
-        "20261010T061229Z"
+        "20261010T085310Z"
       ],
       "Authorization": [
         "REDACTED"
       ]
     },
-    "body": "{\"QueryExecutionId\":\"9ffc0278-e340-4240-b98b-6a808be24cba\"}"
+    "body": "{\"QueryExecutionId\":\"4cc49bfc-7073-4128-8750-15c7aaad94b9\"}"
   },
   "response": {
     "status": 200,
     "header": {
-      "X-Amzn-Requestid": [
-        "410419c1-4d27-42ec-b5bf-c57692532687"
-      ],
       "Date": [
-        "Sat, 10 Oct 2026 06:12:32 GMT"
+        "Sat, 10 Oct 2026 08:53:10 GMT"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
       "Content-Length": [
         "1868"
+      ],
+      "X-Amzn-Requestid": [
+        "0a7bd90b-8261-4e8e-9b9a-f09c89b6afcb"
       ]
     },
-    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"MERGE INTO dbimp_it_ice t USING (SELECT 1 AS id, 'm' AS name) s ON t.id = s.id WHEN MATCHED THEN UPDATE SET name = s.name\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"9ffc0278-e340-4240-b98b-6a808be24cba\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/9ffc0278-e340-4240-b98b-6a808be24cba.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":44,\"EngineExecutionTimeInMillis\":1660,\"QueryPlanningTimeInMillis\":267,\"QueryQueueTimeInMillis\":59,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":205,\"ServiceProcessingTimeInMillis\":35,\"TotalExecutionTimeInMillis\":1959},\"Status\":{\"CompletionDateTime\":1.791612741792E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612739833E9},\"SubstatementType\":\"MERGE\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/9ffc0278-e340-4240-b98b-6a808be24cba.csv\",\"Query\":\"MERGE INTO dbimp_it_ice t USING (SELECT 1 AS id, 'm' AS name) s ON t.id = s.id WHEN MATCHED THEN UPDATE SET name = s.name\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"9ffc0278-e340-4240-b98b-6a808be24cba\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/9ffc0278-e340-4240-b98b-6a808be24cba.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":1660,\"ProcessedBytes\":44,\"ProcessedInputBytes\":394,\"ProcessedInputRows\":2,\"ProcessedRows\":2,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791612741792E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612739833E9},\"WorkGroup\":\"dbimp\"}}"
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"MERGE INTO dbimp_it_ice t USING (SELECT 1 AS id, 'm' AS name) s ON t.id = s.id WHEN MATCHED THEN UPDATE SET name = s.name\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"4cc49bfc-7073-4128-8750-15c7aaad94b9\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/4cc49bfc-7073-4128-8750-15c7aaad94b9.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":44,\"EngineExecutionTimeInMillis\":1751,\"QueryPlanningTimeInMillis\":303,\"QueryQueueTimeInMillis\":87,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":142,\"ServiceProcessingTimeInMillis\":23,\"TotalExecutionTimeInMillis\":2003},\"Status\":{\"CompletionDateTime\":1.791622382701E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791622380698E9},\"SubstatementType\":\"MERGE\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/4cc49bfc-7073-4128-8750-15c7aaad94b9.csv\",\"Query\":\"MERGE INTO dbimp_it_ice t USING (SELECT 1 AS id, 'm' AS name) s ON t.id = s.id WHEN MATCHED THEN UPDATE SET name = s.name\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"4cc49bfc-7073-4128-8750-15c7aaad94b9\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/4cc49bfc-7073-4128-8750-15c7aaad94b9.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":1751,\"ProcessedBytes\":44,\"ProcessedInputBytes\":394,\"ProcessedInputRows\":2,\"ProcessedRows\":2,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791622382701E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791622380698E9},\"WorkGroup\":\"dbimp\"}}"
   }
 }

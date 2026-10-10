@@ -456,7 +456,7 @@ differ for the integers: `TINYINT` is `BYTE`, `SMALLINT` is `SHORT` and `BIGINT`
   (read of `internal/rows/rows.go`, 2026-10-10).
 
 The mapping is in the table below. The table was written by hand for step 8a. Step 10 will
-generate it from the code. The mapping waits for Ken (see Open questions).
+generate it from the code. Ken decided the mapping in D193 items 6 and 7.
 
 <!-- dbimp:types -->
 | Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
@@ -475,10 +475,10 @@ generate it from the code. The mapping waits for Ken (see Open questions).
 | TIMESTAMP | timestamp | `time.Time` | `time.Time` | `TIMESTAMP` | yes |
 | TIMESTAMP_NTZ | local timestamp | `dbimp.LocalDateTime` | `dbimp.LocalDateTime` | `TIMESTAMP_NTZ` | yes |
 | INTERVAL YEAR TO MONTH | interval | `dbimp.Interval` | `dbimp.Interval` | `INTERVAL` | yes |
-| INTERVAL DAY TO SECOND | duration | `time.Duration` | `time.Duration` | `INTERVAL` | yes |
+| INTERVAL DAY TO SECOND | interval | `dbimp.Interval` | `dbimp.Interval` | `INTERVAL` | yes |
 | ARRAY | array | `[]any` | `[]interface {}` | `ARRAY` | yes |
 | MAP | map | `map[string]any` | `map[string]interface {}` | `MAP` | yes |
-| STRUCT | tuple | `[]any` | `[]interface {}` | `STRUCT` | yes |
+| STRUCT | map | `map[string]any` | `map[string]interface {}` | `STRUCT` | yes |
 | VARIANT | json | `the decoded JSON value` | `interface {}` | `VARIANT` | yes |
 | GEOMETRY | geometry | `string` | `string` | `GEOMETRY` | yes |
 | GEOGRAPHY | geometry | `string` | `string` | `GEOGRAPHY` | yes |
@@ -493,29 +493,25 @@ Notes on the mapping, which step 9 must settle:
   `float64` nearest to the text, and not as the `float32` widened. Both are choices for step 9.
   `NaN`, `Infinity` and `-Infinity` need a reader that takes them, and `strconv.ParseFloat`
   does.
-- `TIMESTAMP` and `TIMESTAMP_NTZ` have three digits of fraction in `JSON_ARRAY`, so a value with
+- Decided, D193: the driver accepts three digits. `TIMESTAMP` and `TIMESTAMP_NTZ` have three digits of fraction in `JSON_ARRAY`, so a value with
   microseconds loses them in the server before the driver sees them. The Go types hold
   nanoseconds. A column in a stored table keeps the microseconds on the server (recorded:
   "the rows of every type" shows the stored value was cut in the answer, and the statement
   that stored it had six digits).
-- `INTERVAL YEAR TO MONTH` is a count of months, so it fits `dbimp.Interval` with months only.
-  `INTERVAL DAY TO SECOND` is an exact length, so it fits `time.Duration`, as the interval of days of
-  Elasticsearch does (`TYPES.md`). A length above about 292 years does not fit, and
-  the row fails, as D178 item 15 says for Elasticsearch. The types `INTERVAL YEAR` and
-  `INTERVAL MONTH` have their own `type_interval_type` and the same kind.
+- Decided, D193: both interval types are a `dbimp.Interval`. A year to month interval has months only, and a day to second
+  interval has days and nanoseconds. The types `INTERVAL YEAR`, `INTERVAL MONTH`, `INTERVAL DAY`, `INTERVAL HOUR`, `INTERVAL MINUTE` and
+  `INTERVAL SECOND` have their own `type_interval_type` and the same kind.
 - A `DECIMAL` has up to 38 digits, so `*apd.Decimal` holds every value (D33).
-- `MAP` has keys of any type, and the text has text keys. The Go type has string keys, so the
-  key type of a map of `INT` is lost, and the keys of a map of `BINARY` stay base64 text. The
-  alternatives are a list of pairs and `map[any]any`.
-- `STRUCT` is a tuple because a struct can have two fields with one name (source: Gemini, not
-  measured on the service) and because the order is in `type_text`. The names are in the schema. The
-  alternative is a map from the names.
+- `MAP` has keys of any type, and the text has text keys, so the key type of a map of `INT` is lost, and the keys of a map
+  of `BINARY` stay base64 text.
+- Decided, D193: a `STRUCT` is a `map[string]any`, a `MAP` is a `map[string]any` that loses its key type, and an `ARRAY` is a `[]any`.
+  The driver parses `type_text` to decode them. A struct with two fields of one name is not recorded.
 - Every leaf of an `ARRAY`, `MAP` or `STRUCT` is text, so the driver must parse `type_text`
   (`ARRAY<STRUCT<a: MAP<STRING, ARRAY<INT>> NOT NULL>>`) and decode each leaf by its type. The
   grammar has a space after a comma, `: ` between a name and a type, and `NOT NULL`.
 - `VARIANT` is decoded JSON with real numbers, so a number goes through `dbimp.Number` (D19). A
   `VARIANT` that holds a JSON null and a SQL NULL both become `nil`, and the kind json cannot tell
-  them apart. This is the question of D18.
+  them apart. Decided, D193: both are `nil` (D18).
 - `GEOMETRY` and `GEOGRAPHY` are text with a different form for the SRID, and the kind geometry
   leaves the Go type to the decision of the driver. The table gives `string`, as Databend does.
 - `VOID` is the type of a bare `NULL`, and the value of such a column is not recorded in `JSON_ARRAY`.
@@ -905,8 +901,7 @@ source in the module cache, 2026-10-10):
     292 years. They were told only the shape of the text. When Gemini was told that Spark stores a day to second
     interval as an exact count of microseconds, so a day is 24 hours, it said that this changes its view, and that the
     type then measures an absolute duration. That fact is not measured here (source: Gemini and the Spark
-    documentation as the agent knows it). The mapping keeps `time.Duration`, as Elasticsearch has it, and the question
-    is open for Ken (see Open questions).
+    documentation as the agent knows it). Decided, D193: the mapping is a `dbimp.Interval`.
   - DeepSeek said that a `VARIANT` that holds a JSON null and a SQL NULL must not both become `nil`, and that a number
     in a `VARIANT` must not go through a `float64`. The mapping already decodes the number with `dbimp.Number` (D19), as
     the kind json says, and the JSON null is the question of D18, which is open. It said that the parser of `type_text`
@@ -922,50 +917,29 @@ source in the module cache, 2026-10-10):
 
 ## Open questions
 
+Ken decided the step 9 items on 2026-10-10, in D193. These are the answers, and what stays open.
+
+- Decided, D193: `INLINE` only, with an error on `truncated` or on a statement that fails for the size of the result. A
+  later release can add `EXTERNAL_LINKS` after a recording of a second chunk and of the body of a link.
+- Decided, D193: the driver accepts the three fraction digits of `TIMESTAMP` and `TIMESTAMP_NTZ`. A caller who needs
+  microseconds casts to a string in SQL.
+- Decided, D193: the DSN is `databricks://token:<pat>@host/<warehouse-id>?catalog=&schema=`, with the token as the
+  password (D94). OAuth with a client id and a secret can come later.
+- Decided, D193: `BeginTx` returns the error of D20. The driver sends the catalog and the schema of the DSN with every
+  statement. `SET`, `USE`, temporary views and variables do not last between statements.
+- Decided, D193: several statements go to the server, which answers a parse error. The driver sends `wait_timeout` of
+  50 seconds and polls. `Exec` reads the count row, and `RowsAffected` returns the wrapped `dbimp.ErrNotSupported` when
+  there is none. The error type exposes the HTTP status, `error_code`, `sql_state` and the message. The driver gives no
+  answer to a version request (D181), the token goes only to the configured host, and the driver serves no flavor.
+- Decided, D193: the types are as in the type table. `STRUCT` is a map, `INTERVAL` is a `dbimp.Interval`, and a `VARIANT`
+  with a JSON null or a SQL NULL gives `nil`.
 1. R. Databricks is a hosted service with no emulator, so a test needs a workspace and a token. The Free Edition
-   workspace is free and has one warehouse that stops after 10 minutes, so a run pays about 15 seconds when it
-   starts. Whether a driver here has integration tests in CI against a workspace, and with what secret, is a question for
-   Ken. The alternatives are the unit tests with the recorded exchanges, a run by hand when a driver changes, and a
-   job of CI with a secret and a Free Edition workspace that `dbsetup` provisions (D188, dbmeta D117).
-2. D21 for a large result. Every recorded result had one chunk. A result above 25 MiB needs `EXTERNAL_LINKS`, and the
-   driver then fetches a link with a `GET` and no `Authorization` header, on a second host. The choices for step 9 are:
-   `INLINE` only, with an error when `truncated` is `true` or when the server fails a result that is too large (a
-   result above 25 MiB is then an error that the caller sees), `EXTERNAL_LINKS` with `JSON_ARRAY` always, or `INLINE`
-   first and a second run with links when the first run says the result is too large. A second live pass must send
-   the large result before the driver decides.
-3. The lost microseconds. `TIMESTAMP` and `TIMESTAMP_NTZ` keep three digits in `JSON_ARRAY` inline. A value with microseconds
-   changes by the server before the driver sees it. The choices are to accept it and say so, to refuse a column that
-   loses digits (the driver cannot know), to read the link of `JSON_ARRAY` if it keeps the digits, or to ask for
-   Arrow, which D13 does not allow without Ken. Whether the link of `JSON_ARRAY` keeps them is not measured.
-4. The mapping of the types (step 8a). The kinds that need Ken: `STRUCT` as a tuple or as a map, `MAP` with text keys,
-   `INTERVAL DAY TO SECOND` as `time.Duration`, `GEOMETRY` and `GEOGRAPHY` as text, `VARIANT` with a JSON null and a SQL NULL both
-   `nil`, and `FLOAT` read as `float64` from the text of a 32 bit value.
-5. The secret of the DSN. D94 says that the secret is the password of the URL. A personal access token goes there. A
-   client id and a client secret for OAuth need two secrets, and the choices are the user name and the password of the URL
-   (the client id and the client secret), or a query key (which breaks D94). The choice is for step 9.
-6. The host. `dburl` adds `.cloud.databricks.com` to a host that has no dot, so AWS works with a short name, and an
-   Azure host or a Google Cloud host has dots and passes unchanged. Whether the driver accepts a host with a port other
-   than 443, and `http` for a test, is for step 9.
-7. The warehouse in the URL. The path can hold `/sql/1.0/warehouses/<id>`, as the ODBC path does, or the bare id,
-   or a key `warehouse`. `dbmeta` lists `/sql/1.0/endpoints/<id>`. The choice is for step 9.
-8. Transactions. `BeginTx` returns the error of D20, because a transaction does not last across requests. A script
-   `BEGIN ATOMIC ... END` is one statement, and only a table with a feature allows it. The choice is for step 9, with D20.
-9. The session. A caller of `database/sql` expects `SET` and `USE` to last on a connection. They do not, so the driver
-   must say it, or it must fail `SET` and `USE` with an error, or it must send the `catalog` and `schema` members from
-   an option. The choice is for step 9.
-10. Several statements in one request. The server refuses them, and a script in `BEGIN ... END` runs. The driver can
-    pass the text as it is, or split it, which needs a parser. The choice is for step 9, as for Snowflake (D183 item 15).
-11. Whether the driver sends `wait_timeout` of `"50s"` and polls, or sends `"0s"` and polls at once. The wake of the
-    warehouse takes 15 seconds, so `"50s"` saves a poll. The choice is for step 9.
-12. The count of rows. A statement of DML gives a row of counts in the result, and the answer does not say that it was
-    DML. `ExecContext` reads the row, and `QueryContext` returns it as a row. The count of `CREATE TABLE AS SELECT` is
-    not in the answer, so `RowsAffected` returns an error that wraps `dbimp.ErrNotSupported`, as D178 item 14 says. The
-    choice of the rule that tells DML is for step 9.
-13. The error type. Every failed statement has `error_code` of `BAD_REQUEST`, so the driver must give the caller the
-    `sql_state` and the name in brackets. The shape is for step 9.
-14. `INTERVAL DAY TO SECOND` as `time.Duration` or as `dbimp.Interval`. Both models first said `dbimp.Interval`.
-    Spark keeps the interval as an exact count of microseconds, which fits `time.Duration` except above about 292 years
-    (see Second opinions). The driver in another language was not read.
-15. The tests that `features.json` names do not exist yet. The gate that reads them runs when the package `databricks/`
-    exists. The type table above has a row that the matrix of `TYPES.md` does not have yet, and the test that writes the matrix
-    fails until it runs with `DBIMP_UPDATE=1`.
+   workspace is free and has one warehouse that stops after 10 minutes. Whether a driver here has integration tests in CI
+   against a workspace, and with what secret, is a question for Ken (D188, dbmeta D117).
+2. The host. `dburl` adds `.cloud.databricks.com` to a host that has no dot. Whether the driver accepts a port other than
+   443 and `http` for a test is not decided.
+3. The recordings contain presigned link URLs. Their signatures were redacted by the main session.
+4. The leads for a second live pass, in Second opinions, stay open.
+5. The tests that `features.json` names do not exist yet. The gate that reads them runs when the package `databricks/`
+   exists. The type table has a row that the matrix of `TYPES.md` does not have yet, and the test that writes the matrix
+   fails until it runs with `DBIMP_UPDATE=1`.

@@ -7,38 +7,38 @@
         "REDACTED"
       ]
     },
-    "body": "{\"query\":\"DROP SNAPSHOT TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_sn_r2\",\"useLegacySql\":false}"
+    "body": "{\"query\":\"CALL BQ.ABORT_SESSION()\",\"useLegacySql\":false,\"connectionProperties\":[{\"key\":\"session_id\",\"value\":\"ChUKE2RiaW1wLWJxLTMxMjE2MTEyMDMQARokZjdkMTBkMzctMjljOS00M2RhLTgzN2EtMDQ5N2Q2NmY5OTcy\"}]}"
   },
   "response": {
-    "status": 403,
+    "status": 200,
     "header": {
-      "X-Frame-Options": [
-        "SAMEORIGIN"
-      ],
-      "X-Content-Type-Options": [
-        "nosniff"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 06:47:26 GMT"
-      ],
-      "Alt-Svc": [
-        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
-      ],
       "Vary": [
         "Origin",
         "X-Origin",
         "Referer"
       ],
-      "Content-Type": [
-        "application/json; charset=UTF-8"
-      ],
       "Server": [
         "ESF"
       ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:56:35 GMT"
+      ],
       "X-Xss-Protection": [
         "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
       ]
     },
-    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Table dbimp-project:dbimp_test.dbimp_it_sn_r2: Permission bigquery.tables.deleteSnapshot denied on table dbimp-project:dbimp_test.dbimp_it_sn_r2 (or it may not exist).\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Table dbimp-project:dbimp_test.dbimp_it_sn_r2: Permission bigquery.tables.deleteSnapshot denied on table dbimp-project:dbimp_test.dbimp_it_sn_r2 (or it may not exist).\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_PskIryAAD3PwqalISY7Z-dV5T73s\",\n    \"location\": \"US\"\n  },\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"sessionInfo\": {\n    \"sessionId\": \"ChUKE2RiaW1wLWJxLTMxMjE2MTEyMDMQARokZjdkMTBkMzctMjljOS00M2RhLTgzN2EtMDQ5N2Q2NmY5OTcy\"\n  },\n  \"queryId\": \"job_PskIryAAD3PwqalISY7Z-dV5T73s\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"totalSlotMs\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791622595592\",\n  \"startTime\": \"1791622595661\",\n  \"endTime\": \"1791622595705\",\n  \"statementType\": \"SCRIPT\"\n}\n"
   }
 }

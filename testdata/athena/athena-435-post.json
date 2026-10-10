@@ -3,37 +3,37 @@
     "method": "POST",
     "path": "/",
     "header": {
-      "X-Amz-Date": [
-        "20261010T062731Z"
-      ],
-      "Authorization": [
-        "REDACTED"
-      ],
       "X-Amz-Target": [
-        "AmazonAthena.GetQueryExecution"
+        "AmazonAthena.StartQueryExecution"
       ],
       "Content-Type": [
         "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T090756Z"
+      ],
+      "Authorization": [
+        "REDACTED"
       ]
     },
-    "body": "{\"QueryExecutionId\":\"d6ae6e38-82df-43b9-ba20-1377bfd070f5\"}"
+    "body": "{\"QueryString\":\"DESCRIBE \\\"dbimp-cw\\\".\\\"/aws/lambda/dbimp-cw\\\".all_log_streams\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r5-622254-0151-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 09:07:56 GMT"
+      ],
       "Content-Type": [
         "application/x-amz-json-1.1"
       ],
       "Content-Length": [
-        "1655"
+        "180"
       ],
       "X-Amzn-Requestid": [
-        "300e6915-2cb1-470d-8ff1-58a2f06ee47f"
-      ],
-      "Date": [
-        "Sat, 10 Oct 2026 06:27:33 GMT"
+        "ed4abc07-5907-4a62-b9cf-7206f7af6331"
       ]
     },
-    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"DROP TABLE IF EXISTS dbimp_it_nn\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d6ae6e38-82df-43b9-ba20-1377bfd070f5\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d6ae6e38-82df-43b9-ba20-1377bfd070f5.txt\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DDL\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":149,\"QueryQueueTimeInMillis\":96,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":18,\"ServiceProcessingTimeInMillis\":26,\"TotalExecutionTimeInMillis\":289},\"Status\":{\"CompletionDateTime\":1.791613647942E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613647653E9},\"SubstatementType\":\"DROP_TABLE\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d6ae6e38-82df-43b9-ba20-1377bfd070f5.txt\",\"Query\":\"DROP TABLE IF EXISTS dbimp_it_nn\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d6ae6e38-82df-43b9-ba20-1377bfd070f5\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d6ae6e38-82df-43b9-ba20-1377bfd070f5.txt\"},\"Stats\":{\"EngineExecutionTimeInMillis\":149,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613647942E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613647653E9},\"WorkGroup\":\"dbimp\"}}"
+    "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"line 1:10: no viable alternative at input 'DESCRIBE \\\"dbimp-cw\\\"'\"}"
   }
 }

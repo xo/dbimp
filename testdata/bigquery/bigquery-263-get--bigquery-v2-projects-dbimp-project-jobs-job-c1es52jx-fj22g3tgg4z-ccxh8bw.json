@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bigquery/v2/projects/dbimp-project/jobs/job_c1ES52Jx_FJ22g3tGG4Z_CCXH8BW",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 08:54:19 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Etag": [
+        "MPrstpQIMTwfhZG1S+RYpg=="
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#job\",\n  \"etag\": \"MPrstpQIMTwfhZG1S+RYpg==\",\n  \"id\": \"dbimp-project:US.job_c1ES52Jx_FJ22g3tGG4Z_CCXH8BW\",\n  \"selfLink\": \"https://bigquery.googleapis.com/bigquery/v2/projects/dbimp-project/jobs/job_c1ES52Jx_FJ22g3tGG4Z_CCXH8BW?location=US\",\n  \"user_email\": \"dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"configuration\": {\n    \"query\": {\n      \"query\": \"SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 10)) AS a, UNNEST(GENERATE_ARRAY(1, 10)) AS b\",\n      \"destinationTable\": {\n        \"projectId\": \"dbimp-project\",\n        \"datasetId\": \"_40527c17d17179741086159c93a628e0402d0825\",\n        \"tableId\": \"anon1b7041a1a5dd46cc1e06adb110392ea37440b1cab0f63465722e934a71859644\"\n      },\n      \"writeDisposition\": \"WRITE_TRUNCATE\",\n      \"priority\": \"INTERACTIVE\",\n      \"useLegacySql\": false\n    },\n    \"jobType\": \"QUERY\"\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_c1ES52Jx_FJ22g3tGG4Z_CCXH8BW\",\n    \"location\": \"US\"\n  },\n  \"statistics\": {\n    \"creationTime\": \"1791622458899\",\n    \"startTime\": \"1791622458907\",\n    \"endTime\": \"1791622458947\",\n    \"totalBytesProcessed\": \"0\",\n    \"query\": {\n      \"totalBytesProcessed\": \"0\",\n      \"totalBytesBilled\": \"0\",\n      \"cacheHit\": true,\n      \"statementType\": \"SELECT\"\n    }\n  },\n  \"status\": {\n    \"state\": \"DONE\"\n  },\n  \"principal_subject\": \"serviceAccount:dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  }\n}\n"
+  }
+}
