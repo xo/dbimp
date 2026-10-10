@@ -95,6 +95,11 @@ which is which.
   driver sends a query as it is, does not plan or merge a query across
   partitions, and returns the HTTP 400 of the gateway. The caller names the
   partition key. The facts are under The cross partition query.
+- Catalog statements. Decided, D190 item 17: the driver answers nine read-only
+  statements, one flat set of rows for each, through `QueryContext`, as a `SELECT`
+  against a reserved name such as `"$containers"`. They are for `dbmeta`, which
+  needs the partition key, the policies and the throughput of a container. See
+  Catalog statements. The driver still writes nothing (D190 items 2 and 14).
 - What the emulator did that the hosted account does not, and the reverse:
   - Signature. The emulator did not look at it. A request with no signature
     answered HTTP 200 (emulator, "a request that the recorder sends with no
@@ -443,6 +448,39 @@ A query that names one partition key, or one range, avoids the merge. The record
   `AccountEndpoint=https://127.0.0.1:<port>/;AccountKey=<key>;InsecureSkipVerify=true`,
   which is the form of `gocosmos`.
 
+The driver reads this DSN (D190, `cosmos/dsn.go`):
+
+    cosmos://x:KEY@account.documents.azure.com/database/container
+    cosmos://x:KEY@127.0.0.1:8081/database/container?insecure=true
+
+- The scheme is `cosmos`, and the host is required. The port is 443 when the DSN
+  names none.
+- The user is any text, and the driver does not read it. The password is the
+  master key of the account, as base64 text. The characters `/`, `+` and `=` of
+  the key are escaped in the URL. A DSN with no password, or with a password
+  that is not base64 text, is an error, and no error holds the key (D94).
+- The path holds the database and the container. It can hold the database only,
+  or nothing. A statement that has no database or no container fails before it
+  sends a request, and `WithDatabase` and `WithContainer` give what the path
+  lacks. A name with `/`, `\`, `?` or `#` is refused, as the server refuses it
+  (recorded: "a container with a name that is not allowed").
+- A DSN with a key that is not in this list is refused, and so is a key that
+  appears twice. The keys of the query are these:
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `tls` | `true` | `false` makes the driver speak HTTP. Both servers speak HTTPS only, so only a test with a fake server needs it. |
+| `insecure` | `false` | `true` accepts any certificate of the server, as the emulator needs. The default verifies the certificate (D190). |
+| `pagesize` | 0 | The number of documents in a page, which the driver sends in `X-Ms-Max-Item-Count`. 0 leaves the size to the server. -1 lets the server choose the size of each page. A value below -1 is refused. |
+| `partitionkey` | none | A partition key, as text, that every statement is limited to. A query for one partition key avoids the refusal of the gateway (see The cross partition query). |
+
+- The URL that `dbrun` prints for the emulator names the key as the user and the
+  key `InsecureSkipVerify`. It is not this DSN. The integration tests turn it
+  into this DSN, and the request to `dbmeta` in W36 asks for the form of D190.
+- Each key that can change for one statement has an option (D109):
+  `WithPageSize` and `WithPartitionKey`. The keys `tls` and `insecure` belong to
+  the connection, so they have none.
+
 ## Responses
 
 - The framing is one JSON object. A query answers
@@ -557,6 +595,25 @@ A query that names one partition key, or one range, avoids the merge. The record
   returns documents with the extra attribute `_lsn` and a header `Etag`, which
   was `"43"` (recorded: "the change feed").
 
+- How the driver reads a result (D190, `cosmos/rows.go`). It reads the answer
+  with `jsontext.Decoder`, one token at a time, and it never holds a page. It
+  reads the members around `Documents` and skips them. When the rows reach the
+  end of a page and the header `X-Ms-Continuation` holds a token, the driver
+  sends the same query again with the token, and reads that page the same way.
+  It sends no query again after an error.
+  - The columns are the keys of the first document, in the order that they
+    arrive. A page with no document and a token is skipped, because the columns
+    come from the first document.
+  - A first document that is not an object, such as the rows of `SELECT VALUE`,
+    gives one column. Its name is `$1`, which is the name that the server gives
+    an expression with no alias (D18 rule 3). A later row of any kind is a value
+    of that column.
+  - A later document with no key that the first has gives `nil` for it. A later
+    document with a key that the first lacks, or a row that is not an object
+    after rows that are, is an error that names the key, and it wraps
+    `dbimp.ErrIncomplete` (D18, D107 and D190).
+  - A result with no document has no column and no row.
+
 ## Types
 
 Cosmos DB stores JSON. A column has no declared type, and the value of a column
@@ -566,7 +623,7 @@ can change its type from one row to the next.
 | Wire type | Kind | Go type | Scan type | Database type | Can be NULL |
 | --- | --- | --- | --- | --- | --- |
 | string | string | `string` | `interface {}` | `` | yes |
-| number | number | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64` | `interface {}` | `` | yes |
+| number | number | `int64, float64, or *apd.Decimal for an integer too large for int64` | `interface {}` | `` | yes |
 | boolean | boolean | `bool` | `interface {}` | `` | yes |
 | null | null | `nil` | `interface {}` | `` | yes |
 | array | array | `[]any` | `interface {}` | `` | yes |
@@ -574,8 +631,8 @@ can change its type from one row to the next.
 | undefined | null | `nil` | `interface {}` | `` | yes |
 <!-- /dbimp:types -->
 
-This table is the proposal of step 8a. Step 10 generates it from the code. Ken
-decided these rows in D190, and the table needs no change for them:
+`cosmos/tables_test.go` writes this table from the code (step 10). Ken decided
+these rows in D190, and the code follows them:
 
 - Number. Decided, D190: an integer that fits is an `int64`, a number with a
   fraction or an exponent is a `float64`, and an integer that is too large for
@@ -690,6 +747,21 @@ Ken has not reviewed the rest of the table.
   in TOP", "a parameter in OFFSET and LIMIT"). `IN (@a, @b)` was not measured.
   A list passes as one array parameter.
 - The server binds parameters, so the driver needs no escaper (D34) for a query.
+- What the driver does (D190, `cosmos/params.go`). It sends one entry of the list
+  `parameters` for each argument, in the order of the arguments. An argument has
+  a name, as `sql.Named("p", v)` gives it, and the driver adds the `@`. An
+  argument with no name has no placeholder to bind, so it is an error that wraps
+  `dbimp.ErrArguments`, and the driver sends nothing. The driver sends a name
+  that the statement does not use, and a name that is given twice, and the
+  server answers the second with HTTP 400.
+  - A string, an integer, a float, a bool, `nil`, a `[]any` and a `map[string]any`
+    go as the JSON value that holds them.
+  - A `[]byte` goes as its base64 text, a `time.Time` goes as its RFC 3339 text,
+    and a `uuid.UUID` goes as its text, because the server has no type for any of
+    them (D190).
+  - An `*apd.Decimal` goes as a JSON number with all its digits. A decimal that
+    is not finite is an error. The server holds a number in a double, so a digit
+    beyond 15 can be lost on the server.
 
 ## Transactions
 
@@ -728,6 +800,9 @@ Ken has not reviewed the rest of the table.
 - A batch gives no `BEGIN`, no read inside a transaction and no `COMMIT`. A
   transaction that spans calls does not exist. The real service has the same
   shape (not measured, source: models, see Second opinions).
+- What the driver does (D20 and D190). `BeginTx` returns an error that wraps
+  `dbimp.ErrNotSupported`, because a batch is atomic only inside one request and
+  needs a language that writes (W40).
 - No other kind of transaction was measured. A stored procedure runs inside one
   partition on the real service (not measured, source: Microsoft). The hosted
   account ran a stored procedure that only returns `1` (recorded: "a call of the
@@ -811,6 +886,14 @@ Ken has not reviewed the rest of the table.
   - The emulator gave HTTP 500 for a continuation that is not valid, a parameter
     with no `@` and a parameter named twice, with the text "Database query failed:
     PostgresError" (emulator). The hosted account gave HTTP 400 for each.
+- What the driver does (D8 and D190, `cosmos/errors.go`). An answer that is not
+  2xx is an `*Error` that wraps the `*dbimp.StatusError` of the response. It
+  holds the status, the substatus from `X-Ms-Substatus`, the code, the text, and
+  the wait from `X-Ms-Retry-After-Ms` in `RetryAfter`. The driver reads the JSON
+  object that the hosted service writes inside the message, to get the code and
+  the text of a syntax error, such as `SC1001`. It cuts the line `ActivityId`
+  from the message. The driver never sends a request again, so HTTP 429 reaches
+  the caller, who can send the query again after `RetryAfter`.
 - No answer had HTTP 200 and an error in the body. A batch has HTTP 200 or 207
   with a status for each operation (recorded: "a batch that fails in its second
   operation").
@@ -846,6 +929,12 @@ Ken has not reviewed the rest of the table.
   documentation of Microsoft names none (not measured, source: Microsoft). The
   `queryEngineConfiguration` of the account names `maxQueryRequestTimeoutFraction`
   0.9 (recorded: "the account"). No run showed a timeout of a query.
+- What the driver does (D190 item 12). When the context ends, the driver stops
+  the request and the read of the body, and the error is the error of the
+  context. The server keeps the work that it started, because it has no call to
+  cancel it. The rows keep the context of the query for the request of each
+  later page, because `database/sql` gives `Rows.Next` no context (see the
+  questions at the end).
 - The continuation header is stateless on the server. Microsoft says that a
   query can resume at any time with it (not measured, source: Microsoft).
   So a client that stops reads pages loses nothing on the server.
@@ -864,6 +953,11 @@ otherwise.
   reported, on both servers. A semicolon between two statements is the same error, so one request
   runs one statement (recorded: "two statements in one request"). Decided, D190:
   the driver strips one trailing semicolon from a statement.
+- What the driver does (D190, `cosmos/statement.go`). It removes one final
+  semicolon before it sends the statement, and no other semicolon. It reads
+  strings, in single or double quotes with a backslash escape, and `--`
+  comments, so that a semicolon in them stays. It reads no `/* */` comment,
+  because the server reads none.
 - A comment that starts with `--` works, and it runs to the end of the line
   (recorded: "a line comment", "a line comment and a new line"). A comment of the
   form `/* */` is HTTP 400 (recorded: "a block comment"). A comment that ends
@@ -902,6 +996,13 @@ otherwise.
 - `GET /offers` listed the throughput of each database, 400 request units a
   second for each of two databases (recorded: "the list of offers"). The master
   key read it.
+- The statement that `usql` runs for the version (step 16). `usql` registers
+  this driver with an empty `drivers.Driver{}`, so it has no `Version` function
+  and runs no statement for the version (read of
+  `usql/drivers/cosmos/cosmos.go`, 2026-10-10). So there is nothing to run as the
+  administrator or as an ordinary user, and the account has one principal, the
+  master key, which the tests use. The driver sends no request for a version
+  (D190 item 12).
 - The version. The account has no field for a version. The only version facts
   are the headers `X-Ms-Gatewayversion` and `X-Ms-Serviceversion`, and the
   version of the API that the client names in `X-Ms-Version` (recorded: "the
@@ -926,7 +1027,228 @@ otherwise.
 
 ## Interfaces
 
-Not written yet. Step 10 writes the table from the code.
+`cosmos/tables_test.go` writes this table from the code (step 10).
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares. |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping reads the account, GET /, which costs little and checks the endpoint and the signature. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because every request carries its own signature. |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, a decimal, a list and a map, which the driver binds as JSON values (D190). |
+| `driver.QueryerContext` | yes | The server binds each argument by its name (D190). |
+| `driver.ExecerContext` | yes | Exec fails with dbimp.ErrNotSupported for every statement, because the driver reads only (D190). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because a batch is atomic only inside one request and needs a write language (D190). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its document is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, so an answer has one result. |
+| `driver.RowsColumnTypeScanType` | yes | A column has no type, so the scan type is any (D190). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | A column has no type, so the name is empty (D190). |
+| `driver.RowsColumnTypeLength` | no | A column has no type, so it has no length. |
+| `driver.RowsColumnTypeNullable` | yes | A document can lack any key, so every column can be NULL. |
+| `driver.RowsColumnTypePrecisionScale` | no | A column has no type, so it has no precision and no scale. |
+<!-- /dbimp:interfaces -->
+
+## Catalog statements
+
+Decided, D190 item 17. The REST API of Cosmos DB holds the catalog in resources,
+and the SQL cannot read them. A statement that `dbmeta` needs is a `SELECT`
+against a reserved name, and the driver answers it from the REST API with
+`GET`. `cosmos/catalog.go` holds the code.
+
+The grammar is one form:
+
+    SELECT * FROM "$containers" WHERE database = 'db' AND container = 'c'
+
+- The name after `FROM` is one of the nine reserved names below, in double quotes
+  or bare. The list after `SELECT` is `*`. A statement with another list, with a
+  reserved name, is an error that says so. A statement with any other name is not
+  a catalog statement, and it goes to the container as a query, as before.
+- The `WHERE` is optional. It holds conditions joined by `AND`. A condition is a
+  key, `=`, and a value. The key is `database`, `container` or `user`, with no
+  regard to case, and each key appears once. A statement takes only the keys that
+  the table names for it.
+- A value is a string in single quotes, with `''` or a backslash for a quote, or
+  a named argument such as `@db`, which a `sql.Named` argument binds. An argument
+  that no condition uses is an error that wraps `dbimp.ErrArguments`.
+- The key that a statement needs comes from the `WHERE`, and else from the path
+  of the DSN or from `WithDatabase` and `WithContainer`. A key that a statement
+  only allows narrows it, and it comes from the `WHERE` alone, so `"$containers"
+  WHERE database = 'db'` lists every container of the database.
+- A statement that lacks a key that it needs, or that does not follow the
+  grammar, is an error that wraps `dbimp.ErrInvalidValue`, and the driver sends
+  nothing.
+- A statement can end with one semicolon, and it can hold `--` comments.
+- A value that the server leaves out is `nil`. A list is a `[]any`, and a policy
+  with no fixed shape is a decoded JSON value. A free-form body, such as the body
+  of a stored procedure, and the whole indexing policy, are text. A number is an
+  `int64`. A feed that carries `X-Ms-Continuation` is read to its last page.
+- The columns of a statement are in the order of the table. A row of a catalog
+  statement has every column, so the order never changes with the server, unlike
+  the keys of a document.
+
+<!-- dbimp:catalog -->
+`SELECT * FROM "$account"`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `writable_regions` | `[]any of string` | writableLocations, the name of each |
+| `writable_endpoints` | `[]any of string` | writableLocations, the endpoint of each |
+| `readable_regions` | `[]any of string` | readableLocations, the name of each |
+| `readable_endpoints` | `[]any of string` | readableLocations, the endpoint of each |
+| `default_consistency` | `string` | userConsistencyPolicy.defaultConsistencyLevel |
+| `multiple_write_locations` | `bool` | enableMultipleWriteLocations |
+| `continuous_backup` | `bool` | continuousBackupEnabled |
+| `query_engine_configuration` | `string` | queryEngineConfiguration, which is JSON text |
+
+`SELECT * FROM "$databases"`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `link` | `string` | _self |
+
+`SELECT * FROM "$containers" WHERE database = '...' [AND container = '...']`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `link` | `string` | _self |
+| `partition_key_paths` | `[]any of string` | partitionKey.paths |
+| `partition_key_kind` | `string` | partitionKey.kind, such as Hash |
+| `partition_key_version` | `int64` | partitionKey.version |
+| `indexing_mode` | `string` | indexingPolicy.indexingMode |
+| `indexing_automatic` | `bool` | indexingPolicy.automatic |
+| `indexing_included_paths` | `[]any of string` | indexingPolicy.includedPaths, the path of each |
+| `indexing_excluded_paths` | `[]any of string` | indexingPolicy.excludedPaths, the path of each |
+| `composite_indexes` | `[]any of []any of map[string]any` | indexingPolicy.compositeIndexes, each with path and order |
+| `spatial_indexes` | `[]any of map[string]any` | indexingPolicy.spatialIndexes |
+| `vector_indexes` | `[]any of map[string]any` | indexingPolicy.vectorIndexes |
+| `indexing_policy` | `string` | indexingPolicy, as JSON text with sorted keys |
+| `unique_keys` | `[]any of []any of string` | uniqueKeyPolicy.uniqueKeys, the paths of each key |
+| `default_ttl` | `int64` | defaultTtl, in seconds, and -1 for no expiry by default |
+| `analytical_ttl` | `int64` | analyticalStorageTtl |
+| `conflict_resolution_mode` | `string` | conflictResolutionPolicy.mode |
+| `conflict_resolution_path` | `string` | conflictResolutionPolicy.conflictResolutionPath |
+| `conflict_resolution_procedure` | `string` | conflictResolutionPolicy.conflictResolutionProcedure |
+| `change_feed_retention` | `int64` | changeFeedPolicy.retentionDuration, in minutes |
+| `computed_properties` | `[]any of map[string]any` | computedProperties, each with name and query |
+| `vector_embedding_policy` | `map[string]any` | vectorEmbeddingPolicy |
+| `full_text_policy` | `map[string]any` | fullTextPolicy |
+| `geospatial_type` | `string` | geospatialConfig.type |
+
+`SELECT * FROM "$stored_procedures" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `link` | `string` | _self |
+| `body` | `string` | body, which is free-form code |
+
+`SELECT * FROM "$triggers" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `link` | `string` | _self |
+| `body` | `string` | body, which is free-form code |
+| `trigger_type` | `string` | triggerType, Pre or Post |
+| `trigger_operation` | `string` | triggerOperation, such as All, Create or Replace |
+
+`SELECT * FROM "$functions" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `link` | `string` | _self |
+| `body` | `string` | body, which is free-form code |
+
+`SELECT * FROM "$offers" WHERE database = '...' [AND container = '...']`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `scope` | `string` | database or container |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the container of a container offer, and nil for a database offer |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `resource_link` | `string` | resource |
+| `version` | `string` | offerVersion |
+| `offer_type` | `string` | offerType |
+| `throughput` | `int64` | content.offerThroughput, the manual request units a second, and nil for autoscale |
+| `autoscale_max_throughput` | `int64` | content.offerAutopilotSettings.maxThroughput, and nil for manual |
+| `autoscale_increment_percent` | `int64` | content.offerAutopilotSettings.autoUpgradePolicy.throughputPolicy.incrementPercent |
+
+`SELECT * FROM "$users" WHERE database = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `link` | `string` | _self |
+
+`SELECT * FROM "$permissions" WHERE database = '...' [AND user = '...']`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `user` | `string` | the user that holds the permission |
+| `id` | `string` | id |
+| `rid` | `string` | _rid |
+| `link` | `string` | _self |
+| `permission_mode` | `string` | permissionMode, Read or All |
+| `resource_link` | `string` | resource |
+<!-- /dbimp:catalog -->
+
+What the recordings show, and what they do not:
+
+- The account, the list of databases, the list and the definition of a container
+  and the list of offers are recorded on the hosted account and on the emulator
+  ("the account", "the list of databases", "the list of containers", "the list
+  of offers"). The tests replay them. The emulator leaves out the version of the
+  partition key, `continuousBackupEnabled` and the throughput detail, and it
+  writes an empty list of unique keys, so those values are `nil` or empty there.
+- The emulator leaves the conflict resolution policy, the geospatial type and the
+  unique keys out of the list of containers, and writes them in the definition
+  of one container (measured, 2026-10-11). So `"$containers" WHERE database =
+  'db'` gives `nil` for them on the emulator, and the statement with a container
+  gives their values. The hosted account writes them in both (recorded).
+- The list of users is recorded, and it was empty on both servers. The lists of
+  stored procedures, triggers and functions of a container, and the permissions
+  of a user, are not recorded: step 6 made one of each and never listed them. The
+  tests use the shapes that Microsoft documents, and the integration tests read
+  them from a server. The emulator runs none of the three scripts (recorded), so
+  that test runs on the hosted account.
+- An offer names its resource by the rid of the resource, so `"$offers"` reads
+  the rid of the database and the rid of each container to give the offers their
+  names. An offer of an autoscale database has the member `offerAutopilotSettings`
+  in the shapes that Microsoft documents. No recording holds one, so the columns
+  `autoscale_max_throughput` and `autoscale_increment_percent` are not measured.
+- The members `changeFeedPolicy`, `computedProperties`, `vectorEmbeddingPolicy`,
+  `fullTextPolicy`, `analyticalStorageTtl`, the spatial indexes and the vector
+  indexes are not in any recording, because step 6 never made a container with
+  them. The driver reads them by the names that Microsoft documents, and a
+  container without them gives `nil`.
+- The master key reads every resource. A principal with a resource token can read
+  less, and the driver returns the error of the server.
 
 ## Faults
 
@@ -1116,6 +1438,31 @@ what D190 leaves, for Ken to read in this document.
    test skip? The emulator also differs in the order of the keys of a `SELECT`,
    in the page size, in HTTP 304 and 429, and in the signature (see the Summary).
 
+Decided, D190 items 14 to 17: `Exec` always fails (item 14), a result whose rows
+are not objects has the column `$1` (item 15), the keys of the DSN are `tls`,
+`insecure`, `pagesize` and `partitionkey`, and the path can be empty or hold the
+database only (item 16), and the catalog statements (item 17).
+
+Questions that the driver raises. The package chose the simplest behavior that
+follows the rules, and Ken decides each one:
+
+4. Rule 4 of AGENTS.md names the drivers whose rows keep the context of the
+   query. Cosmos DB is not in the list. The rows of this driver keep it, with a
+   `nolint` that cites D190, because the request for each page after the first
+   needs a context, and `database/sql` gives `Rows.Next` none. Does a decision
+   add Cosmos DB to the list, as D175 and D178 did for other drivers?
+5. The URL that `dbrun` prints for the emulator holds the key as the user and the
+   key `InsecureSkipVerify`. The integration tests convert it. A real run in CI
+   needs `dbmeta` to print the DSN of D190, or `dburl` to write it. W36 holds the
+   requests.
+6. `WithReadonly(true)` runs the statement, because the driver reads only.
+   `WithTimeout` with a positive value fails with `dbimp.ErrNotSupported`,
+   because the REST API has no such setting. D109 asks for this.
+7. The catalog statements take `database`, `container` and `user` in a `WHERE`,
+   and a statement that needs a key the DSN or an option can supply takes it
+   from there. Is that the grammar that `dbmeta` wants? The autoscale columns and
+   the lists of scripts and permissions need a first run on a hosted account.
+
 Leads that no recording settled, for a later run on the hosted account:
 
 - A newer `X-Ms-Version` for a container with two partition key paths.
@@ -1133,3 +1480,152 @@ Leads that no recording settled, for a later run on the hosted account:
   a recorder that can build them.
 - A next query that the gateway serves, after an abandoned query.
 - A second partition key range, and a split.
+
+## Integration tests
+
+The integration tests of the driver read two variables, and a test skips when the
+variable that it needs is empty (hard rule 9). `COSMOS_DSN` names the emulator,
+which `dbrun` starts as `cosmos-EN20260907`, and the jobs of CI use it (D190 item
+6). `COSMOS_HOSTED_DSN` names a hosted account, and the tests that need it show
+what the emulator cannot: the refusal of the gateway for a query across
+partitions, HTTP 429, and the check of the signature (D190 item 13). Each
+variable holds a DSN of the driver, or the `url` that `dbrun` prints, which the
+tests turn into the DSN:
+
+    COSMOS_DSN='cosmos://x:KEY@127.0.0.1:8081?insecure=true'
+    COSMOS_HOSTED_DSN='cosmos://x:KEY@ACCOUNT.documents.azure.com'
+
+    (cd ../dbmeta/test && go run ./cmd/dbrun start cosmos-EN20260907)
+    go test -race -count=1 -run Integration -v ./cosmos/...
+
+The account has one principal, the master key, and no ordinary user, so each test
+runs as that key only and the manifest has no ordinary user. The SQL of Cosmos DB
+has no statement that writes, and the driver reads only, so the tests make their
+database, their containers and their documents through the REST API, with
+`cosmos.Raw` from `cosmos/export_test.go`, and read through the driver. A test
+that writes a row for the round trip does it through a wrapper of the connector,
+as the tests of the Druid driver do.
+
+The tests make one database for the run, whose name is `dbimp_it_` and eight
+characters, with 400 request units a second shared by its containers. Each test
+makes its containers, and deletes them when it ends, even when it fails.
+`TestMain` deletes the database, and fails if it cannot.
+
+The tests were written on 2026-10-10, and they have not run. The work had no
+account and no emulator. Each test is written from the recordings, and the first
+run on each server can show a fault of a test. The tests and what each one holds:
+
+- `TestIntegrationConnect`: `Ping`, and the refusal of a wrong key, which the
+  service gives and the emulator does not.
+- `TestIntegrationCRUD`: insert, select, update, replace with an etag, upsert,
+  patch and delete on three containers, which an index serves, and the refusal of
+  `INSERT`, `UPDATE` and `DELETE` by the driver and by the server.
+- `TestIntegrationSchema`: a database, a container, the partition key, a
+  hierarchical key (which the hosted account refuses), a unique key, an indexing
+  policy, a composite index, a time to live, the change feed, a stored procedure,
+  a trigger and a function (which the emulator does not run), and the objects that
+  Cosmos DB lacks: a view, a default value and a foreign key.
+- `TestIntegrationFeatures`: the request charge, the continuation token, a
+  query across partitions, the query plan, the etag, the session token,
+  `SELECT VALUE`, a join, `GROUP BY`, `ORDER BY`, aggregates, `TOP`, `OFFSET
+  LIMIT`, `DISTINCT`, a subquery, parameters, a batch, the query metrics, HTTP
+  429 with the wait, the check of the signature, and a response that is not
+  compressed. A query that the hosted gateway refuses across partitions names the
+  partition key, as D190 tells a caller.
+- `TestIntegrationRoundTrip`: every type that `features.json` names, with
+  `dbimptest.RoundTrip`, as a bound argument and as a literal. The types that the
+  server lacks run with the string that holds them, and a last subtest scans the
+  strings into a `uuid.UUID`, a `string` and a `[]byte`.
+- `TestIntegrationCatalog`: each catalog statement against the resources that the
+  test makes: the account, the databases, the containers with their policies, the
+  scripts (which the emulator does not run), the offers, the users and the
+  permissions (which the emulator may not make, and the test skips with the
+  reason).
+- `TestIntegrationHostedCrossPartition`: the refusal with HTTP 400 and the
+  substatus 1004, and the same query with a partition key.
+
+The other tests of the package need no server. They replay the recorded
+exchanges of both servers through the real decoder, and use fake servers for the
+pages, the errors, the options and the contract.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was
+written on 2026-10-10 from the staged code. A fact of Couchbase comes from
+[COUCHBASE.md](COUCHBASE.md), and a fact of Cosmos DB from the sections above.
+
+### The server
+
+| | Couchbase | Cosmos DB |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /dbs/{db}/colls/{c}/docs` with the content type `application/query+json` and the headers `X-Ms-Documentdb-Isquery` and `X-Ms-Documentdb-Query-Enablecrosspartition` or the header of a partition key, and the body `query` and `parameters` (Requests) |
+| Database | The key `query_context` of the body | The path of the request holds the database and the container, and the SQL names neither (Requests, The DSN) |
+| Language | SQL++, which is close to SQL | A dialect of SQL with one `SELECT`, `JOIN` inside a document, and no `INSERT`, `UPDATE` or `DELETE` (Statements). The catalog is in resources of the REST API, which the driver reads for the catalog statements (Catalog statements) |
+| DDL | In SQL++ | None in the SQL. A database and a container are resources of the REST API (Statements) |
+| Parameters | `?`, `$1` and `$name` | `@name` only, in the list `parameters` (Parameters) |
+| Framing | One body for the whole result, which does not page | One JSON object with the array `Documents`. The header `X-Ms-Continuation` holds the token of the next page, and each page is a request (Responses) |
+| Columns | `signature`, before the first row | None. The keys of the documents are the only names (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement on the hosted account for a projection, and the stored order for `SELECT *`. The emulator sorts the keys by length and then by name (Responses) |
+| Errors | Can come with HTTP 200, after some rows | Before any row, with HTTP 400, 401, 403, 404, 409, 412, 413 or 429, and a JSON object of the code and the message. The hosted service writes the JSON of a query error inside the message (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON. No date, decimal, UUID or binary, and a number is a double for a value that a query computes (Types) |
+| Cancel | The server stops a query when the client leaves | The server has no call to cancel a query, and the client abandons the request (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None across requests. A batch is atomic inside one request, with one partition key (Transactions) |
+| Authentication | Basic | An HMAC-SHA256 signature of each request with the master key of the account (Requests) |
+| Default port | 8093, or 18093 with TLS | 443, with TLS always. The emulator uses a port of its own and a certificate that no authority signed (Summary) |
+
+The differences that a caller sees:
+
+- A query across partitions that has an aggregate, `TOP`, `ORDER BY`,
+  `OFFSET LIMIT` or `DISTINCT` fails on the hosted account, and the caller names
+  the partition key. The driver plans nothing and merges nothing (D190 item 1).
+- The driver reads only. `Exec` fails, because the SQL has no statement that
+  writes (D190 item 2 and W40).
+- The columns are the keys of the first document, and a later key that the first
+  lacks is an error (D190 item 3). Couchbase names them in the signature.
+- The caller names the database and the container, in the path of the DSN or in
+  an option, because the SQL names neither (D190 item 4).
+- Parameters are named only. An argument with no name is an error (D190 item 12).
+- A date, a UUID, a binary value and a decimal are strings, as in Couchbase
+  (D190 item 9).
+- The request is signed with a key that the driver sends to the configured host
+  only (D190 item 12).
+
+### The driver
+
+| | `couchbase` | `cosmos` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-10 | About 1300 lines in 8 files | About 1400 lines in 10 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `Insecure`, `Database`, `Container`, `User`, `Key`, `PageSize` and `PartitionKey`. The DSN has the keys `tls`, `insecure`, `pagesize` and `partitionkey` (D190) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithContainer`, `WithPartitionKey` and `WithPageSize`, through `WithOptions` or an argument (D109). `WithTimeout` with a positive value fails with `dbimp.ErrNotSupported`. `WithReadonly(true)` runs the statement, because the driver reads only |
+| Arguments | Sent to the server as `args` and `$name` | Named arguments only, sent as the list `parameters`. A `[]byte` is base64 text, a `time.Time` is RFC 3339 text, and an `*apd.Decimal` is a JSON number (`cosmos/params.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | `dbimp.ContinueObjectRows` for each page, after the driver reads the kind of the first document, and a reader of its own for the pages and for rows that are not objects (`cosmos/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | An empty name, the scan type `any` and nullable for every column, because a column has no type |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | `int64`, `float64`, `*apd.Decimal` for an integer too large for `int64`, `string`, `bool`, `[]any`, `map[string]any` and `nil` (D190) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | None. `Exec` fails with `dbimp.ErrNotSupported` (D190 item 2) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D190 item 12) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same. The rows keep the context for the request of each later page (D190 item 12 and question 4) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, SubStatus, Code, Message, RetryAfter}`, which unwraps to `*dbimp.StatusError` |
+| Authentication | Basic | A signature of the master key, written in the package with the standard library. The driver follows no redirect, so the signature goes to the host of the DSN only (D190 item 12) |
+| Catalog | None in the driver | Nine read-only statements, as a `SELECT` against `"$databases"`, `"$containers"`, `"$stored_procedures"`, `"$triggers"`, `"$functions"`, `"$offers"`, `"$users"`, `"$permissions"` and `"$account"`, each with its own columns (D190 item 17 and Catalog statements) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, `Config`, `ParseDSN` and `NewConnector` |
+
+The differences that a caller sees:
+
+- `Exec` and `BeginTx` always fail (D190 items 2 and 12). Couchbase writes and has
+  transactions.
+- The DSN holds a master key as the password and a path of the database and the
+  container (D190 item 4 and D94).
+- A caller names the partition key with `WithPartitionKey` or the key
+  `partitionkey` to run an aggregate, `TOP`, `ORDER BY`, `OFFSET LIMIT` or
+  `DISTINCT` on the hosted account (D190 item 1).
+- `Error` holds `RetryAfter`, which the caller uses to send a query again after
+  HTTP 429. The driver never sends it again (D8).
+- The driver strips one trailing semicolon, as the server refuses it (D190 item
+  5).
+- `WithTimeout` with a positive value fails, where Couchbase sets a timeout
+  (D109).
+- Rows that are not objects have the column `$1` (D190 item 15).
+- A statement against a reserved name, such as `"$containers"`, is answered by the
+  driver from the REST API, where Couchbase sends every statement to the server
+  (D190 item 17).
