@@ -37,3 +37,7 @@ them on 2026-10-11.
 5. The Spanner driver runs DML through `executeStreamingSql`, as item 11 of D191
    says for every result. A live test on the hosted instance showed the count
    in `stats`.
+6. The Spanner driver ignores the user of the URL and still refuses a password.
+   `dbmeta` puts a user in every URL to name the principal, and the emulator checks
+   nothing. This amends item 12 of D191, which refused user information. Ken
+   decided it on 2026-10-11.

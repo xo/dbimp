@@ -97,8 +97,8 @@ them:
 - Scheme in `dburl`: `Name` is `spanner`, the alias is `sp`, the generator is
   `GenSpanner`, the transport is `TransportUnix`, the deployment is hosted and the
   `Dialect` is `spanner`. `GoPackage` is `github.com/xo/dbimp/spanner`. The URL is
-  `spanner://host:port/project/instance/database`. It keeps its user information and
-  its query. An empty host leaves the endpoint to the driver. The path must name the
+  `spanner://host:port/project/instance/database`. It keeps its user and its
+  query. An empty host leaves the endpoint to the driver. The path must name the
   project, the instance and the database (read of `dburl/scheme.go` and
   `dburl/dsn.go`, 2026-10-10). The generator is provisional (D60).
 - Driver of `usql` now: `github.com/googleapis/go-sql-spanner` v1.26.0, which uses

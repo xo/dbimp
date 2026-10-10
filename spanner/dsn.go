@@ -64,9 +64,10 @@ type Config struct {
 // (D27, D35 and D191). The path holds the project, the instance and the
 // database, and all three are required. The host and the port are optional.
 // The keys are credential_file, the path to the key file of a service
-// account, and tls, a boolean. The driver refuses any other key. The password
-// of the URL is not used, because the key file is too large for it, so the
-// DSN refuses user information.
+// account, and tls, a boolean. The driver refuses any other key. The user of the
+// URL is ignored, because it only names a principal for dbmeta (D195 item 6).
+// The password of the URL is not used, because the key file is too large for
+// it, so the DSN refuses a password.
 func ParseDSN(dsn string) (*Config, error) {
 	u, err := dbimp.ParseURL(Name, dsn)
 	if err != nil {
@@ -76,8 +77,8 @@ func ParseDSN(dsn string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	if u.User != nil {
-		return nil, fmt.Errorf("parsing the dsn: user information: the credential is a key file, named by the key %s: %w", keyCredentialFile, dbimp.ErrInvalidValue)
+	if _, ok := u.User.Password(); ok {
+		return nil, fmt.Errorf("parsing the dsn: the password: the credential is a key file, named by the key %s: %w", keyCredentialFile, dbimp.ErrInvalidValue)
 	}
 	cfg := &Config{Host: u.Hostname(), CredentialFile: q.String(keyCredentialFile, "")}
 	if cfg.Host == "" {
