@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T062501Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryString\":\"CREATE TABLE dbimp_it_pk2 (id int, PRIMARY KEY (id)) LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_pk2/' TBLPROPERTIES ('table_type'='ICEBERG')\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0131-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:25:01 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "190"
+      ],
+      "X-Amzn-Requestid": [
+        "55dbb119-a334-4313-884a-a98237f976ba"
+      ]
+    },
+    "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"line 1:54: mismatched input 'LOCATION'. Expecting: 'COMMENT', 'WITH', <EOF>\"}"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT * FROM dbimp_t_tf(3)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"f843384a-6f60-4ac2-8a58-23453d4d1211\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=237"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:31 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Request-Id": [
+        "f843384a-6f60-4ac2-8a58-23453d4d1211"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-8c33-153a-811d-4a8025a4b6cd\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[UNRESOLVABLE_TABLE_VALUED_FUNCTION] Could not resolve dbimp_t_tf to a table-valued function.\\nPlease make sure that dbimp_t_tf is defined as a table-valued function and that all required parameters are provided correctly.\\nIf dbimp_t_tf is not defined, please create the table-valued function before using it.\\nFor more information about defining table-valued functions, please refer to the Apache Spark documentation. SQLSTATE: 42883; line 1 pos 14\"},\"sql_state\":\"42883\"}}"
+  }
+}

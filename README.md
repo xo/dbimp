@@ -85,7 +85,7 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/NEO4J.md](docs/NEO4J.md) | What is known about the HTTP interface of Neo4j |
 | [docs/AVATICA.md](docs/AVATICA.md) | What is known about Apache Calcite Avatica and the Phoenix Query Server, measured for its driver |
 | [docs/INFLUXDB.md](docs/INFLUXDB.md) | What InfluxDB 1, 2 and 3 answer, as measured on seven releases |
-| [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, and why it has no driver here |
+| [docs/CRATEDB.md](docs/CRATEDB.md) | What is known about CrateDB, and the work toward its driver |
 | [docs/ARANGODB.md](docs/ARANGODB.md) | What ArangoDB 3.12 answers, as measured |
 | [docs/DATABEND.md](docs/DATABEND.md) | What Databend 1.2.881 and 1.2.948 answer, as measured |
 | [docs/TDENGINE.md](docs/TDENGINE.md) | What TDengine answers, as measured, and why it has no driver here |
@@ -103,6 +103,11 @@ URL that the driver reads, so every alias works in `usql`.
 | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md) | What is known about ClickHouse over HTTP, for its driver |
 | [docs/VOLTDB.md](docs/VOLTDB.md) | What is known about VoltDB, and why it has no driver here |
 | [docs/SNOWFLAKE.md](docs/SNOWFLAKE.md) | What is known about Snowflake over its SQL REST API, for its driver |
+| [docs/BIGQUERY.md](docs/BIGQUERY.md) | What is known about Google BigQuery over its REST API, for its driver |
+| [docs/COSMOS.md](docs/COSMOS.md) | What is known about Azure Cosmos DB over its REST API, for its driver |
+| [docs/ATHENA.md](docs/ATHENA.md) | What is known about Amazon Athena over its API, for its driver |
+| [docs/DATABRICKS.md](docs/DATABRICKS.md) | What is known about Databricks over its SQL Statement Execution API, for its driver |
+| [docs/SPANNER.md](docs/SPANNER.md) | What is known about Google Cloud Spanner, and why it has no driver here |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 
 ## Related projects

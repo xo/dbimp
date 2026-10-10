@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT @p AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"INT64\"},\"parameterValue\":{\"value\":\"5\"},\"name\":\"p\"}],\"parameterMode\":\"POSITIONAL\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:44:09 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"NAMED query parameters cannot be used in POSITIONAL parameter mode\",\n    \"errors\": [\n      {\n        \"message\": \"NAMED query parameters cannot be used in POSITIONAL parameter mode\",\n        \"domain\": \"global\",\n        \"reason\": \"invalid\"\n      }\n    ],\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  }
+}

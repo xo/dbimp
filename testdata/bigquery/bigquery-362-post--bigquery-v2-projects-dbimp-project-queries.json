@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_kv\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:38 GMT"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Unrecognized name: s at [1:12]\",\n    \"errors\": [\n      {\n        \"message\": \"Unrecognized name: s at [1:12]\",\n        \"domain\": \"global\",\n        \"reason\": \"invalidQuery\",\n        \"location\": \"q\",\n        \"locationType\": \"parameter\"\n      }\n    ],\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  }
+}

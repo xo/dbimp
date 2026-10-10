@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"MERGE INTO dbimp_t_dml t USING (SELECT 2 AS id, 'm' AS s UNION ALL SELECT 99, 'n') u ON t.id = u.id WHEN MATCHED THEN UPDATE SET s = u.s WHEN NOT MATCHED THEN INSERT (id, s) VALUES (u.id, u.s)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:35:28 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "1e71b37d-840b-483b-80bc-2435e64743cf"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"1e71b37d-840b-483b-80bc-2435e64743cf\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=5103"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-63e2-1644-8e15-dfdc74b8d1d2\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":4,\"columns\":[{\"name\":\"num_affected_rows\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":0},{\"name\":\"num_updated_rows\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":1},{\"name\":\"num_deleted_rows\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":2},{\"name\":\"num_inserted_rows\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":3}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"2\",\"1\",\"0\",\"1\"]]}}"
+  }
+}

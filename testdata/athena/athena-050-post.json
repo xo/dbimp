@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061247Z"
+      ]
+    },
+    "body": "{\"QueryString\":\"CREATE TABLE dbimp_it_ctas WITH (format='PARQUET', external_location='s3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_ctas/') AS SELECT 1 AS id\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0017-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:12:48 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "367"
+      ],
+      "X-Amzn-Requestid": [
+        "df2d4a5a-cbed-49b5-a7f4-d482caf28ecc"
+      ]
+    },
+    "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"INVALID_INPUT\",\"ErrorCode\":\"INVALID_INPUT\",\"Message\":\"The Create Table As Select query failed because it was submitted with an 'external_location' property to an Athena Workgroup that enforces a centralized output location for all queries. Please remove the 'external_location' property and resubmit the query.\"}"
+  }
+}

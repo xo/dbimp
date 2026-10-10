@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "PATCH",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"CREATE TABLE dbimp_t_iv (id INT64 NOT NULL, iv INTERVAL, f32 FLOAT32, ts TIMESTAMP, arr_iv ARRAY<INTERVAL>) PRIMARY KEY (id)\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:51:26 GMT"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=2688"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_85f7a5729ec038a6\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE TABLE dbimp_t_iv (\\n  id INT64 NOT NULL,\\n  iv INTERVAL,\\n  f32 FLOAT32,\\n  ts TIMESTAMP,\\n  arr_iv ARRAY\\u003cINTERVAL\\u003e,\\n) PRIMARY KEY(id)\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:51:25.052197Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_iv\"\n        ]\n      }\n    ]\n  }\n}\n"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT raise_error('dbimp raised on purpose')\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"f52c2344-1939-41c2-97b4-a9080d6e6681\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=532"
+      ],
+      "X-Request-Id": [
+        "f52c2344-1939-41c2-97b4-a9080d6e6681"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:35 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-46b7-16a8-94bf-a1ad6c818eb5\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[USER_RAISED_EXCEPTION] dbimp raised on purpose SQLSTATE: P0001\"},\"sql_state\":\"P0001\"}}"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
+  },
+  "response": {
+    "status": 501,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=458"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:30 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 501,\n    \"message\": \"SQL queries are limited to single statements.\",\n    \"status\": \"UNIMPLEMENTED\"\n  }\n}\n"
+  }
+}

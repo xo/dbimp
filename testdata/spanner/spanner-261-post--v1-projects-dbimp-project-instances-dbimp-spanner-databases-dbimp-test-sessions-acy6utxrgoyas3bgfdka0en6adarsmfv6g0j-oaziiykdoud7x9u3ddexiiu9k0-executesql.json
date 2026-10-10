@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id FROM dbimp_t_dml@{FORCE_INDEX=dbimp_t_nosuch_idx}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=430"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:55:25 GMT"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The table dbimp_t_dml does not have an index called dbimp_t_nosuch_idx\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  }
+}

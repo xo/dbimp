@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"CREATE OR REPLACE TEMPORARY VIEW dbimp_t_view2 AS SELECT 5 AS a\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "3fe3758b-18f3-4e06-9400-e76f5d72b565"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:37:01 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"3fe3758b-18f3-4e06-9400-e76f5d72b565\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=371"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-9e04-183e-ad7a-01420e7f8299\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":0},\"total_chunk_count\":0,\"total_row_count\":0,\"truncated\":false},\"result\":{}}"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_17640bde587a1e02",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:16 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1141"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_17640bde587a1e02\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE TABLE dbimp_t_types (\\n  id INT64 NOT NULL,\\n  i64 INT64,\\n  f64 FLOAT64,\\n  f32 FLOAT32,\\n  n NUMERIC,\\n  b BOOL,\\n  s STRING(MAX),\\n  y BYTES(MAX),\\n  d DATE,\\n  ts TIMESTAMP,\\n  j JSON,\\n  arr_i ARRAY\\u003cINT64\\u003e,\\n  arr_s ARRAY\\u003cSTRING(MAX)\\u003e,\\n  arr_f ARRAY\\u003cFLOAT64\\u003e,\\n  arr_n ARRAY\\u003cNUMERIC\\u003e,\\n  arr_b ARRAY\\u003cBOOL\\u003e,\\n  arr_y ARRAY\\u003cBYTES(MAX)\\u003e,\\n  arr_d ARRAY\\u003cDATE\\u003e,\\n  arr_ts ARRAY\\u003cTIMESTAMP\\u003e,\\n  arr_j ARRAY\\u003cJSON\\u003e,\\n) PRIMARY KEY(id)\",\n      \"CREATE TABLE dbimp_t_dml (\\n  id INT64 NOT NULL,\\n  s STRING(MAX),\\n  n INT64,\\n) PRIMARY KEY(id)\",\n      \"CREATE TABLE dbimp_t_par (\\n  pid INT64 NOT NULL,\\n  name STRING(100),\\n) PRIMARY KEY(pid)\",\n      \"CREATE TABLE dbimp_t_chi (\\n  pid INT64 NOT NULL,\\n  cid INT64 NOT NULL,\\n  v STRING(MAX),\\n) PRIMARY KEY(pid, cid),\\n  INTERLEAVE IN PARENT dbimp_t_par ON DELETE CASCADE\"\n    ],\n    \"commitTimestamps\": [\n      \"2026-10-10T05:46:01.728777Z\",\n      \"2026-10-10T05:46:01.728777Z\",\n      \"2026-10-10T05:46:01.728777Z\",\n      \"2026-10-10T05:46:01.728777Z\"\n    ],\n    \"progress\": [\n      {\n        \"progressPercent\": 100,\n        \"startTime\": \"2026-10-10T05:45:58.846404Z\",\n        \"endTime\": \"2026-10-10T05:46:01.728777Z\"\n      },\n      {\n        \"progressPercent\": 100,\n        \"startTime\": \"2026-10-10T05:45:58.846404Z\",\n        \"endTime\": \"2026-10-10T05:46:01.728777Z\"\n      },\n      {\n        \"progressPercent\": 100,\n        \"startTime\": \"2026-10-10T05:45:58.846404Z\",\n        \"endTime\": \"2026-10-10T05:46:01.728777Z\"\n      },\n      {\n        \"progressPercent\": 100,\n        \"startTime\": \"2026-10-10T05:45:58.846404Z\",\n        \"endTime\": \"2026-10-10T05:46:01.728777Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_types\"\n        ]\n      },\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_dml\"\n        ]\n      },\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_par\"\n        ]\n      },\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_chi\"\n        ]\n      }\n    ]\n  },\n  \"done\": true,\n  \"response\": {\n    \"@type\": \"type.googleapis.com/google.protobuf.Empty\"\n  }\n}\n"
+  }
+}

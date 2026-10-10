@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT 1 / 0 AS a\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:34 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"8a97d0d1-037f-413d-a6f0-ed54d573be2e\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=226"
+      ],
+      "X-Request-Id": [
+        "8a97d0d1-037f-413d-a6f0-ed54d573be2e"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-8dfc-18b1-80f5-18497b84cb58\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \\\"ansi_mode\\\" to \\\"false\\\" to bypass this error. SQLSTATE: 22012\\n== SQL (line 1, position 8) ==\\nSELECT 1 / 0 AS a\\n       ^^^^^\\n\"},\"sql_state\":\"22012\"}}"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bigquery/v2/projects/dbmeta/jobs/dbimp-slow-1",
+    "header": {}
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:22 GMT"
+      ],
+      "Content-Length": [
+        "687"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"configuration\":{\"jobType\":\"QUERY\",\"query\":{\"destinationTable\":{\"datasetId\":\"dbimp-slow-1\",\"projectId\":\"dbmeta\",\"tableId\":\"dbimp-slow-1\"},\"priority\":\"INTERACTIVE\",\"query\":\"SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 3000)) AS a, UNNEST(GENERATE_ARRAY(1, 3000)) AS b\",\"useLegacySql\":false}},\"jobReference\":{\"jobId\":\"dbimp-slow-1\",\"projectId\":\"dbmeta\"},\"kind\":\"bigquery#job\",\"selfLink\":\"http://0.0.0.0:9050/bigquery/v2/projects/dbmeta/jobs/dbimp-slow-1\",\"statistics\":{\"creationTime\":\"1791614052\",\"endTime\":\"1791614056\",\"query\":{\"statementType\":\"SELECT\",\"totalBytesBilled\":\"7\",\"totalBytesProcessed\":\"7\"},\"startTime\":\"1791614052\",\"totalBytesProcessed\":\"7\"},\"status\":{\"state\":\"DONE\"}}"
+  }
+}

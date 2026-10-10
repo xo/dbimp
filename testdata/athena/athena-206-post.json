@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T061756Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"d739cf43-86da-4250-b48c-99eccdc1a490\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "2048"
+      ],
+      "X-Amzn-Requestid": [
+        "527f052a-429e-41a8-884c-0e2303d56bf0"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:17:58 GMT"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT * FROM dbimp_it_nosuch\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d739cf43-86da-4250-b48c-99eccdc1a490\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d739cf43-86da-4250-b48c-99eccdc1a490.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":221,\"QueryQueueTimeInMillis\":67,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":71,\"ServiceProcessingTimeInMillis\":82,\"TotalExecutionTimeInMillis\":441},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"TABLE_NOT_FOUND: line 1:15: Table 'awsdatacatalog.dbimp_test.dbimp_it_nosuch' does not exist\",\"ErrorType\":1301,\"Retryable\":false},\"CompletionDateTime\":1.791613073239E9,\"State\":\"FAILED\",\"StateChangeReason\":\"TABLE_NOT_FOUND: line 1:15: Table 'awsdatacatalog.dbimp_test.dbimp_it_nosuch' does not exist\",\"SubmissionDateTime\":1.791613072798E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d739cf43-86da-4250-b48c-99eccdc1a490.csv\",\"Query\":\"SELECT * FROM dbimp_it_nosuch\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d739cf43-86da-4250-b48c-99eccdc1a490\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d739cf43-86da-4250-b48c-99eccdc1a490.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":221,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613073239E9,\"State\":\"FAILED\",\"StateChangeReason\":\"TABLE_NOT_FOUND: line 1:15: Table 'awsdatacatalog.dbimp_test.dbimp_it_nosuch' does not exist\",\"SubmissionDateTime\":1.791613072798E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

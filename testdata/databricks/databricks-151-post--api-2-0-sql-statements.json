@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT id FROM range(3)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\",\"byte_limit\":0}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"dc56cb19-4f3f-4dd2-a7b1-e476e88d6e64\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=27"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:14 GMT"
+      ],
+      "X-Request-Id": [
+        "dc56cb19-4f3f-4dd2-a7b1-e476e88d6e64"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"error_code\":\"INVALID_PARAMETER_VALUE\",\"message\":\"The byte_limit field must be in the range [1, 26214400].\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.BadRequest\",\"field_violations\":[{\"field\":\"byte_limit\",\"description\":\"The byte_limit field must be in the range [1, 26214400].\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RequestInfo\",\"request_id\":\"dc56cb19-4f3f-4dd2-a7b1-e476e88d6e64\",\"serving_data\":\"\"}]}"
+  }
+}

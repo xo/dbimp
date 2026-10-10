@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT :p AS p, typeof(:p) AS t\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\",\"parameters\":[{\"name\":\"p\",\"value\":\"1.50\",\"type\":\"DECIMAL(10,2)\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Request-Id": [
+        "e56ce5a5-f09f-462b-bbe3-28003975dcb3"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:37 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"e56ce5a5-f09f-462b-bbe3-28003975dcb3\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=488"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-2418-1d24-aa41-8f21164562ca\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":2,\"columns\":[{\"name\":\"p\",\"type_text\":\"DECIMAL(3,2)\",\"type_name\":\"DECIMAL\",\"position\":0,\"type_precision\":3,\"type_scale\":2},{\"name\":\"t\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":1}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"1.50\",\"decimal(3,2)\"]]}}"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT :p AS p, typeof(:p) AS t\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\",\"parameters\":[{\"name\":\"p\",\"value\":\"abc\",\"type\":\"INT\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"b772ab24-a81f-4819-b82e-4e36efa3e61e\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=397"
+      ],
+      "X-Request-Id": [
+        "b772ab24-a81f-4819-b82e-4e36efa3e61e"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:52 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-2d93-1b0e-9832-385c0f6129ac\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[INVALID_PARAMETER_MARKER_VALUE.INVALID_VALUE_FOR_DATA_TYPE] An invalid parameter mapping was provided: the value 'abc' for parameter 'p' cannot be cast to INT because it is malformed. SQLSTATE: 22023\"},\"sql_state\":\"22023\"}}"
+  }
+}

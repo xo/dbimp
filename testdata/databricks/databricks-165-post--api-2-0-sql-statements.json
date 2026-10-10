@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"CREATE TABLE dbimp_t_src (id INT)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:26 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "08ec7dc0-b5cb-468c-8153-b5d20b84377f"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"08ec7dc0-b5cb-468c-8153-b5d20b84377f\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=300"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-41f4-13f7-948f-223e4bf2e418\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[TABLE_OR_VIEW_ALREADY_EXISTS] Cannot create table or view `dbimp`.`dbimp_t_src` because it already exists.\\nChoose a different name, drop the existing object, add the IF NOT EXISTS clause to tolerate pre-existing objects, add the OR REPLACE clause to replace the existing materialized view, or add the OR REFRESH clause to refresh the existing streaming table. SQLSTATE: 42P07\"},\"sql_state\":\"42P07\"}}"
+  }
+}

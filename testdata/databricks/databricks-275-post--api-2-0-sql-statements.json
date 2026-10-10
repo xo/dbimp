@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"-- nothing\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"1246605e-cf01-4d31-aca8-6c3adf2610bf\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=264"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:48 GMT"
+      ],
+      "X-Request-Id": [
+        "1246605e-cf01-4d31-aca8-6c3adf2610bf"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-961d-15e9-ab88-d2d37f5b1e1d\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"\\n[PARSE_SYNTAX_ERROR] Syntax error at or near end of input. SQLSTATE: 42601 (line 1, pos 10)\\n\\n== SQL ==\\n-- nothing\\n----------^^^\\n\"},\"sql_state\":\"42601\"}}"
+  }
+}

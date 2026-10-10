@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT NAMED_STRUCT('a', 1, 'b', 'x') AS s, NAMED_STRUCT('a', CAST(NULL AS INT), 'b', 'y') AS ns, STRUCT(1, 'x') AS unnamed\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Request-Id": [
+        "3cb582c9-a903-46f5-b2d8-2ca1b8953674"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"3cb582c9-a903-46f5-b2d8-2ca1b8953674\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=651"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:03 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-0fb6-1787-82cb-49f1414da3c2\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":3,\"columns\":[{\"name\":\"s\",\"type_text\":\"STRUCT<a: INT NOT NULL, b: STRING NOT NULL>\",\"type_name\":\"STRUCT\",\"position\":0},{\"name\":\"ns\",\"type_text\":\"STRUCT<a: INT, b: STRING NOT NULL>\",\"type_name\":\"STRUCT\",\"position\":1},{\"name\":\"unnamed\",\"type_text\":\"STRUCT<col1: INT NOT NULL, col2: STRING NOT NULL>\",\"type_name\":\"STRUCT\",\"position\":2}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"{\\\"a\\\":\\\"1\\\",\\\"b\\\":\\\"x\\\"}\",\"{\\\"a\\\":null,\\\"b\\\":\\\"y\\\"}\",\"{\\\"col1\\\":\\\"1\\\",\\\"col2\\\":\\\"x\\\"}\"]]}}"
+  }
+}

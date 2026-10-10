@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT 1 AS a, 'x' AS b\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\",\"format\":\"ARROW_STREAM\",\"disposition\":\"INLINE\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Request-Id": [
+        "3dd37341-c473-4202-83a2-adb7ed0f8c11"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:21 GMT"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"3dd37341-c473-4202-83a2-adb7ed0f8c11\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=25"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\"error_code\":\"INVALID_PARAMETER_VALUE\",\"message\":\"Incompatible parameters: The format field must be JSON_ARRAY when the disposition field is INLINE.\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.BadRequest\",\"field_violations\":[{\"field\":\"format\",\"description\":\"The format field must be JSON_ARRAY when the disposition field is INLINE.\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RequestInfo\",\"request_id\":\"3dd37341-c473-4202-83a2-adb7ed0f8c11\",\"serving_data\":\"\"}]}"
+  }
+}

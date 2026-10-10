@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT @p + 1 AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"INTEGER\"},\"parameterValue\":{\"value\":\"5\"},\"name\":\"p\"}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:31:08 GMT"
+      ],
+      "Content-Length": [
+        "209"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"WvOjSjQOTynG8sk0zeXEXJhHhzu\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"}]},\"rows\":[{\"f\":[{\"v\":\"6\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

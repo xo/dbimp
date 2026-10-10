@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT REPEAT('x', 11000000) AS big\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:07 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=460"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Output of REPEAT exceeds max allowed output size of 1MB\",\n    \"status\": \"OUT_OF_RANGE\"\n  }\n}\n"
+  }
+}

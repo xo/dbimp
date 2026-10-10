@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"WITH RECURSIVE r AS (SELECT 1 AS n UNION ALL SELECT n + 1 FROM r WHERE n < 3) SELECT n FROM r\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:34 GMT"
+      ],
+      "Content-Length": [
+        "245"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"O17V0y3ExH6GmcRnYi71u0C0Ffi\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"n\",\"type\":\"INTEGER\"}]},\"rows\":[{\"f\":[{\"v\":\"1\"}]},{\"f\":[{\"v\":\"2\"}]},{\"f\":[{\"v\":\"3\"}]}],\"totalRows\":\"3\",\"jobComplete\":true}"
+  }
+}

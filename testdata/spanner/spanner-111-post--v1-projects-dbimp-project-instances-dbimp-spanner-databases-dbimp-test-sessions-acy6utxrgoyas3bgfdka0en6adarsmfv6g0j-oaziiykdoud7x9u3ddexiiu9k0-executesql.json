@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"INSERT INTO dbimp_t_dml (id, s) VALUES (900, 'x')\",\"transaction\":{\"singleUse\":{\"readOnly\":{\"strong\":true}}}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:12 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=4"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"DML statements may not be performed in single-use transactions, to avoid replay.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  }
+}

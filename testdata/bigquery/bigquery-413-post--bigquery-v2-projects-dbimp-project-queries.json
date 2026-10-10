@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"DROP SCHEMA IF EXISTS `dbimp-project`.dbimp_it_ds\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:47:25 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Dataset dbimp-project:dbimp_it_ds: Permission bigquery.datasets.delete denied on dataset dbimp-project:dbimp_it_ds (or it may not exist).\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Dataset dbimp-project:dbimp_it_ds: Permission bigquery.datasets.delete denied on dataset dbimp-project:dbimp_it_ds (or it may not exist).\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
+  }
+}

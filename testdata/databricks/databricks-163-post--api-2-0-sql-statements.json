@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT 1 + 'a' AS a\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Request-Id": [
+        "b13d87c4-0d24-474c-81f8-5fce1574b4c7"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:25 GMT"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"b13d87c4-0d24-474c-81f8-5fce1574b4c7\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=267"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-413b-1817-a2ae-844f3f66cca1\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[CAST_INVALID_INPUT] The value 'a' of the type \\\"STRING\\\" cannot be cast to \\\"BIGINT\\\" because it is malformed. Correct the value as per the syntax, or change its target type. Use `try_cast` to tolerate malformed input and return NULL instead. SQLSTATE: 22018\\n== SQL (line 1, position 8) ==\\nSELECT 1 + 'a' AS a\\n       ^^^^^^^^^^^^\\n\"},\"sql_state\":\"22018\"}}"
+  }
+}

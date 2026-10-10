@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT ST_GEOGPOINT(1, 2) AS pt, ST_GEOGFROMTEXT('LINESTRING(0 0, 1 1)') AS line, ST_GEOGFROMTEXT('POLYGON((0 0, 1 0, 1 1, 0 0))') AS poly\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ],
+      "Content-Length": [
+        "397"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"8pOfOqEfbV6axvEfjUAjjxogjIU\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"pt\",\"type\":\"GEOGRAPHY\"},{\"mode\":\"NULLABLE\",\"name\":\"line\",\"type\":\"GEOGRAPHY\"},{\"mode\":\"NULLABLE\",\"name\":\"poly\",\"type\":\"GEOGRAPHY\"}]},\"rows\":[{\"f\":[{\"v\":\"POINT (1 2)\"},{\"v\":\"LINESTRING (0 0, 1 1)\"},{\"v\":\"POLYGON ((0 0, 1 0, 1 1, 0 0))\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

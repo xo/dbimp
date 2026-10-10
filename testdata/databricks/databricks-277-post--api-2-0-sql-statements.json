@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"   \\n  \",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"1a38439c-201a-4054-97b2-6e94823b5742\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=415"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:49 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "X-Request-Id": [
+        "1a38439c-201a-4054-97b2-6e94823b5742"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-96b5-1b79-8096-2feb0daa696d\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"\\n[PARSE_EMPTY_STATEMENT] Syntax error, unexpected empty statement. SQLSTATE: 42617 (line 2, pos 2)\\n\\n== SQL ==\\n   \\n  \\n--^^^\\n\"},\"sql_state\":\"42617\"}}"
+  }
+}

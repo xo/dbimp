@@ -18,6 +18,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"errors"
@@ -56,7 +57,9 @@ type Script struct {
 	// as for a server that takes a token and no user, such as libSQL with a
 	// JWT (D94). It is "sigv4" to sign each request with AWS Signature
 	// Version 4, as DynamoDB takes it, with the user of each URL as the
-	// access key and its password as the secret key. It is "" for basic
+	// access key and its password as the secret key. It is "cosmos" to sign
+	// each request with the master key of Azure Cosmos DB, which is the
+	// password of each URL. It is "" for basic
 	// authentication.
 	Auth string `json:"auth,omitzero"`
 	// Region and Service name the scope of each signature when Auth is
@@ -83,7 +86,8 @@ type Request struct {
 	Text string `json:"text,omitzero"`
 	// Encoding is "cbor" to send Body as CBOR, or "" to send it as JSON.
 	Encoding string `json:"encoding,omitzero"`
-	// Auth is "wrong" to send a wrong password, or "" for the right one.
+	// Auth is "wrong" to send a wrong password, "none" to send no credentials
+	// at all, or "" for the right one.
 	Auth string `json:"auth,omitzero"`
 	// Timeout makes the client give up after it. The request is then not
 	// recorded, and a later request records what the server did.
@@ -150,6 +154,7 @@ func record() error {
 	admin := flag.String("admin", "", "the http URL of the server, with the user and password of the administrator")
 	ordinary := flag.String("ordinary", "", "the http URL of the server, with the user and password of the ordinary user, or empty for a release that has none")
 	second := flag.String("second", "", "the http URL of a second server of the product, such as the Controller of Pinot, or empty for none")
+	insecure := flag.Bool("insecure", false, "accept a certificate that no authority signed, as the emulator of Cosmos DB serves")
 	flag.Parse()
 	if *dir == "" || *release == "" || *admin == "" {
 		flag.Usage()
@@ -157,13 +162,13 @@ func record() error {
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
-	return run(ctx, *dir, *release, *second, map[string]string{
+	return run(ctx, *dir, *release, *second, *insecure, map[string]string{
 		dbimptest.Administrator: *admin,
 		dbimptest.Ordinary:      *ordinary,
 	})
 }
 
-func run(ctx context.Context, dir, release, second string, principals map[string]string) error {
+func run(ctx context.Context, dir, release, second string, insecure bool, principals map[string]string) error {
 	b, err := os.ReadFile(filepath.Join(dir, dbimptest.RequestsName))
 	if err != nil {
 		return fmt.Errorf("reading the script: %w", err)
@@ -173,7 +178,7 @@ func run(ctx context.Context, dir, release, second string, principals map[string
 		return fmt.Errorf("reading the script: %w", err)
 	}
 	switch {
-	case !slices.Contains([]string{"", dbimp.AuthBearer, authSigV4}, script.Auth):
+	case !slices.Contains([]string{"", dbimp.AuthBearer, authSigV4, authCosmos}, script.Auth):
 		return fmt.Errorf("reading the script: the auth %q: %w", script.Auth, dbimp.ErrInvalidValue)
 	case script.Auth == authSigV4 && (script.Region == "" || script.Service == ""):
 		return fmt.Errorf("reading the script: the auth %q needs a region and a service: %w", script.Auth, dbimp.ErrInvalidValue)
@@ -185,7 +190,13 @@ func run(ctx context.Context, dir, release, second string, principals map[string
 	if err := forget(dir, release); err != nil {
 		return err
 	}
-	rec := dbimptest.NewRecorder(dir, release, http.DefaultTransport)
+	transport := http.DefaultTransport
+	if insecure {
+		t := &http.Transport{}
+		t.TLSClientConfig = &tls.Config{InsecureSkipVerify: true, MinVersion: tls.VersionTLS12} //nolint:gosec // The flag asks for it, for a local emulator that makes its own certificate.
+		transport = t
+	}
+	rec := dbimptest.NewRecorder(dir, release, transport)
 	for _, u := range principals {
 		if pu, err := url.Parse(u); err == nil && pu.User != nil {
 			pass, _ := pu.User.Password()
@@ -665,7 +676,7 @@ const authSigV4 = "sigv4"
 // first request. If wrong is true, the password is not the one of the URL.
 func authorize(req *http.Request, base *url.URL, r Request, payload []byte, wrong bool) {
 	user := base.User
-	if user == nil {
+	if user == nil || r.Auth == "none" {
 		return
 	}
 	pass, _ := user.Password()
@@ -677,6 +688,10 @@ func authorize(req *http.Request, base *url.URL, r Request, payload []byte, wron
 		req.Header.Set("Authorization", "Bearer "+pass)
 	case authSigV4:
 		dbimp.SignV4(req, payload, user.Username(), pass, r.region, r.service, time.Now())
+	case authCosmos:
+		if err := signCosmos(req, pass, time.Now()); err != nil {
+			fmt.Fprintln(os.Stderr, "record:", err)
+		}
 	default:
 		req.SetBasicAuth(user.Username(), pass)
 	}
@@ -717,13 +732,17 @@ func get(ctx context.Context, client *http.Client, base *url.URL, r Request, uri
 }
 
 // forget removes the files and the entries that an earlier run wrote for
-// release.
+// release. A file of another release, whose name starts with the name of this
+// one and a dash, such as bigquery-0.7.2-001 for the release bigquery, stays.
 func forget(dir, release string) error {
 	paths, err := filepath.Glob(filepath.Join(dir, release+"-*.json"))
 	if err != nil {
 		return fmt.Errorf("finding the recordings of %s: %w", release, err)
 	}
 	for _, path := range paths {
+		if !isRecording(filepath.Base(path), release) {
+			continue
+		}
 		if err := os.Remove(path); err != nil {
 			return fmt.Errorf("removing a recording: %w", err)
 		}
@@ -740,6 +759,25 @@ func forget(dir, release string) error {
 		return e.Release == release
 	})
 	return dbimptest.WriteManifest(path, m)
+}
+
+// isRecording reports whether name is a file that a run for release wrote, which
+// is the release, a dash, the number of the request and a dash.
+func isRecording(name, release string) bool {
+	rest, ok := strings.CutPrefix(name, release+"-")
+	if !ok {
+		return false
+	}
+	num, _, ok := strings.Cut(rest, "-")
+	if !ok || num == "" {
+		return false
+	}
+	for _, r := range num {
+		if r < '0' || r > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 // addAbsent adds an entry for each absent item, for each principal.

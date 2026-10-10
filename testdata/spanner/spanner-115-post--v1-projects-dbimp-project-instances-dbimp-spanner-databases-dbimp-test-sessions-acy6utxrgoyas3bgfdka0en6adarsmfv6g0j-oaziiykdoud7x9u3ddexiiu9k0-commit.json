@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:commit",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"singleUseTransaction\":{\"readWrite\":{}},\"mutations\":[{\"insert\":{\"table\":\"dbimp_t_dml\",\"columns\":[\"nosuch\"],\"values\":[[\"1\"]]}}]}"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:14 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=668"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"Column not found in table dbimp_t_dml: nosuch\",\n    \"status\": \"NOT_FOUND\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ResourceInfo\",\n        \"resourceType\": \"spanner.googleapis.com/Column\",\n        \"resourceName\": \"nosuch\"\n      }\n    ]\n  }\n}\n"
+  }
+}

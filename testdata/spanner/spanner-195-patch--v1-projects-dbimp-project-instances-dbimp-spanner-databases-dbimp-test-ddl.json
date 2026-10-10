@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "PATCH",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"CREATE TABLE dbimp_t_sch.t1 (id INT64 NOT NULL, s STRING(MAX)) PRIMARY KEY (id)\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=2343"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:53:16 GMT"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_39e527c31d9f42e6\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE TABLE dbimp_t_sch.t1 (\\n  id INT64 NOT NULL,\\n  s STRING(MAX),\\n) PRIMARY KEY(id)\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:53:15.094021Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_sch.t1\"\n        ]\n      }\n    ]\n  }\n}\n"
+  }
+}

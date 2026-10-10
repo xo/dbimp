@@ -1,0 +1,1109 @@
+{
+  "driver": "spanner",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "deepseek-v4-flash",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "cloud.google.com/go/spanner",
+      "kind": "driver",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "github.com/googleapis/go-sql-spanner",
+      "kind": "driver",
+      "date": "2026-10-10"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert",
+      "evidence": "spanner-266-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/select",
+      "evidence": "spanner-019-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update",
+      "evidence": "spanner-267-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/delete",
+      "evidence": "spanner-269-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "crud",
+      "name": "then return",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/then_return",
+      "evidence": "spanner-277-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "crud",
+      "name": "mutations",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/mutations",
+      "evidence": "spanner-292-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "crud",
+      "name": "insert or update mutation",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert_or_update_mutation",
+      "evidence": "spanner-264-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "crud",
+      "name": "replace mutation",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/replace_mutation",
+      "evidence": "spanner-292-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "crud",
+      "name": "partitioned dml",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/partitioned_dml",
+      "evidence": "spanner-290-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "crud",
+      "name": "batch dml",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/batch_dml",
+      "evidence": "spanner-286-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executebatchdml.json"
+    },
+    {
+      "kind": "crud",
+      "name": "read by key",
+      "sources": [
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/read_by_key",
+      "evidence": "spanner-294-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-read.json"
+    },
+    {
+      "kind": "crud",
+      "name": "streaming read",
+      "sources": [
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/streaming_read",
+      "evidence": "spanner-296-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-streamingread.json"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/table",
+      "evidence": "spanner-009-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations--auto-op-17640bde587a1e02.json"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/primary_key",
+      "evidence": "spanner-009-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations--auto-op-17640bde587a1e02.json"
+    },
+    {
+      "kind": "schema",
+      "name": "interleaved table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/interleaved_table",
+      "evidence": "spanner-144-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/foreign_key",
+      "evidence": "spanner-230-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "schema",
+      "name": "check constraint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/check_constraint",
+      "evidence": "spanner-231-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/index",
+      "evidence": "spanner-220-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "unique index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/unique_index",
+      "evidence": "spanner-233-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "schema",
+      "name": "null filtered index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/null_filtered_index",
+      "evidence": "spanner-220-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "storing index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/storing_index",
+      "evidence": "spanner-221-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/default_value",
+      "evidence": "spanner-229-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "generated column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/generated_column",
+      "evidence": "spanner-229-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "sequence",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/sequence",
+      "evidence": "spanner-232-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "schema",
+      "name": "change stream",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/change_stream",
+      "evidence": "spanner-165-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations--auto-op-8a51f3b88d22a810.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table add column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_add_column",
+      "evidence": "spanner-155-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations--auto-op-85f7a5729ec038f2.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table drop column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_drop_column",
+      "evidence": "spanner-167-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations--auto-op-4eacf66376e599f3.json"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/drop_table",
+      "evidence": "spanner-400-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations--auto-op-e1ca64b67d18982f.json"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/view",
+      "evidence": "spanner-234-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "search index",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/search_index",
+      "evidence": "spanner-253-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "row deletion policy",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/row_deletion_policy",
+      "evidence": "spanner-250-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "schema",
+      "name": "named schema",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/named_schema",
+      "evidence": "spanner-259-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/named_parameters",
+      "evidence": "spanner-071-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "positional parameters",
+      "sources": [
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/positional_parameters",
+      "evidence": "spanner-090-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "struct parameter",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/struct_parameter",
+      "evidence": "spanner-081-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "array parameter",
+      "sources": [
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/array_parameter",
+      "evidence": "spanner-079-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "array of struct",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/array_of_struct",
+      "evidence": "spanner-063-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "multiplexed sessions",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/multiplexed_sessions",
+      "evidence": "spanner-012-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions.json"
+    },
+    {
+      "kind": "feature",
+      "name": "batch create sessions",
+      "sources": [
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/batch_create_sessions",
+      "evidence": "spanner-013-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-batchcreate.json"
+    },
+    {
+      "kind": "feature",
+      "name": "session labels",
+      "sources": [
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/session_labels",
+      "evidence": "spanner-017-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions.json"
+    },
+    {
+      "kind": "feature",
+      "name": "multi statement request",
+      "sources": [
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/multi_statement_request",
+      "evidence": "spanner-150-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "read only transaction",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/read_only_transaction",
+      "evidence": "spanner-301-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "exact staleness",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/exact_staleness",
+      "evidence": "spanner-304-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "read timestamp",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/read_timestamp",
+      "evidence": "spanner-306-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "read write transaction",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/read_write_transaction",
+      "evidence": "spanner-270-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "feature",
+      "name": "inline begin",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/inline_begin",
+      "evidence": "spanner-283-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "rollback",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/rollback",
+      "evidence": "spanner-274-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-rollback.json"
+    },
+    {
+      "kind": "feature",
+      "name": "aborted transaction",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/aborted_transaction",
+      "evidence": "spanner-324-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "feature",
+      "name": "commit statistics",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/commit_statistics",
+      "evidence": "spanner-270-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "feature",
+      "name": "isolation level",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/isolation_level",
+      "evidence": "spanner-293-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "feature",
+      "name": "precommit token",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/precommit_token",
+      "evidence": "spanner-315-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxjpvkv1wbsao1lbcvp-v7pczxqydtzybrlqlxqmxqu-s89ukozao10jsrw3dkwza-commit.json"
+    },
+    {
+      "kind": "feature",
+      "name": "partitioned query",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/partitioned_query",
+      "evidence": "spanner-310-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-partitionquery.json"
+    },
+    {
+      "kind": "feature",
+      "name": "partitioned read",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/partitioned_read",
+      "evidence": "spanner-312-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-partitionread.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query mode plan",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/query_mode_plan",
+      "evidence": "spanner-031-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query mode profile",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/query_mode_profile",
+      "evidence": "spanner-032-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query mode with stats",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/query_mode_with_stats",
+      "evidence": "spanner-033-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query options",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/query_options",
+      "evidence": "spanner-034-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "request options",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/request_options",
+      "evidence": "spanner-035-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "information schema",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/information_schema",
+      "evidence": "spanner-144-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "spanner sys",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/spanner_sys",
+      "evidence": "spanner-146-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "streaming result",
+      "sources": [
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/streaming_result",
+      "evidence": "spanner-093-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executestreamingsql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "resume token in the stream",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/resume_token_in_the_stream",
+      "evidence": "spanner-298-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executestreamingsql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "gzip response",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/gzip_response",
+      "evidence": "spanner-372-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "delete session",
+      "sources": [
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/delete_session",
+      "evidence": "spanner-373-delete--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxaev8fb7s8zejfpqphpnft4c8eoeyoqtfc4ezpzcxdt3-8tpnzzbrpznq.json"
+    },
+    {
+      "kind": "feature",
+      "name": "ddl operation",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/ddl_operation",
+      "evidence": "spanner-169-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations-dbimp-op-1791610956.json"
+    },
+    {
+      "kind": "feature",
+      "name": "ddl operation id",
+      "sources": [
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/ddl_operation_id",
+      "evidence": "spanner-169-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations-dbimp-op-1791610956.json"
+    },
+    {
+      "kind": "feature",
+      "name": "operation list",
+      "sources": [
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/operation_list",
+      "evidence": "spanner-209-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations.json"
+    },
+    {
+      "kind": "feature",
+      "name": "chunked value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/chunked_value",
+      "evidence": "spanner-365-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executestreamingsql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "statement hint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/statement_hint",
+      "evidence": "spanner-262-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "dml hint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/dml_hint",
+      "evidence": "spanner-336-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "select for update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/select_for_update",
+      "evidence": "spanner-335-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "read lock mode",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/read_lock_mode",
+      "evidence": "spanner-355-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-begintransaction.json"
+    },
+    {
+      "kind": "feature",
+      "name": "exclude transaction from change streams",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/exclude_transaction_from_change_streams",
+      "evidence": "spanner-355-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-begintransaction.json"
+    },
+    {
+      "kind": "feature",
+      "name": "max commit delay",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/max_commit_delay",
+      "evidence": "spanner-342-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-commit.json"
+    },
+    {
+      "kind": "feature",
+      "name": "directed read options",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/directed_read_options",
+      "evidence": "spanner-360-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "feature",
+      "name": "interval column",
+      "sources": [
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/interval_column",
+      "evidence": "spanner-185-get--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-operations--auto-op-85f7a5729ec038a6.json"
+    },
+    {
+      "kind": "type",
+      "name": "BOOL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BOOL",
+      "evidence": "spanner-044-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "INT64",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INT64",
+      "evidence": "spanner-044-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT32",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/FLOAT32",
+      "evidence": "spanner-044-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT64",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/FLOAT64",
+      "evidence": "spanner-044-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "NUMERIC",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/NUMERIC",
+      "evidence": "spanner-050-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "STRING",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/STRING",
+      "evidence": "spanner-052-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "BYTES",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BYTES",
+      "evidence": "spanner-053-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DATE",
+      "evidence": "spanner-054-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP",
+      "evidence": "spanner-055-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "JSON",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/JSON",
+      "evidence": "spanner-057-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "UUID",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/UUID",
+      "evidence": "spanner-058-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL",
+      "sources": [
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTERVAL",
+      "evidence": "spanner-059-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "ARRAY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/ARRAY",
+      "evidence": "spanner-060-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "STRUCT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/spanner",
+        "github.com/googleapis/go-sql-spanner"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationRoundTrip/STRUCT",
+      "evidence": "spanner-065-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    },
+    {
+      "kind": "type",
+      "name": "TOKENLIST",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationRoundTrip/TOKENLIST",
+      "evidence": "spanner-254-post--v1-projects-dbimp-project-instances-dbimp-spanner-databases-dbimp-test-sessions-acy6utxrgoyas3bgfdka0en6adarsmfv6g0j-oaziiykdoud7x9u3ddexiiu9k0-executesql.json"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT job_id FROM dbmeta.INFORMATION_SCHEMA.JOBS\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:30:51 GMT"
+      ],
+      "Content-Length": [
+        "270"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to analyze: Table not found: dbmeta.INFORMATION_SCHEMA.JOBS [at 1:20]\"}],\"code\":400,\"message\":\"failed to analyze: Table not found: dbmeta.INFORMATION_SCHEMA.JOBS [at 1:20]\"}}"
+  }
+}

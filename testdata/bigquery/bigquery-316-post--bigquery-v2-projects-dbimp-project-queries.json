@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml FOR SYSTEM_TIME AS OF TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 SECOND)\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:14 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"id\",\n        \"type\": \"INTEGER\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_2MAkDPLc3dphYI_lh4Jk9pubImAC\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"7\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": \"12\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": \"20\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": \"7\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": \"11\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": \"10\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": \"8\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": \"1\"\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"56\",\n  \"jobComplete\": true,\n  \"cacheHit\": false,\n  \"queryId\": \"job_2MAkDPLc3dphYI_lh4Jk9pubImAC\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"10485760\",\n  \"totalSlotMs\": \"116\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614772941\",\n  \"startTime\": \"1791614774007\",\n  \"endTime\": \"1791614774254\",\n  \"pageRowCount\": \"7\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT INTERVAL 1500 MILLISECOND AS ms, INTERVAL -1500 MILLISECOND AS neg_ms, INTERVAL 1 MICROSECOND AS us, INTERVAL -1 DAY AS neg_day, MAKE_INTERVAL(-1, -2, -3, -4, -5, -6) AS all_neg, MAKE_INTERVAL(1, 0, 0, 0, 0, 0) AS year, INTERVAL 0 DAY AS zero\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "gfet4t7; dur=448"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:55:18 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"ms\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"neg_ms\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"us\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"neg_day\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"all_neg\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"year\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"zero\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"PT1.5S\",\n      \"PT-1.5S\",\n      \"PT0.000001S\",\n      \"P-1D\",\n      \"P-1Y-2M-3DT-4H-5M-6S\",\n      \"P1Y\",\n      \"P0Y\"\n    ]\n  ]\n}\n"
+  }
+}

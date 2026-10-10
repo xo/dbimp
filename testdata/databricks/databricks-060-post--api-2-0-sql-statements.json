@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT catalog_name, schema_name, schema_owner FROM workspace.information_schema.schemata ORDER BY schema_name\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "3082c00b-4926-4b5d-9038-61aadaaaca9e"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"3082c00b-4926-4b5d-9038-61aadaaaca9e\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=1819"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:36 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46b-ff46-1a15-bccb-cc711e0e7e0a\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":3,\"columns\":[{\"name\":\"catalog_name\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":0},{\"name\":\"schema_name\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":1},{\"name\":\"schema_owner\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":2}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":3}],\"total_row_count\":3,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":3,\"data_array\":[[\"workspace\",\"dbimp\",\"e2828290-c044-4393-9072-a458fa9c37eb\"],[\"workspace\",\"default\",\"_workspace_admins_workspace_0000000000000000\"],[\"workspace\",\"information_schema\",\"System user\"]]}}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T061825Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryString\":\"SELECT count(*) FROM UNNEST(sequence(1,200000000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50)) AS u(m)\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0075-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:18:25 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "59"
+      ],
+      "X-Amzn-Requestid": [
+        "0280954e-8200-4a22-81ff-38546e2596cc"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"a29b2520-c498-4866-9139-624d0c64b030\"}"
+  }
+}

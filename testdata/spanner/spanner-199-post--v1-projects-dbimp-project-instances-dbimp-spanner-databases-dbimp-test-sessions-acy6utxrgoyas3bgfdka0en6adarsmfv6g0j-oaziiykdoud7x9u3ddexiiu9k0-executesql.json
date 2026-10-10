@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"INSERT INTO dbimp_t_many (id, g, pad) SELECT x, MOD(x, 7), REPEAT('p', 100) FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x\",\"transaction\":{\"begin\":{\"readWrite\":{}}},\"seqno\":\"1\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:53:53 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1632"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {},\n    \"transaction\": {\n      \"id\": \"QUN5NlVUd3dlUWs5emlGT3FsdkQxWkdDRkFSd3VINXdnOW9XR0Y4UFc4T21ZQjFCN25FUUowRQ==\"\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"stats\": {\n    \"rowCountExact\": \"5000\"\n  }\n}\n"
+  }
+}

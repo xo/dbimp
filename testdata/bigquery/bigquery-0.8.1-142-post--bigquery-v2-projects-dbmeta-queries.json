@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT @p AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"name\":\"p\",\"parameterType\":{\"type\":\"ARRAY\",\"arrayType\":{\"type\":\"INT64\"}},\"parameterValue\":{\"arrayValues\":[{\"value\":\"1\"},{\"value\":\"2\"}]}}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "226"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:09 GMT"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"3WIZjoPeWW015fOQyn36uTtIYFD\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"REPEATED\",\"name\":\"a\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":[{\"v\":\"1\"},{\"v\":\"2\"}]}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

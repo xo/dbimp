@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT 1 AS a\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"soon\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"af503b7d-baec-4885-ab2e-3bcf76669cdd\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=24"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Request-Id": [
+        "af503b7d-baec-4885-ab2e-3bcf76669cdd"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:12 GMT"
+      ]
+    },
+    "body": "{\"error_code\":\"INVALID_PARAMETER_VALUE\",\"message\":\"Error while parsing type: duration.\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.RequestInfo\",\"request_id\":\"af503b7d-baec-4885-ab2e-3bcf76669cdd\",\"serving_data\":\"\"}]}"
+  }
+}

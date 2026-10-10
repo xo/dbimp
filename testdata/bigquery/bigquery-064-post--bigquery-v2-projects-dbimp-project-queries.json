@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT job_id FROM `dbimp-project`.INFORMATION_SCHEMA.JOBS\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:43:27 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Table dbimp-project:INFORMATION_SCHEMA.JOBS: User does not have permission to query table dbimp-project:INFORMATION_SCHEMA.JOBS, or perhaps it does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Table dbimp-project:INFORMATION_SCHEMA.JOBS: User does not have permission to query table dbimp-project:INFORMATION_SCHEMA.JOBS, or perhaps it does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
+  }
+}

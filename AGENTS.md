@@ -81,6 +81,11 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the ClickHouse driver | [docs/CLICKHOUSE.md](docs/CLICKHOUSE.md), then W32 and D174 |
 | asking why VoltDB has no driver here | [docs/VOLTDB.md](docs/VOLTDB.md), then D180 |
 | measuring Snowflake for a driver | [docs/SNOWFLAKE.md](docs/SNOWFLAKE.md), then W34 and D182 |
+| writing the BigQuery driver | [docs/BIGQUERY.md](docs/BIGQUERY.md), then W35 and D184 |
+| writing the Cosmos DB driver | [docs/COSMOS.md](docs/COSMOS.md), then W36 and D184 |
+| writing the Athena driver | [docs/ATHENA.md](docs/ATHENA.md), then W37 and D184 |
+| writing the Databricks driver | [docs/DATABRICKS.md](docs/DATABRICKS.md), then W39 and D188 |
+| writing the Spanner driver | [docs/SPANNER.md](docs/SPANNER.md), then W38, D185 and D187 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
 | mapping the types of a database onto Go types | [docs/TYPES.md](docs/TYPES.md), then step 8a of [docs/DRIVER.md](docs/DRIVER.md), D135, D137 and D138 |
@@ -126,8 +131,8 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    or Trino transaction, by an Avatica connection, and by the rows of an
    ArangoDB cursor, of a Databend query, of a libSQL cursor, of an Avatica
    query, of a Trino query, of an Elasticsearch query, of an OpenSearch query, of
-   a DynamoDB query or of a Snowflake query (D45, D69, D90, D91, D122, D123,
-   D149, D150, D157, D159, D175, D178 and D183). The
+   a DynamoDB query, of a Snowflake query or of an Athena query (D45, D69, D90,
+   D91, D122, D123, D149, D150, D157, D159, D175, D178, D183 and D192). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

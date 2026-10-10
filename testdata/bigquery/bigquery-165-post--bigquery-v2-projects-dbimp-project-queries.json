@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_big ORDER BY id\",\"useLegacySql\":false,\"maxResults\":0}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:44:20 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"id\",\n        \"type\": \"INTEGER\",\n        \"mode\": \"NULLABLE\"\n      },\n      {\n        \"name\": \"s\",\n        \"type\": \"STRING\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_0WW5xz-kpQ8YBZjka0Cf1tcAsciL\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"3000\",\n  \"pageToken\": \"BEWDBDREUEAQAAASA4EAAEEAQCAAKGQIBAABB7X7777QOIFQVYKUVKQCBJYQUHQKCNSGE2LNOAWWE4JNGMYTEMJWGEYTEMBTCEZ274BGAQAAAAASFFPTIMBVGI3WGMJXMQYTOMJXHE3TIMJQHA3DCNJZMM4TGYJWGI4GKMBUGAZGIMBYGI2RUJBUMFTDOZRXGU4S2OBYHA2S2NBVG42C2ODGG5TC2MDBGQ3TGMTGMZSGEOJZCJCGC3TPNY4GCNDFGA4DOZBRGQZDINDEHEYGGN3FMFSWINLDGUYDONDGMZQWKMJSMMYDANDFG44WIMRTMZSWENJXHFTDKMBWGI3TINTDG5QTSMTCDJXTQYJUMUYDQN3EGE2DENBUMQ4TAYZXMVQWKZBVMM2TANZUMZTGCZJRGJRTAMBUMU3TSZBSGNTGKYRVG44WMNJQGYZDONBWMM3WCOJSMIRWK5S7OMZTIOJWMQ4FK3DIHBRDGWKQOVTHSU2LGZTVKZSXMJYW45LPIJ4FGNKCKBMUIOKZG5MFC===\",\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": true,\n  \"queryId\": \"job_0WW5xz-kpQ8YBZjka0Cf1tcAsciL\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614659902\",\n  \"startTime\": \"1791614660543\",\n  \"endTime\": \"1791614660652\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

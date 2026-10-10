@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"INSERT INTO dbimp_t_src VALUES (1, 'a'); INSERT INTO dbimp_t_src VALUES (2, 'b')\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"ea4c2dcf-d8a7-4551-a437-8cde3853b6c0\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=236"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:42 GMT"
+      ],
+      "X-Request-Id": [
+        "ea4c2dcf-d8a7-4551-a437-8cde3853b6c0"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-92f8-1197-a477-47204027fa25\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"\\n[PARSE_SYNTAX_ERROR] Syntax error at or near 'INSERT': extra input 'INSERT'. SQLSTATE: 42601 (line 1, pos 41)\\n\\n== SQL ==\\nINSERT INTO dbimp_t_src VALUES (1, 'a'); INSERT INTO dbimp_t_src VALUES (2, 'b')\\n-----------------------------------------^^^\\n\"},\"sql_state\":\"42601\"}}"
+  }
+}

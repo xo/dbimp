@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "PATCH",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"DROP CHANGE STREAM dbimp_t_nosuch_cs\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=2350"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:50:43 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_140145d5c8192bfb\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"DROP CHANGE STREAM dbimp_t_nosuch_cs\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:50:42.360484Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"DROP\",\n        \"entityType\": \"CHANGE STREAM\",\n        \"entityNames\": [\n          \"dbimp_t_nosuch_cs\"\n        ]\n      }\n    ]\n  }\n}\n"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T062052Z"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"722a137f-9191-43d1-bd87-3582db36df74\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1809"
+      ],
+      "X-Amzn-Requestid": [
+        "e8397ef5-0a8b-4946-811a-c30b8411db1d"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:20:52 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"INSERT INTO dbimp_it_part SELECT 1, 'a'\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"722a137f-9191-43d1-bd87-3582db36df74\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/722a137f-9191-43d1-bd87-3582db36df74\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataManifestLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/722a137f-9191-43d1-bd87-3582db36df74-manifest.csv\",\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":760,\"QueryPlanningTimeInMillis\":19,\"QueryQueueTimeInMillis\":52,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":129,\"ServiceProcessingTimeInMillis\":31,\"TotalExecutionTimeInMillis\":972},\"Status\":{\"CompletionDateTime\":1.791613243525E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613242553E9},\"SubstatementType\":\"INSERT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/722a137f-9191-43d1-bd87-3582db36df74\",\"Query\":\"INSERT INTO dbimp_it_part SELECT 1, 'a'\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"722a137f-9191-43d1-bd87-3582db36df74\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/722a137f-9191-43d1-bd87-3582db36df74\"},\"Stats\":{\"EngineExecutionTimeInMillis\":760,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613243525E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613242553E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

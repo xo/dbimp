@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations",
+    "query": "pageSize=5",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:54:28 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1337"
+      ]
+    },
+    "body": "{\n  \"operations\": [\n    {\n      \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_bcbc9ffa1be2c036\",\n      \"metadata\": {\n        \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n        \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n        \"statements\": [\n          \"CREATE INDEX dbimp_t_idx_m1 ON dbimp_t_many(g) STORING (pad)\",\n          \"CREATE INDEX dbimp_t_idx_m2 ON dbimp_t_many(pad)\",\n          \"CREATE INDEX dbimp_t_idx_m3 ON dbimp_t_many(g DESC, pad)\"\n        ],\n        \"actions\": [\n          {\n            \"action\": \"CREATE\",\n            \"entityType\": \"INDEX\",\n            \"entityNames\": [\n              \"dbimp_t_idx_m1\"\n            ]\n          },\n          {\n            \"action\": \"CREATE\",\n            \"entityType\": \"INDEX\",\n            \"entityNames\": [\n              \"dbimp_t_idx_m2\"\n            ]\n          },\n          {\n            \"action\": \"CREATE\",\n            \"entityType\": \"INDEX\",\n            \"entityNames\": [\n              \"dbimp_t_idx_m3\"\n            ]\n          }\n        ]\n      },\n      \"done\": true,\n      \"error\": {\n        \"code\": 1,\n        \"message\": \"Statement was cancelled by user request.\"\n      }\n    },\n    {\n      \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_bcbc9ffa1be2c207\",\n      \"metadata\": {\n        \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n        \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n        \"statements\": [\n          \"ALTER TABLE dbimp_t_dml ADD COLUMN cts TIMESTAMP OPTIONS (\\n  allow_commit_timestamp = true\\n)\"\n        ],\n        \"commitTimestamps\": [\n          \"2026-10-10T05:53:37.380545Z\"\n        ],\n        \"actions\": [\n          {\n            \"action\": \"ALTER\",\n            \"entityType\": \"TABLE\",\n            \"entityNames\": [\n              \"dbimp_t_dml\"\n            ]\n          }\n        ]\n      },\n      \"done\": true,\n      \"response\": {\n        \"@type\": \"type.googleapis.com/google.protobuf.Empty\"\n      }\n    },\n    {\n      \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_39e527c31d9f42e6\",\n      \"metadata\": {\n        \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n        \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n        \"statements\": [\n          \"CREATE TABLE dbimp_t_sch.t1 (\\n  id INT64 NOT NULL,\\n  s STRING(MAX),\\n) PRIMARY KEY(id)\"\n        ],\n        \"commitTimestamps\": [\n          \"2026-10-10T05:53:18.775033Z\"\n        ],\n        \"actions\": [\n          {\n            \"action\": \"CREATE\",\n            \"entityType\": \"TABLE\",\n            \"entityNames\": [\n              \"dbimp_t_sch.t1\"\n            ]\n          }\n        ]\n      },\n      \"done\": true,\n      \"response\": {\n        \"@type\": \"type.googleapis.com/google.protobuf.Empty\"\n      }\n    },\n    {\n      \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_3ebe7f5347f5a953\",\n      \"metadata\": {\n        \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n        \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n        \"statements\": [\n          \"CREATE SCHEMA dbimp_t_sch\"\n        ],\n        \"commitTimestamps\": [\n          \"2026-10-10T05:52:59.699091Z\"\n        ],\n        \"actions\": [\n          {\n            \"action\": \"CREATE\",\n            \"entityType\": \"SCHEMA\",\n            \"entityNames\": [\n              \"dbimp_t_sch\"\n            ]\n          }\n        ]\n      },\n      \"done\": true,\n      \"response\": {\n        \"@type\": \"type.googleapis.com/google.protobuf.Empty\"\n      }\n    },\n    {\n      \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_d936e9fbe4363d3b\",\n      \"metadata\": {\n        \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n        \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n        \"statements\": [\n          \"CREATE SEARCH INDEX dbimp_t_si ON dbimp_t_doc(body_tokens)\"\n        ],\n        \"commitTimestamps\": [\n          \"2026-10-10T05:52:49.451914Z\"\n        ],\n        \"actions\": [\n          {\n            \"action\": \"CREATE\",\n            \"entityType\": \"SEARCH INDEX\",\n            \"entityNames\": [\n              \"dbimp_t_si\"\n            ]\n          }\n        ]\n      },\n      \"done\": true,\n      \"response\": {\n        \"@type\": \"type.googleapis.com/google.protobuf.Empty\"\n      }\n    }\n  ],\n  \"nextPageToken\": \"ACy6UTz5LDukCmLuzyWotOK624-1pPDl333wHgHoXhx_PEosLpxJwxaPb7ZF8V_j3WrBVmr-iYEZdCN-_6EueUXvSwHgugUjlmc7Diq856W96U3GCiyvx01r9LnyFvQ0pNGCjI4021FtiXnoBIv8RyeZlXm9sS5rJVUqMeAgyr1M6_75GmnMzR9rNfzup_k5eWKQ\"\n}\n"
+  }
+}

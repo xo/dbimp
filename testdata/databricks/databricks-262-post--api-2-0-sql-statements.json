@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"USE SCHEMA dbimp_t_nosuch\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "cd1e70a8-9e88-4e59-90ea-5b4bdb377046"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"cd1e70a8-9e88-4e59-90ea-5b4bdb377046\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=278"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:39 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-90a9-1a98-b4d6-de9b66ab7c56\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[SCHEMA_NOT_FOUND] The schema `workspace`.`dbimp_t_nosuch` cannot be found. Verify the spelling and correctness of the schema and catalog.\\nIf you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.\\nTo tolerate the error on drop use DROP SCHEMA IF EXISTS. SQLSTATE: 42704\"},\"sql_state\":\"42704\"}}"
+  }
+}

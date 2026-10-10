@@ -1,0 +1,96 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/kv/docs",
+    "header": {
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 05:32:47 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Ms-Resource-Quota": [
+        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      ],
+      "Content-Length": [
+        "204"
+      ],
+      "X-Ms-Activity-Id": [
+        "66e32bba-1146-983b-dbe2-bce7972a9c59"
+      ],
+      "Access-Control-Max-Age": [
+        "3600"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "1.02"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
+        "100"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:47 GMT"
+      ],
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
+      ],
+      "Server": [
+        "PGSQL"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
+      ],
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      ],
+      "X-Ms-Session-Token": [
+        "0:0#0"
+      ],
+      "X-Ms-Request-Charge": [
+        "1"
+      ],
+      "X-Ms-Item-Count": [
+        "0"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Ms-Gatewayversion": [
+        "2.0.0-unknown"
+      ]
+    },
+    "body": "{\n  \"errors\": [\n    {\n      \"code\": \"SC1010\",\n      \"message\": \"Syntax error, invalid token ';'.\",\n      \"location\": {\n        \"end\": 14,\n        \"start\": 13\n      },\n      \"severity\": \"Error\"\n    }\n  ]\n}"
+  }
+}

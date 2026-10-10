@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT table_name, view_definition, security_type FROM INFORMATION_SCHEMA.VIEWS WHERE table_name LIKE 'dbimp_t_%'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "gfet4t7; dur=478"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:54:45 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"table_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"view_definition\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"security_type\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"dbimp_t_v\",\n      \"SELECT t.id AS id, t.s AS s FROM dbimp_t_dml t\",\n      \"INVOKER\"\n    ]\n  ]\n}\n"
+  }
+}

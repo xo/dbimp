@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT id, SUM(id) OVER (ORDER BY id) AS running FROM dbmeta.dbmeta.dbimp_it_big WHERE id <= 3\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:32:35 GMT"
+      ],
+      "Content-Length": [
+        "330"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"JRXt62XhekTTQlaLJiiWYO9Li5q\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"id\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"running\",\"type\":\"INTEGER\"}]},\"rows\":[{\"f\":[{\"v\":\"1\"},{\"v\":\"1\"}]},{\"f\":[{\"v\":\"2\"},{\"v\":\"3\"}]},{\"f\":[{\"v\":\"3\"},{\"v\":\"6\"}]}],\"totalRows\":\"3\",\"jobComplete\":true}"
+  }
+}

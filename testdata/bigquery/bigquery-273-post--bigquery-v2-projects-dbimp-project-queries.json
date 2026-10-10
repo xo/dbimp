@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"COMMIT TRANSACTION\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:45:40 GMT"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Transaction control statements are supported only in scripts or sessions\",\n    \"errors\": [\n      {\n        \"message\": \"Transaction control statements are supported only in scripts or sessions\",\n        \"domain\": \"global\",\n        \"reason\": \"invalidQuery\",\n        \"location\": \"q\",\n        \"locationType\": \"parameter\"\n      }\n    ],\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  }
+}

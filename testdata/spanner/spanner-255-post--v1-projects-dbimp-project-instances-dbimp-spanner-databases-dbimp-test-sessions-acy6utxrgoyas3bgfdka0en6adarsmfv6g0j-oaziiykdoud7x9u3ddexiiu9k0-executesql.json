@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT column_name, spanner_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'dbimp_t_doc' ORDER BY ordinal_position\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:55:23 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=446"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"column_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"spanner_type\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"id\",\n      \"INT64\"\n    ],\n    [\n      \"body\",\n      \"STRING(MAX)\"\n    ],\n    [\n      \"body_tokens\",\n      \"TOKENLIST\"\n    ]\n  ]\n}\n"
+  }
+}

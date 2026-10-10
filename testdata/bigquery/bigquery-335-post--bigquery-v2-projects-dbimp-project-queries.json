@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false,\"preserveNulls\":true}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:24 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"a\",\n        \"type\": \"INTEGER\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_sYPjRv92WPNnC8Wya-jRjrWc83G2\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"1\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": \"1\"\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": true,\n  \"queryId\": \"job_sYPjRv92WPNnC8Wya-jRjrWc83G2\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614784266\",\n  \"startTime\": \"1791614784275\",\n  \"endTime\": \"1791614784328\",\n  \"pageRowCount\": \"1\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

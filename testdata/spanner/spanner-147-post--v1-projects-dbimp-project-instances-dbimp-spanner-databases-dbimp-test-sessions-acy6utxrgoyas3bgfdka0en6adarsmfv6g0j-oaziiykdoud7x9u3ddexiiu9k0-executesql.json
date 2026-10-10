@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT VERSION() AS v\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=449"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:29 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Function not found: VERSION [at 1:8]\\\\nSELECT VERSION() AS v\\\\n       ^\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        \"message\": \"Function not found: VERSION [at 1:8]\\nSELECT VERSION() AS v\\n       ^\"\n      }\n    ]\n  }\n}\n"
+  }
+}

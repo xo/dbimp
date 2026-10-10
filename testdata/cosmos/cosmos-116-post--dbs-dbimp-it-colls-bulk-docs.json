@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/bulk/docs",
+    "header": {
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 05:02:56 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Cosmos-Is-Query-Plan-Request": [
+        "True"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT VALUE COUNT(1) FROM c\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000"
+      ],
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:02:56 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "Microsoft-HTTPAPI/2.0"
+      ],
+      "X-Ms-Activity-Id": [
+        "5e3dcd53-af56-4766-81ef-d34eea351602"
+      ]
+    },
+    "body": "{\"code\":\"BadRequest\",\"message\":\"Query contains 1 or more unsupported features. Upgrade your SDK to a version that does support the requested features:\\r\\nQuery contained Aggregate, which the calling client does not support.\\r\\nActivityId: 5e3dcd53-af56-4766-81ef-d34eea351602, Microsoft.Azure.Documents.Common/2.14.0\"}"
+  }
+}

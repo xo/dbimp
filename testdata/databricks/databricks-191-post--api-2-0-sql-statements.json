@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT java_method('java.lang.Thread', 'sleep', 3000L) AS s\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"0s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:53 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "7c0b4f12-a1c0-4cf9-a2d2-6417e9826fef"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"7c0b4f12-a1c0-4cf9-a2d2-6417e9826fef\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=77"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-51c7-16e2-afd8-971e3d80f776\",\"status\":{\"state\":\"PENDING\"}}"
+  }
+}

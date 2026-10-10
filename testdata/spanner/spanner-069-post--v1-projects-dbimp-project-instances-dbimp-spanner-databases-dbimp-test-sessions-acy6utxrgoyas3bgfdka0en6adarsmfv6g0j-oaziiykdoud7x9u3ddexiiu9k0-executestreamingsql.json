@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeStreamingSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT CAST('NaN' AS FLOAT64) AS nan, CAST('inf' AS FLOAT64) AS pinf\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=438"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:55 GMT"
+      ]
+    },
+    "body": "[{\n  \"values\": [\n    \"NaN\",\n    \"Infinity\"\n  ],\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"nan\",\n          \"type\": {\n            \"code\": \"FLOAT64\"\n          }\n        },\n        {\n          \"name\": \"pinf\",\n          \"type\": {\n            \"code\": \"FLOAT64\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"last\": true\n}\n]"
+  }
+}

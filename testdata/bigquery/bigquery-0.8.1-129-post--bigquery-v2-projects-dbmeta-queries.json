@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT @a AS a, @b AS b\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"INT64\"},\"parameterValue\":{\"value\":\"5\"},\"name\":\"a\"},{\"parameterType\":{\"type\":\"STRING\"},\"parameterValue\":{\"value\":\"x\"},\"name\":\"b\"}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "266"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:09 GMT"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"4Hn7r66Ne6Qz8ihihKaguMbRnxI\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"b\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":\"5\"},{\"v\":\"x\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/bulk/docs",
+    "header": {
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 05:32:34 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT c.grp, COUNT(1) AS n, AVG(c.n) AS a FROM c GROUP BY c.grp\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Ms-Request-Duration-Ms": [
+        "20.65"
+      ],
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
+      ],
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
+      ],
+      "X-Ms-Gatewayversion": [
+        "2.0.0-unknown"
+      ],
+      "Access-Control-Max-Age": [
+        "3600"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:34 GMT"
+      ],
+      "X-Ms-Item-Count": [
+        "7"
+      ],
+      "X-Ms-Request-Charge": [
+        "1"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/bulk/docs"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      ],
+      "Content-Length": [
+        "524"
+      ],
+      "Server": [
+        "PGSQL"
+      ],
+      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
+        "100"
+      ],
+      "X-Ms-Resource-Quota": [
+        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      ],
+      "X-Ms-Session-Token": [
+        "0:0#0"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Ms-Activity-Id": [
+        "3db5d789-8eb9-9a19-84d0-bb3267d37d90"
+      ],
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
+      ]
+    },
+    "body": "{\n  \"_count\": 7,\n  \"Documents\": [\n    {\n      \"a\": 248.5,\n      \"n\": 360,\n      \"grp\": 0\n    },\n    {\n      \"a\": 249.5,\n      \"n\": 360,\n      \"grp\": 1\n    },\n    {\n      \"a\": 250.5,\n      \"n\": 360,\n      \"grp\": 2\n    },\n    {\n      \"a\": 248,\n      \"n\": 355,\n      \"grp\": 3\n    },\n    {\n      \"a\": 249,\n      \"n\": 355,\n      \"grp\": 4\n    },\n    {\n      \"a\": 250,\n      \"n\": 355,\n      \"grp\": 5\n    },\n    {\n      \"a\": 251,\n      \"n\": 355,\n      \"grp\": 6\n    }\n  ],\n  \"_rid\": \"prwTAOZU-Sk=\",\n  \"_attachments\": \"attachments/\"\n}"
+  }
+}

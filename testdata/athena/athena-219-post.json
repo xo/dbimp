@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061826Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"a29b2520-c498-4866-9139-624d0c64b030\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:18:27 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "2218"
+      ],
+      "X-Amzn-Requestid": [
+        "4de0b6eb-daad-43c5-a74d-0535459301f2"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,200000000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"a29b2520-c498-4866-9139-624d0c64b030\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a29b2520-c498-4866-9139-624d0c64b030.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":56,\"QueryPlanningTimeInMillis\":26,\"QueryQueueTimeInMillis\":63,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":41,\"ServiceProcessingTimeInMillis\":104,\"TotalExecutionTimeInMillis\":264},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"ErrorType\":1106,\"Retryable\":false},\"CompletionDateTime\":1.79161310611E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"SubmissionDateTime\":1.791613105846E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a29b2520-c498-4866-9139-624d0c64b030.csv\",\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,200000000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"a29b2520-c498-4866-9139-624d0c64b030\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a29b2520-c498-4866-9139-624d0c64b030.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":56,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.79161310611E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_FUNCTION_ARGUMENT: result of sequence function must not have more than 50000 entries\",\"SubmissionDateTime\":1.791613105846E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

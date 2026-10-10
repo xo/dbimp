@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/other/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:44:52 GMT"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ]
+    },
+    "body": "{\"error\":{\"code\":400,\"message\":\"Cannot parse  as CloudRegion.\",\"errors\":[{\"message\":\"Cannot parse  as CloudRegion.\",\"domain\":\"global\",\"reason\":\"badRequest\"}],\"status\":\"INVALID_ARGUMENT\"}}"
+  }
+}

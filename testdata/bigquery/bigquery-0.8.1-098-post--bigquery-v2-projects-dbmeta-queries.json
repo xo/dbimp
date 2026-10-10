@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT RANGE(DATE '2024-01-01', DATE '2024-02-01') AS r, RANGE<DATE> '[2024-01-01, UNBOUNDED)' AS open, RANGE(TIMESTAMP '2024-01-01 00:00:00+00', TIMESTAMP '2024-01-02 00:00:00+00') AS ts\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ],
+      "Content-Length": [
+        "384"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"5I7OGA27Wc4zQw7p5uoSGVmlEba\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"r\"},{\"mode\":\"NULLABLE\",\"name\":\"open\"},{\"mode\":\"NULLABLE\",\"name\":\"ts\"}]},\"rows\":[{\"f\":[{\"v\":\"[2024-01-01, 2024-02-01)\"},{\"v\":\"[2024-01-01, UNBOUNDED)\"},{\"v\":\"[2024-01-01 00:00:00.000000+00, 2024-01-02 00:00:00.000000+00)\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

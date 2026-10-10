@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T062353Z"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"a8d28342-e702-4ba4-bced-5c9b0a947242\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:23:54 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "1817"
+      ],
+      "X-Amzn-Requestid": [
+        "0f128b7f-6e88-4679-ab39-243758a4ed80"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"a8d28342-e702-4ba4-bced-5c9b0a947242\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a8d28342-e702-4ba4-bced-5c9b0a947242.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":6303,\"QueryPlanningTimeInMillis\":82,\"QueryQueueTimeInMillis\":59,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":70,\"ServiceProcessingTimeInMillis\":26,\"TotalExecutionTimeInMillis\":6458},\"Status\":{\"CompletionDateTime\":1.79161343016E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613423702E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a8d28342-e702-4ba4-bced-5c9b0a947242.csv\",\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"a8d28342-e702-4ba4-bced-5c9b0a947242\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/a8d28342-e702-4ba4-bced-5c9b0a947242.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":6303,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.79161343016E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613423702E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/jobs",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"configuration\":{\"query\":{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false},\"labels\":{\"origin\":\"dbimp\"}},\"jobReference\":{\"projectId\":\"dbimp-project\",\"jobId\":\"dbimp-label-614562\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:48 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Etag": [
+        "MVi+2nLgpcyWiHqD+15NXA=="
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#job\",\n  \"etag\": \"MVi+2nLgpcyWiHqD+15NXA==\",\n  \"id\": \"dbimp-project:US.dbimp-label-614562\",\n  \"selfLink\": \"https://bigquery.googleapis.com/bigquery/v2/projects/dbimp-project/jobs/dbimp-label-614562?location=US\",\n  \"user_email\": \"dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"configuration\": {\n    \"query\": {\n      \"query\": \"SELECT 1 AS a\",\n      \"destinationTable\": {\n        \"projectId\": \"dbimp-project\",\n        \"datasetId\": \"_40527c17d17179741086159c93a628e0402d0825\",\n        \"tableId\": \"anonaede2c028bd7993275fc78d825194fa26fbd433cde99b1f790bc385de4e7fc27\"\n      },\n      \"writeDisposition\": \"WRITE_TRUNCATE\",\n      \"priority\": \"INTERACTIVE\",\n      \"useLegacySql\": false\n    },\n    \"labels\": {\n      \"origin\": \"dbimp\"\n    },\n    \"jobType\": \"QUERY\"\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"dbimp-label-614562\",\n    \"location\": \"US\"\n  },\n  \"statistics\": {\n    \"creationTime\": \"1791614807950\",\n    \"startTime\": \"1791614807967\",\n    \"endTime\": \"1791614808033\",\n    \"totalBytesProcessed\": \"0\",\n    \"query\": {\n      \"totalBytesProcessed\": \"0\",\n      \"totalBytesBilled\": \"0\",\n      \"cacheHit\": true,\n      \"statementType\": \"SELECT\"\n    }\n  },\n  \"status\": {\n    \"state\": \"DONE\"\n  },\n  \"principal_subject\": \"serviceAccount:dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  }\n}\n"
+  }
+}

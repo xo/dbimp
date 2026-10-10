@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT id FROM dbmeta.dbmeta.dbimp_it_dml FOR SYSTEM_TIME AS OF TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 SECOND)\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:33 GMT"
+      ],
+      "Content-Length": [
+        "252"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to analyze: FOR SYSTEM_TIME AS OF is not supported [at 1:43]\"}],\"code\":400,\"message\":\"failed to analyze: FOR SYSTEM_TIME AS OF is not supported [at 1:43]\"}}"
+  }
+}

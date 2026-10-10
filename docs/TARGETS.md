@@ -69,6 +69,10 @@ order:
 16. Trino and Presto, in one driver with two flavors (W31 and D173). Done, in
     `v0.12.0`.
 17. ClickHouse, over its HTTP interface (W32 and D174). Done, in `v0.13.0`.
+18. Google BigQuery, over its REST API (W35 and D184). Step 2 has not measured it.
+19. Azure Cosmos DB, over its REST API (W36 and D184). Step 2 has not measured it.
+20. Amazon Athena, over its API (W37 and D184). Step 2 has not measured it.
+21. Databricks, over its SQL Statement Execution API (W39 and D188). Step 2 has not measured it.
 
 The other targets below keep their priority, and their place in the order
 is open.
@@ -220,8 +224,8 @@ Fails R:
   `v0.16.0`. See [SNOWFLAKE.md](SNOWFLAKE.md). `usql` has a driver, which the
   new one can replace (D24).
 - BigQuery and Databricks: cloud only. A community emulator for BigQuery
-  exists, and it can move BigQuery up if it answers the same. `usql` has
-  drivers for both (D24).
+  exists. Ken moved BigQuery into the order on 2026-10-10 (D184), and
+  Databricks on the same day (D188). `usql` has drivers for both (D24).
 - Neon: cloud only. A local copy needs a proxy and PostgreSQL.
 - PlanetScale: cloud only, and `psdb.v1alpha1` is the internal protocol of
   its serverless driver, not a documented public API.
@@ -236,12 +240,16 @@ Held in P2 by Ken on 2026-09-29 (D87):
 Placed in P2 by Ken on 2026-09-27. These places are his opinion, and
 nothing about these targets is measured:
 
-- Azure Cosmos DB. `usql` has a driver, and a Linux emulator exists.
+- Azure Cosmos DB. `usql` has a driver, and a Linux emulator exists. Ken moved it
+  into the order on 2026-10-10 (D184).
 - Apache Ignite. dbmeta D66 names it.
 - VoltDB: no driver here (D180). Ken moved it into the order on 2026-10-08
   (D179), and the `dbmeta` session then found that neither release serves an
   HTTP interface. See [VOLTDB.md](VOLTDB.md).
-- Amazon Athena, which is cloud only.
+- Amazon Athena, which is cloud only. Ken moved it into the order on 2026-10-10
+  (D184).
+- Google Cloud Spanner, measured on the hosted service (D187). Spanner Omni serves
+  gRPC and no REST API, so D186 had closed it. See [SPANNER.md](SPANNER.md).
 - Prometheus, with PromQL.
 - VictoriaMetrics, with PromQL.
 - Loki, with LogQL.

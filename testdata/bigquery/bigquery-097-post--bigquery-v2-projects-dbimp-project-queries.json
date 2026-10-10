@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT STRUCT(STRUCT(1 AS c) AS b, [1, 2] AS d) AS a\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:43:45 GMT"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"a\",\n        \"type\": \"RECORD\",\n        \"mode\": \"NULLABLE\",\n        \"fields\": [\n          {\n            \"name\": \"b\",\n            \"type\": \"RECORD\",\n            \"mode\": \"NULLABLE\",\n            \"fields\": [\n              {\n                \"name\": \"c\",\n                \"type\": \"INTEGER\",\n                \"mode\": \"NULLABLE\"\n              }\n            ]\n          },\n          {\n            \"name\": \"d\",\n            \"type\": \"INTEGER\",\n            \"mode\": \"REPEATED\"\n          }\n        ]\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_Z6MxnwSzIzCxpjO578zMXTGXPRzF\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"1\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": {\n            \"f\": [\n              {\n                \"v\": {\n                  \"f\": [\n                    {\n                      \"v\": \"1\"\n                    }\n                  ]\n                }\n              },\n              {\n                \"v\": [\n                  {\n                    \"v\": \"1\"\n                  },\n                  {\n                    \"v\": \"2\"\n                  }\n                ]\n              }\n            ]\n          }\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": true,\n  \"queryId\": \"job_Z6MxnwSzIzCxpjO578zMXTGXPRzF\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614625264\",\n  \"startTime\": \"1791614625278\",\n  \"endTime\": \"1791614625354\",\n  \"pageRowCount\": \"1\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

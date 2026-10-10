@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"CREATE TABLE dbmeta.dbmeta.dbimp_it_scr (a INT64); INSERT INTO dbmeta.dbmeta.dbimp_it_scr VALUES (1); SELECT a FROM dbmeta.dbmeta.dbimp_it_scr; DROP TABLE dbmeta.dbmeta.dbimp_it_scr\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 500,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:31 GMT"
+      ],
+      "Content-Length": [
+        "243"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"internalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"runtime error: invalid memory address or nil pointer dereference\"}],\"code\":500,\"message\":\"runtime error: invalid memory address or nil pointer dereference\"}}"
+  }
+}

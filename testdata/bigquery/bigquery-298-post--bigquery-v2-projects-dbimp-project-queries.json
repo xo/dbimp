@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"CREATE VECTOR INDEX dbimp_it_vx ON `dbimp-project`.dbimp_test.dbimp_it_def(id) OPTIONS(index_type = 'IVF')\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:45:59 GMT"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The vector index field must be either the generated embedding column or the array of double when creating a vector index\",\n    \"errors\": [\n      {\n        \"message\": \"The vector index field must be either the generated embedding column or the array of double when creating a vector index\",\n        \"domain\": \"global\",\n        \"reason\": \"invalidQuery\",\n        \"location\": \"q\",\n        \"locationType\": \"parameter\"\n      }\n    ],\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  }
+}

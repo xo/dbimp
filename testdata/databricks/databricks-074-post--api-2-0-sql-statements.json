@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT CAST(1.50 AS DECIMAL(10,2)) AS d102, CAST(0 AS DECIMAL(10,5)) AS d0, CAST(-1.5 AS DECIMAL(5,1)) AS neg, CAST(12345 AS DECIMAL(5,0)) AS d50\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "c71decc6-0bd5-4c09-9f8a-5b4a4dbee4c0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"c71decc6-0bd5-4c09-9f8a-5b4a4dbee4c0\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=531"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:52 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-0937-1f47-9b00-4b95cb7f83f3\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":4,\"columns\":[{\"name\":\"d102\",\"type_text\":\"DECIMAL(10,2)\",\"type_name\":\"DECIMAL\",\"position\":0,\"type_precision\":10,\"type_scale\":2},{\"name\":\"d0\",\"type_text\":\"DECIMAL(10,5)\",\"type_name\":\"DECIMAL\",\"position\":1,\"type_precision\":10,\"type_scale\":5},{\"name\":\"neg\",\"type_text\":\"DECIMAL(5,1)\",\"type_name\":\"DECIMAL\",\"position\":2,\"type_precision\":5,\"type_scale\":1},{\"name\":\"d50\",\"type_text\":\"DECIMAL(5,0)\",\"type_name\":\"DECIMAL\",\"position\":3,\"type_precision\":5,\"type_scale\":0}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"1.50\",\"0.00000\",\"-1.5\",\"12345\"]]}}"
+  }
+}

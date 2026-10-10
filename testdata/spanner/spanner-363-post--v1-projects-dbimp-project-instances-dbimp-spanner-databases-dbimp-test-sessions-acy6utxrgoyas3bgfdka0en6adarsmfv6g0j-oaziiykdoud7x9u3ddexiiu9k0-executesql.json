@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"INSERT INTO dbimp_t_big (id, y) VALUES (101, CAST(ARRAY_TO_STRING(ARRAY(SELECT REPEAT('x', 1000000) FROM UNNEST(GENERATE_ARRAY(1, 2))), '') AS BYTES))\",\"transaction\":{\"id\":\"QUN5NlVUdzBUOEYyRTMyejBWTUwxYk5vOEdxajl2OE5XaXhKTzVVeGl5Z3hlTFJlS3lwQTlQQQ==\"},\"seqno\":\"2\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1151"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:56:26 GMT"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {},\n    \"undeclaredParameters\": {}\n  },\n  \"stats\": {\n    \"rowCountExact\": \"1\"\n  }\n}\n"
+  }
+}

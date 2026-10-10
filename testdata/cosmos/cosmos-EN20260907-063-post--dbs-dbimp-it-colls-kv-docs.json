@@ -1,0 +1,96 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/kv/docs",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 05:32:18 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ]
+    },
+    "body": "{\"query\":\"SELECT c.i64, c.u64, c.i64min, c.ovr, c.huge, c.dec, c.one, c.negzero, c.tiny, c.under, c.frac FROM c WHERE c.id = 'nums'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Ms-Resource-Quota": [
+        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      ],
+      "X-Ms-Activity-Id": [
+        "e8daac8b-23b6-7976-6313-e0096db7020e"
+      ],
+      "Server": [
+        "PGSQL"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      ],
+      "X-Ms-Gatewayversion": [
+        "2.0.0-unknown"
+      ],
+      "X-Ms-Session-Token": [
+        "0:0#0"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
+      ],
+      "Content-Length": [
+        "421"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:18 GMT"
+      ],
+      "Access-Control-Max-Age": [
+        "3600"
+      ],
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
+      ],
+      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
+        "100"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "1.58"
+      ],
+      "X-Ms-Item-Count": [
+        "1"
+      ],
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
+      ],
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "X-Ms-Request-Charge": [
+        "1"
+      ]
+    },
+    "body": "{\n  \"_count\": 1,\n  \"Documents\": [\n    {\n      \"dec\": 0.1,\n      \"i64\": 9007199254740993,\n      \"one\": 1,\n      \"ovr\": 1.8446744073709552e+19,\n      \"u64\": 1.8446744073709552e+19,\n      \"frac\": 12345678901234567000,\n      \"huge\": 1.2345678901234568e+29,\n      \"tiny\": 5e-324,\n      \"under\": 0,\n      \"i64min\": -9223372036854775808,\n      \"negzero\": 0\n    }\n  ],\n  \"_rid\": \"prwTAOZU-Sk=\",\n  \"_attachments\": \"attachments/\"\n}"
+  }
+}

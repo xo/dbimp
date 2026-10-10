@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/jobs",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"configuration\":{\"query\":{\"query\":\"INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (30, 'thirty')\",\"useLegacySql\":false}},\"jobReference\":{\"projectId\":\"dbimp-project\",\"jobId\":\"dbimp-dml-614562\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Etag": [
+        "hD1uU28xhtGKUOKdMBf+dA=="
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:25 GMT"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#job\",\n  \"etag\": \"hD1uU28xhtGKUOKdMBf+dA==\",\n  \"id\": \"dbimp-project:US.dbimp-dml-614562\",\n  \"selfLink\": \"https://bigquery.googleapis.com/bigquery/v2/projects/dbimp-project/jobs/dbimp-dml-614562?location=US\",\n  \"user_email\": \"dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"configuration\": {\n    \"query\": {\n      \"query\": \"INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (30, 'thirty')\",\n      \"destinationTable\": {\n        \"projectId\": \"dbimp-project\",\n        \"datasetId\": \"dbimp_test\",\n        \"tableId\": \"dbimp_it_dml\"\n      },\n      \"priority\": \"INTERACTIVE\",\n      \"useLegacySql\": false\n    },\n    \"jobType\": \"QUERY\"\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"dbimp-dml-614562\",\n    \"location\": \"US\"\n  },\n  \"statistics\": {\n    \"creationTime\": \"1791614785621\",\n    \"startTime\": \"1791614785790\",\n    \"query\": {\n      \"statementType\": \"INSERT\"\n    }\n  },\n  \"status\": {\n    \"state\": \"RUNNING\"\n  },\n  \"principal_subject\": \"serviceAccount:dbimp-bq@dbimp-project.iam.gserviceaccount.com\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  }\n}\n"
+  }
+}

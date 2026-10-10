@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT id, concat('row-', id) AS s FROM range(3000)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\",\"row_limit\":10,\"disposition\":\"EXTERNAL_LINKS\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:12 GMT"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "8b9a668d-b063-4e0a-a1a3-b23ca2d363e5"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"8b9a668d-b063-4e0a-a1a3-b23ca2d363e5\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=613"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-395b-1e78-b293-814b11f365e5\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":2,\"columns\":[{\"name\":\"id\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":0},{\"name\":\"s\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":1}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":10,\"byte_count\":141}],\"total_row_count\":10,\"total_byte_count\":141,\"truncated\":true},\"result\":{\"external_links\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":10,\"byte_count\":141,\"external_link\":\"https://us-east-2.storage.cloud.databricks.com/api/2.0/fs/files/WorkspaceInternal/Jobs/sql/extended/results_2026-10-11T06:34:12Z_f9a347f8-29f8-4d25-800c-762a9362fb45?v=1&workspaceId=0000000000000000&wkt=cp&X-Databricks-Consumer-Network-Zone=REDACTED&sn=ohio-prod&X-Databricks-Key-Version=REDACTED&X-Databricks-Issued=REDACTED&X-Databricks-TTL=REDACTED&X-Databricks-Signature=REDACTED\",\"expiration\":\"2026-10-10T05:49:12.859Z\"}]}}"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/jobs",
+    "header": {},
+    "body": "{\"configuration\":{\"query\":{\"query\":\"SELEC 1\",\"useLegacySql\":false}},\"jobReference\":{\"projectId\":\"dbmeta\",\"jobId\":\"dbimp-bad-1\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "752"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:34 GMT"
+      ]
+    },
+    "body": "{\"configuration\":{\"jobType\":\"QUERY\",\"query\":{\"priority\":\"INTERACTIVE\",\"query\":\"SELEC 1\",\"useLegacySql\":false}},\"jobReference\":{\"jobId\":\"dbimp-bad-1\",\"projectId\":\"dbmeta\"},\"kind\":\"bigquery#job\",\"selfLink\":\"http://0.0.0.0:9050/bigquery/v2/projects/dbmeta/jobs/dbimp-bad-1\",\"statistics\":{\"creationTime\":\"1791614074\",\"endTime\":\"1791614074\",\"query\":{\"statementType\":\"SELECT\"},\"startTime\":\"1791614074\"},\"status\":{\"errorResult\":{\"message\":\"failed to parse statements: failed to parse statement: Syntax error: Unexpected identifier \\\"SELEC\\\" [at 1:1]\",\"reason\":\"jobInternalError\"},\"errors\":[{\"message\":\"failed to parse statements: failed to parse statement: Syntax error: Unexpected identifier \\\"SELEC\\\" [at 1:1]\",\"reason\":\"jobInternalError\"}],\"state\":\"DONE\"}}"
+  }
+}

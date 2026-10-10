@@ -1,0 +1,6602 @@
+{
+  "driver": "databricks",
+  "auth": "bearer",
+  "requests": [
+    {
+      "item": 1,
+      "name": "setup: warm the warehouse",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup",
+      "capture": {
+        "warm": "statement_id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "setup: the warm statement",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{warm}}",
+      "wait": "30s",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop view dbimp_t_view",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP VIEW IF EXISTS dbimp_t_view",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop view dbimp_t_view2",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP VIEW IF EXISTS dbimp_t_view2",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop function dbimp_t_f",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP FUNCTION IF EXISTS dbimp_t_f",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop function dbimp_t_tf",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP FUNCTION IF EXISTS dbimp_t_tf",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_types",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_types",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_typesv",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_typesv",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_dml",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_dml",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_src",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_src",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_ctas",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_ctas",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_fk",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_fk",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_pk",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_pk",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_gen",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_gen",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_idc",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_idc",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_def",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_def",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_renamed",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_renamed",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_tx",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_tx",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_page",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_page",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop table dbimp_t_x",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS workspace.dbmeta.dbimp_t_x",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "a statement",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "capture": {
+        "sid": "statement_id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with every optional member",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "row_limit": 10,
+        "byte_limit": 100000,
+        "disposition": "INLINE",
+        "format": "JSON_ARRAY",
+        "on_wait_timeout": "CONTINUE",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "1",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with query tags",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "query_tags": [
+          {
+            "key": "origin",
+            "value": "dbimp"
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with no catalog and no schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT current_catalog() AS c, current_schema() AS s",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with no wait timeout",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a wait timeout of 0s",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "0s"
+      },
+      "capture": {
+        "w0": "statement_id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the statement of the wait timeout of 0s, at once",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{w0}}"
+    },
+    {
+      "item": 1,
+      "name": "the statement of the wait timeout of 0s, after 5s",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{w0}}",
+      "wait": "5s"
+    },
+    {
+      "item": 1,
+      "name": "a statement with a wait timeout of 5s",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a wait timeout of 30s",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "30s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a wait timeout of 50s",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a wait timeout that is too long",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "51s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a wait timeout that is text",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "soon"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an on_wait_timeout that is not known",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "5s",
+        "on_wait_timeout": "STOP"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a disposition that is not known",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "disposition": "NOSUCH"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a format that is not known",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "format": "XML"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a member that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "nosuchmember": 1
+      }
+    },
+    {
+      "item": 1,
+      "name": "an empty statement",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a body with no statement",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a body with no warehouse",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "statement": "SELECT 1",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a body that is an empty object",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {}
+    },
+    {
+      "item": 1,
+      "name": "a body that is not JSON",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "text": "this is not json"
+    },
+    {
+      "item": 1,
+      "name": "an empty body",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "text": ""
+    },
+    {
+      "item": 1,
+      "name": "a statement with the format JSON_ARRAY and the disposition INLINE",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "format": "JSON_ARRAY",
+        "disposition": "INLINE"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with the format JSON_ARRAY and the disposition EXTERNAL_LINKS",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "format": "JSON_ARRAY",
+        "disposition": "EXTERNAL_LINKS"
+      },
+      "capture": {
+        "ext": "statement_id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with the format ARROW_STREAM and the disposition EXTERNAL_LINKS",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "format": "ARROW_STREAM",
+        "disposition": "EXTERNAL_LINKS"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with the format ARROW_STREAM and the disposition INLINE",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "format": "ARROW_STREAM",
+        "disposition": "INLINE"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with the format CSV and the disposition EXTERNAL_LINKS",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b, NULL AS n, 'a,b\"c' AS q",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "format": "CSV",
+        "disposition": "EXTERNAL_LINKS"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with the format CSV and the disposition INLINE",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "format": "CSV",
+        "disposition": "INLINE"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the statement of the disposition EXTERNAL_LINKS",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{ext}}"
+    },
+    {
+      "item": 1,
+      "name": "the chunk 0 of the statement of the disposition EXTERNAL_LINKS",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{ext}}/result/chunks/0"
+    },
+    {
+      "item": 2,
+      "name": "columns of a result with rows",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, concat('v', id) AS s FROM range(3)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns of a result with no rows",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, concat('v', id) AS s FROM range(3) WHERE id < 0",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns that share a name",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 2 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns with no name",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1, 'x', 2.5",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a column with a name that has a space and a dot",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS `a b`, 2 AS `c.d`, 3 AS `Mixed Case`",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns in the order of the statement",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 3 AS z, 2 AS y, 1 AS x, 'b' AS b, 'a' AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a statement with no result",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE IF NOT EXISTS dbimp_t_src (id INT, s STRING)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the answer of a statement that returns no rows",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_src",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the schemata",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT catalog_name, schema_name, schema_owner FROM workspace.information_schema.schemata ORDER BY schema_name",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the tables in information_schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT table_catalog, table_schema, table_name, table_type FROM workspace.information_schema.tables WHERE table_schema = 'dbimp' ORDER BY table_name",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the columns in information_schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT table_name, column_name, ordinal_position, is_nullable, data_type, full_data_type, numeric_precision, numeric_scale FROM workspace.information_schema.columns WHERE table_schema = 'dbimp' AND table_name = 'dbimp_t_src' ORDER BY ordinal_position",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the constraints in information_schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM workspace.information_schema.table_constraints WHERE table_schema = 'dbimp'",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "show catalogs",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SHOW CATALOGS",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "show schemas",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SHOW SCHEMAS IN workspace",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "show tables",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SHOW TABLES IN workspace.dbimp",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "describe table",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DESCRIBE TABLE dbimp_t_src",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 2,
+      "name": "show create table",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SHOW CREATE TABLE dbimp_t_src",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the integer types and their limits",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST(-128 AS TINYINT) AS ti, CAST(127 AS TINYINT) AS tx, CAST(-32768 AS SMALLINT) AS si, CAST(32767 AS SMALLINT) AS sx, CAST(-2147483648 AS INT) AS ii, CAST(2147483647 AS INT) AS ix, CAST(-9223372036854775807 - 1 AS BIGINT) AS bi, CAST(9223372036854775807 AS BIGINT) AS bx",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "an integer larger than BIGINT",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 9223372036854775808 AS big, 18446744073709551615 AS bigger",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the floating point types",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST(1.5 AS FLOAT) AS f, CAST(0.1 AS FLOAT) AS f01, CAST(16777217 AS FLOAT) AS f24, CAST(1.5 AS DOUBLE) AS d, CAST(0.1 AS DOUBLE) AS d01, 1.7976931348623157E308D AS dmax, 4.9E-324D AS dmin, CAST(-0.0 AS DOUBLE) AS dneg0",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the special floating point values of DOUBLE",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST('NaN' AS DOUBLE) AS nan, CAST('Infinity' AS DOUBLE) AS inf, CAST('-Infinity' AS DOUBLE) AS ninf",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the special floating point values of FLOAT",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST('NaN' AS FLOAT) AS nan, CAST('Infinity' AS FLOAT) AS inf, CAST('-Infinity' AS FLOAT) AS ninf",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the decimal types",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST(1.50 AS DECIMAL(10,2)) AS d102, CAST(0 AS DECIMAL(10,5)) AS d0, CAST(-1.5 AS DECIMAL(5,1)) AS neg, CAST(12345 AS DECIMAL(5,0)) AS d50",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the longest decimals",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST('99999999999999999999999999999999999999' AS DECIMAL(38,0)) AS d380, CAST('-99999999999999999999999999999999999999' AS DECIMAL(38,0)) AS nd380, CAST('0.1234567890123456789012345678901234567' AS DECIMAL(38,37)) AS d3837, CAST('0.99999999999999999999999999999999999999' AS DECIMAL(38,38)) AS d3838, CAST('12345678901234567890.123456789012345678' AS DECIMAL(38,18)) AS d3818",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the boolean type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT true AS t, false AS f, CAST(NULL AS BOOLEAN) AS n",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the string type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 'hello' AS s, '' AS e, ' ' AS sp, 'héllo 日本 😀' AS u, 'a\"b\\\\c' AS q, 'line\\nbreak' AS nl, 'tab\\there' AS tb",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the binary type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT X'DEADBEEF' AS b, CAST('abc' AS BINARY) AS t, CAST('' AS BINARY) AS e, X'00' AS z, CAST('hé' AS BINARY) AS u",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the date type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT DATE'2024-01-02' AS d, DATE'0001-01-01' AS dmin, DATE'9999-12-31' AS dmax, DATE'1500-06-15' AS old, DATE'1970-01-01' AS epoch",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the time zone of the session",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT current_timezone() AS tz",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the timestamp type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT TIMESTAMP'2024-01-02 03:04:05.123456' AS ts, TIMESTAMP'2024-01-02 03:04:05.123456+05:30' AS tz, TIMESTAMP'2024-01-02 03:04:05' AS whole, TIMESTAMP'1970-01-01 00:00:00' AS epoch, TIMESTAMP'0001-01-01 00:00:00' AS tmin, TIMESTAMP'9999-12-31 23:59:59.999999' AS tmax",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the timestamp_ntz type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT TIMESTAMP_NTZ'2024-01-02 03:04:05.123456' AS ntz, TIMESTAMP_NTZ'2024-01-02 03:04:05' AS whole, TIMESTAMP_NTZ'0001-01-01 00:00:00' AS tmin, TIMESTAMP_NTZ'9999-12-31 23:59:59.999999' AS tmax",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the interval year to month types",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT INTERVAL '1-2' YEAR TO MONTH AS ym, INTERVAL '-1-2' YEAR TO MONTH AS nym, INTERVAL '5' YEAR AS y, INTERVAL '3' MONTH AS m",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the interval day to second types",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT INTERVAL '1 02:03:04.123456' DAY TO SECOND AS ds, INTERVAL '-1 02:03:04.5' DAY TO SECOND AS nds, INTERVAL '5' DAY AS d, INTERVAL '10' HOUR AS h, INTERVAL '30' MINUTE AS mi, INTERVAL '1.5' SECOND AS s",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the array type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT ARRAY(1, 2, 3) AS a, ARRAY() AS e, ARRAY(NULL, 1) AS n, ARRAY('a\"b', 'c,d') AS s, ARRAY(ARRAY(1, 2), ARRAY(3)) AS nested",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the map type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT MAP('a', 1, 'b', 2) AS m, MAP() AS e, MAP(1, 'x') AS ik, MAP('a', NULL) AS nv",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the struct type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT NAMED_STRUCT('a', 1, 'b', 'x') AS s, NAMED_STRUCT('a', CAST(NULL AS INT), 'b', 'y') AS ns, STRUCT(1, 'x') AS unnamed",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "nested complex types",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT ARRAY(NAMED_STRUCT('a', MAP('k', ARRAY(1, 2)))) AS deep, ARRAY(X'DEADBEEF') AS bin, ARRAY(TIMESTAMP'2024-01-02 03:04:05') AS ts, ARRAY(CAST(1.50 AS DECIMAL(10,2))) AS dec, ARRAY(DATE'2024-01-02') AS d",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the variant type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT PARSE_JSON('{\"a\":1,\"b\":[1,2,\"x\"]}') AS v, PARSE_JSON('1.5') AS n, PARSE_JSON('\"s\"') AS s, PARSE_JSON('null') AS jn, CAST(NULL AS VARIANT) AS sqln",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the geometry type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT ST_GEOMFROMTEXT('POINT(1 2)') AS g, ST_ASTEXT(ST_GEOMFROMTEXT('POINT(1 2)')) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the geography type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT ST_GEOGFROMTEXT('POINT(1 2)') AS g, ST_ASTEXT(ST_GEOGFROMTEXT('POINT(1 2)')) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a NULL of each scalar type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST(NULL AS TINYINT) AS ti, CAST(NULL AS SMALLINT) AS si, CAST(NULL AS INT) AS i, CAST(NULL AS BIGINT) AS bi, CAST(NULL AS FLOAT) AS f, CAST(NULL AS DOUBLE) AS d, CAST(NULL AS DECIMAL(38,18)) AS dec, CAST(NULL AS BOOLEAN) AS b, CAST(NULL AS STRING) AS s, CAST(NULL AS BINARY) AS y, CAST(NULL AS DATE) AS dt, CAST(NULL AS TIMESTAMP) AS ts, CAST(NULL AS TIMESTAMP_NTZ) AS ntz",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a NULL of each complex type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST(NULL AS ARRAY<INT>) AS a, CAST(NULL AS MAP<STRING,INT>) AS m, CAST(NULL AS STRUCT<a:INT,b:STRING>) AS st, CAST(NULL AS INTERVAL YEAR TO MONTH) AS ym, CAST(NULL AS INTERVAL DAY TO SECOND) AS ds, CAST(NULL AS VARIANT) AS v",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the table of every type, created",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_types (id INT, ti TINYINT, si SMALLINT, i INT, bi BIGINT, f FLOAT, d DOUBLE, dec DECIMAL(38,18), dec0 DECIMAL(38,0), b BOOLEAN, s STRING, y BINARY, dt DATE, ts TIMESTAMP, ntz TIMESTAMP_NTZ, arr ARRAY<INT>, m MAP<STRING,INT>, st STRUCT<a:INT,b:STRING>)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a row of every type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_types VALUES (1, -128, 32767, 2147483647, 9223372036854775807, 1.5, 2.5, 12345678901234567890.123456789012345678, 99999999999999999999999999999999999999, TRUE, 'x', X'DEADBEEF', DATE'2024-01-02', TIMESTAMP'2024-01-02 03:04:05.123456', TIMESTAMP_NTZ'2024-01-02 03:04:05.123456', ARRAY(1, 2), MAP('a', 1), NAMED_STRUCT('a', 1, 'b', 'x'))",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a row of NULL in every type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_types (id) VALUES (2)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the rows of every type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_types ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the table with a variant column, created",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_typesv (id INT, v VARIANT)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a row of the table with a variant column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_typesv SELECT 1, PARSE_JSON('{\"a\":1}')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the rows of the table with a variant column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_typesv",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with no type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "abc"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type STRING",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "abc",
+            "type": "STRING"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type INT",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "123456",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type BIGINT",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "9223372036854775807",
+            "type": "BIGINT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type FLOAT",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "1.5",
+            "type": "FLOAT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type DOUBLE",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "1.5",
+            "type": "DOUBLE"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type DECIMAL",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "1.50",
+            "type": "DECIMAL(10,2)"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type DECIMAL with 38 digits",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "12345678901234567890.123456789012345678",
+            "type": "DECIMAL(38,18)"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type BOOLEAN",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "true",
+            "type": "BOOLEAN"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type BINARY",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "deadbeef",
+            "type": "BINARY"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type DATE",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "2024-01-02",
+            "type": "DATE"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type TIMESTAMP",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "2024-01-02 03:04:05.123456",
+            "type": "TIMESTAMP"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type TIMESTAMP_NTZ",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "2024-01-02 03:04:05.123456",
+            "type": "TIMESTAMP_NTZ"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type INTERVAL DAY TO SECOND",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "1 02:03:04",
+            "type": "INTERVAL DAY TO SECOND"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type INTERVAL YEAR TO MONTH",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "1-2",
+            "type": "INTERVAL YEAR TO MONTH"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type VARIANT",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "{\"a\":1}",
+            "type": "VARIANT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type ARRAY",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "[1,2]",
+            "type": "ARRAY<INT>"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type MAP",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "{\"a\":1}",
+            "type": "MAP<STRING,INT>"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of the type STRUCT",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "{\"a\":1}",
+            "type": "STRUCT<a:INT>"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of a type that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "1",
+            "type": "NOSUCH"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with the value NULL as a JSON null",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": null,
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with no value",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with an empty string",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "",
+            "type": "STRING"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter that does not fit its type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "abc",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with a quote and a semicolon in the value",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :p AS p, typeof(:p) AS t",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "p",
+            "value": "a'b; DROP TABLE x --",
+            "type": "STRING"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "two parameters",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :a AS a, :b AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "a",
+            "value": "1",
+            "type": "INT"
+          },
+          {
+            "name": "b",
+            "value": "x",
+            "type": "STRING"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter used twice",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :a AS a1, :a AS a2",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "a",
+            "value": "1",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a marker with no parameter",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :a AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with no marker",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "a",
+            "value": "1",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with the same name twice",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT :a AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "a",
+            "value": "1",
+            "type": "INT"
+          },
+          {
+            "name": "a",
+            "value": "2",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a positional marker",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT ? AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "value": "1",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter list that is empty",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": []
+      }
+    },
+    {
+      "item": 4,
+      "name": "a marker as an identifier",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM IDENTIFIER(:t)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "t",
+            "value": "workspace.dbimp.dbimp_t_src",
+            "type": "STRING"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a marker in a where clause",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id FROM range(5) WHERE id > :n",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "n",
+            "value": "2",
+            "type": "INT"
+          }
+        ]
+      }
+    },
+    {
+      "item": 4,
+      "name": "a marker in an insert",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_src VALUES (:i, :s)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "parameters": [
+          {
+            "name": "i",
+            "value": "1",
+            "type": "INT"
+          },
+          {
+            "name": "s",
+            "value": "a",
+            "type": "STRING"
+          }
+        ]
+      }
+    },
+    {
+      "item": 5,
+      "name": "3000 rows of two narrow columns",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, concat('row-', id) AS s FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "capture": {
+        "pg": "statement_id"
+      }
+    },
+    {
+      "item": 5,
+      "name": "the chunk 0 of the 3000 rows",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{pg}}/result/chunks/0"
+    },
+    {
+      "item": 5,
+      "name": "the chunk 1 of the 3000 rows",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{pg}}/result/chunks/1"
+    },
+    {
+      "item": 5,
+      "name": "the statement of the 3000 rows",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{pg}}"
+    },
+    {
+      "item": 5,
+      "name": "3000 rows of 300 characters",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, repeat('x', 300) AS s FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "capture": {
+        "pw": "statement_id"
+      }
+    },
+    {
+      "item": 5,
+      "name": "the chunk 1 of the rows of 300 characters",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{pw}}/result/chunks/1"
+    },
+    {
+      "item": 5,
+      "name": "the chunk 99 of the rows of 300 characters",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{pw}}/result/chunks/99"
+    },
+    {
+      "item": 5,
+      "name": "3000 rows of 1000 characters as external links",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, repeat('x', 1000) AS s FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "disposition": "EXTERNAL_LINKS",
+        "format": "JSON_ARRAY"
+      },
+      "capture": {
+        "pe": "statement_id"
+      }
+    },
+    {
+      "item": 5,
+      "name": "the statement of the rows as external links",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{pe}}"
+    },
+    {
+      "item": 5,
+      "name": "the chunk 1 of the rows as external links",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{pe}}/result/chunks/1"
+    },
+    {
+      "item": 5,
+      "name": "3000 rows with the row limit 10",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, concat('row-', id) AS s FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "row_limit": 10
+      }
+    },
+    {
+      "item": 5,
+      "name": "3000 rows with the row limit 10 and external links",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, concat('row-', id) AS s FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "row_limit": 10,
+        "disposition": "EXTERNAL_LINKS"
+      }
+    },
+    {
+      "item": 5,
+      "name": "3000 rows with the row limit 0",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "row_limit": 0
+      }
+    },
+    {
+      "item": 5,
+      "name": "3 rows with the row limit that is negative",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id FROM range(3)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "row_limit": -1
+      }
+    },
+    {
+      "item": 5,
+      "name": "3000 rows with the byte limit 1000",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, repeat('x', 300) AS s FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "byte_limit": 1000
+      }
+    },
+    {
+      "item": 5,
+      "name": "3 rows with the byte limit 0",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id FROM range(3)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "byte_limit": 0
+      }
+    },
+    {
+      "item": 5,
+      "name": "the table of rows, created",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_page AS SELECT id, concat('row-', id) AS s FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 5,
+      "name": "the rows of the table, in order",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, s FROM dbimp_t_page ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "capture": {
+        "pt": "statement_id"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELEC 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error at the end",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 FROM",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a table that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_nosuch",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a column that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT nosuch FROM range(1)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a function that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT nosuch(1)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 / 0 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero after some rows",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, 10 DIV (id - 5) AS q FROM range(10)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an overflow of an integer",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 2147483647 + 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a cast of text to an integer",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT CAST('abc' AS INT) AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a sum of a number and text",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 + 'a' AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an insert of text into an integer column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_types (id) VALUES ('abc')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a duplicate table",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_src (id INT)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an error in the middle of a large result",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, 1 / (CASE WHEN id = 2999 THEN 0 ELSE 1 END) AS q FROM range(3000)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a failed statement that is read again",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 / 0 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "capture": {
+        "fail": "statement_id"
+      }
+    },
+    {
+      "item": 6,
+      "name": "the failed statement, read again",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{fail}}"
+    },
+    {
+      "item": 6,
+      "name": "the failed statement, chunk 0",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{fail}}/result/chunks/0"
+    },
+    {
+      "item": 6,
+      "name": "an error with a wait timeout of 0s",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELEC 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "0s"
+      },
+      "capture": {
+        "fail0": "statement_id"
+      }
+    },
+    {
+      "item": 6,
+      "name": "the failed statement of the wait timeout of 0s, after 5s",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{fail0}}",
+      "wait": "5s"
+    },
+    {
+      "item": 6,
+      "name": "a raised error",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT raise_error('dbimp raised on purpose')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a missing warehouse",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "0000000000000000",
+        "statement": "SELECT 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a warehouse id that is not valid",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "nosuch",
+        "statement": "SELECT 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a missing catalog",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1",
+        "catalog": "dbimp_t_nosuch",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a missing schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1",
+        "catalog": "workspace",
+        "schema": "dbimp_t_nosuch",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a statement that is closed",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{sid}}"
+    },
+    {
+      "item": 6,
+      "name": "a statement id that does not exist",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "item": 6,
+      "name": "a statement id that is not valid",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/nosuch"
+    },
+    {
+      "item": 6,
+      "name": "a chunk of a statement that does not exist",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/00000000-0000-0000-0000-000000000000/result/chunks/0"
+    },
+    {
+      "item": 6,
+      "name": "a cancel of a statement that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements/00000000-0000-0000-0000-000000000000/cancel"
+    },
+    {
+      "item": 7,
+      "name": "a heavy statement with a wait timeout of 0s",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT sum(hash(a.id, b.id)) AS s FROM range(20000) a CROSS JOIN range(20000) b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "0s"
+      },
+      "capture": {
+        "c1": "statement_id"
+      }
+    },
+    {
+      "item": 7,
+      "name": "a cancel of the heavy statement",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements/{{c1}}/cancel"
+    },
+    {
+      "item": 7,
+      "name": "the canceled statement, after 3s",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{c1}}",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a cancel of a statement that is finished",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements/{{sid}}/cancel"
+    },
+    {
+      "item": 7,
+      "name": "a heavy statement with a wait timeout of 5s and CANCEL",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT sum(hash(a.id, b.id)) AS s FROM range(20000) a CROSS JOIN range(20000) b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "5s",
+        "on_wait_timeout": "CANCEL"
+      },
+      "capture": {
+        "c2": "statement_id"
+      }
+    },
+    {
+      "item": 7,
+      "name": "the statement that the wait timeout canceled",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{c2}}",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a heavy statement with a wait timeout of 5s and CONTINUE",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT sum(hash(a.id, b.id)) AS s FROM range(20000) a CROSS JOIN range(20000) b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "5s",
+        "on_wait_timeout": "CONTINUE"
+      },
+      "capture": {
+        "c3": "statement_id"
+      }
+    },
+    {
+      "item": 7,
+      "name": "a cancel of the statement that continues",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements/{{c3}}/cancel"
+    },
+    {
+      "item": 7,
+      "name": "the statement that continues, after the cancel",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{c3}}",
+      "wait": "3s"
+    },
+    {
+      "item": 7,
+      "name": "a statement that sleeps",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT java_method('java.lang.Thread', 'sleep', 3000L) AS s",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "0s"
+      },
+      "capture": {
+        "c4": "statement_id"
+      }
+    },
+    {
+      "item": 7,
+      "name": "the statement that sleeps, at once",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{c4}}"
+    },
+    {
+      "item": 7,
+      "name": "the statement that sleeps, after 6s",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{c4}}",
+      "wait": "6s"
+    },
+    {
+      "item": 7,
+      "name": "a statement that sleeps and a cancel at once",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT java_method('java.lang.Thread', 'sleep', 8000L) AS s",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "0s"
+      },
+      "capture": {
+        "c5": "statement_id"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a statement with a wrong token",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a read of a statement with a wrong token",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{sid}}",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a cancel with a wrong token",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements/{{sid}}/cancel",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "the warehouse with a wrong token",
+      "method": "GET",
+      "path": "/api/2.0/sql/warehouses/1111222233334444",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "show tables in the schema of another user",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SHOW TABLES IN workspace.dbmeta",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a select from the schema of another user",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM workspace.dbmeta.dbimp_t_nosuch",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a create table in the schema of another user",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE workspace.dbmeta.dbimp_t_x (a INT)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 8,
+      "name": "a create schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE SCHEMA workspace.dbimp_t_s",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the version",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT version() AS v",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the catalog and the schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT current_catalog() AS c, current_schema() AS s, current_database() AS d",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the warehouse",
+      "method": "GET",
+      "path": "/api/2.0/sql/warehouses/1111222233334444"
+    },
+    {
+      "item": 9,
+      "name": "the list of warehouses",
+      "method": "GET",
+      "path": "/api/2.0/sql/warehouses"
+    },
+    {
+      "item": 9,
+      "name": "the configuration of the warehouses",
+      "method": "GET",
+      "path": "/api/2.0/sql/config/warehouses"
+    },
+    {
+      "item": 9,
+      "name": "the list of tables in Unity Catalog",
+      "method": "GET",
+      "path": "/api/2.1/unity-catalog/tables?catalog_name=workspace&schema_name=dbimp&max_results=5"
+    },
+    {
+      "item": 9,
+      "name": "the list of schemas in Unity Catalog",
+      "method": "GET",
+      "path": "/api/2.1/unity-catalog/schemas?catalog_name=workspace&max_results=5"
+    },
+    {
+      "item": 9,
+      "name": "the history of queries",
+      "method": "GET",
+      "path": "/api/2.0/sql/history/queries?max_results=2"
+    },
+    {
+      "item": 1,
+      "name": "a create table of Delta",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_dml (id INT, s STRING) USING DELTA",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert and its answer",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_dml VALUES (1, 'a'), (2, 'b'), (3, 'c')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert from a select",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_dml SELECT id + 10, s FROM dbimp_t_dml",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an update and its answer",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "UPDATE dbimp_t_dml SET s = 'z' WHERE id > 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a delete and its answer",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DELETE FROM dbimp_t_dml WHERE id = 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a merge and its answer",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "MERGE INTO dbimp_t_dml t USING (SELECT 2 AS id, 'm' AS s UNION ALL SELECT 99, 'n') u ON t.id = u.id WHEN MATCHED THEN UPDATE SET s = u.s WHEN NOT MATCHED THEN INSERT (id, s) VALUES (u.id, u.s)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a truncate",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "TRUNCATE TABLE dbimp_t_dml",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert after the truncate",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_dml VALUES (1, 'a'), (2, 'b')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a select of the rows",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, s FROM dbimp_t_dml ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an update with a wait timeout of 0s",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "UPDATE dbimp_t_dml SET s = 'k' WHERE id > 0",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "0s"
+      },
+      "capture": {
+        "up": "statement_id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the update, after 10s",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{up}}",
+      "wait": "10s"
+    },
+    {
+      "item": 1,
+      "name": "a create table as select",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_ctas AS SELECT id, s FROM dbimp_t_dml",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create view",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE VIEW dbimp_t_view AS SELECT id, s FROM dbimp_t_dml",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a select from the view",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_view ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a drop of the view",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP VIEW dbimp_t_view",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an alter table that adds a column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "ALTER TABLE dbimp_t_dml ADD COLUMN n INT",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an alter table that renames a column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "ALTER TABLE dbimp_t_dml SET TBLPROPERTIES ('delta.columnMapping.mode' = 'name', 'delta.minReaderVersion' = '2', 'delta.minWriterVersion' = '5')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an alter table that renames a column after the mapping",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "ALTER TABLE dbimp_t_dml RENAME COLUMN n TO m",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an alter table that drops a column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "ALTER TABLE dbimp_t_dml DROP COLUMN m",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an alter table that renames the table",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "ALTER TABLE dbimp_t_dml RENAME TO dbimp_t_renamed",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the history of the table",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DESCRIBE HISTORY dbimp_t_dml",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create table with a primary key",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_pk (id BIGINT NOT NULL, s STRING, CONSTRAINT dbimp_t_pk PRIMARY KEY (id))",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create table with a foreign key",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_fk (id BIGINT NOT NULL, pk_id BIGINT, CONSTRAINT dbimp_t_fk_pk FOREIGN KEY (pk_id) REFERENCES dbimp_t_pk (id))",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert of a duplicate primary key",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_pk VALUES (1, 'a'), (1, 'b')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert of a foreign key that has no row",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_fk VALUES (1, 99)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the constraints of the tables",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT table_name, constraint_name, constraint_type FROM workspace.information_schema.table_constraints WHERE table_schema = 'dbimp' ORDER BY table_name",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the key columns of the foreign key",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT constraint_name, table_name, column_name FROM workspace.information_schema.key_column_usage WHERE table_schema = 'dbimp' ORDER BY constraint_name",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create table with a generated column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_gen (id INT, d INT GENERATED ALWAYS AS (id * 2))",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert into the table with a generated column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_gen (id) VALUES (1), (2)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the rows of the table with a generated column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_gen ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create table with an identity column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_idc (id BIGINT GENERATED ALWAYS AS IDENTITY, s STRING)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert into the table with an identity column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_idc (s) VALUES ('a'), ('b')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the rows of the table with an identity column",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_idc ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create table with a default",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE TABLE dbimp_t_def (id INT, n INT DEFAULT 5, s STRING DEFAULT 'x') TBLPROPERTIES ('delta.feature.allowColumnDefaults' = 'supported')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an insert that uses the default",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_def (id) VALUES (1)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the rows of the table with a default",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_def ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create function",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE OR REPLACE FUNCTION dbimp_t_f(x INT) RETURNS INT RETURN x + 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a call of the function",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT dbimp_t_f(1) AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a create function that returns a table",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE OR REPLACE FUNCTION dbimp_t_tf(n INT) RETURNS TABLE (id INT) RETURN SELECT id FROM range(n)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a call of the function that returns a table",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_tf(3)",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a drop of a table that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE dbimp_t_nosuch",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "an explain",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "EXPLAIN SELECT id FROM dbimp_t_dml WHERE id > 1",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a set of a configuration",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SET spark.sql.shuffle.partitions = 4",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a set of the ansi mode",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SET ansi_mode = false",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the division by zero with the ansi mode off, in the next request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 / 0 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a set of the ansi mode on again",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SET ansi_mode = true",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a set of the time zone",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SET TIME ZONE 'Asia/Tokyo'",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the time zone in the next request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT current_timezone() AS tz",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a set of the time zone back",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SET TIME ZONE LOCAL",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a use catalog",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "USE CATALOG workspace",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a use schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "USE SCHEMA dbimp",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a use schema of a schema that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "USE SCHEMA dbimp_t_nosuch",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a use schema of the other schema",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "USE SCHEMA information_schema",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the schema in the next request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT current_schema() AS s",
+        "catalog": "workspace",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a use catalog of a catalog that does not exist",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "USE CATALOG dbimp_t_nosuch",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the catalog in the next request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT current_catalog() AS c",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "two statements in one request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a; SELECT 2 AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "two statements that change data",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "INSERT INTO dbimp_t_src VALUES (1, 'a'); INSERT INTO dbimp_t_src VALUES (2, 'b')",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "the rows after the two statements",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT count(*) AS n FROM dbimp_t_src",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement with a trailing semicolon",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a;",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement with a trailing semicolon and a comment",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a; -- done",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement with a line comment first",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "-- first\nSELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement with a line comment last",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a -- last",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement with a block comment",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "/* first */ SELECT /* middle */ 1 AS a /* last */",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement that is only a comment",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "-- nothing",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement that is only a semicolon",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": ";",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a statement that is only white space",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "   \n  ",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a script with a compound statement",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN DECLARE x INT DEFAULT 1; SET x = x + 1; SELECT x; END",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a script that changes data",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN INSERT INTO dbimp_t_src VALUES (3, 'c'); SELECT count(*) AS n FROM dbimp_t_src; END",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a script with an error in the middle",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN SELECT 1 AS a; SELECT 1 / 0 AS b; SELECT 3 AS c; END",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a begin",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a begin transaction",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN TRANSACTION",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a start transaction",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "START TRANSACTION",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a commit",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "COMMIT",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a rollback",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "ROLLBACK",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a set of autocommit",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SET AUTOCOMMIT = false",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a begin atomic",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN ATOMIC INSERT INTO dbimp_t_src VALUES (10, 'tx'); END",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a script that begins a transaction",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN BEGIN TRANSACTION; INSERT INTO dbimp_t_src VALUES (11, 'tx'); COMMIT; END",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a script that rolls back",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "BEGIN BEGIN TRANSACTION; INSERT INTO dbimp_t_src VALUES (12, 'tx'); ROLLBACK; END",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the rows after the scripts",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT id, s FROM dbimp_t_src ORDER BY id",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a temporary view in one request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "CREATE OR REPLACE TEMPORARY VIEW dbimp_t_view2 AS SELECT 5 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the temporary view in the next request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT * FROM dbimp_t_view2",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a declared variable in one request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DECLARE OR REPLACE VARIABLE dbimp_t_v INT DEFAULT 7",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the variable in the next request",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT dbimp_t_v AS v",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with an accept encoding of gzip",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with an accept encoding of identity",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept-Encoding": [
+          "identity"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with a content type of text",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "text/plain"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with no content type",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with a content encoding of gzip that is not gzip",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Content-Encoding": [
+          "gzip"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request that is PUT",
+      "method": "PUT",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request that is GET with no id",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements"
+    },
+    {
+      "item": 12,
+      "name": "a request that is DELETE of a statement",
+      "method": "DELETE",
+      "path": "/api/2.0/sql/statements/{{sid}}"
+    },
+    {
+      "item": 12,
+      "name": "a request with a trailing slash",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements/",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request with a query string",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements?x=1",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "wait_timeout": "5s"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request to the old path",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements/execute",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a request to a path that does not exist",
+      "method": "GET",
+      "path": "/api/2.0/sql/nosuch"
+    },
+    {
+      "item": 1,
+      "name": "a statement for the expiry",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a, 'x' AS b",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "capture": {
+        "expiry": "statement_id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement of external links for the expiry",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "SELECT 1 AS a",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s",
+        "disposition": "EXTERNAL_LINKS"
+      },
+      "capture": {
+        "expext": "statement_id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement after 16 minutes",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{expiry}}",
+      "wait": "16m"
+    },
+    {
+      "item": 1,
+      "name": "the chunk 0 of the statement after 16 minutes",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{expiry}}/result/chunks/0"
+    },
+    {
+      "item": 1,
+      "name": "the statement of external links after 16 minutes",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{expext}}"
+    },
+    {
+      "item": 1,
+      "name": "the chunk 0 of the statement of external links after 16 minutes",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{expext}}/result/chunks/0"
+    },
+    {
+      "item": 1,
+      "name": "the first statement after 16 minutes",
+      "method": "GET",
+      "path": "/api/2.0/sql/statements/{{sid}}"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop view dbimp_t_view",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP VIEW IF EXISTS dbimp_t_view",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop view dbimp_t_view2",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP VIEW IF EXISTS dbimp_t_view2",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop function dbimp_t_f",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP FUNCTION IF EXISTS dbimp_t_f",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop function dbimp_t_tf",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP FUNCTION IF EXISTS dbimp_t_tf",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_types",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_types",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_typesv",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_typesv",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_dml",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_dml",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_src",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_src",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_ctas",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_ctas",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_fk",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_fk",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_pk",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_pk",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_gen",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_gen",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_idc",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_idc",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_def",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_def",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_renamed",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_renamed",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_tx",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_tx",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_page",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS dbimp_t_page",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop table dbimp_t_x",
+      "method": "POST",
+      "path": "/api/2.0/sql/statements",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "body": {
+        "warehouse_id": "1111222233334444",
+        "statement": "DROP TABLE IF EXISTS workspace.dbmeta.dbimp_t_x",
+        "catalog": "workspace",
+        "schema": "dbimp",
+        "wait_timeout": "50s"
+      },
+      "phase": "teardown"
+    }
+  ]
+}

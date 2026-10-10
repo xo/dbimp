@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/xo/dbimp"
 )
@@ -66,6 +67,9 @@ func TestAuthorizeFollowsTheFormOfTheRequest(t *testing.T) {
 		{"a wrong bearer", Request{auth: dbimp.AuthBearer}, true, func(req *http.Request) bool {
 			return req.Header.Get("Authorization") == "Bearer secret-wrong"
 		}},
+		{"no credentials", Request{auth: dbimp.AuthBearer, Auth: "none"}, false, func(req *http.Request) bool {
+			return req.Header.Get("Authorization") == ""
+		}},
 		{"sigv4", Request{auth: authSigV4, region: "us-east-1", service: "dynamodb"}, false, func(req *http.Request) bool {
 			return strings.HasPrefix(req.Header.Get("Authorization"), "AWS4-HMAC-SHA256 ")
 		}},
@@ -82,5 +86,68 @@ func TestAuthorizeFollowsTheFormOfTheRequest(t *testing.T) {
 				t.Errorf("the headers are %v, and do not hold the form of %s", req.Header, tt.name)
 			}
 		})
+	}
+}
+
+func TestCosmosTarget(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		path, rtype, link string
+	}{
+		{"/", "", ""},
+		{"/dbs", "dbs", ""},
+		{"/dbs/db", "dbs", "dbs/db"},
+		{"/dbs/db/colls", "colls", "dbs/db"},
+		{"/dbs/db/colls/c", "colls", "dbs/db/colls/c"},
+		{"/dbs/db/colls/c/docs", "docs", "dbs/db/colls/c"},
+		{"/dbs/db/colls/c/docs/d?x=1", "docs", "dbs/db/colls/c/docs/d"},
+		{"/dbs/db/colls/c/pkranges", "pkranges", "dbs/db/colls/c"},
+	} {
+		rtype, link := cosmosTarget(tt.path)
+		if rtype != tt.rtype || link != tt.link {
+			t.Errorf("%s: the target is %q and %q, want %q and %q", tt.path, rtype, link, tt.rtype, tt.link)
+		}
+	}
+}
+
+// TestSignCosmos holds the example of the documentation of Cosmos DB: the master key
+// below is the one that the example names, and the signature is the one that it gives.
+func TestSignCosmos(t *testing.T) {
+	t.Parallel()
+	const key = "dsZQi3KtZmCv1ljt3VNWNm7sQUF1y5rJfC6kv5JiwvW0EndXdDku/dkKBp8/ufDToSxLzR4y+O/0H/t4bQtVNw=="
+	req, err := http.NewRequestWithContext(t.Context(), http.MethodGet, "https://example.test/dbs/ToDoList", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	when := time.Date(2017, time.April, 27, 0, 51, 12, 0, time.UTC)
+	if err := signCosmos(req, key, when); err != nil {
+		t.Fatal(err)
+	}
+	if got := req.Header.Get("X-Ms-Date"); got != "thu, 27 apr 2017 00:51:12 gmt" {
+		t.Errorf("the date is %q", got)
+	}
+	want := "type%3Dmaster%26ver%3D1.0%26sig%3Dc09PEVJrgp2uQRkr934kFbTqhByc7TVr3OHyqlu%2Bc%2Bc%3D"
+	if got := req.Header.Get("Authorization"); got != want {
+		t.Errorf("the authorization is %q, want %q", got, want)
+	}
+}
+
+func TestIsRecordingKeepsTheFilesOfAnotherRelease(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name, release string
+		want          bool
+	}{
+		{"bigquery-001-post--queries.json", "bigquery", true},
+		{"bigquery-1000-get.json", "bigquery", true},
+		{"bigquery-0.7.2-001-post--queries.json", "bigquery", false},
+		{"bigquery-0.7.2-001-post--queries.json", "bigquery-0.7.2", true},
+		{"cosmos-EN20260907-001-get.json", "cosmos", false},
+		{"cosmos-001.json", "cosmos", false},
+		{"requests.json", "cosmos", false},
+	} {
+		if got := isRecording(tt.name, tt.release); got != tt.want {
+			t.Errorf("isRecording(%q, %q) is %t, want %t", tt.name, tt.release, got, tt.want)
+		}
 	}
 }

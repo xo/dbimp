@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/kv/docs",
+    "header": {
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 05:03:32 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a; SELECT 2 AS b\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server": [
+        "Microsoft-HTTPAPI/2.0"
+      ],
+      "X-Ms-Activity-Id": [
+        "7cd437b4-b100-4487-a6d6-965861ea7833"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000"
+      ],
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:03:31 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"code\":\"BadRequest\",\"message\":\"Message: {\\\"errors\\\":[{\\\"severity\\\":\\\"Error\\\",\\\"location\\\":{\\\"start\\\":13,\\\"end\\\":14},\\\"code\\\":\\\"SC1010\\\",\\\"message\\\":\\\"Syntax error, invalid token ';'.\\\"}]}\\r\\nActivityId: 7cd437b4-b100-4487-a6d6-965861ea7833, Microsoft.Azure.Documents.Common/2.14.0\"}"
+  }
+}

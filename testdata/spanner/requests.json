@@ -1,0 +1,5448 @@
+{
+  "driver": "spanner",
+  "auth": "bearer",
+  "requests": [
+    {
+      "item": 1,
+      "name": "setup: drop the view",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP VIEW dbimp_t_v"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop the change stream",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP CHANGE STREAM dbimp_t_cs"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop the search index",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP SEARCH INDEX dbimp_t_si"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop what an earlier run left",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP INDEX IF EXISTS dbimp_t_idx_u",
+          "DROP INDEX IF EXISTS dbimp_t_idx_nf",
+          "DROP INDEX IF EXISTS dbimp_t_idx_m1",
+          "DROP INDEX IF EXISTS dbimp_t_idx_m2",
+          "DROP INDEX IF EXISTS dbimp_t_idx_m3",
+          "DROP TABLE IF EXISTS dbimp_t_viaq",
+          "DROP TABLE IF EXISTS dbimp_t_viaq_2",
+          "DROP TABLE IF EXISTS dbimp_t_iv",
+          "DROP TABLE IF EXISTS dbimp_t_ttl",
+          "DROP TABLE IF EXISTS dbimp_t_doc",
+          "DROP TABLE IF EXISTS dbimp_t_many",
+          "DROP TABLE IF EXISTS dbimp_t_big",
+          "DROP TABLE IF EXISTS dbimp_t_seqtab",
+          "DROP TABLE IF EXISTS dbimp_t_fk",
+          "DROP TABLE IF EXISTS dbimp_t_chi",
+          "DROP TABLE IF EXISTS dbimp_t_par",
+          "DROP TABLE IF EXISTS dbimp_t_dml",
+          "DROP TABLE IF EXISTS dbimp_t_types",
+          "DROP SEQUENCE IF EXISTS dbimp_t_seq"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop what an earlier run left: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "6s",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop the table of the named schema",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP TABLE dbimp_t_sch.t1"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: drop the named schema",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP SCHEMA dbimp_t_sch"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create the core tables",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABLE dbimp_t_types (id INT64 NOT NULL, i64 INT64, f64 FLOAT64, f32 FLOAT32, n NUMERIC, b BOOL, s STRING(MAX), y BYTES(MAX), d DATE, ts TIMESTAMP, j JSON, arr_i ARRAY<INT64>, arr_s ARRAY<STRING(MAX)>, arr_f ARRAY<FLOAT64>, arr_n ARRAY<NUMERIC>, arr_b ARRAY<BOOL>, arr_y ARRAY<BYTES(MAX)>, arr_d ARRAY<DATE>, arr_ts ARRAY<TIMESTAMP>, arr_j ARRAY<JSON>) PRIMARY KEY (id)",
+          "CREATE TABLE dbimp_t_dml (id INT64 NOT NULL, s STRING(MAX), n INT64) PRIMARY KEY (id)",
+          "CREATE TABLE dbimp_t_par (pid INT64 NOT NULL, name STRING(100)) PRIMARY KEY (pid)",
+          "CREATE TABLE dbimp_t_chi (pid INT64 NOT NULL, cid INT64 NOT NULL, v STRING(MAX)) PRIMARY KEY (pid, cid), INTERLEAVE IN PARENT dbimp_t_par ON DELETE CASCADE"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "setup: create the core tables: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s",
+      "phase": "setup"
+    },
+    {
+      "item": 1,
+      "name": "createSession with no body",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions",
+      "body": {},
+      "capture": {
+        "s": "name"
+      },
+      "wait": "10s"
+    },
+    {
+      "item": 1,
+      "name": "createSession with labels",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions",
+      "body": {
+        "session": {
+          "labels": {
+            "dbimp": "t",
+            "origin": "record"
+          }
+        }
+      },
+      "capture": {
+        "s2": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "createSession multiplexed",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions",
+      "body": {
+        "session": {
+          "multiplexed": true
+        }
+      },
+      "capture": {
+        "sm": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "batchCreateSessions",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions:batchCreate",
+      "body": {
+        "sessionCount": 2,
+        "sessionTemplate": {
+          "labels": {
+            "dbimp": "t"
+          }
+        }
+      },
+      "capture": {
+        "b0": "session.0.name",
+        "b1": "session.1.name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "getSession",
+      "method": "GET",
+      "path": "/v1/{{s}}"
+    },
+    {
+      "item": 1,
+      "name": "getSession with labels",
+      "method": "GET",
+      "path": "/v1/{{s2}}"
+    },
+    {
+      "item": 1,
+      "name": "getSession multiplexed",
+      "method": "GET",
+      "path": "/v1/{{sm}}"
+    },
+    {
+      "item": 1,
+      "name": "listSessions with a filter",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions?pageSize=10&filter=labels.dbimp:t"
+    },
+    {
+      "item": 1,
+      "name": "createSession with an unknown member",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions",
+      "body": {
+        "session": {
+          "nosuch": 1
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with no transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a, 'x' AS b"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a single use read only transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a, 'x' AS b",
+        "transaction": {
+          "singleUse": {
+            "readOnly": {
+              "strong": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on the multiplexed session",
+      "method": "POST",
+      "path": "/v1/{{sm}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT 1 AS a, 'x' AS b"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with no content type",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "text": "{\"sql\":\"SELECT 1 AS a\"}"
+    },
+    {
+      "item": 1,
+      "name": "a statement with PUT",
+      "method": "PUT",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a field that does not exist",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "nosuchfield": 1
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a body that is not JSON",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "text": "{",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with an empty body",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {}
+    },
+    {
+      "item": 1,
+      "name": "a statement with an empty sql",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": ""
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a gzip content encoding and a body that is not gzip",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "text": "{\"sql\":\"SELECT 1 AS a\"}",
+      "header": {
+        "Content-Type": [
+          "application/json"
+        ],
+        "Content-Encoding": [
+          "gzip"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "queryMode NORMAL",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "queryMode": "NORMAL"
+      }
+    },
+    {
+      "item": 1,
+      "name": "queryMode PLAN",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_dml WHERE id = 1",
+        "queryMode": "PLAN"
+      }
+    },
+    {
+      "item": 1,
+      "name": "queryMode PROFILE",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_dml WHERE id = 1",
+        "queryMode": "PROFILE"
+      }
+    },
+    {
+      "item": 1,
+      "name": "queryMode WITH_STATS",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "queryMode": "WITH_STATS"
+      }
+    },
+    {
+      "item": 1,
+      "name": "queryOptions",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "queryOptions": {
+          "optimizerVersion": "latest",
+          "optimizerStatisticsPackage": "latest"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "requestOptions with a priority and a tag",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "requestOptions": {
+          "priority": "PRIORITY_LOW",
+          "requestTag": "dbimp-tag"
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with a partitionToken that is not valid",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "partitionToken": "bm90YXRva2Vu"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement with lastStatement",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "lastStatement": true
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns of a result with rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s, n FROM dbimp_t_dml ORDER BY id"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns of a result with no rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_dml WHERE FALSE"
+      }
+    },
+    {
+      "item": 2,
+      "name": "columns that share a name",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a, 2 AS a"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a star select",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT * FROM dbimp_t_dml"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the columns of the same query on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT 1 AS a, 'x' AS b, 2.5 AS c"
+      }
+    },
+    {
+      "item": 3,
+      "name": "insert the rows of every type",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_types",
+              "columns": [
+                "id",
+                "i64",
+                "f64",
+                "f32",
+                "n",
+                "b",
+                "s",
+                "y",
+                "d",
+                "ts",
+                "j",
+                "arr_i",
+                "arr_s",
+                "arr_f",
+                "arr_n",
+                "arr_b",
+                "arr_y",
+                "arr_d",
+                "arr_ts",
+                "arr_j"
+              ],
+              "values": [
+                [
+                  "1",
+                  "-5",
+                  1.25,
+                  1.5,
+                  "1.5",
+                  true,
+                  "x",
+                  "YWJj",
+                  "2024-01-02",
+                  "2024-01-02T03:04:05.123456789Z",
+                  "{\"a\":1}",
+                  [
+                    "1",
+                    "2"
+                  ],
+                  [
+                    "a",
+                    "b"
+                  ],
+                  [
+                    1.5,
+                    2.5
+                  ],
+                  [
+                    "1.5",
+                    "2.5"
+                  ],
+                  [
+                    true,
+                    false
+                  ],
+                  [
+                    "YWJj"
+                  ],
+                  [
+                    "2024-01-02"
+                  ],
+                  [
+                    "2024-01-02T03:04:05Z"
+                  ],
+                  [
+                    "{\"a\":1}"
+                  ]
+                ],
+                [
+                  "2",
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                [
+                  "3",
+                  "9223372036854775807",
+                  "NaN",
+                  "NaN",
+                  "99999999999999999999999999999.999999999",
+                  false,
+                  "",
+                  "",
+                  "0001-01-01",
+                  "9999-12-31T23:59:59.999999999Z",
+                  "null",
+                  [],
+                  [
+                    null,
+                    "x"
+                  ],
+                  [
+                    "Infinity",
+                    "-Infinity",
+                    "NaN",
+                    null
+                  ],
+                  [
+                    null
+                  ],
+                  [
+                    null
+                  ],
+                  [
+                    null
+                  ],
+                  [
+                    null
+                  ],
+                  [
+                    null
+                  ],
+                  [
+                    null
+                  ]
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "the rows of every type",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT * FROM dbimp_t_types ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the rows of every type on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT * FROM dbimp_t_types ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the rows of every type with read",
+      "method": "POST",
+      "path": "/v1/{{s}}:read",
+      "body": {
+        "table": "dbimp_t_types",
+        "columns": [
+          "id",
+          "i64",
+          "f64",
+          "f32",
+          "n",
+          "b",
+          "s",
+          "y",
+          "d",
+          "ts",
+          "j",
+          "arr_i",
+          "arr_s",
+          "arr_f",
+          "arr_n",
+          "arr_b",
+          "arr_y",
+          "arr_d",
+          "arr_ts",
+          "arr_j"
+        ],
+        "keySet": {
+          "all": true
+        }
+      }
+    },
+    {
+      "item": 3,
+      "name": "INT64 limits",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT CAST('9223372036854775807' AS INT64) AS hi, CAST('-9223372036854775808' AS INT64) AS lo, 0 AS z"
+      }
+    },
+    {
+      "item": 3,
+      "name": "FLOAT64 values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1.5 AS a, 1e308 AS big, 5e-324 AS tiny, -0.0 AS negzero, 0.1 + 0.2 AS sum"
+      }
+    },
+    {
+      "item": 3,
+      "name": "FLOAT64 NaN and infinity",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT CAST('NaN' AS FLOAT64) AS nan, CAST('inf' AS FLOAT64) AS pinf, CAST('-inf' AS FLOAT64) AS ninf"
+      }
+    },
+    {
+      "item": 3,
+      "name": "NUMERIC values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT NUMERIC '99999999999999999999999999999.999999999' AS hi, NUMERIC '-99999999999999999999999999999.999999999' AS lo, NUMERIC '0.000000001' AS small, NUMERIC '1' AS one"
+      }
+    },
+    {
+      "item": 3,
+      "name": "BOOL values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT TRUE AS t, FALSE AS f"
+      }
+    },
+    {
+      "item": 3,
+      "name": "STRING values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT '' AS empty, 'h\u00e9llo \u4e16\u754c' AS unicode, 'a\\nb' AS newline, REPEAT('x', 1000) AS long"
+      }
+    },
+    {
+      "item": 3,
+      "name": "BYTES values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT b'' AS empty, b'\\x00\\xff' AS binary, b'abc' AS abc"
+      }
+    },
+    {
+      "item": 3,
+      "name": "DATE limits",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT DATE '0001-01-01' AS lo, DATE '9999-12-31' AS hi, DATE '1970-01-01' AS epoch"
+      }
+    },
+    {
+      "item": 3,
+      "name": "TIMESTAMP values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT TIMESTAMP '0001-01-01T00:00:00Z' AS lo, TIMESTAMP '9999-12-31T23:59:59.999999999Z' AS hi, TIMESTAMP '2024-01-02T03:04:05Z' AS whole, TIMESTAMP '2024-01-02T03:04:05.123456789Z' AS nanos, TIMESTAMP '1970-01-01T00:00:00Z' AS epoch, TIMESTAMP '1969-12-31T23:59:59.5Z' AS before"
+      }
+    },
+    {
+      "item": 3,
+      "name": "TIMESTAMP with a zone",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT TIMESTAMP '2024-01-02T03:04:05+05:30' AS v"
+      }
+    },
+    {
+      "item": 3,
+      "name": "JSON values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT JSON '{\"a\":[1,2,{\"b\":null}]}' AS obj, JSON 'null' AS jnull, JSON '1' AS num, JSON '\"s\"' AS str, CAST(NULL AS JSON) AS sqlnull, JSON '12345678901234567890' AS big, JSON '1.0' AS dec"
+      }
+    },
+    {
+      "item": 3,
+      "name": "UUID values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT CAST('f47ac10b-58cc-4372-a567-0e02b2c3d479' AS UUID) AS u, CAST(NULL AS UUID) AS n"
+      }
+    },
+    {
+      "item": 3,
+      "name": "INTERVAL values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT INTERVAL 1 DAY AS d, INTERVAL -5 MONTH AS neg, MAKE_INTERVAL(1, 2, 3, 4, 5, 6) AS made"
+      }
+    },
+    {
+      "item": 3,
+      "name": "ARRAY of INT64",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT [1, 2, 3] AS a, ARRAY<INT64>[] AS empty, [CAST(NULL AS INT64), 1] AS withnull, CAST(NULL AS ARRAY<INT64>) AS nullarray"
+      }
+    },
+    {
+      "item": 3,
+      "name": "ARRAY of the other types",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT ['a', NULL] AS s, [1.5, CAST('NaN' AS FLOAT64)] AS f, [NUMERIC '1.5'] AS n, [TRUE, NULL] AS b, [b'abc'] AS y, [DATE '2024-01-02'] AS d, [TIMESTAMP '2024-01-02T03:04:05Z'] AS ts, [JSON '{\"a\":1}'] AS j"
+      }
+    },
+    {
+      "item": 3,
+      "name": "ARRAY of UUID and FLOAT32",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT [CAST('f47ac10b-58cc-4372-a567-0e02b2c3d479' AS UUID)] AS u, [CAST(1.5 AS FLOAT32)] AS f"
+      }
+    },
+    {
+      "item": 3,
+      "name": "ARRAY of STRUCT",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT ARRAY(SELECT AS STRUCT 1 AS a, 'x' AS b UNION ALL SELECT AS STRUCT 2, 'y') AS s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a nested STRUCT inside an ARRAY",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT ARRAY(SELECT AS STRUCT STRUCT(1 AS c) AS b, [1, 2] AS d) AS a"
+      }
+    },
+    {
+      "item": 3,
+      "name": "STRUCT as a column",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT STRUCT(1 AS a, 'x' AS b) AS s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a NULL STRUCT as a column",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT CAST(NULL AS STRUCT<a INT64>) AS s"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a NULL of each type",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT CAST(NULL AS INT64) AS i, CAST(NULL AS FLOAT64) AS f, CAST(NULL AS FLOAT32) AS f32, CAST(NULL AS NUMERIC) AS n, CAST(NULL AS BOOL) AS b, CAST(NULL AS STRING) AS s, CAST(NULL AS BYTES) AS y, CAST(NULL AS DATE) AS d, CAST(NULL AS TIMESTAMP) AS ts, CAST(NULL AS JSON) AS j"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a bare NULL",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT NULL AS v"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the literals of the stream: FLOAT64 NaN and infinity",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT CAST('NaN' AS FLOAT64) AS nan, CAST('inf' AS FLOAT64) AS pinf"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the literals of the stream: TIMESTAMP values",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT TIMESTAMP '2024-01-02T03:04:05.123456789Z' AS nanos"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter of every type",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @i AS i, @f AS f, @f32 AS f32, @n AS n, @b AS b, @s AS s, @y AS y, @d AS d, @ts AS ts, @j AS j, @u AS u, @iv AS iv",
+        "params": {
+          "i": "9223372036854775807",
+          "f": 1.5,
+          "f32": 1.5,
+          "n": "1.5",
+          "b": true,
+          "s": "x",
+          "y": "YWJj",
+          "d": "2024-01-02",
+          "ts": "2024-01-02T03:04:05.123456789Z",
+          "j": "{\"a\":1}",
+          "u": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          "iv": "P1Y2M3DT4H5M6S"
+        },
+        "paramTypes": {
+          "i": {
+            "code": "INT64"
+          },
+          "f": {
+            "code": "FLOAT64"
+          },
+          "f32": {
+            "code": "FLOAT32"
+          },
+          "n": {
+            "code": "NUMERIC"
+          },
+          "b": {
+            "code": "BOOL"
+          },
+          "s": {
+            "code": "STRING"
+          },
+          "y": {
+            "code": "BYTES"
+          },
+          "d": {
+            "code": "DATE"
+          },
+          "ts": {
+            "code": "TIMESTAMP"
+          },
+          "j": {
+            "code": "JSON"
+          },
+          "u": {
+            "code": "UUID"
+          },
+          "iv": {
+            "code": "INTERVAL"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "the parameter INT64 alone",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @i AS i",
+        "params": {
+          "i": "9223372036854775807"
+        },
+        "paramTypes": {
+          "i": {
+            "code": "INT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "the parameter FLOAT64 alone",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @f AS f",
+        "params": {
+          "f": 1.5
+        },
+        "paramTypes": {
+          "f": {
+            "code": "FLOAT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "the parameter TIMESTAMP alone",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @ts AS ts",
+        "params": {
+          "ts": "2024-01-02T03:04:05.123456789Z"
+        },
+        "paramTypes": {
+          "ts": {
+            "code": "TIMESTAMP"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "the parameter UUID alone",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @u AS u",
+        "params": {
+          "u": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+        },
+        "paramTypes": {
+          "u": {
+            "code": "UUID"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "the parameter INTERVAL alone",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @iv AS iv",
+        "params": {
+          "iv": "P1Y2M3DT4H5M6S"
+        },
+        "paramTypes": {
+          "iv": {
+            "code": "INTERVAL"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "FLOAT64 parameters that are not finite",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @a AS a, @b AS b, @c AS c",
+        "params": {
+          "a": "NaN",
+          "b": "Infinity",
+          "c": "-Infinity"
+        },
+        "paramTypes": {
+          "a": {
+            "code": "FLOAT64"
+          },
+          "b": {
+            "code": "FLOAT64"
+          },
+          "c": {
+            "code": "FLOAT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a NULL of each type",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @i AS i, @f AS f, @f32 AS f32, @n AS n, @b AS b, @s AS s, @y AS y, @d AS d, @ts AS ts, @j AS j, @u AS u, @iv AS iv",
+        "params": {
+          "i": null,
+          "f": null,
+          "f32": null,
+          "n": null,
+          "b": null,
+          "s": null,
+          "y": null,
+          "d": null,
+          "ts": null,
+          "j": null,
+          "u": null,
+          "iv": null
+        },
+        "paramTypes": {
+          "i": {
+            "code": "INT64"
+          },
+          "f": {
+            "code": "FLOAT64"
+          },
+          "f32": {
+            "code": "FLOAT32"
+          },
+          "n": {
+            "code": "NUMERIC"
+          },
+          "b": {
+            "code": "BOOL"
+          },
+          "s": {
+            "code": "STRING"
+          },
+          "y": {
+            "code": "BYTES"
+          },
+          "d": {
+            "code": "DATE"
+          },
+          "ts": {
+            "code": "TIMESTAMP"
+          },
+          "j": {
+            "code": "JSON"
+          },
+          "u": {
+            "code": "UUID"
+          },
+          "iv": {
+            "code": "INTERVAL"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "an array of each type",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @i AS i, @s AS s, @f AS f, @b AS b, @d AS d, @ts AS ts, @n AS n, @y AS y, @j AS j",
+        "params": {
+          "i": [
+            "1",
+            null
+          ],
+          "s": [
+            "a",
+            null
+          ],
+          "f": [
+            1.5,
+            "NaN"
+          ],
+          "b": [
+            true,
+            null
+          ],
+          "d": [
+            "2024-01-02"
+          ],
+          "ts": [
+            "2024-01-02T03:04:05Z"
+          ],
+          "n": [
+            "1.5"
+          ],
+          "y": [
+            "YWJj"
+          ],
+          "j": [
+            "{\"a\":1}"
+          ]
+        },
+        "paramTypes": {
+          "i": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "INT64"
+            }
+          },
+          "s": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "STRING"
+            }
+          },
+          "f": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "FLOAT64"
+            }
+          },
+          "b": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "BOOL"
+            }
+          },
+          "d": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "DATE"
+            }
+          },
+          "ts": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "TIMESTAMP"
+            }
+          },
+          "n": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "NUMERIC"
+            }
+          },
+          "y": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "BYTES"
+            }
+          },
+          "j": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "JSON"
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "an empty array and a NULL array",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @e AS e, @n AS n",
+        "params": {
+          "e": [],
+          "n": null
+        },
+        "paramTypes": {
+          "e": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "INT64"
+            }
+          },
+          "n": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "INT64"
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a STRUCT parameter",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @s.a AS a, @s.b AS b",
+        "params": {
+          "s": [
+            "1",
+            "x"
+          ]
+        },
+        "paramTypes": {
+          "s": {
+            "code": "STRUCT",
+            "structType": {
+              "fields": [
+                {
+                  "name": "a",
+                  "type": {
+                    "code": "INT64"
+                  }
+                },
+                {
+                  "name": "b",
+                  "type": {
+                    "code": "STRING"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a NULL STRUCT parameter",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @s.a AS a",
+        "params": {
+          "s": null
+        },
+        "paramTypes": {
+          "s": {
+            "code": "STRUCT",
+            "structType": {
+              "fields": [
+                {
+                  "name": "a",
+                  "type": {
+                    "code": "INT64"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "an array of STRUCT parameters",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT x.a, x.b FROM UNNEST(@arr) AS x ORDER BY x.a",
+        "params": {
+          "arr": [
+            [
+              "1",
+              "x"
+            ],
+            [
+              "2",
+              null
+            ]
+          ]
+        },
+        "paramTypes": {
+          "arr": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "STRUCT",
+              "structType": {
+                "fields": [
+                  {
+                    "name": "a",
+                    "type": {
+                      "code": "INT64"
+                    }
+                  },
+                  {
+                    "name": "b",
+                    "type": {
+                      "code": "STRING"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "an array parameter in an IN UNNEST",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id FROM dbimp_t_types WHERE id IN UNNEST(@ids) ORDER BY id",
+        "params": {
+          "ids": [
+            "1",
+            "3"
+          ]
+        },
+        "paramTypes": {
+          "ids": {
+            "code": "ARRAY",
+            "arrayElementType": {
+              "code": "INT64"
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter against a column",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_types WHERE id = @id",
+        "params": {
+          "id": "1"
+        },
+        "paramTypes": {
+          "id": {
+            "code": "INT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter with no paramTypes",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @p AS p",
+        "params": {
+          "p": "7"
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "an INT64 parameter given as a JSON number",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @p AS p",
+        "params": {
+          "p": 7
+        },
+        "paramTypes": {
+          "p": {
+            "code": "INT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "an INT64 parameter that is not a number",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @p AS p",
+        "params": {
+          "p": "abc"
+        },
+        "paramTypes": {
+          "p": {
+            "code": "INT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter that is missing",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT @p AS p"
+      }
+    },
+    {
+      "item": 4,
+      "name": "a positional parameter",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT ? AS p",
+        "params": {
+          "p": "1"
+        },
+        "paramTypes": {
+          "p": {
+            "code": "INT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 4,
+      "name": "a parameter on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT @p AS p",
+        "params": {
+          "p": "7"
+        },
+        "paramTypes": {
+          "p": {
+            "code": "INT64"
+          }
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "5000 rows with UNNEST",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT x FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x ORDER BY x"
+      }
+    },
+    {
+      "item": 5,
+      "name": "5000 rows on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x ORDER BY x"
+      }
+    },
+    {
+      "item": 5,
+      "name": "5000 wide rows on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x, REPEAT('y', 200) AS pad FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x ORDER BY x"
+      }
+    },
+    {
+      "item": 5,
+      "name": "a query with a LIMIT of 3",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT x FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x ORDER BY x LIMIT 3"
+      }
+    },
+    {
+      "item": 5,
+      "name": "a statement with a pageSize",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT x FROM UNNEST(GENERATE_ARRAY(1, 10)) AS x",
+        "pageSize": 3
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of one string of 1 MB",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT REPEAT('x', 1000000) AS big"
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of one string of 1 MB on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT REPEAT('x', 1000000) AS big"
+      }
+    },
+    {
+      "item": 5,
+      "name": "a result of one string of 11 MB",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT REPEAT('x', 11000000) AS big"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a syntax error",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELEC 1"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown table",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT * FROM dbimp_t_nosuch"
+      }
+    },
+    {
+      "item": 6,
+      "name": "an unknown column",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT nosuch FROM dbimp_t_dml"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a wrong type in a comparison",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id FROM dbimp_t_dml WHERE id = 'x'"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 / 0 AS v"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero after 5000 rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT x, 1 / (x - 5000) AS v FROM UNNEST(GENERATE_ARRAY(1, 6000)) AS x ORDER BY x"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero after 5000 rows on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x, 1 / (x - 5000) AS v FROM UNNEST(GENERATE_ARRAY(1, 6000)) AS x ORDER BY x"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero in row 3500 of 4000, unsorted",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT x, REPEAT('y', 500) AS pad, 1 / (x - 3500) AS v FROM UNNEST(GENERATE_ARRAY(1, 4000)) AS x"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a division by zero in row 3500 of 4000, unsorted, on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x, REPEAT('y', 500) AS pad, 1 / (x - 3500) AS v FROM UNNEST(GENERATE_ARRAY(1, 4000)) AS x"
+      },
+      "capture": {
+        "ert": "0.resumeToken"
+      }
+    },
+    {
+      "item": 6,
+      "name": "the same stream resumed with the token of its first message",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x, REPEAT('y', 500) AS pad, 1 / (x - 3500) AS v FROM UNNEST(GENERATE_ARRAY(1, 4000)) AS x",
+        "resumeToken": "{{ert}}"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a DML statement with no transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (900, 'x')"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a DML statement in a read only transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (900, 'x')",
+        "transaction": {
+          "singleUse": {
+            "readOnly": {
+              "strong": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "a duplicate key",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "1",
+                  "a"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "the same duplicate key",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "1",
+                  "a"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a mutation to a missing table",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_nosuch",
+              "columns": [
+                "id"
+              ],
+              "values": [
+                [
+                  "1"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a mutation to a missing column",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "nosuch"
+              ],
+              "values": [
+                [
+                  "1"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "an update of a missing row",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "update": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "12345",
+                  "a"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a read of a missing table",
+      "method": "POST",
+      "path": "/v1/{{s}}:read",
+      "body": {
+        "table": "dbimp_t_nosuch",
+        "columns": [
+          "id"
+        ],
+        "keySet": {
+          "all": true
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "a read of a missing column",
+      "method": "POST",
+      "path": "/v1/{{s}}:read",
+      "body": {
+        "table": "dbimp_t_dml",
+        "columns": [
+          "nosuch"
+        ],
+        "keySet": {
+          "all": true
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "a session that does not exist",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/nosuchsession:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a session of a database that does not exist",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/nosuch/sessions/nosuchsession:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a transaction id that is not valid",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1",
+        "transaction": {
+          "id": "bm90YXRyYW5zYWN0aW9u"
+        }
+      }
+    },
+    {
+      "item": 6,
+      "name": "a transaction id that is not base64",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1",
+        "transaction": {
+          "id": "!!!"
+        }
+      }
+    },
+    {
+      "item": 8,
+      "name": "createSession with a wrong token",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions",
+      "body": {},
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a statement with a wrong token",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      },
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "getSession with a wrong token",
+      "method": "GET",
+      "path": "/v1/{{s}}",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "a statement on the stream with a wrong token",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT 1"
+      },
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "getDatabase with a wrong token",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "listSessions with a wrong token",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions?pageSize=1",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "getDatabaseDdl with a wrong token",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "auth": "wrong"
+    },
+    {
+      "item": 8,
+      "name": "getSession with a wrong access_token in the query",
+      "method": "GET",
+      "path": "/v1/{{s}}?access_token=dbimp-wrong-token"
+    },
+    {
+      "item": 8,
+      "name": "getSession with a wrong key in the query",
+      "method": "GET",
+      "path": "/v1/{{s}}?key=dbimp-wrong-key"
+    },
+    {
+      "item": 8,
+      "name": "createSession on a database that does not exist",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/nosuch/sessions",
+      "body": {}
+    },
+    {
+      "item": 8,
+      "name": "createSession on an instance that does not exist",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/nosuch/databases/dbimp_test/sessions",
+      "body": {}
+    },
+    {
+      "item": 8,
+      "name": "getInstance",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner"
+    },
+    {
+      "item": 8,
+      "name": "listInstances",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances"
+    },
+    {
+      "item": 8,
+      "name": "listInstanceConfigs",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instanceConfigs"
+    },
+    {
+      "item": 8,
+      "name": "listDatabases",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases"
+    },
+    {
+      "item": 8,
+      "name": "a path with no version",
+      "method": "GET",
+      "path": "/projects/dbimp-project/instances"
+    },
+    {
+      "item": 9,
+      "name": "getDatabase",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test"
+    },
+    {
+      "item": 9,
+      "name": "getDatabaseDdl",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl"
+    },
+    {
+      "item": 9,
+      "name": "listDatabaseRoles",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/databaseRoles"
+    },
+    {
+      "item": 9,
+      "name": "the schemata",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT catalog_name, schema_name FROM INFORMATION_SCHEMA.SCHEMATA ORDER BY schema_name"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the options of the database",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT * FROM INFORMATION_SCHEMA.DATABASE_OPTIONS"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the tables",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name, table_type, parent_table_name, on_delete_action FROM INFORMATION_SCHEMA.TABLES WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the columns",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name, column_name, ordinal_position, is_nullable, spanner_type, is_generated, generation_expression, column_default FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name, ordinal_position"
+      }
+    },
+    {
+      "item": 9,
+      "name": "a SPANNER_SYS table",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT * FROM SPANNER_SYS.QUERY_STATS_TOP_MINUTE LIMIT 1"
+      }
+    },
+    {
+      "item": 9,
+      "name": "a version function",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT VERSION() AS v"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the supported optimizer versions",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT * FROM SPANNER_SYS.SUPPORTED_OPTIMIZER_VERSIONS"
+      }
+    },
+    {
+      "item": 9,
+      "name": "the greatest optimizer version",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT CAST(MAX(version) AS STRING) AS v FROM SPANNER_SYS.SUPPORTED_OPTIMIZER_VERSIONS"
+      }
+    },
+    {
+      "item": 10,
+      "name": "two statements in one request",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a; SELECT 2 AS b"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a trailing semicolon",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a;"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a line comment",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "-- a comment\nSELECT 1 AS a"
+      }
+    },
+    {
+      "item": 10,
+      "name": "a block comment",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "/* a comment */ SELECT 1 AS a"
+      }
+    },
+    {
+      "item": 1,
+      "name": "add a column",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "ALTER TABLE dbimp_t_types ADD COLUMN u UUID"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "add a column: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "indexes: unique, null filtered and storing",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE UNIQUE INDEX dbimp_t_idx_u ON dbimp_t_dml (s)",
+          "CREATE NULL_FILTERED INDEX dbimp_t_idx_nf ON dbimp_t_dml (n) STORING (s)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "indexes: unique, null filtered and storing: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a table with a foreign key, a check, a generated column and a default",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABLE dbimp_t_fk (id INT64 NOT NULL, pid INT64, g INT64 AS (id * 2) STORED, d STRING(MAX) DEFAULT ('x'), CONSTRAINT dbimp_t_chk CHECK (id > 0), CONSTRAINT dbimp_t_fk_par FOREIGN KEY (pid) REFERENCES dbimp_t_par (pid)) PRIMARY KEY (id)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a table with a foreign key, a check, a generated column and a default: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a sequence and a table that uses it",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE SEQUENCE dbimp_t_seq OPTIONS (sequence_kind = 'bit_reversed_positive')",
+          "CREATE TABLE dbimp_t_seqtab (id INT64 DEFAULT (GET_NEXT_SEQUENCE_VALUE(SEQUENCE dbimp_t_seq)), v STRING(MAX)) PRIMARY KEY (id)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a sequence and a table that uses it: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a view",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE VIEW dbimp_t_v SQL SECURITY INVOKER AS SELECT t.id AS id, t.s AS s FROM dbimp_t_dml t"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a view: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a change stream",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE CHANGE STREAM dbimp_t_cs FOR dbimp_t_dml"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a change stream: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "add a column and drop it",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "ALTER TABLE dbimp_t_dml ADD COLUMN extra STRING(MAX)",
+          "ALTER TABLE dbimp_t_dml DROP COLUMN extra"
+        ]
+      },
+      "capture": {
+        "opdone": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "add a column and drop it: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{opdone}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a DDL call with an operationId",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "ALTER TABLE dbimp_t_dml ADD COLUMN extra2 INT64"
+        ],
+        "operationId": "dbimp_op_1791610956"
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a DDL call with an operationId: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "the same operationId again",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "ALTER TABLE dbimp_t_dml DROP COLUMN extra2"
+        ],
+        "operationId": "dbimp_op_1791610956"
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a DDL call with a syntax error",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABL x (id INT64) PRIMARY KEY (id)"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a DDL call that drops a table that does not exist",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP TABLE dbimp_t_nosuch"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a DDL call that drops a table that does not exist: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "DROP VIEW of a view that does not exist",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP VIEW dbimp_t_nosuch_v"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "DROP VIEW of a view that does not exist: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "DROP VIEW IF EXISTS of a view that does not exist",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP VIEW IF EXISTS dbimp_t_nosuch_v"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "DROP VIEW IF EXISTS of a view that does not exist: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "DROP CHANGE STREAM of a change stream that does not exist",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP CHANGE STREAM dbimp_t_nosuch_cs"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "DROP CHANGE STREAM of a change stream that does not exist: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "DROP CHANGE STREAM IF EXISTS of a change stream that does not exist",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP CHANGE STREAM IF EXISTS dbimp_t_nosuch_cs"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "DROP CHANGE STREAM IF EXISTS of a change stream that does not exist: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "tables for big values and for a slow index",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABLE dbimp_t_big (id INT64 NOT NULL, v STRING(MAX), y BYTES(MAX)) PRIMARY KEY (id)",
+          "CREATE TABLE dbimp_t_many (id INT64 NOT NULL, g INT64, pad STRING(100)) PRIMARY KEY (id)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "tables for big values and for a slow index: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a table with an INTERVAL column, a FLOAT32 column and an array of INTERVAL",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABLE dbimp_t_iv (id INT64 NOT NULL, iv INTERVAL, f32 FLOAT32, ts TIMESTAMP, arr_iv ARRAY<INTERVAL>) PRIMARY KEY (id)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a table with an INTERVAL column, a FLOAT32 column and an array of INTERVAL: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a table with a row deletion policy",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABLE dbimp_t_ttl (id INT64 NOT NULL, ts TIMESTAMP NOT NULL) PRIMARY KEY (id), ROW DELETION POLICY (OLDER_THAN(ts, INTERVAL 30 DAY))"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a table with a row deletion policy: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a table with a TOKENLIST column",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABLE dbimp_t_doc (id INT64 NOT NULL, body STRING(MAX), body_tokens TOKENLIST AS (TOKENIZE_FULLTEXT(body)) HIDDEN) PRIMARY KEY (id)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a table with a TOKENLIST column: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a search index",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE SEARCH INDEX dbimp_t_si ON dbimp_t_doc (body_tokens)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a search index: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a search index: poll 2 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a named schema",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE SCHEMA dbimp_t_sch"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a named schema: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a table in the named schema",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE TABLE dbimp_t_sch.t1 (id INT64 NOT NULL, s STRING(MAX)) PRIMARY KEY (id)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a table in the named schema: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 1,
+      "name": "a column that takes the commit timestamp",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "ALTER TABLE dbimp_t_dml ADD COLUMN cts TIMESTAMP OPTIONS (allow_commit_timestamp = true)"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a column that takes the commit timestamp: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s"
+    },
+    {
+      "item": 7,
+      "name": "load 5000 rows for a slow DDL",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_many (id, g, pad) SELECT x, MOD(x, 7), REPEAT('p', 100) FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x",
+        "transaction": {
+          "begin": {
+            "readWrite": {}
+          }
+        },
+        "seqno": "1"
+      },
+      "capture": {
+        "txm": "metadata.transaction.id"
+      }
+    },
+    {
+      "item": 7,
+      "name": "commit the 5000 rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txm}}",
+        "returnCommitStats": true
+      }
+    },
+    {
+      "item": 7,
+      "name": "three indexes on 5000 rows",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "CREATE INDEX dbimp_t_idx_m1 ON dbimp_t_many (g) STORING (pad)",
+          "CREATE INDEX dbimp_t_idx_m2 ON dbimp_t_many (pad)",
+          "CREATE INDEX dbimp_t_idx_m3 ON dbimp_t_many (g DESC, pad)"
+        ]
+      },
+      "capture": {
+        "opslow": "name"
+      }
+    },
+    {
+      "item": 7,
+      "name": "cancel the running operation",
+      "method": "POST",
+      "path": "/v1/{{opslow}}:cancel",
+      "body": {}
+    },
+    {
+      "item": 7,
+      "name": "the running operation just after the cancel",
+      "method": "GET",
+      "path": "/v1/{{opslow}}"
+    },
+    {
+      "item": 7,
+      "name": "the running operation after a wait",
+      "method": "GET",
+      "path": "/v1/{{opslow}}",
+      "wait": "20s"
+    },
+    {
+      "item": 7,
+      "name": "cancel a finished operation",
+      "method": "POST",
+      "path": "/v1/{{opdone}}:cancel",
+      "body": {}
+    },
+    {
+      "item": 7,
+      "name": "the operation that was cancelled",
+      "method": "GET",
+      "path": "/v1/{{opdone}}"
+    },
+    {
+      "item": 7,
+      "name": "cancel an operation that does not exist",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/dbimp_nosuchop:cancel",
+      "body": {}
+    },
+    {
+      "item": 7,
+      "name": "an operation that does not exist",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/dbimp_nosuchop"
+    },
+    {
+      "item": 7,
+      "name": "the list of the operations of the database",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations?pageSize=5"
+    },
+    {
+      "item": 7,
+      "name": "delete a finished operation",
+      "method": "DELETE",
+      "path": "/v1/{{opdone}}"
+    },
+    {
+      "item": 7,
+      "name": "the operation after the delete",
+      "method": "GET",
+      "path": "/v1/{{opdone}}"
+    },
+    {
+      "item": 1,
+      "name": "a TRUNCATE TABLE statement in the DDL API",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "TRUNCATE TABLE dbimp_t_many"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a TRUNCATE TABLE statement in the DDL API: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "the rows of the table after the TRUNCATE TABLE",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT COUNT(*) AS c FROM dbimp_t_many"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a CREATE TABLE statement sent to executeSql",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "CREATE TABLE dbimp_t_viaq (id INT64 NOT NULL) PRIMARY KEY (id)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a CREATE TABLE statement sent to executeStreamingSql",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "CREATE TABLE dbimp_t_viaq_2 (id INT64 NOT NULL) PRIMARY KEY (id)"
+      }
+    },
+    {
+      "item": 1,
+      "name": "the tables that the two statements made",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_name LIKE 'dbimp_t_viaq%' ORDER BY table_name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "getDatabaseDdl after the changes",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl"
+    },
+    {
+      "item": 1,
+      "name": "a TRUNCATE statement",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "TRUNCATE TABLE dbimp_t_dml"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the indexes",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name, index_name, index_type, is_unique, is_null_filtered, index_state FROM INFORMATION_SCHEMA.INDEXES WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name, index_name"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the index columns",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name, index_name, column_name, ordinal_position, column_ordering FROM INFORMATION_SCHEMA.INDEX_COLUMNS WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name, index_name, ordinal_position"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the constraints",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name, constraint_name, constraint_type FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name, constraint_name"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the check constraints",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT constraint_name, check_clause FROM INFORMATION_SCHEMA.CHECK_CONSTRAINTS WHERE constraint_name LIKE 'dbimp_t_%'"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the views",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name, view_definition, security_type FROM INFORMATION_SCHEMA.VIEWS WHERE table_name LIKE 'dbimp_t_%'"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the sequences",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT name, data_type FROM INFORMATION_SCHEMA.SEQUENCES WHERE name LIKE 'dbimp_t_%'"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the change streams",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT change_stream_name FROM INFORMATION_SCHEMA.CHANGE_STREAMS WHERE change_stream_name LIKE 'dbimp_t_%'"
+      }
+    },
+    {
+      "item": 1,
+      "name": "insert a parent and a child",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_par",
+              "columns": [
+                "pid",
+                "name"
+              ],
+              "values": [
+                [
+                  "1",
+                  "p1"
+                ],
+                [
+                  "2",
+                  "p2"
+                ]
+              ]
+            }
+          },
+          {
+            "insert": {
+              "table": "dbimp_t_chi",
+              "columns": [
+                "pid",
+                "cid",
+                "v"
+              ],
+              "values": [
+                [
+                  "1",
+                  "1",
+                  "c11"
+                ],
+                [
+                  "1",
+                  "2",
+                  "c12"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "insert a row with a foreign key",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_fk",
+              "columns": [
+                "id",
+                "pid"
+              ],
+              "values": [
+                [
+                  "1",
+                  "1"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the generated column and the default",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, g, d FROM dbimp_t_fk"
+      }
+    },
+    {
+      "item": 6,
+      "name": "a foreign key to a missing parent",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_fk",
+              "columns": [
+                "id",
+                "pid"
+              ],
+              "values": [
+                [
+                  "2",
+                  "99"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "a row that breaks the check constraint",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_fk",
+              "columns": [
+                "id",
+                "pid"
+              ],
+              "values": [
+                [
+                  "-1",
+                  "1"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "a row for the table of the sequence",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_seqtab",
+              "columns": [
+                "v"
+              ],
+              "values": [
+                [
+                  "a"
+                ],
+                [
+                  "b"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 6,
+      "name": "the second use of a unique index",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "50",
+                  "u"
+                ],
+                [
+                  "51",
+                  "u"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "the view",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_v ORDER BY id"
+      }
+    },
+    {
+      "item": 1,
+      "name": "delete the parent and its interleaved children",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "delete": {
+              "table": "dbimp_t_par",
+              "keySet": {
+                "keys": [
+                  [
+                    "1"
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "delete the row that references the parent",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "delete": {
+              "table": "dbimp_t_fk",
+              "keySet": {
+                "keys": [
+                  [
+                    "1"
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "delete the parent after the reference is gone, with its interleaved children",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "delete": {
+              "table": "dbimp_t_par",
+              "keySet": {
+                "keys": [
+                  [
+                    "1"
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "drop the view",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP VIEW dbimp_t_v"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "drop the view: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "drop the change stream",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP CHANGE STREAM dbimp_t_cs"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "drop the change stream: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "8s"
+    },
+    {
+      "item": 1,
+      "name": "the view after the drop",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_v ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "insert the rows of the INTERVAL table",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_iv",
+              "columns": [
+                "id",
+                "iv",
+                "f32",
+                "ts",
+                "arr_iv"
+              ],
+              "values": [
+                [
+                  "1",
+                  "P1Y2M3DT4H5M6.789123456S",
+                  0.1,
+                  "1969-07-20T20:17:40.123456789Z",
+                  [
+                    "P1D",
+                    "P-1M"
+                  ]
+                ],
+                [
+                  "2",
+                  "P-1Y-2M-3DT-4H-5M-6.5S",
+                  3.4028235e+38,
+                  "1900-01-01T00:00:00.000000001Z",
+                  [
+                    "PT0.000000001S"
+                  ]
+                ],
+                [
+                  "3",
+                  "PT-0.5S",
+                  -0.1,
+                  "1970-01-01T00:00:00.999999999Z",
+                  []
+                ],
+                [
+                  "4",
+                  null,
+                  null,
+                  null,
+                  null
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 3,
+      "name": "the rows of the INTERVAL table",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT * FROM dbimp_t_iv ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "the rows of the INTERVAL table on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT * FROM dbimp_t_iv ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "INTERVAL values with fractions and negatives",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT INTERVAL 1500 MILLISECOND AS ms, INTERVAL -1500 MILLISECOND AS neg_ms, INTERVAL 1 MICROSECOND AS us, INTERVAL -1 DAY AS neg_day, MAKE_INTERVAL(-1, -2, -3, -4, -5, -6) AS all_neg, MAKE_INTERVAL(1, 0, 0, 0, 0, 0) AS year, INTERVAL 0 DAY AS zero"
+      }
+    },
+    {
+      "item": 3,
+      "name": "FLOAT32 of 0.1 and FLOAT64 of 0.1",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT CAST(0.1 AS FLOAT32) AS f32, CAST(0.1 AS FLOAT64) AS f64, CAST(CAST(0.1 AS FLOAT32) AS FLOAT64) AS widened, CAST(16777217 AS FLOAT32) AS big"
+      }
+    },
+    {
+      "item": 3,
+      "name": "TIMESTAMP with a fraction below a microsecond and before 1970",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT TIMESTAMP '1969-07-20T20:17:40.123456789Z' AS apollo, TIMESTAMP '1900-01-01T00:00:00.000000001Z' AS old, TIMESTAMP '1969-12-31T23:59:59.999999999Z' AS last_ns"
+      }
+    },
+    {
+      "item": 1,
+      "name": "insert the rows of the table with a row deletion policy",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_ttl",
+              "columns": [
+                "id",
+                "ts"
+              ],
+              "values": [
+                [
+                  "1",
+                  "2000-01-01T00:00:00Z"
+                ],
+                [
+                  "2",
+                  "2999-01-01T00:00:00Z"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the row deletion policy",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_name, row_deletion_policy_expression FROM INFORMATION_SCHEMA.TABLES WHERE table_name = 'dbimp_t_ttl'"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the rows of the table with a row deletion policy",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, ts FROM dbimp_t_ttl ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "insert the rows of the table with a TOKENLIST column",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_doc",
+              "columns": [
+                "id",
+                "body"
+              ],
+              "values": [
+                [
+                  "1",
+                  "hello world of spanner"
+                ],
+                [
+                  "2",
+                  "goodbye world"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "a search of the index",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, body FROM dbimp_t_doc WHERE SEARCH(body_tokens, 'hello') ORDER BY id"
+      }
+    },
+    {
+      "item": 3,
+      "name": "a TOKENLIST column that the statement names",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, body_tokens FROM dbimp_t_doc ORDER BY id"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the TOKENLIST column in the catalog",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT column_name, spanner_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'dbimp_t_doc' ORDER BY ordinal_position"
+      }
+    },
+    {
+      "item": 2,
+      "name": "the search index in the catalog",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT index_name, index_type FROM INFORMATION_SCHEMA.INDEXES WHERE table_name = 'dbimp_t_doc' ORDER BY index_name"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a mutation to a table of the named schema",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_sch.t1",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "1",
+                  "by mutation"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 2,
+      "name": "the tables of the named schema",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT table_schema, table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = 'dbimp_t_sch'"
+      }
+    },
+    {
+      "item": 2,
+      "name": "a table of the named schema by its name",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_sch.t1"
+      }
+    },
+    {
+      "item": 9,
+      "name": "a hint that forces an index",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, n FROM dbimp_t_dml@{FORCE_INDEX=dbimp_t_idx_nf} WHERE n > 0 ORDER BY id"
+      }
+    },
+    {
+      "item": 9,
+      "name": "a hint that names an index that does not exist",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id FROM dbimp_t_dml@{FORCE_INDEX=dbimp_t_nosuch_idx}"
+      }
+    },
+    {
+      "item": 9,
+      "name": "a statement hint",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "@{USE_ADDITIONAL_PARALLELISM=TRUE} SELECT id FROM dbimp_t_dml ORDER BY id"
+      }
+    },
+    {
+      "item": 9,
+      "name": "FOR UPDATE with no transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id FROM dbimp_t_dml WHERE id = 1 FOR UPDATE"
+      }
+    },
+    {
+      "item": 11,
+      "name": "load the rows of the table for DML",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insertOrUpdate": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s",
+                "n"
+              ],
+              "values": [
+                [
+                  "1",
+                  "a",
+                  "10"
+                ],
+                [
+                  "2",
+                  "b",
+                  "20"
+                ],
+                [
+                  "3",
+                  "c",
+                  "30"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a read write transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "tx1": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an insert in the transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_dml (id, s, n) VALUES (100, 'i', 1)",
+        "transaction": {
+          "id": "{{tx1}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an update in the transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET s = 'u' WHERE id >= 100",
+        "transaction": {
+          "id": "{{tx1}}"
+        },
+        "seqno": "2"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read of the writes in the transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_dml WHERE id >= 100",
+        "transaction": {
+          "id": "{{tx1}}"
+        },
+        "seqno": "3"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a delete in the transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "DELETE FROM dbimp_t_dml WHERE id = 100",
+        "transaction": {
+          "id": "{{tx1}}"
+        },
+        "seqno": "4"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit with the stats",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{tx1}}",
+        "returnCommitStats": true
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit again",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{tx1}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction to roll back",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "tx2": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an insert to roll back",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (101, 'r')",
+        "transaction": {
+          "id": "{{tx2}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "rollback",
+      "method": "POST",
+      "path": "/v1/{{s}}:rollback",
+      "body": {
+        "transactionId": "{{tx2}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the rows after the rollback",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id FROM dbimp_t_dml WHERE id = 101"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for THEN RETURN",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "tx3": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an insert with THEN RETURN",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (102, 'ret') THEN RETURN id, s",
+        "transaction": {
+          "id": "{{tx3}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an update with THEN RETURN and many rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = n + 1 WHERE id < 100 THEN RETURN id, n",
+        "transaction": {
+          "id": "{{tx3}}"
+        },
+        "seqno": "2"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an update that changes no row",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = 0 WHERE id = 9999",
+        "transaction": {
+          "id": "{{tx3}}"
+        },
+        "seqno": "3"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a delete with THEN RETURN",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "DELETE FROM dbimp_t_dml WHERE id = 102 THEN RETURN id",
+        "transaction": {
+          "id": "{{tx3}}"
+        },
+        "seqno": "4"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a DML statement with parameters",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET s = @s WHERE id = @id",
+        "params": {
+          "s": "p",
+          "id": "1"
+        },
+        "paramTypes": {
+          "s": {
+            "code": "STRING"
+          },
+          "id": {
+            "code": "INT64"
+          }
+        },
+        "transaction": {
+          "id": "{{tx3}}"
+        },
+        "seqno": "5"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit the transaction of THEN RETURN",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{tx3}}",
+        "returnCommitStats": true
+      }
+    },
+    {
+      "item": 11,
+      "name": "a statement that begins a transaction inline",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = n WHERE id = 1",
+        "transaction": {
+          "begin": {
+            "readWrite": {}
+          }
+        },
+        "seqno": "1"
+      },
+      "capture": {
+        "tx4": "metadata.transaction.id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit the transaction that began inline",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{tx4}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for a batch",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "tx5": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "executeBatchDml",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeBatchDml",
+      "body": {
+        "transaction": {
+          "id": "{{tx5}}"
+        },
+        "seqno": "1",
+        "statements": [
+          {
+            "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (110, 'b1')"
+          },
+          {
+            "sql": "UPDATE dbimp_t_dml SET s = @s WHERE id = 110",
+            "params": {
+              "s": "b2"
+            },
+            "paramTypes": {
+              "s": {
+                "code": "STRING"
+              }
+            }
+          },
+          {
+            "sql": "DELETE FROM dbimp_t_dml WHERE id = 110"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "executeBatchDml with a statement that fails",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeBatchDml",
+      "body": {
+        "transaction": {
+          "id": "{{tx5}}"
+        },
+        "seqno": "2",
+        "statements": [
+          {
+            "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (111, 'b1')"
+          },
+          {
+            "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (111, 'dup')"
+          },
+          {
+            "sql": "INSERT INTO dbimp_t_dml (id, s) VALUES (112, 'never')"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit the batch",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{tx5}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a partitioned DML transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "partitionedDml": {}
+        }
+      },
+      "capture": {
+        "tx6": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a partitioned DML statement",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = n + 1 WHERE TRUE",
+        "transaction": {
+          "id": "{{tx6}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for mutations",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "tx7": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit with every kind of mutation",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{tx7}}",
+        "mutations": [
+          {
+            "insert": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s",
+                "n"
+              ],
+              "values": [
+                [
+                  "130",
+                  "m",
+                  "1"
+                ]
+              ]
+            }
+          },
+          {
+            "update": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "130",
+                  "m2"
+                ]
+              ]
+            }
+          },
+          {
+            "insertOrUpdate": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "131",
+                  "io"
+                ]
+              ]
+            }
+          },
+          {
+            "replace": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "131",
+                  "re"
+                ]
+              ]
+            }
+          },
+          {
+            "delete": {
+              "table": "dbimp_t_dml",
+              "keySet": {
+                "keys": [
+                  [
+                    "130"
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "delete": {
+              "table": "dbimp_t_dml",
+              "keySet": {
+                "ranges": [
+                  {
+                    "startClosed": [
+                      "131"
+                    ],
+                    "endClosed": [
+                      "131"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "returnCommitStats": true
+      }
+    },
+    {
+      "item": 11,
+      "name": "a commit with a single use transaction and the stats",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {},
+          "isolationLevel": "REPEATABLE_READ"
+        },
+        "mutations": [
+          {
+            "insertOrUpdate": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s"
+              ],
+              "values": [
+                [
+                  "132",
+                  "su"
+                ]
+              ]
+            }
+          }
+        ],
+        "returnCommitStats": true
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read with a key set of keys",
+      "method": "POST",
+      "path": "/v1/{{s}}:read",
+      "body": {
+        "table": "dbimp_t_dml",
+        "columns": [
+          "id",
+          "s"
+        ],
+        "keySet": {
+          "keys": [
+            [
+              "1"
+            ],
+            [
+              "2"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read with a range",
+      "method": "POST",
+      "path": "/v1/{{s}}:read",
+      "body": {
+        "table": "dbimp_t_dml",
+        "columns": [
+          "id",
+          "s"
+        ],
+        "keySet": {
+          "ranges": [
+            {
+              "startClosed": [
+                "1"
+              ],
+              "endOpen": [
+                "3"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "a streaming read",
+      "method": "POST",
+      "path": "/v1/{{s}}:streamingRead",
+      "body": {
+        "table": "dbimp_t_dml",
+        "columns": [
+          "id",
+          "s"
+        ],
+        "keySet": {
+          "all": true
+        },
+        "limit": "3"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a stream to take a resume token from",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x, REPEAT('y', 200) AS pad FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x ORDER BY x"
+      },
+      "capture": {
+        "rt": "0.resumeToken"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a stream resumed with the token",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x, REPEAT('y', 200) AS pad FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x ORDER BY x",
+        "resumeToken": "{{rt}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a stream resumed with a token that is not valid",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT x, REPEAT('y', 200) AS pad FROM UNNEST(GENERATE_ARRAY(1, 5000)) AS x ORDER BY x",
+        "resumeToken": "bm90YXRva2Vu"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a strong read only transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readOnly": {
+            "strong": true,
+            "returnReadTimestamp": true
+          }
+        }
+      },
+      "capture": {
+        "tx8": "id",
+        "rts": "readTimestamp"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read in the read only transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT COUNT(*) AS c FROM dbimp_t_dml",
+        "transaction": {
+          "id": "{{tx8}}"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit a read only transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{tx8}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a read only transaction with exact staleness",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readOnly": {
+            "exactStaleness": "5s",
+            "returnReadTimestamp": true
+          }
+        }
+      },
+      "capture": {
+        "tx9": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read with exact staleness",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT COUNT(*) AS c FROM dbimp_t_dml",
+        "transaction": {
+          "id": "{{tx9}}"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a read only transaction at a read timestamp",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readOnly": {
+            "readTimestamp": "{{rts}}",
+            "returnReadTimestamp": true
+          }
+        }
+      },
+      "capture": {
+        "tx10": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read at the read timestamp",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT COUNT(*) AS c FROM dbimp_t_dml",
+        "transaction": {
+          "id": "{{tx10}}"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "a single use read with exact staleness",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "transaction": {
+          "singleUse": {
+            "readOnly": {
+              "exactStaleness": "1s",
+              "returnReadTimestamp": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "a single use read write transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "transaction": {
+          "singleUse": {
+            "readWrite": {}
+          }
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a batch read only transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readOnly": {
+            "strong": true
+          }
+        }
+      },
+      "capture": {
+        "tx12": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "partitionQuery",
+      "method": "POST",
+      "path": "/v1/{{s}}:partitionQuery",
+      "body": {
+        "transaction": {
+          "id": "{{tx12}}"
+        },
+        "sql": "SELECT id, s FROM dbimp_t_dml",
+        "partitionOptions": {
+          "maxPartitions": "2"
+        }
+      },
+      "capture": {
+        "pt": "partitions.0.partitionToken"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a statement with a partition token",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_dml",
+        "transaction": {
+          "id": "{{tx12}}"
+        },
+        "partitionToken": "{{pt}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "partitionRead",
+      "method": "POST",
+      "path": "/v1/{{s}}:partitionRead",
+      "body": {
+        "transaction": {
+          "id": "{{tx12}}"
+        },
+        "table": "dbimp_t_dml",
+        "columns": [
+          "id",
+          "s"
+        ],
+        "keySet": {
+          "all": true
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a read write transaction on the multiplexed session",
+      "method": "POST",
+      "path": "/v1/{{sm}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "tx13": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a DML statement on the multiplexed session",
+      "method": "POST",
+      "path": "/v1/{{sm}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = n WHERE id = 1",
+        "transaction": {
+          "id": "{{tx13}}"
+        },
+        "seqno": "1"
+      },
+      "capture": {
+        "ptok": "precommitToken"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit on the multiplexed session with the precommit token",
+      "method": "POST",
+      "path": "/v1/{{sm}}:commit",
+      "body": {
+        "transactionId": "{{tx13}}",
+        "precommitToken": "{{ptok}}",
+        "returnCommitStats": true
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin another transaction on the multiplexed session",
+      "method": "POST",
+      "path": "/v1/{{sm}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "tx14": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit on the multiplexed session with no precommit token",
+      "method": "POST",
+      "path": "/v1/{{sm}}:commit",
+      "body": {
+        "transactionId": "{{tx14}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "load the row of the conflict",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insertOrUpdate": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s",
+                "n"
+              ],
+              "values": [
+                [
+                  "200",
+                  "conflict",
+                  "0"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin the older transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txa": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin the younger transaction",
+      "method": "POST",
+      "path": "/v1/{{s2}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txb": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the younger transaction locks the row",
+      "method": "POST",
+      "path": "/v1/{{s2}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = 1 WHERE id = 200",
+        "transaction": {
+          "id": "{{txb}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the older transaction updates the same row",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = 2 WHERE id = 200",
+        "transaction": {
+          "id": "{{txa}}"
+        },
+        "seqno": "1"
+      },
+      "background": true
+    },
+    {
+      "item": 11,
+      "name": "commit the younger transaction",
+      "method": "POST",
+      "path": "/v1/{{s2}}:commit",
+      "body": {
+        "transactionId": "{{txb}}"
+      },
+      "wait": "3s"
+    },
+    {
+      "item": 11,
+      "name": "commit the older transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txa}}"
+      },
+      "wait": "3s"
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for the retry",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txc": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the retry updates the row",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = 3 WHERE id = 200",
+        "transaction": {
+          "id": "{{txc}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit the retry",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txc}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the row after the conflict",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, n FROM dbimp_t_dml WHERE id = 200"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for the DML forms",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txd": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "INSERT OR UPDATE of a new row",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT OR UPDATE INTO dbimp_t_dml (id, s, n) VALUES (300, 'ou1', 1)",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "INSERT OR UPDATE of a row that exists",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT OR UPDATE INTO dbimp_t_dml (id, s) VALUES (300, 'ou2')",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "2"
+      }
+    },
+    {
+      "item": 11,
+      "name": "INSERT OR IGNORE of a row that exists",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT OR IGNORE INTO dbimp_t_dml (id, s) VALUES (300, 'oi1')",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "3"
+      }
+    },
+    {
+      "item": 11,
+      "name": "INSERT OR IGNORE of a new row",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT OR IGNORE INTO dbimp_t_dml (id, s) VALUES (301, 'oi2')",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "4"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a DML statement with no seqno",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = 5 WHERE id = 300",
+        "transaction": {
+          "id": "{{txd}}"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "SELECT FOR UPDATE",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s, n FROM dbimp_t_dml WHERE id = 300 FOR UPDATE",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "6"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a DML statement with a hint",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "@{USE_ADDITIONAL_PARALLELISM=TRUE} UPDATE dbimp_t_dml SET n = 6 WHERE id = 301",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "7"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a DML statement with the pending commit timestamp",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_dml (id, s, cts) VALUES (302, 'ct1', PENDING_COMMIT_TIMESTAMP())",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "8"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an insert that takes its key from a sequence, with THEN RETURN",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_seqtab (v) VALUES ('c') THEN RETURN id, v",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "9"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the next value of a sequence in a query",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT GET_NEXT_SEQUENCE_VALUE(SEQUENCE dbimp_t_seq) AS v",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "10"
+      }
+    },
+    {
+      "item": 11,
+      "name": "an insert into a table of the named schema",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_sch.t1 (id, s) VALUES (2, 'by dml') THEN RETURN id",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "11"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read of a table of the named schema in the transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s FROM dbimp_t_sch.t1 ORDER BY id",
+        "transaction": {
+          "id": "{{txd}}"
+        },
+        "seqno": "12"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit the DML forms with maxCommitDelay",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txd}}",
+        "returnCommitStats": true,
+        "maxCommitDelay": "0.100s"
+      }
+    },
+    {
+      "item": 11,
+      "name": "the rows after the DML forms",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, s, n, cts FROM dbimp_t_dml WHERE id >= 300 ORDER BY id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a mutation that writes the commit timestamp",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "singleUseTransaction": {
+          "readWrite": {}
+        },
+        "mutations": [
+          {
+            "insertOrUpdate": {
+              "table": "dbimp_t_dml",
+              "columns": [
+                "id",
+                "s",
+                "cts"
+              ],
+              "values": [
+                [
+                  "303",
+                  "ct2",
+                  "spanner.commit_timestamp()"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for MERGE",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txg": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "MERGE",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "MERGE INTO dbimp_t_dml t USING (SELECT 300 AS id, 'mg' AS s) u ON t.id = u.id WHEN MATCHED THEN UPDATE SET s = u.s WHEN NOT MATCHED THEN INSERT (id, s) VALUES (u.id, u.s)",
+        "transaction": {
+          "id": "{{txg}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 11,
+      "name": "rollback the transaction of MERGE",
+      "method": "POST",
+      "path": "/v1/{{s}}:rollback",
+      "body": {
+        "transactionId": "{{txg}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for lastStatement",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txl": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a DML statement with lastStatement",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = 7 WHERE id = 300",
+        "transaction": {
+          "id": "{{txl}}"
+        },
+        "seqno": "1",
+        "lastStatement": true
+      }
+    },
+    {
+      "item": 11,
+      "name": "a statement after lastStatement",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "UPDATE dbimp_t_dml SET n = 8 WHERE id = 300",
+        "transaction": {
+          "id": "{{txl}}"
+        },
+        "seqno": "2"
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit the transaction of lastStatement",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txl}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction for a batch with lastStatements",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txe": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "executeBatchDml with lastStatements",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeBatchDml",
+      "body": {
+        "transaction": {
+          "id": "{{txe}}"
+        },
+        "seqno": "1",
+        "lastStatements": true,
+        "statements": [
+          {
+            "sql": "UPDATE dbimp_t_dml SET n = 9 WHERE id = 300"
+          }
+        ]
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit the batch with lastStatements",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txe}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "begin a transaction with readLockMode and excludeTxnFromChangeStreams",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {
+            "readLockMode": "OPTIMISTIC"
+          },
+          "excludeTxnFromChangeStreams": true
+        }
+      },
+      "capture": {
+        "txo": "id"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a read in that transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, n FROM dbimp_t_dml WHERE id = 300",
+        "transaction": {
+          "id": "{{txo}}"
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "commit that transaction",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txo}}"
+      }
+    },
+    {
+      "item": 11,
+      "name": "a single use read with maxStaleness",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "transaction": {
+          "singleUse": {
+            "readOnly": {
+              "maxStaleness": "10s",
+              "returnReadTimestamp": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "a single use read with minReadTimestamp",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "transaction": {
+          "singleUse": {
+            "readOnly": {
+              "minReadTimestamp": "{{rts}}",
+              "returnReadTimestamp": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "item": 11,
+      "name": "a single use read with directedReadOptions",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT 1 AS a",
+        "transaction": {
+          "singleUse": {
+            "readOnly": {
+              "strong": true
+            }
+          }
+        },
+        "directedReadOptions": {
+          "includeReplicas": {
+            "replicaSelections": [
+              {
+                "type": "READ_ONLY"
+              }
+            ],
+            "autoFailoverDisabled": false
+          }
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: begin a transaction that writes the big rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      },
+      "capture": {
+        "txb": "id"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: write twelve rows of 1 MB",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_big (id, v) SELECT x, REPEAT('x', 1000000) FROM UNNEST(GENERATE_ARRAY(1, 12)) AS x",
+        "transaction": {
+          "id": "{{txb}}"
+        },
+        "seqno": "1"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: write a BYTES value of 2 MB",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "INSERT INTO dbimp_t_big (id, y) VALUES (101, CAST(ARRAY_TO_STRING(ARRAY(SELECT REPEAT('x', 1000000) FROM UNNEST(GENERATE_ARRAY(1, 2))), '') AS BYTES))",
+        "transaction": {
+          "id": "{{txb}}"
+        },
+        "seqno": "2"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: commit the big rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:commit",
+      "body": {
+        "transactionId": "{{txb}}",
+        "returnCommitStats": true
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: a string of 3 MB on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT ARRAY_TO_STRING(ARRAY(SELECT REPEAT('x', 1000000) FROM UNNEST(GENERATE_ARRAY(1, 3))), '') AS big"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: a string of 3 MB with executeSql",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT ARRAY_TO_STRING(ARRAY(SELECT REPEAT('x', 1000000) FROM UNNEST(GENERATE_ARRAY(1, 3))), '') AS big"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: a BYTES value of 2 MB from a table on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT id, y FROM dbimp_t_big WHERE id = 101"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: a streaming read of the BYTES value of 2 MB",
+      "method": "POST",
+      "path": "/v1/{{s}}:streamingRead",
+      "body": {
+        "table": "dbimp_t_big",
+        "columns": [
+          "id",
+          "y"
+        ],
+        "keySet": {
+          "keys": [
+            [
+              "101"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: the size of the rows",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, LENGTH(v) AS n, LENGTH(y) AS m FROM dbimp_t_big ORDER BY id"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: twelve rows of 1 MB on the stream",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT id, v FROM dbimp_t_big WHERE id <= 12 ORDER BY id"
+      }
+    },
+    {
+      "item": 5,
+      "name": "big: twelve rows of 1 MB with executeSql",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT id, v FROM dbimp_t_big WHERE id <= 12 ORDER BY id"
+      }
+    },
+    {
+      "item": 12,
+      "name": "a response with Accept-Encoding gzip on a large result",
+      "method": "POST",
+      "path": "/v1/{{s}}:executeSql",
+      "body": {
+        "sql": "SELECT x FROM UNNEST(GENERATE_ARRAY(1, 2000)) AS x"
+      },
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      }
+    },
+    {
+      "item": 1,
+      "name": "deleteSession",
+      "method": "DELETE",
+      "path": "/v1/{{b1}}"
+    },
+    {
+      "item": 1,
+      "name": "getSession after the delete",
+      "method": "GET",
+      "path": "/v1/{{b1}}"
+    },
+    {
+      "item": 1,
+      "name": "a statement on the deleted session",
+      "method": "POST",
+      "path": "/v1/{{b1}}:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on the stream on the deleted session",
+      "method": "POST",
+      "path": "/v1/{{b1}}:executeStreamingSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "beginTransaction on the deleted session",
+      "method": "POST",
+      "path": "/v1/{{b1}}:beginTransaction",
+      "body": {
+        "options": {
+          "readWrite": {}
+        }
+      }
+    },
+    {
+      "item": 1,
+      "name": "deleteSession a second time",
+      "method": "DELETE",
+      "path": "/v1/{{b1}}"
+    },
+    {
+      "item": 1,
+      "name": "a statement on the deleted session after a minute",
+      "method": "POST",
+      "path": "/v1/{{b1}}:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      },
+      "wait": "60s"
+    },
+    {
+      "item": 1,
+      "name": "getSession of a session of the first run, deleted",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEWLT3BoYHgo5m-iqFMNe9Oua0"
+    },
+    {
+      "item": 1,
+      "name": "a statement on a session of the first run, deleted",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEWLT3BoYHgo5m-iqFMNe9Oua0:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "a statement on the stream on a session of the first run, deleted",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEWLT3BoYHgo5m-iqFMNe9Oua0:executeStreamingSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "deleteSession of a session of the first run, deleted",
+      "method": "DELETE",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEWLT3BoYHgo5m-iqFMNe9Oua0"
+    },
+    {
+      "item": 1,
+      "name": "getSession of a well formed session that was never made, with another end",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEWLT3BoYHgo5m-iqFMNe9Ub7q"
+    },
+    {
+      "item": 1,
+      "name": "a statement on a well formed session that was never made, with another end",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEWLT3BoYHgo5m-iqFMNe9Ub7q:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "deleteSession of a well formed session that was never made, with another end",
+      "method": "DELETE",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEWLT3BoYHgo5m-iqFMNe9Ub7q"
+    },
+    {
+      "item": 1,
+      "name": "getSession of a well formed session that was never made, with another middle",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEXLT3BoYHgo5m-iqFMNe9Oua0"
+    },
+    {
+      "item": 1,
+      "name": "a statement on a well formed session that was never made, with another middle",
+      "method": "POST",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEXLT3BoYHgo5m-iqFMNe9Oua0:executeSql",
+      "body": {
+        "sql": "SELECT 1"
+      }
+    },
+    {
+      "item": 1,
+      "name": "deleteSession of a well formed session that was never made, with another middle",
+      "method": "DELETE",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTyFkoCYzou9iT-Qh4GesWkBMZziYb6fBaEXLT3BoYHgo5m-iqFMNe9Oua0"
+    },
+    {
+      "item": 1,
+      "name": "deleteSession of the multiplexed session",
+      "method": "DELETE",
+      "path": "/v1/{{sm}}"
+    },
+    {
+      "item": 1,
+      "name": "deleteSession of a session with labels",
+      "method": "DELETE",
+      "path": "/v1/{{s2}}"
+    },
+    {
+      "item": 1,
+      "name": "deleteSession of the batch session",
+      "method": "DELETE",
+      "path": "/v1/{{b0}}"
+    },
+    {
+      "item": 1,
+      "name": "listSessions after the deletes",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions?pageSize=10&filter=labels.dbimp:t"
+    },
+    {
+      "item": 1,
+      "name": "deleteSession of the main session",
+      "method": "DELETE",
+      "path": "/v1/{{s}}"
+    },
+    {
+      "item": 1,
+      "name": "listSessions at the end",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions?pageSize=10"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the view",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP VIEW dbimp_t_v"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the change stream",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP CHANGE STREAM dbimp_t_cs"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the search index",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP SEARCH INDEX dbimp_t_si"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the indexes, the tables and the sequence",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP INDEX IF EXISTS dbimp_t_idx_u",
+          "DROP INDEX IF EXISTS dbimp_t_idx_nf",
+          "DROP INDEX IF EXISTS dbimp_t_idx_m1",
+          "DROP INDEX IF EXISTS dbimp_t_idx_m2",
+          "DROP INDEX IF EXISTS dbimp_t_idx_m3",
+          "DROP TABLE IF EXISTS dbimp_t_viaq",
+          "DROP TABLE IF EXISTS dbimp_t_viaq_2",
+          "DROP TABLE IF EXISTS dbimp_t_iv",
+          "DROP TABLE IF EXISTS dbimp_t_ttl",
+          "DROP TABLE IF EXISTS dbimp_t_doc",
+          "DROP TABLE IF EXISTS dbimp_t_many",
+          "DROP TABLE IF EXISTS dbimp_t_big",
+          "DROP TABLE IF EXISTS dbimp_t_seqtab",
+          "DROP TABLE IF EXISTS dbimp_t_fk",
+          "DROP TABLE IF EXISTS dbimp_t_chi",
+          "DROP TABLE IF EXISTS dbimp_t_par",
+          "DROP TABLE IF EXISTS dbimp_t_dml",
+          "DROP TABLE IF EXISTS dbimp_t_types",
+          "DROP SEQUENCE IF EXISTS dbimp_t_seq"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the indexes, the tables and the sequence: poll 1 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s",
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the indexes, the tables and the sequence: poll 2 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s",
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the indexes, the tables and the sequence: poll 3 of the operation",
+      "method": "GET",
+      "path": "/v1/{{op}}",
+      "wait": "15s",
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the table of the named schema",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP TABLE dbimp_t_sch.t1"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop the named schema",
+      "method": "PATCH",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "body": {
+        "statements": [
+          "DROP SCHEMA dbimp_t_sch"
+        ]
+      },
+      "capture": {
+        "op": "name"
+      },
+      "phase": "teardown"
+    },
+    {
+      "item": 1,
+      "name": "teardown: the database after the drops",
+      "method": "GET",
+      "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+      "phase": "teardown",
+      "wait": "15s"
+    }
+  ]
+}

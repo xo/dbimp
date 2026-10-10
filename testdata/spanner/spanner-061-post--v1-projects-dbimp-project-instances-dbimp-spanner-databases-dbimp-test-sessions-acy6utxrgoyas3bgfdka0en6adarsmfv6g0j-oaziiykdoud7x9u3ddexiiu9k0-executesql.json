@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT ['a', NULL] AS s, [1.5, CAST('NaN' AS FLOAT64)] AS f, [NUMERIC '1.5'] AS n, [TRUE, NULL] AS b, [b'abc'] AS y, [DATE '2024-01-02'] AS d, [TIMESTAMP '2024-01-02T03:04:05Z'] AS ts, [JSON '{\\\"a\\\":1}'] AS j\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=453"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:51 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"s\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"STRING\"\n            }\n          }\n        },\n        {\n          \"name\": \"f\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"FLOAT64\"\n            }\n          }\n        },\n        {\n          \"name\": \"n\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"NUMERIC\"\n            }\n          }\n        },\n        {\n          \"name\": \"b\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"BOOL\"\n            }\n          }\n        },\n        {\n          \"name\": \"y\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"BYTES\"\n            }\n          }\n        },\n        {\n          \"name\": \"d\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"DATE\"\n            }\n          }\n        },\n        {\n          \"name\": \"ts\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"TIMESTAMP\"\n            }\n          }\n        },\n        {\n          \"name\": \"j\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"JSON\"\n            }\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      [\n        \"a\",\n        null\n      ],\n      [\n        1.5,\n        \"NaN\"\n      ],\n      [\n        \"1.5\"\n      ],\n      [\n        true,\n        null\n      ],\n      [\n        \"YWJj\"\n      ],\n      [\n        \"2024-01-02\"\n      ],\n      [\n        \"2024-01-02T03:04:05Z\"\n      ],\n      [\n        \"{\\\"a\\\":1}\"\n      ]\n    ]\n  ]\n}\n"
+  }
+}

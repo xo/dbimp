@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1211"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:54:42 GMT"
+      ]
+    },
+    "body": "{\n  \"statements\": [\n    \"CREATE SCHEMA dbimp_t_sch\",\n    \"CREATE SEQUENCE dbimp_t_seq OPTIONS (\\n  sequence_kind = 'bit_reversed_positive'\\n)\",\n    \"CREATE TABLE dbimp_t_big (\\n  id INT64 NOT NULL,\\n  v STRING(MAX),\\n  y BYTES(MAX),\\n) PRIMARY KEY(id)\",\n    \"CREATE TABLE dbimp_t_dml (\\n  id INT64 NOT NULL,\\n  s STRING(MAX),\\n  n INT64,\\n  extra2 INT64,\\n  cts TIMESTAMP OPTIONS (\\n    allow_commit_timestamp = true\\n  ),\\n) PRIMARY KEY(id)\",\n    \"CREATE NULL_FILTERED INDEX dbimp_t_idx_nf ON dbimp_t_dml(n) STORING (s)\",\n    \"CREATE UNIQUE INDEX dbimp_t_idx_u ON dbimp_t_dml(s)\",\n    \"CREATE TABLE dbimp_t_doc (\\n  id INT64 NOT NULL,\\n  body STRING(MAX),\\n  body_tokens TOKENLIST AS (TOKENIZE_FULLTEXT(body)) HIDDEN,\\n) PRIMARY KEY(id)\",\n    \"CREATE SEARCH INDEX dbimp_t_si ON dbimp_t_doc(body_tokens)\",\n    \"CREATE TABLE dbimp_t_fk (\\n  id INT64 NOT NULL,\\n  pid INT64,\\n  g INT64 AS (id * 2) STORED,\\n  d STRING(MAX) DEFAULT ('x'),\\n  CONSTRAINT dbimp_t_chk CHECK(id \\u003e 0),\\n) PRIMARY KEY(id)\",\n    \"CREATE TABLE dbimp_t_many (\\n  id INT64 NOT NULL,\\n  g INT64,\\n  pad STRING(100),\\n) PRIMARY KEY(id)\",\n    \"CREATE TABLE dbimp_t_par (\\n  pid INT64 NOT NULL,\\n  name STRING(100),\\n) PRIMARY KEY(pid)\",\n    \"ALTER TABLE dbimp_t_fk ADD CONSTRAINT dbimp_t_fk_par FOREIGN KEY(pid) REFERENCES dbimp_t_par(pid)\",\n    \"CREATE TABLE dbimp_t_chi (\\n  pid INT64 NOT NULL,\\n  cid INT64 NOT NULL,\\n  v STRING(MAX),\\n) PRIMARY KEY(pid, cid),\\n  INTERLEAVE IN PARENT dbimp_t_par ON DELETE CASCADE\",\n    \"CREATE TABLE dbimp_t_sch.t1 (\\n  id INT64 NOT NULL,\\n  s STRING(MAX),\\n) PRIMARY KEY(id)\",\n    \"CREATE TABLE dbimp_t_seqtab (\\n  id INT64 DEFAULT (GET_NEXT_SEQUENCE_VALUE(SEQUENCE dbimp_t_seq)),\\n  v STRING(MAX),\\n) PRIMARY KEY(id)\",\n    \"CREATE TABLE dbimp_t_ttl (\\n  id INT64 NOT NULL,\\n  ts TIMESTAMP NOT NULL,\\n) PRIMARY KEY(id), ROW DELETION POLICY (OLDER_THAN(ts, INTERVAL 30 DAY))\",\n    \"CREATE TABLE dbimp_t_types (\\n  id INT64 NOT NULL,\\n  i64 INT64,\\n  f64 FLOAT64,\\n  f32 FLOAT32,\\n  n NUMERIC,\\n  b BOOL,\\n  s STRING(MAX),\\n  y BYTES(MAX),\\n  d DATE,\\n  ts TIMESTAMP,\\n  j JSON,\\n  arr_i ARRAY\\u003cINT64\\u003e,\\n  arr_s ARRAY\\u003cSTRING(MAX)\\u003e,\\n  arr_f ARRAY\\u003cFLOAT64\\u003e,\\n  arr_n ARRAY\\u003cNUMERIC\\u003e,\\n  arr_b ARRAY\\u003cBOOL\\u003e,\\n  arr_y ARRAY\\u003cBYTES(MAX)\\u003e,\\n  arr_d ARRAY\\u003cDATE\\u003e,\\n  arr_ts ARRAY\\u003cTIMESTAMP\\u003e,\\n  arr_j ARRAY\\u003cJSON\\u003e,\\n  u UUID,\\n) PRIMARY KEY(id)\",\n    \"CREATE CHANGE STREAM dbimp_t_cs\\n  FOR dbimp_t_dml\",\n    \"CREATE VIEW dbimp_t_v SQL SECURITY INVOKER AS SELECT t.id AS id, t.s AS s FROM dbimp_t_dml t\"\n  ]\n}\n"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061836Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"{{id76}}\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "748"
+      ],
+      "X-Amzn-Requestid": [
+        "8b9b213b-f37d-4643-9fbc-c5b527372907"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:18:38 GMT"
+      ]
+    },
+    "body": "{\"__type\":\"InvalidSignatureException\",\"message\":\"The request signature we calculated does not match the signature you provided. Check your AWS Secret Access Key and signing method. Consult the service documentation for details.\\n\\nThe Canonical String for this request should have been\\n'POST\\n/\\n\\ncontent-type:application/x-amz-json-1.1\\nhost:athena.us-east-1.amazonaws.com\\nx-amz-date:20261010T061836Z\\nx-amz-target:AmazonAthena.GetQueryExecution\\n\\ncontent-type;host;x-amz-date;x-amz-target\\n63ca3c514609d34ecafa754d5c6c21005a70f37992b57d094d65bd7d7da9a453'\\n\\nThe String-to-Sign should have been\\n'AWS4-HMAC-SHA256\\n20261010T061836Z\\n20261010/us-east-1/athena/aws4_request\\n9b9b3174e499494de1fbf05966b881051a4e30a8f2acf43c543bf7dae54c3853'\\n\"}"
+  }
+}

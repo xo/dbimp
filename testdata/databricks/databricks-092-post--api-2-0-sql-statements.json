@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT CAST(NULL AS TINYINT) AS ti, CAST(NULL AS SMALLINT) AS si, CAST(NULL AS INT) AS i, CAST(NULL AS BIGINT) AS bi, CAST(NULL AS FLOAT) AS f, CAST(NULL AS DOUBLE) AS d, CAST(NULL AS DECIMAL(38,18)) AS dec, CAST(NULL AS BOOLEAN) AS b, CAST(NULL AS STRING) AS s, CAST(NULL AS BINARY) AS y, CAST(NULL AS DATE) AS dt, CAST(NULL AS TIMESTAMP) AS ts, CAST(NULL AS TIMESTAMP_NTZ) AS ntz\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"270f3713-b7d9-4469-a081-0417be6a1be6\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=672"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:07 GMT"
+      ],
+      "X-Request-Id": [
+        "270f3713-b7d9-4469-a081-0417be6a1be6"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-125c-1f11-9da7-b10f1e0fc272\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":13,\"columns\":[{\"name\":\"ti\",\"type_text\":\"TINYINT\",\"type_name\":\"BYTE\",\"position\":0},{\"name\":\"si\",\"type_text\":\"SMALLINT\",\"type_name\":\"SHORT\",\"position\":1},{\"name\":\"i\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":2},{\"name\":\"bi\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":3},{\"name\":\"f\",\"type_text\":\"FLOAT\",\"type_name\":\"FLOAT\",\"position\":4},{\"name\":\"d\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":5},{\"name\":\"dec\",\"type_text\":\"DECIMAL(38,18)\",\"type_name\":\"DECIMAL\",\"position\":6,\"type_precision\":38,\"type_scale\":18},{\"name\":\"b\",\"type_text\":\"BOOLEAN\",\"type_name\":\"BOOLEAN\",\"position\":7},{\"name\":\"s\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":8},{\"name\":\"y\",\"type_text\":\"BINARY\",\"type_name\":\"BINARY\",\"position\":9},{\"name\":\"dt\",\"type_text\":\"DATE\",\"type_name\":\"DATE\",\"position\":10},{\"name\":\"ts\",\"type_text\":\"TIMESTAMP\",\"type_name\":\"TIMESTAMP\",\"position\":11},{\"name\":\"ntz\",\"type_text\":\"TIMESTAMP_NTZ\",\"type_name\":\"TIMESTAMP_NTZ\",\"position\":12}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[null,null,null,null,null,null,null,null,null,null,null,null,null]]}}"
+  }
+}

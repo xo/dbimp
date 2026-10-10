@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/bulk/docs",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 05:03:31 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ]
+    },
+    "body": "{\"query\":\"SELECT VALUE COUNT(1) FROM c\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "Microsoft-HTTPAPI/2.0"
+      ],
+      "X-Ms-Activity-Id": [
+        "3dd82e94-d670-463a-921a-269705549797"
+      ],
+      "X-Ms-Substatus": [
+        "1004"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000"
+      ],
+      "X-Ms-Gatewayversion": [
+        "version=2.14.0"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:03:31 GMT"
+      ]
+    },
+    "body": "{\"code\":\"BadRequest\",\"message\":\"The provided cross partition query can not be directly served by the gateway. This is a first chance (internal) exception that all newer clients will know how to handle gracefully. This exception is traced, but unless you see it bubble up as an exception (which only happens on older SDK clients), then you can safely ignore this message.\\r\\nActivityId: 3dd82e94-d670-463a-921a-269705549797, Microsoft.Azure.Documents.Common/2.14.0\",\"additionalErrorInfo\":\"{\\\"partitionedQueryExecutionInfoVersion\\\":2,\\\"queryInfo\\\":{\\\"distinctType\\\":\\\"None\\\",\\\"top\\\":null,\\\"offset\\\":null,\\\"limit\\\":null,\\\"orderBy\\\":[],\\\"orderByExpressions\\\":[],\\\"groupByExpressions\\\":[],\\\"groupByAliases\\\":[],\\\"aggregates\\\":[\\\"Count\\\"],\\\"groupByAliasToAggregateType\\\":{},\\\"rewrittenQuery\\\":\\\"SELECT VALUE [{\\\\\\\"item\\\\\\\": COUNT(1)}]\\\\nFROM c\\\",\\\"hasSelectValue\\\":true,\\\"dCountInfo\\\":null,\\\"hasNonStreamingOrderBy\\\":false},\\\"queryRanges\\\":[{\\\"min\\\":\\\"\\\",\\\"max\\\":\\\"FF\\\",\\\"isMinInclusive\\\":true,\\\"isMaxInclusive\\\":false}],\\\"hybridSearchQueryInfo\\\":null}\"}"
+  }
+}

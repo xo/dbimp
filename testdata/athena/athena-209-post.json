@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061802Z"
+      ]
+    },
+    "body": "{\"QueryString\":\"SELECT 1/(n-1500) FROM UNNEST(sequence(1,2500)) AS t(n)\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0071-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "59"
+      ],
+      "X-Amzn-Requestid": [
+        "784ea38e-1e78-4a85-8ed4-135308d799b6"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:18:03 GMT"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"11b86c4b-a568-485c-9fcf-14549510bcd3\"}"
+  }
+}

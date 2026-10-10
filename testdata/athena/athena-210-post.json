@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061809Z"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"11b86c4b-a568-485c-9fcf-14549510bcd3\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1958"
+      ],
+      "X-Amzn-Requestid": [
+        "1304749b-77fc-43b2-9881-9a747e2a49ab"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:18:09 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT 1/(n-1500) FROM UNNEST(sequence(1,2500)) AS t(n)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"11b86c4b-a568-485c-9fcf-14549510bcd3\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/11b86c4b-a568-485c-9fcf-14549510bcd3.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":121,\"QueryPlanningTimeInMillis\":22,\"QueryQueueTimeInMillis\":99,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":70,\"ServiceProcessingTimeInMillis\":237,\"TotalExecutionTimeInMillis\":527},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"DIVISION_BY_ZERO: Division by zero\",\"ErrorType\":1001,\"Retryable\":false},\"CompletionDateTime\":1.791613083602E9,\"State\":\"FAILED\",\"StateChangeReason\":\"DIVISION_BY_ZERO: Division by zero\",\"SubmissionDateTime\":1.791613083075E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/11b86c4b-a568-485c-9fcf-14549510bcd3.csv\",\"Query\":\"SELECT 1/(n-1500) FROM UNNEST(sequence(1,2500)) AS t(n)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"11b86c4b-a568-485c-9fcf-14549510bcd3\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/11b86c4b-a568-485c-9fcf-14549510bcd3.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":121,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613083602E9,\"State\":\"FAILED\",\"StateChangeReason\":\"DIVISION_BY_ZERO: Division by zero\",\"SubmissionDateTime\":1.791613083075E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T062227Z"
+      ]
+    },
+    "body": "{\"QueryString\":\"SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'dbimp_test' AND table_name = 'dbimp_it_ext' ORDER BY ordinal_position\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0114-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:22:28 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "59"
+      ],
+      "X-Amzn-Requestid": [
+        "32642049-3709-407a-a1c9-faea391dfc22"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"60dc459c-668f-4743-ac68-865e394cd199\"}"
+  }
+}

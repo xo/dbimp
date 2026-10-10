@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT ARRAY(NAMED_STRUCT('a', MAP('k', ARRAY(1, 2)))) AS deep, ARRAY(X'DEADBEEF') AS bin, ARRAY(TIMESTAMP'2024-01-02 03:04:05') AS ts, ARRAY(CAST(1.50 AS DECIMAL(10,2))) AS dec, ARRAY(DATE'2024-01-02') AS d\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"d097c1a1-805c-434c-883f-4f77d4a7ea29\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=647"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Request-Id": [
+        "d097c1a1-805c-434c-883f-4f77d4a7ea29"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:03 GMT"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-103f-1eb0-b9d5-e6abe0b73d87\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":5,\"columns\":[{\"name\":\"deep\",\"type_text\":\"ARRAY<STRUCT<a: MAP<STRING, ARRAY<INT>> NOT NULL>>\",\"type_name\":\"ARRAY\",\"position\":0},{\"name\":\"bin\",\"type_text\":\"ARRAY<BINARY>\",\"type_name\":\"ARRAY\",\"position\":1},{\"name\":\"ts\",\"type_text\":\"ARRAY<TIMESTAMP>\",\"type_name\":\"ARRAY\",\"position\":2},{\"name\":\"dec\",\"type_text\":\"ARRAY<DECIMAL(10,2)>\",\"type_name\":\"ARRAY\",\"position\":3},{\"name\":\"d\",\"type_text\":\"ARRAY<DATE>\",\"type_name\":\"ARRAY\",\"position\":4}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"[{\\\"a\\\":{\\\"k\\\":[\\\"1\\\",\\\"2\\\"]}}]\",\"[\\\"3q2+7w==\\\"]\",\"[\\\"2024-01-02T03:04:05.000Z\\\"]\",\"[\\\"1.50\\\"]\",\"[\\\"2024-01-02\\\"]\"]]}}"
+  }
+}

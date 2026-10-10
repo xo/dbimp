@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"USE CATALOG dbimp_t_nosuch\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "63d43811-73ae-4d66-9fa4-ca6ed47085d1"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"63d43811-73ae-4d66-9fa4-ca6ed47085d1\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=249"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:41 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-91e9-14f2-82e1-3da392e37c06\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[NO_SUCH_CATALOG_EXCEPTION] Catalog 'dbimp_t_nosuch' was not found. Please verify the catalog name and then retry the query or command again. SQLSTATE: 42704\"},\"sql_state\":\"42704\"}}"
+  }
+}

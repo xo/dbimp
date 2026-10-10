@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT 1 AS a, 2 AS a\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Request-Id": [
+        "1405921d-c36d-4a6a-a569-2a237ac2e9e9"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"1405921d-c36d-4a6a-a569-2a237ac2e9e9\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=659"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:26 GMT"
+      ],
+      "Server": [
+        "databricks"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46b-f9b2-1ed0-87da-ab9423f95216\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":2,\"columns\":[{\"name\":\"a\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":0},{\"name\":\"a\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":1}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"1\",\"2\"]]}}"
+  }
+}

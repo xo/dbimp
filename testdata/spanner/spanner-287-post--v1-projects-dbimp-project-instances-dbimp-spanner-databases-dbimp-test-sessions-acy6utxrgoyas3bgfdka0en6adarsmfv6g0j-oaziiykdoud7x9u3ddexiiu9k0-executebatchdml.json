@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeBatchDml",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"transaction\":{\"id\":\"QUN5NlVUeUJOWmNESDFEQkNPUTNOZHYyWE9oRG5yaDFGcTlXWjdVZzZZcEkySHk5TTd1b1pSSQ==\"},\"seqno\":\"2\",\"statements\":[{\"sql\":\"INSERT INTO dbimp_t_dml (id, s) VALUES (111, 'b1')\"},{\"sql\":\"INSERT INTO dbimp_t_dml (id, s) VALUES (111, 'dup')\"},{\"sql\":\"INSERT INTO dbimp_t_dml (id, s) VALUES (112, 'never')\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:55:40 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1128"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ]
+    },
+    "body": "{\n  \"resultSets\": [\n    {\n      \"metadata\": {\n        \"rowType\": {}\n      },\n      \"stats\": {\n        \"rowCountExact\": \"1\"\n      }\n    }\n  ],\n  \"status\": {\n    \"code\": 6,\n    \"message\": \"Row [111] in table dbimp_t_dml already exists\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.DebugInfo\",\n        \"detail\": \"dbimp_t_dml(111)\"\n      }\n    ]\n  }\n}\n"
+  }
+}

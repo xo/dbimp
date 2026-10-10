@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SHOW CREATE TABLE dbimp_t_src\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "b0645dc6-8bb6-46e2-aeab-c10c43d09e04"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"b0645dc6-8bb6-46e2-aeab-c10c43d09e04\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=795"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:46 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-05e7-18db-a6d7-86d17e2e85cf\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":1,\"columns\":[{\"name\":\"createtab_stmt\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":0}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"CREATE TABLE workspace.dbimp.dbimp_t_src (\\n  id INT,\\n  s STRING COLLATE UTF8_BINARY)\\nUSING delta\\nTBLPROPERTIES (\\n  'delta.checkpoint.writeStatsAsJson' = 'false',\\n  'delta.checkpoint.writeStatsAsStruct' = 'true',\\n  'delta.enableDeletionVectors' = 'true',\\n  'delta.enableRowTracking' = 'true',\\n  'delta.feature.appendOnly' = 'supported',\\n  'delta.feature.deletionVectors' = 'supported',\\n  'delta.feature.domainMetadata' = 'supported',\\n  'delta.feature.invariants' = 'supported',\\n  'delta.feature.rowTracking' = 'supported',\\n  'delta.minReaderVersion' = '3',\\n  'delta.minWriterVersion' = '7',\\n  'delta.parquet.compression.codec' = 'zstd',\\n  'delta.parquet.format.version' = '2.12.0',\\n  'delta.parquet.format.version.afe.internal' = '2.12.0')\\n\"]]}}"
+  }
+}

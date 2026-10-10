@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"CREATE TABLE dbimp_t_types (id INT, ti TINYINT, si SMALLINT, i INT, bi BIGINT, f FLOAT, d DOUBLE, dec DECIMAL(38,18), dec0 DECIMAL(38,0), b BOOLEAN, s STRING, y BINARY, dt DATE, ts TIMESTAMP, ntz TIMESTAMP_NTZ, arr ARRAY<INT>, m MAP<STRING,INT>, st STRUCT<a:INT,b:STRING>)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"104a9b44-2c87-4bab-b528-2a6f21ebf6d1\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=3116"
+      ],
+      "X-Request-Id": [
+        "104a9b44-2c87-4bab-b528-2a6f21ebf6d1"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:11 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-137b-12f0-99a2-5fcf348658d5\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":0},\"total_chunk_count\":0,\"total_row_count\":0,\"truncated\":false},\"result\":{}}"
+  }
+}

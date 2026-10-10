@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT INTERVAL 1 DAY AS d, INTERVAL -5 MONTH AS neg, MAKE_INTERVAL(1, 2, 3, 4, 5, 6) AS made\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:50 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=442"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"d\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"neg\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        },\n        {\n          \"name\": \"made\",\n          \"type\": {\n            \"code\": \"INTERVAL\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"P1D\",\n      \"P-5M\",\n      \"P1Y2M3DT4H5M6S\"\n    ]\n  ]\n}\n"
+  }
+}

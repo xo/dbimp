@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT 1 AS a; SELECT 2 AS b\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"7303ade2-e889-44af-ba23-6b86eab891a7\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=275"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:42 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "7303ade2-e889-44af-ba23-6b86eab891a7"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-92a8-15b4-b22e-f33f2b1b9eb9\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"\\n[PARSE_SYNTAX_ERROR] Syntax error at or near 'SELECT': extra input 'SELECT'. SQLSTATE: 42601 (line 1, pos 15)\\n\\n== SQL ==\\nSELECT 1 AS a; SELECT 2 AS b\\n---------------^^^\\n\"},\"sql_state\":\"42601\"}}"
+  }
+}

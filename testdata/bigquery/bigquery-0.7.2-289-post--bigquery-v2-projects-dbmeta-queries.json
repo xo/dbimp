@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"CREATE TABLE dbmeta.dbmeta.dbimp_it_kv (id INT64, FOREIGN KEY (id) REFERENCES dbmeta.dbmeta.dbimp_it_pk(id) NOT ENFORCED)\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:32:22 GMT"
+      ],
+      "Content-Length": [
+        "236"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to analyze: Foreign keys are not supported [at 1:51]\"}],\"code\":400,\"message\":\"failed to analyze: Foreign keys are not supported [at 1:51]\"}}"
+  }
+}

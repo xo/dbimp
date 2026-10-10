@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT :p AS p, typeof(:p) AS t\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\",\"parameters\":[{\"name\":\"p\",\"value\":\"{\\\"a\\\":1}\",\"type\":\"MAP<STRING,INT>\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"0538fcc2-d4de-4a69-afb1-f8e020022ce4\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=1507"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:47 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Request-Id": [
+        "0538fcc2-d4de-4a69-afb1-f8e020022ce4"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-2a42-1c96-bbd8-f2ee933de345\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[INVALID_PARAMETER_MARKER_VALUE.INVALID_DATA_TYPE] An invalid parameter mapping was provided: the given data type 'MAP<STRING,INT>' for parameter 'p' is not valid. SQLSTATE: 22023\"},\"sql_state\":\"22023\"}}"
+  }
+}

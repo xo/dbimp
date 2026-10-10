@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ts FROM `dbimp-project`.dbimp_test.dbimp_it_types ORDER BY id\",\"useLegacySql\":false,\"formatOptions\":{\"useInt64Timestamp\":true}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:43:33 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"ts\",\n        \"type\": \"TIMESTAMP\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_NxF-R9zTW0F67xDmSgpJbISw1CPA\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"2\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": \"1704164645123456\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": null\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"24\",\n  \"jobComplete\": true,\n  \"cacheHit\": false,\n  \"queryId\": \"job_NxF-R9zTW0F67xDmSgpJbISw1CPA\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"10485760\",\n  \"totalSlotMs\": \"23\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614613438\",\n  \"startTime\": \"1791614613517\",\n  \"endTime\": \"1791614613676\",\n  \"pageRowCount\": \"2\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

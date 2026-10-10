@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT STRUCT(STRUCT(1 AS c) AS b, [1, 2] AS d) AS a\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ],
+      "Content-Length": [
+        "429"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"b7f04ckpbFC0hUlp30M1EqnGWPB\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"fields\":[{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"c\",\"type\":\"INTEGER\"}],\"mode\":\"NULLABLE\",\"name\":\"b\",\"type\":\"RECORD\"},{\"mode\":\"REPEATED\",\"name\":\"d\",\"type\":\"INTEGER\"}],\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"RECORD\"}]},\"rows\":[{\"f\":[{\"v\":{\"f\":[{\"v\":{\"f\":[{\"v\":\"1\"}]}},{\"v\":[{\"v\":\"1\"},{\"v\":\"2\"}]}]}}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

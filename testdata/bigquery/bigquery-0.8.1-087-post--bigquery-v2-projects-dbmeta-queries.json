@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT TIMESTAMP '0001-01-01 00:00:00+00' AS lo, TIMESTAMP '9999-12-31 23:59:59.999999+00' AS hi, TIMESTAMP '2024-01-02 03:04:05+00' AS whole, TIMESTAMP '2024-01-02 03:04:05.5+00' AS half, TIMESTAMP '1970-01-01 00:00:00+00' AS epoch\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ],
+      "Content-Length": [
+        "539"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"B0n209nV9SOQuYSFfzUemzvfYTb\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"lo\",\"type\":\"TIMESTAMP\"},{\"mode\":\"NULLABLE\",\"name\":\"hi\",\"type\":\"TIMESTAMP\"},{\"mode\":\"NULLABLE\",\"name\":\"whole\",\"type\":\"TIMESTAMP\"},{\"mode\":\"NULLABLE\",\"name\":\"half\",\"type\":\"TIMESTAMP\"},{\"mode\":\"NULLABLE\",\"name\":\"epoch\",\"type\":\"TIMESTAMP\"}]},\"rows\":[{\"f\":[{\"v\":\"-62135596800.000000\"},{\"v\":\"253402300799.999999\"},{\"v\":\"1704164645.000000\"},{\"v\":\"1704164645.500000\"},{\"v\":\"0.000000\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

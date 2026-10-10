@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"CREATE SNAPSHOT TABLE `dbimp-project`.dbimp_test.dbimp_it_sn_r2 CLONE `dbimp-project`.dbimp_test.dbimp_it_pk\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 409,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:01 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 409,\n    \"message\": \"Already Exists: Table dbimp-project:dbimp_test.dbimp_it_sn_r2\",\n    \"errors\": [\n      {\n        \"message\": \"Already Exists: Table dbimp-project:dbimp_test.dbimp_it_sn_r2\",\n        \"domain\": \"global\",\n        \"reason\": \"duplicate\"\n      }\n    ],\n    \"status\": \"ALREADY_EXISTS\"\n  }\n}\n"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261010T061219Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryString\":\"MERGE INTO dbimp_it_ice t USING (SELECT 1 AS id, 'm' AS name) s ON t.id = s.id WHEN MATCHED THEN UPDATE SET name = s.name\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0014-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "59"
+      ],
+      "X-Amzn-Requestid": [
+        "df90cfe1-6955-45f0-8548-f4c7b6cccd4d"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:12:19 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"9ffc0278-e340-4240-b98b-6a808be24cba\"}"
+  }
+}

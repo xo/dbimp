@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_fb0b12cfb1afe073",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "gfet4t7; dur=1145"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:48:47 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_fb0b12cfb1afe073\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE SEQUENCE dbimp_t_seq OPTIONS (\\n  sequence_kind = 'bit_reversed_positive'\\n)\",\n      \"CREATE TABLE dbimp_t_seqtab (\\n  id INT64 DEFAULT (GET_NEXT_SEQUENCE_VALUE(SEQUENCE dbimp_t_seq)),\\n  v STRING(MAX),\\n) PRIMARY KEY(id)\"\n    ],\n    \"commitTimestamps\": [\n      \"2026-10-10T05:48:33.089307Z\",\n      \"2026-10-10T05:48:33.089307Z\"\n    ],\n    \"progress\": [\n      {\n        \"progressPercent\": 100,\n        \"startTime\": \"2026-10-10T05:48:30.051814Z\",\n        \"endTime\": \"2026-10-10T05:48:33.089307Z\"\n      },\n      {\n        \"progressPercent\": 100,\n        \"startTime\": \"2026-10-10T05:48:30.051814Z\",\n        \"endTime\": \"2026-10-10T05:48:33.089307Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"SEQUENCE\",\n        \"entityNames\": [\n          \"dbimp_t_seq\"\n        ]\n      },\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_seqtab\"\n        ]\n      }\n    ]\n  },\n  \"done\": true,\n  \"response\": {\n    \"@type\": \"type.googleapis.com/google.protobuf.Empty\"\n  }\n}\n"
+  }
+}

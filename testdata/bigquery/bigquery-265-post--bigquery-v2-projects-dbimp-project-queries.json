@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"BEGIN TRANSACTION; INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_tx (id) VALUES (1); COMMIT TRANSACTION\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:45:29 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_X5yBxZu6txSfGGeT86bSdNDPSOlw\",\n    \"location\": \"US\"\n  },\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"queryId\": \"job_X5yBxZu6txSfGGeT86bSdNDPSOlw\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"totalSlotMs\": \"726\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614727135\",\n  \"startTime\": \"1791614727160\",\n  \"endTime\": \"1791614729460\",\n  \"statementType\": \"SCRIPT\"\n}\n"
+  }
+}

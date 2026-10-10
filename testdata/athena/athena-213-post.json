@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T061814Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"7b937ad1-b9b4-4429-bba1-ae0788ddfd18\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "2145"
+      ],
+      "X-Amzn-Requestid": [
+        "dd4e04ba-d10a-47ff-8b87-7bfa452850ad"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:18:15 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT nosuch FROM dbimp_it_ext\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"7b937ad1-b9b4-4429-bba1-ae0788ddfd18\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/7b937ad1-b9b4-4429-bba1-ae0788ddfd18.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":145,\"QueryQueueTimeInMillis\":64,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":83,\"ServiceProcessingTimeInMillis\":91,\"TotalExecutionTimeInMillis\":383},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"COLUMN_NOT_FOUND: line 1:8: Column 'nosuch' cannot be resolved or requester is not authorized to access requested resources\",\"ErrorType\":1006,\"Retryable\":false},\"CompletionDateTime\":1.791613090318E9,\"State\":\"FAILED\",\"StateChangeReason\":\"COLUMN_NOT_FOUND: line 1:8: Column 'nosuch' cannot be resolved or requester is not authorized to access requested resources\",\"SubmissionDateTime\":1.791613089935E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/7b937ad1-b9b4-4429-bba1-ae0788ddfd18.csv\",\"Query\":\"SELECT nosuch FROM dbimp_it_ext\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"7b937ad1-b9b4-4429-bba1-ae0788ddfd18\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/7b937ad1-b9b4-4429-bba1-ae0788ddfd18.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":145,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613090318E9,\"State\":\"FAILED\",\"StateChangeReason\":\"COLUMN_NOT_FOUND: line 1:8: Column 'nosuch' cannot be resolved or requester is not authorized to access requested resources\",\"SubmissionDateTime\":1.791613089935E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT 1 AS a FROM (SELECT 2 AS b) AS dbimp_v\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:31 GMT"
+      ],
+      "Content-Length": [
+        "340"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to parse statements: failed to parse statement: Syntax error: Unexpected integer literal \\\"6\\\" [at 1:39]\"}],\"code\":400,\"message\":\"failed to parse statements: failed to parse statement: Syntax error: Unexpected integer literal \\\"6\\\" [at 1:39]\"}}"
+  }
+}

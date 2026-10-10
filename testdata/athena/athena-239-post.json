@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061905Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"90c7c233-4d21-42dc-9ead-f6c367b34aab\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1933"
+      ],
+      "X-Amzn-Requestid": [
+        "8274d184-b2b1-4a46-9315-63fbd33115cf"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:19:07 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT version()\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"90c7c233-4d21-42dc-9ead-f6c367b34aab\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/90c7c233-4d21-42dc-9ead-f6c367b34aab.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":12,\"QueryQueueTimeInMillis\":61,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":61,\"ServiceProcessingTimeInMillis\":73,\"TotalExecutionTimeInMillis\":207},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"FUNCTION_NOT_FOUND: line 1:8: Function 'version' not registered\",\"ErrorType\":1303,\"Retryable\":false},\"CompletionDateTime\":1.791613141864E9,\"State\":\"FAILED\",\"StateChangeReason\":\"FUNCTION_NOT_FOUND: line 1:8: Function 'version' not registered\",\"SubmissionDateTime\":1.791613141657E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/90c7c233-4d21-42dc-9ead-f6c367b34aab.csv\",\"Query\":\"SELECT version()\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"90c7c233-4d21-42dc-9ead-f6c367b34aab\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/90c7c233-4d21-42dc-9ead-f6c367b34aab.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":12,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613141864E9,\"State\":\"FAILED\",\"StateChangeReason\":\"FUNCTION_NOT_FOUND: line 1:8: Function 'version' not registered\",\"SubmissionDateTime\":1.791613141657E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT JSON '{\\\"a\\\":[1,2,{\\\"b\\\":null}]}' AS obj, JSON 'null' AS jnull, JSON '1' AS num, JSON '\\\"s\\\"' AS str, CAST(NULL AS JSON) AS sqlnull, JSON '12345678901234567890' AS big, JSON '1.0' AS dec\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=434"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:49 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"obj\",\n          \"type\": {\n            \"code\": \"JSON\"\n          }\n        },\n        {\n          \"name\": \"jnull\",\n          \"type\": {\n            \"code\": \"JSON\"\n          }\n        },\n        {\n          \"name\": \"num\",\n          \"type\": {\n            \"code\": \"JSON\"\n          }\n        },\n        {\n          \"name\": \"str\",\n          \"type\": {\n            \"code\": \"JSON\"\n          }\n        },\n        {\n          \"name\": \"sqlnull\",\n          \"type\": {\n            \"code\": \"JSON\"\n          }\n        },\n        {\n          \"name\": \"big\",\n          \"type\": {\n            \"code\": \"JSON\"\n          }\n        },\n        {\n          \"name\": \"dec\",\n          \"type\": {\n            \"code\": \"JSON\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"{\\\"a\\\":[1,2,{\\\"b\\\":null}]}\",\n      \"null\",\n      \"1\",\n      \"\\\"s\\\"\",\n      null,\n      \"12345678901234567890\",\n      \"1.0\"\n    ]\n  ]\n}\n"
+  }
+}

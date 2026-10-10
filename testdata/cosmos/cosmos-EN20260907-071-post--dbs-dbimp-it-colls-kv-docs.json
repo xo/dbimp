@@ -1,0 +1,96 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/dbs/dbimp_it/colls/kv/docs",
+    "header": {
+      "Content-Type": [
+        "application/query+json"
+      ],
+      "X-Ms-Documentdb-Isquery": [
+        "True"
+      ],
+      "X-Ms-Documentdb-Query-Enablecrosspartition": [
+        "True"
+      ],
+      "X-Ms-Date": [
+        "sat, 10 oct 2026 05:32:18 gmt"
+      ],
+      "X-Ms-Version": [
+        "2018-12-31"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"query\":\"SELECT c.ts, c.dt, c.tm, c.uuid, c.b64, c.dec, c.ts < '2027' AS cmp FROM c WHERE c.id = 'ty1'\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Ms-Resource-Usage": [
+        "databases=1;collections=1;documentSize=0;documentsSize=0;documentsCount=0;collectionSize=0;storedProcedures=0;triggers=0;functions=0"
+      ],
+      "X-Ms-Session-Token": [
+        "0:0#0"
+      ],
+      "X-Ms-Resource-Quota": [
+        "databases=100;collections=50;documentSize=10240;documentsSize=10485760;documentsCount=-1;collectionSize=10485760;storedProcedures=25;triggers=25;functions=25"
+      ],
+      "Access-Control-Allow-Headers": [
+        "*"
+      ],
+      "X-Ms-Documentdb-Partitionkeyrangeid": [
+        "0"
+      ],
+      "Access-Control-Allow-Methods": [
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      ],
+      "X-Ms-Gatewayversion": [
+        "2.0.0-unknown"
+      ],
+      "Access-Control-Max-Age": [
+        "3600"
+      ],
+      "Content-Location": [
+        "https://127.0.0.1:55137/dbs/dbimp_it/colls/kv/docs"
+      ],
+      "Server": [
+        "PGSQL"
+      ],
+      "X-Ms-Documentdb-Collection-Index-Transformation-Progress": [
+        "100"
+      ],
+      "X-Ms-Interopandsdk-Time-Ms": [
+        "15"
+      ],
+      "Content-Length": [
+        "345"
+      ],
+      "X-Ms-Item-Count": [
+        "1"
+      ],
+      "X-Ms-Request-Duration-Ms": [
+        "1.92"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:18 GMT"
+      ],
+      "X-Ms-Request-Charge": [
+        "1"
+      ],
+      "X-Ms-Activity-Id": [
+        "57a2e0d9-6f7d-075f-3f0e-7d98a0470933"
+      ],
+      "Access-Control-Allow-Origin": [
+        "*"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\n  \"_count\": 1,\n  \"Documents\": [\n    {\n      \"dt\": \"2026-10-10\",\n      \"tm\": \"12:34:56.789\",\n      \"ts\": \"2026-10-10T12:00:00Z\",\n      \"b64\": \"AAEC/w==\",\n      \"cmp\": true,\n      \"dec\": \"12345678901234567890.123456789\",\n      \"uuid\": \"123e4567-e89b-12d3-a456-426614174000\"\n    }\n  ],\n  \"_rid\": \"prwTAOZU-Sk=\",\n  \"_attachments\": \"attachments/\"\n}"
+  }
+}

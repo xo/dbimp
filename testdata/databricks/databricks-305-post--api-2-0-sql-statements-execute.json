@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements/execute",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT 1 AS a\"}"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:37:09 GMT"
+      ],
+      "X-Request-Id": [
+        "e55c3d87-043d-4b8b-b0cf-0354f57f6621"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"e55c3d87-043d-4b8b-b0cf-0354f57f6621\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=22"
+      ]
+    },
+    "body": "{\"error_code\":\"ENDPOINT_NOT_FOUND\",\"message\":\"No API found for 'POST /sql/statements/execute'\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.RequestInfo\",\"request_id\":\"e55c3d87-043d-4b8b-b0cf-0354f57f6621\",\"serving_data\":\"\"}]}"
+  }
+}

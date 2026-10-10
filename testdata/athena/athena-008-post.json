@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061042Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"d3275457-e032-478f-b86c-73c1dfbeadf6\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1911"
+      ],
+      "X-Amzn-Requestid": [
+        "999f2518-7873-49ed-b4f9-567b4de65e3f"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:10:42 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"CREATE TABLE dbimp_it_ice (id int, name string) LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_ice/' TBLPROPERTIES ('table_type'='ICEBERG')\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d3275457-e032-478f-b86c-73c1dfbeadf6\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d3275457-e032-478f-b86c-73c1dfbeadf6.txt\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DDL\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":361,\"QueryQueueTimeInMillis\":41,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":19,\"ServiceProcessingTimeInMillis\":27,\"TotalExecutionTimeInMillis\":448},\"Status\":{\"CompletionDateTime\":1.791612634559E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612634111E9},\"SubstatementType\":\"CREATE_TABLE\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d3275457-e032-478f-b86c-73c1dfbeadf6.txt\",\"Query\":\"CREATE TABLE dbimp_it_ice (id int, name string) LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_ice/' TBLPROPERTIES ('table_type'='ICEBERG')\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d3275457-e032-478f-b86c-73c1dfbeadf6\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d3275457-e032-478f-b86c-73c1dfbeadf6.txt\"},\"Stats\":{\"EngineExecutionTimeInMillis\":361,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791612634559E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612634111E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

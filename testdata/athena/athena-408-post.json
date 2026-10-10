@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T062627Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryString\":\"CREATE EXTERNAL TABLE dbimp_nosuch.t (id int) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_x/'\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0143-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "59"
+      ],
+      "X-Amzn-Requestid": [
+        "52c0493e-cb23-4506-af38-3a8ca731324e"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:26:28 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"f5b692a4-23cc-4ba0-b96a-473a9434a2a5\"}"
+  }
+}

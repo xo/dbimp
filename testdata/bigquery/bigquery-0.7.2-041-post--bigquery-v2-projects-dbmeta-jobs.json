@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/jobs",
+    "header": {},
+    "body": "{\"configuration\":{\"query\":{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false}},\"jobReference\":{\"projectId\":\"dbmeta\",\"jobId\":\"dbimp-job-1\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "308"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:30:46 GMT"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to add query result to dynamic destination table: dataset dbimp-job-1 is already created\"}],\"code\":400,\"message\":\"failed to add query result to dynamic destination table: dataset dbimp-job-1 is already created\"}}"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT id FROM dbmeta.dbmeta.dbimp_it_dml ORDER BY id LIMIT @n\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"INT64\"},\"parameterValue\":{\"value\":\"1\"},\"name\":\"n\"}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:10 GMT"
+      ],
+      "Content-Length": [
+        "210"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"zoGfVI8kpJgURe2KDo0uJdZfSih\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"id\",\"type\":\"INTEGER\"}]},\"rows\":[{\"f\":[{\"v\":\"1\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

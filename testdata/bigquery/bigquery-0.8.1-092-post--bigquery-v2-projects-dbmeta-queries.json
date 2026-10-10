@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT INTERVAL 1 DAY AS d, INTERVAL '1-2 3 4:5:6.789' YEAR TO SECOND AS whole, INTERVAL -5 MONTH AS neg, MAKE_INTERVAL(year => 10000) AS big\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ],
+      "Content-Length": [
+        "444"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"8RscWFJPwgujrJiQ2sdH8BaEhkl\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"d\",\"type\":\"INTERVAL\"},{\"mode\":\"NULLABLE\",\"name\":\"whole\",\"type\":\"INTERVAL\"},{\"mode\":\"NULLABLE\",\"name\":\"neg\",\"type\":\"INTERVAL\"},{\"mode\":\"NULLABLE\",\"name\":\"big\",\"type\":\"INTERVAL\"}]},\"rows\":[{\"f\":[{\"v\":\"0-0 1 0:0:0\"},{\"v\":\"1-2 3 4:5:6.789\"},{\"v\":\"-0-5 0 0:0:0\"},{\"v\":\"10000-0 0 0:0:0\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

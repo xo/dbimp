@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT @p AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"INTERVAL\"},\"parameterValue\":{\"value\":\"1-2 3 4:5:6\"},\"name\":\"p\"}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:31:03 GMT"
+      ],
+      "Content-Length": [
+        "218"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"p9KTjcvsHwk9J71IJKZGq77SbsH\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":\"1-2 3 4:5:6\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

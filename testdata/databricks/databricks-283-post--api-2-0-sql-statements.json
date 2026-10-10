@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"START TRANSACTION\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "3779a7d8-202f-4a2d-8060-7e63d9b1e36c"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:56 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"3779a7d8-202f-4a2d-8060-7e63d9b1e36c\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=270"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-9ad7-1306-b2aa-7dc2b24ac4bc\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"\\n[INVALID_STATEMENT_OR_CLAUSE] The statement or clause: START TRANSACTION is not valid. SQLSTATE: 42601\\n== SQL (line 1, position 1) ==\\nSTART TRANSACTION\\n^^^^^^^^^^^^^^^^^\\n\"},\"sql_state\":\"42601\"}}"
+  }
+}

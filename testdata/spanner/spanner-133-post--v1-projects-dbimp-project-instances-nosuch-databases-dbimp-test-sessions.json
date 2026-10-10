@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/nosuch/databases/dbimp_test/sessions",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:21 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=263"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Operation denied by [IAM permission 'spanner.sessions.create' on resource '//spanner.googleapis.com/projects/dbimp-project/instances/nosuch/databases/dbimp_test'].\",\n    \"status\": \"PERMISSION_DENIED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"IAM_PERMISSION_DENIED\",\n        \"domain\": \"iam.googleapis.com\",\n        \"metadata\": {\n          \"permission\": \"spanner.sessions.create\",\n          \"resource\": \"projects/dbimp-project/instances/nosuch/databases/dbimp_test\"\n        }\n      }\n    ]\n  }\n}\n"
+  }
+}

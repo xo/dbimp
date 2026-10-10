@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT table_name, constraint_name, constraint_type FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name, constraint_name\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=431"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:54:44 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"table_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"constraint_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"constraint_type\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"dbimp_t_big\",\n      \"CK_IS_NOT_NULL_dbimp_t_big_id\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_big\",\n      \"PK_dbimp_t_big\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_chi\",\n      \"CK_IS_NOT_NULL_dbimp_t_chi_cid\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_chi\",\n      \"CK_IS_NOT_NULL_dbimp_t_chi_pid\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_chi\",\n      \"PK_dbimp_t_chi\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"CK_IS_NOT_NULL_dbimp_t_dml_id\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"PK_dbimp_t_dml\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_doc\",\n      \"CK_IS_NOT_NULL_dbimp_t_doc_id\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_doc\",\n      \"PK_dbimp_t_doc\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_fk\",\n      \"CK_IS_NOT_NULL_dbimp_t_fk_id\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_fk\",\n      \"PK_dbimp_t_fk\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_fk\",\n      \"dbimp_t_chk\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_fk\",\n      \"dbimp_t_fk_par\",\n      \"FOREIGN KEY\"\n    ],\n    [\n      \"dbimp_t_many\",\n      \"CK_IS_NOT_NULL_dbimp_t_many_id\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_many\",\n      \"PK_dbimp_t_many\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_par\",\n      \"CK_IS_NOT_NULL_dbimp_t_par_pid\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_par\",\n      \"PK_dbimp_t_par\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_seqtab\",\n      \"PK_dbimp_t_seqtab\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_ttl\",\n      \"CK_IS_NOT_NULL_dbimp_t_ttl_id\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_ttl\",\n      \"CK_IS_NOT_NULL_dbimp_t_ttl_ts\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_ttl\",\n      \"PK_dbimp_t_ttl\",\n      \"PRIMARY KEY\"\n    ],\n    [\n      \"dbimp_t_types\",\n      \"CK_IS_NOT_NULL_dbimp_t_types_id\",\n      \"CHECK\"\n    ],\n    [\n      \"dbimp_t_types\",\n      \"PK_dbimp_t_types\",\n      \"PRIMARY KEY\"\n    ]\n  ]\n}\n"
+  }
+}

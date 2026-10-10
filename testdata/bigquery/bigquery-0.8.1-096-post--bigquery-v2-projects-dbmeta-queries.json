@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT STRUCT(1 AS a, 'x' AS b) AS s, STRUCT(CAST(NULL AS INT64) AS a) AS withnull, CAST(NULL AS STRUCT<a INT64>) AS nullstruct\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "602"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"z2cEhqPiKBa5M5z18kQy8cswp8X\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"b\",\"type\":\"STRING\"}],\"mode\":\"NULLABLE\",\"name\":\"s\",\"type\":\"RECORD\"},{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"}],\"mode\":\"NULLABLE\",\"name\":\"withnull\",\"type\":\"RECORD\"},{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"}],\"mode\":\"NULLABLE\",\"name\":\"nullstruct\",\"type\":\"RECORD\"}]},\"rows\":[{\"f\":[{\"v\":{\"f\":[{\"v\":\"1\"},{\"v\":\"x\"}]}},{\"v\":{\"f\":[{\"v\":null}]}},{\"v\":null}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

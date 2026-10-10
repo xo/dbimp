@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"BEGIN ATOMIC INSERT INTO dbimp_t_src VALUES (10, 'tx'); END\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"04884aaf-01f6-433e-b1e9-318b959c9742\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=564"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:58 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "04884aaf-01f6-433e-b1e9-318b959c9742"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-9c24-1053-b5ea-ee2bae0a7ade\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[TRANSACTION_NOT_SUPPORTED.WRITE_NON_CATALOG_MANAGED_TABLE] Failed to execute the statement. Table `workspace`.`dbimp`.`dbimp_t_src` does not have table feature 'catalogManaged' enabled. Only tables with this feature enabled can be written to in a transaction. Please enable this feature and then retry the transaction.\"},\"sql_state\":\"0A000\"}}"
+  }
+}

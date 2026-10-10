@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT @p AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"TIME\"},\"parameterValue\":{\"value\":\"12:34:56.789\"},\"name\":\"p\"}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "219"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:09 GMT"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"6eCYKtK1lCKz2RWAGpXFI2cBVcv\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":\"12:34:56.789\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261010T062604Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"c151f02d-c73f-433e-bab4-6832d525725d\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1839"
+      ],
+      "X-Amzn-Requestid": [
+        "547718aa-af30-4e5e-9f9b-03354d8f4cdf"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:26:05 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT * FROM \\\"lambda:dbimp_nosuch\\\".dbimp.t\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"c151f02d-c73f-433e-bab4-6832d525725d\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/c151f02d-c73f-433e-bab4-6832d525725d.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"QueryQueueTimeInMillis\":63,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"TotalExecutionTimeInMillis\":63},\"Status\":{\"AthenaError\":{\"ErrorCategory\":3,\"ErrorMessage\":\"Unknown error occurred.\",\"ErrorType\":9999,\"Retryable\":false},\"CompletionDateTime\":1.791613558206E9,\"State\":\"FAILED\",\"StateChangeReason\":\"You are not authorized to perform: athena:GetDataCatalog on the resource. After your AWS administrator or you have updated your permissions, please try again.\",\"SubmissionDateTime\":1.791613558143E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/c151f02d-c73f-433e-bab4-6832d525725d.csv\",\"Query\":\"SELECT * FROM \\\"lambda:dbimp_nosuch\\\".dbimp.t\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"c151f02d-c73f-433e-bab4-6832d525725d\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/c151f02d-c73f-433e-bab4-6832d525725d.csv\"},\"Stats\":{},\"Status\":{\"CompletionDateTime\":1.791613558206E9,\"State\":\"FAILED\",\"StateChangeReason\":\"You are not authorized to perform: athena:GetDataCatalog on the resource. After your AWS administrator or you have updated your permissions, please try again.\",\"SubmissionDateTime\":1.791613558143E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

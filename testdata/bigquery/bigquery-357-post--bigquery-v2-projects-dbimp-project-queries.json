@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"GRANT `roles/bigquery.dataViewer` ON SCHEMA `dbimp-project`.dbimp_it_ds TO 'user:a@example.com'\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:36 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Dataset dbimp-project:dbimp_it_ds: Permission bigquery.datasets.get denied on dataset dbimp-project:dbimp_it_ds (or it may not exist).\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Dataset dbimp-project:dbimp_it_ds: Permission bigquery.datasets.get denied on dataset dbimp-project:dbimp_it_ds (or it may not exist).\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
+  }
+}

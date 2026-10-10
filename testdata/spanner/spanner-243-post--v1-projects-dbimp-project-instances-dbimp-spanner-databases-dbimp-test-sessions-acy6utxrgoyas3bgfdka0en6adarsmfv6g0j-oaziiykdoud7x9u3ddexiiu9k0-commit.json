@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:commit",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"singleUseTransaction\":{\"readWrite\":{}},\"mutations\":[{\"insert\":{\"table\":\"dbimp_t_iv\",\"columns\":[\"id\",\"iv\",\"f32\",\"ts\",\"arr_iv\"],\"values\":[[\"1\",\"P1Y2M3DT4H5M6.789123456S\",0.1,\"1969-07-20T20:17:40.123456789Z\",[\"P1D\",\"P-1M\"]],[\"2\",\"P-1Y-2M-3DT-4H-5M-6.5S\",3.4028235e+38,\"1900-01-01T00:00:00.000000001Z\",[\"PT0.000000001S\"]],[\"3\",\"PT-0.5S\",-0.1,\"1970-01-01T00:00:00.999999999Z\",[]],[\"4\",null,null,null,null]]}}]}"
+  },
+  "response": {
+    "status": 404,
+    "header": {
+      "Server-Timing": [
+        "gfet4t7; dur=651"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:55:17 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"Table not found: dbimp_t_iv\",\n    \"status\": \"NOT_FOUND\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ResourceInfo\",\n        \"resourceType\": \"spanner.googleapis.com/Table\",\n        \"resourceName\": \"dbimp_t_iv\",\n        \"description\": \"Table not found\"\n      }\n    ]\n  }\n}\n"
+  }
+}

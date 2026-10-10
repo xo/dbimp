@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT s.a, s.b FROM UNNEST([STRUCT(1 AS a, 'x' AS b), STRUCT(2, 'y')]) AS s\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:32:34 GMT"
+      ],
+      "Content-Length": [
+        "294"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"lrnIAGGTb8SG1WMZrKUK8DYg4iU\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"b\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":\"1\"},{\"v\":\"x\"}]},{\"f\":[{\"v\":\"2\"},{\"v\":\"y\"}]}],\"totalRows\":\"2\",\"jobComplete\":true}"
+  }
+}

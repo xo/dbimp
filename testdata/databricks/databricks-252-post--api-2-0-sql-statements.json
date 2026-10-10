@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"EXPLAIN SELECT id FROM dbimp_t_dml WHERE id > 1\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "3c520579-378f-42ee-9a3b-87cf2681e594"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"3c520579-378f-42ee-9a3b-87cf2681e594\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=542"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:32 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-8ccc-1d03-9539-e54702df3f0d\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":1,\"columns\":[{\"name\":\"plan\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":0}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":8}],\"total_row_count\":8,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":8,\"data_array\":[[\"Error occurred during query planning: \"],[\"[TABLE_OR_VIEW_NOT_FOUND] The table or view `dbimp_t_dml` cannot be found. Verify the spelling and correctness of the schema and catalog.\"],[\"Search path: [`system`.`session`, `system`.`builtin`, `system`.`ai`, `workspace`.`dbimp`].\"],[\"If you did not qualify the name with a schema, verify the current_schema() output, or qualify the name with the correct schema and catalog.\"],[\"To tolerate the error on drop use DROP VIEW IF EXISTS or DROP TABLE IF EXISTS. SQLSTATE: 42P01; line 1 pos 23;\"],[\"'Project ['id]\"],[\"+- 'Filter ('id > 1)\"],[\"   +- 'UnresolvedRelation [dbimp_t_dml], [], false\"]]}}"
+  }
+}

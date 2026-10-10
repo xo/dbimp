@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T062640Z"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"47eb154e-f6e7-450a-82d4-d038d46b9a88\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:26:41 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "1531"
+      ],
+      "X-Amzn-Requestid": [
+        "f7c8d826-fa95-48bf-8cd5-8310f52cb310"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m) CROSS JOIN UNNEST(sequence(1,50000)) AS v(o)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"47eb154e-f6e7-450a-82d4-d038d46b9a88\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/47eb154e-f6e7-450a-82d4-d038d46b9a88.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"QueryQueueTimeInMillis\":96,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":166,\"TotalExecutionTimeInMillis\":301},\"Status\":{\"State\":\"RUNNING\",\"SubmissionDateTime\":1.791613600808E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/47eb154e-f6e7-450a-82d4-d038d46b9a88.csv\",\"Query\":\"SELECT count(*) FROM UNNEST(sequence(1,50000)) AS t(n) CROSS JOIN UNNEST(sequence(1,50000)) AS u(m) CROSS JOIN UNNEST(sequence(1,50000)) AS v(o)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"47eb154e-f6e7-450a-82d4-d038d46b9a88\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/47eb154e-f6e7-450a-82d4-d038d46b9a88.csv\"},\"Stats\":{},\"Status\":{\"State\":\"RUNNING\",\"SubmissionDateTime\":1.791613600808E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_kv/insertAll",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"rows\":[{\"insertId\":\"1\",\"json\":{\"id\":1,\"s\":\"a\"}}]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:38 GMT"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#tableDataInsertAllResponse\",\n  \"insertErrors\": [\n    {\n      \"index\": 0,\n      \"errors\": [\n        {\n          \"reason\": \"invalid\",\n          \"location\": \"s\",\n          \"debugInfo\": \"\",\n          \"message\": \"no such field: s.\"\n        }\n      ]\n    }\n  ]\n}\n"
+  }
+}

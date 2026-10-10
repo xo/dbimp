@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT constraint_name, table_name, column_name FROM workspace.information_schema.key_column_usage WHERE table_schema = 'dbimp' ORDER BY constraint_name\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:10 GMT"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "4a1e87c0-af40-4100-8793-9ccbd271336a"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"4a1e87c0-af40-4100-8793-9ccbd271336a\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=917"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-7f83-1216-a08f-ec4d368e213c\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":3,\"columns\":[{\"name\":\"constraint_name\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":0},{\"name\":\"table_name\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":1},{\"name\":\"column_name\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":2}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":2}],\"total_row_count\":2,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":2,\"data_array\":[[\"dbimp_t_fk_pk\",\"dbimp_t_fk\",\"pk_id\"],[\"dbimp_t_pk\",\"dbimp_t_pk\",\"id\"]]}}"
+  }
+}

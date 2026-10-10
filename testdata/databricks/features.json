@@ -1,0 +1,900 @@
+{
+  "driver": "databricks",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "deepseek-v4-flash",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "github.com/databricks/databricks-sql-go",
+      "kind": "driver",
+      "date": "2026-10-10"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert",
+      "evidence": "databricks-212-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/select",
+      "evidence": "databricks-219-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update",
+      "evidence": "databricks-214-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/delete",
+      "evidence": "databricks-215-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/merge",
+      "evidence": "databricks-216-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "crud",
+      "name": "truncate",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/truncate",
+      "evidence": "databricks-217-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "crud",
+      "name": "create table as select",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/create_table_as_select",
+      "evidence": "databricks-222-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/table",
+      "evidence": "databricks-211-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/primary_key",
+      "evidence": "databricks-232-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/foreign_key",
+      "evidence": "databricks-233-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "enforced primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/enforced_primary_key",
+      "evidence": "databricks-234-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "enforced foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/enforced_foreign_key",
+      "evidence": "databricks-235-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/view",
+      "evidence": "databricks-223-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "temporary view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/temporary_view",
+      "evidence": "databricks-291-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/default_value",
+      "evidence": "databricks-244-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "generated column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/generated_column",
+      "evidence": "databricks-238-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "identity column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/identity_column",
+      "evidence": "databricks-241-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "function",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/function",
+      "evidence": "databricks-247-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table add column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_add_column",
+      "evidence": "databricks-226-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table rename column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_rename_column",
+      "evidence": "databricks-228-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table drop column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_drop_column",
+      "evidence": "databricks-229-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table rename",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_rename",
+      "evidence": "databricks-230-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/named_parameters",
+      "evidence": "databricks-126-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "positional parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/positional_parameters",
+      "evidence": "databricks-131-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "identifier clause",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/identifier_clause",
+      "evidence": "databricks-133-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "binary parameter",
+      "sources": [
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/binary_parameter",
+      "evidence": "databricks-110-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "complex parameter",
+      "sources": [
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/complex_parameter",
+      "evidence": "databricks-117-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "multi statement request",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/multi_statement_request",
+      "evidence": "databricks-267-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "compound statement",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/compound_statement",
+      "evidence": "databricks-278-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "script variables",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/script_variables",
+      "evidence": "databricks-278-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "sessions",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/sessions",
+      "evidence": "databricks-294-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "session configuration",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/session_configuration",
+      "evidence": "databricks-255-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction commit",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/transaction_commit",
+      "evidence": "databricks-284-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction rollback",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/transaction_rollback",
+      "evidence": "databricks-285-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "async execution",
+      "sources": [
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/async_execution",
+      "evidence": "databricks-026-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "statement cancel",
+      "sources": [
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/statement_cancel",
+      "evidence": "databricks-183-post--api-2-0-sql-statements-01f1c46c-4962-158c-a827-62527c62fe53-cancel.json"
+    },
+    {
+      "kind": "feature",
+      "name": "row limit",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/row_limit",
+      "evidence": "databricks-146-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "byte limit",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/byte_limit",
+      "evidence": "databricks-150-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "external links",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/external_links",
+      "evidence": "databricks-045-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "arrow stream",
+      "sources": [
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/arrow_stream",
+      "evidence": "databricks-046-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "csv format",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/csv_format",
+      "evidence": "databricks-048-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "inline arrow",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/inline_arrow",
+      "evidence": "databricks-047-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "result chunk fetch",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/result_chunk_fetch",
+      "evidence": "databricks-137-get--api-2-0-sql-statements-01f1c46c-34d9-12ec-823e-0d7b818eccd4-result-chunks-0.json"
+    },
+    {
+      "kind": "feature",
+      "name": "information schema",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/information_schema",
+      "evidence": "databricks-060-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "show statements",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/show_statements",
+      "evidence": "databricks-064-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "describe table",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/describe_table",
+      "evidence": "databricks-067-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/explain",
+      "evidence": "databricks-252-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "gzip response",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/gzip_response",
+      "evidence": "databricks-295-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "version function",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/version_function",
+      "evidence": "databricks-203-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "default catalog and schema",
+      "sources": [
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/default_catalog_and_schema",
+      "evidence": "databricks-204-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "affected row counts",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/affected_row_counts",
+      "evidence": "databricks-214-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "comments",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/comments",
+      "evidence": "databricks-274-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "trailing semicolon",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/trailing_semicolon",
+      "evidence": "databricks-270-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "warehouse auto resume",
+      "sources": [
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/warehouse_auto_resume",
+      "evidence": "databricks-001-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "feature",
+      "name": "statement result retention",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/statement_result_retention",
+      "evidence": "databricks-313-get--api-2-0-sql-statements-01f1c46b-e9fe-1a72-81ef-0a076d8e9fc9.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query history",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/query_history",
+      "evidence": "databricks-210-get--api-2-0-sql-history-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "warehouse api",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/warehouse_api",
+      "evidence": "databricks-205-get--api-2-0-sql-warehouses-1111222233334444.json"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TINYINT",
+      "evidence": "databricks-069-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/SMALLINT",
+      "evidence": "databricks-069-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "INT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INT",
+      "evidence": "databricks-069-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BIGINT",
+      "evidence": "databricks-069-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/FLOAT",
+      "evidence": "databricks-071-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DOUBLE",
+      "evidence": "databricks-071-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DECIMAL",
+      "evidence": "databricks-075-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BOOLEAN",
+      "evidence": "databricks-076-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "STRING",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/STRING",
+      "evidence": "databricks-077-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "BINARY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BINARY",
+      "evidence": "databricks-078-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DATE",
+      "evidence": "databricks-079-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP",
+      "evidence": "databricks-081-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP_NTZ",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP_NTZ",
+      "evidence": "databricks-082-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL YEAR TO MONTH",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTERVAL_YEAR_TO_MONTH",
+      "evidence": "databricks-083-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL DAY TO SECOND",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTERVAL_DAY_TO_SECOND",
+      "evidence": "databricks-084-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "ARRAY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/ARRAY",
+      "evidence": "databricks-085-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "MAP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/MAP",
+      "evidence": "databricks-086-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "STRUCT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/STRUCT",
+      "evidence": "databricks-087-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "VARIANT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/VARIANT",
+      "evidence": "databricks-089-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "GEOMETRY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/GEOMETRY",
+      "evidence": "databricks-090-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "GEOGRAPHY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/GEOGRAPHY",
+      "evidence": "databricks-091-post--api-2-0-sql-statements.json"
+    },
+    {
+      "kind": "type",
+      "name": "VOID",
+      "sources": [
+        "deepseek-v4-flash",
+        "github.com/databricks/databricks-sql-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/VOID",
+      "evidence": "databricks-048-post--api-2-0-sql-statements.json"
+    }
+  ]
+}

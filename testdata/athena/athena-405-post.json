@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T062619Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"bd4940a0-411e-41b8-9956-13148935ec9b\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:26:19 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "1982"
+      ],
+      "X-Amzn-Requestid": [
+        "c7ff1a9a-dbdb-4e34-9ac6-846d8904fe32"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT id FROM dbimp_it_ice FOR VERSION AS OF 1\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"bd4940a0-411e-41b8-9956-13148935ec9b\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/bd4940a0-411e-41b8-9956-13148935ec9b.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":278,\"QueryQueueTimeInMillis\":62,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":50,\"ServiceProcessingTimeInMillis\":64,\"TotalExecutionTimeInMillis\":454},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"NOT_SUPPORTED: Unsupported type for table version: integer\",\"ErrorType\":1200,\"Retryable\":false},\"CompletionDateTime\":1.791613574097E9,\"State\":\"FAILED\",\"StateChangeReason\":\"NOT_SUPPORTED: Unsupported type for table version: integer\",\"SubmissionDateTime\":1.791613573643E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/bd4940a0-411e-41b8-9956-13148935ec9b.csv\",\"Query\":\"SELECT id FROM dbimp_it_ice FOR VERSION AS OF 1\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"bd4940a0-411e-41b8-9956-13148935ec9b\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/bd4940a0-411e-41b8-9956-13148935ec9b.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":278,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613574097E9,\"State\":\"FAILED\",\"StateChangeReason\":\"NOT_SUPPORTED: Unsupported type for table version: integer\",\"SubmissionDateTime\":1.791613573643E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

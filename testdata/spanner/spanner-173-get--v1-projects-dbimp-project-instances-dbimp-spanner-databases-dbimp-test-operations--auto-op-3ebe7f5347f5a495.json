@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_3ebe7f5347f5a495",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:50:16 GMT"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1178"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_3ebe7f5347f5a495\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"DROP TABLE dbimp_t_nosuch\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:50:06.172270Z\",\n        \"endTime\": \"2026-10-10T05:50:06.901643Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"DROP\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_nosuch\"\n        ]\n      }\n    ]\n  },\n  \"done\": true,\n  \"error\": {\n    \"code\": 5,\n    \"message\": \"Table not found: dbimp_t_nosuch\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ResourceInfo\",\n        \"resourceType\": \"spanner.googleapis.com/Table\",\n        \"resourceName\": \"dbimp_t_nosuch\",\n        \"description\": \"Table not found\"\n      }\n    ]\n  }\n}\n"
+  }
+}

@@ -293,11 +293,15 @@ with `"server": "second"` goes to the URL of the flag `-second`, such as the
 Controller of Pinot, through which the setup makes the tables that the
 Broker cannot. A script with `"auth": "bearer"` sends the password of each
 URL as a Bearer token, for a server that takes a token and no user, such as
-libSQL with a JWT (D94). A script with `"auth": "sigv4"`, a `region` and a
+libSQL with a JWT (D94). A script with `"auth": "cosmos"` signs each request with
+the master key of Azure Cosmos DB, which is the password of each URL, and the
+flag `-insecure` accepts the certificate that the emulator of Cosmos DB makes
+for itself. A script with `"auth": "sigv4"`, a `region` and a
 `service` signs each request with AWS Signature Version 4, with the user of
 each URL as the access key and its password as the secret key, as DynamoDB
 takes them. It signs the host, `X-Amz-Date`, each header that the script
-sets, and the body, with `dbimp.SignV4`. It replaces the files and the entries that an
+sets, and the body, with `dbimp.SignV4`. A request with `"auth": "none"` sends no credentials at all, and a request
+with `"auth": "wrong"` sends a password that differs from the one of the URL. It replaces the files and the entries that an
 earlier run wrote for the same release. [DRIVER.md](DRIVER.md) shows how to run
 it in step 6. The gates and `Replay` skip `requests.json`. The recorder writes
 the value of `Authorization`, `Cookie` and `Set-Cookie` as `REDACTED`.

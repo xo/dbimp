@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id FROM dbimp_t_dml WHERE id = 'x'\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:09 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=447"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"No matching signature for operator = for argument types: INT64, STRING\\\\n  Signature: T1 = T1\\\\n    Unable to find common supertype for templated argument \\u003cT1\\u003e\\\\n      Input types for \\u003cT1\\u003e: {INT64, STRING}\\\\n  Signature: JSON = JSON\\\\n    Argument 1: Unable to coerce type INT64 to expected type JSON\\\\n  Signature: JSON = JSON\\\\n    Argument 2: Unable to coerce type STRING to expected type JSON [at 1:34]\\\\nSELECT id FROM dbimp_t_dml WHERE id = \\\\'x\\\\'\\\\n                                 ^\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        \"message\": \"No matching signature for operator = for argument types: INT64, STRING\\n  Signature: T1 = T1\\n    Unable to find common supertype for templated argument \\u003cT1\\u003e\\n      Input types for \\u003cT1\\u003e: {INT64, STRING}\\n  Signature: JSON = JSON\\n    Argument 1: Unable to coerce type INT64 to expected type JSON\\n  Signature: JSON = JSON\\n    Argument 2: Unable to coerce type STRING to expected type JSON [at 1:34]\\nSELECT id FROM dbimp_t_dml WHERE id = 'x'\\n                                 ^\"\n      }\n    ]\n  }\n}\n"
+  }
+}

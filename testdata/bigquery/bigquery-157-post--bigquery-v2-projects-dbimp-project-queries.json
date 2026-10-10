@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (?, ?)\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"INT64\"},\"parameterValue\":{\"value\":\"8\"}},{\"parameterType\":{\"type\":\"STRING\"},\"parameterValue\":{\"value\":\"eight\"}}],\"parameterMode\":\"POSITIONAL\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:44:13 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"id\",\n        \"type\": \"INTEGER\"\n      },\n      {\n        \"name\": \"s\",\n        \"type\": \"STRING\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_Pd47JRzj9J68JkxMxg5ar6gOeQKA\",\n    \"location\": \"US\"\n  },\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": false,\n  \"numDmlAffectedRows\": \"1\",\n  \"dmlStats\": {\n    \"insertedRowCount\": \"1\",\n    \"dmlMode\": \"COARSE_GRAINED_DML\"\n  },\n  \"queryId\": \"job_Pd47JRzj9J68JkxMxg5ar6gOeQKA\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"totalSlotMs\": \"2054\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614652423\",\n  \"startTime\": \"1791614652581\",\n  \"endTime\": \"1791614653673\",\n  \"statementType\": \"INSERT\"\n}\n"
+  }
+}

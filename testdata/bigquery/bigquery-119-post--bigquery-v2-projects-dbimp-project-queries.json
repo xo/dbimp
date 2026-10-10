@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT ? AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"BOOL\"},\"parameterValue\":{\"value\":\"true\"}}],\"parameterMode\":\"POSITIONAL\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:43:55 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"a\",\n        \"type\": \"BOOLEAN\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_XytBAO7bhH1xgAXje9AxGH2esZ8M\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"1\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": \"true\"\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": true,\n  \"queryId\": \"job_XytBAO7bhH1xgAXje9AxGH2esZ8M\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614634903\",\n  \"startTime\": \"1791614634914\",\n  \"endTime\": \"1791614634974\",\n  \"pageRowCount\": \"1\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

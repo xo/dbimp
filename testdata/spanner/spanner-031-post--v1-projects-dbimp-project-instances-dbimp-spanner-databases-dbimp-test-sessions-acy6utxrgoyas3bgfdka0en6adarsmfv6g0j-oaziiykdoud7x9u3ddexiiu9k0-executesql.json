@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT id, s FROM dbimp_t_dml WHERE id = 1\",\"queryMode\":\"PLAN\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:37 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=448"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"id\",\n          \"type\": {\n            \"code\": \"INT64\"\n          }\n        },\n        {\n          \"name\": \"s\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"stats\": {\n    \"queryPlan\": {\n      \"planNodes\": [\n        {\n          \"kind\": \"RELATIONAL\",\n          \"displayName\": \"Distributed Union\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 1\n            },\n            {\n              \"childIndex\": 13,\n              \"type\": \"Split Range\"\n            }\n          ],\n          \"metadata\": {\n            \"split_ranges_aligned\": \"false\",\n            \"distribution_table\": \"dbimp_t_dml\",\n            \"subquery_cluster_node\": \"1\",\n            \"execution_method\": \"Row\"\n          }\n        },\n        {\n          \"index\": 1,\n          \"kind\": \"RELATIONAL\",\n          \"displayName\": \"Distributed Union\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 2\n            }\n          ],\n          \"metadata\": {\n            \"call_type\": \"Local\",\n            \"execution_method\": \"Row\",\n            \"subquery_cluster_node\": \"2\"\n          }\n        },\n        {\n          \"index\": 2,\n          \"kind\": \"RELATIONAL\",\n          \"displayName\": \"Serialize Result\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 3\n            },\n            {\n              \"childIndex\": 11\n            },\n            {\n              \"childIndex\": 12\n            }\n          ],\n          \"metadata\": {\n            \"execution_method\": \"Row\"\n          }\n        },\n        {\n          \"index\": 3,\n          \"kind\": \"RELATIONAL\",\n          \"displayName\": \"Filter Scan\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 4\n            }\n          ],\n          \"metadata\": {\n            \"execution_method\": \"Row\",\n            \"seekable_key_size\": \"0\"\n          }\n        },\n        {\n          \"index\": 4,\n          \"kind\": \"RELATIONAL\",\n          \"displayName\": \"Scan\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 5,\n              \"variable\": \"id\"\n            },\n            {\n              \"childIndex\": 6,\n              \"variable\": \"s\"\n            },\n            {\n              \"childIndex\": 10,\n              \"type\": \"Seek Condition\"\n            }\n          ],\n          \"metadata\": {\n            \"scan_type\": \"TableScan\",\n            \"scan_target\": \"dbimp_t_dml\",\n            \"execution_method\": \"Row\",\n            \"scan_method\": \"Row\"\n          }\n        },\n        {\n          \"index\": 5,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Reference\",\n          \"shortRepresentation\": {\n            \"description\": \"id\"\n          }\n        },\n        {\n          \"index\": 6,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Reference\",\n          \"shortRepresentation\": {\n            \"description\": \"s\"\n          }\n        },\n        {\n          \"index\": 7,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Function\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 8\n            },\n            {\n              \"childIndex\": 9\n            }\n          ],\n          \"shortRepresentation\": {\n            \"description\": \"($id = @_auto_p0_int64_)\"\n          }\n        },\n        {\n          \"index\": 8,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Reference\",\n          \"shortRepresentation\": {\n            \"description\": \"$id\"\n          }\n        },\n        {\n          \"index\": 9,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Parameter\",\n          \"shortRepresentation\": {\n            \"description\": \"@_auto_p0_int64_\"\n          },\n          \"metadata\": {\n            \"name\": \"_auto_p0_int64_\",\n            \"type\": \"scalar\"\n          }\n        },\n        {\n          \"index\": 10,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Function\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 7\n            }\n          ],\n          \"shortRepresentation\": {\n            \"description\": \"($id = @_auto_p0_int64_)\"\n          }\n        },\n        {\n          \"index\": 11,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Parameter\",\n          \"shortRepresentation\": {\n            \"description\": \"@_auto_p0_int64_\"\n          },\n          \"metadata\": {\n            \"name\": \"_auto_p0_int64_\",\n            \"type\": \"scalar\"\n          }\n        },\n        {\n          \"index\": 12,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Reference\",\n          \"shortRepresentation\": {\n            \"description\": \"$s\"\n          }\n        },\n        {\n          \"index\": 13,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Function\",\n          \"childLinks\": [\n            {\n              \"childIndex\": 14\n            },\n            {\n              \"childIndex\": 15\n            }\n          ],\n          \"shortRepresentation\": {\n            \"description\": \"($id = @_auto_p0_int64_)\"\n          }\n        },\n        {\n          \"index\": 14,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Reference\",\n          \"shortRepresentation\": {\n            \"description\": \"$id\"\n          }\n        },\n        {\n          \"index\": 15,\n          \"kind\": \"SCALAR\",\n          \"displayName\": \"Parameter\",\n          \"shortRepresentation\": {\n            \"description\": \"@_auto_p0_int64_\"\n          },\n          \"metadata\": {\n            \"name\": \"_auto_p0_int64_\",\n            \"type\": \"scalar\"\n          }\n        }\n      ]\n    }\n  }\n}\n"
+  }
+}

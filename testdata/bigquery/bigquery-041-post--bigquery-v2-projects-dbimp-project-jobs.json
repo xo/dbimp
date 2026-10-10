@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/jobs",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"configuration\":{\"query\":{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false}},\"jobReference\":{\"projectId\":\"dbimp-project\",\"jobId\":\"dbimp-job-614562\"}}"
+  },
+  "response": {
+    "status": 409,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:43:14 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 409,\n    \"message\": \"Already Exists: Job dbimp-project:US.dbimp-job-614562\",\n    \"errors\": [\n      {\n        \"message\": \"Already Exists: Job dbimp-project:US.dbimp-job-614562\",\n        \"domain\": \"global\",\n        \"reason\": \"duplicate\"\n      }\n    ],\n    \"status\": \"ALREADY_EXISTS\"\n  }\n}\n"
+  }
+}

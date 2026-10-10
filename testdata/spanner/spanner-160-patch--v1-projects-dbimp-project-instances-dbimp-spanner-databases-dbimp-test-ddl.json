@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "PATCH",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"CREATE SEQUENCE dbimp_t_seq OPTIONS (sequence_kind = 'bit_reversed_positive')\",\"CREATE TABLE dbimp_t_seqtab (id INT64 DEFAULT (GET_NEXT_SEQUENCE_VALUE(SEQUENCE dbimp_t_seq)), v STRING(MAX)) PRIMARY KEY (id)\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=2463"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:48:31 GMT"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_fb0b12cfb1afe073\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE SEQUENCE dbimp_t_seq OPTIONS (\\n  sequence_kind = 'bit_reversed_positive'\\n)\",\n      \"CREATE TABLE dbimp_t_seqtab (\\n  id INT64 DEFAULT (GET_NEXT_SEQUENCE_VALUE(SEQUENCE dbimp_t_seq)),\\n  v STRING(MAX),\\n) PRIMARY KEY(id)\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:48:30.051814Z\"\n      },\n      {}\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"SEQUENCE\",\n        \"entityNames\": [\n          \"dbimp_t_seq\"\n        ]\n      },\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_seqtab\"\n        ]\n      }\n    ]\n  }\n}\n"
+  }
+}

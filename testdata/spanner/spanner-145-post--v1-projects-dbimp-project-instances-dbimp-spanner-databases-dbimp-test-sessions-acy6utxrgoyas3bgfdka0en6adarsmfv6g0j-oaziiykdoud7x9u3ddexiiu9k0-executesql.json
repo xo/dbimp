@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT table_name, column_name, ordinal_position, is_nullable, spanner_type, is_generated, generation_expression, column_default FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name, ordinal_position\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "gfet4t7; dur=445"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:28 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"table_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"column_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"ordinal_position\",\n          \"type\": {\n            \"code\": \"INT64\"\n          }\n        },\n        {\n          \"name\": \"is_nullable\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"spanner_type\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"is_generated\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"generation_expression\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"column_default\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"dbimp_t_chi\",\n      \"pid\",\n      \"1\",\n      \"NO\",\n      \"INT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_chi\",\n      \"cid\",\n      \"2\",\n      \"NO\",\n      \"INT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_chi\",\n      \"v\",\n      \"3\",\n      \"YES\",\n      \"STRING(MAX)\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"id\",\n      \"1\",\n      \"NO\",\n      \"INT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"s\",\n      \"2\",\n      \"YES\",\n      \"STRING(MAX)\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"n\",\n      \"3\",\n      \"YES\",\n      \"INT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_par\",\n      \"pid\",\n      \"1\",\n      \"NO\",\n      \"INT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_par\",\n      \"name\",\n      \"2\",\n      \"YES\",\n      \"STRING(100)\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"id\",\n      \"1\",\n      \"NO\",\n      \"INT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"i64\",\n      \"2\",\n      \"YES\",\n      \"INT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"f64\",\n      \"3\",\n      \"YES\",\n      \"FLOAT64\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"f32\",\n      \"4\",\n      \"YES\",\n      \"FLOAT32\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"n\",\n      \"5\",\n      \"YES\",\n      \"NUMERIC\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"b\",\n      \"6\",\n      \"YES\",\n      \"BOOL\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"s\",\n      \"7\",\n      \"YES\",\n      \"STRING(MAX)\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"y\",\n      \"8\",\n      \"YES\",\n      \"BYTES(MAX)\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"d\",\n      \"9\",\n      \"YES\",\n      \"DATE\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"ts\",\n      \"10\",\n      \"YES\",\n      \"TIMESTAMP\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"j\",\n      \"11\",\n      \"YES\",\n      \"JSON\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_i\",\n      \"12\",\n      \"YES\",\n      \"ARRAY\\u003cINT64\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_s\",\n      \"13\",\n      \"YES\",\n      \"ARRAY\\u003cSTRING(MAX)\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_f\",\n      \"14\",\n      \"YES\",\n      \"ARRAY\\u003cFLOAT64\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_n\",\n      \"15\",\n      \"YES\",\n      \"ARRAY\\u003cNUMERIC\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_b\",\n      \"16\",\n      \"YES\",\n      \"ARRAY\\u003cBOOL\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_y\",\n      \"17\",\n      \"YES\",\n      \"ARRAY\\u003cBYTES(MAX)\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_d\",\n      \"18\",\n      \"YES\",\n      \"ARRAY\\u003cDATE\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_ts\",\n      \"19\",\n      \"YES\",\n      \"ARRAY\\u003cTIMESTAMP\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"arr_j\",\n      \"20\",\n      \"YES\",\n      \"ARRAY\\u003cJSON\\u003e\",\n      \"NEVER\",\n      null,\n      null\n    ]\n  ]\n}\n"
+  }
+}

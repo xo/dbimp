@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T062521Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ]
+    },
+    "body": "{\"QueryString\":\"CREATE EXTERNAL TABLE dbimp_it_df (id int DEFAULT 1) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_df/'\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0134-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "242"
+      ],
+      "X-Amzn-Requestid": [
+        "c7ac637a-e3dd-46dd-a466-f66e6c88e2f4"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:25:21 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"line 1:8: mismatched input 'EXTERNAL'. Expecting: 'MATERIALIZED', 'MULTI', 'OR', 'PROTECTED', 'ROLE', 'SCHEMA', 'TABLE', 'VIEW'\"}"
+  }
+}

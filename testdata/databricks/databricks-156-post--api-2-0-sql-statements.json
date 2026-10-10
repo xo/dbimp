@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT * FROM dbimp_t_nosuch\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "35895351-77c1-46da-87fd-2d364051d985"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:21 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"35895351-77c1-46da-87fd-2d364051d985\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=242"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-3ee8-12a9-b70e-cb699b8f4c24\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[TABLE_OR_VIEW_NOT_FOUND] The table or view `dbimp_t_nosuch` cannot be found. Verify the spelling and correctness of the schema and catalog.\\nSearch path: [`system`.`session`, `system`.`builtin`, `system`.`ai`, `workspace`.`dbimp`].\\nIf you did not qualify the name with a schema, verify the current_schema() output, or qualify the name with the correct schema and catalog.\\nTo tolerate the error on drop use DROP VIEW IF EXISTS or DROP TABLE IF EXISTS. SQLSTATE: 42P01; line 1 pos 14\"},\"sql_state\":\"42P01\"}}"
+  }
+}

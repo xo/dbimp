@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"BEGIN BEGIN TRANSACTION; INSERT INTO dbimp_t_src VALUES (12, 'tx'); ROLLBACK; END\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:59 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"95a0c331-0a5e-4495-98c2-f756f0289f38\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=234"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "X-Request-Id": [
+        "95a0c331-0a5e-4495-98c2-f756f0289f38"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-9cf8-1af3-b4ed-ef1bba375e8a\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[TRANSACTION_NOT_SUPPORTED.SQL_SCRIPT_TRANSACTION_COMMAND] Failed to execute the statement. Transaction command BEGIN TRANSACTION is not supported in SQL scripts. To execute multiple SQL statements atomically in a SQL script, please use `BEGIN ATOMIC ... END;` blocks.\"},\"sql_state\":\"0A000\"}}"
+  }
+}

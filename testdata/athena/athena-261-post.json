@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T061950Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"9bc1969d-d0e4-42e9-88af-26003073c7ce\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1993"
+      ],
+      "X-Amzn-Requestid": [
+        "f792edba-c081-4b12-91c6-d962d90250af"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:19:51 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"INSERT INTO dbimp_it_ty SELECT X'DEADBEEF', CAST(ROW(1,'x') AS ROW(a integer, b varchar)), MAP(ARRAY['k'],ARRAY[7]), ARRAY['p','q']\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"9bc1969d-d0e4-42e9-88af-26003073c7ce\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/9bc1969d-d0e4-42e9-88af-26003073c7ce\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataManifestLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/9bc1969d-d0e4-42e9-88af-26003073c7ce-manifest.csv\",\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":513,\"QueryPlanningTimeInMillis\":78,\"QueryQueueTimeInMillis\":51,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":107,\"ServiceProcessingTimeInMillis\":24,\"TotalExecutionTimeInMillis\":695},\"Status\":{\"CompletionDateTime\":1.791613180691E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613179996E9},\"SubstatementType\":\"INSERT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/9bc1969d-d0e4-42e9-88af-26003073c7ce\",\"Query\":\"INSERT INTO dbimp_it_ty SELECT X'DEADBEEF', CAST(ROW(1,'x') AS ROW(a integer, b varchar)), MAP(ARRAY['k'],ARRAY[7]), ARRAY['p','q']\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"9bc1969d-d0e4-42e9-88af-26003073c7ce\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/9bc1969d-d0e4-42e9-88af-26003073c7ce\"},\"Stats\":{\"EngineExecutionTimeInMillis\":513,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613180691E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613179996E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

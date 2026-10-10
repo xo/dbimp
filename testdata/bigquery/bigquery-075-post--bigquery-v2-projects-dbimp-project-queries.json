@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1.5 AS a, 1e308 AS big, 5e-324 AS tiny, -0.0 AS negzero, 0.1 + 0.2 AS sum\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:43:35 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"a\",\n        \"type\": \"FLOAT\",\n        \"mode\": \"NULLABLE\"\n      },\n      {\n        \"name\": \"big\",\n        \"type\": \"FLOAT\",\n        \"mode\": \"NULLABLE\"\n      },\n      {\n        \"name\": \"tiny\",\n        \"type\": \"FLOAT\",\n        \"mode\": \"NULLABLE\"\n      },\n      {\n        \"name\": \"negzero\",\n        \"type\": \"FLOAT\",\n        \"mode\": \"NULLABLE\"\n      },\n      {\n        \"name\": \"sum\",\n        \"type\": \"FLOAT\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_z2Pqcrycuu_gYxyGlJjaSlxyKXhi\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"1\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": \"1.5\"\n        },\n        {\n          \"v\": \"1.0E308\"\n        },\n        {\n          \"v\": \"4.9E-324\"\n        },\n        {\n          \"v\": \"-0.0\"\n        },\n        {\n          \"v\": \"0.30000000000000004\"\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": true,\n  \"queryId\": \"job_z2Pqcrycuu_gYxyGlJjaSlxyKXhi\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614614879\",\n  \"startTime\": \"1791614614887\",\n  \"endTime\": \"1791614614942\",\n  \"pageRowCount\": \"1\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

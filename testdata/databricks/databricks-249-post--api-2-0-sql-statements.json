@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"CREATE OR REPLACE FUNCTION dbimp_t_tf(n INT) RETURNS TABLE (id INT) RETURN SELECT id FROM range(n)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "81f52b67-1285-4b0f-a470-8d2a980436bb"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"81f52b67-1285-4b0f-a470-8d2a980436bb\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=327"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:36:30 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-8bdb-1a44-8962-195f285fd0f7\",\"status\":{\"state\":\"FAILED\",\"error\":{\"error_code\":\"BAD_REQUEST\",\"message\":\"[NON_FOLDABLE_ARGUMENT] The function `range` requires the parameter `end` to be a foldable expression of the type \\\"BIGINT\\\", but the actual argument is a non-foldable. SQLSTATE: 42K08; line 1 pos 15\"},\"sql_state\":\"42K08\"}}"
+  }
+}

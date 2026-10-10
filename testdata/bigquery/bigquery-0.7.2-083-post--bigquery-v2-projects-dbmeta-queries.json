@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT b'' AS empty, b'\\\\x00\\\\xff' AS binary\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:30:56 GMT"
+      ],
+      "Content-Length": [
+        "274"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"5LuoP730m5NED1KMrw70Sp4n5UB\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"empty\",\"type\":\"BYTES\"},{\"mode\":\"NULLABLE\",\"name\":\"binary\",\"type\":\"BYTES\"}]},\"rows\":[{\"f\":[{\"v\":\"\"},{\"v\":\"AP8=\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

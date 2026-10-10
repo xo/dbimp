@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT SAFE_CAST('x' AS INT64) AS a, SAFE_DIVIDE(1, 0) AS b, SAFE.PARSE_DATE('%Y', 'x') AS c\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "323"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:32:34 GMT"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"H8xah3PwkcdjXrvi0vrkicJeerl\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"b\",\"type\":\"FLOAT\"},{\"mode\":\"NULLABLE\",\"name\":\"c\",\"type\":\"DATE\"}]},\"rows\":[{\"f\":[{\"v\":null},{\"v\":null},{\"v\":null}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

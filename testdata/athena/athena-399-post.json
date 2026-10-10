@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T062556Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"c38180f7-462a-4076-8aec-b3fb85de5660\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "2299"
+      ],
+      "X-Amzn-Requestid": [
+        "9d151f1b-4990-4ce6-998d-85f9fbeabe06"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:25:57 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"CREATE EXTERNAL TABLE dbimp_it_pj (id int) PARTITIONED BY (p string) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_pj/' TBLPROPERTIES ('projection.enabled'='true','projection.p.type'='enum','projection.p.values'='a,b','storage.location.template'='s3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_pj/${p}/')\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"c38180f7-462a-4076-8aec-b3fb85de5660\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/c38180f7-462a-4076-8aec-b3fb85de5660.txt\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DDL\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":305,\"QueryQueueTimeInMillis\":37,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":15,\"ServiceProcessingTimeInMillis\":24,\"TotalExecutionTimeInMillis\":381},\"Status\":{\"CompletionDateTime\":1.791613550586E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613550205E9},\"SubstatementType\":\"CREATE_TABLE\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/c38180f7-462a-4076-8aec-b3fb85de5660.txt\",\"Query\":\"CREATE EXTERNAL TABLE dbimp_it_pj (id int) PARTITIONED BY (p string) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_pj/' TBLPROPERTIES ('projection.enabled'='true','projection.p.type'='enum','projection.p.values'='a,b','storage.location.template'='s3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_pj/${p}/')\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"c38180f7-462a-4076-8aec-b3fb85de5660\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/c38180f7-462a-4076-8aec-b3fb85de5660.txt\"},\"Stats\":{\"EngineExecutionTimeInMillis\":305,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613550586E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613550205E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

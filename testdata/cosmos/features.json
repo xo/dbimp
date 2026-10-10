@@ -1,0 +1,636 @@
+{
+  "driver": "cosmos",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "qwen3.7-plus",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "github.com/btnguyen2k/gocosmos",
+      "kind": "driver",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "learn.microsoft.com/en-us/rest/api/cosmos-db",
+      "kind": "driver",
+      "date": "2026-10-10"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-039-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-040-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-138-put--dbs-dbimp-it-colls-kv-docs-d1.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-143-delete--dbs-dbimp-it-colls-kv-docs-d2.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-133-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "patch",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-140-patch--dbs-dbimp-it-colls-kv-docs-d1.json",
+      "test": "TestIntegrationCRUD/patch"
+    },
+    {
+      "kind": "crud",
+      "name": "replace",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-138-put--dbs-dbimp-it-colls-kv-docs-d1.json",
+      "test": "TestIntegrationCRUD/replace"
+    },
+    {
+      "kind": "crud",
+      "name": "sql dml",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-128-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationCRUD/sql_dml"
+    },
+    {
+      "kind": "schema",
+      "name": "database",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-002-post--dbs.json",
+      "test": "TestIntegrationSchema/database"
+    },
+    {
+      "kind": "schema",
+      "name": "container",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-003-post--dbs-dbimp-it-colls.json",
+      "test": "TestIntegrationSchema/container"
+    },
+    {
+      "kind": "schema",
+      "name": "partition key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-037-get--dbs-dbimp-it-colls-kv.json",
+      "test": "TestIntegrationSchema/partition_key"
+    },
+    {
+      "kind": "schema",
+      "name": "hierarchical partition key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-005-post--dbs-dbimp-it-colls.json",
+      "test": "TestIntegrationSchema/hierarchical_partition_key"
+    },
+    {
+      "kind": "schema",
+      "name": "unique key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-149-post--dbs-dbimp-it-colls-uk-docs.json",
+      "test": "TestIntegrationSchema/unique_key"
+    },
+    {
+      "kind": "schema",
+      "name": "indexing policy",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-006-post--dbs-dbimp-it-colls.json",
+      "test": "TestIntegrationSchema/indexing_policy"
+    },
+    {
+      "kind": "schema",
+      "name": "composite index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/composite_index",
+      "evidence": "cosmos-006-post--dbs-dbimp-it-colls.json"
+    },
+    {
+      "kind": "schema",
+      "name": "time to live",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-151-get--dbs-dbimp-it-colls-uk-docs-3.json",
+      "test": "TestIntegrationSchema/time_to_live"
+    },
+    {
+      "kind": "schema",
+      "name": "change feed",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-152-get--dbs-dbimp-it-colls-uk-docs.json",
+      "test": "TestIntegrationSchema/change_feed"
+    },
+    {
+      "kind": "schema",
+      "name": "stored procedure",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/stored_procedure",
+      "evidence": "cosmos-160-post--dbs-dbimp-it-colls-kv-sprocs-sp1.json"
+    },
+    {
+      "kind": "schema",
+      "name": "trigger",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/trigger",
+      "evidence": "cosmos-161-post--dbs-dbimp-it-colls-kv-triggers.json"
+    },
+    {
+      "kind": "schema",
+      "name": "user defined function",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/user_defined_function",
+      "evidence": "cosmos-158-post--dbs-dbimp-it-colls-kv-docs.json"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-156-get--dbs-dbimp-it-views.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-154-post--dbs-dbimp-it-colls-nopolicy-docs.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-154-post--dbs-dbimp-it-colls-nopolicy-docs.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "feature",
+      "name": "request charge",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-040-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/request_charge"
+    },
+    {
+      "kind": "feature",
+      "name": "continuation token",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-096-post--dbs-dbimp-it-colls-bulk-docs.json",
+      "test": "TestIntegrationFeatures/continuation_token"
+    },
+    {
+      "kind": "feature",
+      "name": "cross partition query",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/cross_partition_query",
+      "evidence": "cosmos-096-post--dbs-dbimp-it-colls-bulk-docs.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query plan",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-114-post--dbs-dbimp-it-colls-bulk-docs.json",
+      "test": "TestIntegrationFeatures/query_plan"
+    },
+    {
+      "kind": "feature",
+      "name": "etag and if-match",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-139-put--dbs-dbimp-it-colls-kv-docs-d1.json",
+      "test": "TestIntegrationFeatures/etag_and_if-match"
+    },
+    {
+      "kind": "feature",
+      "name": "session token",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-040-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/session_token"
+    },
+    {
+      "kind": "feature",
+      "name": "select value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-049-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/select_value"
+    },
+    {
+      "kind": "feature",
+      "name": "join inside a document",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-122-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/join_inside_a_document"
+    },
+    {
+      "kind": "feature",
+      "name": "group by",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-115-post--dbs-dbimp-it-colls-bulk-docs.json",
+      "test": "TestIntegrationFeatures/group_by"
+    },
+    {
+      "kind": "feature",
+      "name": "order by",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-214-post--dbs-dbimp-it-colls-bulk-docs.json",
+      "test": "TestIntegrationFeatures/order_by"
+    },
+    {
+      "kind": "feature",
+      "name": "aggregate",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-111-post--dbs-dbimp-it-colls-bulk-docs.json",
+      "test": "TestIntegrationFeatures/aggregate"
+    },
+    {
+      "kind": "feature",
+      "name": "top",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-215-post--dbs-dbimp-it-colls-bulk-docs.json",
+      "test": "TestIntegrationFeatures/top"
+    },
+    {
+      "kind": "feature",
+      "name": "offset and limit",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-120-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/offset_and_limit"
+    },
+    {
+      "kind": "feature",
+      "name": "distinct",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-216-post--dbs-dbimp-it-colls-bulk-docs.json",
+      "test": "TestIntegrationFeatures/distinct"
+    },
+    {
+      "kind": "feature",
+      "name": "subquery",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-125-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/subquery"
+    },
+    {
+      "kind": "feature",
+      "name": "parameters",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-072-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "transactional batch",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-193-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/transactional_batch"
+    },
+    {
+      "kind": "feature",
+      "name": "query metrics",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-131-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/query_metrics"
+    },
+    {
+      "kind": "feature",
+      "name": "throttling with retry after",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "not measured",
+      "test": "TestIntegrationFeatures/throttling_with_retry_after"
+    },
+    {
+      "kind": "feature",
+      "name": "signature check",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/signature_check",
+      "evidence": "cosmos-185-get--dbs.json"
+    },
+    {
+      "kind": "feature",
+      "name": "gzip response",
+      "sources": [
+        "learn.microsoft.com/en-us/rest/api/cosmos-db"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-202-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationFeatures/gzip_response"
+    },
+    {
+      "kind": "type",
+      "name": "string",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-043-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/string"
+    },
+    {
+      "kind": "type",
+      "name": "number",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-061-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/number"
+    },
+    {
+      "kind": "type",
+      "name": "boolean",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-043-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/boolean"
+    },
+    {
+      "kind": "type",
+      "name": "null",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-043-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/null"
+    },
+    {
+      "kind": "type",
+      "name": "array",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-043-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/array"
+    },
+    {
+      "kind": "type",
+      "name": "object",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus",
+        "github.com/btnguyen2k/gocosmos"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-043-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/object"
+    },
+    {
+      "kind": "type",
+      "name": "undefined",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "yes",
+      "evidence": "cosmos-048-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/undefined"
+    },
+    {
+      "kind": "type",
+      "name": "date",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-071-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/date"
+    },
+    {
+      "kind": "type",
+      "name": "uuid",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-071-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/uuid"
+    },
+    {
+      "kind": "type",
+      "name": "binary",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-071-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/binary"
+    },
+    {
+      "kind": "type",
+      "name": "decimal",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3.7-plus"
+      ],
+      "verdict": "no",
+      "evidence": "cosmos-071-post--dbs-dbimp-it-colls-kv-docs.json",
+      "test": "TestIntegrationRoundTrip/decimal"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"CREATE FUNCTION `dbimp-project`.dbimp_test.dbimp_it_f(x INT64) RETURNS INT64 AS (x + 1)\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 409,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:02 GMT"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 409,\n    \"message\": \"Already Exists: Routine dbimp-project.dbimp_test.dbimp_it_f\",\n    \"errors\": [\n      {\n        \"message\": \"Already Exists: Routine dbimp-project.dbimp_test.dbimp_it_f\",\n        \"domain\": \"global\",\n        \"reason\": \"duplicate\"\n      }\n    ],\n    \"status\": \"ALREADY_EXISTS\"\n  }\n}\n"
+  }
+}

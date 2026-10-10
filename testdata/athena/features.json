@@ -1,0 +1,808 @@
+{
+  "driver": "athena",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "qwen3-coder-plus",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "github.com/uber/athenadriver",
+      "kind": "driver",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "github.com/aws/aws-sdk-go",
+      "kind": "driver",
+      "date": "2026-10-10"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert",
+      "evidence": "athena-030-post.json"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/select",
+      "evidence": "athena-033-post.json"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update",
+      "evidence": "athena-039-post.json"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/delete",
+      "evidence": "athena-042-post.json"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/merge",
+      "evidence": "athena-045-post.json"
+    },
+    {
+      "kind": "crud",
+      "name": "insert overwrite",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationCRUD/insert_overwrite",
+      "evidence": "athena-298-post.json"
+    },
+    {
+      "kind": "crud",
+      "name": "create table as select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/create_table_as_select",
+      "evidence": "athena-302-post.json"
+    },
+    {
+      "kind": "crud",
+      "name": "unload",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/unload",
+      "evidence": "athena-306-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/table",
+      "evidence": "athena-008-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "external table",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/external_table",
+      "evidence": "athena-006-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/drop_table",
+      "evidence": "athena-002-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/primary_key",
+      "evidence": "athena-382-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/foreign_key",
+      "evidence": "athena-388-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/index",
+      "evidence": "athena-394-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/unique_constraint",
+      "evidence": "athena-386-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/view",
+      "evidence": "athena-312-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/default_value",
+      "evidence": "athena-390-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "partitions",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/partitions",
+      "evidence": "athena-295-post.json"
+    },
+    {
+      "kind": "schema",
+      "name": "bucketing",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/bucketing",
+      "evidence": "athena-397-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "workgroup",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/workgroup",
+      "evidence": "athena-233-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "execution parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/aws/aws-sdk-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/execution_parameters",
+      "evidence": "athena-168-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "prepared statement",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/prepared_statement",
+      "evidence": "athena-356-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "client request token",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/aws/aws-sdk-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/client_request_token",
+      "evidence": "athena-340-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "result paging",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/aws/aws-sdk-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/result_paging",
+      "evidence": "athena-199-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "header row",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/header_row",
+      "evidence": "athena-019-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "update count",
+      "sources": [
+        "github.com/aws/aws-sdk-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/update_count",
+      "evidence": "athena-030-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "stop query execution",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver",
+        "github.com/aws/aws-sdk-go"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/stop_query_execution",
+      "evidence": "athena-418-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "result reuse",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/result_reuse",
+      "evidence": "athena-367-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "msck repair table",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/msck_repair_table",
+      "evidence": "athena-292-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "partition projection",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/partition_projection",
+      "evidence": "athena-399-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "federated query",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "not measured",
+      "test": "TestIntegrationFeatures/federated_query"
+    },
+    {
+      "kind": "feature",
+      "name": "iceberg time travel",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/iceberg_time_travel",
+      "evidence": "athena-403-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "information schema",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/information_schema",
+      "evidence": "athena-320-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "show tables",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/show_tables",
+      "evidence": "athena-243-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "describe table",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/describe_table",
+      "evidence": "athena-165-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "show create table",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/show_create_table",
+      "evidence": "athena-249-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/explain",
+      "evidence": "athena-252-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "several statements",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/several_statements",
+      "evidence": "athena-026-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/transaction",
+      "evidence": "athena-253-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "use statement",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/use_statement",
+      "evidence": "athena-255-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "version function",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/version_function",
+      "evidence": "athena-239-post.json"
+    },
+    {
+      "kind": "feature",
+      "name": "system runtime nodes",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationFeatures/system_runtime_nodes",
+      "evidence": "athena-235-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TINYINT",
+      "evidence": "athena-069-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/SMALLINT",
+      "evidence": "athena-072-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTEGER",
+      "evidence": "athena-075-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BIGINT",
+      "evidence": "athena-078-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/FLOAT",
+      "evidence": "athena-081-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DOUBLE",
+      "evidence": "athena-084-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DECIMAL",
+      "evidence": "athena-087-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/VARCHAR",
+      "evidence": "athena-090-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "CHAR",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/CHAR",
+      "evidence": "athena-093-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BOOLEAN",
+      "evidence": "athena-096-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DATE",
+      "evidence": "athena-099-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIME",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIME",
+      "evidence": "athena-102-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP",
+      "evidence": "athena-105-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP WITH TIME ZONE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP_WITH_TIME_ZONE",
+      "evidence": "athena-108-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "VARBINARY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/VARBINARY",
+      "evidence": "athena-111-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "ARRAY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/ARRAY",
+      "evidence": "athena-114-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "MAP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/MAP",
+      "evidence": "athena-117-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "ROW",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "qwen3-coder-plus",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/ROW",
+      "evidence": "athena-120-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "JSON",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/JSON",
+      "evidence": "athena-123-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "IPADDRESS",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/IPADDRESS",
+      "evidence": "athena-126-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "UUID",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/UUID",
+      "evidence": "athena-129-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL DAY TO SECOND",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTERVAL_DAY_TO_SECOND",
+      "evidence": "athena-132-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL YEAR TO MONTH",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTERVAL_YEAR_TO_MONTH",
+      "evidence": "athena-135-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "UNKNOWN",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/UNKNOWN",
+      "evidence": "athena-183-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "GEOMETRY",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/GEOMETRY",
+      "evidence": "athena-159-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "STRING",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/STRING",
+      "evidence": "athena-165-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIME WITH TIME ZONE",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIME_WITH_TIME_ZONE",
+      "evidence": "athena-271-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "BINARY",
+      "sources": [
+        "github.com/uber/athenadriver"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationRoundTrip/BINARY",
+      "evidence": "athena-265-post.json"
+    },
+    {
+      "kind": "type",
+      "name": "STRUCT",
+      "sources": [
+        "github.com/uber/athenadriver",
+        "qwen3-coder-plus"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationRoundTrip/STRUCT",
+      "evidence": "athena-265-post.json"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"wait_timeout\":\"5s\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:17 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "29d03e50-00e4-47bb-a9f5-829fbf69d8e3"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"29d03e50-00e4-47bb-a9f5-829fbf69d8e3\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=25"
+      ]
+    },
+    "body": "{\"error_code\":\"BAD_REQUEST\",\"message\":\"Required field is not specified: statement.\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.BadRequest\",\"field_violations\":[{\"field\":\"statement\",\"description\":\"field is not specified\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RequestInfo\",\"request_id\":\"29d03e50-00e4-47bb-a9f5-829fbf69d8e3\",\"serving_data\":\"\"}]}"
+  }
+}

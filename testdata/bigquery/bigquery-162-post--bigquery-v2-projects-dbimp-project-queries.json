@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_big (id, s) SELECT x, CONCAT('row', CAST(x AS STRING)) FROM UNNEST(GENERATE_ARRAY(1, 3000)) AS x\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:44:18 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"id\",\n        \"type\": \"INTEGER\"\n      },\n      {\n        \"name\": \"s\",\n        \"type\": \"STRING\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_VxnariJgocXUHhMN5MUmIvpaJ86I\",\n    \"location\": \"US\"\n  },\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": false,\n  \"numDmlAffectedRows\": \"3000\",\n  \"dmlStats\": {\n    \"insertedRowCount\": \"3000\",\n    \"dmlMode\": \"COARSE_GRAINED_DML\"\n  },\n  \"queryId\": \"job_VxnariJgocXUHhMN5MUmIvpaJ86I\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"totalSlotMs\": \"664\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614656146\",\n  \"startTime\": \"1791614656319\",\n  \"endTime\": \"1791614658178\",\n  \"statementType\": \"INSERT\"\n}\n"
+  }
+}

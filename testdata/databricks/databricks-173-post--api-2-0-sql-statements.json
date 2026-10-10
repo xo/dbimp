@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"0000000000000000\",\"statement\":\"SELECT 1\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"bb057c42-7c34-4f0f-99da-f6590253a291\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=34"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "bb057c42-7c34-4f0f-99da-f6590253a291"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:35 GMT"
+      ]
+    },
+    "body": "{\"error_code\":\"PERMISSION_DENIED\",\"message\":\"You do not have permission to use the SQL Warehouse. Please contact your administrator.\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.ResourceInfo\",\"resource_type\":\"warehouse\",\"resource_name\":\"0000000000000000\",\"owner\":\"\",\"description\":\"user is not authorized to use this warehouse\"},{\"@type\":\"type.googleapis.com/google.rpc.RequestInfo\",\"request_id\":\"bb057c42-7c34-4f0f-99da-f6590253a291\",\"serving_data\":\"\"}]}"
+  }
+}

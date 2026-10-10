@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT [1, 2, 3] AS a, ARRAY<INT64>[] AS empty, [CAST(NULL AS INT64), 1] AS withnull, CAST(NULL AS ARRAY<INT64>) AS nullarray\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=444"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:50 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"a\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"INT64\"\n            }\n          }\n        },\n        {\n          \"name\": \"empty\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"INT64\"\n            }\n          }\n        },\n        {\n          \"name\": \"withnull\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"INT64\"\n            }\n          }\n        },\n        {\n          \"name\": \"nullarray\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"INT64\"\n            }\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      [\n        \"1\",\n        \"2\",\n        \"3\"\n      ],\n      [],\n      [\n        null,\n        \"1\"\n      ],\n      null\n    ]\n  ]\n}\n"
+  }
+}

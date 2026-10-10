@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061054Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"ddaaf583-fc36-4964-b2b6-79cfe6e70862\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1985"
+      ],
+      "X-Amzn-Requestid": [
+        "4084ee39-472b-4e90-82f8-2dc8e3edbae4"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:10:54 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"CREATE EXTERNAL TABLE dbimp_it_ty (b binary, s struct<a:int,b:string>, m map<string,int>, a array<string>) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_ty/'\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"ddaaf583-fc36-4964-b2b6-79cfe6e70862\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/ddaaf583-fc36-4964-b2b6-79cfe6e70862.txt\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DDL\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":329,\"QueryQueueTimeInMillis\":51,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":17,\"ServiceProcessingTimeInMillis\":23,\"TotalExecutionTimeInMillis\":420},\"Status\":{\"CompletionDateTime\":1.791612648952E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612648532E9},\"SubstatementType\":\"CREATE_TABLE\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/ddaaf583-fc36-4964-b2b6-79cfe6e70862.txt\",\"Query\":\"CREATE EXTERNAL TABLE dbimp_it_ty (b binary, s struct<a:int,b:string>, m map<string,int>, a array<string>) STORED AS PARQUET LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_ty/'\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"ddaaf583-fc36-4964-b2b6-79cfe6e70862\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/ddaaf583-fc36-4964-b2b6-79cfe6e70862.txt\"},\"Stats\":{\"EngineExecutionTimeInMillis\":329,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791612648952E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612648532E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261010T062612Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"41382f66-b184-4b7c-b0b9-2db93cf3e90a\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:26:13 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "1802"
+      ],
+      "X-Amzn-Requestid": [
+        "29b2a69e-3e8b-4cd6-96bf-b7219bc788c7"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT id FROM dbimp_it_ice FOR TIMESTAMP AS OF (current_timestamp - interval '1' minute)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"41382f66-b184-4b7c-b0b9-2db93cf3e90a\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/41382f66-b184-4b7c-b0b9-2db93cf3e90a.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":264,\"EngineExecutionTimeInMillis\":780,\"QueryPlanningTimeInMillis\":111,\"QueryQueueTimeInMillis\":96,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":87,\"ServiceProcessingTimeInMillis\":21,\"TotalExecutionTimeInMillis\":984},\"Status\":{\"CompletionDateTime\":1.791613566906E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613565922E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/41382f66-b184-4b7c-b0b9-2db93cf3e90a.csv\",\"Query\":\"SELECT id FROM dbimp_it_ice FOR TIMESTAMP AS OF (current_timestamp - interval '1' minute)\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"41382f66-b184-4b7c-b0b9-2db93cf3e90a\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/41382f66-b184-4b7c-b0b9-2db93cf3e90a.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":780,\"ProcessedBytes\":264,\"ProcessedInputBytes\":20,\"ProcessedInputRows\":4,\"ProcessedRows\":4,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613566906E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613565922E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

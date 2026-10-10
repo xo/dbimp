@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT id, s FROM dbmeta.dbmeta.dbimp_it_dml WHERE id >= 10 ORDER BY id\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:32:04 GMT"
+      ],
+      "Content-Length": [
+        "304"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"qXs7Qacf1u1U6kmNkESeFBwnXoF\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"id\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"s\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":\"10\"},{\"v\":\"ten\"}]},{\"f\":[{\"v\":\"11\"},{\"v\":\"eleven\"}]}],\"totalRows\":\"2\",\"jobComplete\":true}"
+  }
+}

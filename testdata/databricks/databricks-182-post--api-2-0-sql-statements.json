@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT sum(hash(a.id, b.id)) AS s FROM range(20000) a CROSS JOIN range(20000) b\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"0s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"8928e343-3d7a-4ba1-9548-77f786cf604e\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=98"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "8928e343-3d7a-4ba1-9548-77f786cf604e"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:39 GMT"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-4962-158c-a827-62527c62fe53\",\"status\":{\"state\":\"PENDING\"}}"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT * FROM dbimp_t_types ORDER BY id\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"67ab33e2-f901-4f66-82f6-067271d2d7b2\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=1492"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:25 GMT"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Request-Id": [
+        "67ab33e2-f901-4f66-82f6-067271d2d7b2"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-1ca3-11e9-bc26-97f96dcd0eb4\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":18,\"columns\":[{\"name\":\"id\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":0},{\"name\":\"ti\",\"type_text\":\"TINYINT\",\"type_name\":\"BYTE\",\"position\":1},{\"name\":\"si\",\"type_text\":\"SMALLINT\",\"type_name\":\"SHORT\",\"position\":2},{\"name\":\"i\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":3},{\"name\":\"bi\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":4},{\"name\":\"f\",\"type_text\":\"FLOAT\",\"type_name\":\"FLOAT\",\"position\":5},{\"name\":\"d\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":6},{\"name\":\"dec\",\"type_text\":\"DECIMAL(38,18)\",\"type_name\":\"DECIMAL\",\"position\":7,\"type_precision\":38,\"type_scale\":18},{\"name\":\"dec0\",\"type_text\":\"DECIMAL(38,0)\",\"type_name\":\"DECIMAL\",\"position\":8,\"type_precision\":38,\"type_scale\":0},{\"name\":\"b\",\"type_text\":\"BOOLEAN\",\"type_name\":\"BOOLEAN\",\"position\":9},{\"name\":\"s\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":10},{\"name\":\"y\",\"type_text\":\"BINARY\",\"type_name\":\"BINARY\",\"position\":11},{\"name\":\"dt\",\"type_text\":\"DATE\",\"type_name\":\"DATE\",\"position\":12},{\"name\":\"ts\",\"type_text\":\"TIMESTAMP\",\"type_name\":\"TIMESTAMP\",\"position\":13},{\"name\":\"ntz\",\"type_text\":\"TIMESTAMP_NTZ\",\"type_name\":\"TIMESTAMP_NTZ\",\"position\":14},{\"name\":\"arr\",\"type_text\":\"ARRAY<INT>\",\"type_name\":\"ARRAY\",\"position\":15},{\"name\":\"m\",\"type_text\":\"MAP<STRING, INT>\",\"type_name\":\"MAP\",\"position\":16},{\"name\":\"st\",\"type_text\":\"STRUCT<a: INT, b: STRING>\",\"type_name\":\"STRUCT\",\"position\":17}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":2}],\"total_row_count\":2,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":2,\"data_array\":[[\"1\",\"-128\",\"32767\",\"2147483647\",\"9223372036854775807\",\"1.5\",\"2.5\",\"12345678901234567890.123456789012345678\",\"99999999999999999999999999999999999999\",\"true\",\"x\",\"3q2+7w==\",\"2024-01-02\",\"2024-01-02T03:04:05.123Z\",\"2024-01-02T03:04:05.123\",\"[\\\"1\\\",\\\"2\\\"]\",\"{\\\"a\\\":\\\"1\\\"}\",\"{\\\"a\\\":\\\"1\\\",\\\"b\\\":\\\"x\\\"}\"],[\"2\",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]]}}"
+  }
+}

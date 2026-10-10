@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT CAST('NaN' AS DOUBLE) AS nan, CAST('Infinity' AS DOUBLE) AS inf, CAST('-Infinity' AS DOUBLE) AS ninf\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "ae1ad159-8ddf-45a2-8626-9394df519fed"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"ae1ad159-8ddf-45a2-8626-9394df519fed\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=615"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:50 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-083a-1030-8101-b8d30960250f\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":3,\"columns\":[{\"name\":\"nan\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":0},{\"name\":\"inf\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":1},{\"name\":\"ninf\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":2}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"NaN\",\"Infinity\",\"-Infinity\"]]}}"
+  }
+}

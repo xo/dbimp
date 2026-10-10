@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_ef6e5c0df5f0e090",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:48:29 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=1150"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_ef6e5c0df5f0e090\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE TABLE dbimp_t_fk (\\n  id INT64 NOT NULL,\\n  pid INT64,\\n  g INT64 AS (id * 2) STORED,\\n  d STRING(MAX) DEFAULT ('x'),\\n  CONSTRAINT dbimp_t_fk_par FOREIGN KEY(pid) REFERENCES dbimp_t_par(pid),\\n  CONSTRAINT dbimp_t_chk CHECK(id \\u003e 0),\\n) PRIMARY KEY(id)\"\n    ],\n    \"commitTimestamps\": [\n      \"2026-10-10T05:48:14.886283Z\"\n    ],\n    \"progress\": [\n      {\n        \"progressPercent\": 100,\n        \"startTime\": \"2026-10-10T05:48:11.252295Z\",\n        \"endTime\": \"2026-10-10T05:48:14.886283Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_fk\"\n        ]\n      }\n    ]\n  },\n  \"done\": true,\n  \"response\": {\n    \"@type\": \"type.googleapis.com/google.protobuf.Empty\"\n  }\n}\n"
+  }
+}

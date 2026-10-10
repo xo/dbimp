@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT IEEE_DIVIDE(1, 0) AS pinf, IEEE_DIVIDE(-1, 0) AS ninf, IEEE_DIVIDE(0, 0) AS nan\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ],
+      "Content-Length": [
+        "334"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"YQhCICtaDkW9nJApPaw8t8D2dgc\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"pinf\",\"type\":\"FLOAT\"},{\"mode\":\"NULLABLE\",\"name\":\"ninf\",\"type\":\"FLOAT\"},{\"mode\":\"NULLABLE\",\"name\":\"nan\",\"type\":\"FLOAT\"}]},\"rows\":[{\"f\":[{\"v\":\"+Inf\"},{\"v\":\"-Inf\"},{\"v\":null}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

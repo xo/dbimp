@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261010T062634Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryString\":\"SELECT ARRAY['a,b','c\\\"d'] AS a, MAP(ARRAY['k,1'],ARRAY['v\\\"2']) AS m, CAST(ROW('x,y','z\\\"w') AS ROW(a varchar, b varchar)) AS r\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0144-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:26:34 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "59"
+      ],
+      "X-Amzn-Requestid": [
+        "505c5f1d-d245-4141-924d-0d251aecbb40"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"c9522ec1-7716-4bf3-af0e-0f834cb085a0\"}"
+  }
+}

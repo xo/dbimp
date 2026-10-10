@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT @p AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"STRUCT\",\"structTypes\":[{\"name\":\"a\",\"type\":{\"type\":\"INT64\"}},{\"name\":\"b\",\"type\":{\"type\":\"STRING\"}}]},\"parameterValue\":{\"structValues\":{\"a\":{\"value\":\"1\"},\"b\":{\"value\":\"x\"}}},\"name\":\"p\"}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:09 GMT"
+      ],
+      "Content-Length": [
+        "232"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"q9I4oVK98Pwql6A5ZoEPJlWinwM\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":\"{\\\"a\\\":\\\"1\\\",\\\"b\\\":\\\"x\\\"}\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

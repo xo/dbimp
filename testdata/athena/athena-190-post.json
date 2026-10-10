@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061726Z"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"d4ee5465-eb9d-4b55-98d5-854a84ce7a69\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:17:28 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "2001"
+      ],
+      "X-Amzn-Requestid": [
+        "ab5b3f8e-49e1-46bc-b646-8e1fe7daf771"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT ?, ?\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d4ee5465-eb9d-4b55-98d5-854a84ce7a69\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d4ee5465-eb9d-4b55-98d5-854a84ce7a69.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":30,\"QueryQueueTimeInMillis\":62,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":57,\"ServiceProcessingTimeInMillis\":64,\"TotalExecutionTimeInMillis\":213},\"Status\":{\"AthenaError\":{\"ErrorCategory\":2,\"ErrorMessage\":\"INVALID_PARAMETER_USAGE: line 1:1: Incorrect number of parameters: expected 2 but found 1\",\"ErrorType\":1100,\"Retryable\":false},\"CompletionDateTime\":1.791613042817E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_PARAMETER_USAGE: line 1:1: Incorrect number of parameters: expected 2 but found 1\",\"SubmissionDateTime\":1.791613042604E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d4ee5465-eb9d-4b55-98d5-854a84ce7a69.csv\",\"Query\":\"SELECT ?, ?\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"d4ee5465-eb9d-4b55-98d5-854a84ce7a69\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/d4ee5465-eb9d-4b55-98d5-854a84ce7a69.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":30,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613042817E9,\"State\":\"FAILED\",\"StateChangeReason\":\"INVALID_PARAMETER_USAGE: line 1:1: Incorrect number of parameters: expected 2 but found 1\",\"SubmissionDateTime\":1.791613042604E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

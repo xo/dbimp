@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 1000000)) AS a CROSS JOIN UNNEST(GENERATE_ARRAY(1, 30000)) AS b\",\"useLegacySql\":false,\"timeoutMs\":100,\"maxResults\":1,\"useQueryCache\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:44:50 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_Q-pmJRMsBM2bj81e4muAmkNCwLj7\",\n    \"location\": \"US\"\n  },\n  \"jobComplete\": false,\n  \"queryId\": \"job_Q-pmJRMsBM2bj81e4muAmkNCwLj7\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"location\": \"US\",\n  \"creationTime\": \"1791614689589\",\n  \"startTime\": \"1791614689599\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

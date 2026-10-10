@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "PATCH",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"ALTER TABLE dbimp_t_dml ADD COLUMN extra STRING(MAX)\",\"ALTER TABLE dbimp_t_dml DROP COLUMN extra\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:49:27 GMT"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=2502"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_4eacf66376e599f3\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"ALTER TABLE dbimp_t_dml ADD COLUMN extra STRING(MAX)\",\n      \"ALTER TABLE dbimp_t_dml DROP COLUMN extra\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:49:26.242693Z\"\n      },\n      {}\n    ],\n    \"actions\": [\n      {\n        \"action\": \"ALTER\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_dml\"\n        ]\n      },\n      {\n        \"action\": \"ALTER\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_dml\"\n        ]\n      }\n    ]\n  }\n}\n"
+  }
+}

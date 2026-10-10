@@ -1,0 +1,5090 @@
+{
+ "driver": "bigquery",
+ "requests": [
+  {
+   "item": 1,
+   "name": "setup: drop types",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_types",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop dml",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop big",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_big",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop pk",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_pk",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop def",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_def",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop clone",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_clone",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop scr",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_scr",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop tx",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_tx",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop ghost",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_ghost",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop kv",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_kv",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop src",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_src",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop dsd",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_dsd",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP VIEW IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_v",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop the table of the view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP VIEW IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_view",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop the dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP SCHEMA IF EXISTS `dbimp-project`.dbimp_it_ds",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "setup: drop the materialized view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP MATERIALIZED VIEW IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_mv",
+    "useLegacySql": false
+   },
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "a statement",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a, 'x' AS b",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a statement with every optional member",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "useQueryCache": false,
+    "timeoutMs": 10000,
+    "maxResults": 10,
+    "location": "US",
+    "requestId": "dbimp-request-614562",
+    "labels": {
+     "origin": "dbimp"
+    },
+    "maximumBytesBilled": "1000000",
+    "dryRun": false,
+    "defaultDataset": {
+     "projectId": "dbimp-project",
+     "datasetId": "dbimp_test"
+    },
+    "formatOptions": {
+     "useInt64Timestamp": false
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "a request id used a second time",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "requestId": "dbimp-request-614562"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a dry run",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "dryRun": true
+   }
+  },
+  {
+   "item": 1,
+   "name": "a request with the legacy dialect",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": true
+   }
+  },
+  {
+   "item": 1,
+   "name": "a request with no useLegacySql",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a statement with a default dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a FROM dbimp_it_nosuch",
+    "useLegacySql": false,
+    "defaultDataset": {
+     "projectId": "dbimp-project",
+     "datasetId": "dbimp_test"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table and its answer",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_dml (id INT64, s STRING)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an insert and its answer",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (1, 'a'), (2, 'b'), (3, 'c')",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an update and its answer",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "UPDATE `dbimp-project`.dbimp_test.dbimp_it_dml SET s = 'z' WHERE id > 1",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an update with no where clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "UPDATE `dbimp-project`.dbimp_test.dbimp_it_dml SET s = 'y'",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a delete and its answer",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DELETE FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE id = 1",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a merge from a query",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "MERGE `dbimp-project`.dbimp_test.dbimp_it_dml t USING (SELECT 9 AS id, 'm' AS s) u ON t.id = u.id WHEN NOT MATCHED THEN INSERT (id, s) VALUES (u.id, u.s)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a truncate",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "TRUNCATE TABLE `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an insert after the truncate",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (1, 'a')",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select of the rows",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_dml ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an insert and its job",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "UPDATE `dbimp-project`.dbimp_test.dbimp_it_dml SET s = 'k' WHERE id > 0",
+    "useLegacySql": false
+   },
+   "capture": {
+    "job": "jobReference.jobId"
+   }
+  },
+  {
+   "item": 1,
+   "name": "the job of the update",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/{{job}}"
+  },
+  {
+   "item": 1,
+   "name": "the results of the job of the update",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}"
+  },
+  {
+   "item": 1,
+   "name": "a request with no content type",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "text": "{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false}"
+  },
+  {
+   "item": 1,
+   "name": "a request that is PUT",
+   "method": "PUT",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a request with an accept encoding of gzip",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "header": {
+    "Accept-Encoding": [
+     "gzip"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "a request with a member that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "nosuchmember": 1
+   }
+  },
+  {
+   "item": 1,
+   "name": "a job inserted with jobs.insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs",
+   "body": {
+    "configuration": {
+     "query": {
+      "query": "SELECT 1 AS a",
+      "useLegacySql": false
+     }
+    },
+    "jobReference": {
+     "projectId": "dbimp-project",
+     "jobId": "dbimp-job-614562"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "the same job id again",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs",
+   "body": {
+    "configuration": {
+     "query": {
+      "query": "SELECT 1 AS a",
+      "useLegacySql": false
+     }
+    },
+    "jobReference": {
+     "projectId": "dbimp-project",
+     "jobId": "dbimp-job-614562"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "the results of a job from jobs.insert",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/dbimp-job-614562"
+  },
+  {
+   "item": 1,
+   "name": "the list of jobs",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs?maxResults=2"
+  },
+  {
+   "item": 2,
+   "name": "columns of a result with rows",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_dml ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "columns of a result with no rows",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE FALSE",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "columns that share a name",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a, 2 AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "columns with no name",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1, 'x', 2.5",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "a column with the name of a table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT t.id, t.s FROM `dbimp-project`.dbimp_test.dbimp_it_dml AS t",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "a star select",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "a statement with no result",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_ghost",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the tables of the dataset",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables"
+  },
+  {
+   "item": 2,
+   "name": "a table",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_dml"
+  },
+  {
+   "item": 2,
+   "name": "a table that does not exist",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_nosuch"
+  },
+  {
+   "item": 2,
+   "name": "the datasets",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets"
+  },
+  {
+   "item": 2,
+   "name": "a dataset",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test"
+  },
+  {
+   "item": 2,
+   "name": "a dataset that does not exist",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/nosuch"
+  },
+  {
+   "item": 2,
+   "name": "the projects",
+   "method": "GET",
+   "path": "/bigquery/v2/projects"
+  },
+  {
+   "item": 2,
+   "name": "the rows of a table with tabledata.list",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_dml/data?maxResults=1"
+  },
+  {
+   "item": 2,
+   "name": "the schemata",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT schema_name FROM `dbimp-project`.INFORMATION_SCHEMA.SCHEMATA",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the tables in INFORMATION_SCHEMA",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT table_name, table_type FROM `dbimp-project`.dbimp_test.INFORMATION_SCHEMA.TABLES ORDER BY table_name",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the columns in INFORMATION_SCHEMA",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT table_name, column_name, ordinal_position, is_nullable, data_type FROM `dbimp-project`.dbimp_test.INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'dbimp_it_dml' ORDER BY ordinal_position",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the options of tables in INFORMATION_SCHEMA",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.INFORMATION_SCHEMA.TABLE_OPTIONS",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the views in INFORMATION_SCHEMA",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.INFORMATION_SCHEMA.VIEWS",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the jobs in INFORMATION_SCHEMA",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT job_id FROM `dbimp-project`.INFORMATION_SCHEMA.JOBS",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the routines in INFORMATION_SCHEMA",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.INFORMATION_SCHEMA.ROUTINES",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 2,
+   "name": "the key columns in INFORMATION_SCHEMA",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.INFORMATION_SCHEMA.KEY_COLUMN_USAGE",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "setup of the table of every type",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_types (id INT64, i INT64, f FLOAT64, n NUMERIC, bn BIGNUMERIC, b BOOL, s STRING, y BYTES, d DATE, t TIME, dt DATETIME, ts TIMESTAMP, j JSON, g GEOGRAPHY, iv INTERVAL, arr ARRAY<INT64>, st STRUCT<a INT64, b STRING>, r RANGE<DATE>)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "a row of every type",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_types (id, i, f, n, bn, b, s, y, d, t, dt, ts, j, g, iv, arr, st, r) VALUES (1, -5, 1.25, NUMERIC '1.5', BIGNUMERIC '1.5', TRUE, 'x', b'abc', DATE '2024-01-02', TIME '12:34:56.789', DATETIME '2024-01-02 03:04:05.123456', TIMESTAMP '2024-01-02 03:04:05.123456+00', JSON '{\"a\":1}', ST_GEOGPOINT(1, 2), INTERVAL 1 DAY, [1, 2], STRUCT(1, 'x'), RANGE(DATE '2024-01-01', DATE '2024-02-01'))",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "a row of NULL in every type",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_types (id) VALUES (2)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "the rows of every type",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.dbimp_it_types ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "the schema of the table of every type",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_types"
+  },
+  {
+   "item": 3,
+   "name": "the rows of every type with integer timestamps",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ts FROM `dbimp-project`.dbimp_test.dbimp_it_types ORDER BY id",
+    "useLegacySql": false,
+    "formatOptions": {
+     "useInt64Timestamp": true
+    }
+   }
+  },
+  {
+   "item": 3,
+   "name": "the largest and smallest INT64",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT CAST(9223372036854775807 AS INT64) AS hi, CAST(-9223372036854775808 AS INT64) AS lo",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "an INT64 overflow",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT CAST(9223372036854775807 AS INT64) + 1 AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "FLOAT64 values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1.5 AS a, 1e308 AS big, 5e-324 AS tiny, -0.0 AS negzero, 0.1 + 0.2 AS sum",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "FLOAT64 infinity and NaN",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT IEEE_DIVIDE(1, 0) AS pinf, IEEE_DIVIDE(-1, 0) AS ninf, IEEE_DIVIDE(0, 0) AS nan",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "FLOAT64 NaN from a cast",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT CAST('NaN' AS FLOAT64) AS nan",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "FLOAT64 infinity from a cast",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT CAST('inf' AS FLOAT64) AS inf",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "NUMERIC limits",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT NUMERIC '99999999999999999999999999999.999999999' AS hi, NUMERIC '-99999999999999999999999999999.999999999' AS lo, NUMERIC '0.000000001' AS small, NUMERIC '1' AS one",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "BIGNUMERIC limits",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT BIGNUMERIC '578960446186580977117854925043439539266.34992332820282019728792003956564819967' AS hi, BIGNUMERIC '-578960446186580977117854925043439539266.34992332820282019728792003956564819968' AS lo",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "BOOL values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TRUE AS t, FALSE AS f",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "STRING values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT '' AS empty, 'héllo 世界' AS unicode, 'a\\nb' AS newline, REPEAT('x', 1000) AS long",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "BYTES values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT b'' AS empty, b'\\x00\\xff' AS binary",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "DATE limits",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT DATE '0001-01-01' AS lo, DATE '9999-12-31' AS hi",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "TIME values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIME '00:00:00' AS lo, TIME '23:59:59.999999' AS hi",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "DATETIME values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT DATETIME '0001-01-01 00:00:00' AS lo, DATETIME '9999-12-31 23:59:59.999999' AS hi, DATETIME '2024-01-02 03:04:05' AS whole",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "TIMESTAMP values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIMESTAMP '0001-01-01 00:00:00+00' AS lo, TIMESTAMP '9999-12-31 23:59:59.999999+00' AS hi, TIMESTAMP '2024-01-02 03:04:05+00' AS whole, TIMESTAMP '2024-01-02 03:04:05.5+00' AS half, TIMESTAMP '1970-01-01 00:00:00+00' AS epoch",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "TIMESTAMP with a zone",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIMESTAMP '2024-01-02 03:04:05+05:30' AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "TIMESTAMP before the epoch",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIMESTAMP '1969-12-31 23:59:59.5+00' AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "JSON values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT JSON '{\"a\":[1,2,{\"b\":null}]}' AS obj, JSON 'null' AS jnull, JSON '1' AS num, JSON '\"s\"' AS str, CAST(NULL AS JSON) AS sqlnull, JSON '12345678901234567890' AS big",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "GEOGRAPHY values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ST_GEOGPOINT(1, 2) AS pt, ST_GEOGFROMTEXT('LINESTRING(0 0, 1 1)') AS line, ST_GEOGFROMTEXT('POLYGON((0 0, 1 0, 1 1, 0 0))') AS poly",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "INTERVAL values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT INTERVAL 1 DAY AS d, INTERVAL '1-2 3 4:5:6.789' YEAR TO SECOND AS whole, INTERVAL -5 MONTH AS neg, MAKE_INTERVAL(year => 10000) AS big",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "ARRAY values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT [1, 2, 3] AS a, ARRAY<INT64>[] AS empty, [CAST(NULL AS INT64), 1] AS withnull, CAST(NULL AS ARRAY<INT64>) AS nullarray",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "an array of arrays through a struct",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT STRUCT([1, 2] AS inside) AS s",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "an array of structs",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT [STRUCT(1 AS a, 'x' AS b), STRUCT(2, 'y')] AS s",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "STRUCT values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT STRUCT(1 AS a, 'x' AS b) AS s, STRUCT(CAST(NULL AS INT64) AS a) AS withnull, CAST(NULL AS STRUCT<a INT64>) AS nullstruct",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "a nested struct",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT STRUCT(STRUCT(1 AS c) AS b, [1, 2] AS d) AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "RANGE values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT RANGE(DATE '2024-01-01', DATE '2024-02-01') AS r, RANGE<DATE> '[2024-01-01, UNBOUNDED)' AS open, RANGE(TIMESTAMP '2024-01-01 00:00:00+00', TIMESTAMP '2024-01-02 00:00:00+00') AS ts",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "a NULL of each type",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT CAST(NULL AS INT64) AS i, CAST(NULL AS FLOAT64) AS f, CAST(NULL AS NUMERIC) AS n, CAST(NULL AS BOOL) AS b, CAST(NULL AS STRING) AS s, CAST(NULL AS BYTES) AS y, CAST(NULL AS DATE) AS d, CAST(NULL AS TIMESTAMP) AS ts",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 3,
+   "name": "a bare NULL",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT NULL AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type INT64",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type FLOAT64",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "FLOAT64"
+      },
+      "parameterValue": {
+       "value": "1.5"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type NUMERIC",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "NUMERIC"
+      },
+      "parameterValue": {
+       "value": "1.5"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type BIGNUMERIC",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "BIGNUMERIC"
+      },
+      "parameterValue": {
+       "value": "1.5"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type BOOL",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "BOOL"
+      },
+      "parameterValue": {
+       "value": "true"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type STRING",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "x"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type BYTES",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "BYTES"
+      },
+      "parameterValue": {
+       "value": "YWJj"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type DATE",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "DATE"
+      },
+      "parameterValue": {
+       "value": "2024-01-02"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type TIME",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "TIME"
+      },
+      "parameterValue": {
+       "value": "12:34:56.789"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type DATETIME",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "DATETIME"
+      },
+      "parameterValue": {
+       "value": "2024-01-02T03:04:05.123456"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type TIMESTAMP",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "TIMESTAMP"
+      },
+      "parameterValue": {
+       "value": "2024-01-02 03:04:05.123456+00:00"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type JSON",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "JSON"
+      },
+      "parameterValue": {
+       "value": "{\"a\":1}"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type GEOGRAPHY",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "GEOGRAPHY"
+      },
+      "parameterValue": {
+       "value": "POINT(1 2)"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type INTERVAL",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INTERVAL"
+      },
+      "parameterValue": {
+       "value": "1-2 3 4:5:6"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type INT64",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type FLOAT64",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "FLOAT64"
+      },
+      "parameterValue": {
+       "value": "1.5"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type NUMERIC",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "NUMERIC"
+      },
+      "parameterValue": {
+       "value": "1.5"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type BIGNUMERIC",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "BIGNUMERIC"
+      },
+      "parameterValue": {
+       "value": "1.5"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type BOOL",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "BOOL"
+      },
+      "parameterValue": {
+       "value": "true"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type STRING",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "x"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type BYTES",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "BYTES"
+      },
+      "parameterValue": {
+       "value": "YWJj"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type DATE",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "DATE"
+      },
+      "parameterValue": {
+       "value": "2024-01-02"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type TIME",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "TIME"
+      },
+      "parameterValue": {
+       "value": "12:34:56.789"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type DATETIME",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "DATETIME"
+      },
+      "parameterValue": {
+       "value": "2024-01-02T03:04:05.123456"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type TIMESTAMP",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "TIMESTAMP"
+      },
+      "parameterValue": {
+       "value": "2024-01-02 03:04:05.123456+00:00"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type JSON",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "JSON"
+      },
+      "parameterValue": {
+       "value": "{\"a\":1}"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type GEOGRAPHY",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "GEOGRAPHY"
+      },
+      "parameterValue": {
+       "value": "POINT(1 2)"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter of the type INTERVAL",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INTERVAL"
+      },
+      "parameterValue": {
+       "value": "1-2 3 4:5:6"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "two named parameters",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @a AS a, @b AS b",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      },
+      "name": "a"
+     },
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "x"
+      },
+      "name": "b"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "two positional parameters",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a, ? AS b",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      }
+     },
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "x"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter with no mode",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @a AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      },
+      "name": "a"
+     }
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter with no mode",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "a NULL named parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {},
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a NULL positional parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {}
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a NULL named parameter of INT64",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {},
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named FLOAT64 parameter of NaN",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "FLOAT64"
+      },
+      "parameterValue": {
+       "value": "NaN"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named FLOAT64 parameter of Infinity",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "FLOAT64"
+      },
+      "parameterValue": {
+       "value": "Infinity"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named INT64 parameter of the largest value",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "9223372036854775807"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of the type INTEGER",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p + 1 AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INTEGER"
+      },
+      "parameterValue": {
+       "value": "5"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter of a type that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT65"
+      },
+      "parameterValue": {
+       "value": "5"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter that is not a number",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "notanumber"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named array parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "name": "p",
+      "parameterType": {
+       "type": "ARRAY",
+       "arrayType": {
+        "type": "INT64"
+       }
+      },
+      "parameterValue": {
+       "arrayValues": [
+        {
+         "value": "1"
+        },
+        {
+         "value": "2"
+        }
+       ]
+      }
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional array parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "ARRAY",
+       "arrayType": {
+        "type": "INT64"
+       }
+      },
+      "parameterValue": {
+       "arrayValues": [
+        {
+         "value": "1"
+        },
+        {
+         "value": "2"
+        }
+       ]
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "an empty named array parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "name": "p",
+      "parameterType": {
+       "type": "ARRAY",
+       "arrayType": {
+        "type": "INT64"
+       }
+      },
+      "parameterValue": {
+       "arrayValues": []
+      }
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named array parameter in an IN",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE id IN UNNEST(@p)",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "name": "p",
+      "parameterType": {
+       "type": "ARRAY",
+       "arrayType": {
+        "type": "INT64"
+       }
+      },
+      "parameterValue": {
+       "arrayValues": [
+        {
+         "value": "1"
+        },
+        {
+         "value": "2"
+        }
+       ]
+      }
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named struct parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRUCT",
+       "structTypes": [
+        {
+         "name": "a",
+         "type": {
+          "type": "INT64"
+         }
+        },
+        {
+         "name": "b",
+         "type": {
+          "type": "STRING"
+         }
+        }
+       ]
+      },
+      "parameterValue": {
+       "structValues": {
+        "a": {
+         "value": "1"
+        },
+        "b": {
+         "value": "x"
+        }
+       }
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional struct parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRUCT",
+       "structTypes": [
+        {
+         "name": "a",
+         "type": {
+          "type": "INT64"
+         }
+        },
+        {
+         "name": "b",
+         "type": {
+          "type": "STRING"
+         }
+        }
+       ]
+      },
+      "parameterValue": {
+       "structValues": {
+        "a": {
+         "value": "1"
+        },
+        "b": {
+         "value": "x"
+        }
+       }
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named range parameter",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "RANGE",
+       "rangeElementType": {
+        "type": "DATE"
+       }
+      },
+      "parameterValue": {
+       "rangeValue": {
+        "start": {
+         "value": "2024-01-01"
+        },
+        "end": {
+         "value": "2024-02-01"
+        }
+       }
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "too many positional parameters",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      }
+     },
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "6"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "too few positional parameters",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ?, ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter with the wrong name",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @a AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      },
+      "name": "b"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter in a mode of named",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ? AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      }
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter in a mode of positional",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "5"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter in a where clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE s = ?",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "k"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter in a where clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE s = @p",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "k"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter in an insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (@id, @s)",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "7"
+      },
+      "name": "id"
+     },
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "seven"
+      },
+      "name": "s"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a positional parameter in an insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (?, ?)",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "8"
+      }
+     },
+     {
+      "parameterType": {
+       "type": "STRING"
+      },
+      "parameterValue": {
+       "value": "eight"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named parameter in a limit",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml ORDER BY id LIMIT @n",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "1"
+      },
+      "name": "n"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 4,
+   "name": "the rows after the inserts",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_dml ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 4,
+   "name": "a parameter in a type table with a named TIMESTAMP and the integer form",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @p AS a",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "TIMESTAMP"
+      },
+      "parameterValue": {
+       "value": "2024-01-02 03:04:05.123456+00:00"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 5,
+   "name": "setup of the large table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_big (id INT64, s STRING)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 5,
+   "name": "fill of the large table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_big (id, s) SELECT x, CONCAT('row', CAST(x AS STRING)) FROM UNNEST(GENERATE_ARRAY(1, 3000)) AS x",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 5,
+   "name": "a result of 3000 rows with maxResults of 500",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_big ORDER BY id",
+    "useLegacySql": false,
+    "maxResults": 500
+   },
+   "capture": {
+    "job": "jobReference.jobId",
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "a result of 3000 rows with no maxResults",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_big ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 5,
+   "name": "a result of 3000 rows with maxResults of 0",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_big ORDER BY id",
+    "useLegacySql": false,
+    "maxResults": 0
+   }
+  },
+  {
+   "item": 5,
+   "name": "the first page of the job",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=500",
+   "capture": {
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "page 2 of the job",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=500&pageToken={{pt}}",
+   "capture": {
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "page 3 of the job",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=500&pageToken={{pt}}",
+   "capture": {
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "page 4 of the job",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=500&pageToken={{pt}}",
+   "capture": {
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "page 5 of the job",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=500&pageToken={{pt}}",
+   "capture": {
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "page 6 of the job",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=500&pageToken={{pt}}",
+   "capture": {
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "a page read from a start index",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=500&startIndex=2900"
+  },
+  {
+   "item": 5,
+   "name": "a page with a page token that is not valid",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=10&pageToken=abc"
+  },
+  {
+   "item": 5,
+   "name": "a page with a start index past the end",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=10&startIndex=5000"
+  },
+  {
+   "item": 5,
+   "name": "a page of a job that does not exist",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/nosuchjob?maxResults=10"
+  },
+  {
+   "item": 5,
+   "name": "a page with a location",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=10&location=US"
+  },
+  {
+   "item": 5,
+   "name": "a page with timestamps as integers",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?maxResults=2&formatOptions.useInt64Timestamp=true"
+  },
+  {
+   "item": 5,
+   "name": "the rows of a table with tabledata.list and a page token",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_big/data?maxResults=1000",
+   "capture": {
+    "pt": "pageToken"
+   }
+  },
+  {
+   "item": 5,
+   "name": "the second page of tabledata.list",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_big/data?maxResults=1000&pageToken={{pt}}"
+  },
+  {
+   "item": 5,
+   "name": "the tables of the dataset with a page size",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables?maxResults=2"
+  },
+  {
+   "item": 6,
+   "name": "a syntax error",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELEC 1",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a table that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.dbimp_it_nosuch",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a dataset that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.nosuchdataset.t",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a column that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT nosuch FROM `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a type that does not match",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 'a' + 1 AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a division by zero",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 / 0 AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a division by zero in a row after the first",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 / (x - 1500) AS v FROM UNNEST(GENERATE_ARRAY(1, 3000)) AS x ORDER BY x",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "an overflow",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT CAST(9223372036854775807 AS INT64) * 2 AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a call of ERROR",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ERROR('boom') AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "an empty query",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a body that is not JSON",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "text": "{"
+  },
+  {
+   "item": 6,
+   "name": "a body with no query",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {}
+  },
+  {
+   "item": 6,
+   "name": "a body with a query that is not text",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": 5
+   }
+  },
+  {
+   "item": 6,
+   "name": "a project that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/nosuch/queries",
+   "body": {
+    "query": "SELECT 1",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a path that does not exist",
+   "method": "GET",
+   "path": "/nosuch"
+  },
+  {
+   "item": 6,
+   "name": "a method that is not allowed",
+   "method": "DELETE",
+   "path": "/bigquery/v2/projects/dbimp-project/queries"
+  },
+  {
+   "item": 6,
+   "name": "an insert of a wrong type",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES ('x', 'y')",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "an insert with the wrong number of values",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (1)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a create table that exists",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_dml (id INT64)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a create table with a name of two parts that is refused",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE dbimp_test.dbimp_it_ghost (id INT64)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a drop of the table with a name of two parts",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE dbimp_test.dbimp_it_ghost",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a drop of the table with a name of three parts after it",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_ghost",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a drop of a table that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE `dbimp-project`.dbimp_test.dbimp_it_nosuch",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a query with a quota that is too small",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_big",
+    "useLegacySql": false,
+    "maximumBytesBilled": "1",
+    "useQueryCache": false
+   }
+  },
+  {
+   "item": 6,
+   "name": "a query with a timeout of one millisecond",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "timeoutMs": 1
+   }
+  },
+  {
+   "item": 6,
+   "name": "a query with a negative timeout",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "timeoutMs": -1
+   }
+  },
+  {
+   "item": 6,
+   "name": "a get of a job that does not exist",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/nosuchjob"
+  },
+  {
+   "item": 7,
+   "name": "a slow job started in the background",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs",
+   "body": {
+    "configuration": {
+     "query": {
+      "query": "SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 1000000)) AS a CROSS JOIN UNNEST(GENERATE_ARRAY(1, 30000)) AS b",
+      "useLegacySql": false,
+      "useQueryCache": false
+     }
+    },
+    "jobReference": {
+     "projectId": "dbimp-project",
+     "jobId": "dbimp-slow-614562"
+    }
+   },
+   "background": true
+  },
+  {
+   "item": 7,
+   "name": "the slow job while it runs",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-slow-614562",
+   "wait": "1s"
+  },
+  {
+   "item": 7,
+   "name": "the cancel of the slow job",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-slow-614562/cancel",
+   "body": {}
+  },
+  {
+   "item": 7,
+   "name": "the slow job after the cancel",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-slow-614562",
+   "wait": "6s"
+  },
+  {
+   "item": 7,
+   "name": "the results of the slow job after the cancel",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/dbimp-slow-614562"
+  },
+  {
+   "item": 7,
+   "name": "a cancel of a job that finished",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-job-614562/cancel",
+   "body": {}
+  },
+  {
+   "item": 7,
+   "name": "a cancel of a job that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/nosuchjob/cancel",
+   "body": {}
+  },
+  {
+   "item": 7,
+   "name": "a slow query with a timeout of one millisecond",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 1000000)) AS a CROSS JOIN UNNEST(GENERATE_ARRAY(1, 30000)) AS b",
+    "useLegacySql": false,
+    "timeoutMs": 1,
+    "useQueryCache": false
+   }
+  },
+  {
+   "item": 7,
+   "name": "a slow query with a timeout of 100 milliseconds and a job that can be read",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 1000000)) AS a CROSS JOIN UNNEST(GENERATE_ARRAY(1, 30000)) AS b",
+    "useLegacySql": false,
+    "timeoutMs": 100,
+    "maxResults": 1,
+    "useQueryCache": false
+   },
+   "capture": {
+    "job": "jobReference.jobId"
+   }
+  },
+  {
+   "item": 7,
+   "name": "the results of the slow query that timed out",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/{{job}}?timeoutMs=1"
+  },
+  {
+   "item": 7,
+   "name": "the list of jobs after the cancels",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs"
+  },
+  {
+   "item": 8,
+   "name": "a request with no credentials",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "auth": "none"
+  },
+  {
+   "item": 8,
+   "name": "a request with a Bearer token that is wrong",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "a request with an API key that is wrong",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries?key=wrong",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 8,
+   "name": "a request with a header of the project of a quota",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "header": {
+    "X-Goog-User-Project": [
+     "nosuch"
+    ]
+   }
+  },
+  {
+   "item": 8,
+   "name": "a request for a project that is not this one",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/other/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 8,
+   "name": "the datasets of a project that is not this one",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/other/datasets"
+  },
+  {
+   "item": 8,
+   "name": "a read of a table of a project that is not this one",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/other/datasets/dbimp_test/tables/dbimp_it_dml"
+  },
+  {
+   "item": 8,
+   "name": "a statement that creates a dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE SCHEMA `dbimp-project`.dbimp_it_ds",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 8,
+   "name": "the datasets after the create",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets"
+  },
+  {
+   "item": 8,
+   "name": "a statement that drops the dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP SCHEMA `dbimp-project`.dbimp_it_ds",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 9,
+   "name": "the version variable",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @@version",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 9,
+   "name": "the project variable",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @@project_id AS project, @@dataset_id AS dataset, @@time_zone AS tz",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 9,
+   "name": "the session user",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT SESSION_USER() AS u",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 9,
+   "name": "the current time",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT CURRENT_TIMESTAMP() AS now, CURRENT_DATE() AS today",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 9,
+   "name": "the system variables of a script",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT @@query_label AS l, @@session_id AS s",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 9,
+   "name": "the ping of the dataset",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test"
+  },
+  {
+   "item": 9,
+   "name": "the root path",
+   "method": "GET",
+   "path": "/"
+  },
+  {
+   "item": 9,
+   "name": "the discovery document",
+   "method": "GET",
+   "path": "/discovery/v1/apis/bigquery/v2/rest"
+  },
+  {
+   "item": 9,
+   "name": "the service info",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/serviceAccount"
+  },
+  {
+   "item": 10,
+   "name": "two selects in one request",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a; SELECT 2 AS b",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "two selects with a trailing semicolon",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a; SELECT 2 AS b;",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a trailing semicolon",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a;",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a declare and a select",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DECLARE dbimp_v INT64 DEFAULT 5; SELECT dbimp_v AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a set and a select",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DECLARE dbimp_v INT64 DEFAULT 5; SET dbimp_v = dbimp_v + 1; SELECT dbimp_v AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "the name of a variable of an earlier script used as a column name",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS dbimp_v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "the name of a variable of an earlier script used as a table alias",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a FROM (SELECT 2 AS b) AS dbimp_v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a name that is not a variable",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS dbimp_w",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "an insert and a select",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (10, 'ten'); SELECT COUNT(*) AS c FROM `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a select and an insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a; INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (11, 'eleven')",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a failing second statement after an insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (12, 'twelve'); SELECT 1 / 0 AS v",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "the rows after the failing script",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE id >= 10 ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a failing first statement",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELEC 1; SELECT 2 AS b",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a script with an if",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "IF 1 = 1 THEN SELECT 'yes' AS a; ELSE SELECT 'no' AS a; END IF",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a script with a loop",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DECLARE dbimp_i INT64 DEFAULT 0; WHILE dbimp_i < 3 DO SET dbimp_i = dbimp_i + 1; END WHILE; SELECT dbimp_i AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a script with a temporary table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TEMP TABLE tmp AS SELECT 1 AS a; SELECT * FROM tmp",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a block comment",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT /* c */ 1 AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a line comment at the end",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a -- tail",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a line comment with a semicolon",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a -- ; SELECT 2",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a semicolon in a string",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 'a;b' AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a hash comment",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a # tail",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "an empty statement between two",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a;; SELECT 2 AS b",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "only a comment",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "-- nothing",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a script that creates and drops a table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_scr (a INT64); INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_scr VALUES (1); SELECT a FROM `dbimp-project`.dbimp_test.dbimp_it_scr; DROP TABLE `dbimp-project`.dbimp_test.dbimp_it_scr",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 10,
+   "name": "a script as a job",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 10)) AS a, UNNEST(GENERATE_ARRAY(1, 10)) AS b",
+    "useLegacySql": false
+   },
+   "capture": {
+    "job": "jobReference.jobId"
+   }
+  },
+  {
+   "item": 10,
+   "name": "the job of a script",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/{{job}}"
+  },
+  {
+   "item": 11,
+   "name": "setup of the table of transactions",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_tx (id INT64)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a transaction that commits",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN TRANSACTION; INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_tx (id) VALUES (1); COMMIT TRANSACTION",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a transaction that rolls back",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN TRANSACTION; INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_tx (id) VALUES (2); ROLLBACK TRANSACTION",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "the rows after the transaction",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_tx ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a transaction with an error",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN TRANSACTION; INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_tx (id) VALUES (3); SELECT 1 / 0; COMMIT TRANSACTION",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "the rows after the transaction with an error",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_tx ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a transaction with an exception handler",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN BEGIN TRANSACTION; INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_tx (id) VALUES (4); SELECT 1 / 0; COMMIT TRANSACTION; EXCEPTION WHEN ERROR THEN ROLLBACK TRANSACTION; END",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "the rows after the exception handler",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_tx ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a begin alone",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN TRANSACTION",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a commit alone",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "COMMIT TRANSACTION",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a rollback alone",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "ROLLBACK TRANSACTION",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a begin with the short form",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN; INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_tx (id) VALUES (5); COMMIT",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "a request that creates a session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "createSession": true
+   }
+  },
+  {
+   "item": 11,
+   "name": "a request with a session that does not exist",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "connectionProperties": [
+     {
+      "key": "session_id",
+      "value": "nosuchsession"
+     }
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "a request with a connection property of a session and a transaction",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN TRANSACTION",
+    "useLegacySql": false,
+    "createSession": true,
+    "connectionProperties": [
+     {
+      "key": "time_zone",
+      "value": "UTC"
+     }
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "the rows at the end of the transactions",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_tx ORDER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 12,
+   "name": "the headers of a statement",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "header": {
+    "Accept-Encoding": [
+     "gzip, deflate"
+    ]
+   }
+  },
+  {
+   "item": 12,
+   "name": "the headers of a request with a user agent",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "header": {
+    "User-Agent": [
+     "dbimp"
+    ],
+    "X-Goog-Api-Client": [
+     "dbimp"
+    ]
+   }
+  },
+  {
+   "item": 12,
+   "name": "the headers of a request that is refused",
+   "method": "GET",
+   "path": "/nosuch"
+  },
+  {
+   "item": 12,
+   "name": "the headers of a request with an options method",
+   "method": "OPTIONS",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "header": {
+    "Origin": [
+     "http://example.com"
+    ],
+    "Access-Control-Request-Method": [
+     "POST"
+    ]
+   }
+  },
+  {
+   "item": 12,
+   "name": "the headers of a head request",
+   "method": "HEAD",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test"
+  },
+  {
+   "item": 12,
+   "name": "a request with an expect header",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "header": {
+    "Expect": [
+     "100-continue"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table as select",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_clone AS SELECT 1 AS id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create or replace table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE OR REPLACE TABLE `dbimp-project`.dbimp_test.dbimp_it_clone AS SELECT 2 AS id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table with a primary key",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_pk (id INT64, PRIMARY KEY (id) NOT ENFORCED)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table with a foreign key",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_kv (id INT64, FOREIGN KEY (id) REFERENCES `dbimp-project`.dbimp_test.dbimp_it_pk(id) NOT ENFORCED)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table with a unique column",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_ghost (id INT64 UNIQUE)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table with a default, a partition and a cluster",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_def (id INT64 DEFAULT 5, d DATE) PARTITION BY d CLUSTER BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an insert that uses the default",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_def (d) VALUES (DATE '2024-01-02')",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "the row with the default",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, d FROM `dbimp-project`.dbimp_test.dbimp_it_def",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE VIEW `dbimp-project`.dbimp_test.dbimp_it_view AS SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_pk",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select from the view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.dbimp_it_view",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create materialized view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE MATERIALIZED VIEW `dbimp-project`.dbimp_test.dbimp_it_mv AS SELECT id, COUNT(*) AS c FROM `dbimp-project`.dbimp_test.dbimp_it_pk GROUP BY id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create search index",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE SEARCH INDEX dbimp_it_ix ON `dbimp-project`.dbimp_test.dbimp_it_def(ALL COLUMNS)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create vector index",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE VECTOR INDEX dbimp_it_vx ON `dbimp-project`.dbimp_test.dbimp_it_def(id) OPTIONS(index_type = 'IVF')",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table clone",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_cl CLONE `dbimp-project`.dbimp_test.dbimp_it_pk",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create snapshot table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE SNAPSHOT TABLE `dbimp-project`.dbimp_test.dbimp_it_sn_r2 CLONE `dbimp-project`.dbimp_test.dbimp_it_pk",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create function",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE FUNCTION `dbimp-project`.dbimp_test.dbimp_it_f(x INT64) RETURNS INT64 AS (x + 1)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create temporary function",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TEMP FUNCTION f(x INT64) RETURNS INT64 AS (x + 1); SELECT f(1) AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table function",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE FUNCTION `dbimp-project`.dbimp_test.dbimp_it_tf(x INT64) AS SELECT x AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create procedure",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE PROCEDURE `dbimp-project`.dbimp_test.dbimp_it_proc() BEGIN SELECT 1; END",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create external table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE EXTERNAL TABLE `dbimp-project`.dbimp_test.dbimp_it_ext OPTIONS (format = 'CSV', uris = ['gs://nosuch/x.csv'])",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create schema",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE SCHEMA `dbimp-project`.dbimp_it_ds",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a drop schema",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP SCHEMA `dbimp-project`.dbimp_it_ds",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an alter table add column",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "ALTER TABLE `dbimp-project`.dbimp_test.dbimp_it_dml ADD COLUMN n INT64",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an alter table rename",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "ALTER TABLE `dbimp-project`.dbimp_test.dbimp_it_dml RENAME TO dbimp_it_dml2",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an alter table rename back",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "ALTER TABLE `dbimp-project`.dbimp_test.dbimp_it_dml2 RENAME TO dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an alter table drop column",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "ALTER TABLE `dbimp-project`.dbimp_test.dbimp_it_dml DROP COLUMN n",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an insert select",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) SELECT 20, 'twenty'",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an export data",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "EXPORT DATA OPTIONS (uri = 'gs://nosuch/x*', format = 'CSV') AS SELECT 1 AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a load data",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "LOAD DATA INTO `dbimp-project`.dbimp_test.dbimp_it_dml FROM FILES (format = 'CSV', uris = ['gs://nosuch/x.csv'])",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a wildcard table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM ``dbimp-project`.dbimp_test.dbimp_it_*`",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a time travel",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml FOR SYSTEM_TIME AS OF TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 SECOND)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a qualify",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml QUALIFY ROW_NUMBER() OVER (ORDER BY id) = 1",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select except",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * EXCEPT (s) FROM `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select replace",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * REPLACE ('r' AS s) FROM `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "an unnest of an array of structs",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT s.a, s.b FROM UNNEST([STRUCT(1 AS a, 'x' AS b), STRUCT(2, 'y')]) AS s",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a safe prefix",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT SAFE_CAST('x' AS INT64) AS a, SAFE_DIVIDE(1, 0) AS b, SAFE.PARSE_DATE('%Y', 'x') AS c",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "the pipe syntax",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "FROM `dbimp-project`.dbimp_test.dbimp_it_dml |> WHERE id = 1 |> SELECT id",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a table sample",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_big TABLESAMPLE SYSTEM (10 PERCENT)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a window function",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, SUM(id) OVER (ORDER BY id) AS running FROM `dbimp-project`.dbimp_test.dbimp_it_big WHERE id <= 3",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a with clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "WITH a AS (SELECT 1 AS x) SELECT x FROM a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a recursive with clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "WITH RECURSIVE r AS (SELECT 1 AS n UNION ALL SELECT n + 1 FROM r WHERE n < 3) SELECT n FROM r",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a generate array",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT GENERATE_ARRAY(1, 3) AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a json function",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT JSON_VALUE(JSON '{\"a\":1}', '$.a') AS a",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a geography function",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT ST_DISTANCE(ST_GEOGPOINT(0, 0), ST_GEOGPOINT(1, 1)) AS d",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a count of the rows",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select with a limit and an offset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_big ORDER BY id LIMIT 2 OFFSET 1",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select with a label",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "labels": {
+     "a": "b"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select with a reservation",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "reservation": "none"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select with jobCreationMode",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "jobCreationMode": "JOB_CREATION_OPTIONAL"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select with a preserved nulls member",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "preserveNulls": true
+   }
+  },
+  {
+   "item": 6,
+   "name": "lead: a failing job inserted with jobs.insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs",
+   "body": {
+    "configuration": {
+     "query": {
+      "query": "SELEC 1",
+      "useLegacySql": false
+     }
+    },
+    "jobReference": {
+     "projectId": "dbimp-project",
+     "jobId": "dbimp-bad-614562"
+    }
+   }
+  },
+  {
+   "item": 6,
+   "name": "lead: the job that failed",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-bad-614562"
+  },
+  {
+   "item": 6,
+   "name": "lead: the results of the job that failed",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/dbimp-bad-614562"
+  },
+  {
+   "item": 1,
+   "name": "lead: an insert job inserted with jobs.insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs",
+   "body": {
+    "configuration": {
+     "query": {
+      "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (30, 'thirty')",
+      "useLegacySql": false
+     }
+    },
+    "jobReference": {
+     "projectId": "dbimp-project",
+     "jobId": "dbimp-dml-614562"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: the insert job with its statistics",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-dml-614562"
+  },
+  {
+   "item": 1,
+   "name": "lead: the row count after a dml statement",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (31, 'thirty-one'); SELECT @@row_count AS n",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 5,
+   "name": "lead: timestamps in the ISO 8601 form",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIMESTAMP '2024-01-02 03:04:05.123456+00' AS ts",
+    "useLegacySql": false,
+    "formatOptions": {
+     "timestampOutputFormat": "ISO8601_STRING"
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "lead: timestamps in the float form",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIMESTAMP '2024-01-02 03:04:05.123456+00' AS ts",
+    "useLegacySql": false,
+    "formatOptions": {
+     "timestampOutputFormat": "FLOAT64"
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "lead: timestamps as integers and a use of the output format",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIMESTAMP '2024-01-02 03:04:05.123456+00' AS ts",
+    "useLegacySql": false,
+    "formatOptions": {
+     "useInt64Timestamp": true,
+     "timestampOutputFormat": "INT64"
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "lead: the child jobs of a job",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs?parentJobId=dbimp-job-614562"
+  },
+  {
+   "item": 5,
+   "name": "lead: the jobs in the state done",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs?stateFilter=done&maxResults=1"
+  },
+  {
+   "item": 5,
+   "name": "lead: the jobs of all users",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs?allUsers=true&maxResults=1"
+  },
+  {
+   "item": 5,
+   "name": "lead: the selected fields of tabledata.list",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_big/data?maxResults=2&selectedFields=id"
+  },
+  {
+   "item": 5,
+   "name": "lead: tabledata.list from a start index",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_big/data?maxResults=2&startIndex=2998"
+  },
+  {
+   "item": 5,
+   "name": "lead: a very large maxResults",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/queries/dbimp-job-614562?maxResults=1000000"
+  },
+  {
+   "item": 1,
+   "name": "lead: the results of a job with a location that is wrong",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-job-614562?location=EU"
+  },
+  {
+   "item": 1,
+   "name": "lead: the results of a job with the location of the request",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-job-614562?location=US"
+  },
+  {
+   "item": 1,
+   "name": "lead: a request with a job creation mode of required",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "jobCreationMode": "JOB_CREATION_REQUIRED"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: an execute immediate",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "EXECUTE IMMEDIATE 'SELECT 1 AS a'",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a call of the procedure",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CALL `dbimp-project`.dbimp_test.dbimp_it_proc()",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: an assert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "ASSERT 1 = 2 AS 'one is not two'",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a grant",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "GRANT `roles/bigquery.dataViewer` ON SCHEMA `dbimp-project`.dbimp_it_ds TO 'user:a@example.com'",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a describe of a table through INFORMATION_SCHEMA with the field paths",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT * FROM `dbimp-project`.dbimp_test.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a dataset made with datasets.insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets",
+   "body": {
+    "datasetReference": {
+     "projectId": "dbimp-project",
+     "datasetId": "dbimp_it_ds2"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a table made with tables.insert",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables",
+   "body": {
+    "tableReference": {
+     "projectId": "dbimp-project",
+     "datasetId": "dbimp_test",
+     "tableId": "dbimp_it_kv"
+    },
+    "schema": {
+     "fields": [
+      {
+       "name": "id",
+       "type": "INTEGER"
+      },
+      {
+       "name": "s",
+       "type": "STRING"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a row streamed with tabledata.insertAll",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_kv/insertAll",
+   "body": {
+    "rows": [
+     {
+      "insertId": "1",
+      "json": {
+       "id": 1,
+       "s": "a"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: the row that was streamed",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_kv",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a table dropped with tables.delete",
+   "method": "DELETE",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets/dbimp_test/tables/dbimp_it_kv"
+  },
+  {
+   "item": 12,
+   "name": "lead: a request with a gzip content encoding and a body that is not gzip",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "text": "{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false}",
+   "header": {
+    "Content-Type": [
+     "application/json"
+    ],
+    "Content-Encoding": [
+     "gzip"
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table that is the source of a merge",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_src AS SELECT 40 AS id, 'forty' AS s",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a merge from a table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "MERGE `dbimp-project`.dbimp_test.dbimp_it_dml t USING `dbimp-project`.dbimp_test.dbimp_it_src u ON t.id = u.id WHEN MATCHED THEN UPDATE SET s = u.s WHEN NOT MATCHED THEN INSERT (id, s) VALUES (u.id, u.s)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select after the merge from a table",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id, s FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE id = 40",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a delete with no where clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DELETE FROM `dbimp-project`.dbimp_test.dbimp_it_src",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "a create table with a default dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE dbimp_it_dsd (id INT64)",
+    "useLegacySql": false,
+    "defaultDataset": {
+     "projectId": "dbimp-project",
+     "datasetId": "dbimp_test"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "an insert with a default dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO dbimp_it_dsd (id) VALUES (1)",
+    "useLegacySql": false,
+    "defaultDataset": {
+     "projectId": "dbimp-project",
+     "datasetId": "dbimp_test"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "a select with a default dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM dbimp_it_dsd",
+    "useLegacySql": false,
+    "defaultDataset": {
+     "projectId": "dbimp-project",
+     "datasetId": "dbimp_test"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "a job inserted with a label",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs",
+   "body": {
+    "configuration": {
+     "query": {
+      "query": "SELECT 1 AS a",
+      "useLegacySql": false
+     },
+     "labels": {
+      "origin": "dbimp"
+     }
+    },
+    "jobReference": {
+     "projectId": "dbimp-project",
+     "jobId": "dbimp-label-614562"
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "the job that was inserted with a label",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/jobs/dbimp-label-614562"
+  },
+  {
+   "item": 4,
+   "name": "a positional INT64 parameter in a where clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT s FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE id = ?",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "7"
+      }
+     }
+    ],
+    "parameterMode": "POSITIONAL"
+   }
+  },
+  {
+   "item": 4,
+   "name": "a named INT64 parameter in a where clause",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT s FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE id = @p",
+    "useLegacySql": false,
+    "queryParameters": [
+     {
+      "parameterType": {
+       "type": "INT64"
+      },
+      "parameterValue": {
+       "value": "7"
+      },
+      "name": "p"
+     }
+    ],
+    "parameterMode": "NAMED"
+   }
+  },
+  {
+   "item": 7,
+   "name": "a slow query that the client gives up on",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM UNNEST(GENERATE_ARRAY(1, 1000000)) AS a CROSS JOIN UNNEST(GENERATE_ARRAY(1, 30000)) AS b",
+    "useLegacySql": false,
+    "useQueryCache": false
+   },
+   "timeout": "1s"
+  },
+  {
+   "item": 7,
+   "name": "a query after the client gave up",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false
+   },
+   "wait": "3s"
+  },
+  {
+   "item": 7,
+   "name": "a second query after the client gave up",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 2 AS a",
+    "useLegacySql": false
+   },
+   "wait": "6s"
+  },
+  {
+   "item": 7,
+   "name": "a read of the datasets after the client gave up",
+   "method": "GET",
+   "path": "/bigquery/v2/projects/dbimp-project/datasets"
+  },
+  {
+   "item": 3,
+   "name": "lead: timestamps as 64 bit integers",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT TIMESTAMP '2024-01-02 03:04:05.123456+00' AS ts, TIMESTAMP '9999-12-31 23:59:59.999999+00' AS far",
+    "useLegacySql": false,
+    "formatOptions": {
+     "useInt64Timestamp": true
+    }
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: an insert with a request id",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (900, 'req')",
+    "useLegacySql": false,
+    "requestId": "dbimp-insert-614562"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: the same insert with the same request id",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_dml (id, s) VALUES (900, 'req')",
+    "useLegacySql": false,
+    "requestId": "dbimp-insert-614562"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: the rows of the request id",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE id = 900",
+    "useLegacySql": false,
+    "useQueryCache": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: a request that creates a session for a transaction",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT 1 AS a",
+    "useLegacySql": false,
+    "createSession": true
+   },
+   "capture": {
+    "sid": "sessionInfo.sessionId"
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: begin in the session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "BEGIN TRANSACTION",
+    "useLegacySql": false,
+    "connectionProperties": [
+     {
+      "key": "session_id",
+      "value": "{{sid}}"
+     }
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: an insert in the session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "INSERT INTO `dbimp-project`.dbimp_test.dbimp_it_tx (id) VALUES (700)",
+    "useLegacySql": false,
+    "connectionProperties": [
+     {
+      "key": "session_id",
+      "value": "{{sid}}"
+     }
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: a select in the session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_tx WHERE id = 700",
+    "useLegacySql": false,
+    "useQueryCache": false,
+    "connectionProperties": [
+     {
+      "key": "session_id",
+      "value": "{{sid}}"
+     }
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: rollback in the session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "ROLLBACK TRANSACTION",
+    "useLegacySql": false,
+    "connectionProperties": [
+     {
+      "key": "session_id",
+      "value": "{{sid}}"
+     }
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: a select after the rollback in the session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_tx WHERE id = 700",
+    "useLegacySql": false,
+    "useQueryCache": false,
+    "connectionProperties": [
+     {
+      "key": "session_id",
+      "value": "{{sid}}"
+     }
+    ]
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: a select after the rollback outside the session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_tx WHERE id = 700",
+    "useLegacySql": false,
+    "useQueryCache": false
+   }
+  },
+  {
+   "item": 11,
+   "name": "lead: abort the session",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CALL BQ.ABORT_SESSION()",
+    "useLegacySql": false,
+    "connectionProperties": [
+     {
+      "key": "session_id",
+      "value": "{{sid}}"
+     }
+    ]
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: the first table of a wildcard",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_wc1 (id INT64)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: the second table of a wildcard",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "CREATE TABLE `dbimp-project`.dbimp_test.dbimp_it_wc2 (id INT64)",
+    "useLegacySql": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a wildcard table of two like tables",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "SELECT COUNT(*) AS c FROM `dbimp-project.dbimp_test.dbimp_it_wc*`",
+    "useLegacySql": false,
+    "useQueryCache": false
+   }
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop types",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_types",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop dml",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop big",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_big",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop pk",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_pk",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop def",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_def",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop clone",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_clone",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop scr",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_scr",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop tx",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_tx",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop ghost",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_ghost",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop kv",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_kv",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop src",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_src",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop dsd",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_dsd",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop view view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP VIEW IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_view",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop table dml",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_dml",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop table dml2",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_dml2",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop table cl",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_cl",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop table sn",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_sn_r2",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop table ext",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_ext",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop the function",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP FUNCTION IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_f",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop the dataset",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP SCHEMA IF EXISTS `dbimp-project`.dbimp_it_ds",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop dbimp_it_wc1",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_wc1",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop dbimp_it_wc2",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_wc2",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop dbimp_it_sn_r2",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP SNAPSHOT TABLE IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_sn_r2",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop the view of the run",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP VIEW IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_view",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop the materialized view",
+   "method": "POST",
+   "path": "/bigquery/v2/projects/dbimp-project/queries",
+   "body": {
+    "query": "DROP MATERIALIZED VIEW IF EXISTS `dbimp-project`.dbimp_test.dbimp_it_mv",
+    "useLegacySql": false
+   },
+   "phase": "teardown"
+  }
+ ],
+ "auth": "bearer"
+}

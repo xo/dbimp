@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT CAST(NULL AS ARRAY<INT>) AS a, CAST(NULL AS MAP<STRING,INT>) AS m, CAST(NULL AS STRUCT<a:INT,b:STRING>) AS st, CAST(NULL AS INTERVAL YEAR TO MONTH) AS ym, CAST(NULL AS INTERVAL DAY TO SECOND) AS ds, CAST(NULL AS VARIANT) AS v\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"d09bfd70-659b-4bc8-98c3-574e88134248\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=732"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:33:08 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Request-Id": [
+        "d09bfd70-659b-4bc8-98c3-574e88134248"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-12e7-1ad8-8422-3763ffda3322\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":6,\"columns\":[{\"name\":\"a\",\"type_text\":\"ARRAY<INT>\",\"type_name\":\"ARRAY\",\"position\":0},{\"name\":\"m\",\"type_text\":\"MAP<STRING, INT>\",\"type_name\":\"MAP\",\"position\":1},{\"name\":\"st\",\"type_text\":\"STRUCT<a: INT, b: STRING>\",\"type_name\":\"STRUCT\",\"position\":2},{\"name\":\"ym\",\"type_text\":\"INTERVAL YEAR TO MONTH\",\"type_name\":\"INTERVAL\",\"position\":3,\"type_interval_type\":\"YEAR TO MONTH\"},{\"name\":\"ds\",\"type_text\":\"INTERVAL DAY TO SECOND\",\"type_name\":\"INTERVAL\",\"position\":4,\"type_interval_type\":\"DAY TO SECOND\"},{\"name\":\"v\",\"type_text\":\"VARIANT\",\"type_name\":\"VARIANT\",\"position\":5}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[null,null,null,null,null,null]]}}"
+  }
+}

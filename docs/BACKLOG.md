@@ -1759,3 +1759,64 @@ sections Interfaces, Faults, Integration tests and Compared with Couchbase of
 [SNOWFLAKE.md](SNOWFLAKE.md). The integration tests never ran, because the work
 had no account. The workflow leaves a hosted driver out of its jobs. Open
 questions 6 to 17 of SNOWFLAKE.md wait for Ken. Steps 18 to 20 wait for Ken too.
+
+## W35. Write the Google BigQuery driver
+
+Ken asked for it on 2026-10-10, by D184. Follow [DRIVER.md](DRIVER.md). Step 3
+goes in [BIGQUERY.md](BIGQUERY.md), and the package is `bigquery`. `dbrun`
+starts `bigquery-0.7.2` and `bigquery-0.8.1`, the community emulator, which
+`dbmeta` reads already. `dburl` has the scheme `bigquery`, and `usql` has a
+driver on `gorm.io/driver/bigquery`, which pulls in the Arrow-based Storage
+Read API. This driver uses the REST API with JSON only.
+
+## W36. Write the Azure Cosmos DB driver
+
+Ken asked for it on 2026-10-10, by D184. Follow [DRIVER.md](DRIVER.md). Step 3
+goes in [COSMOS.md](COSMOS.md), and the package is `cosmos`. `dbrun` starts
+`cosmos-EN20260907`, the emulator. `dburl` has the scheme `cosmos`, and `usql`
+has a driver on `btnguyen2k/gocosmos`. The `usql` session reported on
+2026-10-10 that its old hook stripped a trailing semicolon from every
+statement, because Cosmos DB refuses it. Step 2 measures that, and step 9 says
+whether the driver accepts a trailing semicolon.
+
+## W37. Write the Amazon Athena driver
+
+Ken asked for it on 2026-10-10, by D184. Follow [DRIVER.md](DRIVER.md). Step 3
+goes in [ATHENA.md](ATHENA.md), and the package is `athena`. Athena has no
+emulator and no entry in `dbrun`. `usql` has a driver on `uber/athenadriver`. The
+`usql` session reported on 2026-10-10 that its hook strips a trailing semicolon,
+and that its `Version` statement is `SELECT node_version FROM system.runtime.nodes
+LIMIT 1`, because Athena is Trino underneath (D181 gives a product with such a
+query no `SELECT version()`). The measurement needs an account of Amazon, which `dbsetup` provisions when Ken
+asks (dbmeta D117). The `dynamodb` driver signs requests already.
+
+## W38. Write the Google Cloud Spanner driver. Reopened.
+
+Ken asked for it on 2026-10-10, by D185. Step 2 found that the only server of
+`dbrun`, Spanner Omni, serves gRPC and no REST API, so Ken decided on the same
+day that dbimp writes no driver for it (D186). Ken then decided that the
+drivers are built on the hosted services, so D187 reopens it. The measurement
+runs on the hosted instance, and again on the Cloud Spanner emulator when
+`dbmeta` has its entry. [SPANNER.md](SPANNER.md) holds the facts.
+
+## W39. Write the Databricks driver
+
+Ken asked for it on 2026-10-10, by D188. Follow [DRIVER.md](DRIVER.md). Step 3
+goes in [DATABRICKS.md](DATABRICKS.md), and the package is `databricks`.
+Databricks has no emulator and no entry in `dbrun`. `usql` has a driver on
+`databricks/databricks-sql-go`. The measurement needs a workspace and a SQL
+warehouse, which `dbsetup` provisions (dbmeta D117). The API is
+`POST /api/2.0/sql/statements`, with a personal access token as a Bearer value.
+
+## W40. Write a small parser for INSERT, UPDATE and DELETE
+
+Ken asked for it on 2026-10-10, with D190. The Cosmos DB driver reads only,
+because the SQL of Cosmos DB has no statement that writes, and a write is a REST
+request on a document. A driver of this repository might at some point need a
+minimal parser and implementation that turns `INSERT`, `UPDATE` and `DELETE`
+into those requests, so that `usql` and `dbtpl` can write. Decide the language
+first. The `gocosmos` statements and a JSON command are the two known forms
+(W36 and [COSMOS.md](COSMOS.md)). Other drivers that might need it have not
+been named. The root package holds code that drivers share (D4), so a parser
+that two drivers use goes there.
+

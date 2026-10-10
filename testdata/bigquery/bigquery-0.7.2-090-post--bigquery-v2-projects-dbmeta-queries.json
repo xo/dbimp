@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT JSON '{\\\"a\\\":[1,2,{\\\"b\\\":null}]}' AS obj, JSON 'null' AS jnull, JSON '1' AS num, JSON '\\\"s\\\"' AS str, CAST(NULL AS JSON) AS sqlnull, JSON '12345678901234567890' AS big\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:30:57 GMT"
+      ],
+      "Content-Length": [
+        "551"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"JFPnmUXTZF026UHwExeSu04iZHO\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"obj\",\"type\":\"JSON\"},{\"mode\":\"NULLABLE\",\"name\":\"jnull\",\"type\":\"JSON\"},{\"mode\":\"NULLABLE\",\"name\":\"num\",\"type\":\"JSON\"},{\"mode\":\"NULLABLE\",\"name\":\"str\",\"type\":\"JSON\"},{\"mode\":\"NULLABLE\",\"name\":\"sqlnull\",\"type\":\"JSON\"},{\"mode\":\"NULLABLE\",\"name\":\"big\",\"type\":\"JSON\"}]},\"rows\":[{\"f\":[{\"v\":\"{\\\"a\\\":[1,2,{\\\"b\\\":null}]}\"},{\"v\":\"null\"},{\"v\":\"1\"},{\"v\":\"\\\"s\\\"\"},{\"v\":null},{\"v\":\"12345678901234567890\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

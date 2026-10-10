@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT id FROM dbmeta.dbmeta.dbimp_it_dml WHERE id IN UNNEST(@p)\",\"useLegacySql\":false,\"queryParameters\":[{\"name\":\"p\",\"parameterType\":{\"type\":\"ARRAY\",\"arrayType\":{\"type\":\"INT64\"}},\"parameterValue\":{\"arrayValues\":[{\"value\":\"1\"},{\"value\":\"2\"}]}}],\"parameterMode\":\"NAMED\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:09 GMT"
+      ],
+      "Content-Length": [
+        "366"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to analyze: No matching signature for operator IN UNNEST for argument types: INT64, ARRAY\\u003cSTRING\\u003e [at 1:52]\"}],\"code\":400,\"message\":\"failed to analyze: No matching signature for operator IN UNNEST for argument types: INT64, ARRAY\\u003cSTRING\\u003e [at 1:52]\"}}"
+  }
+}

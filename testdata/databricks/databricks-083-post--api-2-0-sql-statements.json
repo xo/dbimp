@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT INTERVAL '1-2' YEAR TO MONTH AS ym, INTERVAL '-1-2' YEAR TO MONTH AS nym, INTERVAL '5' YEAR AS y, INTERVAL '3' MONTH AS m\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"c9ed0482-15c7-4422-8d1a-06eb90bd0310\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=635"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:59 GMT"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "c9ed0482-15c7-4422-8d1a-06eb90bd0310"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-0d93-1a32-843c-6776d79bf7b5\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":4,\"columns\":[{\"name\":\"ym\",\"type_text\":\"INTERVAL YEAR TO MONTH\",\"type_name\":\"INTERVAL\",\"position\":0,\"type_interval_type\":\"YEAR TO MONTH\"},{\"name\":\"nym\",\"type_text\":\"INTERVAL YEAR TO MONTH\",\"type_name\":\"INTERVAL\",\"position\":1,\"type_interval_type\":\"YEAR TO MONTH\"},{\"name\":\"y\",\"type_text\":\"INTERVAL YEAR\",\"type_name\":\"INTERVAL\",\"position\":2,\"type_interval_type\":\"YEAR\"},{\"name\":\"m\",\"type_text\":\"INTERVAL MONTH\",\"type_name\":\"INTERVAL\",\"position\":3,\"type_interval_type\":\"MONTH\"}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"INTERVAL '1-2' YEAR TO MONTH\",\"INTERVAL '-1-2' YEAR TO MONTH\",\"INTERVAL '5' YEAR\",\"INTERVAL '3' MONTH\"]]}}"
+  }
+}

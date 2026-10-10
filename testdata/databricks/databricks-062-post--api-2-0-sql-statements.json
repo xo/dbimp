@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT table_name, column_name, ordinal_position, is_nullable, data_type, full_data_type, numeric_precision, numeric_scale FROM workspace.information_schema.columns WHERE table_schema = 'dbimp' AND table_name = 'dbimp_t_src' ORDER BY ordinal_position\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:39 GMT"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"6730f8ee-e12c-4b92-83cf-979ba90be1d5\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=1395"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Request-Id": [
+        "6730f8ee-e12c-4b92-83cf-979ba90be1d5"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-0164-1e95-9942-9b333ceb2007\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":8,\"columns\":[{\"name\":\"table_name\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":0},{\"name\":\"column_name\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":1},{\"name\":\"ordinal_position\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":2},{\"name\":\"is_nullable\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":3},{\"name\":\"data_type\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":4},{\"name\":\"full_data_type\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":5},{\"name\":\"numeric_precision\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":6},{\"name\":\"numeric_scale\",\"type_text\":\"INT\",\"type_name\":\"INT\",\"position\":7}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":2}],\"total_row_count\":2,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":2,\"data_array\":[[\"dbimp_t_src\",\"id\",\"0\",\"YES\",\"INT\",\"int\",null,null],[\"dbimp_t_src\",\"s\",\"1\",\"YES\",\"STRING\",\"string\",null,null]]}}"
+  }
+}

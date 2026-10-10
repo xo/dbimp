@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT [STRUCT(1 AS a, 'x' AS b), STRUCT(2, 'y')] AS s\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "380"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:08 GMT"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"QbKdaYcOtOAPHWPj7DKJm4i0Zxf\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"a\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"b\",\"type\":\"STRING\"}],\"mode\":\"REPEATED\",\"name\":\"s\",\"type\":\"RECORD\"}]},\"rows\":[{\"f\":[{\"v\":[{\"v\":{\"f\":[{\"v\":\"1\"},{\"v\":\"x\"}]}},{\"v\":{\"f\":[{\"v\":\"2\"},{\"v\":\"y\"}]}}]}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

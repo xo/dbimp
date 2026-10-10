@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Accept": [
+        "application/json"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT X'DEADBEEF' AS b, CAST('abc' AS BINARY) AS t, CAST('' AS BINARY) AS e, X'00' AS z, CAST('hé' AS BINARY) AS u\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "databricks"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"41dd30ad-e63a-4290-bee5-3eba765f7387\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=575"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "41dd30ad-e63a-4290-bee5-3eba765f7387"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:55 GMT"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-0b29-1d8e-8dc2-632d6e474dbc\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":5,\"columns\":[{\"name\":\"b\",\"type_text\":\"BINARY\",\"type_name\":\"BINARY\",\"position\":0},{\"name\":\"t\",\"type_text\":\"BINARY\",\"type_name\":\"BINARY\",\"position\":1},{\"name\":\"e\",\"type_text\":\"BINARY\",\"type_name\":\"BINARY\",\"position\":2},{\"name\":\"z\",\"type_text\":\"BINARY\",\"type_name\":\"BINARY\",\"position\":3},{\"name\":\"u\",\"type_text\":\"BINARY\",\"type_name\":\"BINARY\",\"position\":4}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"3q2+7w==\",\"YWJj\",\"\",\"AA==\",\"aMOp\"]]}}"
+  }
+}

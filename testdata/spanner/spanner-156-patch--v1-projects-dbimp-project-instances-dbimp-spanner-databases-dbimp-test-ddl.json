@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "PATCH",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"CREATE UNIQUE INDEX dbimp_t_idx_u ON dbimp_t_dml (s)\",\"CREATE NULL_FILTERED INDEX dbimp_t_idx_nf ON dbimp_t_dml (n) STORING (s)\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=2395"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:47:53 GMT"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_5c5891fa8a685783\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE UNIQUE INDEX dbimp_t_idx_u ON dbimp_t_dml(s)\",\n      \"CREATE NULL_FILTERED INDEX dbimp_t_idx_nf ON dbimp_t_dml(n) STORING (s)\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:47:51.996340Z\"\n      },\n      {}\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"INDEX\",\n        \"entityNames\": [\n          \"dbimp_t_idx_u\"\n        ]\n      },\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"INDEX\",\n        \"entityNames\": [\n          \"dbimp_t_idx_nf\"\n        ]\n      }\n    ]\n  }\n}\n"
+  }
+}

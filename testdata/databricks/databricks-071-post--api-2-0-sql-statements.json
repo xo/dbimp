@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT CAST(1.5 AS FLOAT) AS f, CAST(0.1 AS FLOAT) AS f01, CAST(16777217 AS FLOAT) AS f24, CAST(1.5 AS DOUBLE) AS d, CAST(0.1 AS DOUBLE) AS d01, 1.7976931348623157E308D AS dmax, 4.9E-324D AS dmin, CAST(-0.0 AS DOUBLE) AS dneg0\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Request-Id": [
+        "6adbf724-6c5d-4dcc-96e7-49bdcc7de3ab"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"6adbf724-6c5d-4dcc-96e7-49bdcc7de3ab\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=663"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:32:49 GMT"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ],
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-07b5-1c3b-a90f-d4df1c3b6803\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":8,\"columns\":[{\"name\":\"f\",\"type_text\":\"FLOAT\",\"type_name\":\"FLOAT\",\"position\":0},{\"name\":\"f01\",\"type_text\":\"FLOAT\",\"type_name\":\"FLOAT\",\"position\":1},{\"name\":\"f24\",\"type_text\":\"FLOAT\",\"type_name\":\"FLOAT\",\"position\":2},{\"name\":\"d\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":3},{\"name\":\"d01\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":4},{\"name\":\"dmax\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":5},{\"name\":\"dmin\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":6},{\"name\":\"dneg0\",\"type_text\":\"DOUBLE\",\"type_name\":\"DOUBLE\",\"position\":7}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1}],\"total_row_count\":1,\"truncated\":false},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":1,\"data_array\":[[\"1.5\",\"0.1\",\"1.6777216E7\",\"1.5\",\"0.1\",\"1.7976931348623157E308\",\"4.9E-324\",\"0.0\"]]}}"
+  }
+}

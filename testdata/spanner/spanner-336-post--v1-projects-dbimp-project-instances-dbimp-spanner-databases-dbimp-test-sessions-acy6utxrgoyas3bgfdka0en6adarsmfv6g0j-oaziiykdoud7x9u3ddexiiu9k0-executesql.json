@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"@{USE_ADDITIONAL_PARALLELISM=TRUE} UPDATE dbimp_t_dml SET n = 6 WHERE id = 301\",\"transaction\":{\"id\":\"QUN5NlVUd3JmRU1KMnEzRTN4bGl6eVYzOHhrSGFuMDBWUklKOUFyRkxfdklvSlVoOElVSnl6SQ==\"},\"seqno\":\"7\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Server-Timing": [
+        "gfet4t7; dur=651"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:56:13 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Server": [
+        "ESF"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Unsupported hint: USE_ADDITIONAL_PARALLELISM.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  }
+}

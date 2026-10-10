@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Content-Encoding": [
+        "gzip"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1 AS a\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:35 GMT"
+      ],
+      "Content-Length": [
+        "211"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"invalid\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to decode gzip content: gzip: invalid header\"}],\"code\":400,\"message\":\"failed to decode gzip content: gzip: invalid header\"}}"
+  }
+}

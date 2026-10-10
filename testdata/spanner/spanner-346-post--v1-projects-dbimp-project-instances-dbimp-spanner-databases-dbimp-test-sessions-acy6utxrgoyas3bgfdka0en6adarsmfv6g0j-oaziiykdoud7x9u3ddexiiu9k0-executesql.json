@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"MERGE INTO dbimp_t_dml t USING (SELECT 300 AS id, 'mg' AS s) u ON t.id = u.id WHEN MATCHED THEN UPDATE SET s = u.s WHEN NOT MATCHED THEN INSERT (id, s) VALUES (u.id, u.s)\",\"transaction\":{\"id\":\"QUN5NlVUd050b3hpNkNtUXktdFBDeFRRZFp1YWZacWctNkEwcnFXNmhveUJiUTRVN2ROdkV1NA==\"},\"seqno\":\"1\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:56:19 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=869"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Statement not supported: MergeStatement [at 1:1]\\\\nMERGE INTO dbimp_t_dml t USING (SELECT 300 AS id, \\\\'mg\\\\' AS s) u ON t.id = u.id...\\\\n^\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        \"message\": \"Statement not supported: MergeStatement [at 1:1]\\nMERGE INTO dbimp_t_dml t USING (SELECT 300 AS id, 'mg' AS s) u ON t.id = u.id...\\n^\"\n      }\n    ]\n  }\n}\n"
+  }
+}

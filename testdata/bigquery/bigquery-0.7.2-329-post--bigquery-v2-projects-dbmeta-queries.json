@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT ST_DISTANCE(ST_GEOGPOINT(0, 0), ST_GEOGPOINT(1, 1)) AS d\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:32:36 GMT"
+      ],
+      "Content-Length": [
+        "224"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"wC6FwPcf4yo6VngM191Z4U3YSIx\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"d\",\"type\":\"FLOAT\"}]},\"rows\":[{\"f\":[{\"v\":\"157249.38127194397\"}]}],\"totalRows\":\"1\",\"jobComplete\":true}"
+  }
+}

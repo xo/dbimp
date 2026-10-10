@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T061516Z"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"01cc7b2e-9449-4a3a-b8a2-2c5ed668b5ce\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:15:16 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "1732"
+      ],
+      "X-Amzn-Requestid": [
+        "76483a5f-03ae-4104-b60e-cd11c87a1edc"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT CAST(ROW(1,'x') AS ROW(a integer, b varchar)) AS v\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"01cc7b2e-9449-4a3a-b8a2-2c5ed668b5ce\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/01cc7b2e-9449-4a3a-b8a2-2c5ed668b5ce.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":326,\"QueryPlanningTimeInMillis\":36,\"QueryQueueTimeInMillis\":62,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":57,\"ServiceProcessingTimeInMillis\":27,\"TotalExecutionTimeInMillis\":472},\"Status\":{\"CompletionDateTime\":1.791612913168E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612912696E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/01cc7b2e-9449-4a3a-b8a2-2c5ed668b5ce.csv\",\"Query\":\"SELECT CAST(ROW(1,'x') AS ROW(a integer, b varchar)) AS v\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"01cc7b2e-9449-4a3a-b8a2-2c5ed668b5ce\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/01cc7b2e-9449-4a3a-b8a2-2c5ed668b5ce.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":326,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791612913168E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612912696E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

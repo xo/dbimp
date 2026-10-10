@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT ? AS a\",\"useLegacySql\":false,\"queryParameters\":[{\"parameterType\":{\"type\":\"STRUCT\",\"structTypes\":[{\"name\":\"a\",\"type\":{\"type\":\"INT64\"}},{\"name\":\"b\",\"type\":{\"type\":\"STRING\"}}]},\"parameterValue\":{\"structValues\":{\"a\":{\"value\":\"1\"},\"b\":{\"value\":\"x\"}}}}],\"parameterMode\":\"POSITIONAL\"}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:09 GMT"
+      ],
+      "Content-Length": [
+        "1152"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to convert value from {Name: Ordinal:1 Value:eyJoZWFkZXIiOiJzdHJ1Y3QiLCJib2R5Ijoie1wia2V5c1wiOltcImFcIixcImJcIl0sXCJ2YWx1ZXNcIjpbXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2lNU0o5XCIsXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2llQ0o5XCJdfSJ9}: strconv.ParseInt: parsing \\\"eyJoZWFkZXIiOiJzdHJ1Y3QiLCJib2R5Ijoie1wia2V5c1wiOltcImFcIixcImJcIl0sXCJ2YWx1ZXNcIjpbXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2lNU0o5XCIsXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2llQ0o5XCJdfSJ9\\\": invalid syntax\"}],\"code\":400,\"message\":\"failed to convert value from {Name: Ordinal:1 Value:eyJoZWFkZXIiOiJzdHJ1Y3QiLCJib2R5Ijoie1wia2V5c1wiOltcImFcIixcImJcIl0sXCJ2YWx1ZXNcIjpbXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2lNU0o5XCIsXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2llQ0o5XCJdfSJ9}: strconv.ParseInt: parsing \\\"eyJoZWFkZXIiOiJzdHJ1Y3QiLCJib2R5Ijoie1wia2V5c1wiOltcImFcIixcImJcIl0sXCJ2YWx1ZXNcIjpbXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2lNU0o5XCIsXCJleUpvWldGa1pYSWlPaUp6ZEhKcGJtY2lMQ0ppYjJSNUlqb2llQ0o5XCJdfSJ9\\\": invalid syntax\"}}"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbimp-project/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT s.a, s.b FROM UNNEST([STRUCT(1 AS a, 'x' AS b), STRUCT(2, 'y')]) AS s\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:46:16 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ]
+    },
+    "body": "{\n  \"kind\": \"bigquery#queryResponse\",\n  \"schema\": {\n    \"fields\": [\n      {\n        \"name\": \"a\",\n        \"type\": \"INTEGER\",\n        \"mode\": \"NULLABLE\"\n      },\n      {\n        \"name\": \"b\",\n        \"type\": \"STRING\",\n        \"mode\": \"NULLABLE\"\n      }\n    ]\n  },\n  \"jobReference\": {\n    \"projectId\": \"dbimp-project\",\n    \"jobId\": \"job_Mh9ctzUm6-WcM_1mL5z3ibAo2EYM\",\n    \"location\": \"US\"\n  },\n  \"totalRows\": \"2\",\n  \"rows\": [\n    {\n      \"f\": [\n        {\n          \"v\": \"1\"\n        },\n        {\n          \"v\": \"x\"\n        }\n      ]\n    },\n    {\n      \"f\": [\n        {\n          \"v\": \"2\"\n        },\n        {\n          \"v\": \"y\"\n        }\n      ]\n    }\n  ],\n  \"totalBytesProcessed\": \"0\",\n  \"jobComplete\": true,\n  \"cacheHit\": true,\n  \"queryId\": \"job_Mh9ctzUm6-WcM_1mL5z3ibAo2EYM\",\n  \"jobCreationReason\": {\n    \"code\": \"REQUESTED\"\n  },\n  \"totalBytesBilled\": \"0\",\n  \"location\": \"US\",\n  \"creationTime\": \"1791614776684\",\n  \"startTime\": \"1791614776700\",\n  \"endTime\": \"1791614776760\",\n  \"pageRowCount\": \"2\",\n  \"statementType\": \"SELECT\"\n}\n"
+  }
+}

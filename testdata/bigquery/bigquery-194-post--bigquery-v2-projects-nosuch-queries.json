@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/nosuch/queries",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"query\":\"SELECT 1\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:44:33 GMT"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ]
+    },
+    "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Access Denied: Project nosuch: User does not have bigquery.jobs.create permission in project nosuch.\",\n    \"errors\": [\n      {\n        \"message\": \"Access Denied: Project nosuch: User does not have bigquery.jobs.create permission in project nosuch.\",\n        \"domain\": \"global\",\n        \"reason\": \"accessDenied\"\n      }\n    ],\n    \"status\": \"PERMISSION_DENIED\"\n  }\n}\n"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "PATCH",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/ddl",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"statements\":[\"CREATE TABLE dbimp_t_fk (id INT64 NOT NULL, pid INT64, g INT64 AS (id * 2) STORED, d STRING(MAX) DEFAULT ('x'), CONSTRAINT dbimp_t_chk CHECK (id > 0), CONSTRAINT dbimp_t_fk_par FOREIGN KEY (pid) REFERENCES dbimp_t_par (pid)) PRIMARY KEY (id)\"]}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:48:12 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=2755"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ]
+    },
+    "body": "{\n  \"name\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/operations/_auto_op_ef6e5c0df5f0e090\",\n  \"metadata\": {\n    \"@type\": \"type.googleapis.com/google.spanner.admin.database.v1.UpdateDatabaseDdlMetadata\",\n    \"database\": \"projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test\",\n    \"statements\": [\n      \"CREATE TABLE dbimp_t_fk (\\n  id INT64 NOT NULL,\\n  pid INT64,\\n  g INT64 AS (id * 2) STORED,\\n  d STRING(MAX) DEFAULT ('x'),\\n  CONSTRAINT dbimp_t_fk_par FOREIGN KEY(pid) REFERENCES dbimp_t_par(pid),\\n  CONSTRAINT dbimp_t_chk CHECK(id \\u003e 0),\\n) PRIMARY KEY(id)\"\n    ],\n    \"progress\": [\n      {\n        \"startTime\": \"2026-10-10T05:48:11.252295Z\"\n      }\n    ],\n    \"actions\": [\n      {\n        \"action\": \"CREATE\",\n        \"entityType\": \"TABLE\",\n        \"entityNames\": [\n          \"dbimp_t_fk\"\n        ]\n      }\n    ]\n  }\n}\n"
+  }
+}

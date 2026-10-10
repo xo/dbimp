@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT table_name, index_name, index_type, is_unique, is_null_filtered, index_state FROM INFORMATION_SCHEMA.INDEXES WHERE table_name LIKE 'dbimp_t_%' ORDER BY table_name, index_name\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=459"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:54:43 GMT"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"table_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"index_name\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"index_type\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        },\n        {\n          \"name\": \"is_unique\",\n          \"type\": {\n            \"code\": \"BOOL\"\n          }\n        },\n        {\n          \"name\": \"is_null_filtered\",\n          \"type\": {\n            \"code\": \"BOOL\"\n          }\n        },\n        {\n          \"name\": \"index_state\",\n          \"type\": {\n            \"code\": \"STRING\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"dbimp_t_big\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_chi\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"dbimp_t_idx_nf\",\n      \"INDEX\",\n      false,\n      true,\n      \"READ_WRITE\"\n    ],\n    [\n      \"dbimp_t_dml\",\n      \"dbimp_t_idx_u\",\n      \"INDEX\",\n      true,\n      false,\n      \"READ_WRITE\"\n    ],\n    [\n      \"dbimp_t_doc\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_doc\",\n      \"dbimp_t_si\",\n      \"SEARCH\",\n      true,\n      false,\n      \"READ_WRITE\"\n    ],\n    [\n      \"dbimp_t_fk\",\n      \"IDX_dbimp_t_fk_pid_N_B73A5117986F4402\",\n      \"INDEX\",\n      false,\n      true,\n      \"READ_WRITE\"\n    ],\n    [\n      \"dbimp_t_fk\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_many\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_par\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_seqtab\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_ttl\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ],\n    [\n      \"dbimp_t_types\",\n      \"PRIMARY_KEY\",\n      \"PRIMARY_KEY\",\n      true,\n      false,\n      null\n    ]\n  ]\n}\n"
+  }
+}

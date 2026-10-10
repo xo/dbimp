@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"DECLARE dbimp_i INT64 DEFAULT 0; WHILE dbimp_i < 3 DO SET dbimp_i = dbimp_i + 1; END WHILE; SELECT dbimp_i AS a\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:34:31 GMT"
+      ],
+      "Content-Length": [
+        "340"
+      ]
+    },
+    "body": "{\"error\":{\"errors\":[{\"reason\":\"jobInternalError\",\"location\":\"\",\"debugInfo\":\"\",\"message\":\"failed to parse statements: failed to parse statement: Syntax error: Unexpected integer literal \\\"0\\\" [at 1:21]\"}],\"code\":400,\"message\":\"failed to parse statements: failed to parse statement: Syntax error: Unexpected integer literal \\\"0\\\" [at 1:21]\"}}"
+  }
+}

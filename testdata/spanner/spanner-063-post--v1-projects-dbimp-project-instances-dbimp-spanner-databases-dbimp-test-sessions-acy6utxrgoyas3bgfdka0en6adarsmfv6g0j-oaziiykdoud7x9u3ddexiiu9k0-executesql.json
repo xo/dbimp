@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT ARRAY(SELECT AS STRUCT 1 AS a, 'x' AS b UNION ALL SELECT AS STRUCT 2, 'y') AS s\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:52 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=447"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"s\",\n          \"type\": {\n            \"code\": \"ARRAY\",\n            \"arrayElementType\": {\n              \"code\": \"STRUCT\",\n              \"structType\": {\n                \"fields\": [\n                  {\n                    \"name\": \"a\",\n                    \"type\": {\n                      \"code\": \"INT64\"\n                    }\n                  },\n                  {\n                    \"name\": \"b\",\n                    \"type\": {\n                      \"code\": \"STRING\"\n                    }\n                  }\n                ]\n              }\n            }\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      [\n        [\n          \"1\",\n          \"x\"\n        ],\n        [\n          \"2\",\n          \"y\"\n        ]\n      ]\n    ]\n  ]\n}\n"
+  }
+}

@@ -204,3 +204,13 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D181](D181-select-version-for-databases-with-no-query-for-it.md) | SELECT version() for databases with no query for it | Decided |
 | [D182](D182-snowflake-is-measured-for-an-http-driver.md) | Snowflake is measured for an HTTP driver | Decided |
 | [D183](D183-the-snowflake-driver.md) | The Snowflake driver | Decided |
+| [D184](D184-bigquery-cosmos-db-and-athena-are-targets.md) | BigQuery, Cosmos DB and Athena are targets | Decided |
+| [D185](D185-spanner-is-a-target.md) | Spanner is a target | Decided. Amended by D186 |
+| [D186](D186-spanner-gets-no-driver-here.md) | Spanner gets no driver here | Amends D185. Amended by D187 |
+| [D187](D187-spanner-is-measured-on-the-hosted-service.md) | Spanner is measured on the hosted service | Amends D186 |
+| [D188](D188-databricks-is-a-target.md) | Databricks is a target | Decided |
+| [D189](D189-the-bigquery-driver.md) | The BigQuery driver | Decided |
+| [D190](D190-the-cosmos-db-driver.md) | The Cosmos DB driver | Decided in part |
+| [D191](D191-the-spanner-driver.md) | The Spanner driver | Decided |
+| [D192](D192-the-athena-driver.md) | The Athena driver | Decided |
+| [D193](D193-the-databricks-driver.md) | The Databricks driver | Decided |

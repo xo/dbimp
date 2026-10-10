@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261010T061855Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.StartQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryString\":\"SELECT node_version FROM system.runtime.nodes LIMIT 1\",\"WorkGroup\":\"dbimp\",\"ClientRequestToken\":\"dbimp-athena-r4-612609-0080-aaaaaaaaaaaa\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"}}"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "153"
+      ],
+      "X-Amzn-Requestid": [
+        "289387eb-6bf7-4896-a7f1-0283caad2e3c"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:18:55 GMT"
+      ]
+    },
+    "body": "{\"__type\":\"InvalidRequestException\",\"AthenaErrorCode\":\"MALFORMED_QUERY\",\"ErrorCode\":\"MALFORMED_QUERY\",\"Message\":\"Queries of this type are not supported\"}"
+  }
+}

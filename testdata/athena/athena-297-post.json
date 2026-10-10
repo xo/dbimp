@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "X-Amz-Date": [
+        "20261010T062111Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"fd160be6-686f-4bbe-92f6-7c095d440c48\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "1727"
+      ],
+      "X-Amzn-Requestid": [
+        "6ce7cea9-a62f-4e40-9457-7394c6cb5abe"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:21:11 GMT"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"ALTER TABLE dbimp_it_part ADD IF NOT EXISTS PARTITION (p='b')\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"fd160be6-686f-4bbe-92f6-7c095d440c48\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/fd160be6-686f-4bbe-92f6-7c095d440c48.txt\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DDL\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":246,\"QueryQueueTimeInMillis\":110,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":19,\"ServiceProcessingTimeInMillis\":21,\"TotalExecutionTimeInMillis\":396},\"Status\":{\"CompletionDateTime\":1.791613266646E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.79161326625E9},\"SubstatementType\":\"ALTER_TABLE_ADD_PARTITION\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/fd160be6-686f-4bbe-92f6-7c095d440c48.txt\",\"Query\":\"ALTER TABLE dbimp_it_part ADD IF NOT EXISTS PARTITION (p='b')\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"fd160be6-686f-4bbe-92f6-7c095d440c48\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/fd160be6-686f-4bbe-92f6-7c095d440c48.txt\"},\"Stats\":{\"EngineExecutionTimeInMillis\":246,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613266646E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.79161326625E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Date": [
+        "20261010T062019Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"71f88529-4a8a-45d6-acda-f5c82b33bd29\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Length": [
+        "1764"
+      ],
+      "X-Amzn-Requestid": [
+        "ce6d4f53-692f-4c19-b3b7-6625ccf756c2"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 06:20:20 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"SELECT TIMESTAMP '2026-10-10 12:34:56 UTC' AT TIME ZONE 'Asia/Tokyo' AS v\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"71f88529-4a8a-45d6-acda-f5c82b33bd29\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/71f88529-4a8a-45d6-acda-f5c82b33bd29.csv\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DML\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":182,\"QueryPlanningTimeInMillis\":13,\"QueryQueueTimeInMillis\":66,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":48,\"ServiceProcessingTimeInMillis\":23,\"TotalExecutionTimeInMillis\":319},\"Status\":{\"CompletionDateTime\":1.791613215651E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613215332E9},\"SubstatementType\":\"SELECT\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/71f88529-4a8a-45d6-acda-f5c82b33bd29.csv\",\"Query\":\"SELECT TIMESTAMP '2026-10-10 12:34:56 UTC' AT TIME ZONE 'Asia/Tokyo' AS v\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"71f88529-4a8a-45d6-acda-f5c82b33bd29\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/71f88529-4a8a-45d6-acda-f5c82b33bd29.csv\"},\"Stats\":{\"EngineExecutionTimeInMillis\":182,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.791613215651E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791613215332E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT TIMESTAMP '0001-01-01T00:00:00Z' AS lo, TIMESTAMP '9999-12-31T23:59:59.999999999Z' AS hi, TIMESTAMP '2024-01-02T03:04:05Z' AS whole, TIMESTAMP '2024-01-02T03:04:05.123456789Z' AS nanos, TIMESTAMP '1970-01-01T00:00:00Z' AS epoch, TIMESTAMP '1969-12-31T23:59:59.5Z' AS before\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=450"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:46:48 GMT"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"lo\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        },\n        {\n          \"name\": \"hi\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        },\n        {\n          \"name\": \"whole\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        },\n        {\n          \"name\": \"nanos\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        },\n        {\n          \"name\": \"epoch\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        },\n        {\n          \"name\": \"before\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"0001-01-01T00:00:00Z\",\n      \"9999-12-31T23:59:59.999999999Z\",\n      \"2024-01-02T03:04:05Z\",\n      \"2024-01-02T03:04:05.123456789Z\",\n      \"1970-01-01T00:00:00Z\",\n      \"1969-12-31T23:59:59.5Z\"\n    ]\n  ]\n}\n"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/projects/dbimp-project/instances/dbimp-spanner/databases/dbimp_test/sessions/ACy6UTxRGOyAS3bGfdKA0eN6adaRSmFv6G0j_oaZiIyKDoud7x9u3DdEXiiu9k0:executeSql",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"sql\":\"SELECT TIMESTAMP '1969-07-20T20:17:40.123456789Z' AS apollo, TIMESTAMP '1900-01-01T00:00:00.000000001Z' AS old, TIMESTAMP '1969-12-31T23:59:59.999999999Z' AS last_ns\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 05:55:19 GMT"
+      ],
+      "Server": [
+        "ESF"
+      ],
+      "Server-Timing": [
+        "gfet4t7; dur=450"
+      ],
+      "Alt-Svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "Vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "X-Xss-Protection": [
+        "0"
+      ],
+      "X-Frame-Options": [
+        "SAMEORIGIN"
+      ],
+      "Content-Type": [
+        "application/json; charset=UTF-8"
+      ]
+    },
+    "body": "{\n  \"metadata\": {\n    \"rowType\": {\n      \"fields\": [\n        {\n          \"name\": \"apollo\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        },\n        {\n          \"name\": \"old\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        },\n        {\n          \"name\": \"last_ns\",\n          \"type\": {\n            \"code\": \"TIMESTAMP\"\n          }\n        }\n      ]\n    },\n    \"undeclaredParameters\": {}\n  },\n  \"rows\": [\n    [\n      \"1969-07-20T20:17:40.123456789Z\",\n      \"1900-01-01T00:00:00.000000001Z\",\n      \"1969-12-31T23:59:59.999999999Z\"\n    ]\n  ]\n}\n"
+  }
+}

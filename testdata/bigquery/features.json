@@ -1,0 +1,922 @@
+{
+  "driver": "bigquery",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "deepseek-v4-flash",
+      "kind": "model",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "cloud.google.com/go/bigquery",
+      "kind": "driver",
+      "date": "2026-10-10"
+    },
+    {
+      "source": "gorm.io/driver/bigquery",
+      "kind": "driver",
+      "date": "2026-10-10"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery",
+        "gorm.io/driver/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert",
+      "evidence": "bigquery-025-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery",
+        "gorm.io/driver/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/select",
+      "evidence": "bigquery-032-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery",
+        "gorm.io/driver/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/update",
+      "evidence": "bigquery-026-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery",
+        "gorm.io/driver/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/delete",
+      "evidence": "bigquery-028-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/merge",
+      "evidence": "bigquery-366-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "truncate table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/truncate_table",
+      "evidence": "bigquery-030-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "insert select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/insert_select",
+      "evidence": "bigquery-312-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "export data",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/export_data",
+      "evidence": "bigquery-313-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "crud",
+      "name": "load data",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationCRUD/load_data",
+      "evidence": "bigquery-314-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/table",
+      "evidence": "bigquery-024-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/primary_key",
+      "evidence": "bigquery-288-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/foreign_key",
+      "evidence": "bigquery-289-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "test": "TestIntegrationSchema/unique_constraint",
+      "evidence": "bigquery-290-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "search index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/search_index",
+      "evidence": "bigquery-297-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "vector index",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/vector_index",
+      "evidence": "bigquery-298-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/view",
+      "evidence": "bigquery-294-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "materialized view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/materialized_view",
+      "evidence": "bigquery-296-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/default_value",
+      "evidence": "bigquery-291-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "partitioning",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/partitioning",
+      "evidence": "bigquery-291-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "clustering",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/clustering",
+      "evidence": "bigquery-291-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "snapshot",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/snapshot",
+      "evidence": "bigquery-060-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "clone",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/clone",
+      "evidence": "bigquery-060-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "function",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/function",
+      "evidence": "bigquery-065-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "table function",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/table_function",
+      "evidence": "bigquery-065-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "procedure",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/procedure",
+      "evidence": "bigquery-355-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "external table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/external_table",
+      "evidence": "bigquery-305-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "dataset",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/dataset",
+      "evidence": "bigquery-055-get--bigquery-v2-projects-dbimp-project-datasets-dbimp-test.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table add column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_add_column",
+      "evidence": "bigquery-308-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table rename",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_rename",
+      "evidence": "bigquery-309-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table drop column",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationSchema/alter_table_drop_column",
+      "evidence": "bigquery-311-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "dry run",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/dry_run",
+      "evidence": "bigquery-020-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "query cache",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/query_cache",
+      "evidence": "bigquery-036-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "sessions",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/sessions",
+      "evidence": "bigquery-383-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "multi statement script",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/multi_statement_script",
+      "evidence": "bigquery-238-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "script variables",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/script_variables",
+      "evidence": "bigquery-241-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction commit",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/transaction_commit",
+      "evidence": "bigquery-265-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "transaction rollback",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/transaction_rollback",
+      "evidence": "bigquery-387-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "wildcard table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/wildcard_table",
+      "evidence": "bigquery-393-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "time travel",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/time_travel",
+      "evidence": "bigquery-316-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "qualify",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/qualify",
+      "evidence": "bigquery-317-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "select except",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/select_except",
+      "evidence": "bigquery-318-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "select replace",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/select_replace",
+      "evidence": "bigquery-319-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "unnest",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/unnest",
+      "evidence": "bigquery-320-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "safe prefix",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/safe_prefix",
+      "evidence": "bigquery-321-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "pipe syntax",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/pipe_syntax",
+      "evidence": "bigquery-322-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery",
+        "gorm.io/driver/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/named_parameters",
+      "evidence": "bigquery-101-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "positional parameters",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery",
+        "gorm.io/driver/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/positional_parameters",
+      "evidence": "bigquery-374-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "labels",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/labels",
+      "evidence": "bigquery-373-get--bigquery-v2-projects-dbimp-project-jobs-dbimp-label-614562.json"
+    },
+    {
+      "kind": "feature",
+      "name": "maximum bytes billed",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/maximum_bytes_billed",
+      "evidence": "bigquery-204-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "location",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/location",
+      "evidence": "bigquery-018-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "request id",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/request_id",
+      "evidence": "bigquery-381-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "default dataset",
+      "sources": [
+        "cloud.google.com/go/bigquery",
+        "gorm.io/driver/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/default_dataset",
+      "evidence": "bigquery-371-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "async execution",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/async_execution",
+      "evidence": "bigquery-209-post--bigquery-v2-projects-dbimp-project-jobs.json"
+    },
+    {
+      "kind": "feature",
+      "name": "job cancel",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/job_cancel",
+      "evidence": "bigquery-210-post--bigquery-v2-projects-dbimp-project-jobs-dbimp-slow-614562-cancel.json"
+    },
+    {
+      "kind": "feature",
+      "name": "result paging",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/result_paging",
+      "evidence": "bigquery-167-get--bigquery-v2-projects-dbimp-project-queries-job-lly7oi6yspwk2oawj1m622jnikk8.json"
+    },
+    {
+      "kind": "feature",
+      "name": "integer timestamps",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/integer_timestamps",
+      "evidence": "bigquery-072-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "information schema",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/information_schema",
+      "evidence": "bigquery-060-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "streaming insert",
+      "sources": [
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/streaming_insert",
+      "evidence": "bigquery-361-post--bigquery-v2-projects-dbimp-project-datasets-dbimp-test-tables-dbimp-it-kv-insertall.json"
+    },
+    {
+      "kind": "feature",
+      "name": "gzip request body",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/gzip_request_body",
+      "evidence": "bigquery-364-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "execute immediate",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/execute_immediate",
+      "evidence": "bigquery-354-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "feature",
+      "name": "assert",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationFeatures/assert",
+      "evidence": "bigquery-356-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTEGER",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/FLOAT",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "NUMERIC",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/NUMERIC",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "BIGNUMERIC",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BIGNUMERIC",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BOOLEAN",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "STRING",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/STRING",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "BYTES",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/BYTES",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DATE",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIME",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIME",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "DATETIME",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/DATETIME",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "JSON",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/JSON",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "GEOGRAPHY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/GEOGRAPHY",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/INTERVAL",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "RECORD",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/RECORD",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "RANGE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/RANGE",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    },
+    {
+      "kind": "type",
+      "name": "ARRAY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "cloud.google.com/go/bigquery"
+      ],
+      "verdict": "yes",
+      "test": "TestIntegrationRoundTrip/ARRAY",
+      "evidence": "bigquery-070-post--bigquery-v2-projects-dbimp-project-queries.json"
+    }
+  ]
+}

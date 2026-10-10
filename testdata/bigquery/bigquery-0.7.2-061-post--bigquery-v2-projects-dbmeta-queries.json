@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/bigquery/v2/projects/dbmeta/queries",
+    "header": {},
+    "body": "{\"query\":\"SELECT table_name, column_name, ordinal_position, is_nullable, data_type FROM dbmeta.dbmeta.INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'dbimp_it_dml' ORDER BY ordinal_position\",\"useLegacySql\":false}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:30:50 GMT"
+      ],
+      "Content-Length": [
+        "583"
+      ],
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"jobReference\":{\"jobId\":\"ZtBzDZjXzoBkfHsUYe97Yhh2PhJ\",\"projectId\":\"dbmeta\"},\"schema\":{\"fields\":[{\"mode\":\"NULLABLE\",\"name\":\"table_name\",\"type\":\"STRING\"},{\"mode\":\"NULLABLE\",\"name\":\"column_name\",\"type\":\"STRING\"},{\"mode\":\"NULLABLE\",\"name\":\"ordinal_position\",\"type\":\"INTEGER\"},{\"mode\":\"NULLABLE\",\"name\":\"is_nullable\",\"type\":\"STRING\"},{\"mode\":\"NULLABLE\",\"name\":\"data_type\",\"type\":\"STRING\"}]},\"rows\":[{\"f\":[{\"v\":\"dbimp_it_dml\"},{\"v\":\"id\"},{\"v\":\"1\"},{\"v\":\"YES\"},{\"v\":\"INT64\"}]},{\"f\":[{\"v\":\"dbimp_it_dml\"},{\"v\":\"s\"},{\"v\":\"2\"},{\"v\":\"YES\"},{\"v\":\"STRING\"}]}],\"totalRows\":\"2\",\"jobComplete\":true}"
+  }
+}

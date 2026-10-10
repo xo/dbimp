@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/2.0/sql/statements",
+    "header": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Accept": [
+        "application/json"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"warehouse_id\":\"1111222233334444\",\"statement\":\"SELECT id, concat('row-', id) AS s FROM range(3000)\",\"catalog\":\"workspace\",\"schema\":\"dbimp\",\"wait_timeout\":\"50s\",\"row_limit\":10}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Strict-Transport-Security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "X-Content-Type-Options": [
+        "nosniff"
+      ],
+      "X-Request-Id": [
+        "4790f81a-d4ce-4425-b7ad-d50e3085c174"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "X-Databricks-Org-Id": [
+        "0000000000000000"
+      ],
+      "Server": [
+        "databricks"
+      ],
+      "Alt-Svc": [
+        "clear"
+      ],
+      "Server-Timing": [
+        "request_id;dur=0;desc=\"4790f81a-d4ce-4425-b7ad-d50e3085c174\", client_protocol;dur=0;desc=\"HTTP/2\", request_ttfb_msec;dur=710"
+      ],
+      "Date": [
+        "Sat, 10 Oct 2026 05:34:12 GMT"
+      ],
+      "Vary": [
+        "Accept-Encoding"
+      ]
+    },
+    "body": "{\"statement_id\":\"01f1c46c-38c9-1e83-ade3-535e5feb5043\",\"status\":{\"state\":\"SUCCEEDED\"},\"manifest\":{\"format\":\"JSON_ARRAY\",\"schema\":{\"column_count\":2,\"columns\":[{\"name\":\"id\",\"type_text\":\"BIGINT\",\"type_name\":\"LONG\",\"position\":0},{\"name\":\"s\",\"type_text\":\"STRING\",\"type_name\":\"STRING\",\"position\":1}]},\"total_chunk_count\":1,\"chunks\":[{\"chunk_index\":0,\"row_offset\":0,\"row_count\":10}],\"total_row_count\":10,\"truncated\":true},\"result\":{\"chunk_index\":0,\"row_offset\":0,\"row_count\":10,\"data_array\":[[\"0\",\"row-0\"],[\"1\",\"row-1\"],[\"2\",\"row-2\"],[\"3\",\"row-3\"],[\"4\",\"row-4\"],[\"5\",\"row-5\"],[\"6\",\"row-6\"],[\"7\",\"row-7\"],[\"8\",\"row-8\"],[\"9\",\"row-9\"]]}}"
+  }
+}

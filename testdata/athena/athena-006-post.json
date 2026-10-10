@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "header": {
+      "X-Amz-Target": [
+        "AmazonAthena.GetQueryExecution"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "X-Amz-Date": [
+        "20261010T061032Z"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "{\"QueryExecutionId\":\"b03ed6f2-48a1-46d8-b371-7312b296492d\"}"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Sat, 10 Oct 2026 06:10:33 GMT"
+      ],
+      "Content-Type": [
+        "application/x-amz-json-1.1"
+      ],
+      "Content-Length": [
+        "1979"
+      ],
+      "X-Amzn-Requestid": [
+        "00a31047-49ab-40be-b8ba-b21f7388e358"
+      ]
+    },
+    "body": "{\"QueryExecution\":{\"EngineVersion\":{\"EffectiveEngineVersion\":\"Athena engine version 3\",\"SelectedEngineVersion\":\"AUTO\"},\"Query\":\"CREATE EXTERNAL TABLE dbimp_it_ext (id int, name string) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_ext/'\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"b03ed6f2-48a1-46d8-b371-7312b296492d\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/b03ed6f2-48a1-46d8-b371-7312b296492d.txt\"},\"ResultReuseConfiguration\":{\"ResultReuseByAgeConfiguration\":{\"Enabled\":false}},\"StatementType\":\"DDL\",\"Statistics\":{\"DataScannedInBytes\":0,\"EngineExecutionTimeInMillis\":281,\"QueryQueueTimeInMillis\":37,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false},\"ServicePreProcessingTimeInMillis\":14,\"ServiceProcessingTimeInMillis\":21,\"TotalExecutionTimeInMillis\":353},\"Status\":{\"CompletionDateTime\":1.79161262674E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612626387E9},\"SubstatementType\":\"CREATE_TABLE\",\"WorkGroup\":\"dbimp\"},\"QueryExecutionDetail\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/b03ed6f2-48a1-46d8-b371-7312b296492d.txt\",\"Query\":\"CREATE EXTERNAL TABLE dbimp_it_ext (id int, name string) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION 's3://dbimp-athena-111122223333-us-east-1/tables/dbimp_it_ext/'\",\"QueryExecutionContext\":{\"Database\":\"dbimp_test\"},\"QueryExecutionId\":\"b03ed6f2-48a1-46d8-b371-7312b296492d\",\"ResultConfiguration\":{\"OutputLocation\":\"s3://dbimp-athena-111122223333-us-east-1/results/b03ed6f2-48a1-46d8-b371-7312b296492d.txt\"},\"Stats\":{\"EngineExecutionTimeInMillis\":281,\"ProcessedBytes\":0,\"ProcessedInputBytes\":0,\"ProcessedInputRows\":0,\"ProcessedRows\":0,\"ResultReuseInformation\":{\"ReusedPreviousResult\":false}},\"Status\":{\"CompletionDateTime\":1.79161262674E9,\"State\":\"SUCCEEDED\",\"SubmissionDateTime\":1.791612626387E9},\"WorkGroup\":\"dbimp\"}}"
+  }
+}
