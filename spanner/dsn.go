@@ -16,6 +16,7 @@ import (
 const (
 	keyCredentialFile = "credential_file" //nolint:gosec // G101: the name of a key of the DSN, which holds a path and no secret.
 	keyTLS            = "tls"
+	keyDatabaseRole   = "database_role"
 )
 
 // The defaults of the DSN. The hosted service is at spanner.googleapis.com
@@ -52,6 +53,10 @@ type Config struct {
 	// token with the private key in it. The text of the key never sits in a
 	// DSN (D94). A DSN with TLS must name a file, unless Token is set.
 	CredentialFile string
+	// DatabaseRole is the database role that the sessions run as, for
+	// fine-grained access control (D198). It is empty for no role. The key
+	// database_role sets it, and WithDatabaseRole sets it for one statement.
+	DatabaseRole string
 	// Token returns an access token, for a caller that gets its tokens from
 	// elsewhere. It replaces CredentialFile, and the driver calls it for each
 	// request, so it must cache its token. It is not part of a DSN (D191 item
@@ -64,7 +69,8 @@ type Config struct {
 // (D27, D35 and D191). The path holds the project, the instance and the
 // database, and all three are required. The host and the port are optional.
 // The keys are credential_file, the path to the key file of a service
-// account, and tls, a boolean. The driver refuses any other key. The user of the
+// account, tls, a boolean, and database_role, the name of a database role
+// (D198). The driver refuses any other key. The user of the
 // URL is ignored, because it only names a principal for dbmeta (D195 item 6).
 // The password of the URL is not used, because the key file is too large for
 // it, so the DSN refuses a password.
@@ -73,7 +79,7 @@ func ParseDSN(dsn string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	q, err := dbimp.NewQuery(u, keyCredentialFile, keyTLS)
+	q, err := dbimp.NewQuery(u, keyCredentialFile, keyTLS, keyDatabaseRole)
 	if err != nil {
 		return nil, err
 	}
@@ -101,6 +107,14 @@ func ParseDSN(dsn string) (*Config, error) {
 	}
 	if q.Has(keyCredentialFile) && cfg.CredentialFile == "" {
 		return nil, fmt.Errorf("parsing key %q: the value is empty: %w", keyCredentialFile, dbimp.ErrInvalidValue)
+	}
+	if q.Has(keyDatabaseRole) {
+		if cfg.DatabaseRole = q.String(keyDatabaseRole, ""); cfg.DatabaseRole == "" {
+			return nil, fmt.Errorf("parsing key %q: the value is empty: %w", keyDatabaseRole, dbimp.ErrInvalidValue)
+		}
+		if err := validRole(cfg.DatabaseRole); err != nil {
+			return nil, fmt.Errorf("parsing key %q: %w", keyDatabaseRole, err)
+		}
 	}
 	if cfg.TLS && cfg.CredentialFile == "" {
 		return nil, fmt.Errorf("parsing the dsn: a server with TLS needs the key %s: %w", keyCredentialFile, dbimp.ErrInvalidValue)
@@ -137,6 +151,9 @@ func (cfg *Config) FormatDSN() string {
 	q := url.Values{}
 	if cfg.CredentialFile != "" {
 		q.Set(keyCredentialFile, cfg.CredentialFile)
+	}
+	if cfg.DatabaseRole != "" {
+		q.Set(keyDatabaseRole, cfg.DatabaseRole)
 	}
 	if cfg.TLS == isLocal(cfg.Host) {
 		q.Set(keyTLS, strconv.FormatBool(cfg.TLS))

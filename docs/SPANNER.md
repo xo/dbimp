@@ -333,6 +333,18 @@ Summary). The facts that a driver needs:
   and parameters after a `;` or a `?`, such as
   `localhost:9010/projects/p/instances/i/databases/d;usePlainText=true` (source: the
   comment of `driver.go` in v1.26.0, read 2026-10-10).
+- The key `database_role` is the database role that the sessions run as, for fine-grained
+  access control (decided, D198). The value is 1 to 128 letters, digits and underscores,
+  and the driver refuses a value that is empty, too long or has another character, and a
+  repeated key, with `dbimp.ErrInvalidValue` or `dbimp.ErrRepeatedKey`. The default is no
+  role. The role is a member of the session that the driver makes, so the driver keeps one
+  session for each database and role. `WithDatabaseRole` sets it for one statement or one
+  transaction. The member of the REST `Session` resource is `creatorRole` (source: the
+  reference of Google, `creator_role` in `Session`, read 2026-10-11 and not measured, because
+  the recordings hold no session with a role). If the name is wrong, the constant
+  `creatorRoleMember` in `spanner/connector.go` is the one line to change. A login that uses a
+  role needs `roles/spanner.fineGrainedAccessUser` and the right to use the role
+  (`roles/spanner.databaseRoleUser` on it). `TestIntegrationDatabaseRole` measures it.
 - Examples that `dburl` generates: `spanner:///p/i/d` for the hosted service, and
   `spanner://localhost:9020/p/i/d` for the emulator (read of `GenSpanner`, 2026-10-10).
 
@@ -1119,7 +1131,7 @@ The one principal is a service account with `roles/spanner.databaseAdmin` on the
 | Interface | Implemented | Reason |
 | --- | --- | --- |
 | `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
-| `driver.Connector` | yes | The connector owns the transport, the token that the driver gets with the key file of the DSN, and the multiplexed session of each database (D191). |
+| `driver.Connector` | yes | The connector owns the transport, the token that the driver gets with the key file of the DSN, and the multiplexed session of each database and role (D191 and D198). |
 | `io.Closer on the connector` | yes | Close closes the idle connections of the transport. A multiplexed session cannot be deleted, so the server ends it. |
 | `driver.Pinger` | yes | Ping runs SELECT 1, which checks the token, the session and the login, and costs little. |
 | `driver.SessionResetter` | no | A connection holds a transaction only, and database/sql ends it before it reuses the connection (D102). The session is the connector's, and it holds no state. |
@@ -1263,9 +1275,25 @@ each one with its answer.
    because the server infers it. `TestIntegrationNullParameters` checks a NULL for each type,
    and the driver sends `STRING` for a NULL that the server refuses. A caller can write
    `@name`. A statement that mixes both is an error.
-8. Several statements: decided, D191. The driver refuses them, as the server does.
-9. DDL: decided, D191. The driver sends a DDL statement to `updateDatabaseDdl` and polls
+8. Several statements: decided, D191 and D198. The driver refuses several statements of
+   DML and queries, as the server does. Several DDL statements are a batch (item 9).
+9. DDL: decided, D191 and D198. The driver sends a DDL statement to `updateDatabaseDdl` and polls
    the operation until it is done. When the context ends, it calls `operations:cancel`.
+   A DDL batch is one `Exec` or `Query` whose text holds several DDL statements. The
+   grammar: the driver cuts the text at each semicolon that is outside a literal (`'`, `"`,
+   triple quotes and a raw string), a quoted name (a backtick) and a comment (`--`, `#`
+   and `/* */`), and it drops a part that holds only white space and comments, so a
+   trailing semicolon adds nothing. When every statement starts with `CREATE`, `ALTER`,
+   `DROP`, `RENAME`, `GRANT`, `REVOKE` or `ANALYZE`, the driver sends them as the array
+   `statements` of one `updateDatabaseDdl` request, and polls its one operation, and the error
+   of the operation is the error of the call. A text that mixes DDL with DML or a query
+   fails with `dbimp.ErrNotSupported` before any request, and several statements that are
+   not DDL go to the server, which refuses them. A batch takes no argument. The statements
+   are the caller's, and the server runs them in order. It stops at the first one that
+   fails and keeps the ones before it (not measured: the recordings hold a batch that
+   succeeded). A fixture of about 60 statements took 461 s on the hosted instance with a request
+   for each statement (W43). `TestIntegrationDDLBatch` counts the requests of a batch at a
+   proxy.
 10. The credentials: decided, D191. A path to a key file in a key of the DSN query. The
     driver signs the JWT. A caller can pass an access token through a connector.
 11. The doubtful types: decided, D191. `JSON` is a decoded value, `FLOAT32` is a `float64`
@@ -1295,6 +1323,11 @@ each one with its answer.
     of the stream, the CI job runs the release `spanneremulator-1.5.58`, and some tests skip with
     a reason. Open: the emulator sent no error after a row, and the hosted service has not run the
     new code (D196 item 7).
+
+18. The database role and the DDL batch: decided, D198 (W43). The code and the unit tests are
+    written. Open: the member `creatorRole`, the order of a failed batch and the role on the
+    emulator are not measured. The main session runs `TestIntegrationDDLBatch` and
+    `TestIntegrationDatabaseRole` on the hosted instance and on the emulator.
 
 ### Leads for a third run
 
@@ -1353,6 +1386,12 @@ hosted service yet. The tests and what each one holds:
 
 - `TestIntegrationConnect`: the ping, the type of each column, and several connections that
   share one session.
+- `TestIntegrationDDLBatch` (D198): three tables and an index in one `Exec`, read back from
+  `INFORMATION_SCHEMA`, and dropped in one batch. A proxy on the loopback address counts that each
+  batch sent one `updateDatabaseDdl` request.
+- `TestIntegrationDatabaseRole` (D198): a role with a grant on one table. A connector with
+  `database_role` reads that table, and the server refuses another one. It skips on the emulator if
+  `CREATE ROLE` fails, and on the service if the login cannot use the role.
 - `TestIntegrationErrors`: a syntax error, a missing table, a duplicate key, and an error
   after some rows.
 - `TestIntegrationContext`: a deadline that ends while a query runs, and while a DDL
@@ -1413,7 +1452,8 @@ The differences that a caller sees:
   (D191 item 6).
 - A DML statement outside a transaction needs one, so the driver begins it and commits it (D191 item 6).
 - A DDL statement waits for its operation, costs a request for each poll, and cancels the operation when
-  the context ends (D191 items 4 and 8).
+  the context ends (D191 items 4 and 8). Several DDL statements in one text are one request and one
+  operation (D198).
 - The driver reads every result with `executeStreamingSql`, and joins the pieces of a value that the server
   splits, so a `BYTES` value arrives whole (D191 item 11).
 - A `?` becomes `@p1`, and a caller can write `@name` with `sql.Named`. A statement that mixes both forms is
@@ -1425,8 +1465,8 @@ The differences that a caller sees:
 | | `couchbase` | `spanner` |
 | --- | --- | --- |
 | Size, without tests, on 2026-10-10 | About 1300 lines in 8 files | About 3100 lines in 9 files |
-| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `Project`, `Instance`, `Database`, `CredentialFile` and `Token`. The DSN has the keys `credential_file` and `tls` (D191) |
-| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter` and `WithDatabase`, through `WithOptions` or an argument (D109). `WithTimeout` with a positive value fails with `dbimp.ErrNotSupported`. `WithReadonly(true)` runs the statement in a read-only transaction. `WithParameter` sets a member of the body of the statement, and of `beginTransaction` and `commit` for a transaction |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `Project`, `Instance`, `Database`, `CredentialFile`, `DatabaseRole` and `Token`. The DSN has the keys `credential_file`, `tls` and `database_role` (D191 and D198) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase` and `WithDatabaseRole`, through `WithOptions` or an argument (D109). `WithTimeout` with a positive value fails with `dbimp.ErrNotSupported`. `WithReadonly(true)` runs the statement in a read-only transaction. `WithParameter` sets a member of the body of the statement, and of `beginTransaction` and `commit` for a transaction |
 | Arguments | Sent to the server as `args` and `$name` | Named parameters with a type for each: `INT64`, `FLOAT32`, `FLOAT64`, `NUMERIC`, `BOOL`, `STRING`, `BYTES`, `DATE`, `TIMESTAMP`, `JSON`, `UUID`, `INTERVAL` and `ARRAY`. A slice is an `ARRAY`, a map is `JSON`. A NULL has no type (`spanner/params.go`) |
 | Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own, which reads the messages of the array, joins the pieces of a value, and cuts the flat list of values by the number of columns (`spanner/rows.go`) |
 | Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | The same, and `ColumnTypePrecisionScale` for a `NUMERIC` column. The metadata has no length |

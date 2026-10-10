@@ -39,7 +39,7 @@ func TestTables(t *testing.T) {
 	}, typeKinds))
 	dbimptest.InterfaceTable(t, doc, map[string]string{
 		"driver.DriverContext":                  "OpenConnector parses the DSN once, for every connection.",
-		"driver.Connector":                      "The connector owns the transport, the token that the driver gets with the key file of the DSN, and the multiplexed session of each database (D191).",
+		"driver.Connector":                      "The connector owns the transport, the token that the driver gets with the key file of the DSN, and the multiplexed session of each database and role (D191 and D198).",
 		"io.Closer on the connector":            "Close closes the idle connections of the transport. A multiplexed session cannot be deleted, so the server ends it.",
 		"driver.Pinger":                         "Ping runs SELECT 1, which checks the token, the session and the login, and costs little.",
 		"driver.SessionResetter":                "A connection holds a transaction only, and database/sql ends it before it reuses the connection (D102). The session is the connector's, and it holds no state.",

@@ -462,7 +462,7 @@ func TestReplayLostSession(t *testing.T) {
 	db, s, c := replayDB(t)
 	gone := file(t, 376).Request.Path
 	gone = strings.TrimSuffix(strings.TrimPrefix(gone, "/v1/"), ":executeStreamingSql")
-	c.sessions[testDatabase] = gone
+	c.sessions[target{database: testDatabase}] = gone
 	var n int64
 	if err := db.QueryRowContext(t.Context(), "SELECT 1").Scan(&n); err != nil {
 		t.Fatalf("the statement after a lost session: %v", err)
@@ -471,8 +471,8 @@ func TestReplayLostSession(t *testing.T) {
 	if got := s.requests(); !equalStrings(got, want) {
 		t.Errorf("the requests are %q, want %q", got, want)
 	}
-	if c.sessions[testDatabase] == gone || c.sessions[testDatabase] == "" {
-		t.Errorf("the connector holds the session %q, want a new one", c.sessions[testDatabase])
+	if c.sessions[target{database: testDatabase}] == gone || c.sessions[target{database: testDatabase}] == "" {
+		t.Errorf("the connector holds the session %q, want a new one", c.sessions[target{database: testDatabase}])
 	}
 }
 

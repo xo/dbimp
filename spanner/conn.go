@@ -135,10 +135,13 @@ func skipLeading(s string) string {
 
 // plan is a statement with its options, ready to send.
 type plan struct {
-	o        options
-	args     []driver.NamedValue
-	database string
-	kind     kind
+	o      options
+	args   []driver.NamedValue
+	target target
+	kind   kind
+	// stmts are the statements of a DDL batch. It is nil for any other kind, and
+	// for a DDL text that scan did not split (D198).
+	stmts []string
 }
 
 // QueryContext satisfies driver.QueryerContext.
@@ -266,16 +269,13 @@ func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, e
 	if err := o.check(); err != nil {
 		return nil, err
 	}
-	database := c.c.cfg.Database
-	if o.database != "" {
-		database = o.database
-	}
+	tg := c.c.cfg.target().with(o)
 	readOnly := opts.ReadOnly || o.readonly
 	if readOnly && level != "" {
 		return nil, fmt.Errorf("beginning a read-only transaction with the isolation %s: %w", sql.IsolationLevel(opts.Isolation), dbimp.ErrNotSupported)
 	}
 	beginParams, commitParams := o.split()
-	t, err := c.c.begin(ctx, database, readOnly, level, beginParams)
+	t, err := c.c.begin(ctx, tg, readOnly, level, beginParams)
 	if err != nil {
 		if serr, ok := errors.AsType[*Error](err); ok && level != "" && serr.Status == "INVALID_ARGUMENT" {
 			return nil, fmt.Errorf("beginning a transaction with the isolation %s: the server refused it: %w: %w", sql.IsolationLevel(opts.Isolation), dbimp.ErrNotSupported, err)
@@ -296,15 +296,19 @@ func (c *conn) plan(ctx context.Context, query string, args []driver.NamedValue)
 	if err := o.check(); err != nil {
 		return plan{}, err
 	}
-	p := plan{o: o, args: args, database: c.c.cfg.Database, kind: classify(query)}
-	if o.database != "" {
-		p.database = o.database
+	k, stmts, err := scan(query)
+	if err != nil {
+		return plan{}, err
 	}
+	p := plan{o: o, args: args, target: c.c.cfg.target().with(o), kind: k, stmts: stmts}
 	if c.tx != nil {
-		if o.database != "" && o.database != c.tx.db {
-			return plan{}, fmt.Errorf("applying the option WithDatabase: the transaction runs in the database %s: %w", c.tx.db, dbimp.ErrNotSupported)
+		if o.database != "" && o.database != c.tx.target.database {
+			return plan{}, fmt.Errorf("applying the option WithDatabase: the transaction runs in the database %s: %w", c.tx.target.database, dbimp.ErrNotSupported)
 		}
-		p.database = c.tx.db
+		if o.role != "" && o.role != c.tx.target.role {
+			return plan{}, fmt.Errorf("applying the option WithDatabaseRole: the transaction runs as the role %q: %w", c.tx.target.role, dbimp.ErrNotSupported)
+		}
+		p.target = c.tx.target
 	}
 	return p, nil
 }
@@ -319,8 +323,11 @@ func (c *conn) runDDL(ctx context.Context, p plan, query string) error {
 	case len(p.args) > 0:
 		return fmt.Errorf("running a DDL statement: it takes no argument: %w", dbimp.ErrArguments)
 	}
-	text := strings.TrimRight(strings.TrimSpace(query), "; \t\r\n")
-	return c.c.ddl(ctx, p.database, text)
+	stmts := p.stmts
+	if stmts == nil {
+		stmts = []string{strings.TrimRight(strings.TrimSpace(query), "; \t\r\n")}
+	}
+	return c.c.ddl(ctx, p.target.database, stmts)
 }
 
 // run sends a query or a DML statement and returns its rows, read up to the
@@ -340,7 +347,7 @@ func (c *conn) run(ctx context.Context, p plan, query string, skip bool) (*rows,
 	case p.o.readonly:
 		req.Transaction = readOnlyOnce()
 	case p.kind == kindDML:
-		if t, err = c.c.begin(ctx, p.database, false, "", nil); err != nil {
+		if t, err = c.c.begin(ctx, p.target, false, "", nil); err != nil {
 			return nil, err
 		}
 		finish = func(ok bool) error { return c.c.finish(ctx, t, ok) }
@@ -356,7 +363,7 @@ func (c *conn) run(ctx context.Context, p plan, query string, skip bool) (*rows,
 		}
 		return nil, fmt.Errorf("writing the request: %w", err)
 	}
-	res, err := c.c.stream(ctx, p.database, body)
+	res, err := c.c.stream(ctx, p.target, body)
 	if err != nil {
 		if finish != nil {
 			_ = finish(false)
@@ -375,7 +382,7 @@ func (c *conn) run(ctx context.Context, p plan, query string, skip bool) (*rows,
 
 // txn is a transaction of the server.
 type txn struct {
-	db       string
+	target   target
 	id       string
 	readOnly bool
 	// commitParams are the members of the commit that WithParameter set.
@@ -423,9 +430,9 @@ func (t *txn) precommitToken() *precommit {
 	return &p
 }
 
-// begin calls beginTransaction in the session of the database. The id of the
+// begin calls beginTransaction in the session of the target. The id of the
 // transaction is base64 text (recorded: "begin a read write transaction").
-func (c *Connector) begin(ctx context.Context, database string, readOnly bool, level string, params map[string]any) (*txn, error) {
+func (c *Connector) begin(ctx context.Context, tg target, readOnly bool, level string, params map[string]any) (*txn, error) {
 	opts := map[string]any{"readWrite": map[string]any{}}
 	if readOnly {
 		opts = map[string]any{"readOnly": map[string]any{"strong": true}}
@@ -442,13 +449,13 @@ func (c *Connector) begin(ctx context.Context, database string, readOnly bool, l
 	var ans struct {
 		ID string `json:"id"`
 	}
-	if err := c.post(ctx, database, "beginTransaction", body, &ans); err != nil {
+	if err := c.post(ctx, tg, "beginTransaction", body, &ans); err != nil {
 		return nil, fmt.Errorf("beginning a transaction: %w", err)
 	}
 	if ans.ID == "" {
 		return nil, fmt.Errorf("beginning a transaction: the answer has no id: %w", dbimp.ErrInvalidValue)
 	}
-	return &txn{db: database, id: ans.ID, readOnly: readOnly}, nil
+	return &txn{target: tg, id: ans.ID, readOnly: readOnly}, nil
 }
 
 // commitRequest is the body of commit.
@@ -476,7 +483,7 @@ func (t *txn) commit(ctx context.Context, c *Connector) error {
 			CommitTimestamp string     `json:"commitTimestamp"`
 			Precommit       *precommit `json:"precommitToken"`
 		}
-		if err := c.post(ctx, t.db, "commit", body, &ans); err != nil {
+		if err := c.post(ctx, t.target, "commit", body, &ans); err != nil {
 			return fmt.Errorf("committing the transaction: %w", err)
 		}
 		if ans.CommitTimestamp != "" {
@@ -504,7 +511,7 @@ func (t *txn) rollback(ctx context.Context, c *Connector) error {
 	if err != nil {
 		return fmt.Errorf("writing the request: %w", err)
 	}
-	if err := c.post(ctx, t.db, "rollback", body, nil); err != nil {
+	if err := c.post(ctx, t.target, "rollback", body, nil); err != nil {
 		return fmt.Errorf("rolling the transaction back: %w", err)
 	}
 	return nil

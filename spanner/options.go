@@ -13,15 +13,18 @@ import (
 
 // Option sets an option of one statement or of one transaction (D109). An
 // option comes from the DSN, then from the context through WithOptions, then
-// from an argument of the statement, and a later one wins. The DSN of this
-// driver has no key that can change for one statement, so the options start
-// empty.
+// from an argument of the statement, and a later one wins. The options
+// start empty. The keys of the DSN that can change for one statement are the
+// database and the database role (D198).
 type Option = dbimp.Option[options]
 
 // options are the options of one statement.
 type options struct {
 	timeout  time.Duration
 	database string
+	// role is the database role of the session. Empty keeps the role of the DSN
+	// (D198).
+	role     string
 	readonly bool
 	// params holds the members of the body that WithParameter set, by name.
 	params map[string]any
@@ -78,6 +81,49 @@ func WithDatabase(name string) Option {
 	return func(o *options) { o.database = name }
 }
 
+// WithDatabaseRole sets the database role of one statement, as the key
+// database_role of the DSN does. The driver keeps one session for each pair of a
+// database and a role, because the server fixes the role when it makes the
+// session. An empty name keeps the role of the DSN. A statement of a transaction
+// runs as the role of the transaction, so WithDatabaseRole with another role
+// fails the statement with dbimp.ErrNotSupported (D109 and D198).
+func WithDatabaseRole(name string) Option {
+	return func(o *options) { o.role = name }
+}
+
+// with returns tg with the database and the role of o, where o sets them.
+func (tg target) with(o options) target {
+	if o.database != "" {
+		tg.database = o.database
+	}
+	if o.role != "" {
+		tg.role = o.role
+	}
+	return tg
+}
+
+// maxRoleLen is the longest name of a database role.
+const maxRoleLen = 128
+
+// validRole returns an error when name is not a database role that Spanner
+// accepts: 1 to 128 letters, digits and underscores. The empty name is the
+// absence of a role, and it is valid.
+func validRole(name string) error {
+	if name == "" {
+		return nil
+	}
+	if len(name) > maxRoleLen {
+		return fmt.Errorf("the database role %q is longer than %d characters: %w", name, maxRoleLen, dbimp.ErrInvalidValue)
+	}
+	for i := range len(name) {
+		c := name[i]
+		if c != '_' && (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') {
+			return fmt.Errorf("the database role %q holds a character that is not a letter, a digit or an underscore: %w", name, dbimp.ErrInvalidValue)
+		}
+	}
+	return nil
+}
+
 // resolve returns the options of one statement, those of the context, and
 // then the Option arguments of args, and the other arguments (D109).
 func resolve(ctx context.Context, args []driver.NamedValue) (options, []driver.NamedValue) {
@@ -94,6 +140,9 @@ func (o options) check() error {
 		return dbimp.Unsupported("WithTimeout")
 	case strings.Contains(o.database, "/"):
 		return fmt.Errorf("applying the option WithDatabase: %q is not the id of a database: %w", o.database, dbimp.ErrInvalidValue)
+	}
+	if err := validRole(o.role); err != nil {
+		return fmt.Errorf("applying the option WithDatabaseRole: %w", err)
 	}
 	for name, value := range o.params {
 		switch {

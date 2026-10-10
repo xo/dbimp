@@ -33,6 +33,8 @@ func TestDSNRoundTrip(t *testing.T) {
 		{"spanner://:8443/p/i/d?credential_file=/etc/key.json", with(func(c *spanner.Config) { c.Port = 8443 })},
 		{"spanner://example.test:8443/p/i/d?credential_file=/k", with(func(c *spanner.Config) { c.Host, c.Port, c.CredentialFile = "example.test", 8443, "/k" })},
 		{"spanner:///p/i/d?credential_file=/etc/key.json&tls=true", hosted()},
+		{"spanner:///p/i/d?credential_file=/etc/key.json&database_role=app_reader", with(func(c *spanner.Config) { c.DatabaseRole = "app_reader" })},
+		{"spanner://localhost/p/i/d?database_role=R1_x", spanner.Config{Host: "localhost", Port: 9020, Project: "p", Instance: "i", Database: "d", DatabaseRole: "R1_x"}},
 		{"spanner:///example.com%3Aproj/i/d?credential_file=/etc/key.json", with(func(c *spanner.Config) { c.Project = "example.com:proj" })},
 		{"spanner:///example.com:proj/i/d?credential_file=/etc/key.json", with(func(c *spanner.Config) { c.Project = "example.com:proj" })},
 		{"spanner:///p/i/a%20b?credential_file=/etc/key.json", with(func(c *spanner.Config) { c.Database = "a b" })},
@@ -83,7 +85,7 @@ func TestFormatDSNLeavesOutDefaults(t *testing.T) {
 	}
 }
 
-// TestParseDSNRefuses holds D191: a key other than the two is refused, and so is
+// TestParseDSNRefuses holds D191: a key other than the three is refused, and so is
 // a repeated key, a scheme that is not spanner, a path that is not three names, a
 // port that is not valid, user information, a server with TLS and no key file,
 // and a value that is not valid.
@@ -119,6 +121,11 @@ func TestParseDSNRefuses(t *testing.T) {
 		{"spanner:///p/i/d" + key + "&password=x", dbimp.ErrUnknownKey},
 		{"spanner:///p/i/d" + key + "&credential_file=/other", dbimp.ErrRepeatedKey},
 		{"spanner://localhost/p/i/d?tls=true&tls=false", dbimp.ErrRepeatedKey},
+		{"spanner://localhost/p/i/d?database_role=a&database_role=b", dbimp.ErrRepeatedKey},
+		{"spanner://localhost/p/i/d?database_role=", dbimp.ErrInvalidValue},
+		{"spanner://localhost/p/i/d?database_role=a%20b", dbimp.ErrInvalidValue},
+		{"spanner://localhost/p/i/d?database_role=a-b", dbimp.ErrInvalidValue},
+		{"spanner://localhost/p/i/d?database_role=" + strings.Repeat("r", 129), dbimp.ErrInvalidValue},
 	} {
 		_, err := spanner.ParseDSN(tt.dsn)
 		if err == nil || tt.want != nil && !errors.Is(err, tt.want) {
@@ -167,6 +174,9 @@ func FuzzParseDSN(f *testing.F) {
 		"spanner://h///",
 		"spanner://localhost/p/i/d?tls=true&tls=true",
 		"spanner://localhost/p/i/d?tls=false&credential_file=",
+		"spanner://localhost/p/i/d?database_role=app_reader",
+		"spanner://localhost/p/i/d?database_role=",
+		"spanner://localhost/p/i/d?database_role=a%00b",
 	} {
 		f.Add(dsn)
 	}

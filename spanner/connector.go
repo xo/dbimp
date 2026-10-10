@@ -62,10 +62,10 @@ type Connector struct {
 	// tests set it.
 	now func() time.Time
 
-	// sessions maps the name of a database to its multiplexed session, and
-	// sessGate guards it (D191 item 3).
+	// sessions maps a database and a role to the multiplexed session of the
+	// pair, and sessGate guards it (D191 item 3 and D198).
 	sessGate gate
-	sessions map[string]string
+	sessions map[target]string
 
 	// pollMin and pollMax are the interval of the poll, which the tests set.
 	pollMin, pollMax time.Duration
@@ -95,7 +95,7 @@ func NewConnector(cfg Config) *Connector {
 		client:   dbimp.NewClient(t, false),
 		tokGate:  newGate(),
 		sessGate: newGate(),
-		sessions: map[string]string{},
+		sessions: map[target]string{},
 		pollMin:  pollMin,
 		pollMax:  pollMax,
 		wait:     sleep,
@@ -106,7 +106,7 @@ func NewConnector(cfg Config) *Connector {
 // session of the database, and checks that the database speaks GoogleSQL. A
 // later call sends no request while the session lives.
 func (c *Connector) Connect(ctx context.Context) (driver.Conn, error) {
-	if _, err := c.session(ctx, c.cfg.Database); err != nil {
+	if _, err := c.session(ctx, c.cfg.target()); err != nil {
 		return nil, err
 	}
 	return &conn{c: c}, nil
@@ -193,10 +193,44 @@ func (c *Connector) call(ctx context.Context, method, path string, body []byte, 
 	return nil
 }
 
-// session returns the name of the multiplexed session of the database. It makes
+// target is the database of a statement, and the database role that it runs
+// as. A session belongs to one target, because the role is fixed when the
+// session is made (D198).
+type target struct {
+	database string
+	role     string
+}
+
+// target returns the database and the role of the DSN.
+func (cfg *Config) target() target {
+	return target{database: cfg.Database, role: cfg.DatabaseRole}
+}
+
+// creatorRoleMember is the member of the Session resource that names the
+// database role of the session. It is the JSON name of creator_role in the
+// REST reference of Google. The recordings hold no session with a role, so the
+// member is not measured here (D198).
+const creatorRoleMember = "creatorRole"
+
+// sessionBody returns the body of the request that makes a multiplexed session
+// that runs as role. An empty role leaves the member out.
+func sessionBody(role string) ([]byte, error) {
+	sess := map[string]any{"multiplexed": true}
+	if role != "" {
+		sess[creatorRoleMember] = role
+	}
+	b, err := json.Marshal(map[string]any{"session": sess})
+	if err != nil {
+		return nil, fmt.Errorf("writing the session request: %w", err)
+	}
+	return b, nil
+}
+
+// session returns the name of the multiplexed session of the target. It makes
 // the session when the connector has none, after it checks that the database
 // speaks GoogleSQL (D191 items 3 and 10).
-func (c *Connector) session(ctx context.Context, database string) (string, error) {
+func (c *Connector) session(ctx context.Context, tg target) (string, error) {
+	database := tg.database
 	if database == "" {
 		return "", fmt.Errorf("opening a session: the DSN names no database: %w", dbimp.ErrInvalidValue)
 	}
@@ -204,7 +238,7 @@ func (c *Connector) session(ctx context.Context, database string) (string, error
 		return "", err
 	}
 	defer c.sessGate.unlock()
-	if name := c.sessions[database]; name != "" {
+	if name := c.sessions[tg]; name != "" {
 		return name, nil
 	}
 	db := c.cfg.databaseName(database)
@@ -220,26 +254,29 @@ func (c *Connector) session(ctx context.Context, database string) (string, error
 	var sess struct {
 		Name string `json:"name"`
 	}
-	body := []byte(`{"session":{"multiplexed":true}}`)
+	body, err := sessionBody(tg.role)
+	if err != nil {
+		return "", err
+	}
 	if err := c.call(ctx, http.MethodPost, resource(db+"/sessions", ""), body, &sess); err != nil {
 		return "", fmt.Errorf("making a session in the database %s: %w", database, err)
 	}
 	if sess.Name == "" {
 		return "", fmt.Errorf("making a session in the database %s: the answer has no name: %w", database, dbimp.ErrInvalidValue)
 	}
-	c.sessions[database] = sess.Name
+	c.sessions[tg] = sess.Name
 	return sess.Name, nil
 }
 
-// forget drops the session of the database when it is still name, so that the
+// forget drops the session of the target when it is still name, so that the
 // next statement makes a new one.
-func (c *Connector) forget(database, name string) {
+func (c *Connector) forget(tg target, name string) {
 	// The call has no context, and the lock is held for the time of a map
 	// access, so it waits for the lock.
 	c.sessGate.hold()
 	defer c.sessGate.unlock()
-	if c.sessions[database] == name {
-		delete(c.sessions, database)
+	if c.sessions[tg] == name {
+		delete(c.sessions, tg)
 	}
 }
 
@@ -249,8 +286,8 @@ func (c *Connector) forget(database, name string) {
 // its session did not run, so the connector drops the session and the error
 // wraps driver.ErrBadConn, and database/sql sends the statement again on a
 // new session (D8 and D191 item 3).
-func (c *Connector) stream(ctx context.Context, database string, body []byte) (*http.Response, error) {
-	name, err := c.session(ctx, database)
+func (c *Connector) stream(ctx context.Context, tg target, body []byte) (*http.Response, error) {
+	name, err := c.session(ctx, tg)
 	if err != nil {
 		return nil, err
 	}
@@ -259,29 +296,29 @@ func (c *Connector) stream(ctx context.Context, database string, body []byte) (*
 		return nil, err
 	}
 	if err := checkStatus(res); err != nil {
-		return nil, c.lost(database, name, err)
+		return nil, c.lost(tg, name, err)
 	}
 	return res, nil
 }
 
 // post sends a request to a verb of the session of the database, and reads one
 // small object from the answer into out.
-func (c *Connector) post(ctx context.Context, database, verb string, body []byte, out any) error {
-	name, err := c.session(ctx, database)
+func (c *Connector) post(ctx context.Context, tg target, verb string, body []byte, out any) error {
+	name, err := c.session(ctx, tg)
 	if err != nil {
 		return err
 	}
-	return c.lost(database, name, c.call(ctx, http.MethodPost, resource(name, verb), body, out))
+	return c.lost(tg, name, c.call(ctx, http.MethodPost, resource(name, verb), body, out))
 }
 
 // lost turns the error of a session that the server does not know into one
 // that wraps driver.ErrBadConn, and drops the session. It returns any other
 // error as it is.
-func (c *Connector) lost(database, name string, err error) error {
+func (c *Connector) lost(tg target, name string, err error) error {
 	if err == nil || !errors.Is(err, ErrSessionNotFound) {
 		return err
 	}
-	c.forget(database, name)
+	c.forget(tg, name)
 	return fmt.Errorf("the session %s is gone: %w: %w", name, driver.ErrBadConn, err)
 }
 
@@ -304,19 +341,19 @@ type operation struct {
 	Error *wireError `json:"error"`
 }
 
-// ddl runs one DDL statement with updateDatabaseDdl, and polls the operation
-// until it is done (D191 item 8). An error of the operation is the error of the
-// statement. When ctx ends first, it cancels the operation on the server and
+// ddl runs DDL statements with one updateDatabaseDdl request, and polls the one
+// operation until it is done (D191 item 8 and D198). An error of the operation
+// is the error of the call. When ctx ends first, it cancels the operation on the server and
 // returns the error of ctx (D191 item 4). The driver names the operation, so
 // that it can cancel it even when the answer of the first request did not come.
-func (c *Connector) ddl(ctx context.Context, database, statement string) error {
+func (c *Connector) ddl(ctx context.Context, database string, statements []string) error {
 	db := c.cfg.databaseName(database)
 	id := "dbimp_" + strings.ToLower(rand.Text())
 	name := db + "/operations/" + id
 	body, err := json.Marshal(struct {
 		Statements  []string `json:"statements"`
 		OperationID string   `json:"operationId"`
-	}{[]string{statement}, id})
+	}{statements, id})
 	if err != nil {
 		return fmt.Errorf("writing the DDL request: %w", err)
 	}

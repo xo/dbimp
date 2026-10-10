@@ -94,7 +94,7 @@ func connector(cfg Config, base string, withSession bool) *Connector {
 	c.base = base
 	c.pollMin, c.pollMax = fastPoll, 4*fastPoll
 	if withSession {
-		c.sessions[cfg.Database] = cfg.databaseName(cfg.Database) + "/sessions/test-session"
+		c.sessions[cfg.target()] = cfg.databaseName(cfg.Database) + "/sessions/test-session"
 	}
 	return c
 }

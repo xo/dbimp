@@ -218,3 +218,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D195](D195-answers-for-bigquery-and-spanner-after-the-live-run.md) | Answers for BigQuery and Spanner after the live run | Decided. Amends D189 and D191 |
 | [D196](D196-the-spanner-driver-reads-the-emulator.md) | The Spanner driver reads the emulator | Decided. Adds to D187, D191 and D195 |
 | [D197](D197-the-error-of-a-driver-matches-errauthentication.md) | The error of a driver matches ErrAuthentication | Decided |
+| [D198](D198-spanner-database-role-and-ddl-batches.md) | Spanner database role and DDL batches | Decided |
