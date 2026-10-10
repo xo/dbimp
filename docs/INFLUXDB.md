@@ -396,6 +396,24 @@ InfluxQL:
 - No recorded answer is HTTP 429, and no header limits the rate (measured
   on every release).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose
+`HTTPStatus` is 401. Every release sends HTTP 401 for a wrong password or
+token (recorded: "a wrong password (influxql)", "a wrong password (sql)" and
+"ping with a wrong password"), with the bodies that this section lists.
+
+It is false for these refusals, because the credential was good and the
+principal lacks a permission:
+
+- HTTP 403 on InfluxDB 1 for a statement or a write that the user cannot run
+  (measured, 1.11.8-074 and 078).
+- HTTP 200 with `insufficient permissions` in the result on InfluxDB 2
+  (measured, 2.9.1-080).
+
+It is also false for every other status, such as HTTP 400. The test
+`TestAuthenticationInfluxdb` reads each of these answers from `testdata/influxdb/`.
+
 ## Cancellation and timeouts
 
 - On InfluxDB 3, a query that the client leaves is recorded in

@@ -78,10 +78,18 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// codeInvalidToken is the code of a JWT that the server refused, with HTTP 401
+// (measured).
+const codeInvalidToken = "390144"
+
 // Is reports whether target is the sentinel that the code of the error
-// names, ErrCanceled or ErrTimeout.
+// names, ErrCanceled or ErrTimeout, or dbimp.ErrAuthentication when the server
+// refused the token: the code 390144, or HTTP 401 (D197). A statement that the
+// role may not run, such as code 002003 with HTTP 422, does not match.
 func (err *Error) Is(target error) bool {
 	switch target {
+	case dbimp.ErrAuthentication:
+		return err.Code == codeInvalidToken || err.HTTPStatus == http.StatusUnauthorized
 	case ErrCanceled:
 		return err.Code == codeCanceled
 	case ErrTimeout:

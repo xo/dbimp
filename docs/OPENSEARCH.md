@@ -660,6 +660,30 @@ These facts were recorded on each release:
   (`TestSelectVersion`, `TestSelectVersionFromTheHeader`,
   `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the server refused the
+credential, and only then. It is never true for a refusal for lack of a
+permission. The method `Is` of `*Error` decides it, and `*dbimp.StatusError`
+under it also matches HTTP 401.
+
+The match is true for:
+
+- HTTP 401 with the plain text "Unauthorized" (recorded: "a wrong password").
+- An error whose status is 401, also when it came in the body of an answer with
+  HTTP 200. No recording holds this form. It follows the rule for the HTTP
+  status, and the legacy engine reports its refusals in the body as it does for
+  403 (recorded: the request that the manifest numbers 250).
+
+The match is false for:
+
+- HTTP 403 with `OpenSearchSecurityException` and the text "no permissions for"
+  (recorded: the requests of the ordinary user that the manifest numbers 249,
+  258, 346 and 374).
+- A body with status 403 that came with HTTP 200 (recorded: the request that the
+  manifest numbers 250).
+- Every other status.
+
 ## Principals
 
 These facts were recorded as `dbmeta_user` on each release:

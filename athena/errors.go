@@ -85,10 +85,31 @@ func (err *Error) Unwrap() error {
 }
 
 // Is reports whether target is ErrCanceled and the query ended in the state
-// CANCELLED.
+// CANCELLED. It reports whether target is dbimp.ErrAuthentication and the
+// server refused the credential (D197).
 func (err *Error) Is(target error) bool {
-	return target == ErrCanceled && err.State == stateCancelled
+	switch target {
+	case ErrCanceled:
+		return err.State == stateCancelled
+	case dbimp.ErrAuthentication:
+		return err.authRefused()
+	}
+	return false
 }
+
+// authRefused reports whether the type of the error says that the server
+// refused the credential: a signature that does not match the secret key, or
+// an access key that the server does not know (recorded: "a wrong secret").
+// AccessDeniedException is a missing permission, and it is not a refusal.
+func (err *Error) authRefused() bool {
+	return err.Type == typeInvalidSignature || err.Type == typeUnrecognizedClient
+}
+
+// The types of the errors that name a refused credential.
+const (
+	typeInvalidSignature   = "InvalidSignatureException"
+	typeUnrecognizedClient = "UnrecognizedClientException"
+)
 
 // The states of a query (recorded).
 const (

@@ -2007,3 +2007,27 @@ the emulator and the hosted account, and tell `dbmeta` the forms, the columns,
 the tag and the DSN. The keys of the hosted account of `dbmeta` reach every
 database of the account, so a test uses names of its own.
 
+## W42. Give a caller one way to ask any dbimp error whether the credential was refused. Done.
+
+The `usql` session asked for it on 2026-10-11. `usql` prints a dbimp error as its own
+`Error()` says, and it treats an HTTP 401 as a wrong credential for every driver.
+It still holds a check for a wrong password that is not a 401, for seven drivers:
+Athena (`InvalidSignature` or `UnrecognizedClient` in `Error.Type`), Avatica (the
+Java exception `SQLInvalidAuthorizationSpecException` in `Error.Exception`),
+ClickHouse (codes 194 and 516), Databricks (HTTP 403 and the message
+`Invalid access token`), Drill (`drill.ErrLogin`), DynamoDB (an Alternator
+`UnrecognizedClientException`) and Neo4j. `usql` wants one function in the root
+package, such as `dbimp.IsAuth(err)`, or an `ErrAuthentication` that the error of
+each driver wraps for those cases, so that `errors.Is` works and `usql` can drop all
+seven checks and its rule for a 401. Ken has not decided it. The question for Ken is
+the form (a function or a wrapped sentinel), and whether the 401 of every driver
+and the refusals of the seven drivers all count. It touches the error types of
+about twenty drivers, so it is a release of its own. `usql` also takes each insert
+of `\copy` alone when `BeginTx` returns `dbimp.ErrNotSupported`, and counts zero
+rows for an error that wraps `dbimp.ErrNotSupported`, so no driver needs to change
+for those.
+
+W42 is decided by D197: the sentinel `ErrAuthentication`, an `Is` method on the error
+of each driver, and a gate. It is written for all 24 drivers, and it waits for its
+release.
+

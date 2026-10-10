@@ -76,9 +76,25 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
-// Is reports whether target is ErrCanceled, which the reason stopped names.
+// Is reports whether target is ErrCanceled, which the reason stopped names. It
+// reports whether target is dbimp.ErrAuthentication and the service refused the
+// credential (D197).
 func (err *Error) Is(target error) bool {
-	return target == ErrCanceled && (err.Reason == reasonStopped || err.Status == "CANCELLED")
+	switch target {
+	case ErrCanceled:
+		return err.Reason == reasonStopped || err.Status == "CANCELLED"
+	case dbimp.ErrAuthentication:
+		return err.authRefused()
+	}
+	return false
+}
+
+// authRefused reports whether the service refused the credential: HTTP 401, or
+// the status UNAUTHENTICATED (recorded: bigquery-219 and bigquery-420). HTTP 403
+// with the reason accessDenied is a missing permission, and it is not a
+// refusal.
+func (err *Error) authRefused() bool {
+	return err.HTTPStatus == http.StatusUnauthorized || err.Status == "UNAUTHENTICATED"
 }
 
 // checkStatus returns nil if the status of res is one of the codes in ok.

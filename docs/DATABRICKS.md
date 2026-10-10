@@ -650,6 +650,23 @@ The server binds parameters. The request carries `parameters`, a list of objects
 - The error of a read of a statement that has `CANCELED` is not an error object. The state is the only sign
   (recorded: "the canceled statement, after 3s").
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `Error` with HTTP 401,
+and for an `Error` with HTTP 403 whose message starts with `Invalid access
+token`. The workspace answers a wrong token with HTTP 403 and the number 403 as
+`error_code`. The recorded cases are "a statement with a wrong token", "a read of
+a statement with a wrong token", "a cancel with a wrong token" and "the
+warehouse with a wrong token". No recording holds HTTP 401, so the unit test
+builds it.
+
+The match is false for any other HTTP 403, such as `PERMISSION_DENIED` (recorded:
+a SQL warehouse that the user cannot use, and the configuration of the
+warehouses). It is false for a statement that ended in the state FAILED, even
+when its message names `PERMISSION_DENIED`, and for every other error.
+`errors.Is` also finds the match through a wrapped error and through
+`errors.Join`.
+
 ## Cancellation and timeouts
 
 - A statement can wait on the server. With `wait_timeout` of `"0s"` the answer is at once with the state

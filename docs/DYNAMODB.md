@@ -527,6 +527,26 @@ These facts were recorded on each release of DynamoDB Local:
   VIEW` and `ALTER TABLE` fail (recorded: "crud: upsert", "crud: replace",
   "crud: a group by" and the requests of `schema:`).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose `Type`
+is `UnrecognizedClientException` or `InvalidSignatureException`, or whose
+`HTTPStatus` is 401 (`Error.Is` in `dynamodb/errors.go`). The namespace of the
+type does not matter, because the driver strips it.
+
+`AccessDeniedException` does not match. Alternator sends it for a write that
+`dbmeta_user` cannot do (Principals). Every other type does not match, such as
+`ValidationException`, `ResourceNotFoundException` and a quota.
+
+DynamoDB Local checks no key, and it answered "a wrong secret" with the list
+of tables. So step 6 has no recording of a refused credential and none of a
+refusal for a permission. `TestAuthentication` in `dynamodb/auth_test.go`
+holds those cases as bodies that the protocol of AWS and Alternator use, with
+the texts that Principals names. Those bodies are written in the test, and
+they are not recordings. The cases of a syntax error and of a missing table
+come from two recordings. Replace the written bodies with recordings when step
+6 records Alternator.
+
 ## Principals
 
 - DynamoDB Local checks no key. It answered a wrong secret with the list of

@@ -57,6 +57,14 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for HTTP 401, which is the answer to a wrong password. HTTP 403, "Permission
+// denied", is a missing permission and never matches (D197). The error of
+// HTTP 401 also matches through its *dbimp.StatusError.
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.HTTPStatus == http.StatusUnauthorized
+}
+
 // newError returns the *Error of the exceptions of an answer.
 func newError(httpStatus int, exceptions []Exception) *Error {
 	return &Error{HTTPStatus: httpStatus, Code: exceptions[0].Code, Message: exceptions[0].Message, Exceptions: exceptions}

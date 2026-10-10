@@ -869,6 +869,27 @@ Notes on the mapping (decided, D191):
 - A wrong token: the server answered HTTP 200 for the token with `-wrong` at the end. The
   answer to a token that the server refuses is not measured. See Requests.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `Error` whose
+`HTTPStatus` is 401 or whose `Status` is `UNAUTHENTICATED`. The status of an
+error of a long running operation is `UNAUTHENTICATED` when its gRPC code is 16.
+
+It is also true when the token endpoint of Google refuses the key file, with the
+error `invalid_grant` or `invalid_client`. The error of the exchange then wraps
+both `dbimp.ErrAuthentication` and the `*dbimp.StatusError` of the answer.
+
+No recording of Spanner holds a refused credential, because the emulator
+accepted a wrong token (see "A request with a wrong token" under Requests). The
+unit tests use the recordings of BigQuery for the answer with HTTP 401, which
+comes from the same front end of Google, and decode them with the decoder of this
+driver. The test builds the answer of the token endpoint.
+
+The match is false for HTTP 403 with the status `PERMISSION_DENIED`, which is a
+missing permission (recorded: the sessions of a database, and an instance). It
+is false for `ABORTED` and for every other error. `errors.Is` also finds the
+match through a wrapped error and through `errors.Join`.
+
 ## Cancellation and timeouts
 
 - The recorder cannot cancel a request, and a client timeout is not recorded (source:

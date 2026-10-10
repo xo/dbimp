@@ -507,6 +507,28 @@ What the driver does (D167):
   statement, and two statements go to the server (`TestSelectVersion`,
   `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the server refused the
+credential, and only then. It is never true for a refusal for lack of a
+permission. The method `Is` of `*Error` decides it, and `*dbimp.StatusError`
+under it also matches HTTP 401.
+
+The match is true for:
+
+- HTTP 401 with `security_exception` and the reason "unable to authenticate
+  user" (recorded: "a wrong password", on 8.19.22, 9.4.6 and 9.5.3).
+
+The match is false for:
+
+- HTTP 403 with `security_exception` and the reason "action ... is unauthorized
+  for user". The user lacks an index or a cluster privilege (recorded: the
+  requests of the ordinary user that the manifest numbers 179 and 287).
+- HTTP 403 with `security_exception` and the reason "current license is
+  non-compliant". The license does not allow the feature (recorded: the
+  request that the manifest numbers 024).
+- Every other status.
+
 ## Principals
 
 These facts were recorded as `dbmeta_user` on each release:

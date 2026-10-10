@@ -47,6 +47,10 @@ const (
 	// ErrArguments is the error for arguments that do not match the
 	// placeholders of a statement (D34).
 	ErrArguments Error = "arguments do not match the placeholders"
+	// ErrAuthentication is the error that the error of a driver matches with
+	// errors.Is when the server refused the credential: a wrong password, key
+	// or token. It never matches a refusal for lack of a permission (D197).
+	ErrAuthentication Error = "authentication refused"
 )
 
 // maxErrorBody is the most of the body of a response that a StatusError
@@ -69,6 +73,14 @@ func (err *StatusError) Error() string {
 		return fmt.Sprintf("status %d %s: %s", err.Code, text, body)
 	}
 	return fmt.Sprintf("status %d %s", err.Code, text)
+}
+
+// Is reports whether err matches target. It matches ErrAuthentication for HTTP
+// 401, which is the status for a request with no valid credential. HTTP 403 is
+// not matched, because a server also sends it for a missing permission, so the
+// error of a driver decides it (D197).
+func (err *StatusError) Is(target error) bool {
+	return target == ErrAuthentication && err.Code == http.StatusUnauthorized
 }
 
 // CheckStatus returns nil if the status of res is 2xx. Otherwise it reads at

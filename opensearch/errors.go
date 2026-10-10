@@ -66,6 +66,18 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// when the status is 401, whether it is the HTTP status or the status of a body that came with HTTP 200. HTTP 401 is a wrong password (recorded: "a wrong password"). Every other refusal does not match, such as HTTP 403 for a missing
+// permission (D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the status of the error is 401.
+func (err *Error) authRefused() bool {
+	return err.Status == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with what the body says.
 func checkStatus(res *http.Response) error {

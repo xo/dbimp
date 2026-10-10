@@ -52,6 +52,19 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for HTTP 401, which is the answer for a token that is not valid (recorded:
+// "a wrong password"). HTTP 403, for a token that cannot write, is a missing
+// permission and does not match (D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the server refused the credential.
+func (err *Error) authRefused() bool {
+	return err.HTTPStatus == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with the message of the body, which is
 // {"message": ..., "code": ...} for an expired stream, {"error": ...} for a

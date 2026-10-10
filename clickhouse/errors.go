@@ -59,6 +59,28 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// The codes of the errors that name a refused credential (D197). Code 194 is
+// the wrong password of the user default, and code 516 is the wrong password of
+// another user (measured). Code 497, ACCESS_DENIED, is a missing privilege, and
+// it is not one of them.
+const (
+	codeAuthRequired = 194
+	codeAuthFailed   = 516
+)
+
+// Is reports whether target is dbimp.ErrAuthentication, which the error
+// matches when the server refused the credential: the code 194 or 516, or HTTP
+// 401 (D197). A missing privilege, code 497 with HTTP 403, does not match.
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the fields that the server sent say that it
+// refused the credential.
+func (err *Error) authRefused() bool {
+	return err.Code == codeAuthRequired || err.Code == codeAuthFailed || err.HTTPStatus == http.StatusUnauthorized
+}
+
 // headerCode is the header of a response that holds the code of an error.
 const headerCode = "X-Clickhouse-Exception-Code"
 

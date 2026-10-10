@@ -85,9 +85,12 @@ func (err *Error) Unwrap() error {
 }
 
 // Is reports whether target is the sentinel that the status of the error
-// names.
+// names. It reports whether target is dbimp.ErrAuthentication and the server
+// refused the credential (D197).
 func (err *Error) Is(target error) bool {
 	switch target {
+	case dbimp.ErrAuthentication:
+		return err.authRefused()
 	case ErrAborted:
 		return err.Status == "ABORTED"
 	case ErrSessionNotFound:
@@ -96,6 +99,13 @@ func (err *Error) Is(target error) bool {
 		return err.Status == "CANCELLED"
 	}
 	return false
+}
+
+// authRefused reports whether the server refused the credential: HTTP 401, or
+// the status UNAUTHENTICATED, which is the gRPC code 16 of an operation too.
+// PERMISSION_DENIED is a missing permission, and it is not a refusal.
+func (err *Error) authRefused() bool {
+	return err.HTTPStatus == http.StatusUnauthorized || err.Status == "UNAUTHENTICATED"
 }
 
 // wireError is the member error of a body.

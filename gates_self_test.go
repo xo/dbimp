@@ -81,6 +81,12 @@ func WithReadonly(bool) Option                                         { return 
 func WithParameter(string, any) Option                                 { return nil }
 func WithDatabase(string) Option                                       { return nil }
 
+type Error struct{}
+
+func (*Error) Error() string { return "" }
+
+func (*Error) Is(target error) bool { return target == dbimp.ErrAuthentication }
+
 func use() {
 	client := &http.Client{}
 	_ = client
@@ -94,9 +100,11 @@ func use() {
 import (
 	"testing"
 
+	"github.com/xo/dbimp"
 	"github.com/xo/dbimp/dbimptest"
 )
 
+func TestAuthentication(t *testing.T) { _ = dbimp.ErrAuthentication }
 func TestContract(t *testing.T) { dbimptest.RunContract(t, dbimptest.Contract{}) }
 func TestTables(t *testing.T) {
 	dbimptest.TypeTable(t, "", nil)

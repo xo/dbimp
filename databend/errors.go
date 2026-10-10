@@ -39,6 +39,23 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// codeAuthentication is the code of Databend for a failed authentication,
+// sent with HTTP 401 (recorded: "a wrong password").
+const codeAuthentication = 5100
+
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for the code 5100, and for HTTP 401. The code 1063, "Permission denied",
+// arrives with HTTP 200 and is a missing privilege, so it does not match
+// (recorded: "a database that needs a privilege", D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the server refused the credential.
+func (err *Error) authRefused() bool {
+	return err.Code == codeAuthentication || err.HTTPStatus == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with the code and the message of the body,
 // which is {"error": {"code", "message"}} (measured).

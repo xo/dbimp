@@ -522,6 +522,18 @@ These facts were measured with the driver on 2026-10-07, on both releases:
   started later gave `VALIDATION ERROR: null`. Both are a failure with no
   change in the table.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` that
+answers HTTP 307 to the login page, `/mainLogin`. That is the answer to "a
+wrong password", and the same error still matches `drill.ErrLogin`. A 307 to
+another place matches `drill.ErrLogin` only. An HTTP 401 also matches,
+through the `*dbimp.StatusError` that the `*Error` wraps.
+
+It is false for the `PERMISSION ERROR` of "ALTER SYSTEM", which Drill sends
+with HTTP 200 and the state FAILED, and for every other failure of a
+statement.
+
 ## Cancellation and timeouts
 
 These facts were recorded on each release, as both principals:

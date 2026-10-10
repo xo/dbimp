@@ -447,6 +447,16 @@ Recorded on 1.4.0 and 1.5.1:
   `WorkloadBudgetExceededError` has the same code (the source,
   `QueryErrorCode.java`).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose
+`HTTPStatus` is 401. That is the answer to "a wrong password". It is also true
+through the `*dbimp.StatusError` that the `*Error` wraps.
+
+It is false for HTTP 403, which is the answer to "a table the user cannot
+read" and says "Permission denied". It is false for an exception of an answer
+with HTTP 200, such as code 180 (`AccessDenied`) and every other code.
+
 ## Cancellation and timeouts
 
 Recorded on 1.4.0 and 1.5.1, as both principals:

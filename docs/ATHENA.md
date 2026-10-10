@@ -733,6 +733,22 @@ An error has one of six forms.
   The id of a DDL statement was not sent, so what the two calls answer for it is
   not measured.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the `Type` of the `Error`
+is `InvalidSignatureException` or `UnrecognizedClientException`. The server
+answers HTTP 400 for both. The recorded case is `InvalidSignatureException` for
+"a wrong secret", on the start of the query and on its execution.
+`UnrecognizedClientException` is the form that AWS documents for an access key
+that it does not know. No recording holds it, because the recorded run used a
+known key, and the unit test builds it from that form.
+
+The match is false for `AccessDeniedException`, which is a missing permission
+(recorded: a workgroup that the user cannot use, and the list of data
+catalogs). It is false for `InvalidRequestException`, for a query that ended in
+the state FAILED or CANCELLED, and for every other type. `errors.Is` also finds
+the match through a wrapped error and through `errors.Join`.
+
 ## Cancellation and timeouts
 
 - `StopQueryExecution` answered HTTP 200 and `{}` in every call. On a query

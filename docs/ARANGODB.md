@@ -206,6 +206,24 @@ maps every kind onto its Go type (D135 and D137).
 - A schema that refuses a document is HTTP 400 and 1620 (measured, 107).
 - No recorded answer is HTTP 429, and none is HTTP 503.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the server refused the
+credential. The server sends HTTP 401 and `errorNum` 11 for a refused
+credential and for a missing permission, so the status and the number do not
+tell the two apart. The message does.
+
+- The error matches for HTTP 401, `errorNum` 11 and the message "User not
+  authenticated". The recordings "a wrong password" (058 and 059) and "no
+  credentials" (174 and 175) hold it.
+- The error does not match for HTTP 401, `errorNum` 11 and the message "No
+  read access to database.". That is a missing permission (recordings 127, 176,
+  177 and 178).
+- An `*Error` for HTTP 401 that does not match also hides its
+  `*dbimp.StatusError` from `errors.Unwrap`, because the status alone would
+  match.
+- No other recorded error matches.
+
 ## Cancellation and timeouts
 
 - A closed connection does not stop a query: the query goes on to its end

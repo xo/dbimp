@@ -1040,6 +1040,26 @@ These facts were recorded on each release:
 - The changes to the columns of the key are refused with the code 524
   (recorded: "schema: alter modify column" and "schema: alter rename column").
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose `Code`
+is 194 or 516, or whose `HTTPStatus` is 401 (`Error.Is` in
+`clickhouse/errors.go`). The recordings of "a wrong password" show both codes:
+
+- Code 194 with HTTP 401 is a wrong password of the user `default`.
+- Code 516, `AUTHENTICATION_FAILED`, with HTTP 403 is a wrong password of
+  another user, or a user that the server does not know.
+
+Code 516 also names a request that sends the credential in two ways, or a
+user header with no name (recorded: "the headers with an unauthorized
+request"). The server calls those a failed authentication, so they match too.
+
+A missing privilege does not match. The server sends code 497, `ACCESS_DENIED`,
+with HTTP 403 and the text `Not enough privileges`, such as `CREATE DATABASE`
+or `SELECT ON system.users` for `dbimp_user` (recorded: "a read of a system
+table with no grant" and "a create of a database with no grant"). A syntax error (62), an unknown table
+(60) and a statement that the server does not allow (358) do not match either.
+
 ## Principals
 
 - The administrator is `default`. The image sets its password from

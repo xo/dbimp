@@ -48,6 +48,20 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for HTTP 401, which every release sends for a wrong password or token
+// (recorded: "a wrong password"). HTTP 403 and a statement that failed with
+// HTTP 200, such as `insufficient permissions` on InfluxDB 2, are a missing
+// permission and do not match (D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the server refused the credential.
+func (err *Error) authRefused() bool {
+	return err.HTTPStatus == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body and returns an *Error with the message of the server, which is
 // JSON with "error" on InfluxDB 1 and 3, JSON with "message" on InfluxDB 2,

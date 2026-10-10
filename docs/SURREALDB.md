@@ -255,6 +255,21 @@ maps every kind onto its Go type (D135 and D137).
   reads as `surrealdb: NotFound: The table 'dbimp_nothing' does not exist`
   (tested).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the server refused the
+credential.
+
+- The plain text of HTTP 401, "The password did not verify", matches through
+  its `*dbimp.StatusError`. The recordings "a wrong password" (items 76 and
+  234) hold it.
+- An `Error` with the code 401, which a refusal with a body of JSON gives,
+  matches. No recording has that form for a wrong credential, so a test builds
+  the error by hand.
+- A statement that fails with "IAM error: Not enough permissions" is HTTP 200
+  with the status `ERR` and the code 0. It does not match (item 235).
+- No other recorded error matches.
+
 ## Cancellation and timeouts
 
 - The server stops a query when the client disconnects. `SLEEP 3s; CREATE

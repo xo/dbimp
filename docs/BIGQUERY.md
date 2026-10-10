@@ -1175,6 +1175,26 @@ the driver. The hosted service checks it, as the next facts show.
   `requestId` is safe to repeat for a statement that changes data: the second
   `INSERT` did not insert again (recorded: bigquery-380 to bigquery-382).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `Error` whose
+`HTTPStatus` is 401 or whose `Status` is `UNAUTHENTICATED`. The recorded cases
+are "a request with no credentials" (reason `required`) and "a request with a
+Bearer token that is wrong" (reason `authError`), on a query and on a read.
+
+It is also true when the token endpoint of Google refuses the key file. The
+endpoint answers HTTP 400 with the error `invalid_grant` or `invalid_client`.
+The error of the exchange then wraps both `dbimp.ErrAuthentication` and the
+`*dbimp.StatusError` of the answer. No recording holds this answer, because the
+recorded run used a good key. The unit test builds it from the form of the
+answer that the code of the exchange reads.
+
+The match is false for HTTP 403 with the reason `accessDenied`, which is a
+missing permission (recorded: a dataset, a project, a job, and a caller that
+lacks the role `serviceusage.serviceUsageConsumer`). It is false for `notFound`
+and for every other error. `errors.Is` also finds the match through a wrapped
+error and through `errors.Join`.
+
 ## Cancellation and timeouts
 
 - A job that runs longer than `timeoutMs` leaves `jobs.query` with `jobComplete:

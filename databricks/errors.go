@@ -88,13 +88,33 @@ func (err *Error) Unwrap() error {
 }
 
 // Is reports whether target is the sentinel that the state of the error
-// names, ErrCanceled or ErrClosed.
+// names, ErrCanceled or ErrClosed. It reports whether target is
+// dbimp.ErrAuthentication and the server refused the credential (D197).
 func (err *Error) Is(target error) bool {
 	switch target {
 	case ErrCanceled:
 		return err.state == stateCanceled
 	case ErrClosed:
 		return err.state == stateClosed
+	case dbimp.ErrAuthentication:
+		return err.authRefused()
+	}
+	return false
+}
+
+// invalidToken is the start of the message of a token that the server does
+// not accept (recorded: "a statement with a wrong token").
+const invalidToken = "Invalid access token"
+
+// authRefused reports whether the server refused the credential: HTTP 401, or
+// HTTP 403 with the message Invalid access token. Any other 403, such as
+// PERMISSION_DENIED, is a missing permission, and it is not a refusal.
+func (err *Error) authRefused() bool {
+	switch err.HTTPStatus {
+	case http.StatusUnauthorized:
+		return true
+	case http.StatusForbidden:
+		return strings.HasPrefix(err.Message, invalidToken)
 	}
 	return false
 }

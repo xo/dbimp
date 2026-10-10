@@ -452,6 +452,9 @@ func TestTokenEndpointRefuses(t *testing.T) {
 	if _, ok := errors.AsType[*dbimp.StatusError](err); !ok {
 		t.Errorf("the error %v does not wrap a *dbimp.StatusError", err)
 	}
+	if !errors.Is(err, dbimp.ErrAuthentication) {
+		t.Errorf("the error %v does not match dbimp.ErrAuthentication", err)
+	}
 	assertion := tokens.forms[0].Get("assertion")
 	if strings.Contains(err.Error(), assertion) || strings.Contains(err.Error(), key[40:80]) {
 		t.Errorf("the error holds the assertion or the key: %v", err)

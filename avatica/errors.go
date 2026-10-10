@@ -43,6 +43,19 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// invalidAuthorization is the Java exception that HSQLDB, and the Phoenix
+// Query Server above it, throw for a wrong user or password (measured).
+const invalidAuthorization = "SQLInvalidAuthorizationSpecException"
+
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// when the first exception names SQLInvalidAuthorizationSpecException, which
+// is the answer to a wrong password. Any other exception is not a refused
+// credential (D197). A *dbimp.StatusError with HTTP 401 also matches, through
+// Unwrap.
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && strings.Contains(err.Exception, invalidAuthorization)
+}
+
 // noSuchConnection is the exception of a connection that the server does not
 // know, such as one whose cache entry expired (measured).
 const noSuchConnection = "org.apache.calcite.avatica.NoSuchConnectionException"

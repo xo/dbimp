@@ -385,6 +385,21 @@ proposals that step 9 must settle:
   ran (recorded: "insert overwrite", "a multi table insert", "a clustering
   key", "a clone", "time travel", "flatten", "qualify", "a path in a variant").
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose `Code`
+is `390144`, or whose `HTTPStatus` is 401 (`Error.Is` in
+`snowflake/errors.go`). The recording of "a wrong token" has both: HTTP 401,
+code `390144` and the text `JWT token is invalid`.
+
+A statement that the role cannot run does not match. The server sends HTTP 422
+and code `002003`, with the text `does not exist or not authorized`, for an
+object or a schema that the role cannot see (recorded: "a missing table" and "a schema that
+the role cannot read"). A syntax error, an empty statement and
+HTTP 400 do not match either. The code `390146`, for a body with no token, is
+HTTP 400 and does not match, because no recording shows it for a credential
+that the server read.
+
 ## Principals
 
 - This login is one user with one role. It can use the warehouse and the

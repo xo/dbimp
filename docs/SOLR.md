@@ -487,6 +487,24 @@ The integration tests of step 14 measured these facts on each release on
   `WithDatabase` has no effect on it (`TestSelectVersion`,
   `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the server refused the
+credential, and only then. It is never true for a refusal for lack of a
+permission. The method `Is` of `*Error` decides it, and `*dbimp.StatusError`
+under it also matches HTTP 401.
+
+The match is true for:
+
+- HTTP 401 with the title "Bad credentials" (recorded: "a wrong password").
+
+The match is false for:
+
+- HTTP 403 with the title "Unauthorized request, Response code: 403". The role
+  of the user does not allow the request (recorded: the requests of the
+  ordinary user that the manifest numbers 122 and 127).
+- An exception in the body of an answer with HTTP 200, and every other status.
+
 ## Principals
 
 These facts were recorded on each release, as `dbmeta_user`, who has the

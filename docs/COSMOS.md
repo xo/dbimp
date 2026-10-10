@@ -982,6 +982,30 @@ otherwise.
 - The statement names no container, so the driver must learn it from the DSN or
   from a clause of its own.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the server refused the
+credential, and only then. It is never true for a refusal for lack of a
+permission. The method `Is` of `*Error` decides it, and `*dbimp.StatusError`
+under it also matches HTTP 401.
+
+The match is true for:
+
+- HTTP 401 with the code `Unauthorized` or with no code, such as a request with
+  no `Authorization` header (recorded: "a request that the recorder sends with
+  no signature", on the hosted account).
+
+A wrong signature is HTTP 401 on the hosted service, but no recording holds it
+(measured, not recorded). The emulator answers HTTP 200 to a request with no
+signature, so no error arises there.
+
+The match is false for:
+
+- HTTP 403 with the code `Forbidden` (recorded: "a request for the options of
+  the server", "replace the indexing policy"). HTTP 403 is not a refusal of a
+  credential, and no recording of it is a missing privilege.
+- Every other status, such as 400, 404 and 429.
+
 ## Principals
 
 - The recordings are of the master key of the account, on both servers (recorded in

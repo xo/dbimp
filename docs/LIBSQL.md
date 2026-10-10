@@ -339,6 +339,19 @@ These facts were recorded as both principals:
   statement of it runs (recorded as `dbmeta_user`: "crud: insert" and
   "schema: the pragma of foreign keys").
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose
+`HTTPStatus` is 401. The server sends it for a token that is not valid, with
+`{"error":"Unauthorized: `The JWT is invalid`"}` (recorded: "a wrong
+password").
+
+It is false for HTTP 403, which a token that can only read gets for a write
+(recorded: item 3, principal `ordinary`). That token is valid and lacks a
+permission. It is also false for HTTP 400, such as an expired stream. The
+test `TestAuthenticationLibsql` reads each of these answers from
+`testdata/libsql/`.
+
 ## Cancellation and timeouts
 
 - A statement stops when the client disconnects, on `/v2/pipeline` and on

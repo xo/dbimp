@@ -322,6 +322,19 @@ otherwise):
 - An unsupported media type is HTTP 406 for `Accept` and HTTP 415 for
   `Content-Type` (recorded).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true when the server refused the
+credential.
+
+- The error matches for the code `Neo.ClientError.Security.Unauthorized`,
+  which comes with HTTP 401. The recordings of a wrong password hold it, on
+  5.26.31 and on 2026.09.0 (items 88, 89, 307 and 309).
+- The error does not match for `Neo.ClientError.Security.Forbidden`. That is
+  a missing privilege, with HTTP 400 (for example items 310 and 312, `SHOW
+  USERS`).
+- No other recorded error matches.
+
 ## Cancellation and timeouts
 
 - The server does not stop a query when the client disconnects. A query that

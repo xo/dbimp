@@ -407,6 +407,9 @@ func TestTokenEndpointErrors(t *testing.T) {
 			t.Errorf("%s: the error is %v", name, err)
 			continue
 		}
+		if got, want := errors.Is(err, dbimp.ErrAuthentication), tt.status == http.StatusBadRequest; got != want {
+			t.Errorf("%s: errors.Is(err, dbimp.ErrAuthentication) is %t, want %t", name, got, want)
+		}
 		if tt.status == http.StatusBadRequest {
 			var serr *dbimp.StatusError
 			if !errors.As(err, &serr) || serr.Code != tt.status || !strings.Contains(serr.Body, "invalid_grant") {

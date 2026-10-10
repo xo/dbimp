@@ -429,6 +429,24 @@ These facts come from the server source, and are not measured:
 - HTTP 503 with the text `leader not found` comes when a node has no leader.
 - HTTP 408 comes when a queued write waits past its timeout.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose
+`HTTPStatus` is 401, which the server sends with an empty body for a wrong
+password (recorded: "a wrong password").
+
+rqlite sends HTTP 401 with the same empty body and the same
+`Www-Authenticate` header when a user has no permission for an endpoint
+(recorded: "the status", "the nodes", "a backup" and "the readiness").
+Nothing in the answer tells the two causes apart. The driver sends only
+`/db/execute`, `/db/query` and `/db/request`, so a 401 that it receives is
+treated as a refused credential. A user who lacks the `execute` or `query`
+permission also gets a 401 from these endpoints (the server source, not
+measured), and the driver cannot tell that case from a wrong password.
+
+The test `TestAuthenticationRqlite` reads the recorded wrong password on both
+releases, and an HTTP 400 that does not match, from `testdata/rqlite/`.
+
 ## Cancellation and timeouts
 
 These facts were measured on both releases:

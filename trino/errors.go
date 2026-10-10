@@ -67,6 +67,14 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether target is dbimp.ErrAuthentication, which the error
+// matches for HTTP 401 only. Trino answers 401 for a request with no valid
+// credential, and an error in the body of a page, such as PERMISSION_DENIED,
+// never matches (D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.HTTPStatus == http.StatusUnauthorized
+}
+
 // failure is the error member of a page. The member failureInfo holds the
 // stack of the server, which the driver never shows (measured).
 type failure struct {

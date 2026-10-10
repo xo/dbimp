@@ -37,6 +37,21 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for HTTP 401, which is the answer for a wrong password (recorded: "a wrong
+// password"). rqlite also sends HTTP 401, with the same empty body, for an
+// endpoint that a user has no permission for (recorded: "the status"), but
+// the driver sends only /db/execute, /db/query and /db/request, so a 401 that
+// the driver sees is a refused credential (D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the server refused the credential.
+func (err *Error) authRefused() bool {
+	return err.HTTPStatus == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with the text of the body, which is plain
 // text, or empty for HTTP 401 (measured).

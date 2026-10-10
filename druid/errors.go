@@ -60,6 +60,15 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for HTTP 401, which is the answer to a wrong password. HTTP 403 with
+// Access-Check-Result, and the task state FORBIDDEN, are a missing privilege
+// and never match (D197). The error of HTTP 401 also matches through its
+// *dbimp.StatusError.
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.HTTPStatus == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with what the body says.
 func checkStatus(res *http.Response) error {

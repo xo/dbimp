@@ -500,6 +500,20 @@ Measured on 2026-09-29 (recorded, item 6), on both releases:
   without running the statement twice (the server source). D8 decides what
   that allows.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose `Code`
+is 5100 or whose `HTTPStatus` is 401. The server sends both for a wrong
+password: HTTP 401 with 5100 and `Authentication failed: incorrect password`
+(recorded: "a wrong password", on both releases).
+
+It is false for code 1063, `Permission denied`, which arrives with HTTP 200
+(recorded: "a database that needs a privilege"). It is also false for any
+other code, such as 1005. The server source says that HTTP 401 is also the
+status for a page of a query that belongs to another user, so such a page
+matches too (not measured). The test `TestAuthenticationDatabend` reads each
+recorded answer from `testdata/databend/`.
+
 ## Cancellation and timeouts
 
 Measured on 2026-09-29 (recorded, item 7), as both principals, on both

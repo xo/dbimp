@@ -318,6 +318,19 @@ has the kind of its signature, or the signature says `json`.
   13014 and the missing role (recorded, for the ordinary user on
   `system:user_info`).
 - A request with no statement is HTTP 400 with code 1050 (recorded).
+
+The refused credential (D197): `errors.Is(err, dbimp.ErrAuthentication)` is
+true when the server refused the credential.
+
+- An `Error` with the code 2120 matches. It is the "wrong password" of
+  7.6.12 and 8.0.3 (item 32).
+- An `Error` with the code 13014 does not match, although it is also HTTP 401.
+  It means that the user lacks a role (item 209 and the other refusals of the
+  ordinary user).
+- The code 1000 for a write in `readonly` mode (HTTP 403) and the code 3000
+  for a syntax error do not match.
+- 7.2.9 accepted a wrong password for `SELECT 1 AS a`, so it sends no error
+  to match.
 - A prepared statement that the server does not know gives code 4040 on
   7.2.9 and 8.0.3, and `PREPARE` with a name that exists gives 4060 (the
   `n1ql` session).

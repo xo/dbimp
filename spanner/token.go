@@ -10,6 +10,7 @@ import (
 	"encoding/base64"
 	"encoding/json/v2"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -173,7 +174,7 @@ func (s *signer) exchange(ctx context.Context, client *http.Client, now time.Tim
 		return "", time.Time{}, fmt.Errorf("asking %s for a token: %w", s.tokenURI, err)
 	}
 	if err := dbimp.CheckStatus(res); err != nil {
-		return "", time.Time{}, fmt.Errorf("asking %s for a token: %w", s.tokenURI, err)
+		return "", time.Time{}, fmt.Errorf("asking %s for a token: %w", s.tokenURI, tokenRefused(err))
 	}
 	defer res.Body.Close()
 	var ans tokenAnswer
@@ -264,4 +265,25 @@ func (c *Connector) clock() time.Time {
 		return c.now()
 	}
 	return time.Now()
+}
+
+// tokenRefused wraps err with dbimp.ErrAuthentication when err is the answer
+// of the token endpoint that refuses the key: the error invalid_grant or
+// invalid_client in the body (D197). Any other error comes back as it is. An
+// answer with HTTP 401 matches already, through the *dbimp.StatusError.
+func tokenRefused(err error) error {
+	serr, ok := errors.AsType[*dbimp.StatusError](err)
+	if !ok {
+		return err
+	}
+	var body struct {
+		Error string `json:"error"`
+	}
+	if json.Unmarshal([]byte(serr.Body), &body) != nil {
+		return err
+	}
+	if body.Error == "invalid_grant" || body.Error == "invalid_client" {
+		return fmt.Errorf("%w: %w", dbimp.ErrAuthentication, err)
+	}
+	return err
 }

@@ -3,6 +3,8 @@ package neo4j
 import (
 	"fmt"
 	"strings"
+
+	"github.com/xo/dbimp"
 )
 
 // Error is one error that Neo4j reported, such as
@@ -17,6 +19,18 @@ type Error struct {
 // Error satisfies the error interface.
 func (err Error) Error() string {
 	return "neo4j: " + err.Code + ": " + err.Message
+}
+
+// codeUnauthorized is the code that Neo4j sends, with HTTP 401, for a
+// credential that it refused, such as a wrong password (recorded). The code
+// Neo.ClientError.Security.Forbidden is a missing privilege, and it is not
+// a refused credential (D197).
+const codeUnauthorized = "Neo.ClientError.Security.Unauthorized"
+
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for the code Neo.ClientError.Security.Unauthorized alone (D197).
+func (err Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.Code == codeUnauthorized
 }
 
 // ResponseError holds the errors of one response, with its HTTP status. The

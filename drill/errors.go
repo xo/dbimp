@@ -35,6 +35,7 @@ type Error struct {
 	Message string
 
 	status *dbimp.StatusError
+	login  bool
 }
 
 // Error satisfies the error interface.
@@ -59,9 +60,18 @@ func (err *Error) Unwrap() error {
 // which is the answer to a wrong user or a wrong password (measured).
 const ErrLogin dbimp.Error = "the server asked for a login"
 
-// Is reports whether err is target, for ErrLogin.
+// Is reports whether err is target. It is ErrLogin for HTTP 307. It matches
+// dbimp.ErrAuthentication only when the redirect goes to the login page, which
+// is the answer to a wrong user or password. A PERMISSION ERROR, which comes
+// with HTTP 200, is a missing permission and never matches (D197).
 func (err *Error) Is(target error) bool {
-	return target == ErrLogin && err.HTTPStatus == http.StatusTemporaryRedirect
+	switch target {
+	case ErrLogin:
+		return err.HTTPStatus == http.StatusTemporaryRedirect
+	case dbimp.ErrAuthentication:
+		return err.login
+	}
+	return false
 }
 
 // kindPattern matches the start of the message of Drill, such as
@@ -103,6 +113,7 @@ func newError(serr *dbimp.StatusError, location string) *Error {
 	}
 	switch {
 	case serr.Code == http.StatusTemporaryRedirect && strings.Contains(location, "/mainLogin"):
+		e.login = true
 		e.Message = "the server sent the request to its login page: the user or the password is wrong"
 	case json.Unmarshal([]byte(text), &body) == nil && body.Message != "":
 		e.Message = body.Message

@@ -40,6 +40,12 @@ with `%w`, and a caller tests it with `errors.Is`:
 - `ErrIncomplete` for a result set that failed, or that the server cut
   short, after at least one of its rows reached the caller (D21 and D107).
 - `ErrUnterminated` and `ErrArguments` for placeholders (D34).
+- `ErrAuthentication` for a server that refused the credential: a wrong
+  password, key or token. The error of each driver matches it with
+  `errors.Is`, through an `Is` method that reads the fields of the server
+  (D197). It never matches a refusal for lack of a permission. A `StatusError`
+  with the code 401 matches it, and a `StatusError` with the code 403 does not,
+  because a server sends 403 for both causes, so the driver decides it.
 
 `CheckStatus` turns a response whose status is not 2xx into a `StatusError`.
 It keeps the code and at most 64 KiB of the body, so that a driver can read

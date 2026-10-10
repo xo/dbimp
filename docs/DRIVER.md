@@ -476,6 +476,12 @@ these, and a unit test holds each one:
   set `Accept-Encoding` itself, so that the transport decompresses gzip.
 - No error message holds a password or a token. Write a URL in an error with
   `url.URL.Redacted`.
+- The error of the driver matches `dbimp.ErrAuthentication` with `errors.Is`
+  when the server refused the credential, and only then (D197). Its `Is`
+  method reads the fields that step 6 recorded for a wrong password, a wrong
+  key and a wrong token, and it returns false for a missing permission. A
+  table test holds each recorded case, for a refusal of the credential and for
+  a refusal of a permission.
 - Two queries can run at the same time on one `sql.DB`.
 - A test makes sure that no goroutine is left running after each test, with
   `dbimptest.CheckGoroutines`.
@@ -490,8 +496,9 @@ these, and a unit test holds each one:
   JSON. Step 6 measures the setting of the server that each option sends,
   and a test with a fake server holds each one.
 
-Gate: `TestNoDriverTouchesGlobalState`, `TestEveryDriverRegistersOneName`
-and `TestEveryDriverTakesTheCommonOptions` pass, and
+Gate: `TestNoDriverTouchesGlobalState`, `TestEveryDriverRegistersOneName`,
+`TestEveryDriverTakesTheCommonOptions` and
+`TestEveryDriverClassifiesAuthentication` pass, and
 `go test -race -count=2 ./<driver>/...` passes.
 
 ### 13. Test the DSN
@@ -851,6 +858,7 @@ gate finds nothing.
 | `TestNoDriverTouchesGlobalState` | a driver assigns to `http.DefaultTransport`, `http.DefaultClient` or a package variable outside `init`, or calls `io.ReadAll` (step 12) |
 | `TestEveryDriverRegistersOneName` | a driver calls `sql.Register` more than once, outside `init`, or with a name that is not its folder (step 12) |
 | `TestEveryDriverTestsItsDSN` | a driver has no fuzz test, or no round trip test, for its DSN (step 13) |
+| `TestEveryDriverClassifiesAuthentication` | a driver never names `dbimp.ErrAuthentication`, or its tests never name it (step 12) |
 | `TestEveryDriverIsComparedWithTheFirst` | the document of a driver other than `couchbase` has no `## Compared with Couchbase`, or that section lacks `### The server` or `### The driver` (step 17a) |
 | `TestEveryDriverHasItsFeatures` | the survey asked fewer than two models or no other driver, lacks a statement of CRUD, leaves an entry not measured, marks one `no` with no recorded refusal, names a test that does not exist, has a type whose test does not call `RoundTrip`, or disagrees with the type table (steps 5a, 6, 10 and 14a) |
 | `TestTheWorkflowNamesNoRelease` | a workflow names a release, or runs the integration tests without reading the releases from `dbrun` (step 15) |

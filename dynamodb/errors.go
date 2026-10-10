@@ -49,6 +49,24 @@ func (err *Error) Unwrap() error {
 	return err.status
 }
 
+// Is reports whether target is dbimp.ErrAuthentication, which the error
+// matches when the server refused the credential: the type
+// UnrecognizedClientException or InvalidSignatureException, or HTTP 401 (D197).
+// AccessDeniedException is a missing permission, and it does not match.
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the fields that the server sent say that it
+// refused the credential.
+func (err *Error) authRefused() bool {
+	switch err.Type {
+	case "UnrecognizedClientException", "InvalidSignatureException":
+		return true
+	}
+	return err.HTTPStatus == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with what the body says.
 func checkStatus(res *http.Response) error {

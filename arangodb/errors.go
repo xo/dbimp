@@ -32,16 +32,38 @@ func (err *Error) Error() string {
 	return "arangodb: status " + strconv.Itoa(err.HTTPStatus) + ": " + err.Message
 }
 
-// Unwrap returns the *dbimp.StatusError of the response.
+// Unwrap returns the *dbimp.StatusError of the response. It returns nil for
+// an HTTP 401 that is not a refused credential, because the status alone
+// would then match dbimp.ErrAuthentication (D197).
 func (err *Error) Unwrap() error {
-	if err.status == nil {
+	if err.status == nil || err.HTTPStatus == http.StatusUnauthorized && !err.authRefused() {
 		return nil
 	}
 	return err.status
 }
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for a refused credential only (D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// messageNotAuthenticated is the message that the server sends with HTTP 401
+// and errorNum 11 for a request whose credential it refused (measured). A
+// user without access to a database gets the same status and errorNum with
+// the message "No read access to database.", so the message tells the two
+// apart.
+const messageNotAuthenticated = "User not authenticated"
+
+// authRefused reports whether the server refused the credential.
+func (err *Error) authRefused() bool {
+	return err.HTTPStatus == http.StatusUnauthorized && err.Num == numNotAuthorized &&
+		err.Message == messageNotAuthenticated
+}
+
 // The errorNum values that the driver reads (errors.dat of 3.12.12).
 const (
+	numNotAuthorized      = 11
 	numCursorNotFound     = 1600
 	numDuplicateName      = 1207
 	numCollectionNotFound = 1203

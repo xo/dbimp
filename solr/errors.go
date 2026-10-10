@@ -50,6 +50,18 @@ func (err *Error) Unwrap() error {
 // comes wrapped with dbimp.ErrIncomplete (D107 and D166).
 const ErrCut dbimp.Error = "the answer was cut short"
 
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// when the status is HTTP 401, which is a wrong password (recorded: "a wrong password"). Every other refusal does not match, such as HTTP 403 for a missing
+// permission (D197).
+func (err *Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.authRefused()
+}
+
+// authRefused reports whether the status is HTTP 401.
+func (err *Error) authRefused() bool {
+	return err.HTTPStatus == http.StatusUnauthorized
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with what the body says.
 func checkStatus(res *http.Response) error {

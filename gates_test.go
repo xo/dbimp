@@ -31,18 +31,19 @@ type gate func(root string) []string
 
 // gates are every gate, by the name of the test that runs it.
 var gates = map[string]gate{
-	"TestEveryDriverIsATarget":              gateTargets,
-	"TestEveryDriverHasItsDocument":         gateDocument,
-	"TestEveryDriverHasItsManifest":         gateManifest,
-	"TestEveryDriverRunsTheContract":        gateContract,
-	"TestEveryDriverTestsItsDSN":            gateDSNTests,
-	"TestEveryDriverGeneratesItsTables":     gateTables,
-	"TestNoDriverTouchesGlobalState":        gateGlobals,
-	"TestEveryDriverRegistersOneName":       gateRegister,
-	"TestTheWorkflowNamesNoRelease":         gateWorkflow,
-	"TestEveryDriverHasItsFeatures":         gateFeatures,
-	"TestEveryDriverIsComparedWithTheFirst": gateComparison,
-	"TestEveryDriverTakesTheCommonOptions":  gateOptions,
+	"TestEveryDriverIsATarget":                gateTargets,
+	"TestEveryDriverHasItsDocument":           gateDocument,
+	"TestEveryDriverHasItsManifest":           gateManifest,
+	"TestEveryDriverRunsTheContract":          gateContract,
+	"TestEveryDriverTestsItsDSN":              gateDSNTests,
+	"TestEveryDriverGeneratesItsTables":       gateTables,
+	"TestNoDriverTouchesGlobalState":          gateGlobals,
+	"TestEveryDriverRegistersOneName":         gateRegister,
+	"TestTheWorkflowNamesNoRelease":           gateWorkflow,
+	"TestEveryDriverHasItsFeatures":           gateFeatures,
+	"TestEveryDriverIsComparedWithTheFirst":   gateComparison,
+	"TestEveryDriverTakesTheCommonOptions":    gateOptions,
+	"TestEveryDriverClassifiesAuthentication": gateAuthentication,
 }
 
 func runGate(t *testing.T, g gate) {
@@ -107,9 +108,48 @@ func TestEveryDriverIsComparedWithTheFirst(t *testing.T) {
 	runGate(t, gateComparison)
 }
 
+func TestEveryDriverClassifiesAuthentication(t *testing.T) {
+	t.Parallel()
+	runGate(t, gateAuthentication)
+}
+
 func TestEveryDriverTakesTheCommonOptions(t *testing.T) {
 	t.Parallel()
 	runGate(t, gateOptions)
+}
+
+// gateAuthentication holds step 12: the error of each driver matches
+// dbimp.ErrAuthentication with errors.Is when the server refused the credential
+// (D197). The package names the sentinel, and its tests name it too.
+func gateAuthentication(root string) []string {
+	var problems []string
+	for _, d := range driverDirs(root) {
+		if !namesSelector(parseDir(root, d, false), "ErrAuthentication") {
+			problems = append(problems, fmt.Sprintf("step 12: %s never names dbimp.ErrAuthentication, so errors.Is cannot ask whether the server refused the credential (D197)", d))
+		}
+		if !namesSelector(parseDir(root, d, true), "ErrAuthentication") {
+			problems = append(problems, fmt.Sprintf("step 12: the tests of %s never name dbimp.ErrAuthentication, so no test holds the refusal of a credential (D197)", d))
+		}
+	}
+	return problems
+}
+
+// namesSelector reports whether a file names the selector dbimp.name.
+func namesSelector(files []*ast.File, name string) bool {
+	for _, f := range files {
+		pkg := importName(f, "github.com/xo/dbimp")
+		found := false
+		ast.Inspect(f, func(n ast.Node) bool {
+			if e, ok := n.(ast.Expr); ok && isSelector(e, pkg, name) {
+				found = true
+			}
+			return !found
+		})
+		if found {
+			return true
+		}
+	}
+	return false
 }
 
 // commonOptions are the functions of the options that every driver declares

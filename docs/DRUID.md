@@ -382,6 +382,17 @@ These facts were recorded on each release:
   password" and "a system table that needs a privilege").
 - No request answered HTTP 429.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose
+`HTTPStatus` is 401. That is the answer to "a wrong password", a page of
+HTML. It is also true through the `*dbimp.StatusError` that the `*Error`
+wraps.
+
+It is false for HTTP 403, which Druid sends for a missing privilege: "a
+refused privilege" (`Access-Check-Result`) and "a refused task" (the category
+`FORBIDDEN`). It is false for every other status.
+
 ## Cancellation and timeouts
 
 These facts were recorded on each release:

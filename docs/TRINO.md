@@ -737,6 +737,28 @@ These facts were recorded on each release:
   other text (`TestSelectVersionOnPresto`, `TestSelectVersionOnTrino`,
   `TestSelectVersionOnlyThat` and `TestIntegrationVersion`).
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose
+`HTTPStatus` is 401, and for nothing else (`Error.Is` in `trino/errors.go`).
+Trino answers HTTP 401 for a request that has no valid credential. The
+recordings hold three answers of that kind from `trino-476`: no user and no
+password ("no user"), and a password over HTTP, with or
+without the user header ("a wrong password" and "a wrong password with the
+user header"). The last two say `Password not allowed for insecure
+authentication`. That is a refusal of the setup and not of the password, but
+the status is 401, so the error matches.
+
+The error does not match in these cases:
+
+- An error in the body of a page, such as `PERMISSION_DENIED` with the text
+  `Access Denied: User trino cannot impersonate user alice` ("set session
+  authorization with the capability"). Its `HTTPStatus` is 0.
+- HTTP 400, 404 and 410 (recorded: "an empty statement", "a poll with a wrong
+  token").
+- Presto, which ignores the `Authorization` header and so has no wrong
+  password to refuse (recorded: "a wrong password" on `presto-0.299`).
+
 ## Principals
 
 - No release has an ordinary user. The user is the name in `X-Trino-User` or

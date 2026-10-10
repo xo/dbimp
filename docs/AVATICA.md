@@ -288,6 +288,17 @@ These facts were recorded on each release:
   rows (measured by `TestIntegrationErrorInResult` on 2026-10-01). So on
   HSQLDB, an error never follows some rows.
 
+### The refused credential (D197)
+
+`errors.Is(err, dbimp.ErrAuthentication)` is true for an `*Error` whose first
+exception names `SQLInvalidAuthorizationSpecException`. That is the answer to
+"a wrong password" and to "a statement with the wrong password". An HTTP 401
+also matches, through the `*dbimp.StatusError` that the `*Error` wraps.
+
+It is false for every other exception, such as the `SQLSyntaxErrorException`
+of "a syntax error", which HSQLDB also sends for "user lacks privilege or
+object not found", and for `NoSuchConnectionException`.
+
 ## Cancellation and timeouts
 
 - A query does not stop when the client leaves. On 1.29.0, a query that the

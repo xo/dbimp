@@ -2,8 +2,11 @@ package surrealdb
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/xo/dbimp"
 )
 
 // Error is one error that SurrealDB reported, such as a statement that
@@ -24,6 +27,16 @@ type Error struct {
 // Error satisfies the error interface.
 func (err Error) Error() string {
 	return "surrealdb: " + err.text()
+}
+
+// Is reports whether err matches target. It matches dbimp.ErrAuthentication
+// for the code 401, which is the HTTP status of a refused request, so it
+// matches a refusal of the credential. A statement that fails with "IAM
+// error: Not enough permissions" has the code 0, and does not match (D197).
+// The plain text of an HTTP 401 is a *dbimp.StatusError, which matches by
+// its own status.
+func (err Error) Is(target error) bool {
+	return target == dbimp.ErrAuthentication && err.Code == http.StatusUnauthorized
 }
 
 // text returns the code, the kind and the message that the server sent.
