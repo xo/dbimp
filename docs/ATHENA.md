@@ -564,6 +564,11 @@ Rows that were doubtful, all decided in D192 (items 3, 7 and 10):
   parameters: expected 2 but found 1` (recorded: "too few parameters", "too
   many parameters"). A value that does not fit fails too, with
   `INVALID_CAST_ARGUMENT` (recorded: "a parameter that does not fit").
+- A parameter holds at most 1024 characters. A longer one fails the request with
+  HTTP 400, `INVALID_INPUT` (live run of 2026-10-10, "Member must have length
+  less than or equal to 1024"). So when an argument is longer than 1024 bytes,
+  the driver writes every argument into the text of the statement, with the same
+  literals, and sends no `ExecutionParameters`.
 - Named parameters: none. A parameter in `INSERT` and in DDL: not measured.
   The most parameters: not measured.
 - A prepared statement of the workgroup works in two ways. The call
@@ -924,7 +929,18 @@ An error has one of six forms.
   `EngineVersion.EffectiveEngineVersion` of "Athena engine version 3" and
   `SelectedEngineVersion` of `AUTO` (recorded: "the engine version of the
   workgroup"). The user can read it. D181 gives a product that has such a
-  source no `SELECT version()` of its own, and this is a question for Ken.
+  source no `SELECT version()` of its own, and the driver sends no request for it
+  (decided, D192 item 6).
+- The statement that `usql` runs for the version is
+  `SELECT node_version FROM system.runtime.nodes LIMIT 1`. The administrator,
+  which is the only login of this work, gets HTTP 400 with the code
+  `MALFORMED_QUERY` and the text "Queries of this type are not supported"
+  (recorded: "the node version"). There is no ordinary user, so there is no
+  second answer. The driver answers no version request, as D192 item 6 says, and
+  the statement fails with that error. `SELECT version()` fails too, in the state
+  `FAILED`, with the type 1303 `FUNCTION_NOT_FOUND` (recorded: "version
+  function"). The test `TestIntegrationFeatures` runs both statements and
+  expects each refusal.
 - Cost, from the pricing page (fetched 2026-10-10): the page gives an example
   of `3 TB scanned is 3 * $5/TB = $15`. Its text of the 10 MB minimum names
   federated queries. It does not say whether DDL and cancelled queries are
@@ -940,7 +956,37 @@ engine are not measured.
 
 ## Interfaces
 
-Step 10 writes this table from the code.
+`athena/tables_test.go` writes this table from the code (step 10).
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares, and the credentials that the driver signs each request with (D192). |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping sends GetWorkGroup, or ListWorkGroups when the DSN names no workgroup. Neither starts a query, so neither scans data or costs money. |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because each query is its own request, so there is nothing to reset. |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, and the values that the driver writes as a literal of a type of their own: a decimal, a dbimp.Date, a dbimp.LocalTime, a dbimp.OffsetTime, a dbimp.LocalDateTime, a dbimp.Interval, a uuid.UUID, a netip.Addr, a list and a map (D192). |
+| `driver.QueryerContext` | yes | The statement goes to StartQueryExecution with its arguments as ExecutionParameters, which the server binds to its ? (D192). |
+| `driver.ExecerContext` | yes | Exec reads the result to its end with no decoding, and RowsAffected is UpdateCount, or an error that wraps dbimp.ErrNotSupported when the answer has none (D178). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. The driver does not use the prepared statements of Athena (D192 item 4). |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because the server refuses START TRANSACTION (D20 and D192). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement, so a query has one result. The driver reads the pages of one result as one set of rows. |
+| `driver.RowsColumnTypeScanType` | yes | ColumnInfo names the type of each column, and each type has one Go type (D135 and D192). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The type of the column in upper case, such as BIGINT. The server names a REAL float. |
+| `driver.RowsColumnTypeLength` | yes | A char column has its length, and a varchar with no length, a string and a varbinary have the largest length. |
+| `driver.RowsColumnTypeNullable` | yes | The member Nullable of ColumnInfo is always UNKNOWN, and every type can be NULL, so every column can. |
+| `driver.RowsColumnTypePrecisionScale` | yes | A decimal column has its precision and its scale in ColumnInfo. |
+<!-- /dbimp:interfaces -->
+
+`Ping` sends `GetWorkGroup` for the workgroup of the DSN. When the DSN names
+none, it sends `ListWorkGroups` with one entry. Neither call starts a query,
+so neither scans data or costs money. A connection holds no state on the
+server, because each query is its own request. The driver sends no request
+to learn the version, as D192 item 6 says, and the server refuses the query
+that `usql` runs for it.
 
 ## Faults
 
@@ -1129,21 +1175,37 @@ questions are answered, each as "decided, D192":
 
 D192 leaves these open. Ken decides:
 
-1. The rules for the escaped literal of D192 item 4. The writer of literals
-   needs the rule for a string and for a binary value, and the rules of Trino
-   are not measured.
+1. The rules for the escaped literal of D192 item 4. The package doubles each
+   quote in a string and keeps a backslash as it is. It writes a time with the
+   fewest digits of fraction, and it sends a value finer than a millisecond as it
+   is, so the server decides (`athena/params.go`). The rules of Trino are not
+   measured, so Ken has not decided them.
 2. Billing. A driver that opens a result of a large table can scan terabytes.
    Whether the driver sets a limit, or leaves it to the workgroup, is not
    measured.
 3. Data in S3 for the tests. `DROP TABLE` of an external table leaves its files,
-   and `UNLOAD` refuses a directory that exists. A test needs a new prefix in S3
-   for each run, or a clean up that the driver cannot do, because S3 is not
-   Athena. The recordings show the cost: the old files repeated the rows of
-   three tables up to five times. How the test makes the prefix is not decided.
-4. Polling a statement that has no result. Whether a DDL statement can stop at
-   the state is not measured.
-5. A repeat of a start on a broken connection, with the same token, is not
+   and `UNLOAD` refuses a directory that exists. The tests use a new prefix in S3
+   for each run, under `dbimp-it/<run>/`, but a clean up of S3 is not Athena, and
+   the driver cannot do it. Whether a tool removes the old prefixes is open.
+4. A repeat of a start on a broken connection, with the same token, is not
    measured.
+5. The long argument rule. The service refuses an `ExecutionParameters` member of
+   more than 1024 characters (live run of 2026-10-10). When one argument is longer
+   than 1024 bytes, the driver writes all arguments into the text of the
+   statement (see Parameters). D192 item 4 says that the driver binds with
+   `ExecutionParameters`, so this rule is a choice of the driver that Ken has not
+   decided. The reason is that a caller can hit the limit with one long string.
+6. A row with fewer values than the columns, such as a row of `DESCRIBE`, has NULL
+   for the values that it lacks. Ken has not decided this.
+7. `WithTimeout` fails with `dbimp.ErrNotSupported`, because only a workgroup sets
+   a timeout on the server. The context bounds the wait. Ken has not decided this.
+8. The tests name the federated catalog in the variable
+   `ATHENA_FEDERATED_CATALOG`, and the database `/aws/lambda/<catalog>`.
+
+Decided, D192 item 12: the region is the label after `athena` or `athena-fips` in
+the host, a DSN with no key and no secret makes `Connect` fail with
+`ErrNoCredentials`, `GetQueryResults` runs for every statement, DDL too, and the
+driver sends `StopQueryExecution` after a failed poll.
 
 ### The leads of the fifth live pass
 
@@ -1233,3 +1295,158 @@ The leads that no pass has settled, each with a new request:
 14. The final state of the first federated query, which was still `RUNNING` at its
     only poll, `SHOW SCHEMAS` in the federated catalog, and the rows of
     `all_log_streams`.
+
+## Integration tests
+
+The integration tests of the driver read `ATHENA_DSN` and skip when it is empty
+(hard rule 9). The variable holds the DSN of D192 item 10, with the access key
+as the user and the secret key as the password:
+
+    ATHENA_DSN='athena://KEY:SECRET@athena.us-east-1.amazonaws.com/DATABASE?workgroup=WG&output=s3://BUCKET/results/'
+
+The key `token` holds the session token of a temporary credential. The variable
+`ATHENA_FEDERATED_CATALOG` is optional. It names a data catalog of the type
+`LAMBDA`, whose database is `/aws/lambda/<catalog>`, and the test of the
+federated query skips when it is empty. `dbrun` does not start Athena, and the
+workflow has no job for it and no secret (D192 item 2). A person runs the tests
+on an account with the login that `dbsetup` made:
+
+    go test -race -count=1 -run Integration -v ./athena/...
+
+The login is one IAM user, so each test runs as that user only, and the manifest
+has no ordinary user. The user needs these rights:
+
+- `athena:StartQueryExecution`, `GetQueryExecution`, `GetQueryResults`,
+  `StopQueryExecution`, `BatchGetQueryExecution`, `ListQueryExecutions`,
+  `GetWorkGroup`, `ListWorkGroups`, `CreatePreparedStatement`,
+  `GetPreparedStatement` and `DeletePreparedStatement`, in the workgroup.
+- The rights of Glue to make, change and drop tables and partitions in the
+  database of the DSN, and `glue:UpdateTable` for an Iceberg table.
+- The rights of S3 to read, write and list the bucket of the output location, and
+  `s3:DeleteObject` for the Iceberg tables.
+- For the federated query only: `athena:GetDataCatalog` and the right to invoke
+  the Lambda function of the catalog.
+
+The tests make their tables in the database of the DSN, with the name of the run
+for a prefix (`dbimp_it_` and eight characters), and their data in the bucket of
+the output location, under `dbimp-it/<run>/`. `TestMain` looks for a table or a
+view of the run that a test left, drops it and fails. `DROP TABLE` of an external
+table leaves its files in S3, and the driver cannot delete them, because S3 is
+not Athena. So each run has its own prefix, and a person removes `dbimp-it/` from
+the bucket from time to time.
+
+The tests were written on 2026-10-10 with no account, and they have not run. The
+tests and what each one holds:
+
+- `TestIntegrationPing`, `TestIntegrationWrongSecret` and
+  `TestIntegrationSelect`: the call of the ping, the error of a wrong secret key,
+  which holds neither key, and a `SELECT` with its header row.
+- `TestIntegrationContextDeadline`: a deadline that ends while a query runs. The
+  driver stops the query, and the test reads its state with
+  `BatchGetQueryExecution` until it is `CANCELLED`, within a limit of time.
+- `TestIntegrationCRUD`, `TestIntegrationSchema` and `TestIntegrationFeatures`:
+  the entries of `features.json`, with one subtest for each entry. The entries
+  that the survey marks no send the operation and expect the refusal of the
+  server.
+- `TestIntegrationRoundTrip`: every type that `features.json` marks yes, with
+  `dbimptest.RoundTrip`, as a bound argument and as a literal, and the two types
+  that it marks no.
+
+A table of Athena holds few types, and only an Iceberg table takes `UPDATE` and
+`DELETE`. So each type has one of two homes. A type that Iceberg holds is a column
+of that type in an Iceberg table. A type that only Hive holds, such as `TINYINT`,
+`CHAR`, `ARRAY`, `MAP` and `ROW`, is a column in a Hive table of Parquet files,
+which takes `INSERT` and `SELECT` only, so its round trip skips the update and
+the delete. A type that no table holds, which is `TIME`, `TIME WITH TIME ZONE`,
+`TIMESTAMP WITH TIME ZONE`, `JSON`, `IPADDRESS`, `UUID`, both intervals and
+`GEOMETRY`, is a column of text. The statement writes the cast of the value, and
+the select casts it back, so the column that the driver reads has the type. The
+type `UNKNOWN` is a bare `NULL` that a select reads from a row that holds `NULL`.
+The type `STRING` is the type of the columns of `DESCRIBE` and `SHOW`, and a
+Hive column of the type `string` is a `varchar` in a select, so its round trip
+reads a `varchar`, and `TestIntegrationFeatures` holds the type `STRING` in the
+result of `DESCRIBE`. The two entries that are no, `BINARY` and `STRUCT`, read a
+Hive column of each type and expect the wire types `VARBINARY` and `ROW`.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was
+written on 2026-10-10 from the staged code. A fact of Couchbase comes from
+[COUCHBASE.md](COUCHBASE.md), and a fact of Athena from the sections above.
+
+### The server
+
+| | Couchbase | Athena |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /`, with the operation in `X-Amz-Target`. A statement is `StartQueryExecution`, then `GetQueryExecution` until the state ends, then `GetQueryResults` (Requests) |
+| Database | The key `query_context` of the body | `QueryExecutionContext.Database`, and `Catalog` for a data catalog (Requests) |
+| Language | SQL++, which is close to SQL | The SQL of Trino, and Hive DDL. One statement for each request (Statements) |
+| DDL | In SQL++ | Hive DDL, and Iceberg tables with `table_type`. A key, a unique column, a default value and an index are refused (Statements) |
+| Parameters | `?`, `$1` and `$name` | `?`, with `ExecutionParameters` as a list of strings, each the text of an SQL expression (Parameters) |
+| Framing | One body for the whole result, which does not page | One JSON object for each page of at most 1000 rows. A page after the first needs `NextToken` and is another request (Responses) |
+| Columns | `signature`, before the first row | `ColumnInfos` of the first page, before the first row, with the type, the precision and the scale of each column. The first row of a `SELECT` is a header row (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement (Responses) |
+| Errors | Can come with HTTP 200, after some rows | A request that the server refuses is HTTP 400. A query that fails is HTTP 200 and the state `FAILED` of the poll, so an error never comes after a row (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON, and every value is a string or null, with the type name of the column. A container is text that is not JSON (Types) |
+| Cancel | The server stops a query when the client leaves | A query runs on when the client leaves, and `StopQueryExecution` stops it (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | None. `START TRANSACTION` is refused (Transactions) |
+| Authentication | Basic, or `creds` in the body | AWS Signature Version 4, with an access key and a secret key, and a session token for a temporary credential (Requests) |
+| Default port | 8093, or 18093 with TLS | 443, with TLS always |
+
+The differences that a caller sees:
+
+- A statement is three requests or more, and it takes at least a few hundred
+  milliseconds, where Couchbase sends one. The driver polls from 100 ms and backs
+  off to one second (D192 item 8).
+- The result is in pages of 1000 rows, and the driver reads each page one row at
+  a time and the next page only when the caller asks for it. An error cannot come
+  after a row, but a request for a page can fail, and the error then wraps
+  `dbimp.ErrIncomplete` (D192 item 5).
+- The first row of a `SELECT` is a header row, and the driver drops it by the
+  type of the statement (D192 item 10).
+- The server runs a query on when the client leaves, so the driver stops the
+  query when the context ends (D192 item 10).
+- An `ARRAY`, a `MAP` and a `ROW` are the text of the server in a `string`, and the
+  driver does not parse it (D192 item 3).
+- A transaction has no form (D192 item 10).
+
+### The driver
+
+| | `couchbase` | `athena` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-10 | About 1300 lines in 8 files | About 2200 lines in 9 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Host`, `Port`, `TLS`, `Region`, `User`, `Password` (the secret key), `Token`, `Database`, `WorkGroup`, `Output` and `Catalog`. The DSN has the keys `workgroup`, `output`, `token` and `catalog`, and the region comes from the host (D192) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithWorkGroup`, `WithOutput` and `WithCatalog`, through `WithOptions` or an argument (D109). `WithParameter` sets any key of `StartQueryExecution`. `WithTimeout` and `WithReadonly(true)` fail with `dbimp.ErrNotSupported` |
+| Arguments | Sent to the server as `args` and `$name` | Written as SQL literals in `ExecutionParameters`, from the Go type of each argument, and the server binds each to a `?`. A named argument fails with `dbimp.ErrArguments` (`athena/params.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own, which reads one page token by token, then the next page (`athena/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | The same, and `ColumnTypeLength` for a char, a varchar, a string and a varbinary, and `ColumnTypePrecisionScale` for a decimal |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the column, as the type table says: `int64`, `float64`, `*apd.Decimal`, `string`, `bool`, `[]byte`, `dbimp.Date`, `dbimp.LocalTime`, `dbimp.OffsetTime`, `dbimp.LocalDateTime`, `time.Time`, `dbimp.Interval`, `netip.Addr`, `uuid.UUID` and the decoded JSON value (D135 and D192) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` from `UpdateCount`, or `dbimp.ErrNotSupported` when the answer has none. `LastInsertId` always gives `dbimp.ErrNotSupported` (D178 item 14) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D192 item 10) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The poll stops when the context ends, and the driver sends `StopQueryExecution` with a limit of 5 seconds. The rows keep the context for the pages after the first (D192 items 5 and 8, and item 12 for the stop after a failed poll) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Type, Code, State, ErrorType, Category, Message, QueryID}`, which unwraps to `*dbimp.StatusError` for a request, and the sentinels `ErrCanceled` and `ErrNoCredentials` |
+| Authentication | Basic | AWS Signature Version 4 from `dbimp.SignV4`, with the service `athena`. The driver follows no redirect, so the signature goes to the host of the DSN only, and it reads no credential from the environment (D7 and D192) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, the two sentinels, `Config`, `ParseDSN` and `NewConnector` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a date, a time, a decimal, an interval, an address and a
+  UUID too, where Couchbase gives JSON shapes (D135 and D192).
+- `RowsAffected` gives an error for a statement with no `UpdateCount`, such as
+  `DESCRIBE`, and the count for a statement that changes rows (D178 item 14).
+- A row of `DESCRIBE` has one value, in the first column, and NULL in the others,
+  because the server sends one value for three columns (Responses).
+- `WithParameter` replaces a key of `StartQueryExecution`, as in Couchbase.
+- `WithTimeout` fails with `dbimp.ErrNotSupported`. No decision explains it, and
+  it is open question 7.
+- An argument of more than 1024 bytes moves every argument into the text of the
+  statement. No decision explains it, and it is open question 5.
+- `GetQueryResults` runs for every statement, DDL too (decided, D192 item 12).
+- A row of `DESCRIBE` has NULL for the values that it lacks. No decision explains
+  it, and it is open question 6.
+- A DSN needs a host with the label `athena` and then the region. A DSN with no
+  access key opens no connection, and the error is `ErrNoCredentials` (decided,
+  D192 item 12).
+- A `TIMESTAMP WITH TIME ZONE` with a named zone is in that zone, from the zone
+  database that the package `time/tzdata` holds (D192 item 7).
