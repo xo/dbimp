@@ -24,8 +24,10 @@ into a scratch folder, and run that copy.
 Ken named six targets after Avatica on 2026-10-01 (D162). Each one goes
 through step 8a of [DRIVER.md](DRIVER.md), and then all six go through step
 9 together. Ken added Trino and Presto (D173) and ClickHouse (D174) on
-2026-10-07, so the table below holds eight rows. The scratch notes of each target are outside the repository, in
-the scratch folder of the session. They can be lost, so the files below are
+2026-10-07. Ken added Snowflake (D182), and then BigQuery, Cosmos DB and Athena
+(D184), Spanner (D185 and D187) and Databricks (D188), and the table below holds
+them all. The scratch notes of each target are outside the repository, in the
+scratch folder of the session. They can be lost, so the files below are
 the record.
 
 | Target | Work item | Step reached | On disk | Next |
@@ -47,14 +49,18 @@ the record.
 
 ## Next
 
-The order of D162 is done as far as step 17a. Druid, Trino and Presto, and
-ClickHouse are released. Drill, Solr, Elasticsearch, OpenSearch and DynamoDB
-are committed and wait for their release. Ken reviews the open questions that
-D178 left, and then the release of those five goes through steps 18 to 20 of
-[DRIVER.md](DRIVER.md), when Ken says so.
+The order of D162 is done as far as step 17a, and every driver in it is released.
+The drivers for Databricks, BigQuery, Athena, Cosmos DB and Spanner (D184, D185,
+D187 and D188) are released in `v0.17.0`. `v0.17.1` makes the Spanner driver read
+the emulator of `dbmeta`. `v0.18.0` adds `dbimp.ErrAuthentication` (D197), and
+`v0.19.0` adds the database role and the DDL batches of Spanner (D198). The
+sessions `dburl`, `usql` and `dbmeta` have their requests, and they move to the
+new drivers when `dburl` names them.
 
 ## Waiting for Ken
 
-- The open questions of DRILL.md, SOLR.md, ELASTICSEARCH.md, OPENSEARCH.md and
-  DYNAMODB.md that D178 left open. The rows of the table above name them.
-- The release of the five committed drivers.
+- The next target. The usql drivers that this repository does not cover have a
+  binary wire protocol (Thrift, gRPC or their own), or are embedded. `maxcompute`
+  is the one that may take HTTP and JSON, and it needs a hosted account.
+- The rqlite rule for a refused credential: it matches every HTTP 401, because
+  the server sends the same 401 for a missing permission (RQLITE.md).

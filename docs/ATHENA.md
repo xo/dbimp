@@ -1,7 +1,8 @@
 # Amazon Athena
 
-This file holds what is known about Amazon Athena over its JSON API, for a
-possible driver `athena` (W37 and D184). The headings are the template of
+This file holds what is known about Amazon Athena over its JSON API, for the
+driver `athena` (W37, D184 and D192). The first release that held the driver was
+`v0.17.0`, on 2026-10-11. The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with how and when, or "not measured", with its source.
 
@@ -1168,7 +1169,7 @@ questions are answered, each as "decided, D192":
 3. `ARRAY`, `MAP` and `ROW`. Decided, D192 item 3: the value is the text of the
    server, in a `string`, of the kind `other`, and the driver does not parse it.
 4. The intervals, `IPADDRESS`, `GEOMETRY` and `TIME WITH TIME ZONE`. Decided,
-   D192 item 10: the proposals stand as the type table writes them.
+   D192 items 10 and 11: the rows stand as the type table writes them.
 5. Zone names. Decided, D192 item 7: a `TIMESTAMP WITH TIME ZONE` with a named
    zone is a `time.Time` in that zone, from `time.LoadLocation`, and the driver
    imports `time/tzdata`.
@@ -1189,13 +1190,13 @@ questions are answered, each as "decided, D192":
 11. The federated pass. Decided, D192 item 9, and done: the fifth pass ran with
     the catalog and the Lambda connector of `dbsetup`.
 
-D192 leaves these open. Ken decides:
+D192 leaves these open, and D192 item 13 decided three more on 2026-10-11:
 
 1. The rules for the escaped literal of D192 item 4. The package doubles each
    quote in a string and keeps a backslash as it is. It writes a time with the
    fewest digits of fraction, and it sends a value finer than a millisecond as it
    is, so the server decides (`athena/params.go`). The rules of Trino are not
-   measured, so Ken has not decided them.
+   measured. Open: no decision names these rules.
 2. Billing. A driver that opens a result of a large table can scan terabytes.
    Whether the driver sets a limit, or leaves it to the workgroup, is not
    measured.
@@ -1205,17 +1206,17 @@ D192 leaves these open. Ken decides:
    the driver cannot do it. Whether a tool removes the old prefixes is open.
 4. A repeat of a start on a broken connection, with the same token, is not
    measured.
-5. The long argument rule. The service refuses an `ExecutionParameters` member of
+5. Decided, D192 item 13. The long argument rule. The service refuses an `ExecutionParameters` member of
    more than 1024 characters (live run of 2026-10-10). When one argument is longer
    than 1024 bytes, the driver writes all arguments into the text of the
-   statement (see Parameters). D192 item 4 says that the driver binds with
-   `ExecutionParameters`, so this rule is a choice of the driver that Ken has not
-   decided. The reason is that a caller can hit the limit with one long string.
-6. A row with fewer values than the columns, such as a row of `DESCRIBE`, has NULL
-   for the values that it lacks. Ken has not decided this.
-7. `WithTimeout` fails with `dbimp.ErrNotSupported`, because only a workgroup sets
-   a timeout on the server. The context bounds the wait. Ken has not decided this.
-8. The tests name the federated catalog in the variable
+   statement and sends no `ExecutionParameters` (see Parameters). This is an
+   exception to D192 item 4. The reason is that a caller can hit the limit with
+   one long string.
+6. Decided, D192 item 13. A row with fewer values than the columns, such as a row of `DESCRIBE`, has NULL
+   for the values that it lacks.
+7. Decided, D192 item 13. `WithTimeout` fails with `dbimp.ErrNotSupported`, because only a workgroup sets
+   a timeout on the server. The context bounds the wait. `WithReadonly(true)` fails the same way.
+8. Open. No decision names it. The tests name the federated catalog in the variable
    `ATHENA_FEDERATED_CATALOG`, and the database `/aws/lambda/<catalog>`.
 
 Decided, D192 item 12: the region is the label after `athena` or `athena-fips` in
@@ -1351,8 +1352,13 @@ table leaves its files in S3, and the driver cannot delete them, because S3 is
 not Athena. So each run has its own prefix, and a person removes `dbimp-it/` from
 the bucket from time to time.
 
-The tests were written on 2026-10-10 with no account, and they have not run. The
-tests and what each one holds:
+The tests were written on 2026-10-10 with no account. They ran on a hosted account
+on 2026-10-11, with the catalog and the Lambda connector that `dbsetup` made for
+the federated query, and all of them passed. The skips in the code are: no
+account when the DSN variable is empty, an output location that is no S3 location,
+a DSN with no workgroup (the engine version and two feature subtests), a federated
+catalog when `ATHENA_FEDERATED_CATALOG` is empty, and the update and the delete of
+a Hive table in the round trip. The tests and what each one holds:
 
 - `TestIntegrationPing`, `TestIntegrationWrongSecret` and
   `TestIntegrationSelect`: the call of the ping, the error of a wrong secret key,
@@ -1387,7 +1393,7 @@ Hive column of each type and expect the wire types `VARBINARY` and `ROW`.
 ## Compared with Couchbase
 
 Step 17a compares this driver with `couchbase`, the first driver (D97). It was
-written on 2026-10-10 from the staged code. A fact of Couchbase comes from
+written on 2026-10-10 from the code of the first release. A fact of Couchbase comes from
 [COUCHBASE.md](COUCHBASE.md), and a fact of Athena from the sections above.
 
 ### The server
@@ -1454,13 +1460,12 @@ The differences that a caller sees:
 - A row of `DESCRIBE` has one value, in the first column, and NULL in the others,
   because the server sends one value for three columns (Responses).
 - `WithParameter` replaces a key of `StartQueryExecution`, as in Couchbase.
-- `WithTimeout` fails with `dbimp.ErrNotSupported`. No decision explains it, and
-  it is open question 7.
+- `WithTimeout` fails with `dbimp.ErrNotSupported` (decided, D192 item 13).
 - An argument of more than 1024 bytes moves every argument into the text of the
-  statement. No decision explains it, and it is open question 5.
+  statement (decided, D192 item 13).
 - `GetQueryResults` runs for every statement, DDL too (decided, D192 item 12).
-- A row of `DESCRIBE` has NULL for the values that it lacks. No decision explains
-  it, and it is open question 6.
+- A row of `DESCRIBE` has NULL for the values that it lacks (decided, D192 item
+  13).
 - A DSN needs a host with the label `athena` and then the region. A DSN with no
   access key opens no connection, and the error is `ErrNoCredentials` (decided,
   D192 item 12).

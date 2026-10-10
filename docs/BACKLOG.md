@@ -1753,12 +1753,10 @@ names the entry `snowflake`, a hosted service with a live trial account, and
 `usql` uses. Whether a driver is possible is the result of step 2.
 
 
-Steps 2 to 9 are done (D183). Ken asked for the driver on 2026-10-09. Steps 10 to
-17a are written and staged: the package `snowflake/`, its tests, and the
-sections Interfaces, Faults, Integration tests and Compared with Couchbase of
-[SNOWFLAKE.md](SNOWFLAKE.md). The integration tests never ran, because the work
-had no account. The workflow leaves a hosted driver out of its jobs. Open
-questions 6 to 17 of SNOWFLAKE.md wait for Ken. Steps 18 to 20 wait for Ken too.
+Released in `v0.16.0` (D183), and `v0.16.1` fixed the boolean of a piped statement.
+The package `snowflake/`, its tests and [SNOWFLAKE.md](SNOWFLAKE.md) are done. The
+integration tests ran on the live trial account before the release, and CI leaves
+a hosted driver out of its jobs. Steps 18 to 20 are done.
 
 ## W35. Write the Google BigQuery driver. Done.
 
@@ -1769,16 +1767,13 @@ starts `bigquery-0.7.2` and `bigquery-0.8.1`, the community emulator, which
 driver on `gorm.io/driver/bigquery`, which pulls in the Arrow-based Storage
 Read API. This driver uses the REST API with JSON only.
 
-Steps 2 to 9 are done (D189). Steps 10 to 17a are written and staged: the package
-`bigquery/`, its tests, the type table, the interface table, and the sections
-Interfaces, Integration tests and Compared with Couchbase of
-[BIGQUERY.md](BIGQUERY.md). The unit tests replay the recordings of the service
-and of the emulator `bigquery-0.8.1`. The integration tests never ran, because
-the work had no project and no emulator. The open questions of BIGQUERY.md
-wait for Ken. Steps 18 to 20 wait for Ken too.
+Released in `v0.17.0` (D184, D189 and D195). The package `bigquery/`, its tests and
+[BIGQUERY.md](BIGQUERY.md) are done. The integration tests passed on the emulator
+`bigquery-0.8.1`, which CI runs, and on a hosted project on 2026-10-11. The driver
+does not support `bigquery-0.7.2`, and its tests skip on that release. Steps 18 to
+20 are done.
 
-The requests of step 16 follow. Do not send them before the tag of step 19
-(step 20).
+The requests of step 16 follow. Step 20 sent them after the tag, on 2026-10-11.
 
 1. To `dburl`: the scheme `bigquery` names `github.com/xo/dbimp/bigquery`, and
    its generator writes the URL of D189: `bigquery://<project>/<dataset>`, with
@@ -1809,14 +1804,13 @@ has a driver on `btnguyen2k/gocosmos`. The `usql` session reported on
 statement, because Cosmos DB refuses it. Step 2 measures that, and step 9 says
 whether the driver accepts a trailing semicolon.
 
-Steps 2 to 9 are done (D190). Steps 10 to 17a are written and staged: the package
-`cosmos/`, its tests, and the sections Interfaces, Integration tests and Compared
-with Couchbase of [COSMOS.md](COSMOS.md). The integration tests never ran,
-because the work had no account and no emulator. The workflow needs no change,
-because `dbrun` starts the emulator and the job reads `COSMOS_DSN`. Open questions
-4 to 10 of COSMOS.md wait for Ken. Steps 18 to 20 wait for Ken too.
+Released in `v0.17.0` (D184 and D190), with the catalog statements of W41. The
+package `cosmos/`, its tests and [COSMOS.md](COSMOS.md) are done. The integration
+tests passed on the emulator `cosmos-EN20260907`, which CI runs, and on a hosted
+account on 2026-10-11, where a burst of reads also gave the HTTP 429. Steps 18 to
+20 are done.
 
-The requests of step 16. Nothing is sent before the release (step 20). The
+The requests of step 16. Step 20 sent them after the release, on 2026-10-11. The
 statement that `usql` runs for the version is none, because its file registers the
 driver with an empty `drivers.Driver{}`.
 
@@ -1848,14 +1842,13 @@ LIMIT 1`, because Athena is Trino underneath (D181 gives a product with such a
 query no `SELECT version()`). The measurement needs an account of Amazon, which `dbsetup` provisions when Ken
 asks (dbmeta D117). The `dynamodb` driver signs requests already.
 
-Steps 2 to 9 are done (D192). Steps 10 to 17a are written and staged: the package
-`athena/`, its tests, and the sections Interfaces, Integration tests and Compared
-with Couchbase of [ATHENA.md](ATHENA.md). The integration tests never ran,
-because the work had no account. The workflow leaves a hosted driver out of its
-jobs, as for Snowflake. Steps 18 to 20 wait for Ken.
+Released in `v0.17.0` (D184 and D192). The package `athena/`, its tests and
+[ATHENA.md](ATHENA.md) are done. The integration tests passed on a hosted account
+on 2026-10-11, with a Lambda connector for the federated query. CI leaves a hosted
+driver out of its jobs, as for Snowflake. Steps 18 to 20 are done.
 
-The requests of step 16 are written here, and nobody has sent them. Step 20
-sends them after the release is public, and names its tag.
+The requests of step 16 are written here. Step 20 sent them after the release was
+public, on 2026-10-11, and named its tag.
 
 1. The `dburl` session sets the `GoPackage` of the scheme `athena` to
    `github.com/xo/dbimp/athena` (it is that already), and `RequiresCGO` to false.
@@ -1894,11 +1887,10 @@ drivers are built on the hosted services, so D187 reopens it. The measurement
 runs on the hosted instance, and again on the Cloud Spanner emulator when
 `dbmeta` has its entry. [SPANNER.md](SPANNER.md) holds the facts.
 
-Steps 2 to 9 are done (D191). Ken asked for the driver on 2026-10-10. Steps 10 to
-17a are written and staged: the package `spanner/`, its tests, and the sections
-Interfaces, Integration tests and Compared with Couchbase of
-[SPANNER.md](SPANNER.md). The integration tests never ran, because the work had
-no credential. Steps 18 to 20 wait for Ken.
+Released in `v0.17.0` (D185, D187 and D191), and `v0.17.1` added the emulator (D196).
+The package `spanner/`, its tests and [SPANNER.md](SPANNER.md) are done. The
+integration tests passed on the hosted instance and on the emulator
+`spanneremulator-1.5.58`, which CI runs, on 2026-10-11. Steps 18 to 20 are done.
 
 Ken asked on 2026-10-11 that the Spanner integration tests run on the emulator of
 `dbmeta` (D187 item 2). D196 holds the work: the driver reads the stream and the errors
@@ -1908,8 +1900,7 @@ longer lists `spanner` as hosted. The integration tests passed on the emulator, 
 the skips that [SPANNER.md](SPANNER.md) lists. They did not run on the hosted service
 after the change.
 
-The requests of step 16, which nobody sent yet, because a request names a release
-and step 20 sends it after step 19:
+The requests of step 16, which step 20 sent after the release, on 2026-10-11:
 
 1. To `dburl`: the scheme `spanner` names `github.com/xo/dbimp/spanner`, and
    `RequiresCGO` is false (D5 and D14). The driver registers the name `spanner`,
@@ -1947,18 +1938,14 @@ Databricks has no emulator and no entry in `dbrun`. `usql` has a driver on
 warehouse, which `dbsetup` provisions (dbmeta D117). The API is
 `POST /api/2.0/sql/statements`, with a personal access token as a Bearer value.
 
-Steps 2 to 9 are done (D188 and D193). Steps 10 to 17a are written and staged: the
-package `databricks/`, its tests, and the sections Interfaces, Integration tests
-and Compared with Couchbase of [DATABRICKS.md](DATABRICKS.md). The unit tests run
-on the 331 recorded exchanges. The integration tests never ran, because the work
-had no workspace. The workflow leaves a hosted driver out of its jobs. Open
-questions 6 to 15 of DATABRICKS.md are choices of the package that wait for Ken.
-Steps 18 to 20 wait for Ken too.
+Released in `v0.17.0` (D188 and D193). The package `databricks/`, its tests and
+[DATABRICKS.md](DATABRICKS.md) are done. The unit tests run on the 331 recorded
+exchanges, and the integration tests passed on a free workspace on 2026-10-11. CI
+leaves a hosted driver out of its jobs. Steps 18 to 20 are done.
 
 The version for step 16: `usql` runs no statement for the version on this driver.
 `SELECT version()` answers `4.2.0` and a hash to the one login, and the driver gives
-no answer of its own (D181). The requests below wait for the release. Nothing is
-sent.
+no answer of its own (D181). Step 20 sent the requests below after the release, on 2026-10-11.
 
 - To `dburl`: set the `GoPackage` of the scheme `databricks` to
   `github.com/xo/dbimp/databricks`, and set `RequiresCGO` to false (D5 and D14). Make
@@ -2027,7 +2014,19 @@ of `\copy` alone when `BeginTx` returns `dbimp.ErrNotSupported`, and counts zero
 rows for an error that wraps `dbimp.ErrNotSupported`, so no driver needs to change
 for those.
 
-W42 is decided by D197: the sentinel `ErrAuthentication`, an `Is` method on the error
-of each driver, and a gate. It is written for all 24 drivers, and it waits for its
-release.
+W42 is released in `v0.18.0` (D197).
 
+## W43. Add the database role and DDL batches to the Spanner driver. Done.
+
+`dbmeta` asked on 2026-10-11, and Ken decided the same day (D198). Add the DSN key
+`database_role`, sent as the role of the session, and a DDL batch: one `Exec` with
+several DDL statements separated by semicolons goes in one `updateDatabaseDdl`
+request. A fixture of about 60 statements took 461 s on the hosted instance with one
+statement per request. Test both on the hosted instance and on the emulator of
+`dbmeta`, and tell `dbmeta` when the tag exists.
+
+Released in `v0.19.0` (D198). The driver reads the key `database_role` and the option
+`WithDatabaseRole`, and a text of several DDL statements separated by semicolons goes
+in one `updateDatabaseDdl` request. The tests passed on the hosted instance and on the
+emulator on 2026-10-11: a batch of four statements made three tables and an index in
+one request. Tell `dbmeta` the tag, so that it can move its hosted tests of Spanner.

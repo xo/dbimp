@@ -1,7 +1,8 @@
 # Azure Cosmos DB
 
-This file holds what is known about Azure Cosmos DB over its REST API, for a
-possible driver `cosmos` (W36 and D184). The headings are the template of
+This file holds what is known about Azure Cosmos DB over its REST API, for the
+driver `cosmos` (W36, D184 and D190). The first release that held the driver was
+`v0.17.0`, on 2026-10-11. The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with the date, or "not measured", with its source.
 
@@ -76,8 +77,7 @@ which is which.
   statement of UPDATE", "a statement of DELETE"). A write is a REST request on a
   document. Decided, D190: the driver reads only, and `Exec` returns the error of
   D20 for a statement that writes. W40 records the need for a small parser for
-  `INSERT`, `UPDATE` and `DELETE`. The priority of the driver is Ken's to set
-  (TARGETS.md has the row, W36).
+  `INSERT`, `UPDATE` and `DELETE`.
 - Whether it can be a driver: yes, and no condition of "When it cannot be a
   driver" holds. The columns are not known before the first row, but D18
   supplies them (see Responses). A result is a list that arrives in pages by the
@@ -651,7 +651,7 @@ these rows in D190, and the code follows them:
 - GeoJSON. Decided, D190: it is an ordinary object, so a `map[string]any`. It
   was not measured.
 
-Ken has not reviewed the rest of the table.
+D190 item 12 says that the other proposals of step 9 stand as this document writes them, so no row of the table waits for review.
 
 - A number is JSON text. The measurements on the hosted account (recorded: "numbers
   beyond 2^53 and the numbers that JSON loses", "read the numbers back", "select
@@ -1403,7 +1403,7 @@ fact.
   - DeepSeek Flash said that `undefined` must not become `nil`, because only an
     explicit JSON `null` is `nil`, and that a date stays a string. The server
     shows that `undefined` is a missing key and never a value, so the row for
-    `undefined` is a question for Ken (D18). Qwen timed out twice on the
+    `undefined` was a question for Ken. Decided, D190 item 10: it is `nil`. Qwen timed out twice on the
     mapping.
 
 The plan handshake, asked on 2026-10-10 about the section The cross partition
@@ -1443,24 +1443,25 @@ query. Each answer is a lead, not a fact. Nothing below was run.
 
 ## Open questions
 
-Ken decided many questions of step 9 in D190 (see the marks "decided, D190"
+Ken decided the questions of step 9 in D190 (see the marks "decided, D190"
 above): no merge across partitions, a read only driver (W40), the columns, the
-DSN, the semicolon, the emulator in CI and the mappings of the types. These are
-what D190 leaves, for Ken to read in this document.
+DSN, the semicolon, the emulator in CI and the mappings of the types. Questions 1
+to 4 below are decided too. Questions 5 to 7 stay open, and each one says why.
 
-1. Which `X-Ms-Version` does the driver send? The recorder sends `2018-12-31`,
-   and the hosted account refused a container with two partition key paths at
-   that version (recorded: "setup: create the container hier"). A newer version
-   was not tried, and it can change other answers.
-2. The rest of the table of types and the other proposals of step 9 are not
-   reviewed. The table above holds the rows of D190 and the proposal for the
-   others.
-3. The emulator is the server of CI (D190), and it answers an aggregate, a
-   `TOP`, an `ORDER BY`, an `OFFSET LIMIT`, a `DISTINCT` and a `GROUP BY` across
-   partitions that the hosted gateway refuses. Does a test of the refusal of the
-   hosted gateway run only where a person supplies an account, and how does the
-   test skip? The emulator also differs in the order of the keys of a `SELECT`,
-   in the page size, in HTTP 304 and 429, and in the signature (see the Summary).
+1. Decided, D190 item 11. The driver sends `X-Ms-Version: 2018-12-31`, the version
+   that was measured from end to end. The hosted account refused a container with
+   two partition key paths at that version (recorded: "setup: create the
+   container hier"), so the first release does not support such a container. A
+   newer version was not tried, and it can change other answers.
+2. Decided, D190 item 12. The other proposals of step 9 stand as this document
+   writes them. The table of types holds the rows of D190.
+3. Decided, D190 items 6 and 13. The emulator is the server of CI, and it answers an
+   aggregate, a `TOP`, an `ORDER BY`, an `OFFSET LIMIT`, a `DISTINCT` and a
+   `GROUP BY` across partitions that the hosted gateway refuses. The tests of the
+   refusal of the gateway (the 400 and the 429) read `COSMOS_HOSTED_DSN` and skip
+   when it is empty. The emulator also differs in the order of the keys of a
+   `SELECT`, in the page size, in HTTP 304 and 429, and in the signature (see the
+   Summary).
 
 Decided, D190 items 14 to 17: `Exec` always fails (item 14), a result whose rows
 are not objects has the column `$1` (item 15), the keys of the DSN are `tls`,
@@ -1468,24 +1469,25 @@ are not objects has the column `$1` (item 15), the keys of the DSN are `tls`,
 database only (item 16), and the catalog statements (item 17).
 
 Questions that the driver raises. The package chose the simplest behavior that
-follows the rules, and Ken decides each one:
+follows the rules:
 
-4. Rule 4 of AGENTS.md names the drivers whose rows keep the context of the
-   query. Cosmos DB is not in the list. The rows of this driver keep it, with a
-   `nolint` that cites D190, because the request for each page after the first
-   needs a context, and `database/sql` gives `Rows.Next` none. Does a decision
-   add Cosmos DB to the list, as D175 and D178 did for other drivers?
-5. The URL that `dbrun` prints for the emulator holds the key as the user and the
-   key `InsecureSkipVerify`. The integration tests convert it. A real run in CI
-   needs `dbmeta` to print the DSN of D190, or `dburl` to write it. W36 holds the
-   requests.
-6. `WithReadonly(true)` runs the statement, because the driver reads only.
+4. Decided, D194 item 2. The rows of a Cosmos DB query keep the context of the
+   statement, because the request for each page after the first needs it. Rule 4
+   of AGENTS.md names them. The code has a `nolint` that cites D190.
+5. Open. The URL that `dbrun` prints for the emulator holds the key as the user and the
+   key `InsecureSkipVerify`. The integration tests convert it, and the live run
+   used that conversion. A run that needs no conversion needs `dbmeta` to print the
+   DSN of D190, or `dburl` to write it. W36 holds the requests, and no decision
+   answers them.
+6. Open. No decision names it, and D109 asks for it. `WithReadonly(true)` runs the statement, because the driver reads only.
    `WithTimeout` with a positive value fails with `dbimp.ErrNotSupported`,
    because the REST API has no such setting. D109 asks for this.
-7. The catalog statements take `database`, `container` and `user` in a `WHERE`,
-   and a statement that needs a key the DSN or an option can supply takes it
-   from there. Is that the grammar that `dbmeta` wants? The autoscale columns and
-   the lists of scripts and permissions need a first run on a hosted account.
+7. Open in part. D190 item 17 decided the catalog statements. They take `database`,
+   `container` and `user` in a `WHERE`, and a statement that needs a key the DSN
+   or an option can supply takes it from there. Whether this is the grammar that
+   `dbmeta` wants is for `dbmeta` to say. This document records no result of the
+   autoscale columns and of the lists of scripts and permissions on the hosted
+   account, so they stay not measured.
 
 Leads that no recording settled, for a later run on the hosted account:
 
@@ -1535,9 +1537,15 @@ characters, with 400 request units a second shared by its containers. Each test
 makes its containers, and deletes them when it ends, even when it fails.
 `TestMain` deletes the database, and fails if it cannot.
 
-The tests were written on 2026-10-10, and they have not run. The work had no
-account and no emulator. Each test is written from the recordings, and the first
-run on each server can show a fault of a test. The tests and what each one holds:
+The tests were written on 2026-10-10 from the recordings, with no account and no
+emulator. They ran on 2026-10-11 on the emulator `cosmos-EN20260907` and on a hosted
+account, and all of them passed. The skips in the code are: an empty variable, a
+container with two partition key paths on the emulator, a delete that the emulator
+did not finish in 90 seconds, the change feed that the emulator refuses, the
+stored procedure, trigger and function that the emulator does not run, the query
+metrics that the emulator does not send, a `GROUP BY` that the hosted gateway
+refuses, and a user or a permission that the server does not make. The tests and
+what each one holds:
 
 - `TestIntegrationConnect`: `Ping`, and the refusal of a wrong key, which the
   service gives and the emulator does not.
@@ -1575,7 +1583,7 @@ pages, the errors, the options and the contract.
 ## Compared with Couchbase
 
 Step 17a compares this driver with `couchbase`, the first driver (D97). It was
-written on 2026-10-10 from the staged code. A fact of Couchbase comes from
+written on 2026-10-10 from the code of the first release. A fact of Couchbase comes from
 [COUCHBASE.md](COUCHBASE.md), and a fact of Cosmos DB from the sections above.
 
 ### The server
@@ -1628,7 +1636,7 @@ The differences that a caller sees:
 | Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | None. `Exec` fails with `dbimp.ErrNotSupported` (D190 item 2) |
 | Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D190 item 12) |
 | Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
-| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same. The rows keep the context for the request of each later page (D190 item 12 and question 4) |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same. The rows keep the context for the request of each later page (D190 item 12 and D194 item 2) |
 | Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, SubStatus, Code, Message, RetryAfter}`, which unwraps to `*dbimp.StatusError` |
 | Authentication | Basic | A signature of the master key, written in the package with the standard library. The driver follows no redirect, so the signature goes to the host of the DSN only (D190 item 12) |
 | Catalog | None in the driver | Nine read-only statements, as a `SELECT` against `"$databases"`, `"$containers"`, `"$stored_procedures"`, `"$triggers"`, `"$functions"`, `"$offers"`, `"$users"`, `"$permissions"` and `"$account"`, each with its own columns (D190 item 17 and Catalog statements) |

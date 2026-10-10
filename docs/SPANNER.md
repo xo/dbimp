@@ -1,7 +1,8 @@
 # Google Cloud Spanner
 
 This file holds what is known about Google Cloud Spanner over its REST API, for the
-driver `spanner` (W38, D185, D187 and D191). The headings are the template of
+driver `spanner` (W38, D185, D187 and D191). The first release that held the driver was
+`v0.17.0`, on 2026-10-11. The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with how and when, or "not measured", with its source.
 
@@ -1312,22 +1313,24 @@ each one with its answer.
     when its rows end or close, also on an early close of `THEN RETURN` rows (D195 item
     3). Rule 4 of `AGENTS.md` names the Spanner transaction and the rows of such a
     statement (D194).
-16. DML on the stream: not measured. The driver sends DML to `executeStreamingSql`, as D191
-    item 11 says for every result. The recordings sent DML to `executeSql` only. The
-    reference of `PartialResultSet` says that `stats` carries the count of a DML statement.
-    `TestIntegrationDMLCount` checks the count live. If the stream gives none, DML goes to
-    `executeSql`.
+16. DML on the stream: decided, D195 item 5, and measured. The driver sends DML to
+    `executeStreamingSql`, as D191 item 11 says for every result. The recordings sent DML to
+    `executeSql` only, and a live test on the hosted instance showed the count in `stats`
+    (D195 item 5). `TestIntegrationDMLCount` checks the count.
 
 17. The emulator: Ken asked on 2026-10-11 that the Spanner integration tests run on the emulator
     of `dbmeta` (D187 item 2). D196 holds what the `dbimp` session did: the driver reads both forms
     of the stream, the CI job runs the release `spanneremulator-1.5.58`, and some tests skip with
-    a reason. Open: the emulator sent no error after a row, and the hosted service has not run the
-    new code (D196 item 7).
+    a reason. The integration suite then passed on the hosted instance too, on 2026-10-11
+    (1757 s), with the code of D196. Open: the emulator sent no error after a row.
 
 18. The database role and the DDL batch: decided, D198 (W43). The code and the unit tests are
-    written. Open: the member `creatorRole`, the order of a failed batch and the role on the
-    emulator are not measured. The main session runs `TestIntegrationDDLBatch` and
-    `TestIntegrationDatabaseRole` on the hosted instance and on the emulator.
+    written. `TestIntegrationDDLBatch` and `TestIntegrationDatabaseRole` passed on the hosted
+    instance on 2026-10-11: a batch of four statements made three tables and an index in one
+    request in 19 s, and a session with a database role read a granted table and was refused
+    an ungranted one. On the emulator the batch passed, and the role test skips, because the
+    emulator does not enforce the grants of a role. Open: the order of a failed batch is not
+    measured.
 
 ### Leads for a third run
 
@@ -1380,9 +1383,14 @@ schemas in the database of the DSN, with the name of the run as the prefix of ea
 statement takes seconds on the hosted service, so the tests run one after the other, and
 the whole run takes some minutes.
 
-The tests were written on 2026-10-10 with no credential. On 2026-10-11 they ran on the emulator
-and passed, with the skips that "Measured on the emulator" lists. They have not run against the
-hosted service yet. The tests and what each one holds:
+The tests were written on 2026-10-10 with no credential. On 2026-10-11 they ran on the hosted
+instance and passed (D195). On the same day they ran on the emulator `spanneremulator-1.5.58`
+and passed, with the skips that "Measured on the emulator" lists. On the hosted instance the
+skips are the calls that the driver cannot send, because it sends SQL only: a mutation, a
+replace, a partitioned statement, a batch, a read by key, a streaming read, a partition, a
+`STRUCT` parameter, the calls for sessions, the resume of a stream, and the list of operations.
+A test of a conflict skips when five tries make no abort. The tests of D198 have not run on
+either server (question 18). The tests and what each one holds:
 
 - `TestIntegrationConnect`: the ping, the type of each column, and several connections that
   share one session.
@@ -1423,7 +1431,7 @@ the package use fake servers that the tests start, and a key that `crypto/rsa` m
 ## Compared with Couchbase
 
 Step 17a compares this driver with `couchbase`, the first driver (D97). It was written on
-2026-10-10 from the staged code. A fact of Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and
+2026-10-10 from the code of the first release. A fact of Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and
 a fact of Spanner from the sections above.
 
 ### The server
@@ -1497,6 +1505,8 @@ The differences that a caller sees:
   commits one, where Couchbase replaces a key of its one body.
 - A DSN needs a path with three names and, for a server with TLS, a key file (D191 items
   5 and 12). The key `tls` defaults to false for localhost and a loopback address.
+- The driver ignores the user of the URL and refuses a password, because `dbmeta` puts a user in every
+  URL and the emulator checks nothing (D195 item 6).
 - A nil argument has no type in the request, and a nil slice is a typed NULL array
   (D195 item 2 and D191 item 12).
 - A lost session returns `driver.ErrBadConn`, so `database/sql` tries the statement again on a

@@ -246,6 +246,7 @@ for code that only a test uses. So they are not in the root package (D37).
 | `record.go` | `Recorder`, `NewRecorder` and `WithLabel`, which write the exchanges of step 6 |
 | `cmd/record/` | The command that records the requests of `requests.json` |
 | `goroutines.go` | `CheckGoroutines` |
+| `heap.go` | `HeapGauge`, `NewHeapGauge` and `HeapLimit`, which measure the growth of the live heap while a driver reads a result of 64 MiB (D25) |
 | `contract.go` | `Contract`, its cases `ColumnsCase`, `NullCase`, `ErrorCase` and `StreamCase`, and `RunContract` |
 | `tables.go` | `TypeTable`, `TypeRow`, `Kinds`, `InterfaceTable`, `WriteBlock`, `EnvUpdate` and the markers of the tables |
 | `features.go` | `Features`, `Source` and `Feature`, the survey of step 5a, with `FeaturesName`, the constants of a kind, a source and a verdict, and `ReadFeatures` |

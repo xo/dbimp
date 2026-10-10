@@ -1,7 +1,8 @@
 # Databricks
 
-This file holds what is known about Databricks over its SQL Statement Execution API, for a
-possible driver `databricks` (W39 and D188). The headings are the template of
+This file holds what is known about Databricks over its SQL Statement Execution API, for the
+driver `databricks` (W39, D188 and D193). The first release that held the driver was
+`v0.17.0`, on 2026-10-11. The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with the date, or "not measured", with its source.
 
@@ -19,7 +20,8 @@ A fact marked "source: documentation" comes from the Databricks documentation of
 Statement Execution API and of OAuth. This work made no network call, so the agent
 wrote those facts from what it knows of the documentation and did not open it on
 2026-10-10. Ken or a later pass must make sure of each one before a decision rests
-on it.
+on it. The live run of 2026-10-11 (see Integration tests) tested the driver against the
+real service, and this document names each fact that it settled.
 
 The recordings give no fact about two things, and both are named where they matter.
 The first is the body that a presigned link returns, because the recorder sends
@@ -40,7 +42,8 @@ finished in about 5 seconds.
   needs a token of a workspace. `dbmeta/hosted/hosted.go` lists it as a hosted
   service with the form `databricks://token:<personal access token>@<workspace>.databricks.com:443/sql/1.0/endpoints/<warehouse id>`
   and no emulator (read, 2026-10-10). CI cannot test it without a secret.
-  D188 says so.
+  D188 says so, and D193 item 10 decided that the integration tests run only where a
+  person supplies a workspace.
 - H: passes. `POST /api/2.0/sql/statements` takes JSON and answers JSON
   (recorded: "a statement"). The rows of the default form are JSON text, and no
   binary encoding is needed (recorded: "a statement with the format JSON_ARRAY and
@@ -952,7 +955,7 @@ source in the module cache, 2026-10-10):
     documentation as the agent knows it). Decided, D193: the mapping is a `dbimp.Interval`.
   - DeepSeek said that a `VARIANT` that holds a JSON null and a SQL NULL must not both become `nil`, and that a number
     in a `VARIANT` must not go through a `float64`. The mapping already decodes the number with `dbimp.Number` (D19), as
-    the kind json says, and the JSON null is the question of D18, which is open. It said that the parser of `type_text`
+    the kind json says, and the JSON null is nil, as a SQL NULL is (D18, D193 item 7). It said that the parser of `type_text`
     must strip `NOT NULL`, that the key type of a `MAP` is lost and cannot be recovered with a `map[string]any`, that
     the SRID of a `GEOGRAPHY` must be kept or stripped by a decision, that `strconv.ParseFloat` takes `Infinity`, that a
     `BINARY` is base64 to decode, and that the lost microseconds of a `TIMESTAMP` cannot be recovered by any mapping. It
@@ -965,7 +968,9 @@ source in the module cache, 2026-10-10):
 
 ## Open questions
 
-Ken decided the step 9 items on 2026-10-10, in D193. These are the answers, and what stays open.
+Ken decided the step 9 items on 2026-10-10, in D193, and he accepted the choices of the
+package on 2026-10-11 (D193 item 12). The first six lines are the answers of D193. Questions 1, 2, 5 to 9,
+11, 12 and 14 are decided. Questions 3, 4, 10, 13 and 15 are open.
 
 - Decided, D193: `INLINE` only, with an error on `truncated` or on a statement that fails for the size of the result. A
   later release can add `EXTERNAL_LINKS` after a recording of a second chunk and of the body of a link.
@@ -981,46 +986,47 @@ Ken decided the step 9 items on 2026-10-10, in D193. These are the answers, and 
   answer to a version request (D181), the token goes only to the configured host, and the driver serves no flavor.
 - Decided, D193: the types are as in the type table. `STRUCT` is a map, `INTERVAL` is a `dbimp.Interval`, and a `VARIANT`
   with a JSON null or a SQL NULL gives `nil`.
-1. R. Databricks is a hosted service with no emulator, so a test needs a workspace and a token. The Free Edition
-   workspace is free and has one warehouse that stops after 10 minutes. Whether a driver here has integration tests in CI
-   against a workspace, and with what secret, is a question for Ken (D188, dbmeta D117).
-2. The host. `dburl` adds `.cloud.databricks.com` to a host that has no dot. Whether the driver accepts a port other than
-   443 and `http` for a test is not decided.
-3. The recordings contain presigned link URLs. Their signatures were redacted by the main session.
-4. The leads for a second live pass, in Second opinions, stay open.
-5. The tests that `features.json` names exist now, in `databricks/features_integration_test.go` and
-   `databricks/roundtrip_integration_test.go`. They have not run on a workspace yet (see Integration tests).
+1. Decided (D193 item 10). R. Databricks is a hosted service with no emulator, so a test needs a workspace and a token.
+   The Free Edition workspace is free and has one warehouse that stops after 10 minutes. The integration tests run only
+   where a person supplies a workspace, and the workflow has no job and no secret for them.
+2. Decided (D193 item 11). The host. `dburl` adds `.cloud.databricks.com` to a host that has no dot. The driver uses HTTPS
+   on port 443, and the key `tls=false` lets a test use plain HTTP.
+3. Open. The recordings contain presigned link URLs. The main session redacted their signatures. No decision names them.
+4. Open. The leads for a second live pass, in Second opinions, stay open. The live run of 2026-10-11 ran the integration
+   tests, and no recording or document of the run says which of these leads it sent.
+5. Decided (the tests ran). The tests that `features.json` names exist, in `databricks/features_integration_test.go` and
+   `databricks/roundtrip_integration_test.go`. They ran on a workspace on 2026-10-11 and passed (see Integration tests).
 
-The package made these choices where no document answered. Each one is for Ken to confirm or to change:
+The package made these choices where no document answered. Ken accepted the ones that D193 item 12 names. The others stay open, and each one says so:
 
-6. The type of a NULL parameter. A `nil` argument has no Go type, so the driver sends the type `VOID`. No recording shows
+6. Decided (D193 item 12). The type of a NULL parameter. A `nil` argument has no Go type, so the driver sends the type `VOID`. No recording shows
    what the server does with it. The other choice is `STRING`, which fails for a column of a number under ANSI mode,
-   because a string is not assigned to a number. The first live run settles it (see Integration tests).
-7. The wait of a statement. The driver sends `wait_timeout` of 50 seconds. When the context of the caller ends in less
+   because a string is not assigned to a number. The live run accepted `VOID` (D193 item 12).
+7. Decided (D193 item 12). The wait of a statement. The driver sends `wait_timeout` of 50 seconds. When the context of the caller ends in less
    than 50 seconds, it sends `0s` and polls, because the answer holds the id of the statement, and the driver needs the
    id to cancel the statement. D193 item 8 says 50 seconds and does not name this case. When the context has no deadline,
    or a long one, the wait is 50 seconds. A context that is canceled with no deadline can still leave a statement that runs
    on the server, until it ends, because the driver learns the id only from the answer.
-8. The key `timeout` and the option `WithTimeout` are the longest time that the driver waits for one statement. The default
+8. Decided (D193 item 12). The key `timeout` and the option `WithTimeout` are the longest time that the driver waits for one statement. The default
    is none. D193 item 8 says that the default must allow the 15 seconds that a stopped warehouse takes to wake, and no limit
    allows it. The driver cancels the statement on the server when the time ends.
-9. `WithDatabase` sets the schema, as `WithSchema` does, because Spark calls a schema a database (recorded: "the catalog
+9. Decided (D193 item 12). `WithDatabase` sets the schema, as `WithSchema` does, because Spark calls a schema a database (recorded: "the catalog
    and the schema"). `WithCatalog` sets the catalog. `WithReadonly(true)` fails with `dbimp.ErrNotSupported`.
-10. `WithParameter` sets a member of the body, and replaces the member of the driver with the same name. It refuses
+10. Open. D193 does not name it. `WithParameter` sets a member of the body, and replaces the member of the driver with the same name. It refuses
     `warehouse_id`, `statement`, `parameters`, `wait_timeout`, `on_wait_timeout`, `row_limit`, `byte_limit`,
     `disposition` and `format`. A `row_limit` or a `byte_limit` makes the server cut the result, and D193 item 2 says that
     the driver returns an error for a result that was cut.
-11. The user name of the DSN is `token` or empty, and the DSN has no other. The path is one name, with or without a slash
+11. Decided (D193 item 12). The user name of the DSN is `token` or empty, and the DSN has no other. The path is one name, with or without a slash
     at its end, and the driver does not check its form, because the server checks it (recorded: "a warehouse id that is
     not valid"). The key `tls=false` makes the driver use HTTP, for a fake server of a test.
-12. A `TIMESTAMP` parameter is the instant in UTC, written with at most six digits of fraction, and the driver cuts the
+12. Decided (D193 item 12). A `TIMESTAMP` parameter is the instant in UTC, written with at most six digits of fraction, and the driver cuts the
     nanoseconds. The session zone is UTC (recorded: "the time zone of the session"). An interval parameter fails when it
     holds months and days together, because Spark has no such interval, and when it holds a part of a microsecond.
-13. `ColumnTypeNullable` returns `true` and `false`: the column can be NULL, and the driver does not know. The manifest
+13. Open. D193 does not name it. `ColumnTypeNullable` returns `true` and `false`: the column can be NULL, and the driver does not know. The manifest
     has no nullability (recorded: "the rows of every type").
-14. `Exec` of a statement whose answer has the column `num_affected_rows` reads the whole answer, and returns its first
+14. Decided (D193 item 12). `Exec` of a statement whose answer has the column `num_affected_rows` reads the whole answer, and returns its first
     value as the count. `Exec` of any other statement closes the answer at once, and the count is not known.
-15. The rows of the driver hold the function that cancels the context of the timeout, and no context, because the driver
+15. Open. D193 and D194 do not name it. The rows of the driver hold the function that cancels the context of the timeout, and no context, because the driver
     polls inside `QueryContext` and the statement has ended when the rows exist. So Databricks needs no change in rule 4
     of `AGENTS.md`.
 
@@ -1041,8 +1047,9 @@ tests make their tables, views and functions in the catalog and the schema of th
 prefix (`dbimp_it_` and eight characters). `TestMain` looks for an object of the run that a test left, drops it and fails.
 The warehouse of the free workspace stops after 10 minutes, so the first statement waits about 15 seconds. The workspace
 has a daily quota of compute that `dbmeta` shares, and the round trip of every type sends about 1500 statements, so a person
-runs the tests once a day at most. The tests were written on 2026-10-10 with no workspace, and they have not run. The
-tests and what each one holds:
+runs the tests once a day at most. The tests were written on 2026-10-10 with no workspace. They ran on a free workspace on
+2026-10-11 and all of them passed. The only skip in the code is the subtest of the primary key, which skips when the table of
+the subtest before it does not exist. The tests and what each one holds:
 
 - `TestIntegrationConnect`: the login, `Ping`, the version, and the catalog and the schema of a statement and of an option.
 - `TestIntegrationErrors`: an error of the engine before any row, a statement that fails in its last row, a warehouse that
@@ -1059,7 +1066,8 @@ tests and what each one holds:
   the test binds text and the statement turns it into the type. The `VOID` type is a NULL literal that a select reads from a
   table of text.
 
-The first live run must settle these facts, which no recording holds:
+These facts had no recording before the live run. The run passed with `VOID` for a NULL parameter (D193 item 12). This
+document holds no other measured result of the run, so the other facts stay "not measured" here until a person records them:
 
 - The type `VOID` for a NULL parameter, and a NULL parameter in `unhex`, `from_json` and `parse_json`.
 - A date and a timestamp of the year 1 in a table of Delta, which Spark can refuse when it writes to Parquet.
@@ -1071,7 +1079,7 @@ The first live run must settle these facts, which no recording holds:
 
 ## Compared with Couchbase
 
-Step 17a compares this driver with `couchbase`, the first driver (D97). It was written on 2026-10-10 from the staged code.
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was written on 2026-10-10 from the code of the first release.
 A fact of Couchbase comes from [COUCHBASE.md](COUCHBASE.md), and a fact of Databricks from the sections above.
 
 ### The server
@@ -1130,4 +1138,4 @@ The differences that a caller sees:
 - `WithParameter` replaces a member of the body, as in Couchbase, and refuses nine of them (question 10).
 - A DSN needs a token and a warehouse id (D193 item 4).
 - The key `timeout` is a duration with a unit, such as `5m`, and a bare number is refused (question 8).
-- A `NULL` argument has the type `VOID`, which the first live run must settle (question 6).
+- A `NULL` argument has the type `VOID`, which the live run accepted (question 6, D193 item 12).

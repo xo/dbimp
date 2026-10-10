@@ -1,7 +1,8 @@
 # Google BigQuery
 
-This file holds what is known about Google BigQuery over its REST API, for a
-possible driver `bigquery` (W35 and D184). The headings are the template of
+This file holds what is known about Google BigQuery over its REST API, for the
+driver `bigquery` (W35, D184 and D189). The first release that held the driver was
+`v0.17.0`, on 2026-10-11. The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with the date, or "not measured", with its source.
 
@@ -83,7 +84,8 @@ facts of the latest pass matter when a reader compares the numbers:
   `ghcr.io/goccy/bigquery-emulator`, a community project under the MIT licence
   that Google does not maintain. `dbrun` starts it with the project `dbmeta` and
   the dataset `dbmeta`. The user in the URL of `dbrun` is `admin`, and nothing
-  checks it. `dbmeta` has no model that reads it, so no CI job runs it yet.
+  checks it. `dbmeta` has no model that reads it. CI runs the integration tests of the driver on the
+  release `bigquery-0.8.1`, with the `url` that `dbrun` prints (D195 item 7).
 - R: the emulator meets R and the service does not. `dbrun` starts both
   releases, and a driver can run against them with no credential. The service
   needs a Google Cloud project, a service account with a key, and a dataset that
@@ -197,7 +199,7 @@ it, and the emulator fact stays there with the word "emulator".
   (recorded: bigquery-174). A page token that is not valid answers HTTP 400 with
   the reason `invalid` and the message `Invalid paging token:abc` (recorded:
   bigquery-173). A job in the wrong location answers HTTP 404 `notFound` (recorded:
-  bigquery-351, "the results of a job with a location that is wrong"). Emulator
+  bigquery-351, "lead: the results of a job with a location that is wrong"). Emulator
   0.7.2: the job is not known. Emulator 0.8.1: it is known, and the page token is
   an offset.
 - DML counts. A DML answer has `numDmlAffectedRows` as a string and `dmlStats`
@@ -1535,8 +1537,8 @@ no password, so each test runs as that principal only, and the manifest has no
 ordinary user. A test that needs the service and not the emulator skips on the
 emulator with the reason from the section Hosted and emulator. The emulator
 supports only the release `bigquery-0.8.1`, and the driver does not support
-`bigquery-0.7.2` (D189 item 4), so CI must not run the integration tests on that
-release (open question 2).
+`bigquery-0.7.2` (D189 item 4), so the integration tests skip on that
+release with a reason (D195 item 4 and open question 2).
 
 The tests were written on 2026-10-10 with no project and no emulator. On
 2026-10-11 the main session ran them: the hosted suite passes, and the emulator
@@ -1708,7 +1710,8 @@ snapshot. The snapshot expires after 7 days. The tests and what each one holds:
 
 Ken decided the step 9 questions on 2026-10-10 in D189, and the questions that
 the live run raised on 2026-10-11 in D194 and D195. The decided answers come first,
-and what is still open follows.
+and what is still open follows. Questions 1 to 8 and 10 of "Still open" are choices of
+the package that Ken accepted on 2026-10-11 (D195 item 4). Questions 9 and 11 are open.
 
 Decided:
 
@@ -1740,59 +1743,62 @@ driver:
 
 Still open:
 
-1. The first wait of a statement. The driver sends `timeoutMs` of 3000, so that
+1. Decided, D195 item 4. The first wait of a statement. The driver sends `timeoutMs` of 3000, so that
    the service answers `jobComplete` `false` after three seconds and the driver
    then polls the job. The value is the choice of the package and it is not
    measured. A job has no id until the first answer arrives, so a context that
    ends in those three seconds cannot cancel the job, and the job runs on at the
    service. A request through `jobs.insert` with an id that the driver makes would
    close the gap, and it is a change of D189 item 8, which names `jobs.query`.
-2. CI and the emulator. The job `releases` runs every driver under `testdata/` on
-   each release that `dbrun list` names for it, so it would run the integration
-   tests on `bigquery-0.7.2` too, which D189 item 4 does not support. Hosted runs
-   need a secret that CI does not hold. Ken decides whether the tests skip on
-   `bigquery-0.7.2`, or the workflow leaves that release out.
-3. The mode of the parameters. D189 item 8 says named parameters bound by the
+2. Decided, D195 item 4. CI and the emulator. The job `releases` runs every driver
+   under `testdata/` on each release that `dbrun list` names for it, so it runs the
+   integration tests on `bigquery-0.7.2` too, which D189 item 4 does not support.
+   The tests of that release skip with a reason. Hosted runs need a secret that CI
+   does not hold.
+3. Decided, D195 item 4. The mode of the parameters. D189 item 8 says named parameters bound by the
    server. The driver sends the mode `NAMED` when every argument has a name, as
    `sql.Named("p", 5)` and `@p`, and the mode `POSITIONAL` when none has a name,
    as `?`. It refuses a mix with `dbimp.ErrArguments`, because the service refuses
    it too (recorded: bigquery-152 and bigquery-153).
-4. The types that a parameter cannot have. A NULL has no Go type, so the driver
+4. Decided, D195 item 4. The types that a parameter cannot have. A NULL has no Go type, so the driver
    sends it as a `STRING` with no value, which only a `STRING` column or a `CAST`
    takes. The driver binds no `ARRAY` and no `STRUCT`, and it binds no `JSON`,
    `GEOGRAPHY`, `RANGE` or `BIGNUMERIC` of its own: text goes as a `STRING`, and a
    decimal that does not fit a `NUMERIC` goes as a `BIGNUMERIC`. A caller parses
    JSON text in the statement. A typed NULL and the two structured types can come
    in a later release.
-5. A type that the driver does not know, and a field with no type, as the emulator
+5. Decided, D195 item 4. A type that the driver does not know, and a field with no type, as the emulator
    writes for a `RANGE`, read as the text of the service, with the Go type
    `string`.
-6. A value of finer than a microsecond. BigQuery has microseconds, so the driver
+6. Decided, D195 item 4. A value of finer than a microsecond. BigQuery has microseconds, so the driver
    refuses to send a `dbimp.LocalTime`, a `dbimp.LocalDateTime`, a `time.Time`
    and a `dbimp.Interval` with nanoseconds, with `dbimp.ErrInvalidValue`, and it
    never rounds one. A `time.Time` goes as UTC.
-7. The keys and members that D189 does not name. D189 names `credential_file`. The
+7. Decided, D195 item 4. The keys and members that D189 does not name. D189 names `credential_file`. The
    DSN also has `endpoint`, `disable_auth`, `scopes`, `location`, `timeout` and
    `max_results`, because the emulator needs an address and no login, and each
    option of D109 needs a key that it can change. `Config.AccessToken` holds a
    ready token. The token endpoint of the key file must be `https`, or `http` on
    the machine of the caller, so that a signed request never crosses the network
    in the clear.
-8. `Exec` reads the head of the answer and no row, and it leaves the rest of a
+   The driver also sends no Authorization header when the DSN has an endpoint and no
+   key file and no token, because that is an emulator. The `url` of `dbrun` has no
+   `disable_auth`, and CI ran with it (D195 item 7). The user of the URL is ignored,
+   and a password is refused.
+8. Decided, D195 item 4. `Exec` reads the head of the answer and no row, and it leaves the rest of a
    result at the service, so `Exec` of a `SELECT` costs one request, and
    `RowsAffected` of it is an error. `Ping` runs `SELECT 1` as a dry run, which
    the service does not bill.
-9. `WithParameter` sets a member of the request, such as `labels`,
+9. Open. No decision names it. `WithParameter` sets a member of the request, such as `labels`,
    `maximumBytesBilled`, `requestId`, `useQueryCache`, `dryRun` and
    `createSession`. It refuses the members that change how the driver binds or
    reads a value: `query`, `queryParameters`, `parameterMode`, `useLegacySql`,
    `formatOptions` and `queryResultsFormat`. A session that `createSession` makes
    is not carried to the next statement (D189 item 3).
-10. The driver answers no `SELECT version()`. BigQuery has no endpoint or header
-    that carries a release, so D181 has nothing to read, and the statement goes to
-    the service, which refuses it (recorded: bigquery-229). Ken decides if the
-    driver answers with the revision of the REST API instead.
-11. What the hosted run still did not show, and what it needs:
+10. Decided, D195 item 4. The driver answers no `SELECT version()`. BigQuery has no
+    endpoint or header that carries a release, so D181 has nothing to read, and the
+    statement goes to the service, which refuses it (recorded: bigquery-229).
+11. Open. What the hosted run of 2026-10-11 still did not show, and what it needs:
     - A script with several statements, listed with `parentJobId`. The children of
       a real script and `numChildJobs` are not recorded. D189 item 6 leaves the
       child jobs for a later release.
@@ -1803,7 +1809,7 @@ Still open:
 ## Compared with Couchbase
 
 Step 17a compares this driver with `couchbase`, the first driver (D97). It was
-written on 2026-10-10 from the staged code. A fact of Couchbase comes from
+written on 2026-10-10 from the code of the first release. A fact of Couchbase comes from
 [COUCHBASE.md](COUCHBASE.md), and a fact of BigQuery from the sections above.
 
 ### The server

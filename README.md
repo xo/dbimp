@@ -1,5 +1,6 @@
 <div align="center">
   <a href="#use" title="Use">Use</a> |
+  <a href="#drivers" title="Drivers">Drivers</a> |
   <a href="#documents" title="Documents">Documents</a> |
   <a href="#related-projects" title="Related Projects">Related Projects</a> |
   <a href="https://pkg.go.dev/github.com/xo/dbimp" title="Go Reference">Reference</a> |
@@ -32,20 +33,6 @@ use them. The first drivers are for databases that take queries over HTTP.
 The drivers use the Go standard library, with
 [apd](https://github.com/cockroachdb/apd) for decimals, and need no cgo.
 
-The repository is new. It holds the drivers `couchbase`, which was first
-released in `v0.1.0`, `surrealdb` and `neo4j`, which the tags `v0.2.0` and
-`v0.3.0` hold, `influxdb`, which was first released in `v0.4.0` with the
-other three, `arangodb`, which was first released in `v0.5.0`, `databend`,
-which was first released in `v0.6.0`, `pinot`, which was first released in
-`v0.7.0`, `rqlite`, which was first released in `v0.8.0`, and `libsql`,
-which was first released in `v0.9.0`, `avatica`, which was first
-released in `v0.10.0`, `druid`, which was first released in `v0.11.0`,
-`trino`, which was first released in `v0.12.0`, `clickhouse`, which was
-first released in `v0.13.0`, and `drill`, `solr`, `elasticsearch`,
-`opensearch` and `dynamodb`, which were first released in `v0.14.0`, and
-`snowflake`, which was first released in `v0.16.0`, and `databricks`,
-`bigquery`, `athena`, `cosmos` and `spanner`, which were first released in
-`v0.17.0`.
 [docs/TARGETS.md](docs/TARGETS.md) names the databases it aims to support,
 and the order of the work.
 
@@ -68,6 +55,60 @@ db, err := sql.Open("couchbase", "couchbase://user:pass@localhost:8093/")
 A driver registers one name and knows no alias.
 [dburl](https://github.com/xo/dburl) turns an alias, such as `n1ql`, into the
 URL that the driver reads, so every alias works in `usql`.
+
+To open a database from a URL in one call, import `dburl` and the drivers that
+you need. `dburl.Open` reads the scheme of the URL, finds the driver, and
+returns a `*sql.DB`. A program can import as many drivers as it needs:
+
+```go
+import (
+	"github.com/xo/dburl"
+
+	_ "github.com/xo/dbimp/bigquery"
+	_ "github.com/xo/dbimp/couchbase"
+	_ "github.com/xo/dbimp/databricks"
+)
+
+bq, err := dburl.Open("bigquery://my-project/my_dataset?credential_file=/path/key.json")
+cb, err := dburl.Open("couchbase://user:pass@localhost:8093/")
+dbx, err := dburl.Open("databricks://token:dapi-secret@dbc-1234.cloud.databricks.com/warehouse-id?catalog=main&schema=default")
+```
+
+The URL of each driver, with its keys and its credential, is in its document.
+BigQuery and Spanner read the path of a key file. Databricks reads a token as
+the password of the URL.
+
+## Drivers
+
+Each row is a driver that a release holds. The name of the driver links to its
+page on pkg.go.dev, and the version links to the release that first held it.
+
+| Driver | Database | First released in |
+| --- | --- | --- |
+| [`couchbase`](https://pkg.go.dev/github.com/xo/dbimp/couchbase) | Couchbase | [`v0.1.0`](https://github.com/xo/dbimp/releases/tag/v0.1.0) |
+| [`surrealdb`](https://pkg.go.dev/github.com/xo/dbimp/surrealdb) | SurrealDB | [`v0.2.0`](https://github.com/xo/dbimp/releases/tag/v0.2.0) |
+| [`neo4j`](https://pkg.go.dev/github.com/xo/dbimp/neo4j) | Neo4j | [`v0.3.0`](https://github.com/xo/dbimp/releases/tag/v0.3.0) |
+| [`influxdb`](https://pkg.go.dev/github.com/xo/dbimp/influxdb) | InfluxDB | [`v0.4.0`](https://github.com/xo/dbimp/releases/tag/v0.4.0) |
+| [`arangodb`](https://pkg.go.dev/github.com/xo/dbimp/arangodb) | ArangoDB | [`v0.5.0`](https://github.com/xo/dbimp/releases/tag/v0.5.0) |
+| [`databend`](https://pkg.go.dev/github.com/xo/dbimp/databend) | Databend | [`v0.6.0`](https://github.com/xo/dbimp/releases/tag/v0.6.0) |
+| [`pinot`](https://pkg.go.dev/github.com/xo/dbimp/pinot) | Apache Pinot | [`v0.7.0`](https://github.com/xo/dbimp/releases/tag/v0.7.0) |
+| [`rqlite`](https://pkg.go.dev/github.com/xo/dbimp/rqlite) | rqlite | [`v0.8.0`](https://github.com/xo/dbimp/releases/tag/v0.8.0) |
+| [`libsql`](https://pkg.go.dev/github.com/xo/dbimp/libsql) | libSQL and Turso | [`v0.9.0`](https://github.com/xo/dbimp/releases/tag/v0.9.0) |
+| [`avatica`](https://pkg.go.dev/github.com/xo/dbimp/avatica) | Apache Phoenix and Calcite Avatica | [`v0.10.0`](https://github.com/xo/dbimp/releases/tag/v0.10.0) |
+| [`druid`](https://pkg.go.dev/github.com/xo/dbimp/druid) | Apache Druid | [`v0.11.0`](https://github.com/xo/dbimp/releases/tag/v0.11.0) |
+| [`trino`](https://pkg.go.dev/github.com/xo/dbimp/trino) | Trino and Presto | [`v0.12.0`](https://github.com/xo/dbimp/releases/tag/v0.12.0) |
+| [`clickhouse`](https://pkg.go.dev/github.com/xo/dbimp/clickhouse) | ClickHouse | [`v0.13.0`](https://github.com/xo/dbimp/releases/tag/v0.13.0) |
+| [`drill`](https://pkg.go.dev/github.com/xo/dbimp/drill) | Apache Drill | [`v0.14.0`](https://github.com/xo/dbimp/releases/tag/v0.14.0) |
+| [`solr`](https://pkg.go.dev/github.com/xo/dbimp/solr) | Apache Solr | [`v0.14.0`](https://github.com/xo/dbimp/releases/tag/v0.14.0) |
+| [`elasticsearch`](https://pkg.go.dev/github.com/xo/dbimp/elasticsearch) | Elasticsearch | [`v0.14.0`](https://github.com/xo/dbimp/releases/tag/v0.14.0) |
+| [`opensearch`](https://pkg.go.dev/github.com/xo/dbimp/opensearch) | OpenSearch | [`v0.14.0`](https://github.com/xo/dbimp/releases/tag/v0.14.0) |
+| [`dynamodb`](https://pkg.go.dev/github.com/xo/dbimp/dynamodb) | Amazon DynamoDB | [`v0.14.0`](https://github.com/xo/dbimp/releases/tag/v0.14.0) |
+| [`snowflake`](https://pkg.go.dev/github.com/xo/dbimp/snowflake) | Snowflake | [`v0.16.0`](https://github.com/xo/dbimp/releases/tag/v0.16.0) |
+| [`databricks`](https://pkg.go.dev/github.com/xo/dbimp/databricks) | Databricks | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
+| [`bigquery`](https://pkg.go.dev/github.com/xo/dbimp/bigquery) | Google BigQuery | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
+| [`athena`](https://pkg.go.dev/github.com/xo/dbimp/athena) | Amazon Athena | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
+| [`cosmos`](https://pkg.go.dev/github.com/xo/dbimp/cosmos) | Azure Cosmos DB | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
+| [`spanner`](https://pkg.go.dev/github.com/xo/dbimp/spanner) | Google Cloud Spanner | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
 
 ## Documents
 

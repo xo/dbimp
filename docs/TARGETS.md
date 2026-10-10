@@ -261,12 +261,13 @@ nothing about these targets is measured:
   HTTP interface. See [VOLTDB.md](VOLTDB.md).
 - Amazon Athena, which is cloud only. Ken moved it into the order on 2026-10-10
   (D184).
-- Google Cloud Spanner, over its REST API (W38, D185 and D191). Done, in `v0.17.0`. The driver is `github.com/xo/dbimp/spanner`. It was measured on the hosted service (D187). Spanner Omni serves
-  gRPC and no REST API, so D186 had closed it. The driver is
-  `github.com/xo/dbimp/spanner` (W38 and D191). It speaks the REST API with JSON, and
-  its integration tests run only where a person supplies a key file. Written and
-  staged, with no release yet. See [SPANNER.md](SPANNER.md). `usql` has a driver on
-  gRPC, which the new one can replace (D24).
+- Google Cloud Spanner, over its REST API (W38, D185, D187 and D191). Done, in
+  `v0.17.0`. The driver is `github.com/xo/dbimp/spanner`. Spanner Omni serves gRPC
+  and no REST API, so D186 had closed it, and D187 reopened it on the hosted
+  service. The driver speaks the REST API with JSON. Its integration tests run on
+  the Cloud Spanner emulator of `dbmeta` in CI (D196), and on a hosted instance
+  where a person supplies a key file. See [SPANNER.md](SPANNER.md). `usql` has a
+  driver on gRPC, which the new one can replace (D24).
 - Prometheus, with PromQL.
 - VictoriaMetrics, with PromQL.
 - Loki, with LogQL.

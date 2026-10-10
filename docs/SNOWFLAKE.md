@@ -1,7 +1,8 @@
 # Snowflake
 
-This file holds what is known about Snowflake over its SQL REST API, for a
-possible driver `snowflake` (W34 and D182). The headings are the template of
+This file holds what is known about Snowflake over its SQL REST API, for the
+driver `snowflake` (W34, D182 and D183). The first release that held the driver
+was `v0.16.0`. The headings are the template of
 [DRIVER.md](DRIVER.md). A fact is "recorded", with the name of its request in
 quotes, "measured", with the date, or "not measured", with its source.
 
@@ -24,8 +25,10 @@ release that a person picks, and the version was `10.36.101` in the region
 - R: a hosted service has no container, so `dbrun` cannot start it. The
   account is a trial that ends after 30 days or when its credit of 400 dollars
   is used (D182). CI would need a secret that holds a private key and would
-  spend credit on every run. Whether CI can hold that secret is not measured.
-  This is the one condition of R that the product does not meet.
+  spend credit on every run. Ken decided that the workflow has no job for
+  Snowflake and no secret, and that the integration tests run only where a
+  person supplies an account (D183 item 13). This is the one condition of R
+  that the product does not meet.
 - H: `POST /api/v2/statements` is HTTPS and JSON, and it answered every
   statement that the login can run (recorded: "a statement"). It needs no
   binary encoding. A result is JSON text, and a large result is a list of JSON
@@ -219,18 +222,18 @@ The type name is the `type` member of the `rowType` entry. Each value is text.
 | VECTOR | vector | `dbimp.Vector[float64]` | `dbimp.Vector[float64]` | `VECTOR` | yes |
 <!-- /dbimp:types -->
 
-The Go types of the kinds follow [TYPES.md](TYPES.md). Three mappings are
-proposals that step 9 must settle:
+The Go types of the kinds follow [TYPES.md](TYPES.md). Three mappings
+were proposals of step 8a, and D183 item 4 decided them:
 
 - A `fixed` value of a large scale or precision has no `int64`, so the kind
   decimal gives `*apd.Decimal` (D33). A column of `NUMBER(38,0)` can hold a
   value that does not fit an `int64`, so the Go type depends on the column and
   not on the value.
-- A `geography` and a `geometry` arrive as GeoJSON text, and the proposal
+- A `geography` and a `geometry` arrive as GeoJSON text, and the driver
   decodes it to `map[string]any`, as the kind geometry allows. A caller that
   wants the text gets a `string` only through a cast in the statement.
 - A `vector` names no element type, so the driver cannot tell `FLOAT` from
-  `INT` before it reads the values. The proposal reads each as a `float64`.
+  `INT` before it reads the values. The driver reads each as a `float64`.
 
 ## Parameters
 
@@ -278,8 +281,8 @@ proposals that step 9 must settle:
   (recorded: "the transaction of the session", "a change of the session" and
   "the session after the change"). There is no session to hold an open
   transaction across requests.
-- So a driver has no `BeginTx` across several statements, and the proposal is
-  `dbimp.ErrNotSupported` (D20).
+- So a driver has no `BeginTx` across several statements, and the driver returns
+  `dbimp.ErrNotSupported` (D20 and D183 item 7).
 
 ## Errors
 
@@ -326,9 +329,9 @@ proposals that step 9 must settle:
   the cancel"). The same call on a statement that is gone answered the same
   (recorded: "cancel a statement that is gone").
 - When the client leaves, the statement runs on. A synchronous statement has
-  no handle that the client holds when it leaves, so the proposal is to start
-  each statement asynchronously and poll, so that the client always holds the
-  handle for a cancel. This is not measured.
+  no handle that the client holds when it leaves, so the driver starts
+  each statement asynchronously and polls, so that the client always holds the
+  handle for a cancel (D183 item 9). The delay of the cancel is not measured.
 - A suspended warehouse resumes at the first statement that needs it, and the
   statement then takes longer. The warehouse was running during this work, so
   the delay is not measured, source: Gemini.
@@ -536,14 +539,13 @@ whether rule 4 of `AGENTS.md` names them.
 
 ## Open questions
 
-1. R. The account is a trial, and CI would need a secret key and credit. Whether
-   a driver here can have integration tests in CI is a question for Ken. The
-   alternative is unit tests with the recorded exchanges, which this work made,
-   and an integration test that runs only where a person supplies an account.
-2. The secret of the DSN. D94 says it is the password of the URL, and the key
-   of Snowflake is about 1,600 characters, which a URL can hold, but the user
-   is not enough: the driver also needs the user name and the account for the
-   claims. The choice is for step 9.
+1. Decided (D183 item 13). R. The account is a trial, and CI would need a
+   secret key and credit. The workflow has no job for Snowflake and no secret.
+   The unit tests replay the recorded exchanges in CI, and the integration
+   tests run only where a person supplies an account.
+2. Decided (D183 item 2). The secret of the DSN is the private key, as the
+   password of the URL. The user name is the user of the URL, and the host
+   gives the account for the claims.
 3. Closed. The four schema features that the role could not create (a view, a
    dynamic table, a sequence and a stream) were measured on 2026-10-10 in the
    schema `DBIMP`, and each one works.
@@ -612,16 +614,13 @@ did not settle them.
 16. Decided (D183 item 15). A value of a type that the driver has no Go type
     for, such as a `map` column, fails the row with `dbimp.ErrNotSupported`
     (D135). A table with such a column cannot be read with `SELECT *`.
-17. Three gates of the root package fail for this driver, and the failures come
-    from steps 5a and 6, not from the code. `TestEveryDriverHasItsManifest`
-    wants `noOrdinaryUser` in `manifest.json`, which the file lacks, though the
-    Principals section says that there is one login.
-    `TestEveryDriverHasItsFeatures` wants a survey that asked two models, and
-    `features.json` names one, because DeepSeek timed out. It also wanted a
-    verdict for every entry, and four were `not measured`: they are measured now
-    (question 3). The two
-    entries `FIXED INTEGER` and `FIXED DECIMAL` replace `FIXED` (question 6). The work
-    that wrote the driver did not change these files.
+17. Decided (closed). Gates of the root package failed for this driver when the
+    driver was written, and the failures came from steps 5a and 6, not from the
+    code. The two named were `TestEveryDriverHasItsManifest`, which wanted `noOrdinaryUser`
+    in `manifest.json`, `TestEveryDriverHasItsFeatures`, which wanted a survey of
+    two models and a verdict for every entry. The files were
+    changed after that. The gates pass on 2026-10-11 and name no fault of
+    Snowflake.
 
 ## Integration tests
 
@@ -721,7 +720,7 @@ tests start, and a key that `crypto/rsa` makes for each run.
 ## Compared with Couchbase
 
 Step 17a compares this driver with `couchbase`, the first driver (D97). It was
-written on 2026-10-09 from the staged code. A fact of Couchbase comes from
+written on 2026-10-09 from the code of the first release. A fact of Couchbase comes from
 [COUCHBASE.md](COUCHBASE.md), and a fact of Snowflake from the sections above.
 
 ### The server

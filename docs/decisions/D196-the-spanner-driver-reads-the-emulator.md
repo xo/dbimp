@@ -40,6 +40,7 @@ session did. Ken has not reviewed it.
    at a time, and the cancel of a DDL operation. Tests of errors accept an error with no name and
    the HTTP status that the name stands for. Two limits of the emulator change a size, an array of
    16000 elements at most.
-7. The hosted service did not run the new code. The replay tests of the hosted recordings pass,
-   and the change to the commit is the only one that touches the hosted path. Someone with the
-   login of `dbsetup` must run the integration tests there before a release.
+7. The hosted service did not run the new code when the change was written. The replay tests
+   of the hosted recordings passed, and the change to the commit is the only one that touches
+   the hosted path. The main session then ran the integration suite on the hosted instance, on
+   2026-10-11, and it passed.
