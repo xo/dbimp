@@ -9,7 +9,6 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"reflect"
-	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -19,6 +18,7 @@ import (
 	"github.com/cockroachdb/apd/v3"
 
 	"github.com/xo/dbimp"
+	"github.com/xo/dbimp/dbimptest"
 	"github.com/xo/dbimp/solr"
 )
 
@@ -410,26 +410,21 @@ func TestLargeResult(t *testing.T) { //nolint:paralleltest // The test reads the
 		t.Fatal(err)
 	}
 	defer rows.Close()
+	gauge := dbimptest.NewHeapGauge()
 	var (
-		n    int
-		peak uint64
-		s    string
+		n int
+		s string
 	)
 	for rows.Next() {
 		if err := rows.Scan(&s); err != nil {
 			t.Fatal(err)
 		}
 		if n++; n%(rowsCount/4) == 0 {
-			runtime.GC()
-			var m runtime.MemStats
-			runtime.ReadMemStats(&m)
-			peak = max(peak, m.HeapInuse)
+			gauge.Sample()
 		}
 	}
 	if err := rows.Err(); err != nil || n != rowsCount {
 		t.Fatalf("read %d rows and %v, want %d rows", n, err, rowsCount)
 	}
-	if peak > 16<<20 {
-		t.Errorf("the heap in use reached %d bytes while the driver read a result of 64 MiB, want at most 16 MiB (D25)", peak)
-	}
+	gauge.Check(t)
 }

@@ -9,13 +9,13 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"runtime"
 	"slices"
 	"strings"
 	"sync"
 	"testing"
 
 	"github.com/xo/dbimp"
+	"github.com/xo/dbimp/dbimptest"
 	"github.com/xo/dbimp/opensearch"
 )
 
@@ -548,26 +548,21 @@ func TestLargeResult(t *testing.T) { //nolint:paralleltest // The test reads the
 		t.Fatal(err)
 	}
 	defer rows.Close()
+	gauge := dbimptest.NewHeapGauge()
 	var (
-		n    int
-		peak uint64
-		s    string
+		n int
+		s string
 	)
 	for rows.Next() {
 		if err := rows.Scan(&s); err != nil {
 			t.Fatal(err)
 		}
 		if n++; n%(pageRows*pages/4) == 0 {
-			runtime.GC()
-			var m runtime.MemStats
-			runtime.ReadMemStats(&m)
-			peak = max(peak, m.HeapInuse)
+			gauge.Sample()
 		}
 	}
 	if err := rows.Err(); err != nil || n != pageRows*pages {
 		t.Fatalf("read %d rows and %v, want %d rows", n, err, pageRows*pages)
 	}
-	if peak > 16<<20 {
-		t.Errorf("the heap in use reached %d bytes while the driver read a result of 64 MiB, want at most 16 MiB (D25)", peak)
-	}
+	gauge.Check(t)
 }
