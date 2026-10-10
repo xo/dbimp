@@ -185,6 +185,7 @@ jobs:
           driver=${{ matrix.driver }}
           prefix=$(echo "$driver" | tr '[:lower:]' '[:upper:]')
           export "${prefix}_DSN=$(echo "$info" | jq -r '.[0].url')"
+          export DBIMP_RELEASE="${{ matrix.release }}"
           export "${prefix}_ORDINARY_DSN=$(echo "$info" | jq -r '[.[0].principals[]? | select(.role == "user") | .url][0] // empty')"
           export "${prefix}_SECOND_ADDRESS=$(echo "$info" | jq -r '.[0].secondAddress // empty')"
           # A run of the schedule or a manual run reads every type of a

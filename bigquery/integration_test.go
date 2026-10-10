@@ -62,8 +62,18 @@ func itDSN(t testing.TB) string {
 
 // itConfig returns the configuration of the DSN, and skips the test when the DSN
 // names no dataset.
+// envRelease names the variable that CI sets to the release that dbrun started,
+// and unsupportedRelease is the one that the driver does not support.
+const (
+	envRelease         = "DBIMP_RELEASE"
+	unsupportedRelease = "bigquery-0.7.2"
+)
+
 func itConfig(t testing.TB) Config {
 	t.Helper()
+	if os.Getenv(envRelease) == unsupportedRelease {
+		t.Skipf("%s is the emulator release %s, which cannot read the result of a jobs.query job, so the driver does not support it (D189 item 4 and D195 item 4)", envRelease, unsupportedRelease)
+	}
 	cfg, err := ParseDSN(itDSN(t))
 	if err != nil {
 		t.Fatalf("reading %s: %v", envDSN, err)
@@ -137,6 +147,9 @@ func TestMain(m *testing.M) {
 // leftovers drops each table of this run, and returns the name of each object that
 // it failed to drop. It returns none when there is no project.
 func leftovers() []string {
+	if os.Getenv(envRelease) == unsupportedRelease {
+		return nil
+	}
 	v := os.Getenv(envDSN)
 	if v == "" {
 		return nil
