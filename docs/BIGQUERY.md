@@ -510,7 +510,45 @@ The answers that this run did not show are in Open questions.
 
 ## The DSN
 
-Not decided. These are the facts that a DSN must carry.
+The driver reads this DSN (D189, D27 and D35):
+
+    bigquery://<project>/<dataset>?credential_file=/path/key.json
+
+- The scheme is `bigquery`, and the driver registers that one name and no alias.
+  The host is the id of the project, and it is a part of every request path. A host
+  with a port, or with a colon that is not an IPv6 address, is refused.
+- The path holds the dataset of each statement, which the driver sends as
+  `defaultDataset`, so that a statement can name a table with no dataset. A path of
+  two parts is `/<location>/<dataset>`, which is the form of `dburl`. Both parts are
+  optional, and a path of three parts is refused.
+- The user of the URL is ignored, because `dbrun` writes `admin` for the emulator.
+  A password is refused, because the secret is the path of a key file in a key of
+  the query, and a URL never holds the text of the key (D189 item 2, which is the
+  alternative to D94 for a secret that is a JSON file).
+- The driver refuses a key that is not in the table below, and a key that appears
+  twice. The query holds no other key.
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `credential_file` | none | The path of the key file of a service account. The driver reads it when it makes the connector |
+| `disable_auth` | `false` | `true` sends no `Authorization` header, for an emulator. It cannot go with `credential_file` |
+| `endpoint` | `https://bigquery.googleapis.com` | The address of the service, `http` or `https` with a host and nothing else, such as `http://127.0.0.1:9050` |
+| `location` | none | The location of the job, such as `US`, `EU` or `asia-southeast1`. The path can name it too, and not both |
+| `scopes` | `https://www.googleapis.com/auth/bigquery` | The scopes of the token, separated by a comma or a space |
+| `timeout` | none | The time that the service gives a job, as `jobTimeoutMs`. A duration with a unit, such as `60s` |
+| `max_results` | none | The most rows in a page of a result, as `maxResults`. None leaves the size to the service, which cuts a page at 10 MB |
+
+A caller can pass a ready access token in `Config.AccessToken` of a connector. A
+DSN cannot hold it, and `FormatDSN` leaves it out. A connector with no key file, no
+access token and no `disable_auth` fails the first statement with `ErrNoCredential`.
+
+Examples, for the service and for the emulator that `dbrun` starts:
+
+    bigquery://my-project/my_dataset?credential_file=/home/me/key.json
+    bigquery://my-project/EU/my_dataset?credential_file=/home/me/key.json&timeout=5m
+    bigquery://admin@dbmeta/dbmeta?endpoint=http%3A%2F%2F127.0.0.1%3A9050&disable_auth=true
+
+The facts that the DSN rests on follow.
 
 - `dburl` writes `bigquery://<project>/<dataset>?<options>`, and `dbrun` prints
   `bigquery://admin@dbmeta/dbmeta?endpoint=http%3A%2F%2F127.0.0.1%3A<port>&disable_auth=true`
@@ -622,7 +660,7 @@ Not decided. These are the facts that a DSN must carry.
   not promise it, and Gemini said that real clients never rely on it. A driver
   that reads the answer one token at a time and needs `schema` before `rows`
   must hold the rows, or read the schema from `getQueryResults`, when `rows` comes
-  first. D189 does not cover this, and it is an open question below.
+  first. The driver refuses such an answer with an error (see Open questions).
 - A query that is not done answers HTTP 200 with `jobComplete` `false`, the
   `jobReference`, `queryId`, `jobCreationReason`, `location`, `creationTime`,
   `startTime` and `statementType`, and no `schema`, no `totalRows` and no `rows`
@@ -879,8 +917,10 @@ Notes on the mapping. D189 settled the notes that name it:
   (recorded: bigquery-070). A NULL element cannot arrive, because the service
   refuses it (recorded: bigquery-093), so a driver need not handle one.
 - `JSON` arrives as text, and the value `null` of JSON arrives as `"null"`, which
-  differs from a NULL. Decided, D189: a JSON column is a decoded Go value, and a
-  JSON null stays distinct from a SQL NULL.
+  differs from a NULL on the wire. Decided, D189 item 7 and D195 item 1: a JSON
+  column is a decoded Go value, and a JSON null and a SQL NULL are both `nil`.
+  A caller who must tell them apart selects `TO_JSON_STRING`, which gives the
+  text `null`.
 - Decided, D189: a `STRUCT` column is a `map[string]any`. A struct whose members
   repeat a name or have none makes the driver return an error that names the
   column. The default of that error is the choice of the decision, and Ken can
@@ -1332,6 +1372,15 @@ the driver. The hosted service checks it, as the next facts show.
   that a client reads. `usql` registers no `Version` statement for BigQuery (read
   of `usql/drivers/bigquery/bigquery.go`, 2026-10-10). Emulator: `SELECT
   SESSION_USER()` answered `dummy`.
+- The version for `usql` (step 16). `usql` runs no statement for the version of
+  BigQuery, because its driver registers no `Version` function. So no statement ran
+  as the administrator or as the ordinary user, and the one login has no ordinary
+  user. The nearest statement that a person can type, `SELECT @@version`, is
+  refused for the one login (recorded: bigquery-229). The driver answers no
+  `SELECT version()` of its own, because D181 gives that answer only to a product
+  that has no way to read the release, and this driver has no endpoint that
+  carries a release either. So the statement goes to the service and fails there.
+  `TestReplayNoVersion` holds that the driver sends it.
 - `GET /bigquery/v2/projects/{project}/serviceAccount` answered the email of the
   service account of the encryption of the project (recorded: bigquery-237).
   `GET /` answered HTTP 404 `notFound` (recorded: bigquery-235). Emulator: `{}` and
@@ -1372,7 +1421,31 @@ emulator has none (see Open questions).
 
 ## Interfaces
 
-Not written yet. Step 10 generates the table.
+`TestTables` makes the table below from the types of the driver, and it fails when
+the document holds another table. Run it with `DBIMP_UPDATE=1` to write the table.
+
+<!-- dbimp:interfaces -->
+| Interface | Implemented | Reason |
+| --- | --- | --- |
+| `driver.DriverContext` | yes | OpenConnector parses the DSN once, for every connection. |
+| `driver.Connector` | yes | The connector owns the transport, which every connection shares, and the access token that the driver gets by signing a request with the key file of the DSN (D189). |
+| `io.Closer on the connector` | yes | Close closes the idle connections of the transport. |
+| `driver.Pinger` | yes | Ping runs SELECT 1 as a dry run, which checks the token, the project and the right to make a job, and which the service does not bill (D189). |
+| `driver.SessionResetter` | no | A connection holds nothing on the server, because each request is its own job with no session (D189). |
+| `driver.Validator` | no | A connection holds nothing on the server, so it is always valid. |
+| `driver.NamedValueChecker` | yes | It keeps an Option, and the values that the driver binds with a type of their own: a decimal, a dbimp.Date, a dbimp.LocalTime, a dbimp.LocalDateTime, a dbimp.Interval, and a list and a map that fail with dbimp.ErrArguments (D189). |
+| `driver.QueryerContext` | yes | The statement goes to POST /queries with its arguments as typed parameters, which the server binds (D189). |
+| `driver.ExecerContext` | yes | Exec reads the head of the answer and no row, and RowsAffected is numDmlAffectedRows, or an error that wraps dbimp.ErrNotSupported when the answer has no count (D178). |
+| `driver.ConnPrepareContext` | yes | A prepared statement runs as its text, with its arguments, each time. |
+| `driver.ConnBeginTx` | yes | BeginTx fails with dbimp.ErrNotSupported, because the service refuses BEGIN TRANSACTION alone and the first release has no session across requests (D20 and D189). |
+| `driver.RowsColumnScanner` | yes | A value is decoded when its row is read, and assigned when it is scanned. |
+| `driver.RowsNextResultSet` | no | A request holds one statement or one script, and the answer holds the result of its last statement, so it has one result. The driver reads the pages of one result as one set of rows (D189). |
+| `driver.RowsColumnTypeScanType` | yes | The schema names the type of each field, and each type has one Go type (D135 and D189). |
+| `driver.RowsColumnTypeDatabaseTypeName` | yes | The type of the field in upper case, such as INTEGER, and ARRAY for a field of the mode REPEATED. |
+| `driver.RowsColumnTypeLength` | no | The schema names no length for a field (recorded: bigquery-070). |
+| `driver.RowsColumnTypeNullable` | yes | The mode of the field: an ARRAY is never NULL, and a REQUIRED field is not NULL. |
+| `driver.RowsColumnTypePrecisionScale` | no | The schema names no precision and no scale for a field (recorded: bigquery-070). |
+<!-- /dbimp:interfaces -->
 
 ## Faults
 
@@ -1412,6 +1485,75 @@ which this driver must not repeat (read of the source in the module cache,
   main ones are the ignored members of the request, the error reason
   `jobInternalError` for every query error, the positional parameters, the leak of
   a script variable, and the lost state of `DROP`.
+
+## Integration tests
+
+The integration tests of the driver read `BIGQUERY_DSN` and skip when it is empty
+(hard rule 9). The variable holds the DSN of D189. For the service it names the
+project, the dataset that holds the tables of the tests, and the key file:
+
+    BIGQUERY_DSN='bigquery://PROJECT/DATASET?credential_file=/path/key.json'
+
+For the emulator that `dbrun` starts, it is the `url` that `dbrun` prints:
+
+    (cd ../dbmeta/test && go run ./cmd/dbrun start bigquery-0.8.1)
+    export BIGQUERY_DSN=$(cd ../dbmeta/test && go run ./cmd/dbrun dsn --json bigquery-0.8.1 | jq -r '.[0].url')
+    go test -race -count=1 -run Integration -v ./bigquery/...
+
+Two tests need a bucket of Cloud Storage that the account can read and write, and
+they skip when `BIGQUERY_BUCKET` holds no name. The name has no `gs://`.
+
+The service account needs the rights that the first section lists: run queries,
+make and drop tables, routines, clones and datasets, read `JOBS_BY_PROJECT`, and
+read and write the bucket. It cannot drop a snapshot, so the test of a snapshot
+logs the refusal of the drop, and a person with `bigquery.tables.deleteSnapshot`
+drops the snapshot. `TestMain` drops each table, view and clone of the run that a
+test left, and it fails if it could not drop one.
+
+The login is one principal, a service account, and the emulator has one login with
+no password, so each test runs as that principal only, and the manifest has no
+ordinary user. A test that needs the service and not the emulator skips on the
+emulator with the reason from the section Hosted and emulator. The emulator
+supports only the release `bigquery-0.8.1`, and the driver does not support
+`bigquery-0.7.2` (D189 item 4), so CI must not run the integration tests on that
+release (open question 2).
+
+The tests were written on 2026-10-10 with no project and no emulator. On
+2026-10-11 the main session ran them: the hosted suite passes, and the emulator
+suite passes on `bigquery-0.8.1` with skips that name the difference of the
+emulator. The test of a snapshot leaves a snapshot that the account cannot drop,
+because it lacks `bigquery.tables.deleteSnapshot` and cannot set the expiry of a
+snapshot. The snapshot expires after 7 days. The tests and what each one holds:
+
+- `TestIntegrationConnect`: the login, `Ping`, the principal, the project, the
+  refusal of `SELECT @@version`, and the options `WithDatabase` and
+  `WithMaxResults`.
+- `TestIntegrationErrors`: an error before any row for a syntax error, a table that
+  does not exist, an overflow, a division by zero halfway, an array with a NULL
+  and a failed assertion, with the reasons of the service, a wrong token with the
+  reason `authError`, and a dataset that does not exist with the reason
+  `accessDenied`.
+- `TestIntegrationTransactions`: `BeginTx` and the refusal of `BEGIN TRANSACTION`
+  alone.
+- `TestIntegrationContext`: a deadline that ends while a heavy job runs, the cancel
+  of the job, and the reason `stopped` that `JOBS_BY_PROJECT` then shows.
+- `TestIntegrationParameters`: each Go type that the driver binds, as a named
+  parameter and as a positional one, a NULL cast in the statement, and the
+  refusal of a list and of a mix.
+- `TestIntegrationTimestampForm`: the two ends of the range of a `TIMESTAMP` in the
+  ISO form, which is the check that D189 item 5 asks for.
+- `TestIntegrationCRUD`, `TestIntegrationSchema` and `TestIntegrationFeatures`: the
+  entries of `features.json`, in the order that the file names them. The requests
+  that the driver never sends go by hand with the token of the connector:
+  `jobs.insert`, `jobs.get`, `jobs.cancel`, `tabledata.insertAll`, and a body that
+  is gzip.
+- `TestIntegrationRoundTrip`: every type that `features.json` marks yes, with
+  `dbimptest.RoundTrip`, as a bound argument and as a literal. Each statement names
+  its arguments, so that it can use a value more than once. A JSON document, a
+  STRUCT, an ARRAY, a RANGE and a GEOGRAPHY go in as text that the statement
+  parses, because they have no Go type to bind. A NULL has no type, so the
+  statement casts each value. The emulator runs five types, and skips the others
+  with a reason.
 
 ## Second opinions
 
@@ -1544,52 +1686,177 @@ which this driver must not repeat (read of the source in the module cache,
 
 ## Open questions
 
-Ken decided the step 9 questions on 2026-10-10 in D189 (the package, the secret,
-`BeginTx`, the emulator releases, the timestamp form, several statements, JSON and
-STRUCT, and the other proposals). The sections above say "decided, D189" where a
-proposal stood. What is still open follows. The leads that a later run can close
-come first.
+Ken decided the step 9 questions on 2026-10-10 in D189, and the questions that
+the live run raised on 2026-10-11 in D194 and D195. The decided answers come first,
+and what is still open follows.
 
-1. The timestamp form at the year 9999. D189 item 5 chooses `ISO8601_STRING`, and
-   the recordings show the form with a `Z` and six digits for one value (recorded:
-   bigquery-342) but not for `9999-12-31 23:59:59.999999`. The integration test
-   must check it. If the ISO form loses a digit, the answer is for Ken, and the
-   integer form is exact (recorded: bigquery-379).
-2. R and CI. D189 item 4 supports the emulator release `bigquery-0.8.1` and the
-   hosted service. It does not say whether CI runs the emulator only, or also the
-   service with a secret and a project that `dbsetup` provisions (D184, dbmeta
-   D117). The emulator differs from the service in the places that the section
-   Hosted and emulator lists, so it can run the tests of shape but not the tests of
-   the errors, the transactions, the sessions, the paging, the cancel and the
-   types. The service needs a key, a billing project, and it bills at least 10 MB
-   for a scan and for a read of `INFORMATION_SCHEMA`.
-3. The error for a struct whose members repeat a name or have none (D189 item 7).
-   The default is an error that names the column, and Ken can change it.
-4. What the hosted run still did not show, and what it needs. All of these need a
-   change of the script, and none needs a new right:
-   - A poll that ends with `jobComplete: true`. The run polled once. A script must
-     poll `getQueryResults` until a heavy query ends, and cancel the jobs of
-     bigquery-215 and bigquery-216, which still run and cost money.
-   - A script with several statements, listed with `parentJobId`. The request that
-     lists children named a plain `SELECT` (recorded: bigquery-262 and
-     bigquery-419), so the children of a real script and `numChildJobs` are not
-     recorded. D189 item 6 leaves the child jobs for a later release.
-   - A gzip request body that is right. The recorder cannot send one.
-   - A vector index that works. The table needs at least 5000 rows (recorded:
-     bigquery-403).
-   - A request with a valid API key.
-   - The creation of a snapshot. The two snapshots of earlier passes stay, because
-     the account lacks `bigquery.tables.deleteSnapshot` (recorded: bigquery-450). A
-     person with that right must drop `dbimp_it_sn` and `dbimp_it_sn_r2`, and the
-     script needs a unique snapshot name or a teardown that works.
-   - A teardown that drops the dataset `dbimp_it_ds2` and the routines
-     `dbimp_it_tf` and `dbimp_it_proc`.
-   - A load from the exported files that reads both rows. The export wrote no
-     header, so the load must not skip a line (recorded: bigquery-408).
-5. Whether the driver must read `rows` that come before `schema`. The hosted
-   service sent `schema` first in this run, and the documents do not promise it
-   (see Responses). D189 does not cover it.
-6. The tests that `features.json` names do not exist yet. The gate that reads them
-   runs when the package `bigquery/` exists. The type table above has a column
-   that the matrix of `TYPES.md` does not have yet, and the test that writes the
-   matrix fails until it runs with `DBIMP_UPDATE=1`.
+Decided:
+
+1. The timestamp form at the year 9999. D189 item 5 chooses `ISO8601_STRING`. The
+   hosted integration test `TestIntegrationTimestampForm` passed on 2026-10-11 at
+   `0001-01-01` and at `9999-12-31 23:59:59.999999`, so the ISO form loses no
+   digit, and the driver keeps it. It does not switch to `useInt64Timestamp`.
+2. The emulator. D189 item 4 supports `bigquery-0.8.1` and the service, and not
+   `bigquery-0.7.2`.
+3. A struct whose members repeat a name or have none. D189 item 7: the driver
+   returns an error that names the column.
+4. A JSON null and a SQL NULL. D195 item 1 amends D189 item 7: both are `nil`.
+5. Rule 4 of `AGENTS.md`. D194 item 1: the rows of a BigQuery query keep the
+   context of the statement, because the request for each next page needs it.
+6. `rows` that come before `schema`. The driver reads the answer one token at a
+   time and refuses such an answer with `dbimp.ErrInvalidValue`
+   (`TestRowsRefuse`). The service sent `schema` first in every recording.
+
+Live results of 2026-10-11, which the main session got with the tests of this
+driver:
+
+- The hosted integration suite passes.
+- The emulator suite passes on `bigquery-0.8.1`, with skips that name the
+  difference of the emulator.
+- One test leaves an object behind: the test of a snapshot makes a snapshot that
+  the account cannot drop, because it lacks `bigquery.tables.deleteSnapshot` and
+  it cannot set the expiry of a snapshot. The snapshot expires after 7 days.
+  `TestMain` reports it and a person with the right drops it.
+
+Still open:
+
+1. The first wait of a statement. The driver sends `timeoutMs` of 3000, so that
+   the service answers `jobComplete` `false` after three seconds and the driver
+   then polls the job. The value is the choice of the package and it is not
+   measured. A job has no id until the first answer arrives, so a context that
+   ends in those three seconds cannot cancel the job, and the job runs on at the
+   service. A request through `jobs.insert` with an id that the driver makes would
+   close the gap, and it is a change of D189 item 8, which names `jobs.query`.
+2. CI and the emulator. The job `releases` runs every driver under `testdata/` on
+   each release that `dbrun list` names for it, so it would run the integration
+   tests on `bigquery-0.7.2` too, which D189 item 4 does not support. Hosted runs
+   need a secret that CI does not hold. Ken decides whether the tests skip on
+   `bigquery-0.7.2`, or the workflow leaves that release out.
+3. The mode of the parameters. D189 item 8 says named parameters bound by the
+   server. The driver sends the mode `NAMED` when every argument has a name, as
+   `sql.Named("p", 5)` and `@p`, and the mode `POSITIONAL` when none has a name,
+   as `?`. It refuses a mix with `dbimp.ErrArguments`, because the service refuses
+   it too (recorded: bigquery-152 and bigquery-153).
+4. The types that a parameter cannot have. A NULL has no Go type, so the driver
+   sends it as a `STRING` with no value, which only a `STRING` column or a `CAST`
+   takes. The driver binds no `ARRAY` and no `STRUCT`, and it binds no `JSON`,
+   `GEOGRAPHY`, `RANGE` or `BIGNUMERIC` of its own: text goes as a `STRING`, and a
+   decimal that does not fit a `NUMERIC` goes as a `BIGNUMERIC`. A caller parses
+   JSON text in the statement. A typed NULL and the two structured types can come
+   in a later release.
+5. A type that the driver does not know, and a field with no type, as the emulator
+   writes for a `RANGE`, read as the text of the service, with the Go type
+   `string`.
+6. A value of finer than a microsecond. BigQuery has microseconds, so the driver
+   refuses to send a `dbimp.LocalTime`, a `dbimp.LocalDateTime`, a `time.Time`
+   and a `dbimp.Interval` with nanoseconds, with `dbimp.ErrInvalidValue`, and it
+   never rounds one. A `time.Time` goes as UTC.
+7. The keys and members that D189 does not name. D189 names `credential_file`. The
+   DSN also has `endpoint`, `disable_auth`, `scopes`, `location`, `timeout` and
+   `max_results`, because the emulator needs an address and no login, and each
+   option of D109 needs a key that it can change. `Config.AccessToken` holds a
+   ready token. The token endpoint of the key file must be `https`, or `http` on
+   the machine of the caller, so that a signed request never crosses the network
+   in the clear.
+8. `Exec` reads the head of the answer and no row, and it leaves the rest of a
+   result at the service, so `Exec` of a `SELECT` costs one request, and
+   `RowsAffected` of it is an error. `Ping` runs `SELECT 1` as a dry run, which
+   the service does not bill.
+9. `WithParameter` sets a member of the request, such as `labels`,
+   `maximumBytesBilled`, `requestId`, `useQueryCache`, `dryRun` and
+   `createSession`. It refuses the members that change how the driver binds or
+   reads a value: `query`, `queryParameters`, `parameterMode`, `useLegacySql`,
+   `formatOptions` and `queryResultsFormat`. A session that `createSession` makes
+   is not carried to the next statement (D189 item 3).
+10. The driver answers no `SELECT version()`. BigQuery has no endpoint or header
+    that carries a release, so D181 has nothing to read, and the statement goes to
+    the service, which refuses it (recorded: bigquery-229). Ken decides if the
+    driver answers with the revision of the REST API instead.
+11. What the hosted run still did not show, and what it needs:
+    - A script with several statements, listed with `parentJobId`. The children of
+      a real script and `numChildJobs` are not recorded. D189 item 6 leaves the
+      child jobs for a later release.
+    - A gzip request body that is right, which the recorder cannot send. The
+      integration test sends one.
+    - A request with a valid API key.
+
+## Compared with Couchbase
+
+Step 17a compares this driver with `couchbase`, the first driver (D97). It was
+written on 2026-10-10 from the staged code. A fact of Couchbase comes from
+[COUCHBASE.md](COUCHBASE.md), and a fact of BigQuery from the sections above.
+
+### The server
+
+| | Couchbase | BigQuery |
+| --- | --- | --- |
+| Request | `POST /query/service`, with `statement`, `args` and `$name` | `POST /bigquery/v2/projects/{project}/queries` with `query`, `useLegacySql`, `queryParameters`, `parameterMode`, `defaultDataset`, `location`, `timeoutMs`, `jobTimeoutMs`, `maxResults` and `formatOptions` (Requests) |
+| Database | The key `query_context` of the body | The project is a part of the path, and the dataset is `defaultDataset` in the body (The DSN) |
+| Language | SQL++, which is close to SQL | GoogleSQL. The service has a legacy dialect that is the default, so the driver sends `useLegacySql` as `false` every time. A request can hold a script, and the answer holds the rows of the last statement (Statements) |
+| DDL | In SQL++ | In SQL. A key is declared and not enforced, `UNIQUE` is refused, and a dataset, a routine, a clone and a snapshot have statements (Statements) |
+| Parameters | `?`, `$1` and `$name` | `?` or `@name`, with a typed entry in `queryParameters` for each, and the mode `NAMED` or `POSITIONAL`. The service refuses a mix (Parameters) |
+| Framing | One body for the whole result, which does not page | One JSON object for a page. The service cuts a page at 10 MB or at `maxResults`, and the next page is `GET /queries/{jobId}` with the `pageToken` (Responses) |
+| Columns | `signature`, before the first row | `schema.fields`, before `rows` in the order that the service wrote. Each field has a legacy type name and a mode (Responses) |
+| Order | The projection on 7.6 and 8.0, the names on 7.2 | The statement. A second column of one name is renamed `a_1`, and a column with no name is `f0_` (Responses) |
+| Errors | Can come with HTTP 200, after some rows | Before any row, with HTTP 400, 401, 403 or 404 and a JSON object with a reason such as `invalidQuery`. A later page can fail (Errors) |
+| Types | JSON. No date, decimal, UUID or binary | JSON, and every scalar is a string or null. The text of a `TIMESTAMP` is a double by default, and the driver asks for the ISO form (Types) |
+| Cancel | The server stops a query when the client leaves | A job runs on when the client leaves, and `POST /jobs/{jobId}/cancel` stops it a little after it answers (Cancellation and timeouts) |
+| Transactions | `BEGIN WORK` in SQL++, carried by `txid` | In a script of one request, or in a session that `createSession` makes. `BEGIN TRANSACTION` alone is refused (Transactions) |
+| Authentication | Basic | A service account. The client signs a JWT with RS256, exchanges it at the token endpoint of its key file, and sends the access token as a Bearer token (The DSN) |
+| Default port | 8093, or 18093 with TLS | 443, with TLS always. The emulator uses 9050 over `http` |
+
+The differences that a caller sees:
+
+- A job that runs longer than the first wait answers `jobComplete` `false`. The
+  driver then polls the job, so a long statement costs a request each interval, and
+  it cancels the job when the context ends (D189 item 8 and open question 1).
+- A result can have several pages. The driver reads the first from the answer and
+  each later one only when the caller has read the rows before it, and an error in
+  a later page wraps `dbimp.ErrIncomplete` (D21, D107 and D189).
+- The secret of the DSN is the path of a key file, and the driver sends a token that
+  it gets by signing, never the key (D189 item 2).
+- A script gives the rows of its last statement, and a transaction has no form
+  across requests (D189 items 3 and 6).
+- A timestamp has microseconds, so the driver refuses a value that has nanoseconds
+  when it sends one (open question 6).
+- The service has no version that a client reads, so `SELECT version()` is a
+  statement of the service and fails (D181 and open question 10).
+
+### The driver
+
+| | `couchbase` | `bigquery` |
+| --- | --- | --- |
+| Size, without tests, on 2026-10-10 | About 1300 lines in 8 files | About 2500 lines in 10 files |
+| `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Project`, `Dataset`, `Location`, `Endpoint`, `CredentialFile`, `AccessToken`, `DisableAuth`, `Scopes`, `Timeout` and `MaxResults`. The DSN has the keys `credential_file`, `disable_auth`, `endpoint`, `location`, `scopes`, `timeout` and `max_results` (D189) |
+| Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithLocation` and `WithMaxResults`, through `WithOptions` or an argument (D109). `WithParameter` sets a member of the request and refuses six. `WithReadonly(true)` fails with `dbimp.ErrNotSupported` |
+| Arguments | Sent to the server as `args` and `$name` | Typed parameters, from the Go type of each argument: `INT64`, `FLOAT64`, `NUMERIC`, `BIGNUMERIC`, `BOOL`, `STRING`, `BYTES`, `DATE`, `TIME`, `DATETIME`, `TIMESTAMP` and `INTERVAL`. A NULL is a `STRING` with no value. A list and a map fail with `dbimp.ErrArguments` (`bigquery/params.go`) |
+| Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own, which reads the members of the answer, one row for each call, then the members after the rows, and then the next page (`bigquery/rows.go`) |
+| Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | `ColumnTypeDatabaseTypeName`, `ColumnTypeScanType` and `ColumnTypeNullable` from the schema. The schema has no length, precision or scale, so the driver has no method for them |
+| Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the field, as the type table says: `int64`, `float64`, `*apd.Decimal`, `bool`, `string`, `[]byte`, `dbimp.Date`, `dbimp.LocalTime`, `dbimp.LocalDateTime`, `time.Time`, the decoded JSON value, `dbimp.Interval`, `[]any` and `map[string]any` (D135 and D189) |
+| Result of `Exec` | `RowsAffected` from `metrics.mutationCount` | `RowsAffected` from `numDmlAffectedRows`, or `dbimp.ErrNotSupported` when the answer has none. `LastInsertId` always gives `dbimp.ErrNotSupported` (D178 item 14) |
+| Transactions | `BeginTx` sends `BEGIN WORK`. `ReadOnly` sends `readonly` | `BeginTx` returns `dbimp.ErrNotSupported` (D189 item 3) |
+| Reset of a session | `ResetSession`, which it keeps as a guard (D41 and D102), and `IsValid` | None. A connection holds nothing on the server |
+| Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | When the context ends while the job runs, the driver sends `jobs.cancel` with the location of the job and a limit of 5 seconds. A result that the service finished needs no cancel (D189 item 8) |
+| Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, Reason, Status, Message, Location, JobID}`, which unwraps to `*dbimp.StatusError`, and the sentinels `ErrCut`, `ErrCanceled` and `ErrNoCredential` |
+| Authentication | Basic | A JWT of the service account, signed in the package with RS256, exchanged for an access token that the driver keeps and renews five minutes before its end. The driver follows no redirect, so the token goes to the host of the endpoint only (D189 items 2 and 8) |
+| Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, the three sentinels, `Config`, `ParseDSN` and `NewConnector` |
+
+The differences that a caller sees:
+
+- A value keeps its type, a date, a time, a decimal and an interval too, where
+  Couchbase gives JSON shapes (D135 and D189).
+- A JSON column is the decoded value, and a JSON null and a SQL NULL are both `nil`
+  (D189 item 7, amended by D195 item 1).
+- A STRUCT is a `map[string]any`, and a struct whose members repeat a name or have
+  none fails with an error that names the column (D189 item 7).
+- `RowsAffected` gives an error for DDL and for a `SELECT`, and the count for a
+  statement that changes rows (D178 item 14).
+- The driver sends one request to start a statement, one for each poll, and one for
+  each later page, where Couchbase sends one (D189 item 8).
+- `WithParameter` sets a member of the request and refuses the members that change
+  how the driver binds or reads a value, where it replaces any key of the body in
+  Couchbase (open question 9).
+- A NULL argument is a `STRING`, so a statement casts it, and the driver binds no
+  list and no map (open question 4).
+- The DSN has no password. It names a key file, and the emulator needs `endpoint`
+  and `disable_auth` (D189 item 2 and open question 7).
