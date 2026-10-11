@@ -1,6 +1,6 @@
 # D195. Answers for BigQuery and Spanner after the live run
 
-Status: Decided. Amends D189 and D191.
+Status: Decided. Amends D189 and D191. Amended by D216.
 
 These are answers of Ken after the first live run of the drivers. He decided
 them on 2026-10-11.

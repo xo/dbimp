@@ -7,9 +7,11 @@ import (
 	"database/sql"
 	"encoding/json/v2"
 	"errors"
+	"fmt"
 	"io"
 	"maps"
 	"net/http"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -740,4 +742,32 @@ func raw(t testing.TB, method, path string, body []byte, header http.Header) (in
 		t.Fatalf("reading the answer to %s %s: %v", method, path, err)
 	}
 	return res.StatusCode, out
+}
+
+// TestIntegrationNullArgumentsFitEveryColumn holds D216: a NULL argument of INSERT
+// fits a column of any type. The service has no one parameter type for it, so
+// the driver writes the literal NULL.
+func TestIntegrationNullArgumentsFitEveryColumn(t *testing.T) {
+	db := connect(t)
+	ctx := t.Context()
+	types := []string{"INT64", "FLOAT64", "NUMERIC", "BIGNUMERIC", "BOOL", "STRING", "BYTES", "DATE", "TIME", "DATETIME", "TIMESTAMP"}
+	var cols, marks, nulls []string
+	for i, typ := range types {
+		cols = append(cols, fmt.Sprintf("c%d %s", i, typ))
+		marks = append(marks, "?")
+		nulls = append(nulls, "c"+strconv.Itoa(i)+" IS NULL")
+	}
+	tbl := table(t, "null_args")
+	if _, err := db.ExecContext(ctx, "CREATE TABLE "+tbl+" ("+strings.Join(cols, ", ")+")"); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _, _ = db.ExecContext(context.WithoutCancel(ctx), "DROP TABLE IF EXISTS "+tbl) })
+	args := make([]any, len(types))
+	if _, err := db.ExecContext(ctx, "INSERT INTO "+tbl+" VALUES ("+strings.Join(marks, ", ")+")", args...); err != nil {
+		t.Fatalf("inserting a NULL argument for each of %v: %v", types, err)
+	}
+	var n int64
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM "+tbl+" WHERE "+strings.Join(nulls, " AND ")).Scan(&n); err != nil || n != 1 {
+		t.Errorf("counted %d rows of NULL, want 1: %v", n, err)
+	}
 }

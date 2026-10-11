@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"math"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -53,7 +54,7 @@ type paramType struct {
 }
 
 // paramValue is the member parameterValue of a parameter. The value is text,
-// and a NULL has no value (recorded: bigquery-133).
+// and a NULL has no value (recorded: bigquery-133). The driver sends none (D216).
 type paramValue struct {
 	Value *string `json:"value,omitzero"`
 }
@@ -63,6 +64,68 @@ type queryParam struct {
 	Name  string     `json:"name,omitzero"`
 	Type  paramType  `json:"parameterType"`
 	Value paramValue `json:"parameterValue"`
+}
+
+// sqlSyntax tells the parser for placeholders how GoogleSQL writes literals,
+// quoted names and comments (D34). A triple-quoted string reads as a literal that
+// holds the doubled quote, and that is right unless its text holds a lone quote.
+var sqlSyntax = dbimp.Syntax{
+	Quotes:        "'\"`",
+	Backslash:     true,
+	DashComments:  true,
+	HashComments:  true,
+	BlockComments: true,
+}
+
+// inlineNulls writes each NULL argument as the literal NULL in place of its
+// placeholder, and returns the other arguments. The service has no type for a
+// NULL parameter, and no one type fits every column: a STRING fits a DATE and a
+// TIMESTAMP column but not a NUMERIC one, and an INT64 fits a NUMERIC column but
+// not a TIMESTAMP one (D216, recorded by hand on 2026-10-11). The literal NULL
+// fits every column. A statement with no NULL argument, and one whose
+// placeholders the driver cannot match with its arguments, goes unchanged, and
+// the service answers it.
+func inlineNulls(query string, args []driver.NamedValue) (string, []driver.NamedValue) {
+	if !slices.ContainsFunc(args, func(a driver.NamedValue) bool { return a.Value == nil }) {
+		return query, args
+	}
+	ps, err := sqlSyntax.Placeholders(query)
+	if err != nil {
+		return query, args
+	}
+	named := args[0].Name != ""
+	isNull := func(i int, p dbimp.Placeholder) bool {
+		if !named {
+			return p.Name == "" && args[i].Value == nil
+		}
+		for _, a := range args {
+			if a.Name == p.Name {
+				return a.Value == nil
+			}
+		}
+		return false
+	}
+	if !named && len(ps) != len(args) {
+		return query, args
+	}
+	var b strings.Builder
+	last := 0
+	for i, p := range ps {
+		if !isNull(i, p) {
+			continue
+		}
+		b.WriteString(query[last:p.Offset])
+		b.WriteString("NULL")
+		last = p.Offset + p.Len
+	}
+	b.WriteString(query[last:])
+	kept := make([]driver.NamedValue, 0, len(args))
+	for _, a := range args {
+		if a.Value != nil {
+			kept = append(kept, a)
+		}
+	}
+	return b.String(), kept
 }
 
 // bindArgs returns the parameter mode and the parameters of the arguments, in
@@ -110,9 +173,10 @@ func validParamName(s string) bool {
 	return !strings.ContainsFunc(s, func(r rune) bool { return !isNameRune(r) })
 }
 
-// bind returns v as the type and the text of a parameter. A NULL has no type,
-// so it is a STRING with no value, which only a STRING column or a CAST takes
-// (docs/BIGQUERY.md). A list and a map fail with dbimp.ErrArguments.
+// bind returns v as the type and the text of a parameter. A NULL argument never
+// reaches it from a statement, because inlineNulls writes it as the literal
+// NULL (D216), but a NULL in a value that bind reads is a STRING with no value.
+// A list and a map fail with dbimp.ErrArguments.
 func bind(v any) (string, *string, error) {
 	switch v := v.(type) {
 	case nil:

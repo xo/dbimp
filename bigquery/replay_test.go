@@ -710,8 +710,8 @@ func TestReplayParameters(t *testing.T) {
 		{"positional int64", "SELECT ? AS a", []any{int64(5)}, int64(5)},
 		{"positional float64", "SELECT ? AS a", []any{1.5}, 1.5},
 		{"positional two", "SELECT ? AS a, ? AS b", []any{int64(5), "x"}, int64(5)},
-		{"named null", "SELECT @p AS a", []any{sql.Named("p", nil)}, nil},
-		{"positional null", "SELECT ? AS a", []any{nil}, nil},
+		// A NULL argument is the literal NULL in the text (D216), so it has its own
+		// tests in params_test.go.
 		{"in a where clause", "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml WHERE s = ?", []any{"k"}, anyValue},
 		{"in a limit", "SELECT id FROM `dbimp-project`.dbimp_test.dbimp_it_dml ORDER BY id LIMIT @n", []any{sql.Named("n", int64(1))}, anyValue},
 	} {

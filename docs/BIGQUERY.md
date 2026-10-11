@@ -1766,7 +1766,9 @@ Still open:
    `GEOGRAPHY`, `RANGE` or `BIGNUMERIC` of its own: text goes as a `STRING`, and a
    decimal that does not fit a `NUMERIC` goes as a `BIGNUMERIC`. A caller parses
    JSON text in the statement. A typed NULL and the two structured types can come
-   in a later release.
+   in a later release. D216 amends the first sentence: the driver now writes a NULL
+   as the literal `NULL` in the text of the statement, because no one parameter type
+   fits a column of every type.
 5. Decided, D195 item 4. A type that the driver does not know, and a field with no type, as the emulator
    writes for a `RANGE`, read as the text of the service, with the Go type
    `string`.
@@ -1855,7 +1857,7 @@ The differences that a caller sees:
 | Size, without tests, on 2026-10-10 | About 1300 lines in 8 files | About 2500 lines in 10 files |
 | `Config` | `QueryContext`, `ScanConsistency`, `Timeout`, `Durability`, `TxTimeout` | `Project`, `Dataset`, `Location`, `Endpoint`, `CredentialFile`, `AccessToken`, `DisableAuth`, `Scopes`, `Timeout` and `MaxResults`. The DSN has the keys `credential_file`, `disable_auth`, `endpoint`, `location`, `scopes`, `timeout` and `max_results` (D189) |
 | Options for one statement | Six `With` options for one statement, through `WithOptions` or an argument, and two for `BeginTx`, through `WithOptions` only (D40, D46 and D109). `WithParameter` sets any key of the body | `WithTimeout`, `WithReadonly`, `WithParameter`, `WithDatabase`, `WithLocation` and `WithMaxResults`, through `WithOptions` or an argument (D109). `WithParameter` sets a member of the request and refuses six. `WithReadonly(true)` fails with `dbimp.ErrNotSupported` |
-| Arguments | Sent to the server as `args` and `$name` | Typed parameters, from the Go type of each argument: `INT64`, `FLOAT64`, `NUMERIC`, `BIGNUMERIC`, `BOOL`, `STRING`, `BYTES`, `DATE`, `TIME`, `DATETIME`, `TIMESTAMP` and `INTERVAL`. A NULL is a `STRING` with no value. A list and a map fail with `dbimp.ErrArguments` (`bigquery/params.go`) |
+| Arguments | Sent to the server as `args` and `$name` | Typed parameters, from the Go type of each argument: `INT64`, `FLOAT64`, `NUMERIC`, `BIGNUMERIC`, `BOOL`, `STRING`, `BYTES`, `DATE`, `TIME`, `DATETIME`, `TIMESTAMP` and `INTERVAL`. A NULL is the literal `NULL` in the text (D216). A list and a map fail with `dbimp.ErrArguments` (`bigquery/params.go`) |
 | Rows | `dbimp.ObjectRows` from the root package, after the driver reads the signature | A reader of its own, which reads the members of the answer, one row for each call, then the members after the rows, and then the next page (`bigquery/rows.go`) |
 | Types of the columns | `ColumnTypeDatabaseTypeName` and `ColumnTypeScanType` from the signature, and `ColumnTypeNullable` | `ColumnTypeDatabaseTypeName`, `ColumnTypeScanType` and `ColumnTypeNullable` from the schema. The schema has no length, precision or scale, so the driver has no method for them |
 | Values | `int64`, `float64`, or `*apd.Decimal` for an integer too large for `int64`. Bytes are decoded from base64 (D44) | By the type of the field, as the type table says: `int64`, `float64`, `*apd.Decimal`, `bool`, `string`, `[]byte`, `dbimp.Date`, `dbimp.LocalTime`, `dbimp.LocalDateTime`, `time.Time`, the decoded JSON value, `dbimp.Interval`, `[]any` and `map[string]any` (D135 and D189) |

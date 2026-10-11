@@ -205,3 +205,54 @@ func TestCheckNamedValue(t *testing.T) {
 		}
 	}
 }
+
+// TestInlineNulls holds D216: a NULL argument is the literal NULL in the text of
+// the statement, and the other arguments keep their order.
+func TestInlineNulls(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name  string
+		query string
+		args  []driver.NamedValue
+		want  string
+		kept  int
+	}{
+		{"no null", "INSERT INTO t VALUES (?, ?)", args(int64(1), "x"), "INSERT INTO t VALUES (?, ?)", 2},
+		{"one null", "INSERT INTO t VALUES (?, ?, ?)", args(int64(1), nil, "x"), "INSERT INTO t VALUES (?, NULL, ?)", 2},
+		{"all null", "INSERT INTO t VALUES (?, ?)", args(nil, nil), "INSERT INTO t VALUES (NULL, NULL)", 0},
+		{"skips a literal", "SELECT '?', ?, \"?\", `?`, ? -- ?", args(nil, int64(2)), "SELECT '?', NULL, \"?\", `?`, ? -- ?", 1},
+		{"skips a comment", "SELECT /* ? */ ?", args(nil), "SELECT /* ? */ NULL", 0},
+		{"named", "SELECT @a, @b, @a", args(sql.Named("a", nil), sql.Named("b", int64(1))), "SELECT NULL, @b, NULL", 1},
+		{"too few arguments", "SELECT ?, ?", args(nil), "SELECT ?, ?", 1},
+		{"unterminated literal", "SELECT 'x, ?", args(nil), "SELECT 'x, ?", 1},
+	} {
+		got, kept := inlineNulls(tt.query, tt.args)
+		if got != tt.want || len(kept) != tt.kept {
+			t.Errorf("%s: got %q with %d arguments, want %q with %d", tt.name, got, len(kept), tt.want, tt.kept)
+		}
+	}
+}
+
+// TestNullArgumentIsALiteralInTheRequest holds D216 on the wire: the request has
+// the literal NULL and no parameter for it.
+func TestNullArgumentIsALiteralInTheRequest(t *testing.T) {
+	t.Parallel()
+	db, s := optionDB(t, config())
+	if _, err := db.ExecContext(t.Context(), "INSERT INTO t VALUES (?, ?)", nil, int64(7)); err != nil {
+		t.Fatal(err)
+	}
+	got := s.last(t)
+	if got["query"] != "INSERT INTO t VALUES (NULL, ?)" {
+		t.Errorf("the query is %v", got["query"])
+	}
+	if ps, _ := got["queryParameters"].([]any); len(ps) != 1 || got["parameterMode"] != "POSITIONAL" {
+		t.Errorf("the parameters are %v in the mode %v, want one positional parameter", got["queryParameters"], got["parameterMode"])
+	}
+	if _, err := db.ExecContext(t.Context(), "SELECT ?", nil); err != nil {
+		t.Fatal(err)
+	}
+	got = s.last(t)
+	if _, has := got["queryParameters"]; has || got["parameterMode"] != nil && got["parameterMode"] != "" {
+		t.Errorf("a statement with only NULL arguments sent %v in the mode %v", got["queryParameters"], got["parameterMode"])
+	}
+}

@@ -215,7 +215,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D192](D192-the-athena-driver.md) | The Athena driver | Decided |
 | [D193](D193-the-databricks-driver.md) | The Databricks driver | Decided |
 | [D194](D194-rule-4-names-three-more-drivers.md) | Rule 4 names three more drivers | Decided |
-| [D195](D195-answers-for-bigquery-and-spanner-after-the-live-run.md) | Answers for BigQuery and Spanner after the live run | Decided. Amends D189 and D191 |
+| [D195](D195-answers-for-bigquery-and-spanner-after-the-live-run.md) | Answers for BigQuery and Spanner after the live run | Decided. Amends D189 and D191. Amended by D216 |
 | [D196](D196-the-spanner-driver-reads-the-emulator.md) | The Spanner driver reads the emulator | Decided. Adds to D187, D191 and D195 |
 | [D197](D197-the-error-of-a-driver-matches-errauthentication.md) | The error of a driver matches ErrAuthentication | Decided |
 | [D198](D198-spanner-database-role-and-ddl-batches.md) | Spanner database role and DDL batches | Decided |
@@ -236,3 +236,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D213](D213-the-exasol-driver-has-no-flavors.md) | The Exasol driver has no flavors | Decided |
 | [D214](D214-the-exasol-driver-compresses-by-default.md) | The Exasol driver compresses by default | Decided |
 | [D215](D215-rule-4-names-the-exasol-driver.md) | Rule 4 names the Exasol driver | Accepted |
+| [D216](D216-a-null-argument-is-the-literal-null-in-bigquery.md) | A NULL argument is the literal NULL in BigQuery | Decided. Amends D195 |

@@ -2059,3 +2059,15 @@ the columns.
 Status: the code, the unit tests, the integration test for the emulator and the columns in
 [COSMOS.md](COSMOS.md) are written and staged. Open: run `TestIntegrationCatalog` on the
 hosted account, then release and tell `dbmeta`.
+
+## W46. A NULL argument is the literal NULL in the BigQuery driver
+
+The `usql` session reported on 2026-10-11 that an `INSERT` with a NULL argument fails for a
+`NUMERIC` or a `TIMESTAMP` column, because the driver sent the NULL as a `STRING`. Ken decided
+the same day to fix it (D216). The driver writes a NULL argument as the literal `NULL` in the
+text of the statement, with the parser for placeholders of the root package, and sends no
+parameter for it.
+
+Status: the code, the unit tests, the integration test `TestIntegrationNullArgumentsFitEveryColumn`
+(run on the hosted project, 11 column types) and D216 are written and staged. Open: the tag,
+with the Exasol driver, then tell `usql`.

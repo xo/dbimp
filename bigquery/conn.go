@@ -162,6 +162,7 @@ func (c *conn) query(ctx context.Context, query string, args []driver.NamedValue
 	if err := o.check(); err != nil {
 		return nil, err
 	}
+	query, args = inlineNulls(query, args)
 	mode, params, err := bindArgs(args)
 	if err != nil {
 		return nil, err
