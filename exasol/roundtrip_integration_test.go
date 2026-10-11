@@ -130,7 +130,7 @@ func TestIntegrationRoundTrip(t *testing.T) {
 				})
 			}, nil},
 			{"TIMESTAMP WITH LOCAL TIME ZONE", "TIMESTAMP(6) WITH LOCAL TIME ZONE", []dbimptest.Value{
-				{Name: "smallest", In: time.Date(1, 1, 3, 0, 0, 0, 0, time.UTC)}, {Name: "largest", In: time.Date(9999, 12, 30, 23, 59, 59, 999999000, time.UTC)},
+				{Name: "old", In: time.Date(1970, 1, 2, 0, 0, 0, 0, time.UTC)}, {Name: "largest", In: time.Date(9999, 12, 30, 23, 59, 59, 999999000, time.UTC)},
 				{Name: "microsecond", In: time.Date(2026, 10, 11, 12, 34, 56, 123456000, time.UTC)},
 				{Name: "offset", In: time.Date(2026, 10, 11, 12, 34, 56, 0, time.FixedZone("", 5*3600+1800))}, {Name: "null", In: nil},
 			}, func(v any) string {

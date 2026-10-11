@@ -12,6 +12,7 @@ func NewTestWebSocket(c net.Conn) *WebSocket {
 	var rwc io.ReadWriteCloser = c
 	return &WebSocket{
 		rwc:        rwc,
+		conn:       c,
 		br:         bufio.NewReader(rwc),
 		bw:         bufio.NewWriter(rwc),
 		maxMessage: DefaultMaxMessage,
@@ -20,5 +21,5 @@ func NewTestWebSocket(c net.Conn) *WebSocket {
 
 // SendCloseForTest sends a close frame as Close does, and nothing more.
 func (ws *WebSocket) SendCloseForTest(code CloseCode, reason string) error {
-	return ws.sendClose(code, reason)
+	return ws.sendClose(code, reason, ws.writeUnguarded)
 }

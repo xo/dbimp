@@ -2,7 +2,6 @@ package dbimp
 
 import (
 	"bufio"
-	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/sha1" //nolint:gosec // RFC 6455 makes the accept key with SHA-1.
@@ -14,7 +13,9 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/http/httptrace"
 	"net/url"
+	"os"
 	"slices"
 	"strings"
 	"sync"
@@ -27,7 +28,10 @@ import (
 // such as Exasol (D200). It is a client only, and it offers no extension, so
 // it never compresses a message. The first version reads and writes whole
 // messages, up to a limit. It does not stream a message, so a message that
-// is near the limit is in memory once, in the slice that Read returns.
+// is near the limit is in memory once, in the slice that Read returns. The
+// slice grows as the bytes arrive, one step of at most 1 MiB at a time, so a
+// frame that declares a large length and sends little holds little memory
+// (D217).
 
 // MessageType is the type of a message of a WebSocket.
 type MessageType int
@@ -66,6 +70,15 @@ const (
 	ClosePolicy      CloseCode = 1008
 	CloseTooBig      CloseCode = 1009
 	CloseInternal    CloseCode = 1011
+)
+
+// The limits of the reader. A step is the most that the buffer of a message
+// grows at once, and the frame limit is the most frames that one call to Read
+// reads, control frames included.
+const (
+	growStep         = 1 << 20
+	growMin          = 4 << 10
+	defaultMaxFrames = 1_000_000
 )
 
 // The limits of a close frame, and how long Close waits for the reply.
@@ -129,6 +142,7 @@ const (
 // webSocketConfig holds the options of DialWebSocket.
 type webSocketConfig struct {
 	client       *http.Client
+	proxy        func(*http.Request) (*url.URL, error)
 	tls          *tls.Config
 	header       http.Header
 	origin       string
@@ -142,8 +156,10 @@ type WebSocketOption func(*webSocketConfig)
 // WithWebSocketClient sets the client that sends the request for the upgrade.
 // Its transport must speak HTTP/1.1 to the server, because a WebSocket cannot
 // start over HTTP/2. By default, DialWebSocket makes a client from
-// NewTransport, with HTTP/2 turned off, and it follows no redirect. The
-// WithWebSocketTLS option is not used with a client of the caller.
+// NewTransport, with HTTP/2 turned off and with no proxy, and it follows no
+// redirect. The WithWebSocketTLS and WithWebSocketProxy options are not used
+// with a client of the caller. A caller that needs a proxy sets the Proxy
+// field of the transport of its own client.
 func WithWebSocketClient(c *http.Client) WebSocketOption {
 	return func(cfg *webSocketConfig) {
 		cfg.client = c
@@ -159,11 +175,22 @@ func WithWebSocketTLS(tc *tls.Config) WebSocketOption {
 	}
 }
 
+// WithWebSocketProxy sets the proxy function for the default client, as the
+// Proxy field of http.Transport takes it. By default the default client uses
+// no proxy, and it does not read the environment, because a plain HTTP proxy
+// cannot carry the upgrade of a ws URL. Pass http.ProxyFromEnvironment to take
+// the proxy from the environment.
+func WithWebSocketProxy(proxy func(*http.Request) (*url.URL, error)) WebSocketOption {
+	return func(cfg *webSocketConfig) {
+		cfg.proxy = proxy
+	}
+}
+
 // WithWebSocketHeader adds header to the request for the upgrade. A header
 // that the protocol needs is ignored, whatever the case of its name: Upgrade,
 // Connection, Sec-WebSocket-Key, Sec-WebSocket-Version, Sec-WebSocket-Extensions
 // and Sec-WebSocket-Protocol. Use WithWebSocketSubprotocols for the last one, and
-// the client offers no extension.
+// the client offers no extension. A Host header sets the host of the request.
 func WithWebSocketHeader(header http.Header) WebSocketOption {
 	return func(cfg *webSocketConfig) {
 		if cfg.header == nil {
@@ -203,11 +230,18 @@ func WithWebSocketMaxMessage(n int64) WebSocketOption {
 // time can call Read, and one at a time can call Write. A call to Read can
 // run with a call to Write, and Close can run at any time.
 //
-// The context of a call bounds that call only. If it ends, the call closes the
-// connection and returns the error of the context, because a call that stops
-// half way leaves the stream of frames in a state that nothing can mend.
+// The context of a call bounds that call only. If the context is done before the
+// call starts, the call returns its error and the connection stays open. If it
+// ends while the call waits for the network, a deadline in the past interrupts
+// the call, and the call closes the connection and returns the error of the
+// context, because a call that stops half way leaves the stream of frames in a
+// state that nothing can mend. If it ends after the call did its work, the
+// call returns its result, and the connection stays open for the next call.
 type WebSocket struct {
 	rwc          io.ReadWriteCloser
+	conn         deadliner
+	maxFrames    int
+	hdr          [8]byte
 	br           *bufio.Reader
 	maxMessage   int64
 	subprotocol  string
@@ -220,6 +254,13 @@ type WebSocket struct {
 	closeSent    bool
 	closeOnce    sync.Once
 	closeRequest bool
+}
+
+// deadliner is the part of a net.Conn that interrupts a call that waits for the
+// network.
+type deadliner interface {
+	SetReadDeadline(t time.Time) error
+	SetWriteDeadline(t time.Time) error
 }
 
 // DialWebSocket opens a WebSocket to rawurl. The scheme is ws or wss, and
@@ -245,6 +286,10 @@ func DialWebSocket(ctx context.Context, rawurl string, opts ...WebSocketOption) 
 	client := cfg.client
 	if client == nil {
 		tr := NewTransport(cfg.tls)
+		// The proxy of the environment cannot carry the upgrade over plain
+		// HTTP, so the default is none.
+		tr.Proxy = cfg.proxy
+		defer tr.CloseIdleConnections()
 		// A nil map and a true ForceAttemptHTTP2 make a TLS server pick h2,
 		// and h2 has no upgrade.
 		tr.ForceAttemptHTTP2 = false
@@ -265,6 +310,14 @@ func DialWebSocket(ctx context.Context, rawurl string, opts ...WebSocketOption) 
 		if reservedWebSocketHeaders[k] {
 			continue
 		}
+		if k == "Host" {
+			// net/http ignores a Host key in the header map, and takes the host
+			// from the request.
+			if len(v) > 0 && v[0] != "" {
+				req.Host = v[0]
+			}
+			continue
+		}
 		req.Header[k] = append(req.Header[k], v...)
 	}
 	if cfg.origin != "" {
@@ -277,6 +330,22 @@ func DialWebSocket(ctx context.Context, rawurl string, opts ...WebSocketOption) 
 	req.Header.Set("Upgrade", "websocket")
 	req.Header.Set("Sec-WebSocket-Version", "13")
 	req.Header.Set("Sec-WebSocket-Key", sentKey)
+	// The connection that carries the upgrade is the one that a deadline
+	// interrupts, because the body of the response has no deadline.
+	var (
+		connMu sync.Mutex
+		conn   deadliner
+	)
+	trace := &httptrace.ClientTrace{
+		GotConn: func(info httptrace.GotConnInfo) {
+			if d, ok := info.Conn.(deadliner); ok {
+				connMu.Lock()
+				conn = d
+				connMu.Unlock()
+			}
+		},
+	}
+	req = req.WithContext(httptrace.WithClientTrace(ctx, trace))
 	res, err := Send(client, req)
 	if err != nil {
 		return nil, fmt.Errorf("dialing the websocket: %w", err)
@@ -295,8 +364,12 @@ func DialWebSocket(ctx context.Context, rawurl string, opts ...WebSocketOption) 
 		res.Body.Close()
 		return nil, fmt.Errorf("dialing the websocket: %w: the client gave no connection", ErrHandshake)
 	}
+	connMu.Lock()
+	d := conn
+	connMu.Unlock()
 	ws := &WebSocket{
 		rwc:        rwc,
+		conn:       d,
 		br:         bufio.NewReader(rwc),
 		bw:         bufio.NewWriter(rwc),
 		maxMessage: cfg.maxMessage,
@@ -343,8 +416,13 @@ func (ws *WebSocket) Subprotocol() string {
 // drops a pong. After the server sent a close frame, it answers the frame and
 // returns a *CloseError, and every later call returns the same error. A
 // message larger than the limit closes the connection with the code 1009 and
-// returns an error that wraps ErrMessageTooBig. A text message that is not UTF-8
-// closes it with the code 1007.
+// returns an error that wraps ErrMessageTooBig, and so does a message of more
+// than one million frames, control frames included. A text message that is not
+// UTF-8 closes it with the code 1007.
+//
+// If the server closes the TCP connection at the start of a frame, without a
+// close frame, Read returns an error that wraps io.EOF, and not a *CloseError.
+// If the connection ends inside a frame, the error wraps io.ErrUnexpectedEOF.
 func (ws *WebSocket) Read(ctx context.Context) (MessageType, []byte, error) {
 	if ws.closing() {
 		return 0, nil, fmt.Errorf("reading a websocket message: %w", ErrWebSocketClosed)
@@ -354,43 +432,42 @@ func (ws *WebSocket) Read(ctx context.Context) (MessageType, []byte, error) {
 	if err := ws.failure(); err != nil {
 		return 0, nil, err
 	}
-	g := ws.watch(ctx)
-	mt, msg, err := ws.readMessage()
-	g.stop()
+	if err := ctx.Err(); err != nil {
+		return 0, nil, fmt.Errorf("reading a websocket message: %w", err)
+	}
+	g := ws.watch(ctx, ws.setReadDeadline)
+	mt, msg, err := ws.readMessage(ctx)
+	g.stop(err)
 	if err != nil {
 		return 0, nil, ws.fail(ctx, "reading a websocket message", err)
 	}
 	return mt, msg, nil
 }
 
-// closeGuard closes the connection when the context of a call ends, unless the
-// call has already returned. The call stops the guard under the same lock that
-// the guard takes before it closes, so a context that ends after the call
-// returned never closes the connection.
-type closeGuard struct {
+// guard interrupts the call of one direction when its context ends. It sets a
+// deadline in the past, and the caller removes the deadline when the call
+// returned a result, so a context that ends after the work was done never
+// breaks the next call. A connection without deadlines is closed instead.
+type guard struct {
 	mu    sync.Mutex
 	done  bool
 	fired bool
 	stp   func() bool
-	dl    interface{ SetWriteDeadline(t time.Time) error }
+	set   func(time.Time) bool
 }
 
-// clearDeadline removes the deadline that the end of the context set, after a
-// write that succeeded.
-func (g *closeGuard) clearDeadline() {
-	g.mu.Lock()
-	defer g.mu.Unlock()
-	if g.fired {
-		_ = g.dl.SetWriteDeadline(time.Time{})
-	}
-}
-
-// stop ends the guard. The connection stays open if the context ends after it.
-func (g *closeGuard) stop() {
+// stop ends the guard. After it, the context can no longer interrupt anything.
+// If the guard set the deadline and the call returned no error, the call did its
+// work, so stop removes the deadline.
+func (g *guard) stop(err error) {
 	g.mu.Lock()
 	g.done = true
+	fired := g.fired
 	g.mu.Unlock()
 	g.stp()
+	if fired && err == nil {
+		g.set(time.Time{})
+	}
 }
 
 // parseClose reads the payload of a close frame. If the payload is not valid,
@@ -405,7 +482,7 @@ func parseClose(p []byte) (*CloseError, CloseCode) {
 		return nil, CloseProtocolError
 	}
 	code := CloseCode(binary.BigEndian.Uint16(p))
-	if code < 1000 || code >= closeStatusLimit || code == 1004 || code == 1005 || code == 1006 || (code > 1013 && code < 3000) {
+	if code < 1000 || code >= closeStatusLimit || code == 1004 || code == 1005 || code == 1006 || (code > 1014 && code < 3000) {
 		return nil, CloseProtocolError
 	}
 	if !utf8.Valid(p[2:]) {
@@ -415,7 +492,8 @@ func parseClose(p []byte) (*CloseError, CloseCode) {
 }
 
 // Write sends one data message in one frame. Control frames that Read sends
-// can run between two calls, but never inside one.
+// can run between two calls, but never inside one. A context that ends after
+// the frame went out does not fail the call.
 func (ws *WebSocket) Write(ctx context.Context, mt MessageType, data []byte) error {
 	if mt != MessageText && mt != MessageBinary {
 		return fmt.Errorf("writing a websocket message: %w: type %v", ErrInvalidValue, mt)
@@ -423,16 +501,14 @@ func (ws *WebSocket) Write(ctx context.Context, mt MessageType, data []byte) err
 	if err := ws.failure(); err != nil {
 		return err
 	}
-	g := ws.watchWrite(ctx)
+	if err := ctx.Err(); err != nil {
+		return fmt.Errorf("writing a websocket message: %w", err)
+	}
 	op := byte(opText)
 	if mt == MessageBinary {
 		op = opBinary
 	}
-	err := ws.writeFrame(op, data)
-	g.stop()
-	if err == nil {
-		g.clearDeadline()
-	}
+	err := ws.writeFrame(ctx, op, data)
 	if errors.Is(err, ErrWebSocketClosed) {
 		// Close is under way, and it ends the connection itself, so a refused
 		// write must not cut its handshake short.
@@ -444,11 +520,30 @@ func (ws *WebSocket) Write(ctx context.Context, mt MessageType, data []byte) err
 	return nil
 }
 
+// validCloseCode reports whether a close frame can carry code. RFC 6455
+// section 7.4.2 reserves 1004, 1005, 1006 and 1015, and the codes from 1016 to
+// 2999 and from 5000 are not for an endpoint to send.
+func validCloseCode(code CloseCode) bool {
+	switch {
+	case code >= 1000 && code <= 1003, code >= 1007 && code <= 1014:
+		return true
+	}
+	return code >= 3000 && code < closeStatusLimit
+}
+
 // Close sends a close frame with code and reason, waits at most five seconds
 // for the close frame of the server, and closes the connection. The reason
 // can be at most 123 bytes. It is safe to call Close more than once and from
 // another goroutine.
+//
+// The code CloseNoStatus sends a close frame with no code and no reason. A code
+// that RFC 6455 does not let an endpoint send, such as 1006 or 1015, or a code
+// outside 1000 to 1014 and 3000 to 4999, is an error that wraps ErrInvalidValue.
+// Close then sends nothing and leaves the connection open.
 func (ws *WebSocket) Close(code CloseCode, reason string) error {
+	if code != CloseNoStatus && !validCloseCode(code) {
+		return fmt.Errorf("closing the websocket: %w: close code %d", ErrInvalidValue, code)
+	}
 	var err error
 	ws.closeOnce.Do(func() {
 		ws.stateMu.Lock()
@@ -462,7 +557,7 @@ func (ws *WebSocket) Close(code CloseCode, reason string) error {
 		// an error, has nothing to send and nothing to wait for.
 		var sendErr error
 		if !ended {
-			sendErr = ws.sendClose(code, reason)
+			sendErr = ws.sendClose(code, reason, ws.writeUnguarded)
 			if sendErr == nil {
 				ws.drain()
 			}
@@ -484,40 +579,6 @@ func (ws *WebSocket) Close(code CloseCode, reason string) error {
 	return err
 }
 
-// watch returns a guard for the call that uses ctx.
-func (ws *WebSocket) watch(ctx context.Context) *closeGuard {
-	g := &closeGuard{}
-	g.stp = context.AfterFunc(ctx, func() {
-		g.mu.Lock()
-		defer g.mu.Unlock()
-		if !g.done {
-			_ = ws.rwc.Close()
-		}
-	})
-	return g
-}
-
-// watchWrite returns a guard for a write that uses ctx. When the connection
-// has write deadlines, the end of ctx only sets a deadline in the past, and the
-// caller clears it once the frame is fully written. So a context that ends just
-// after the frame went out does not close a connection that works.
-func (ws *WebSocket) watchWrite(ctx context.Context) *closeGuard {
-	dl, ok := ws.rwc.(interface{ SetWriteDeadline(t time.Time) error })
-	if !ok {
-		return ws.watch(ctx)
-	}
-	g := &closeGuard{dl: dl}
-	g.stp = context.AfterFunc(ctx, func() {
-		g.mu.Lock()
-		defer g.mu.Unlock()
-		if !g.done {
-			g.fired = true
-			_ = dl.SetWriteDeadline(time.Unix(1, 0))
-		}
-	})
-	return g
-}
-
 // cutReason cuts reason to the limit of a close frame, at the start of a
 // character, because the reason must be UTF-8 (RFC 6455 section 5.5.1).
 func cutReason(reason string) string {
@@ -529,6 +590,42 @@ func cutReason(reason string) string {
 		n--
 	}
 	return reason[:n]
+}
+
+// setReadDeadline sets the read deadline of the connection, and it reports
+// false if the connection has none.
+func (ws *WebSocket) setReadDeadline(t time.Time) bool {
+	if ws.conn == nil {
+		return false
+	}
+	return ws.conn.SetReadDeadline(t) == nil
+}
+
+// setWriteDeadline sets the write deadline of the connection, and it reports
+// false if the connection has none.
+func (ws *WebSocket) setWriteDeadline(t time.Time) bool {
+	if ws.conn == nil {
+		return false
+	}
+	return ws.conn.SetWriteDeadline(t) == nil
+}
+
+// watch returns the guard of a call that uses ctx. The function set sets a
+// deadline, and it reports false if there is none to set.
+func (ws *WebSocket) watch(ctx context.Context, set func(time.Time) bool) *guard {
+	g := &guard{set: set}
+	g.stp = context.AfterFunc(ctx, func() {
+		g.mu.Lock()
+		defer g.mu.Unlock()
+		if g.done {
+			return
+		}
+		g.fired = true
+		if !g.set(time.Unix(1, 0)) {
+			_ = ws.rwc.Close()
+		}
+	})
+	return g
 }
 
 // checkHandshake checks the headers of the response of the server.
@@ -558,66 +655,74 @@ func (ws *WebSocket) checkHandshake(h http.Header, sentKey string, offered []str
 	return nil
 }
 
-// readMessage reads frames until it has one whole data message.
-func (ws *WebSocket) readMessage() (MessageType, []byte, error) {
+// readMessage reads frames until it has one whole data message. The message
+// grows in one buffer, and each fragment goes into the end of it.
+func (ws *WebSocket) readMessage(ctx context.Context) (MessageType, []byte, error) {
 	var (
 		mt      MessageType
 		msg     []byte
 		started bool
+		ctrl    [125]byte
 	)
-	for {
-		f, err := readFrame(ws.br, ws.maxMessage-int64(len(msg)))
-		if err != nil {
-			var code CloseCode
-			switch {
-			case errors.Is(err, ErrMessageTooBig):
-				code = CloseTooBig
-			case errors.Is(err, ErrWebSocketProtocol):
-				code = CloseProtocolError
-			}
-			if code != 0 {
-				ws.abort(code)
-			}
-			return 0, nil, err
+	maxFrames := ws.maxFrames
+	if maxFrames <= 0 {
+		maxFrames = defaultMaxFrames
+	}
+	for frames := 1; ; frames++ {
+		if frames > maxFrames {
+			ws.abort(ctx, CloseTooBig)
+			return 0, nil, fmt.Errorf("%w: more than %d frames in one message", ErrMessageTooBig, maxFrames)
 		}
-		switch f.opcode {
-		case opPing:
-			// A close that this side started already sent its close frame, and no
-			// frame follows it, so the pong is dropped.
-			if err := ws.writeFrame(opPong, f.payload); err != nil && !errors.Is(err, ErrWebSocketClosed) {
+		h, err := readHeader(ws.br, &ws.hdr, ws.maxMessage-int64(len(msg)))
+		if err != nil {
+			return 0, nil, ws.readFault(ctx, err)
+		}
+		switch h.opcode {
+		case opPing, opPong, opClose:
+			p, err := readPayload(ws.br, ctrl[:0], h.length)
+			if err != nil {
 				return 0, nil, err
 			}
-		case opPong:
-		case opClose:
-			ce, bad := parseClose(f.payload)
-			if ce == nil {
-				ws.abort(bad)
-				return 0, nil, fmt.Errorf("%w: bad close frame", ErrWebSocketProtocol)
+			switch h.opcode {
+			case opPing:
+				// A close that this side started already sent its close frame, and no
+				// frame follows it, so the pong is dropped.
+				if err := ws.writeFrame(ctx, opPong, p); err != nil && !errors.Is(err, ErrWebSocketClosed) {
+					return 0, nil, err
+				}
+			case opClose:
+				ce, bad := parseClose(p)
+				if ce == nil {
+					ws.abort(ctx, bad)
+					return 0, nil, fmt.Errorf("%w: bad close frame", ErrWebSocketProtocol)
+				}
+				if ce.Code != CloseNoStatus {
+					ws.abort(ctx, ce.Code)
+				} else {
+					ws.abort(ctx, CloseNormal)
+				}
+				return 0, nil, ce
 			}
-			if ce.Code != CloseNoStatus {
-				ws.abort(ce.Code)
-			} else {
-				ws.abort(CloseNormal)
-			}
-			return 0, nil, ce
+			continue
 		case opText, opBinary:
 			if started {
-				ws.abort(CloseProtocolError)
+				ws.abort(ctx, CloseProtocolError)
 				return 0, nil, fmt.Errorf("%w: a data frame inside a fragmented message", ErrWebSocketProtocol)
 			}
 			started = true
-			mt = MessageType(f.opcode)
-			msg = f.payload
+			mt = MessageType(h.opcode)
 		case opContinuation:
 			if !started {
-				ws.abort(CloseProtocolError)
+				ws.abort(ctx, CloseProtocolError)
 				return 0, nil, fmt.Errorf("%w: a continuation with no message", ErrWebSocketProtocol)
 			}
-			msg = append(msg, f.payload...)
 		}
-		if (f.opcode == opText || f.opcode == opBinary || f.opcode == opContinuation) && f.fin {
+		if msg, err = readPayload(ws.br, msg, h.length); err != nil {
+			return 0, nil, err
+		}
+		if h.fin {
 			if mt == MessageText && !utf8.Valid(msg) {
-				ws.abort(CloseInvalidData)
+				ws.abort(ctx, CloseInvalidData)
 				return 0, nil, fmt.Errorf("%w: a text message that is not UTF-8", ErrWebSocketProtocol)
 			}
 			return mt, msg, nil
@@ -625,14 +730,31 @@ func (ws *WebSocket) readMessage() (MessageType, []byte, error) {
 	}
 }
 
+// readFault sends the close frame for a fault of the header of a frame, and
+// returns the fault.
+func (ws *WebSocket) readFault(ctx context.Context, err error) error {
+	switch {
+	case errors.Is(err, ErrMessageTooBig):
+		ws.abort(ctx, CloseTooBig)
+	case errors.Is(err, ErrWebSocketProtocol):
+		ws.abort(ctx, CloseProtocolError)
+	}
+	return err
+}
+
 // drain reads and drops frames until the close frame of the server, or until
-// the stream breaks. It waits for a call to Read that is already running.
+// the stream breaks. It waits for a call to Read that is already running. It
+// holds no payload in memory.
 func (ws *WebSocket) drain() {
 	ws.readMu.Lock()
 	defer ws.readMu.Unlock()
 	for {
-		f, err := readFrame(ws.br, ws.maxMessage)
-		if err != nil || f.opcode == opClose {
+		h, err := readHeader(ws.br, &ws.hdr, ws.maxMessage)
+		if err != nil || h.opcode == opClose {
+			return
+		}
+		skip := int64(h.length) //nolint:gosec // readHeader bounded the length of a data frame by the limit, and a control frame has at most 125 bytes.
+		if _, err := io.CopyN(io.Discard, ws.br, skip); err != nil {
 			return
 		}
 	}
@@ -654,15 +776,16 @@ func (ws *WebSocket) failure() error {
 }
 
 // fail records err as the end of the connection, closes it, and returns the
-// error for the caller. If the context ended, it returns the error of the
-// context.
+// error for the caller. If the context ended and a deadline of the guard
+// interrupted the call, it returns the error of the context. An error of
+// another kind stays as it is, even when the context ended too.
 func (ws *WebSocket) fail(ctx context.Context, what string, err error) error {
 	ws.rwc.Close()
 	ws.stateMu.Lock()
 	defer ws.stateMu.Unlock()
 	if ws.closeRequest {
 		err = ErrWebSocketClosed
-	} else if cerr := ctx.Err(); cerr != nil {
+	} else if cerr := ctx.Err(); cerr != nil && (errors.Is(err, os.ErrDeadlineExceeded) || ws.conn == nil) {
 		err = cerr
 	}
 	if ws.err == nil {
@@ -671,8 +794,9 @@ func (ws *WebSocket) fail(ctx context.Context, what string, err error) error {
 	return fmt.Errorf("%s: %w", what, err)
 }
 
-// sendClose writes a close frame once. It ignores a second request.
-func (ws *WebSocket) sendClose(code CloseCode, reason string) error {
+// sendClose writes a close frame once with send. It ignores a second request.
+// The code CloseNoStatus makes a close frame with no payload.
+func (ws *WebSocket) sendClose(code CloseCode, reason string, send func(byte, []byte) error) error {
 	ws.stateMu.Lock()
 	sent := ws.closeSent
 	ws.closeSent = true
@@ -680,23 +804,44 @@ func (ws *WebSocket) sendClose(code CloseCode, reason string) error {
 	if sent {
 		return nil
 	}
+	if code == CloseNoStatus {
+		return send(opClose, nil)
+	}
 	p := make([]byte, 2, 2+len(reason))
 	binary.BigEndian.PutUint16(p, uint16(code))
 	p = append(p, reason...)
-	return ws.writeFrame(opClose, p)
+	return send(opClose, p)
 }
 
 // abort sends a close frame for an error that this side found. It is a best
 // effort: the caller already holds the error that explains the close, and a
 // failed write adds nothing to it.
-func (ws *WebSocket) abort(code CloseCode) {
-	_ = ws.sendClose(code, "")
+func (ws *WebSocket) abort(ctx context.Context, code CloseCode) {
+	_ = ws.sendClose(code, "", func(op byte, p []byte) error { return ws.writeFrame(ctx, op, p) })
 }
 
-// writeFrame writes one masked frame with the final bit set.
-func (ws *WebSocket) writeFrame(opcode byte, payload []byte) error {
+// writeFrame writes one masked frame with the final bit set. A context that
+// ends while it waits for the network sets a write deadline in the past, and the
+// frame that went out whole keeps the connection.
+func (ws *WebSocket) writeFrame(ctx context.Context, opcode byte, payload []byte) error {
 	ws.writeMu.Lock()
 	defer ws.writeMu.Unlock()
+	g := ws.watch(ctx, ws.setWriteDeadline)
+	err := ws.writeLocked(opcode, payload)
+	g.stop(err)
+	return err
+}
+
+// writeUnguarded writes a frame with no context. Close uses it, and a timer ends
+// a write that does not finish.
+func (ws *WebSocket) writeUnguarded(opcode byte, payload []byte) error {
+	ws.writeMu.Lock()
+	defer ws.writeMu.Unlock()
+	return ws.writeLocked(opcode, payload)
+}
+
+// writeLocked writes one masked frame. The caller holds writeMu.
+func (ws *WebSocket) writeLocked(opcode byte, payload []byte) error {
 	// No frame follows the close frame (RFC 6455 section 5.5.1). The flag is set
 	// before the close frame is written, and a frame that holds the lock first
 	// goes out before it.
@@ -758,66 +903,85 @@ func midFrame(err error) error {
 	return err
 }
 
-// frame is one frame that a server sent.
-type frame struct {
-	fin     bool
-	opcode  byte
-	payload []byte
+// frameHeader is the header of one frame that a server sent.
+type frameHeader struct {
+	fin    bool
+	opcode byte
+	length uint64
 }
 
-// readFrame reads one frame from r. It refuses a frame whose payload is
-// longer than limit, before it reads the payload, and it never allocates
-// more than the bytes that arrive. A server frame must not be masked, and the
-// client offers no extension, so no reserved bit can be set.
-func readFrame(r io.Reader, limit int64) (frame, error) {
-	var hdr [8]byte
+// readHeader reads the header of one frame from r, with hdr as its scratch space,
+// so that it allocates nothing. It refuses a data frame
+// whose payload is longer than limit, before it reads the payload. A server
+// frame must not be masked, and the client offers no extension, so no reserved
+// bit can be set.
+func readHeader(r io.Reader, hdr *[8]byte, limit int64) (frameHeader, error) {
 	if _, err := io.ReadFull(r, hdr[:2]); err != nil {
-		return frame{}, fmt.Errorf("reading a frame header: %w", err)
+		return frameHeader{}, fmt.Errorf("reading a frame header: %w", err)
 	}
-	f := frame{fin: hdr[0]&0x80 != 0, opcode: hdr[0] & 0x0f}
+	h := frameHeader{fin: hdr[0]&0x80 != 0, opcode: hdr[0] & 0x0f}
 	if hdr[0]&0x70 != 0 {
-		return frame{}, fmt.Errorf("%w: a reserved bit is set", ErrWebSocketProtocol)
+		return frameHeader{}, fmt.Errorf("%w: a reserved bit is set", ErrWebSocketProtocol)
 	}
 	if hdr[1]&0x80 != 0 {
-		return frame{}, fmt.Errorf("%w: the server masked a frame", ErrWebSocketProtocol)
+		return frameHeader{}, fmt.Errorf("%w: the server masked a frame", ErrWebSocketProtocol)
 	}
-	var length uint64
 	switch l := hdr[1] & 0x7f; l {
 	case 126:
 		if _, err := io.ReadFull(r, hdr[:2]); err != nil {
-			return frame{}, fmt.Errorf("reading a frame length: %w", midFrame(err))
+			return frameHeader{}, fmt.Errorf("reading a frame length: %w", midFrame(err))
 		}
-		length = uint64(binary.BigEndian.Uint16(hdr[:2]))
+		h.length = uint64(binary.BigEndian.Uint16(hdr[:2]))
 	case 127:
 		if _, err := io.ReadFull(r, hdr[:8]); err != nil {
-			return frame{}, fmt.Errorf("reading a frame length: %w", midFrame(err))
+			return frameHeader{}, fmt.Errorf("reading a frame length: %w", midFrame(err))
 		}
-		length = binary.BigEndian.Uint64(hdr[:8])
-		if length>>63 != 0 {
-			return frame{}, fmt.Errorf("%w: the length has the top bit set", ErrWebSocketProtocol)
+		h.length = binary.BigEndian.Uint64(hdr[:8])
+		if h.length>>63 != 0 {
+			return frameHeader{}, fmt.Errorf("%w: the length has the top bit set", ErrWebSocketProtocol)
 		}
 	default:
-		length = uint64(l)
+		h.length = uint64(l)
 	}
-	switch f.opcode {
+	switch h.opcode {
 	case opContinuation, opText, opBinary:
+		// A control frame has at most 125 bytes and does not belong to a message,
+		// so the limit for a message does not count it.
+		if limit < 0 || h.length > uint64(limit) {
+			return frameHeader{}, ErrMessageTooBig
+		}
 	case opClose, opPing, opPong:
-		if !f.fin || length > 125 {
-			return frame{}, fmt.Errorf("%w: a control frame that is fragmented or longer than 125 bytes", ErrWebSocketProtocol)
+		if !h.fin || h.length > 125 {
+			return frameHeader{}, fmt.Errorf("%w: a control frame that is fragmented or longer than 125 bytes", ErrWebSocketProtocol)
 		}
 	default:
-		return frame{}, fmt.Errorf("%w: unknown opcode %d", ErrWebSocketProtocol, f.opcode)
+		return frameHeader{}, fmt.Errorf("%w: unknown opcode %d", ErrWebSocketProtocol, h.opcode)
 	}
-	// A control frame has at most 125 bytes and does not belong to a message, so
-	// the limit for a message does not count it.
-	if f.opcode <= opBinary && (limit < 0 || length > uint64(limit)) {
-		return frame{}, ErrMessageTooBig
+	return h, nil
+}
+
+// readPayload appends the n bytes of a payload to dst, and it returns the longer
+// slice. The slice grows only as bytes arrive, by at most growStep at a time,
+// so a header that declares a large length and then sends nothing holds at most
+// one step. A step is at least half of the bytes that are held, up to the
+// maximum, so a message of many small fragments costs a linear number of
+// copies, and a large message costs one copy for each step.
+func readPayload(r io.Reader, dst []byte, n uint64) ([]byte, error) {
+	want := int(n) //nolint:gosec // The caller bounded n by the limit of the message, or by 125 for a control frame.
+	start := len(dst)
+	for len(dst)-start < want {
+		if len(dst) == cap(dst) {
+			step := min(growStep, max(want-(len(dst)-start), len(dst)/2, growMin))
+			grown := make([]byte, len(dst), len(dst)+step)
+			copy(grown, dst)
+			dst = grown
+		}
+		room := min(cap(dst)-len(dst), want-(len(dst)-start))
+		m, err := io.ReadFull(r, dst[len(dst):len(dst)+room])
+		dst = dst[:len(dst)+m]
+		if err != nil {
+			return dst, fmt.Errorf("reading a frame payload after %d of %d bytes: %w", len(dst)-start, n, midFrame(err))
+		}
 	}
-	var buf bytes.Buffer
-	n, err := io.CopyN(&buf, r, int64(length))
-	if err != nil {
-		return frame{}, fmt.Errorf("reading a frame payload after %d of %d bytes: %w", n, length, midFrame(err))
-	}
-	f.payload = buf.Bytes()
-	return f, nil
+	return dst, nil
 }

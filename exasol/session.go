@@ -177,17 +177,47 @@ func (s *session) decode(mt dbimp.MessageType, msg []byte) (*envelope, error) {
 			return nil, fmt.Errorf("reading a compressed answer: %w", err)
 		}
 		defer zr.Close()
-		var buf bytes.Buffer
-		n, err := buf.ReadFrom(io.LimitReader(zr, 2*limit+1))
+		out, err := inflate(zr, limit)
 		if err != nil {
 			return nil, fmt.Errorf("reading a compressed answer: %w", err)
 		}
-		if n > 2*limit {
-			return nil, fmt.Errorf("reading a compressed answer: more than %d bytes: %w", 2*limit, dbimp.ErrMessageTooBig)
-		}
-		msg = buf.Bytes()
+		msg = out
 	}
 	return decodeEnvelope(msg)
+}
+
+// The steps of the buffer of inflate: it grows by an eighth of its size, but by
+// at least minInflateStep and at most maxInflateStep bytes.
+const (
+	minInflateStep = 64 << 10
+	maxInflateStep = 4 << 20
+)
+
+// inflate reads r to its end and returns what it read. It fails with an error
+// that wraps dbimp.ErrMessageTooBig if r holds more than limit bytes. The buffer
+// grows only as bytes arrive, so that its peak is the size of the answer and one
+// step, and not up to twice that size, as a doubling buffer would be.
+func inflate(r io.Reader, limit int64) ([]byte, error) {
+	buf := make([]byte, 0, min(limit+1, minInflateStep))
+	for {
+		if len(buf) == cap(buf) {
+			step := min(max(int64(cap(buf))/8, minInflateStep), maxInflateStep)
+			next := make([]byte, len(buf), min(int64(cap(buf))+step, limit+1))
+			copy(next, buf)
+			buf = next
+		}
+		n, err := r.Read(buf[len(buf):cap(buf)])
+		buf = buf[:len(buf)+n]
+		if int64(len(buf)) > limit {
+			return nil, fmt.Errorf("more than %d bytes: %w", limit, dbimp.ErrMessageTooBig)
+		}
+		if errors.Is(err, io.EOF) {
+			return buf, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
 }
 
 // apply takes the attributes of the session that an answer reports.

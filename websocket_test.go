@@ -12,6 +12,8 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -780,5 +782,215 @@ func TestWebSocketContextEndedAfterTheFrameWentOutKeepsTheConnection(t *testing.
 	}
 	if err := ws.Write(t.Context(), dbimp.MessageText, []byte("two")); err != nil {
 		t.Errorf("second Write after the context ended: %v", err)
+	}
+}
+
+// TestWebSocketLateContextEndKeepsTheConnectionOverTCP holds, over a real TLS
+// connection whose body has no deadline, that a call that succeeded is never
+// followed by a failure of the next call with a new context, when the context of
+// the first call ends at the moment of the call (D217). A call that fails
+// because its context ended is allowed, and the test dials again.
+func TestWebSocketLateContextEndKeepsTheConnectionOverTCP(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+		t.Helper()
+		for {
+			f, err := c.tryRead()
+			if err != nil || f.opcode == 8 {
+				return
+			}
+			c.write(true, f.opcode, f.payload)
+		}
+	})
+	ws := dial(t, srv)
+	redials := 0
+	for i := range 1000 {
+		ctx, cancel := context.WithCancel(t.Context())
+		var wg sync.WaitGroup
+		wg.Go(func() {
+			// Spin for 0 to 300 microseconds, which is about the time of one round.
+			for end := time.Now().Add(time.Duration(i%300) * time.Microsecond); time.Now().Before(end); {
+				runtime.Gosched()
+			}
+			cancel()
+		})
+		err := ws.Write(ctx, dbimp.MessageText, []byte("hi"))
+		if err == nil {
+			var msg []byte
+			if _, msg, err = ws.Read(ctx); err == nil && string(msg) != "hi" {
+				t.Fatalf("round %d: Read returned %q", i, msg)
+			}
+		}
+		wg.Wait()
+		cancel()
+		if err != nil {
+			if !errors.Is(err, context.Canceled) {
+				t.Fatalf("round %d: %v", i, err)
+			}
+			// The call that the context interrupted may leave a half frame, and the
+			// connection may be closed, so this round ends with a new connection.
+			_ = ws.Close(dbimp.CloseNormal, "")
+			ws = dial(t, srv)
+			redials++
+			continue
+		}
+		// Every call of this round succeeded, so the next calls must too.
+		if err := ws.Write(t.Context(), dbimp.MessageText, []byte("ok")); err != nil {
+			t.Fatalf("round %d: Write after a successful round: %v", i, err)
+		}
+		if _, msg, err := ws.Read(t.Context()); err != nil || string(msg) != "ok" {
+			t.Fatalf("round %d: Read after a successful round: %q, %v", i, msg, err)
+		}
+	}
+	t.Logf("%d rounds ended with a context error", redials)
+}
+
+// TestWebSocketCloseCodes holds the bytes that Close puts on the wire: no code
+// for CloseNoStatus, and an error, with nothing sent, for a code that an
+// endpoint cannot send.
+func TestWebSocketCloseCodes(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	for _, code := range []dbimp.CloseCode{0, 999, 1004, 1006, 1015, 1016, 2999, 5000, 65535} {
+		first := make(chan wsFrame, 1)
+		srv := newWSServer(t, serverOptions{}, func(_ *testing.T, c *wsConn, _ *http.Request) {
+			f, _ := c.tryRead()
+			first <- f
+			_, _ = c.tryRead()
+		})
+		ws := dial(t, srv)
+		if err := ws.Close(code, "x"); !errors.Is(err, dbimp.ErrInvalidValue) {
+			t.Errorf("Close(%d): got %v, want ErrInvalidValue", code, err)
+		}
+		if err := ws.Write(t.Context(), dbimp.MessageText, []byte("still open")); err != nil {
+			t.Errorf("Write after Close(%d) was refused: %v", code, err)
+		}
+		if f := <-first; f.opcode != 1 || string(f.payload) != "still open" {
+			t.Errorf("Close(%d): the first frame of the server was %+v", code, f)
+		}
+	}
+	for code, want := range map[dbimp.CloseCode][]byte{
+		dbimp.CloseNoStatus: {},
+		1000:                {0x03, 0xe8, 'r'},
+		1012:                {0x03, 0xf4, 'r'},
+		1014:                {0x03, 0xf6, 'r'},
+		3000:                {0x0b, 0xb8, 'r'},
+		4999:                {0x13, 0x87, 'r'},
+	} {
+		got := make(chan wsFrame, 1)
+		srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+			t.Helper()
+			f := c.read(t)
+			got <- f
+			c.write(true, 8, f.payload)
+		})
+		ws := dial(t, srv)
+		if err := ws.Close(code, "r"); err != nil {
+			t.Errorf("Close(%d): %v", code, err)
+		}
+		f := <-got
+		if f.opcode != 8 || !f.masked || string(f.payload) != string(want) {
+			t.Errorf("Close(%d): frame %+v, want a masked close frame with payload % x", code, f, want)
+		}
+	}
+}
+
+// TestWebSocketServerCloseWithRegisteredCodes holds that a close frame with a
+// code that IANA registered, 1012 to 1014, is a close of the server and not a
+// protocol error, and that a reserved code still is one.
+func TestWebSocketServerCloseWithRegisteredCodes(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	for code, ok := range map[uint16]bool{
+		1000: true, 1011: true, 1012: true, 1013: true, 1014: true, 3000: true, 4999: true,
+		1004: false, 1005: false, 1006: false, 1015: false, 1016: false, 2999: false, 5000: false,
+	} {
+		srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+			t.Helper()
+			c.write(true, 8, closePayload(code, "r"))
+			_, _ = c.tryRead()
+		})
+		ws := dial(t, srv)
+		_, _, err := ws.Read(t.Context())
+		var ce *dbimp.CloseError
+		switch {
+		case ok && (!errors.As(err, &ce) || ce.Code != dbimp.CloseCode(code)):
+			t.Errorf("code %d: got %v, want a close of the server", code, err)
+		case !ok && !errors.Is(err, dbimp.ErrWebSocketProtocol):
+			t.Errorf("code %d: got %v, want a protocol error", code, err)
+		}
+	}
+}
+
+// TestWebSocketTCPEndIsEOFAndNotACloseError pins the error of a server that
+// closes the TCP connection at a frame boundary without a close frame: it wraps
+// io.EOF, it is not a *CloseError, and every later call returns the same error.
+func TestWebSocketTCPEndIsEOFAndNotACloseError(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	srv := newWSServer(t, serverOptions{}, func(*testing.T, *wsConn, *http.Request) {})
+	ws := dial(t, srv)
+	for range 2 {
+		_, _, err := ws.Read(t.Context())
+		var ce *dbimp.CloseError
+		if !errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) || errors.As(err, &ce) {
+			t.Fatalf("got %v, want an error that wraps io.EOF and no CloseError", err)
+		}
+	}
+}
+
+// TestWebSocketHostHeaderSetsTheHost holds that a Host header of the caller
+// sets the host of the request, and that the request does not carry it twice.
+func TestWebSocketHostHeaderSetsTheHost(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	type seen struct {
+		host  string
+		hosts []string
+	}
+	got := make(chan seen, 1)
+	srv := newWSServer(t, serverOptions{}, func(_ *testing.T, c *wsConn, r *http.Request) {
+		got <- seen{host: r.Host, hosts: r.Header.Values("Host")}
+		_, _ = c.tryRead()
+	})
+	dial(t, srv, dbimp.WithWebSocketHeader(http.Header{"host": {"db.example.com"}}))
+	if s := <-got; s.host != "db.example.com" || len(s.hosts) != 0 {
+		t.Errorf("host %q, Host headers %q, want db.example.com and none", s.host, s.hosts)
+	}
+}
+
+// TestWebSocketProxyOption holds that the default client uses no proxy until
+// WithWebSocketProxy sets one. The proxy function sees the request of the dial.
+func TestWebSocketProxyOption(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	srv := newWSServer(t, serverOptions{}, func(_ *testing.T, c *wsConn, _ *http.Request) {
+		_, _ = c.tryRead()
+	})
+	var calls int
+	dial(t, srv, dbimp.WithWebSocketProxy(func(r *http.Request) (*url.URL, error) {
+		calls++
+		if r.URL.Scheme != "https" {
+			t.Errorf("proxy function got the scheme %q", r.URL.Scheme)
+		}
+		return nil, nil //nolint:nilnil // No proxy for this request.
+	}))
+	if calls != 1 {
+		t.Errorf("the proxy function ran %d times, want 1", calls)
+	}
+}
+
+// TestWebSocketFailedDialLeavesNoIdleConnection holds that a dial that fails
+// after the server answered closes the idle connection of its own transport.
+// The server stays up, so only the client can end the goroutines of the
+// connection.
+func TestWebSocketFailedDialLeavesNoIdleConnection(t *testing.T) { //nolint:paralleltest // The test counts the goroutines of the process.
+	srv := newWSServer(t, serverOptions{status: http.StatusForbidden}, func(*testing.T, *wsConn, *http.Request) {})
+	before := runtime.NumGoroutine()
+	for range 10 {
+		if _, err := dbimp.DialWebSocket(t.Context(), wsURL(srv), insecure); !errors.Is(err, dbimp.ErrHandshake) {
+			t.Fatalf("got %v", err)
+		}
+	}
+	for deadline := time.Now().Add(5 * time.Second); runtime.NumGoroutine() > before+2; {
+		if time.Now().After(deadline) {
+			t.Fatalf("%d goroutines after ten failed dials, %d before", runtime.NumGoroutine(), before)
+		}
+		time.Sleep(10 * time.Millisecond)
 	}
 }

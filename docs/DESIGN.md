@@ -237,20 +237,40 @@ name. A missing argument and an argument left over are both
 
 `DialWebSocket(ctx, url, opts...)` opens a WebSocket (RFC 6455) for a database whose
 server takes its requests as messages, such as Exasol (D200). It sends the
-request for the upgrade with `Send`, so the proxy, the TLS configuration and
+request for the upgrade with `Send`, so the TLS configuration and
 `driver.ErrBadConn` for a failed dial work as they do for HTTP. The default client turns
-HTTP/2 off, because a WebSocket cannot start over HTTP/2. The context bounds the
-dial, and the connection outlives it.
+HTTP/2 off, because a WebSocket cannot start over HTTP/2. It also uses no proxy and does
+not read the proxy of the environment, because a plain HTTP proxy cannot carry the upgrade
+of a `ws` URL. `WithWebSocketProxy` sets a proxy function, and a caller that passes its own
+client with `WithWebSocketClient` sets the field of its transport (D217). A `Host` header
+of the caller sets the host of the request. The context bounds the dial, and the connection
+outlives it. A dial with the default client closes the idle connections of its own
+transport on every exit.
 
 `Read(ctx)` returns one whole message, text or binary, and `Write(ctx, type, data)`
 sends one. `Read` joins fragments, answers a ping with a pong, and drops a pong.
 After the server sent a close frame, `Read` answers it and returns a `*CloseError`
-that holds the code and the reason. A message over the limit, 64 MiB by default
-(`WithWebSocketMaxMessage`), closes the connection with the code 1009. The
-client masks each frame that it sends. If the context of a call ends, the call
-closes the connection and returns the error of the context, because the
-stream of frames cannot continue after a call that stopped half way. `Close`
-sends a close frame and waits at most five seconds for the reply.
+that holds the code and the reason. A server that ends the TCP connection at the start of a
+frame, with no close frame, gives an error that wraps `io.EOF`, and an end inside a frame
+gives `io.ErrUnexpectedEOF`. A message over the limit, 64 MiB by default
+(`WithWebSocketMaxMessage`), closes the connection with the code 1009, and so does a message
+of more than one million frames. The buffer of a message grows only as bytes arrive, by at
+most 1 MiB for each step, so a frame that declares a large length and sends little holds
+little memory. The client masks each frame that it sends.
+
+The context of a call works like this (D217). If it is done before the call starts, the call
+returns its error and the connection stays open. If it ends while the call waits for the
+network, the call sets a deadline in the past on the TCP connection that carries the upgrade,
+which the dial records with the `GotConn` hook of `httptrace`. The call then closes the
+connection and returns the error of the context, because the stream of frames cannot continue
+after a call that stopped half way. The body of the response of `net/http` has no deadline, so
+the client never relies on it. If the context ends after the call did its work, the call
+returns its result, and the client removes the deadline, so the next call with a new context
+works. The client never closes the connection for a call that returned. `Close` sends a close
+frame and waits at most five seconds for the reply. `Close(CloseNoStatus, "")` sends a close
+frame with no code, and `Close` refuses a code that RFC 6455 does not let an endpoint send
+(1004, 1006, 1015, 1016 to 2999 and from 5000) with an error that wraps `ErrInvalidValue`, and
+it sends nothing.
 
 The client does not do these things:
 
@@ -262,7 +282,9 @@ The client does not do these things:
 - It sends no ping by itself, and it does not reconnect.
 
 The tests run a server that the test file writes with `net/http` and a hijack.
-`FuzzWebSocketFrame` holds the reader of frames.
+The tests of the contexts also run over a real TCP connection whose body has no deadline,
+because `net.Pipe` has a deadline and hides the fault of D217. `FuzzWebSocketFrame` holds the
+reader of frames.
 
 ## The package dbimptest
 

@@ -507,12 +507,14 @@ Ken decided each one in D206: a value of `INTERVAL YEAR TO MONTH` that overflows
   the next frames got `Received packet type not expected while command execution.` with `42X99`. The driver sends
   `abortQuery` as a binary frame of zlib data when compression is on, and the abort then worked (measured with the driver
   on 2026-10-11, not recorded). The recordings of the abort are of a session with compression off.
-- A context that ends in the instant after the driver wrote a frame closes the connection. The guard of `Write` in the root
-  client closes the socket when the context ends before its call returns, even when the frame is whole on the wire, so
-  the driver then loses the session and returns the error of the context. A unit test that cancelled the context when the
-  scripted server read the request met this in about one run of five under heavy load (measured on 2026-10-11), and the
-  scripted server now waits 50 milliseconds before it tells the test. A caller meets it only if its context ends in
-  that instant, and `database/sql` then opens another connection.
+- A context that ends in the instant after the driver wrote a frame used to close the connection. The guard of `Write` in
+  the root client closed the socket when the context ended before its call returned, even when the frame was whole on the
+  wire, and the same held for `Read`. The driver then lost the session and returned the error of the context. A unit test
+  that cancelled the context when the scripted server read the request met this in about one run of five under heavy load
+  (measured on 2026-10-11). The cause was that the body of an upgraded response has no write deadline, so the guard
+  always fell back to a close. D217 fixed it: the client keeps the TCP connection of the upgrade, a context that ends
+  during a call sets a deadline in the past on it, and a context that ends after the call did its work changes nothing.
+  The driver reads with `context.WithoutCancel`, so a read is never interrupted by the context of the caller.
 - A write to a table waits while a transaction of another session holds the same table. A test that inserted a row in
   a transaction and then inserted a second row in the same table from another session did not return until the
   transaction ended (measured with the driver on 2026-10-11, not recorded).
@@ -714,6 +716,10 @@ Ken answered the questions of step 9 on 2026-10-11 (D203 to D214). These questio
 - The shared test of the contract. `RunContract` sends HTTP, so `dbimptest` gets a second set of cases for a WebSocket,
   which `Contract.WebSocket` selects ([DESIGN.md](DESIGN.md), "The scripted server and the contract"). Ken reviews it with
   the staged changes.
+- `TIMESTAMP WITH LOCAL TIME ZONE` before the rules of a time zone began: the server and Go can hold different data for the
+  zone name `CET` in the years before 1893, so the same stored value reads back as a different instant. The round trip test
+  uses 1970-01-02 as its oldest value for this type, because CI failed on the year 1 with a Go that resolves `CET` to a fixed
+  offset (2026-10-11).
 
 ## Integration tests
 

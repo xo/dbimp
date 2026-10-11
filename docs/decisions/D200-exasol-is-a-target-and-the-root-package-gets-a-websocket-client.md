@@ -1,6 +1,6 @@
 # D200. Exasol is a target, and the root package gets a WebSocket client
 
-Status: Decided.
+Status: Decided. Amended by D217.
 
 Ken decided on 2026-10-11, at step 1 of [DRIVER.md](../DRIVER.md), that Exasol is the
 next target (W44). `usql` reaches Exasol with `exasol/exasol-driver-go`, and `dbmeta`

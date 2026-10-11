@@ -220,7 +220,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D197](D197-the-error-of-a-driver-matches-errauthentication.md) | The error of a driver matches ErrAuthentication | Decided |
 | [D198](D198-spanner-database-role-and-ddl-batches.md) | Spanner database role and DDL batches | Decided |
 | [D199](D199-answers-after-the-releases.md) | Answers after the releases | Decided |
-| [D200](D200-exasol-is-a-target-and-the-root-package-gets-a-websocket-client.md) | Exasol is a target, and the root package gets a WebSocket client | Decided |
+| [D200](D200-exasol-is-a-target-and-the-root-package-gets-a-websocket-client.md) | Exasol is a target, and the root package gets a WebSocket client | Decided. Amended by D217 |
 | [D201](D201-five-more-catalog-statements-for-cosmos-db.md) | Five more catalog statements for Cosmos DB | Decided |
 | [D202](D202-answers-for-exasol-after-step-2.md) | Answers for Exasol after step 2 | Decided |
 | [D203](D203-the-exasol-driver-is-the-package-exasol.md) | The Exasol driver is the package exasol | Decided |
@@ -237,3 +237,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D214](D214-the-exasol-driver-compresses-by-default.md) | The Exasol driver compresses by default | Decided |
 | [D215](D215-rule-4-names-the-exasol-driver.md) | Rule 4 names the Exasol driver | Accepted |
 | [D216](D216-a-null-argument-is-the-literal-null-in-bigquery.md) | A NULL argument is the literal NULL in BigQuery | Decided. Amends D195 |
+| [D217](D217-the-websocket-client-decides-from-the-result-of-a-call.md) | The WebSocket client decides from the result of a call | Decided. Amends D200 |
