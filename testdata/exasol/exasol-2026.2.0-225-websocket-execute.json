@@ -1,0 +1,29 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "ROLLBACK"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "attributes": {
+        "autocommit": false
+      },
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 0
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

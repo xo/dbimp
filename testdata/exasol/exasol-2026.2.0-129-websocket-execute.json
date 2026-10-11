@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT CAST('abc' AS DECIMAL(9,0))"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "data exception - invalid character value for cast; Value: 'abc' in cast of expression 'abc' (Session: 1878718558361157632)",
+        "sqlCode": "22018"
+      }
+    }
+  }
+}

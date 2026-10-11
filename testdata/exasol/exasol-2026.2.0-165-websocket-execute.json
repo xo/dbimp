@@ -1,0 +1,45 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT * FROM (SELECT 1 AS A UNION ALL SELECT 2) PREFERRING HIGH A"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "A",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                }
+              ],
+              "data": [
+                [
+                  2
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

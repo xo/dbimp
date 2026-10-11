@@ -1,0 +1,84 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT ID, X, T, TS > TIMESTAMP '2020-01-01 00:00:00' AS RECENT FROM DBIMP.GEN ORDER BY ID"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 4,
+              "numRows": 3,
+              "numRowsInMessage": 3,
+              "columns": [
+                {
+                  "name": "ID",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "X",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "T",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 10,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "RECENT",
+                  "dataType": {
+                    "type": "BOOLEAN"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  1,
+                  2,
+                  3
+                ],
+                [
+                  42,
+                  42,
+                  42
+                ],
+                [
+                  "none",
+                  "a",
+                  "b"
+                ],
+                [
+                  true,
+                  true,
+                  true
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

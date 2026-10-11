@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "low",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT * FROM EXA_DBA_SESSIONS"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "insufficient privileges for accessing view EXA_DBA_SESSIONS (Session: 1878718577051041792)",
+        "sqlCode": "42500"
+      }
+    }
+  }
+}

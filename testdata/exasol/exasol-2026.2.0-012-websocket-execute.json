@@ -1,0 +1,74 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT 3 AS \"z\", 'a' AS \"a\", TRUE AS \"m\", NULL AS \"n\""
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 4,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "z",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "a",
+                  "dataType": {
+                    "type": "CHAR",
+                    "size": 1,
+                    "characterSet": "ASCII"
+                  }
+                },
+                {
+                  "name": "m",
+                  "dataType": {
+                    "type": "BOOLEAN"
+                  }
+                },
+                {
+                  "name": "n",
+                  "dataType": {
+                    "type": "BOOLEAN"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  3
+                ],
+                [
+                  "a"
+                ],
+                [
+                  true
+                ],
+                [
+                  null
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

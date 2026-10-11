@@ -1,0 +1,40 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "createPreparedStatement",
+      "sqlText": "DELETE FROM DBIMP.TYPES WHERE ID = ?"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "statementHandle": 28,
+        "parameterData": {
+          "numColumns": 1,
+          "columns": [
+            {
+              "name": "",
+              "dataType": {
+                "type": "DECIMAL",
+                "precision": 9,
+                "scale": 0
+              }
+            }
+          ]
+        },
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 0
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

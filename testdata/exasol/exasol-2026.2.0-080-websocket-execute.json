@@ -1,0 +1,49 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT ID, TXT FROM DBIMP.BIG WHERE ID <= 1000 ORDER BY ID"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "resultSetHandle": 31,
+              "numColumns": 2,
+              "numRows": 1000,
+              "numRowsInMessage": 0,
+              "columns": [
+                {
+                  "name": "ID",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "TXT",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 30,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "executeBatch",
+      "sqlTexts": [
+        "SELECT ID FROM DBIMP.BIG"
+      ]
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "resultSetHandle": 57,
+              "numColumns": 1,
+              "numRows": 3000,
+              "numRowsInMessage": 0,
+              "columns": [
+                {
+                  "name": "ID",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

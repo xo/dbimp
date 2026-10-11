@@ -223,3 +223,16 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D200](D200-exasol-is-a-target-and-the-root-package-gets-a-websocket-client.md) | Exasol is a target, and the root package gets a WebSocket client | Decided |
 | [D201](D201-five-more-catalog-statements-for-cosmos-db.md) | Five more catalog statements for Cosmos DB | Decided |
 | [D202](D202-answers-for-exasol-after-step-2.md) | Answers for Exasol after step 2 | Decided |
+| [D203](D203-the-exasol-driver-is-the-package-exasol.md) | The Exasol driver is the package exasol | Decided |
+| [D204](D204-the-exasol-driver-registers-the-name-exasol.md) | The Exasol driver registers the name exasol and no alias | Decided |
+| [D205](D205-the-dsn-of-the-exasol-driver.md) | The DSN of the Exasol driver | Decided |
+| [D206](D206-the-types-of-the-exasol-driver.md) | The types of the Exasol driver | Decided |
+| [D207](D207-an-empty-string-and-null-are-one-value-in-exasol.md) | An empty string and NULL are one value in Exasol | Decided |
+| [D208](D208-the-exasol-driver-binds-arguments-on-the-server.md) | The Exasol driver binds arguments on the server | Decided |
+| [D209](D209-the-exasol-driver-begins-a-transaction-with-autocommit.md) | A transaction of the Exasol driver turns autocommit off | Decided |
+| [D210](D210-the-exasol-driver-reads-a-result-by-its-handle.md) | The Exasol driver reads a result by its handle | Decided |
+| [D211](D211-the-exasol-driver-aborts-a-statement-when-its-context-ends.md) | The Exasol driver aborts a statement when its context ends | Decided |
+| [D212](D212-the-exasol-driver-follows-no-redirect.md) | The Exasol driver follows no redirect | Decided |
+| [D213](D213-the-exasol-driver-has-no-flavors.md) | The Exasol driver has no flavors | Decided |
+| [D214](D214-the-exasol-driver-compresses-by-default.md) | The Exasol driver compresses by default | Decided |
+| [D215](D215-rule-4-names-the-exasol-driver.md) | Rule 4 names the Exasol driver | Accepted |

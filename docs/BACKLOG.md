@@ -2041,6 +2041,13 @@ WebSocket client (D200 item 2), and `dbimptest` gets a way to record and replay 
 messages of a WebSocket (D200 item 3). Whether a driver is possible is the result of
 step 2.
 
+Status: steps 9 to 17a are done and staged. Ken answered step 9 on 2026-10-11 (D203 to D214),
+and D215 proposes the change of rule 4. The package, its unit tests, its integration tests, the
+tables, the sections Integration tests and Compared with Couchbase of [EXASOL.md](EXASOL.md) and the
+second set of cases of `dbimptest.RunContract` for a WebSocket are written. The integration tests
+passed on `exasol-2026.2.0` as both principals. Open: Ken reviews the staged changes and the open
+questions at the end of EXASOL.md, then steps 18 to 20.
+
 ## W45. Add five more catalog statements to the Cosmos DB driver
 
 `dbmeta` asked on 2026-10-11, and Ken decided the same day (D201): `$index_paths`,

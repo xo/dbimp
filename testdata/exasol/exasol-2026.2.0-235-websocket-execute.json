@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "BEGIN"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "syntax error, unexpected BEGIN_, expecting FOR_ or LOOP_ or WHILE_ or REPEAT_ [line 1, column 1] (Session: 1878718558361157632)",
+        "sqlCode": "42000"
+      }
+    }
+  }
+}

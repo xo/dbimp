@@ -35,7 +35,8 @@ eighteenth, in `drill/`, `solr/`, `elasticsearch/`, `opensearch/` and
 `dynamodb/`, were first released in `v0.14.0` (W26 to W30). The nineteenth, in
 `snowflake/`, was first released in `v0.16.0` (W34). The twentieth to the
 twenty-fourth, in `databricks/`, `bigquery/`, `athena/`, `cosmos/` and `spanner/`,
-were first released in `v0.17.0` (W35 to W39). The
+were first released in `v0.17.0` (W35 to W39). The twenty-fifth, in `exasol/`, is
+not released yet (W44). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -87,7 +88,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Cosmos DB driver | [docs/COSMOS.md](docs/COSMOS.md), then W36 and D184 |
 | writing the Athena driver | [docs/ATHENA.md](docs/ATHENA.md), then W37 and D184 |
 | writing the Databricks driver | [docs/DATABRICKS.md](docs/DATABRICKS.md), then W39 and D188 |
-| writing the Exasol driver | [docs/EXASOL.md](docs/EXASOL.md), then W44 and D200 |
+| writing the Exasol driver | [docs/EXASOL.md](docs/EXASOL.md), then W44, D200, D202 and D203 to D215 |
 | writing the Spanner driver | [docs/SPANNER.md](docs/SPANNER.md), then W38, D185, D187 and D191 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |
@@ -135,9 +136,10 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    ArangoDB cursor, of a Databend query, of a libSQL cursor, of an Avatica
    query, of a Trino query, of an Elasticsearch query, of an OpenSearch query, of
    a DynamoDB query, of a Snowflake query, of an Athena query, of a BigQuery query,
-   of a Cosmos DB query, by a Spanner transaction and by the rows of a Spanner
-   DML statement (D45, D69, D90, D91, D122, D123, D149, D150, D157, D159, D175,
-   D178, D183, D192 and D194). The
+   of a Cosmos DB query, by a Spanner transaction, by the rows of a Spanner
+   DML statement, and by an Exasol transaction, statement and query (D45, D69,
+   D90, D91, D122, D123, D149, D150, D157, D159, D175, D178, D183, D192, D194
+   and D215). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

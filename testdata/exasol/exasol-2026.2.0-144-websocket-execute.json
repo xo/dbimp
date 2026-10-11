@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "EXPLAIN SELECT 1"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "syntax error, unexpected SELECT_, expecting ASSIGNMENT_OPERATOR_ or ':' [line 1, column 9] (Session: 1878718558361157632)",
+        "sqlCode": "42000"
+      }
+    }
+  }
+}

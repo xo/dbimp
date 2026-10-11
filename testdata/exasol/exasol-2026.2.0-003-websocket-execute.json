@@ -1,0 +1,45 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT PARAM_VALUE FROM EXA_METADATA WHERE PARAM_NAME = 'databaseProductVersion'"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "PARAM_VALUE",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 8000,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "2026.2.0-nano.6"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

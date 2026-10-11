@@ -41,6 +41,12 @@ type Contract struct {
 	// ContentType is the content type of the bodies of the cases, such as
 	// "application/cbor". It is "application/json" when it is empty.
 	ContentType string
+	// WebSocket, if it is not nil, makes RunContract test a driver whose product
+	// takes its requests as frames of a WebSocket, such as Exasol (D200). The
+	// cases above send an HTTP request and read an HTTP body, so a WebSocket
+	// driver cannot run them, and RunContract then ignores every other field and
+	// runs the cases of WebSocketContract.
+	WebSocket *WebSocketContract
 }
 
 // contentType returns the content type of the bodies of c.
@@ -86,6 +92,10 @@ const streamBytes = 64 << 20
 // parallel with another test.
 func RunContract(t *testing.T, c Contract) {
 	t.Helper()
+	if c.WebSocket != nil {
+		runWebSocketContract(t, c.WebSocket)
+		return
+	}
 	t.Run("columns keep their order", func(t *testing.T) {
 		db := open(t, c, serve(c.Columns.Body, c.contentType()))
 		rows := query(t, db, c.Query)

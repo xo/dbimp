@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "Feature not supported: isolation level SERIALIZABLE (Session: 1878718558361157632)",
+        "sqlCode": "0A000"
+      }
+    }
+  }
+}

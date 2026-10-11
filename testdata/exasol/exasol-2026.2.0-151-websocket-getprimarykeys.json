@@ -1,0 +1,101 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "getPrimaryKeys",
+      "schema": "DBIMP",
+      "table": "DML"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 6,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "SCHEMA",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "TABLE",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "NAME",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "OWNER",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "ORDINAL_POSITION",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 6,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "COLUMN_NAME",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "DBIMP"
+                ],
+                [
+                  "DML"
+                ],
+                [
+                  "PK_DML"
+                ],
+                [
+                  "SYS"
+                ],
+                [
+                  1
+                ],
+                [
+                  "ID"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

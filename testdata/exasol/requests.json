@@ -1,0 +1,3623 @@
+{
+ "driver": "exasol",
+ "websocket": {
+  "path": "/"
+ },
+ "redact": [
+  "password",
+  "accessToken",
+  "refreshToken"
+ ],
+ "requests": [
+  {
+   "item": 1,
+   "name": "login with protocol 3: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 1,
+   "name": "login with protocol 3: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 9,
+   "name": "version from the metadata",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT PARAM_VALUE FROM EXA_METADATA WHERE PARAM_NAME = 'databaseProductVersion'"
+   }
+  },
+  {
+   "item": 9,
+   "name": "version from the system tables",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CURRENT_USER, CURRENT_SESSION, CURRENT_SCHEMA"
+   }
+  },
+  {
+   "item": 9,
+   "name": "the users that exist",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT USER_NAME FROM EXA_ALL_USERS"
+   }
+  },
+  {
+   "item": 12,
+   "name": "getAttributes",
+   "frame": {
+    "command": "getAttributes"
+   }
+  },
+  {
+   "item": 12,
+   "name": "getHosts",
+   "frame": {
+    "command": "getHosts",
+    "hostIp": "127.0.0.1"
+   }
+  },
+  {
+   "item": 12,
+   "name": "getHosts without the address",
+   "frame": {
+    "command": "getHosts"
+   }
+  },
+  {
+   "item": 1,
+   "name": "drop the schema",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DROP SCHEMA IF EXISTS DBIMP CASCADE"
+   }
+  },
+  {
+   "item": 1,
+   "name": "drop the user of an earlier run",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DROP USER IF EXISTS DBIMP_LOW CASCADE"
+   }
+  },
+  {
+   "item": 1,
+   "name": "create the schema",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE SCHEMA DBIMP"
+   }
+  },
+  {
+   "item": 2,
+   "name": "columns out of order",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 3 AS \"z\", 'a' AS \"a\", TRUE AS \"m\", NULL AS \"n\""
+   }
+  },
+  {
+   "item": 2,
+   "name": "two columns with one name",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 AS x, 2 AS x"
+   }
+  },
+  {
+   "item": 2,
+   "name": "a column with no name",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1, 'a', 1 + 1, CAST(1 AS DOUBLE)"
+   }
+  },
+  {
+   "item": 2,
+   "name": "lower case name",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 AS \"mixedCase\", 2 AS lowercase"
+   }
+  },
+  {
+   "item": 3,
+   "name": "create the table of types",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.TYPES (ID DECIMAL(9,0), B BOOLEAN, C CHAR(5), V VARCHAR(100), VA VARCHAR(10) ASCII, D1 DECIMAL(18,0), D2 DECIMAL(10,2), D3 DECIMAL(36,0), D4 DECIMAL(36,10), D5 DECIMAL(9,0), D6 DECIMAL(1,0), D7 DECIMAL(19,0), D8 DECIMAL(18,5), D9 DECIMAL(18,18), F DOUBLE, DT DATE, TS TIMESTAMP, TS9 TIMESTAMP(9), TSL TIMESTAMP WITH LOCAL TIME ZONE, IYM INTERVAL YEAR(9) TO MONTH, IDS INTERVAL DAY(9) TO SECOND(9), G GEOMETRY, G2 GEOMETRY(4326), H HASHTYPE(16 BYTE), H2 HASHTYPE(32 BYTE))"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert a row with every type",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.TYPES VALUES (1, true, 'ab', 'hello', 'ascii', 9007199254740993, 1.5, 12345678901234567890123456789012345, 1234567890123456789012345.6789012345, 123456789, 7, 1234567890123456789, 1234567890123.45678, 0.123456789012345678, 1.5e300, '2026-10-11', '2026-10-11 12:34:56.123456', '2026-10-11 12:34:56.123456789', '2026-10-11 12:34:56.123456', INTERVAL '5-3' YEAR(9) TO MONTH, INTERVAL '2 03:04:05.678901234' DAY(9) TO SECOND(9), 'POINT(1 2)', 'POINT(1 2)', '550e8400-e29b-41d4-a716-446655440000', '00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert a row of NULL",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID) VALUES (2)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert the smallest values",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.TYPES VALUES (3, false, '', '', '', -999999999999999999, -99999999.99, -999999999999999999999999999999999999, -99999999999999999999999999.9999999999, -999999999, -9, -9999999999999999999, -9999999999999.99999, -0.999999999999999999, -1.7e308, '0001-01-01', '0001-01-01 00:00:00.000000', '0001-01-01 00:00:00.000000000', '0001-01-02 00:00:00.000000', INTERVAL '-999999999-11' YEAR(9) TO MONTH, INTERVAL '-999999999 23:59:59.999999999' DAY(9) TO SECOND(9), 'POINT EMPTY', 'POINT EMPTY', '00000000-0000-0000-0000-000000000000', '0000000000000000000000000000000000000000000000000000000000000000')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert the largest values",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.TYPES VALUES (4, true, 'zzzzz', 'x', 'y', 999999999999999999, 99999999.99, 999999999999999999999999999999999999, 99999999999999999999999999.9999999999, 999999999, 9, 9999999999999999999, 9999999999999.99999, 0.999999999999999999, 1.7e308, '9999-12-31', '9999-12-31 23:59:59.999999', '9999-12-31 23:59:59.999999999', '9999-12-31 23:59:59.999999', INTERVAL '999999999-11' YEAR(9) TO MONTH, INTERVAL '999999999 23:59:59.999999999' DAY(9) TO SECOND(9), 'POLYGON((0 0, 1 0, 1 1, 0 0))', 'LINESTRING(0 0, 1 1)', 'ffffffff-ffff-ffff-ffff-ffffffffffff', 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert text that needs escapes",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID, V, VA, F, D2) VALUES (5, 'h\u00e9llo \u2603 \"quoted\" \\\\ back\\nslash' || CHR(10) || CHR(9) || 'tab', 'a''b', 0.1, 0.01)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert a double of zero",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID, F, D1, D2, D8) VALUES (6, 0, 0, 0, 0)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "insert a negative zero and a tiny double",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID, F) VALUES (7, -0.0), (8, 4.9e-324), (9, 1e-7), (10, 123456789.123456789)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select every row of types",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM DBIMP.TYPES ORDER BY ID"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select NaN",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CAST('NaN' AS DOUBLE)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select a double overflow",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1e308 * 10"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select a long string",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT LPAD('x', 100000, 'xy') AS LONGSTR"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select an empty string",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT '' AS E, CAST('' AS CHAR(3)) AS EC, LENGTH('') AS L"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select decimals by precision",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CAST(1 AS DECIMAL(1,0)) P1, CAST(12345678 AS DECIMAL(9,0)) P9, CAST(123456789012345678 AS DECIMAL(18,0)) P18, CAST(1234567890123456789 AS DECIMAL(19,0)) P19, CAST(1.5 AS DECIMAL(3,1)) P3S1, CAST(12345678901234567.5 AS DECIMAL(18,1)) P18S1, CAST(1.5 AS DECIMAL(36,1)) P36S1, CAST(1 AS DECIMAL(36,0)) P36"
+   }
+  },
+  {
+   "item": 3,
+   "name": "metadata command: getTypeInfo",
+   "frame": {
+    "command": "getTypeInfo"
+   }
+  },
+  {
+   "item": 3,
+   "name": "set the time zone to Tokyo",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER SESSION SET TIME_ZONE = 'ASIA/TOKYO'"
+   }
+  },
+  {
+   "item": 3,
+   "name": "local time zone in Tokyo",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT TSL, TS, CAST(TS AS TIMESTAMP WITH LOCAL TIME ZONE) AS TSL2, CURRENT_TIMESTAMP > TIMESTAMP '2020-01-01 00:00:00' AS NOW, SESSIONTIMEZONE AS TZ FROM DBIMP.TYPES WHERE ID = 1"
+   }
+  },
+  {
+   "item": 3,
+   "name": "set the time zone back",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER SESSION SET TIME_ZONE = 'CET'"
+   }
+  },
+  {
+   "item": 1,
+   "name": "create the table of rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.DML (ID DECIMAL(9,0) NOT NULL, NAME VARCHAR(50), N DECIMAL(10,2))"
+   }
+  },
+  {
+   "item": 1,
+   "name": "insert one row",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML VALUES (1, 'one', 1.1)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "insert three rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML VALUES (2, 'two', 2.2), (3, 'three', 3.3), (4, 'four', 4.4)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "update two rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "UPDATE DBIMP.DML SET N = N + 1 WHERE ID IN (1, 2)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "update no row",
+   "frame": {
+    "command": "execute",
+    "sqlText": "UPDATE DBIMP.DML SET N = 0 WHERE ID = 99"
+   }
+  },
+  {
+   "item": 1,
+   "name": "delete one row",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DELETE FROM DBIMP.DML WHERE ID = 4"
+   }
+  },
+  {
+   "item": 1,
+   "name": "merge",
+   "frame": {
+    "command": "execute",
+    "sqlText": "MERGE INTO DBIMP.DML T USING (SELECT 3 AS ID, 'tres' AS NAME) S ON T.ID = S.ID WHEN MATCHED THEN UPDATE SET T.NAME = S.NAME WHEN NOT MATCHED THEN INSERT (ID, NAME) VALUES (S.ID, S.NAME)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "select the rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM DBIMP.DML ORDER BY ID"
+   }
+  },
+  {
+   "item": 1,
+   "name": "alter the table",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER TABLE DBIMP.DML ADD COLUMN EXTRA VARCHAR(5)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "create a view",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE VIEW DBIMP.V1 AS SELECT ID, NAME FROM DBIMP.DML"
+   }
+  },
+  {
+   "item": 1,
+   "name": "select from the view",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM DBIMP.V1 ORDER BY ID"
+   }
+  },
+  {
+   "item": 1,
+   "name": "truncate",
+   "frame": {
+    "command": "execute",
+    "sqlText": "TRUNCATE TABLE DBIMP.DML"
+   }
+  },
+  {
+   "item": 1,
+   "name": "select a statement with a trailing semicolon",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1;"
+   }
+  },
+  {
+   "item": 1,
+   "name": "a script that returns rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 AS A FROM DUAL WHERE FALSE"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare an insert with every kind of column",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID, B, C, V, D1, D2, D3, F, DT, TS, TSL, IYM, IDS, G, H) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+   },
+   "capture": {
+    "ps": "responseData.statementHandle",
+    "cols": "responseData.parameterData.columns"
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the prepared insert with strings and numbers",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps}}",
+    "numColumns": 15,
+    "numRows": 1,
+    "columns": "{{cols}}",
+    "data": [
+     [
+      100
+     ],
+     [
+      true
+     ],
+     [
+      "abc"
+     ],
+     [
+      "param"
+     ],
+     [
+      123456789012345678
+     ],
+     [
+      "12345.67"
+     ],
+     [
+      "123456789012345678901234567890123456"
+     ],
+     [
+      2.5
+     ],
+     [
+      "2026-10-11"
+     ],
+     [
+      "2026-10-11 01:02:03.456789"
+     ],
+     [
+      "2026-10-11 01:02:03.456789"
+     ],
+     [
+      "+000000012-03"
+     ],
+     [
+      "+000000002 03:04:05.678000000"
+     ],
+     [
+      "POINT (3 4)"
+     ],
+     [
+      "550e8400e29b41d4a716446655440001"
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the prepared insert with three rows",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps}}",
+    "numColumns": 15,
+    "numRows": 3,
+    "columns": "{{cols}}",
+    "data": [
+     [
+      101,
+      102,
+      103
+     ],
+     [
+      false,
+      true,
+      null
+     ],
+     [
+      "a",
+      null,
+      "c"
+     ],
+     [
+      "x",
+      "y",
+      null
+     ],
+     [
+      1,
+      2,
+      null
+     ],
+     [
+      "1.50",
+      null,
+      "3.00"
+     ],
+     [
+      null,
+      null,
+      null
+     ],
+     [
+      1.0,
+      null,
+      3.5
+     ],
+     [
+      "2026-01-01",
+      null,
+      "2026-12-31"
+     ],
+     [
+      null,
+      "2026-02-02 02:02:02.000000",
+      null
+     ],
+     [
+      null,
+      null,
+      null
+     ],
+     [
+      null,
+      null,
+      null
+     ],
+     [
+      null,
+      null,
+      null
+     ],
+     [
+      null,
+      null,
+      null
+     ],
+     [
+      null,
+      null,
+      null
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the prepared insert with a number for a string",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps}}",
+    "numColumns": 15,
+    "numRows": 1,
+    "columns": "{{cols}}",
+    "data": [
+     [
+      104
+     ],
+     [
+      true
+     ],
+     [
+      "abc"
+     ],
+     [
+      12345
+     ],
+     [
+      1
+     ],
+     [
+      "1.5"
+     ],
+     [
+      null
+     ],
+     [
+      1
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the prepared insert with a string for a boolean",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps}}",
+    "numColumns": 15,
+    "numRows": 1,
+    "columns": "{{cols}}",
+    "data": [
+     [
+      105
+     ],
+     [
+      "true"
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the prepared insert with a bad date",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps}}",
+    "numColumns": 15,
+    "numRows": 1,
+    "columns": "{{cols}}",
+    "data": [
+     [
+      106
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      "not a date"
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ],
+     [
+      null
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the prepared insert with a missing column",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps}}",
+    "numColumns": 2,
+    "numRows": 1,
+    "columns": [
+     {
+      "name": "",
+      "dataType": {
+       "type": "DECIMAL",
+       "precision": 9,
+       "scale": 0
+      }
+     },
+     {
+      "name": "",
+      "dataType": {
+       "type": "BOOLEAN"
+      }
+     }
+    ],
+    "data": [
+     [
+      107
+     ],
+     [
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "close the prepared insert",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "close the prepared insert again",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute a closed prepared statement",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps}}",
+    "numColumns": 0,
+    "numRows": 0,
+    "data": []
+   }
+  },
+  {
+   "item": 4,
+   "name": "select the rows that the parameters wrote",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, B, C, V, D1, D2, D3, F, DT, TS, TSL, IYM, IDS, G, H FROM DBIMP.TYPES WHERE ID >= 100 ORDER BY ID"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare a select with parameters in the select list",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "SELECT ?, ?"
+   },
+   "capture": {
+    "ps2": "responseData.statementHandle",
+    "cols2": "responseData.parameterData.columns"
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the select with parameters in the select list",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps2}}",
+    "numColumns": 2,
+    "numRows": 1,
+    "columns": "{{cols2}}",
+    "data": [
+     [
+      "a"
+     ],
+     [
+      null
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "close the select",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps2}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare a select with a typed parameter",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "SELECT ID, V FROM DBIMP.TYPES WHERE ID = ? OR V = ? ORDER BY ID"
+   },
+   "capture": {
+    "ps3": "responseData.statementHandle",
+    "cols3": "responseData.parameterData.columns"
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the typed select",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps3}}",
+    "numColumns": 2,
+    "numRows": 1,
+    "columns": "{{cols3}}",
+    "data": [
+     [
+      1
+     ],
+     [
+      "param"
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the typed select with two rows",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps3}}",
+    "numColumns": 2,
+    "numRows": 2,
+    "columns": "{{cols3}}",
+    "data": [
+     [
+      1,
+      2
+     ],
+     [
+      "hello",
+      null
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "close the typed select",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps3}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare with a named parameter",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "SELECT :a"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare with no parameter",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "SELECT 1 AS ONE"
+   },
+   "capture": {
+    "ps4": "responseData.statementHandle"
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute with no parameter",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps4}}",
+    "numColumns": 0,
+    "numRows": 0,
+    "data": []
+   }
+  },
+  {
+   "item": 4,
+   "name": "close the statement with no parameter",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps4}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare a DML with a parameter",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "DELETE FROM DBIMP.TYPES WHERE ID = ?"
+   },
+   "capture": {
+    "ps5": "responseData.statementHandle",
+    "cols5": "responseData.parameterData.columns"
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the DML",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps5}}",
+    "numColumns": 1,
+    "numRows": 3,
+    "columns": "{{cols5}}",
+    "data": [
+     [
+      100,
+      101,
+      102
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "close the DML",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps5}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare a statement with a syntax error",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "SELEC ?"
+   }
+  },
+  {
+   "item": 4,
+   "name": "prepare DDL",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "CREATE TABLE DBIMP.PS (ID DECIMAL(9,0))"
+   },
+   "capture": {
+    "ps6": "responseData.statementHandle"
+   }
+  },
+  {
+   "item": 4,
+   "name": "execute the prepared DDL",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps6}}",
+    "numColumns": 0,
+    "numRows": 0,
+    "data": []
+   }
+  },
+  {
+   "item": 4,
+   "name": "close the prepared DDL",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps6}}"
+   }
+  },
+  {
+   "item": 5,
+   "name": "create a table of many rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.BIG (ID DECIMAL(9,0), TXT VARCHAR(30))"
+   }
+  },
+  {
+   "item": 5,
+   "name": "insert 3000 rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.BIG SELECT LEVEL, 'row ' || LEVEL FROM DUAL CONNECT BY LEVEL <= 3000"
+   }
+  },
+  {
+   "item": 5,
+   "name": "select 999 rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, TXT FROM DBIMP.BIG WHERE ID <= 999 ORDER BY ID"
+   }
+  },
+  {
+   "item": 5,
+   "name": "select 1000 rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, TXT FROM DBIMP.BIG WHERE ID <= 1000 ORDER BY ID"
+   }
+  },
+  {
+   "item": 5,
+   "name": "select 1001 rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, TXT FROM DBIMP.BIG WHERE ID <= 1001 ORDER BY ID"
+   },
+   "capture": {
+    "h1001": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 5,
+   "name": "close the result of 1001 rows",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#h1001}}"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "select 3000 rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, TXT FROM DBIMP.BIG ORDER BY ID"
+   },
+   "capture": {
+    "h": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch the first page of 8000 bytes",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 0,
+    "numBytes": 8000
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch the second page",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 400,
+    "numBytes": 8000
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch a page in the middle with 100 bytes",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 1000,
+    "numBytes": 100
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch one byte",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 1000,
+    "numBytes": 1
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch the last rows",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 2900,
+    "numBytes": 100000
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch at the end",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 3000,
+    "numBytes": 8000
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch after the end",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 3001,
+    "numBytes": 8000
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch at a negative position",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": -1,
+    "numBytes": 8000
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch over the largest size",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 0,
+    "numBytes": 67108865
+   }
+  },
+  {
+   "item": 5,
+   "name": "close the result set",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#h}}"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "close the result set twice",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#h}}"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch after the close",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#h}}",
+    "startPosition": 0,
+    "numBytes": 8000
+   }
+  },
+  {
+   "item": 5,
+   "name": "select 300000 rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT LEVEL AS N FROM DUAL CONNECT BY LEVEL <= 300000"
+   },
+   "capture": {
+    "hbig": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch from 300000 rows",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#hbig}}",
+    "startPosition": 299990,
+    "numBytes": 1000
+   }
+  },
+  {
+   "item": 5,
+   "name": "close 300000 rows",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#hbig}}"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "select 2000 wide rows",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT LEVEL AS N, LPAD('x', 1000, 'ab') AS FILLER FROM DUAL CONNECT BY LEVEL <= 2000"
+   },
+   "capture": {
+    "hwide": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch wide rows with 50000 bytes",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#hwide}}",
+    "startPosition": 0,
+    "numBytes": 50000
+   }
+  },
+  {
+   "item": 5,
+   "name": "close the wide rows",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#hwide}}"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "select two result sets and close both",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID FROM DBIMP.BIG"
+   },
+   "capture": {
+    "ha": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 5,
+   "name": "select a second result set",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID FROM DBIMP.BIG WHERE ID > 5"
+   },
+   "capture": {
+    "hb": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 5,
+   "name": "close two result sets in one command",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#ha}}",
+     "{{#hb}}"
+    ]
+   }
+  },
+  {
+   "item": 5,
+   "name": "set a limit of 10 rows",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "resultSetMaxRows": 10
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "select with the row limit",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID FROM DBIMP.BIG ORDER BY ID"
+   }
+  },
+  {
+   "item": 5,
+   "name": "remove the limit",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "resultSetMaxRows": 0
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "a row limit on the execute",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID FROM DBIMP.BIG ORDER BY ID",
+    "attributes": {
+     "resultSetMaxRows": 3
+    }
+   }
+  },
+  {
+   "item": 5,
+   "name": "get the offset of a result set",
+   "frame": {
+    "command": "getOffset",
+    "resultSetHandle": 1
+   }
+  },
+  {
+   "item": 5,
+   "name": "login for the fetch of zero bytes: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "zero",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 5,
+   "name": "login for the fetch of zero bytes: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "zero",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 5,
+   "name": "select rows to fetch with zero bytes",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, TXT FROM DBIMP.BIG ORDER BY ID"
+   },
+   "session": "zero",
+   "capture": {
+    "hzero": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 5,
+   "name": "fetch zero bytes",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#hzero}}",
+    "startPosition": 1000,
+    "numBytes": 0
+   },
+   "session": "zero",
+   "timeout": "5s"
+  },
+  {
+   "item": 6,
+   "name": "syntax error",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELEC 1"
+   }
+  },
+  {
+   "item": 6,
+   "name": "missing table",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 FROM DBIMP.NO_SUCH_TABLE"
+   }
+  },
+  {
+   "item": 6,
+   "name": "missing schema",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 FROM NOSCHEMA.T"
+   }
+  },
+  {
+   "item": 6,
+   "name": "missing column",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT NOCOLUMN FROM DBIMP.DML"
+   }
+  },
+  {
+   "item": 6,
+   "name": "table that exists",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.DML (X INT)"
+   }
+  },
+  {
+   "item": 6,
+   "name": "not null violation",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (NULL, 'x')"
+   }
+  },
+  {
+   "item": 6,
+   "name": "add a primary key",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER TABLE DBIMP.DML ADD CONSTRAINT PK_DML PRIMARY KEY (ID) ENABLE"
+   }
+  },
+  {
+   "item": 6,
+   "name": "insert a row for the key",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (1, 'a')"
+   }
+  },
+  {
+   "item": 6,
+   "name": "primary key violation",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (1, 'b')"
+   }
+  },
+  {
+   "item": 6,
+   "name": "add a foreign key",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.CHILD (ID DECIMAL(9,0), PARENT DECIMAL(9,0), CONSTRAINT FK_CHILD FOREIGN KEY (PARENT) REFERENCES DBIMP.DML (ID) ENABLE)"
+   }
+  },
+  {
+   "item": 6,
+   "name": "foreign key violation",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.CHILD VALUES (1, 99)"
+   }
+  },
+  {
+   "item": 6,
+   "name": "unique constraint is not offered",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER TABLE DBIMP.DML ADD CONSTRAINT UQ UNIQUE (NAME)"
+   }
+  },
+  {
+   "item": 6,
+   "name": "string too long",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (2, LPAD('x', 100, 'x'))"
+   }
+  },
+  {
+   "item": 6,
+   "name": "number out of range",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (10000000000, 'x')"
+   }
+  },
+  {
+   "item": 6,
+   "name": "division by zero",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1/0"
+   }
+  },
+  {
+   "item": 6,
+   "name": "bad cast",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CAST('abc' AS DECIMAL(9,0))"
+   }
+  },
+  {
+   "item": 6,
+   "name": "bad date",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT DATE '2026-02-30'"
+   }
+  },
+  {
+   "item": 6,
+   "name": "error in a late row of a large result",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1/(2999 - ID) AS X FROM DBIMP.BIG ORDER BY ID"
+   }
+  },
+  {
+   "item": 6,
+   "name": "fetch with an unknown handle",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": 99999,
+    "startPosition": 0,
+    "numBytes": 1000
+   }
+  },
+  {
+   "item": 6,
+   "name": "close an unknown result set",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     99999
+    ]
+   }
+  },
+  {
+   "item": 6,
+   "name": "execute an unknown prepared statement",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": 99999,
+    "numColumns": 0,
+    "numRows": 0,
+    "data": []
+   }
+  },
+  {
+   "item": 6,
+   "name": "close an unknown prepared statement",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": 99999
+   }
+  },
+  {
+   "item": 6,
+   "name": "an unknown command",
+   "frame": {
+    "command": "noSuchCommand"
+   }
+  },
+  {
+   "item": 6,
+   "name": "execute with no sqlText",
+   "frame": {
+    "command": "execute"
+   }
+  },
+  {
+   "item": 6,
+   "name": "execute with a number for sqlText",
+   "frame": {
+    "command": "execute",
+    "sqlText": 1
+   }
+  },
+  {
+   "item": 6,
+   "name": "execute with an empty statement",
+   "frame": {
+    "command": "execute",
+    "sqlText": ""
+   }
+  },
+  {
+   "item": 6,
+   "name": "execute with a comment only",
+   "frame": {
+    "command": "execute",
+    "sqlText": "-- nothing"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a frame with no command",
+   "frame": {
+    "sqlText": "SELECT 1"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a frame that is a JSON array",
+   "frame": [
+    1,
+    2
+   ]
+  },
+  {
+   "item": 6,
+   "name": "a frame that is not JSON",
+   "text": "not json"
+  },
+  {
+   "item": 6,
+   "name": "a statement the server does not know",
+   "frame": {
+    "command": "execute",
+    "sqlText": "EXPLAIN SELECT 1"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a privilege error for the administrator",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DROP USER NOSUCHUSER"
+   }
+  },
+  {
+   "item": 6,
+   "name": "a drop of a missing table",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DROP TABLE DBIMP.NOPE"
+   }
+  },
+  {
+   "item": 6,
+   "name": "drop with if exists",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DROP TABLE IF EXISTS DBIMP.NOPE"
+   }
+  },
+  {
+   "item": 6,
+   "name": "an error that carries a line",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1,\n 2,\n NOCOL"
+   }
+  },
+  {
+   "item": 2,
+   "name": "metadata command: getSchemas",
+   "frame": {
+    "command": "getSchemas",
+    "schemaFilter": "DBIMP"
+   }
+  },
+  {
+   "item": 2,
+   "name": "metadata command: getTables",
+   "frame": {
+    "command": "getTables",
+    "schemaFilter": "DBIMP",
+    "tableFilter": "%"
+   }
+  },
+  {
+   "item": 2,
+   "name": "metadata command: getPrimaryKeys",
+   "frame": {
+    "command": "getPrimaryKeys",
+    "schema": "DBIMP",
+    "table": "DML"
+   }
+  },
+  {
+   "item": 2,
+   "name": "metadata command: getTableTypes",
+   "frame": {
+    "command": "getTableTypes"
+   }
+  },
+  {
+   "item": 3,
+   "name": "lead: DECIMAL(36,36)",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CAST(1.123 AS DECIMAL(36,36)) AS D"
+   }
+  },
+  {
+   "item": 3,
+   "name": "lead: Infinity as a double",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CAST('Infinity' AS DOUBLE)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "lead: integer aliases",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.ALIASES (A BIGINT, B INT, C INTEGER, D SMALLINT, E TINYINT, F NUMERIC(5,2), G REAL, H FLOAT, I DOUBLE PRECISION, J LONG VARCHAR, K VARCHAR(5) ASCII, L NCHAR(2), M NVARCHAR(3), N DEC(4,1), O BOOL, P CHAR VARYING(3), Q TIMESTAMP(0), R TIMESTAMP(9) WITH LOCAL TIME ZONE)"
+   }
+  },
+  {
+   "item": 3,
+   "name": "lead: the columns of the aliases",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM DBIMP.ALIASES"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: identity and default",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.GEN (ID DECIMAL(9,0) IDENTITY, X DECIMAL(9,0) DEFAULT 42, T VARCHAR(10) DEFAULT 'none', TS TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: insert default values",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.GEN DEFAULT VALUES"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: insert two rows with defaults",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.GEN (T) VALUES ('a'), ('b')"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: select the generated values",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, X, T, TS > TIMESTAMP '2020-01-01 00:00:00' AS RECENT FROM DBIMP.GEN ORDER BY ID"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: limit and offset",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID FROM DBIMP.BIG ORDER BY ID LIMIT 3 OFFSET 5"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: limit with a comma",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID FROM DBIMP.BIG ORDER BY ID LIMIT 5, 3"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: upsert as a keyword",
+   "frame": {
+    "command": "execute",
+    "sqlText": "UPSERT INTO DBIMP.DML VALUES (1)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a virtual schema",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE VIRTUAL SCHEMA VS USING DBIMP.NOADAPTER"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: skyline query",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM (SELECT 1 AS A UNION ALL SELECT 2) PREFERRING HIGH A"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: qualify",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 AS A QUALIFY ROW_NUMBER() OVER (ORDER BY A) = 1"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a comment on a table",
+   "frame": {
+    "command": "execute",
+    "sqlText": "COMMENT ON TABLE DBIMP.GEN IS 'generated'"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: distribute and partition",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.DIST (A DECIMAL(9,0), B DECIMAL(9,0), DISTRIBUTE BY A, PARTITION BY B)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: create an index",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE INDEX IX ON DBIMP.DIST (A)"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a check constraint",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.CHK (A DECIMAL(9,0) CHECK (A > 0))"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a column default with a function",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) FROM EXA_ALL_COLUMNS WHERE COLUMN_SCHEMA = 'DBIMP' AND COLUMN_DEFAULT IS NOT NULL"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a Lua script",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE OR REPLACE LUA SCALAR SCRIPT DBIMP.DOUBLE_IT (X DOUBLE) RETURNS DOUBLE AS\nfunction run(ctx)\n  return ctx.X * 2\nend\n/"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: call the script",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT DBIMP.DOUBLE_IT(21) AS R"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: a script with the execute statement",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE OR REPLACE LUA SCRIPT DBIMP.SCR () RETURNS TABLE AS\nreturn query([[SELECT 1 AS A, 'x' AS B]])\n/"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: execute the script",
+   "frame": {
+    "command": "execute",
+    "sqlText": "EXECUTE SCRIPT DBIMP.SCR()"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: login for a local export: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "xport",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: login for a local export: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "xport",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: export to a local file",
+   "frame": {
+    "command": "execute",
+    "sqlText": "EXPORT DBIMP.DML INTO LOCAL CSV FILE 'dbimp-export.csv'"
+   },
+   "session": "xport",
+   "timeout": "5s"
+  },
+  {
+   "item": 1,
+   "name": "lead: login for a local import: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "mport",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: login for a local import: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "mport",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: import from a local file",
+   "frame": {
+    "command": "execute",
+    "sqlText": "IMPORT INTO DBIMP.DML FROM LOCAL CSV FILE 'dbimp-import.csv'"
+   },
+   "session": "mport",
+   "timeout": "5s"
+  },
+  {
+   "item": 1,
+   "name": "lead: login for parallel connections: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "par3",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: login for parallel connections: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "par3",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: enter parallel on protocol 3",
+   "frame": {
+    "command": "enterParallel",
+    "hostIp": "127.0.0.1",
+    "numRequestedConnections": 2
+   },
+   "session": "par3"
+  },
+  {
+   "item": 1,
+   "name": "lead: close the parallel session",
+   "session": "par3",
+   "close": true
+  },
+  {
+   "item": 1,
+   "name": "lead: a logout command",
+   "frame": {
+    "command": "logout"
+   }
+  },
+  {
+   "item": 7,
+   "name": "lead: login for the idle timeout: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "idle",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 7,
+   "name": "lead: login for the idle timeout: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "idle",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 7,
+   "name": "lead: an idle timeout statement",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER SESSION SET IDLE_TIMEOUT = 1"
+   },
+   "session": "idle"
+  },
+  {
+   "item": 7,
+   "name": "lead: attributes with an idle timeout",
+   "frame": {
+    "command": "getAttributes"
+   },
+   "session": "idle"
+  },
+  {
+   "item": 7,
+   "name": "lead: a statement after the idle time",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 AS AFTER_IDLE"
+   },
+   "session": "idle",
+   "wait": "3s"
+  },
+  {
+   "item": 7,
+   "name": "lead: close the idle session",
+   "session": "idle",
+   "close": true
+  },
+  {
+   "item": 1,
+   "name": "lead: a session parameter",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER SESSION SET QUERY_TIMEOUT = 5"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: attributes after the session parameter",
+   "frame": {
+    "command": "getAttributes"
+   }
+  },
+  {
+   "item": 1,
+   "name": "lead: reset the session parameter",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ALTER SESSION SET QUERY_TIMEOUT = 0"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: prepare an insert of a decimal",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID, D2, D1, F) VALUES (?, ?, ?, ?)"
+   },
+   "capture": {
+    "ps7": "responseData.statementHandle",
+    "cols7": "responseData.parameterData.columns"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: a number for a decimal with a scale",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps7}}",
+    "numColumns": 4,
+    "numRows": 1,
+    "columns": "{{cols7}}",
+    "data": [
+     [
+      110
+     ],
+     [
+      1.5
+     ],
+     [
+      7
+     ],
+     [
+      1.0
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: a string for a decimal with a scale",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps7}}",
+    "numColumns": 4,
+    "numRows": 1,
+    "columns": "{{cols7}}",
+    "data": [
+     [
+      111
+     ],
+     [
+      "1.5"
+     ],
+     [
+      "7"
+     ],
+     [
+      1.0
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: a number with too many digits",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps7}}",
+    "numColumns": 4,
+    "numRows": 1,
+    "columns": "{{cols7}}",
+    "data": [
+     [
+      112
+     ],
+     [
+      "1.555"
+     ],
+     [
+      7
+     ],
+     [
+      1.0
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: an integer for a double",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps7}}",
+    "numColumns": 4,
+    "numRows": 1,
+    "columns": "{{cols7}}",
+    "data": [
+     [
+      113
+     ],
+     [
+      "1.5"
+     ],
+     [
+      7
+     ],
+     [
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: a string for a double",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps7}}",
+    "numColumns": 4,
+    "numRows": 1,
+    "columns": "{{cols7}}",
+    "data": [
+     [
+      114
+     ],
+     [
+      "1.5"
+     ],
+     [
+      7
+     ],
+     [
+      "NaN"
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: a double with an exponent",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps7}}",
+    "numColumns": 4,
+    "numRows": 1,
+    "columns": "{{cols7}}",
+    "data": [
+     [
+      115
+     ],
+     [
+      "1.5"
+     ],
+     [
+      7
+     ],
+     [
+      1.5e+300
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: close the insert of a decimal",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps7}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: the rows of the decimal inserts",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, D2, D1, F FROM DBIMP.TYPES WHERE ID BETWEEN 110 AND 115 ORDER BY ID"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: prepare an insert of an empty string",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID, V) VALUES (?, ?)"
+   },
+   "capture": {
+    "ps9": "responseData.statementHandle",
+    "cols9": "responseData.parameterData.columns"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: bind an empty string",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps9}}",
+    "numColumns": 2,
+    "numRows": 1,
+    "columns": "{{cols9}}",
+    "data": [
+     [
+      130
+     ],
+     [
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: close the insert of an empty string",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps9}}"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: the row of the empty string",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, V, V IS NULL AS IS_NULL FROM DBIMP.TYPES WHERE ID = 130"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: columns of the prepared statement with a wrong type",
+   "frame": {
+    "command": "createPreparedStatement",
+    "sqlText": "INSERT INTO DBIMP.TYPES (ID, DT) VALUES (?, ?)"
+   },
+   "capture": {
+    "ps8": "responseData.statementHandle"
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: declare a wrong column type",
+   "frame": {
+    "command": "executePreparedStatement",
+    "statementHandle": "{{#ps8}}",
+    "numColumns": 2,
+    "numRows": 1,
+    "columns": [
+     {
+      "name": "",
+      "dataType": {
+       "type": "DECIMAL",
+       "precision": 9,
+       "scale": 0
+      }
+     },
+     {
+      "name": "",
+      "dataType": {
+       "type": "VARCHAR",
+       "size": 20,
+       "characterSet": "UTF8"
+      }
+     }
+    ],
+    "data": [
+     [
+      120
+     ],
+     [
+      "2026-10-11"
+     ]
+    ]
+   }
+  },
+  {
+   "item": 4,
+   "name": "lead: close the wrong column type statement",
+   "frame": {
+    "command": "closePreparedStatement",
+    "statementHandle": "{{#ps8}}"
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements in one batch",
+   "frame": {
+    "command": "executeBatch",
+    "sqlTexts": [
+     "SELECT 1",
+     "INSERT INTO DBIMP.DML (ID) VALUES (50)",
+     "SELECT 2 AS X"
+    ]
+   }
+  },
+  {
+   "item": 10,
+   "name": "a batch with an error in the middle",
+   "frame": {
+    "command": "executeBatch",
+    "sqlTexts": [
+     "INSERT INTO DBIMP.DML (ID) VALUES (51)",
+     "SELEC",
+     "INSERT INTO DBIMP.DML (ID) VALUES (52)"
+    ]
+   }
+  },
+  {
+   "item": 10,
+   "name": "count the rows after the failed batch",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID FROM DBIMP.DML ORDER BY ID"
+   }
+  },
+  {
+   "item": 10,
+   "name": "an empty batch",
+   "frame": {
+    "command": "executeBatch",
+    "sqlTexts": []
+   }
+  },
+  {
+   "item": 10,
+   "name": "a batch of one large result",
+   "frame": {
+    "command": "executeBatch",
+    "sqlTexts": [
+     "SELECT ID FROM DBIMP.BIG"
+    ]
+   },
+   "capture": {
+    "hb1": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 10,
+   "name": "close the result of the batch",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#hb1}}"
+    ]
+   }
+  },
+  {
+   "item": 10,
+   "name": "two statements with a semicolon",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1; SELECT 2"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a block comment",
+   "frame": {
+    "command": "execute",
+    "sqlText": "/* before */ SELECT /* inside */ 2 /* after */"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a string with a semicolon",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 'a;b' AS S"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a placeholder in an execute",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ?"
+   }
+  },
+  {
+   "item": 10,
+   "name": "a question mark in a string",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 'what?' AS Q"
+   }
+  },
+  {
+   "item": 11,
+   "name": "turn autocommit off",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "autocommit": false
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "attributes after the autocommit change",
+   "frame": {
+    "command": "getAttributes"
+   }
+  },
+  {
+   "item": 11,
+   "name": "insert in a transaction",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (60, 'tx')"
+   }
+  },
+  {
+   "item": 11,
+   "name": "attributes with an open transaction",
+   "frame": {
+    "command": "getAttributes"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ROLLBACK"
+   }
+  },
+  {
+   "item": 11,
+   "name": "the row is gone after the rollback",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) AS N FROM DBIMP.DML WHERE ID = 60"
+   }
+  },
+  {
+   "item": 11,
+   "name": "insert again",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (61, 'tx')"
+   }
+  },
+  {
+   "item": 11,
+   "name": "commit",
+   "frame": {
+    "command": "execute",
+    "sqlText": "COMMIT"
+   }
+  },
+  {
+   "item": 11,
+   "name": "the row stays after the commit",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) AS N FROM DBIMP.DML WHERE ID = 61"
+   }
+  },
+  {
+   "item": 11,
+   "name": "DDL in a transaction",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.TXDDL (ID DECIMAL(9,0))"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback after DDL",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ROLLBACK"
+   }
+  },
+  {
+   "item": 11,
+   "name": "the table after the rollback",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) AS N FROM EXA_ALL_TABLES WHERE TABLE_SCHEMA = 'DBIMP' AND TABLE_NAME = 'TXDDL'"
+   }
+  },
+  {
+   "item": 11,
+   "name": "a failed statement in a transaction",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (61, 'dup')"
+   }
+  },
+  {
+   "item": 11,
+   "name": "the transaction after the failure",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) AS N FROM DBIMP.DML WHERE ID = 61"
+   }
+  },
+  {
+   "item": 11,
+   "name": "begin is not a statement",
+   "frame": {
+    "command": "execute",
+    "sqlText": "BEGIN"
+   }
+  },
+  {
+   "item": 11,
+   "name": "start transaction is not a statement",
+   "frame": {
+    "command": "execute",
+    "sqlText": "START TRANSACTION"
+   }
+  },
+  {
+   "item": 11,
+   "name": "set a transaction isolation level",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE"
+   }
+  },
+  {
+   "item": 11,
+   "name": "savepoint",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SAVEPOINT S1"
+   }
+  },
+  {
+   "item": 11,
+   "name": "commit with nothing open",
+   "frame": {
+    "command": "execute",
+    "sqlText": "COMMIT"
+   }
+  },
+  {
+   "item": 11,
+   "name": "turn autocommit on",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "autocommit": true
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "insert with autocommit",
+   "frame": {
+    "command": "execute",
+    "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (62, 'auto')"
+   }
+  },
+  {
+   "item": 11,
+   "name": "rollback with autocommit",
+   "frame": {
+    "command": "execute",
+    "sqlText": "ROLLBACK"
+   }
+  },
+  {
+   "item": 11,
+   "name": "the row stays",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) AS N FROM DBIMP.DML WHERE ID = 62"
+   }
+  },
+  {
+   "item": 11,
+   "name": "set an unknown attribute",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "noSuchAttribute": 1
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "set a read only attribute",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "openTransaction": true
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "set an attribute of the wrong type",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "autocommit": "yes"
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "set the date format",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "dateFormat": "DD.MM.YYYY"
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "select a date with the new format",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT DATE '2026-10-11' AS D, TO_CHAR(DATE '2026-10-11') AS S"
+   }
+  },
+  {
+   "item": 11,
+   "name": "set the numeric characters",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "numericCharacters": ",."
+    }
+   }
+  },
+  {
+   "item": 11,
+   "name": "select a decimal with the new characters",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1.5 AS D, TO_CHAR(1234.5) AS S"
+   }
+  },
+  {
+   "item": 11,
+   "name": "restore the formats",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "dateFormat": "YYYY-MM-DD",
+     "numericCharacters": ".,"
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "set a query timeout of one second",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "queryTimeout": 1
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "a query that runs over the timeout",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) FROM (SELECT * FROM EXA_SQL_KEYWORDS A, EXA_SQL_KEYWORDS B, EXA_SQL_KEYWORDS C, EXA_SQL_KEYWORDS D)"
+   }
+  },
+  {
+   "item": 7,
+   "name": "the session after the timeout",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 AS STILL_THERE"
+   }
+  },
+  {
+   "item": 7,
+   "name": "remove the query timeout",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "queryTimeout": 0
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "abort a running query",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) FROM (SELECT * FROM EXA_SQL_KEYWORDS A, EXA_SQL_KEYWORDS B, EXA_SQL_KEYWORDS C, EXA_SQL_KEYWORDS D)"
+   },
+   "interrupt": {
+    "after": "1500ms",
+    "frame": {
+     "command": "abortQuery"
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "the session after the abort",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 2 AS STILL_THERE"
+   }
+  },
+  {
+   "item": 7,
+   "name": "abort when nothing runs",
+   "frame": {
+    "command": "abortQuery"
+   },
+   "noReply": true
+  },
+  {
+   "item": 7,
+   "name": "the session after the idle abort",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 3 AS STILL_THERE"
+   }
+  },
+  {
+   "item": 7,
+   "name": "a query timeout of a wrong type",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "queryTimeout": "soon"
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "a negative query timeout",
+   "frame": {
+    "command": "setAttributes",
+    "attributes": {
+     "queryTimeout": -1
+    }
+   }
+  },
+  {
+   "item": 7,
+   "name": "the session that goes away: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "victim",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 7,
+   "name": "the session that goes away: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "victim",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 7,
+   "name": "start a long query and leave",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT COUNT(*) FROM (SELECT * FROM EXA_SQL_KEYWORDS A, EXA_SQL_KEYWORDS B, EXA_SQL_KEYWORDS C, EXA_SQL_KEYWORDS D, EXA_SQL_KEYWORDS E)"
+   },
+   "session": "victim",
+   "noReply": true
+  },
+  {
+   "item": 7,
+   "name": "the session goes away",
+   "session": "victim",
+   "close": true,
+   "wait": "500ms"
+  },
+  {
+   "item": 7,
+   "name": "the sessions right after the client left",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT STATUS, COMMAND_NAME, LEFT(SQL_TEXT, 40) AS SQL_START FROM EXA_DBA_SESSIONS WHERE SESSION_ID <> CURRENT_SESSION ORDER BY SESSION_ID"
+   },
+   "wait": "500ms"
+  },
+  {
+   "item": 7,
+   "name": "the sessions five seconds later",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT STATUS, COMMAND_NAME, LEFT(SQL_TEXT, 40) AS SQL_START FROM EXA_DBA_SESSIONS WHERE SESSION_ID <> CURRENT_SESSION ORDER BY SESSION_ID"
+   },
+   "wait": "5s"
+  },
+  {
+   "item": 8,
+   "name": "create a user that can only log in",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE USER DBIMP_LOW IDENTIFIED BY \"Low-pass-1\""
+   }
+  },
+  {
+   "item": 8,
+   "name": "grant the session privilege",
+   "frame": {
+    "command": "execute",
+    "sqlText": "GRANT CREATE SESSION TO DBIMP_LOW"
+   }
+  },
+  {
+   "item": 8,
+   "name": "login as the user with one privilege: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "low",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 8,
+   "name": "login as the user with one privilege: send the credentials",
+   "frame": {
+    "username": "DBIMP_LOW",
+    "password": "Low-pass-1",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "low",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 8,
+   "name": "select without the privilege",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM DBIMP.DML"
+   },
+   "session": "low"
+  },
+  {
+   "item": 8,
+   "name": "read the version without the privilege",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT PARAM_VALUE FROM EXA_METADATA WHERE PARAM_NAME = 'databaseProductVersion'"
+   },
+   "session": "low"
+  },
+  {
+   "item": 8,
+   "name": "read the own user",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CURRENT_USER, CURRENT_SCHEMA"
+   },
+   "session": "low"
+  },
+  {
+   "item": 8,
+   "name": "create a table without the privilege",
+   "frame": {
+    "command": "execute",
+    "sqlText": "CREATE TABLE DBIMP.LOWT (X INT)"
+   },
+   "session": "low"
+  },
+  {
+   "item": 8,
+   "name": "read the system table of sessions without the privilege",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM EXA_DBA_SESSIONS"
+   },
+   "session": "low"
+  },
+  {
+   "item": 8,
+   "name": "disconnect the user",
+   "frame": {
+    "command": "disconnect"
+   },
+   "session": "low"
+  },
+  {
+   "item": 8,
+   "name": "close the session of the user",
+   "session": "low",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with a wrong password: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "wrongpass",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 8,
+   "name": "login with a wrong password: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "wrongpass",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   },
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "close the session of the wrong password",
+   "session": "wrongpass",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with a wrong user: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "wronguser",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 8,
+   "name": "login with a wrong user: send the credentials",
+   "frame": {
+    "username": "NOSUCHUSER",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "wronguser",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 8,
+   "name": "close the session of the wrong user",
+   "session": "wronguser",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with a lower case user",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "lower",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 8,
+   "name": "send the credentials of a lower case user",
+   "frame": {
+    "username": "sys",
+    "password": "{{password}}",
+    "useCompression": false,
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "lower",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 8,
+   "name": "disconnect the lower case user",
+   "frame": {
+    "command": "disconnect"
+   },
+   "session": "lower"
+  },
+  {
+   "item": 8,
+   "name": "close the lower case session",
+   "session": "lower",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "send the credentials with no key",
+   "frame": {
+    "username": "sys",
+    "password": "plain",
+    "useCompression": false
+   },
+   "session": "nokey"
+  },
+  {
+   "item": 8,
+   "name": "close the session with no key",
+   "session": "nokey",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "execute before the login",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1"
+   },
+   "session": "nologin"
+  },
+  {
+   "item": 8,
+   "name": "close the session with no login",
+   "session": "nologin",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with a password that is not encrypted",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "plain"
+  },
+  {
+   "item": 8,
+   "name": "send a plain password",
+   "frame": {
+    "username": "sys",
+    "password": "{{password}}",
+    "useCompression": false
+   },
+   "session": "plain"
+  },
+  {
+   "item": 8,
+   "name": "close the session with a plain password",
+   "session": "plain",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with an unknown protocol",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 9
+   },
+   "session": "proto9"
+  },
+  {
+   "item": 8,
+   "name": "close the session of protocol 9",
+   "session": "proto9",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with protocol 1",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 1
+   },
+   "session": "proto1"
+  },
+  {
+   "item": 8,
+   "name": "close the session of protocol 1",
+   "session": "proto1",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with no protocol",
+   "frame": {
+    "command": "login"
+   },
+   "session": "noproto"
+  },
+  {
+   "item": 8,
+   "name": "close the session with no protocol",
+   "session": "noproto",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login with a token that is wrong",
+   "frame": {
+    "command": "loginToken",
+    "protocolVersion": 3
+   },
+   "session": "token"
+  },
+  {
+   "item": 8,
+   "name": "send the wrong token",
+   "frame": {
+    "accessToken": "not-a-token",
+    "useCompression": false
+   },
+   "session": "token"
+  },
+  {
+   "item": 8,
+   "name": "close the session of the token",
+   "session": "token",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "login again as the administrator: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "again",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 8,
+   "name": "login again as the administrator: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "again",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 8,
+   "name": "login a second time on the same session",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "again"
+  },
+  {
+   "item": 8,
+   "name": "disconnect",
+   "frame": {
+    "command": "disconnect"
+   },
+   "session": "again"
+  },
+  {
+   "item": 8,
+   "name": "close the session that logged in twice",
+   "session": "again",
+   "close": true
+  },
+  {
+   "item": 8,
+   "name": "drop the user",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DROP USER DBIMP_LOW CASCADE"
+   }
+  },
+  {
+   "item": 1,
+   "name": "login with protocol 4: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 4
+   },
+   "session": "v4",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 1,
+   "name": "login with protocol 4: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "v4",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 1,
+   "name": "select a timestamp on protocol 4",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT TS, TS9, TSL, DT FROM DBIMP.TYPES WHERE ID = 1"
+   },
+   "session": "v4"
+  },
+  {
+   "item": 1,
+   "name": "disconnect protocol 4",
+   "frame": {
+    "command": "disconnect"
+   },
+   "session": "v4"
+  },
+  {
+   "item": 1,
+   "name": "close protocol 4",
+   "session": "v4",
+   "close": true
+  },
+  {
+   "item": 1,
+   "name": "login with protocol 5: ask for the key",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 5
+   },
+   "session": "v5",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 1,
+   "name": "login with protocol 5: send the credentials",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": false,
+    "clientName": "dbimp",
+    "driverName": "dbimp record",
+    "attributes": {
+     "autocommit": true
+    }
+   },
+   "session": "v5",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 3,
+   "name": "select precisions on protocol 5",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT CAST('2026-10-11 12:34:56.123456789' AS TIMESTAMP(9)) AS T9, CAST('2026-10-11 12:34:56.123456' AS TIMESTAMP(6)) AS T6, CAST('2026-10-11 12:34:56' AS TIMESTAMP(0)) AS T0, CAST('2026-10-11 12:34:56.123' AS TIMESTAMP(3) WITH LOCAL TIME ZONE) AS TL3, INTERVAL '2 03:04:05.678' DAY TO SECOND AS I, TS FROM DBIMP.TYPES WHERE ID = 1"
+   },
+   "session": "v5"
+  },
+  {
+   "item": 3,
+   "name": "select the table of types on protocol 5",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT * FROM DBIMP.TYPES WHERE ID IN (1, 4) ORDER BY ID"
+   },
+   "session": "v5"
+  },
+  {
+   "item": 1,
+   "name": "lead: request parallel connections on protocol 5",
+   "frame": {
+    "command": "requestParallelConnections",
+    "numRequestedConnections": 2
+   },
+   "session": "v5"
+  },
+  {
+   "item": 1,
+   "name": "disconnect protocol 5",
+   "frame": {
+    "command": "disconnect"
+   },
+   "session": "v5"
+  },
+  {
+   "item": 1,
+   "name": "close protocol 5",
+   "session": "v5",
+   "close": true
+  },
+  {
+   "item": 12,
+   "name": "ask for the key before compression",
+   "frame": {
+    "command": "login",
+    "protocolVersion": 3
+   },
+   "session": "zlib",
+   "capture": {
+    "mod": "responseData.publicKeyModulus",
+    "exp": "responseData.publicKeyExponent"
+   }
+  },
+  {
+   "item": 12,
+   "name": "send the credentials and ask for compression",
+   "frame": {
+    "username": "{{user}}",
+    "password": "{{password}}",
+    "useCompression": true,
+    "clientName": "dbimp",
+    "attributes": {
+     "autocommit": true,
+     "compressionEnabled": true
+    }
+   },
+   "session": "zlib",
+   "encrypt": {
+    "member": "password",
+    "modulus": "mod",
+    "exponent": "exp"
+   }
+  },
+  {
+   "item": 12,
+   "name": "select with compression",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 1 AS ONE, 'zlib' AS KIND"
+   },
+   "session": "zlib",
+   "zlib": true
+  },
+  {
+   "item": 12,
+   "name": "select the rows with compression",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, TXT FROM DBIMP.BIG WHERE ID <= 200 ORDER BY ID"
+   },
+   "session": "zlib",
+   "zlib": true
+  },
+  {
+   "item": 12,
+   "name": "select a large result with compression",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT ID, TXT FROM DBIMP.BIG ORDER BY ID"
+   },
+   "session": "zlib",
+   "zlib": true,
+   "capture": {
+    "hz": "responseData.results.0.resultSet.resultSetHandle"
+   }
+  },
+  {
+   "item": 12,
+   "name": "fetch with compression",
+   "frame": {
+    "command": "fetch",
+    "resultSetHandle": "{{#hz}}",
+    "startPosition": 1000,
+    "numBytes": 8000
+   },
+   "session": "zlib",
+   "zlib": true
+  },
+  {
+   "item": 12,
+   "name": "close with compression",
+   "frame": {
+    "command": "closeResultSet",
+    "resultSetHandles": [
+     "{{#hz}}"
+    ]
+   },
+   "session": "zlib",
+   "zlib": true
+  },
+  {
+   "item": 12,
+   "name": "an error with compression",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELEC 1"
+   },
+   "session": "zlib",
+   "zlib": true
+  },
+  {
+   "item": 12,
+   "name": "a text frame after compression was turned on",
+   "frame": {
+    "command": "execute",
+    "sqlText": "SELECT 2"
+   },
+   "session": "zlib"
+  },
+  {
+   "item": 12,
+   "name": "disconnect with compression",
+   "frame": {
+    "command": "disconnect"
+   },
+   "session": "zlib",
+   "zlib": true
+  },
+  {
+   "item": 12,
+   "name": "close the compressed session",
+   "session": "zlib",
+   "close": true
+  },
+  {
+   "item": 1,
+   "name": "drop the schema at the end",
+   "frame": {
+    "command": "execute",
+    "sqlText": "DROP SCHEMA DBIMP CASCADE"
+   }
+  },
+  {
+   "item": 1,
+   "name": "disconnect",
+   "frame": {
+    "command": "disconnect"
+   }
+  }
+ ]
+}

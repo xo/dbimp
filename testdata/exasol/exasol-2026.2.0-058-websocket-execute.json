@@ -1,0 +1,239 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT ID, B, C, V, D1, D2, D3, F, DT, TS, TSL, IYM, IDS, G, H FROM DBIMP.TYPES WHERE ID >= 100 ORDER BY ID"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 15,
+              "numRows": 4,
+              "numRowsInMessage": 4,
+              "columns": [
+                {
+                  "name": "ID",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "B",
+                  "dataType": {
+                    "type": "BOOLEAN"
+                  }
+                },
+                {
+                  "name": "C",
+                  "dataType": {
+                    "type": "CHAR",
+                    "size": 5,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "V",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 100,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "D1",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "D2",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 10,
+                    "scale": 2
+                  }
+                },
+                {
+                  "name": "D3",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 36,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "F",
+                  "dataType": {
+                    "type": "DOUBLE"
+                  }
+                },
+                {
+                  "name": "DT",
+                  "dataType": {
+                    "type": "DATE",
+                    "size": 4
+                  }
+                },
+                {
+                  "name": "TS",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "size": 16
+                  }
+                },
+                {
+                  "name": "TSL",
+                  "dataType": {
+                    "type": "TIMESTAMP WITH LOCAL TIME ZONE",
+                    "withLocalTimeZone": true,
+                    "size": 16
+                  }
+                },
+                {
+                  "name": "IYM",
+                  "dataType": {
+                    "type": "INTERVAL YEAR TO MONTH",
+                    "size": 13,
+                    "precision": 9
+                  }
+                },
+                {
+                  "name": "IDS",
+                  "dataType": {
+                    "type": "INTERVAL DAY TO SECOND",
+                    "size": 29,
+                    "precision": 9,
+                    "fraction": 9
+                  }
+                },
+                {
+                  "name": "G",
+                  "dataType": {
+                    "type": "GEOMETRY",
+                    "size": 2000000,
+                    "srid": 0
+                  }
+                },
+                {
+                  "name": "H",
+                  "dataType": {
+                    "type": "HASHTYPE",
+                    "size": 32
+                  }
+                }
+              ],
+              "data": [
+                [
+                  100,
+                  101,
+                  102,
+                  103
+                ],
+                [
+                  true,
+                  false,
+                  true,
+                  null
+                ],
+                [
+                  "abc  ",
+                  "a    ",
+                  null,
+                  "c    "
+                ],
+                [
+                  "param",
+                  "x",
+                  "y",
+                  null
+                ],
+                [
+                  123456789012345678,
+                  1,
+                  2,
+                  null
+                ],
+                [
+                  "12345.67",
+                  "1.5",
+                  null,
+                  "3"
+                ],
+                [
+                  "123456789012345678901234567890123456",
+                  null,
+                  null,
+                  null
+                ],
+                [
+                  2.5,
+                  1.0,
+                  null,
+                  3.5
+                ],
+                [
+                  "2026-10-11",
+                  "2026-01-01",
+                  null,
+                  "2026-12-31"
+                ],
+                [
+                  "2026-10-11 01:02:03.456000",
+                  null,
+                  "2026-02-02 02:02:02.000000",
+                  null
+                ],
+                [
+                  "2026-10-11 01:02:03.456000",
+                  null,
+                  null,
+                  null
+                ],
+                [
+                  "+000000012-03",
+                  null,
+                  null,
+                  null
+                ],
+                [
+                  "+000000002 03:04:05.678000000",
+                  null,
+                  null,
+                  null
+                ],
+                [
+                  "POINT (3 4)",
+                  null,
+                  null,
+                  null
+                ],
+                [
+                  "550e8400e29b41d4a716446655440001",
+                  null,
+                  null,
+                  null
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

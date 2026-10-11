@@ -1,0 +1,100 @@
+{
+  "transport": "websocket",
+  "session": "v5",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT CAST('2026-10-11 12:34:56.123456789' AS TIMESTAMP(9)) AS T9, CAST('2026-10-11 12:34:56.123456' AS TIMESTAMP(6)) AS T6, CAST('2026-10-11 12:34:56' AS TIMESTAMP(0)) AS T0, CAST('2026-10-11 12:34:56.123' AS TIMESTAMP(3) WITH LOCAL TIME ZONE) AS TL3, INTERVAL '2 03:04:05.678' DAY TO SECOND AS I, TS FROM DBIMP.TYPES WHERE ID = 1"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 6,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "T9",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "precision": 9
+                  }
+                },
+                {
+                  "name": "T6",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "precision": 6
+                  }
+                },
+                {
+                  "name": "T0",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "precision": 0
+                  }
+                },
+                {
+                  "name": "TL3",
+                  "dataType": {
+                    "type": "TIMESTAMP WITH LOCAL TIME ZONE",
+                    "withLocalTimeZone": true,
+                    "precision": 3
+                  }
+                },
+                {
+                  "name": "I",
+                  "dataType": {
+                    "type": "INTERVAL DAY TO SECOND",
+                    "precision": 2,
+                    "fraction": 3
+                  }
+                },
+                {
+                  "name": "TS",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "precision": 3
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "2026-10-11 12:34:56.123456"
+                ],
+                [
+                  "2026-10-11 12:34:56.123456"
+                ],
+                [
+                  "2026-10-11 12:34:56.000000"
+                ],
+                [
+                  "2026-10-11 12:34:56.123000"
+                ],
+                [
+                  "+02 03:04:05.678"
+                ],
+                [
+                  "2026-10-11 12:34:56.123000"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

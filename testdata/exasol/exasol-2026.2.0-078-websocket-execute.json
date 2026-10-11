@@ -1,0 +1,26 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "INSERT INTO DBIMP.BIG SELECT LEVEL, 'row ' || LEVEL FROM DUAL CONNECT BY LEVEL <= 3000"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 3000
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

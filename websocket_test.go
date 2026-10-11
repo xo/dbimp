@@ -13,8 +13,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
 	"testing"
 	"time"
+	"unicode/utf8"
 
 	"github.com/xo/dbimp"
 	"github.com/xo/dbimp/dbimptest"
@@ -111,6 +113,10 @@ type serverOptions struct {
 	extension string
 	protocol  string
 	status    int
+	// dupAccept sends the Sec-WebSocket-Accept header twice, and dupProtocol sends
+	// the Sec-WebSocket-Protocol header twice.
+	dupAccept   bool
+	dupProtocol bool
 }
 
 // newWSServer starts a TLS server, with HTTP/2 on, that upgrades each request
@@ -149,6 +155,12 @@ func newWSServer(t *testing.T, so serverOptions, serve func(*testing.T, *wsConn,
 		}
 		if so.protocol != "" {
 			sb.WriteString("Sec-WebSocket-Protocol: " + so.protocol + "\r\n")
+		}
+		if so.dupProtocol {
+			sb.WriteString("Sec-WebSocket-Protocol: " + so.protocol + "\r\n")
+		}
+		if so.dupAccept {
+			sb.WriteString("Sec-WebSocket-Accept: " + accept + "\r\n")
 		}
 		sb.WriteString("\r\n")
 		_, _ = conn.Write([]byte(sb.String()))
@@ -443,5 +455,330 @@ func TestWebSocketRefusedOverPlainHTTP(t *testing.T) { //nolint:paralleltest // 
 	var se *dbimp.StatusError
 	if !errors.As(err, &se) || se.Code != 403 {
 		t.Errorf("got %v", err)
+	}
+}
+
+// TestWebSocketCloseAfterACleanCloseReturnsNil holds that a connection that ended
+// with a close frame of the server is closed with no error, so that a deferred
+// Close does not report a normal shutdown, and that Close is idempotent.
+func TestWebSocketCloseAfterACleanCloseReturnsNil(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+		t.Helper()
+		c.write(true, 8, closePayload(1000, "done"))
+		_, _ = c.tryRead()
+	})
+	ws := dial(t, srv)
+	var ce *dbimp.CloseError
+	if _, _, err := ws.Read(t.Context()); !errors.As(err, &ce) || ce.Code != dbimp.CloseNormal {
+		t.Fatalf("got %v", err)
+	}
+	for i := range 2 {
+		if err := ws.Close(dbimp.CloseNormal, ""); err != nil {
+			t.Errorf("Close call %d after a clean close: %v", i+1, err)
+		}
+	}
+}
+
+// TestWebSocketNoDataFrameAfterTheCloseFrame holds RFC 6455 section 5.5.1: a
+// frame that is not a close frame never follows the close frame.
+func TestWebSocketNoDataFrameAfterTheCloseFrame(t *testing.T) {
+	t.Parallel()
+	c, s := net.Pipe()
+	t.Cleanup(func() { _ = s.Close() })
+	ws := dbimp.NewTestWebSocket(c)
+	opcodes := make(chan byte, 8)
+	go func() {
+		br := bufio.NewReader(s)
+		for {
+			var h [2]byte
+			if _, err := io.ReadFull(br, h[:]); err != nil {
+				close(opcodes)
+				return
+			}
+			n := int(h[1] & 0x7f)
+			rest := make([]byte, 4+n)
+			if _, err := io.ReadFull(br, rest); err != nil {
+				close(opcodes)
+				return
+			}
+			opcodes <- h[0] & 0xf
+		}
+	}()
+	if err := ws.SendCloseForTest(dbimp.CloseNormal, ""); err != nil {
+		t.Fatal(err)
+	}
+	if op := <-opcodes; op != 8 {
+		t.Fatalf("the first frame has the opcode %d, want 8", op)
+	}
+	err := ws.Write(t.Context(), dbimp.MessageText, []byte("late"))
+	if !errors.Is(err, dbimp.ErrWebSocketClosed) {
+		t.Errorf("Write after the close frame: %v, want ErrWebSocketClosed", err)
+	}
+	_ = c.Close()
+	for op := range opcodes {
+		t.Errorf("a frame with the opcode %d followed the close frame", op)
+	}
+}
+
+// TestWebSocketWriteDuringCloseGetsTheClosedError holds that a Write and a Read
+// that start while Close waits for the reply of the server return at once, and
+// that they do not cut the handshake short.
+func TestWebSocketWriteDuringCloseGetsTheClosedError(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	release := make(chan struct{})
+	srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+		t.Helper()
+		f := c.read(t)
+		<-release
+		c.write(true, 8, f.payload)
+		_, _ = c.tryRead()
+	})
+	ws := dial(t, srv)
+	closed := make(chan error, 1)
+	go func() { closed <- ws.Close(dbimp.CloseNormal, "") }()
+	var err error
+	deadline := time.Now().Add(5 * time.Second)
+	for time.Now().Before(deadline) {
+		if err = ws.Write(t.Context(), dbimp.MessageText, []byte("x")); err != nil {
+			break
+		}
+		time.Sleep(time.Millisecond)
+	}
+	if !errors.Is(err, dbimp.ErrWebSocketClosed) {
+		t.Fatalf("Write during Close: %v, want ErrWebSocketClosed", err)
+	}
+	start := time.Now()
+	if _, _, err := ws.Read(t.Context()); !errors.Is(err, dbimp.ErrWebSocketClosed) || time.Since(start) > time.Second {
+		t.Errorf("Read during Close: %v after %v, want ErrWebSocketClosed at once", err, time.Since(start))
+	}
+	close(release)
+	if err := <-closed; err != nil {
+		t.Errorf("Close: %v", err)
+	}
+}
+
+// TestWebSocketControlFrameDoesNotCountAgainstTheLimit holds that a ping inside a
+// fragmented message, near the limit, is not a message that is too big.
+func TestWebSocketControlFrameDoesNotCountAgainstTheLimit(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+		t.Helper()
+		c.write(false, 2, make([]byte, 9))
+		c.write(true, 9, []byte("12345"))
+		c.write(true, 0, make([]byte, 1))
+		_, _ = c.tryRead()
+	})
+	ws := dial(t, srv, dbimp.WithWebSocketMaxMessage(10))
+	mt, msg, err := ws.Read(t.Context())
+	if err != nil || mt != dbimp.MessageBinary || len(msg) != 10 {
+		t.Errorf("got %v, %d bytes, %v, want a message of 10 bytes", mt, len(msg), err)
+	}
+}
+
+// TestWebSocketTruncatedFrameIsAnUnexpectedEOF holds that a stream that ends
+// inside a frame is io.ErrUnexpectedEOF, and that only the end at the start of a
+// frame is io.EOF.
+func TestWebSocketTruncatedFrameIsAnUnexpectedEOF(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	for name, tc := range map[string]struct {
+		wire []byte
+		want error
+	}{
+		"cut header":         {[]byte{0x81}, io.ErrUnexpectedEOF},
+		"cut length":         {[]byte{0x82, 0x7e, 0x01}, io.ErrUnexpectedEOF},
+		"no length":          {[]byte{0x82, 0x7e}, io.ErrUnexpectedEOF},
+		"cut payload":        {[]byte{0x81, 0x05, 'a', 'b'}, io.ErrUnexpectedEOF},
+		"no payload":         {[]byte{0x81, 0x05}, io.ErrUnexpectedEOF},
+		"end at a boundary":  {nil, io.EOF},
+		"end after a frame":  {[]byte{0x81, 0x01, 'a'}, io.EOF},
+		"cut control frame":  {[]byte{0x89, 0x03, 'a'}, io.ErrUnexpectedEOF},
+		"cut extended frame": {append([]byte{0x82, 0x7f}, 0, 0, 0, 0), io.ErrUnexpectedEOF},
+	} {
+		srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+			t.Helper()
+			if len(tc.wire) > 0 {
+				_, _ = c.conn.Write(tc.wire)
+			}
+		})
+		ws := dial(t, srv)
+		var err error
+		for range 3 {
+			if _, _, err = ws.Read(t.Context()); err != nil {
+				break
+			}
+		}
+		if !errors.Is(err, tc.want) {
+			t.Errorf("%s: got %v, want %v", name, err, tc.want)
+		}
+		if errors.Is(tc.want, io.EOF) && errors.Is(err, io.ErrUnexpectedEOF) {
+			t.Errorf("%s: a clean end is an unexpected EOF: %v", name, err)
+		}
+	}
+}
+
+// TestWebSocketCloseReasonIsCutAtACharacter holds that a reason that is longer
+// than 123 bytes is cut where a character starts, so that the close frame holds
+// UTF-8 (RFC 6455 section 5.5.1).
+func TestWebSocketCloseReasonIsCutAtACharacter(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	got := make(chan wsFrame, 1)
+	srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+		t.Helper()
+		f := c.read(t)
+		got <- f
+		c.write(true, 8, f.payload)
+	})
+	ws := dial(t, srv)
+	if err := ws.Close(dbimp.CloseNormal, strings.Repeat("é", 100)); err != nil {
+		t.Fatal(err)
+	}
+	f := <-got
+	reason := f.payload[2:]
+	if f.opcode != 8 || len(reason) > 123 || !utf8.Valid(reason) || len(reason) != 122 {
+		t.Errorf("the close frame has a reason of %d bytes, valid %t, want 122 bytes of UTF-8", len(reason), utf8.Valid(reason))
+	}
+}
+
+// TestWebSocketHeadersAreCanonicalAndTheProtocolOnesAreIgnored holds that the
+// header names of the caller are canonical, so that the headers that the protocol
+// needs cannot be replaced or repeated, whatever the case of their names.
+func TestWebSocketHeadersAreCanonicalAndTheProtocolOnesAreIgnored(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	got := make(chan http.Header, 1)
+	srv := newWSServer(t, serverOptions{}, func(_ *testing.T, c *wsConn, r *http.Request) {
+		got <- r.Header
+		_, _ = c.tryRead()
+	})
+	dial(t, srv, dbimp.WithWebSocketHeader(http.Header{
+		"sec-websocket-extensions": {"permessage-deflate"},
+		"upgrade":                  {"other"},
+		"connection":               {"close"},
+		"sec-websocket-key":        {"AAAAAAAAAAAAAAAAAAAAAA=="},
+		"sec-websocket-version":    {"8"},
+		"sec-websocket-protocol":   {"x"},
+		"x-lower":                  {"1"},
+	}))
+	h := <-got
+	if v := h.Values("Sec-WebSocket-Extensions"); len(v) != 0 {
+		t.Errorf("the client sent the extensions %v", v)
+	}
+	for name, want := range map[string]string{"Upgrade": "websocket", "Sec-Websocket-Version": "13"} {
+		if v := h.Values(name); len(v) != 1 || v[0] != want {
+			t.Errorf("%s is %v, want [%s]", name, v, want)
+		}
+	}
+	if v := h.Values("Sec-WebSocket-Key"); len(v) != 1 || v[0] == "AAAAAAAAAAAAAAAAAAAAAA==" {
+		t.Errorf("Sec-Websocket-Key is %v", v)
+	}
+	if v := h.Values("Sec-WebSocket-Protocol"); len(v) != 0 {
+		t.Errorf("the client sent the subprotocols %v", v)
+	}
+	if h.Get("X-Lower") != "1" {
+		t.Errorf("the header x-lower is %q, want 1", h.Get("X-Lower"))
+	}
+}
+
+// TestWebSocketCloseReasonThatIsNotUTF8Is1007 holds RFC 6455 section 7.4.1: a close
+// reason that is not UTF-8 gets the code 1007.
+func TestWebSocketCloseReasonThatIsNotUTF8Is1007(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	got := make(chan wsFrame, 1)
+	srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+		t.Helper()
+		c.write(true, 8, append(closePayload(1000, ""), 0xff, 0xfe))
+		got <- c.read(t)
+	})
+	ws := dial(t, srv)
+	if _, _, err := ws.Read(t.Context()); !errors.Is(err, dbimp.ErrWebSocketProtocol) {
+		t.Fatalf("got %v", err)
+	}
+	if f := <-got; f.opcode != 8 || binary.BigEndian.Uint16(f.payload) != 1007 {
+		t.Errorf("close frame: %+v, want the code 1007", f)
+	}
+}
+
+// TestWebSocketRefusesARepeatedHandshakeHeader holds that a response with the
+// Sec-WebSocket-Accept or the Sec-WebSocket-Protocol header twice is refused.
+func TestWebSocketRefusesARepeatedHandshakeHeader(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	idle := func(*testing.T, *wsConn, *http.Request) {}
+	for name, so := range map[string]serverOptions{
+		"accept twice":   {dupAccept: true},
+		"protocol twice": {protocol: "mine", dupProtocol: true},
+	} {
+		srv := newWSServer(t, so, idle)
+		_, err := dbimp.DialWebSocket(t.Context(), wsURL(srv), insecure, dbimp.WithWebSocketSubprotocols("mine"))
+		if !errors.Is(err, dbimp.ErrHandshake) {
+			t.Errorf("%s: got %v, want ErrHandshake", name, err)
+		}
+	}
+}
+
+// TestWebSocketContextEndedAfterAReadDoesNotCloseTheConnection holds that a
+// context that ends after a call returned does not close the connection, however
+// often it is tried.
+func TestWebSocketContextEndedAfterAReadDoesNotCloseTheConnection(t *testing.T) { //nolint:paralleltest // CheckGoroutines counts the goroutines of the process.
+	dbimptest.CheckGoroutines(t)
+	srv := newWSServer(t, serverOptions{}, func(t *testing.T, c *wsConn, _ *http.Request) {
+		t.Helper()
+		for {
+			f, err := c.tryRead()
+			if err != nil || f.opcode == 8 {
+				return
+			}
+			c.write(true, f.opcode, f.payload)
+		}
+	})
+	ws := dial(t, srv)
+	var wg sync.WaitGroup
+	for i := range 200 {
+		ctx, cancel := context.WithCancel(t.Context())
+		if err := ws.Write(ctx, dbimp.MessageText, []byte("ping")); err != nil {
+			t.Fatalf("round %d: Write: %v", i, err)
+		}
+		_, msg, err := ws.Read(ctx)
+		if err != nil || string(msg) != "ping" {
+			t.Fatalf("round %d: Read: %q, %v", i, msg, err)
+		}
+		wg.Go(cancel)
+		wg.Wait()
+	}
+}
+
+// cancelAfterWrite is a connection that ends a context just after it wrote a
+// whole frame, and before the call that wrote it returns.
+type cancelAfterWrite struct {
+	net.Conn
+
+	cancel context.CancelFunc
+}
+
+func (c *cancelAfterWrite) Write(p []byte) (int, error) {
+	n, err := c.Conn.Write(p)
+	if c.cancel != nil {
+		c.cancel()
+		c.cancel = nil
+		time.Sleep(50 * time.Millisecond)
+	}
+	return n, err
+}
+
+// TestWebSocketContextEndedAfterTheFrameWentOutKeepsTheConnection holds that a
+// Write that sent its whole frame returns nil, and that the connection works for
+// the next call, when the context ends before the call returns.
+func TestWebSocketContextEndedAfterTheFrameWentOutKeepsTheConnection(t *testing.T) {
+	t.Parallel()
+	c, s := net.Pipe()
+	t.Cleanup(func() { _ = s.Close(); _ = c.Close() })
+	go func() { _, _ = io.Copy(io.Discard, s) }()
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	ws := dbimp.NewTestWebSocket(&cancelAfterWrite{Conn: c, cancel: cancel})
+	if err := ws.Write(ctx, dbimp.MessageText, []byte("one")); err != nil {
+		t.Fatalf("first Write: %v", err)
+	}
+	if err := ws.Write(t.Context(), dbimp.MessageText, []byte("two")); err != nil {
+		t.Errorf("second Write after the context ended: %v", err)
 	}
 }

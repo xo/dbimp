@@ -1,0 +1,23 @@
+{
+  "transport": "websocket",
+  "session": "zlib",
+  "request": {
+    "type": "binary",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELEC 1"
+    },
+    "zlib": true
+  },
+  "reply": {
+    "type": "binary",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "syntax error, unexpected UNSIGNED_INTEGER_, expecting ASSIGNMENT_OPERATOR_ or ':' [line 1, column 7] (Session: 1878718590055088128)",
+        "sqlCode": "42000"
+      }
+    },
+    "zlib": true
+  }
+}

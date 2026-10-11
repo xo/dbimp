@@ -1,0 +1,26 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "CREATE OR REPLACE LUA SCALAR SCRIPT DBIMP.DOUBLE_IT (X DOUBLE) RETURNS DOUBLE AS\nfunction run(ctx)\n  return ctx.X * 2\nend\n/"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 0
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

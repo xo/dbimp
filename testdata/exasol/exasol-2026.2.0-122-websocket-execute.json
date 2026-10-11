@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (1, 'b')"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "constraint violation - primary key (PK_DML on table DML) (Session: 1878718558361157632)",
+        "sqlCode": "27002"
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "transport": "websocket",
+  "session": "zlib",
+  "request": {
+    "type": "binary",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT 1 AS ONE, 'zlib' AS KIND"
+    },
+    "zlib": true
+  },
+  "reply": {
+    "type": "binary",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 2,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "ONE",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "KIND",
+                  "dataType": {
+                    "type": "CHAR",
+                    "size": 4,
+                    "characterSet": "ASCII"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  1
+                ],
+                [
+                  "zlib"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    },
+    "zlib": true
+  }
+}

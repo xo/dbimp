@@ -1,0 +1,84 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "getSchemas",
+      "schemaFilter": "DBIMP"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 4,
+              "numRows": 3,
+              "numRowsInMessage": 3,
+              "columns": [
+                {
+                  "name": "NAME",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "OWNER",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "IS_VIRTUAL",
+                  "dataType": {
+                    "type": "BOOLEAN"
+                  }
+                },
+                {
+                  "name": "COMMENT",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 2000,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "DBIMP",
+                  "EXA_STATISTICS",
+                  "SYS"
+                ],
+                [
+                  "SYS",
+                  "SYS",
+                  "SYS"
+                ],
+                [
+                  false,
+                  false,
+                  false
+                ],
+                [
+                  null,
+                  null,
+                  null
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

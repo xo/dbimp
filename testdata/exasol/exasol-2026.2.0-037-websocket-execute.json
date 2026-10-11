@@ -1,0 +1,26 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "UPDATE DBIMP.DML SET N = N + 1 WHERE ID IN (1, 2)"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 2
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

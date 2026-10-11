@@ -1,0 +1,325 @@
+{
+  "transport": "websocket",
+  "session": "v5",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT * FROM DBIMP.TYPES WHERE ID IN (1, 4) ORDER BY ID"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 25,
+              "numRows": 2,
+              "numRowsInMessage": 2,
+              "columns": [
+                {
+                  "name": "ID",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "B",
+                  "dataType": {
+                    "type": "BOOLEAN"
+                  }
+                },
+                {
+                  "name": "C",
+                  "dataType": {
+                    "type": "CHAR",
+                    "size": 5,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "V",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 100,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "VA",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 10,
+                    "characterSet": "ASCII"
+                  }
+                },
+                {
+                  "name": "D1",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "D2",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 10,
+                    "scale": 2
+                  }
+                },
+                {
+                  "name": "D3",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 36,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "D4",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 36,
+                    "scale": 10
+                  }
+                },
+                {
+                  "name": "D5",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "D6",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "D7",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 19,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "D8",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 5
+                  }
+                },
+                {
+                  "name": "D9",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 18
+                  }
+                },
+                {
+                  "name": "F",
+                  "dataType": {
+                    "type": "DOUBLE"
+                  }
+                },
+                {
+                  "name": "DT",
+                  "dataType": {
+                    "type": "DATE"
+                  }
+                },
+                {
+                  "name": "TS",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "precision": 3
+                  }
+                },
+                {
+                  "name": "TS9",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "precision": 9
+                  }
+                },
+                {
+                  "name": "TSL",
+                  "dataType": {
+                    "type": "TIMESTAMP WITH LOCAL TIME ZONE",
+                    "withLocalTimeZone": true,
+                    "precision": 3
+                  }
+                },
+                {
+                  "name": "IYM",
+                  "dataType": {
+                    "type": "INTERVAL YEAR TO MONTH",
+                    "precision": 9
+                  }
+                },
+                {
+                  "name": "IDS",
+                  "dataType": {
+                    "type": "INTERVAL DAY TO SECOND",
+                    "precision": 9,
+                    "fraction": 9
+                  }
+                },
+                {
+                  "name": "G",
+                  "dataType": {
+                    "type": "GEOMETRY",
+                    "size": 2000000,
+                    "srid": 0
+                  }
+                },
+                {
+                  "name": "G2",
+                  "dataType": {
+                    "type": "GEOMETRY",
+                    "size": 2000000,
+                    "srid": 4326
+                  }
+                },
+                {
+                  "name": "H",
+                  "dataType": {
+                    "type": "HASHTYPE",
+                    "size": 32
+                  }
+                },
+                {
+                  "name": "H2",
+                  "dataType": {
+                    "type": "HASHTYPE",
+                    "size": 64
+                  }
+                }
+              ],
+              "data": [
+                [
+                  1,
+                  4
+                ],
+                [
+                  true,
+                  true
+                ],
+                [
+                  "ab   ",
+                  "zzzzz"
+                ],
+                [
+                  "hello",
+                  "x"
+                ],
+                [
+                  "ascii",
+                  "y"
+                ],
+                [
+                  9007199254740993,
+                  999999999999999999
+                ],
+                [
+                  "1.5",
+                  "99999999.99"
+                ],
+                [
+                  "12345678901234567890123456789012345",
+                  "999999999999999999999999999999999999"
+                ],
+                [
+                  "1234567890123456789012345.6789012345",
+                  "99999999999999999999999999.9999999999"
+                ],
+                [
+                  123456789,
+                  999999999
+                ],
+                [
+                  7,
+                  9
+                ],
+                [
+                  "1234567890123456789",
+                  "9999999999999999999"
+                ],
+                [
+                  "1234567890123.45678",
+                  "9999999999999.99999"
+                ],
+                [
+                  "0.123456789012345678",
+                  "0.999999999999999999"
+                ],
+                [
+                  1.5e300,
+                  1.7e308
+                ],
+                [
+                  "2026-10-11",
+                  "9999-12-31"
+                ],
+                [
+                  "2026-10-11 12:34:56.123000",
+                  "9999-12-31 23:59:59.999000"
+                ],
+                [
+                  "2026-10-11 12:34:56.123456",
+                  "9999-12-31 23:59:59.999999"
+                ],
+                [
+                  "2026-10-11 12:34:56.123000",
+                  "9999-12-31 23:59:59.999000"
+                ],
+                [
+                  "+000000005-03",
+                  "+999999999-11"
+                ],
+                [
+                  "+000000002 03:04:05.678000000",
+                  "+999999999 23:59:59.999000000"
+                ],
+                [
+                  "POINT (1 2)",
+                  "POLYGON ((0 0, 1 0, 1 1, 0 0))"
+                ],
+                [
+                  "POINT (1 2)",
+                  "LINESTRING (0 0, 1 1)"
+                ],
+                [
+                  "550e8400e29b41d4a716446655440000",
+                  "ffffffffffffffffffffffffffffffff"
+                ],
+                [
+                  "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
+                  "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT COUNT(*) AS N FROM DBIMP.DML WHERE ID = 62"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "N",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 0
+                  }
+                }
+              ],
+              "data": [
+                [
+                  1
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

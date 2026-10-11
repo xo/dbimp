@@ -1,0 +1,56 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT 1.5 AS D, TO_CHAR(1234.5) AS S"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 2,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "D",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 2,
+                    "scale": 1
+                  }
+                },
+                {
+                  "name": "S",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 7,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "1,5"
+                ],
+                [
+                  "1234,5"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

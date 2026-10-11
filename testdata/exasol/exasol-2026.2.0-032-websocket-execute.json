@@ -1,0 +1,87 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT TSL, TS, CAST(TS AS TIMESTAMP WITH LOCAL TIME ZONE) AS TSL2, CURRENT_TIMESTAMP > TIMESTAMP '2020-01-01 00:00:00' AS NOW, SESSIONTIMEZONE AS TZ FROM DBIMP.TYPES WHERE ID = 1"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 5,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "TSL",
+                  "dataType": {
+                    "type": "TIMESTAMP WITH LOCAL TIME ZONE",
+                    "withLocalTimeZone": true,
+                    "size": 16
+                  }
+                },
+                {
+                  "name": "TS",
+                  "dataType": {
+                    "type": "TIMESTAMP",
+                    "withLocalTimeZone": false,
+                    "size": 16
+                  }
+                },
+                {
+                  "name": "TSL2",
+                  "dataType": {
+                    "type": "TIMESTAMP WITH LOCAL TIME ZONE",
+                    "withLocalTimeZone": true,
+                    "size": 16
+                  }
+                },
+                {
+                  "name": "NOW",
+                  "dataType": {
+                    "type": "BOOLEAN"
+                  }
+                },
+                {
+                  "name": "TZ",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 10,
+                    "characterSet": "ASCII"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "2026-10-11 19:34:56.123000"
+                ],
+                [
+                  "2026-10-11 12:34:56.123000"
+                ],
+                [
+                  "2026-10-11 12:34:56.123000"
+                ],
+                [
+                  true
+                ],
+                [
+                  "ASIA/TOKYO"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

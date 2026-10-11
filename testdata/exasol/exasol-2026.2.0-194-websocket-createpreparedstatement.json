@@ -1,0 +1,62 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "createPreparedStatement",
+      "sqlText": "INSERT INTO DBIMP.TYPES (ID, D2, D1, F) VALUES (?, ?, ?, ?)"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "statementHandle": 49,
+        "parameterData": {
+          "numColumns": 4,
+          "columns": [
+            {
+              "name": "",
+              "dataType": {
+                "type": "DECIMAL",
+                "precision": 9,
+                "scale": 0
+              }
+            },
+            {
+              "name": "",
+              "dataType": {
+                "type": "DECIMAL",
+                "precision": 10,
+                "scale": 2
+              }
+            },
+            {
+              "name": "",
+              "dataType": {
+                "type": "DECIMAL",
+                "precision": 18,
+                "scale": 0
+              }
+            },
+            {
+              "name": "",
+              "dataType": {
+                "type": "DOUBLE"
+              }
+            }
+          ]
+        },
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 0
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT CAST('NaN' AS DOUBLE)"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "data exception - invalid character value for cast; Value: 'NaN' in cast of expression 'NaN' (Session: 1878718558361157632)",
+        "sqlCode": "22018"
+      }
+    }
+  }
+}

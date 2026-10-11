@@ -1,0 +1,122 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT CAST(1 AS DECIMAL(1,0)) P1, CAST(12345678 AS DECIMAL(9,0)) P9, CAST(123456789012345678 AS DECIMAL(18,0)) P18, CAST(1234567890123456789 AS DECIMAL(19,0)) P19, CAST(1.5 AS DECIMAL(3,1)) P3S1, CAST(12345678901234567.5 AS DECIMAL(18,1)) P18S1, CAST(1.5 AS DECIMAL(36,1)) P36S1, CAST(1 AS DECIMAL(36,0)) P36"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 8,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "P1",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "P9",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "P18",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "P19",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 19,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "P3S1",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 3,
+                    "scale": 1
+                  }
+                },
+                {
+                  "name": "P18S1",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 1
+                  }
+                },
+                {
+                  "name": "P36S1",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 36,
+                    "scale": 1
+                  }
+                },
+                {
+                  "name": "P36",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 36,
+                    "scale": 0
+                  }
+                }
+              ],
+              "data": [
+                [
+                  1
+                ],
+                [
+                  12345678
+                ],
+                [
+                  123456789012345678
+                ],
+                [
+                  "1234567890123456789"
+                ],
+                [
+                  "1.5"
+                ],
+                [
+                  "12345678901234567.5"
+                ],
+                [
+                  "1.5"
+                ],
+                [
+                  "1"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

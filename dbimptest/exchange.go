@@ -147,6 +147,9 @@ func replay(t *testing.T, dir, pattern string, match Match) *httptest.Server {
 		if base := filepath.Base(path); base == ManifestName || base == RequestsName || base == FeaturesName {
 			continue
 		}
+		if b, err := os.ReadFile(path); err == nil && isWebSocketFile(b) {
+			continue
+		}
 		ex, err := ReadExchange(path)
 		if err != nil {
 			t.Fatal(err)

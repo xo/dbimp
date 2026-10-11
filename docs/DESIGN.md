@@ -276,10 +276,13 @@ for code that only a test uses. So they are not in the root package (D37).
 | `exchange.go` | `Exchange`, `Request`, `Response`, `ReadExchange`, `Match`, `DefaultMatch`, `Replay` and `ReplayRelease` |
 | `manifest.go` | `Manifest`, `Entry`, `ReadManifest`, `WriteManifest`, the file names `ManifestName` and `RequestsName`, and the principals `Administrator` and `Ordinary` |
 | `record.go` | `Recorder`, `NewRecorder` and `WithLabel`, which write the exchanges of step 6 |
+| `websocket.go` | `WebSocketExchange`, `WebSocketFrame`, `NewFrame`, `ReadWebSocketExchange`, `WebSocketMatch`, `WebSocketTurn`, `DefaultWebSocketMatch`, `WebSocketMatchOn`, `ReplayWebSocket`, `RedactMembers` and the methods `WriteWebSocket` and `RedactMembers` of `Recorder` |
+| `websocket_script.go` | `ScriptedWebSocket`, `ServeWebSocketScript` and `WebSocketStep`, a server that answers the frames of a connection with a script |
 | `cmd/record/` | The command that records the requests of `requests.json` |
 | `goroutines.go` | `CheckGoroutines` |
 | `heap.go` | `HeapGauge`, `NewHeapGauge` and `HeapLimit`, which measure the growth of the live heap while a driver reads a result of 64 MiB (D25) |
 | `contract.go` | `Contract`, its cases `ColumnsCase`, `NullCase`, `ErrorCase` and `StreamCase`, and `RunContract` |
+| `contract_websocket.go` | `WebSocketContract` and its cases, which `RunContract` runs when `Contract.WebSocket` is set |
 | `tables.go` | `TypeTable`, `TypeRow`, `Kinds`, `InterfaceTable`, `WriteBlock`, `EnvUpdate` and the markers of the tables |
 | `features.go` | `Features`, `Source` and `Feature`, the survey of step 5a, with `FeaturesName`, the constants of a kind, a source and a verdict, and `ReadFeatures` |
 | `roundtrip.go` | `RoundTrip`, `RoundTripCase` and `Value`, the round trip of one type for step 14a |
@@ -354,6 +357,134 @@ each time, such as an id for the request, supplies its own `Match`. A
 request that nothing matches fails the test. `ReplayRelease` does the same
 with the exchanges of one release, for a test of what that release sends,
 such as the order of the columns on 7.2.9.
+
+### WebSocket exchanges
+
+A database that takes its requests as messages of a WebSocket, such as Exasol (D200), has
+exchanges of a different form. `dbimptest` records and replays them (D202 item 2), and it
+holds no name of a database.
+
+The file. An exchange of a WebSocket is one request frame and the reply frame that
+the server sent for it. It is one JSON object in its own file under `testdata/<driver>/`,
+named as an HTTP exchange is named, and the manifest names it as it names any file. The
+type is `WebSocketExchange`. The member `transport` is `websocket`, which is how a reader
+tells the file from an `Exchange`. An `Exchange` file has no such member, and `ReadExchange`
+and `Replay` read it as before. `Replay` skips a file with the transport `websocket`.
+
+```json
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {"type": "text", "text": "{\"command\":\"execute\",\"sqlText\":\"SELECT 1\"}"},
+  "reply": {"type": "text", "text": "{\"status\":\"ok\",...}"}
+}
+```
+
+A frame is a `WebSocketFrame`. Its `type` is `text`, `binary` or `close`. A text frame holds
+its message in `text`, or in `json` as a JSON value if the message is compact JSON of at most
+4096 bytes, which keeps the file readable. `Content` returns the message in either form, so a JSON
+value that the file indents is compact again. A binary frame holds it in `binary`, as base64. A close frame holds the code in
+`code` and the reason in `text`, and only a reply can be one. The member `zlib` is true
+for a binary frame whose bytes are the zlib form of `text`. The file then holds the readable
+text, `Replay` compresses it for the client, and the matching sees the text. A frame that is
+binary and not `zlib` is compared as bytes. `session` is the name of the session that the
+exchange belongs to. A request with no `reply` is an exchange that the server did not answer,
+such as a message that cancels a query.
+
+The script. A script of `requests.json` that names `"websocket": {"path": "/"}` at the
+top is a script for a WebSocket. Each request is then a frame and no HTTP request. The
+members are:
+
+- `frame`: the JSON value to send as one text frame. With `"binary": true`, it is a string of
+  base64 that the recorder sends as one binary frame. With `"zlib": true`, the recorder sends
+  the zlib form of the frame as a binary frame, and it reads a binary reply as zlib data
+  when it can. The reply is then recorded as text, with `zlib` true.
+- `session`: the name of the session. The default is `main`. A request with a name that is
+  new opens another WebSocket, so a script can hold two sessions, such as a session
+  that waits and a session that cancels. A request with `"close": true` and no frame closes
+  the session.
+- `capture`: the same as for HTTP. A path such as `responseData.sessionId` names a member
+  of the JSON of the reply. A later frame of the same principal writes the value into
+  `{{name}}`, escaped as the text of a JSON string, so the frame stays valid JSON. The text
+  `"{{name}}"` of a captured object takes the place of the string as JSON, and the text
+  `"{{#name}}"` takes the place of the string as the bare text of the value, so a captured number,
+  such as a handle, is a JSON number. `{{user}}` and `{{password}}` are the credentials of the URL
+  of the principal. `"auth": "wrong"` makes `{{password}}` a wrong password. A capture that finds
+  nothing, such as the handle in an error reply, only prints a line, and a later frame that uses
+  the name then carries the text of the name, as a caller with no handle would.
+- `encrypt`: `{"member": ..., "modulus": ..., "exponent": ...}` replaces a string member of the
+  frame with its RSA encryption, with the padding of PKCS #1 version 1.5, in Base64. The key is
+  the two captured values, in hex, that `modulus` and `exponent` name. It is for a login that
+  sends the password under a public key that the server gave in an earlier reply. The
+  recorder then redacts the member, because the text differs on each run.
+- `text`: a text frame that is sent as it is, in place of `frame`, for a message that is not JSON.
+- `noReply`: the recorder sends the frame and reads no reply.
+- `interrupt`: a frame, and a wait in `after`, such as `abortQuery` one second after a long
+  query. The recorder sends the interrupt on the same session while it waits for the reply. It
+  writes the interrupt as its own exchange, with no reply, before the exchange that it
+  interrupted.
+- `timeout`: how long to wait for the reply. The default is one minute, and a read that ends
+  by the timeout is an error of the recording. With `timeout` set on the request, silence is the
+  result: the recorder writes the exchange with no reply, and the read closes the session.
+- `wait`, `principals`, `phase`, `releases`, `item` and `name` mean what they mean for HTTP.
+
+A reply that is a close frame is recorded with its code. A connection that ends with no close
+frame is recorded as a close reply with the code 1006, which RFC 6455 keeps for that case, and the
+session is dropped. `ReplayWebSocket` ends such a connection with no close frame. A script that
+closes a session that is already gone prints a line and goes on, because the server can end a
+session by itself.
+
+The top of the script has `redact`, a list of names of members. Wherever a name of the list
+is a member of a JSON object in a frame, at any depth, the recorder writes its value as
+`REDACTED`. It does so in the request and in the reply, as it does for the header
+`Authorization`. The recorder also writes each password of the URLs as `REDACTED`, as it does
+for HTTP. A frame that is binary and not `zlib` cannot be redacted.
+
+The recorder dials with `dbimp.DialWebSocket`, with the flag `-insecure` for a certificate
+that nothing signed, sends each frame in order, and records the reply. `Recorder` has the
+method `WriteWebSocket` that writes one exchange, so it numbers the files, makes the
+entries of the manifest and writes the files as it does for HTTP.
+
+The replay. `ReplayWebSocket(t, dir, match)` starts a TLS server that accepts a WebSocket on
+any path. For each request frame that arrives, it sends the reply of the first exchange of
+`dir` that `match` accepts, in the order of the file names. A request that no exchange
+matches fails the test and closes the connection. An exchange with no reply sends nothing,
+and a reply that is a close frame closes the connection. The server answers a ping and the
+close of the client. A client trusts the certificate of `srv.Certificate()`, or turns the
+check off. `Replay` for HTTP stays as it was.
+
+A `WebSocketMatch` gets a `WebSocketTurn`: the frame that arrived (`Got`) and the one before
+it on the same connection (`Prev`, empty for the first), and the exchange that is
+tried (`Exchange`) with the one before it in its session (`Before`, nil for the first).
+`DefaultWebSocketMatch` compares the key of two frames. The key of a JSON frame is the string
+member `command`. A frame with no such member, such as the message that carries the
+credentials of a login in Exasol, takes the key of the frame before it, with the prefix
+`after:`, so it matches the exchange that follows the same command. A frame that is not JSON
+has the key of its bytes. `WebSocketMatchOn("sqlText")` is a `WebSocketMatch` that also
+compares the members it names, for a test that sends several statements with one command.
+
+### The scripted server and the contract
+
+`ServeWebSocketScript(t, script)` starts a TLS server for a case that no recording holds, such as an answer that
+waits for a cancel. It matches nothing. Step i of the script answers the i-th request frame of each connection, so
+the script lists the frames that a correct driver sends, in order. A `WebSocketStep` holds the `Reply` frame, and
+three flags: `Hold` makes the server wait for one more frame before it replies, as a server does while a query runs and
+the client sends `abortQuery`, `Drop` makes it read the request and close the connection with no reply, and `Mute` makes it
+read the request and stay silent until the client closes the connection. A request frame after the last step fails the test.
+`Frames` returns the frames that the server read, with the compression undone, so a test sees what the driver sent. `Held`
+returns a channel that closes a moment after the server starts to wait at a step with `Hold`, so a test cancels a context at that time.
+
+`RunContract` sends HTTP, and a driver of a WebSocket cannot run its cases. `Contract.WebSocket`, a `WebSocketContract`, makes
+`RunContract` run the cases of D8 and D18 to D21 against a scripted server instead, and ignore the other fields. The driver supplies
+the steps of each case, because each product has its own frames: the columns in order, a NULL, an error after some rows, a close
+before the end that reads no more rows, a cancel while the server holds the request that reads more rows, a request that is sent once,
+a server that is not there, and a transaction that is never faked. Each case calls `CheckGoroutines`, so the test that calls
+`RunContract` must not run in parallel with another test. The Exasol driver is the first to use it.
+
+The limits. The matching is by frame, so it cannot tell two frames of one command that
+differ in a member that no `Match` compares. The first exchange that matches always answers,
+so a test that needs the second answer to one request supplies a `Match` that sees the
+members. The server does not stream, does not fragment, and does not offer an extension.
 
 ### The manifest
 

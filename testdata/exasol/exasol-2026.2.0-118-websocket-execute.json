@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "CREATE TABLE DBIMP.DML (X INT)"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "object DBIMP.DML already exists (Session: 1878718558361157632)",
+        "sqlCode": "42500"
+      }
+    }
+  }
+}

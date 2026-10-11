@@ -1,0 +1,34 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "executeBatch",
+      "sqlTexts": [
+        "INSERT INTO DBIMP.DML (ID) VALUES (51)",
+        "SELEC",
+        "INSERT INTO DBIMP.DML (ID) VALUES (52)"
+      ]
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 1
+          }
+        ],
+        "numResults": 1
+      },
+      "exception": {
+        "text": "syntax error, unexpected ';', expecting ASSIGNMENT_OPERATOR_ or ':' [line 1, column 6] (Session: 1878718558361157632)",
+        "sqlCode": "42000"
+      }
+    }
+  }
+}

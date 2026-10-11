@@ -1,0 +1,23 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "setAttributes",
+      "attributes": {
+        "queryTimeout": -1
+      }
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "Rollback because of data exception - Query timeout must be zero or in range 1...999999 (in seconds) (Session: 1878718558361157632)",
+        "sqlCode": "40001"
+      }
+    }
+  }
+}

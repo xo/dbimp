@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "xport",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "EXPORT DBIMP.DML INTO LOCAL CSV FILE 'dbimp-export.csv'"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "Feature not supported: IMPORT and EXPORT of local files is only supported via JDBC (except prepared statements) or EXAplus (Session: 1878718562175418368)",
+        "sqlCode": "0A000"
+      }
+    }
+  }
+}

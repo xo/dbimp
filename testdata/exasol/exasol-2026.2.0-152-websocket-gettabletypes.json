@@ -1,0 +1,46 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "getTableTypes"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 3,
+              "numRowsInMessage": 3,
+              "columns": [
+                {
+                  "name": "TABLE_TYPE",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 12,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "SYSTEM TABLE",
+                  "TABLE",
+                  "VIEW"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

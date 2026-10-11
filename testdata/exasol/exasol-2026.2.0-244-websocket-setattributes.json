@@ -1,0 +1,23 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "setAttributes",
+      "attributes": {
+        "noSuchAttribute": 1
+      }
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "Protocol attribute is undefined: noSuchAttribute (Session: 1878718558361157632)",
+        "sqlCode": "00000"
+      }
+    }
+  }
+}

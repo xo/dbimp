@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (10000000000, 'x')"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "data exception - numeric value out of range: value 10000000000 is not in [ -999999999 .. 999999999 ] in write of column DML.ID (Session: 1878718558361157632)",
+        "sqlCode": "22003"
+      }
+    }
+  }
+}

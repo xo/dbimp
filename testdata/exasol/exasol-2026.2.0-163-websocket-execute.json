@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "UPSERT INTO DBIMP.DML VALUES (1)"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "syntax error, unexpected INTO_, expecting ASSIGNMENT_OPERATOR_ or ':' [line 1, column 8] (Session: 1878718558361157632)",
+        "sqlCode": "42000"
+      }
+    }
+  }
+}

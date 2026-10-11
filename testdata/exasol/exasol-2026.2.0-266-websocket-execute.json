@@ -1,0 +1,79 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT STATUS, COMMAND_NAME, LEFT(SQL_TEXT, 40) AS SQL_START FROM EXA_DBA_SESSIONS WHERE SESSION_ID <> CURRENT_SESSION ORDER BY SESSION_ID"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 3,
+              "numRows": 5,
+              "numRowsInMessage": 5,
+              "columns": [
+                {
+                  "name": "STATUS",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 30,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "COMMAND_NAME",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 40,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "SQL_START",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 40,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "IDLE",
+                  "IDLE",
+                  "IDLE",
+                  "IDLE",
+                  "EXECUTE SQL"
+                ],
+                [
+                  "NOT SPECIFIED",
+                  "NOT SPECIFIED",
+                  "NOT SPECIFIED",
+                  "NOT SPECIFIED",
+                  "SELECT"
+                ],
+                [
+                  null,
+                  null,
+                  null,
+                  null,
+                  "SELECT COUNT(*) FROM (SELECT * FROM EXA_"
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

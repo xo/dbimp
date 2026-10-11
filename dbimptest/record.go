@@ -36,6 +36,7 @@ type Recorder struct {
 	principal string
 	entries   []Entry
 	secrets   []string
+	members   []string
 }
 
 // NewRecorder returns a Recorder that sends each request with next and
@@ -135,7 +136,7 @@ func (r *Recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 	ex.Request.Body, ex.Request.Binary = body(r.hide(reqBody))
 	ex.Response.Body, ex.Response.Binary = body(resBody)
 	l, _ := req.Context().Value(labelKey{}).(label)
-	if err := r.write(&ex, l); err != nil {
+	if err := r.write(&ex, ex.Request.Method+" "+ex.Request.Path, l); err != nil {
 		return nil, err
 	}
 	return res, nil
@@ -169,15 +170,15 @@ func (r *Recorder) hide(b []byte) []byte {
 	return b
 }
 
-func (r *Recorder) write(ex *Exchange, l label) error {
+func (r *Recorder) write(v any, what string, l label) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if l.principal == "" {
 		l = label{item: r.item, principal: r.principal}
 	}
 	r.n++
-	name := fmt.Sprintf("%s-%03d-%s.json", r.release, r.n, slug(ex.Request.Method+" "+ex.Request.Path))
-	b, err := json.Marshal(ex, jsontext.Multiline(true), jsontext.WithIndent("  "))
+	name := fmt.Sprintf("%s-%03d-%s.json", r.release, r.n, slug(what))
+	b, err := json.Marshal(v, jsontext.Multiline(true), jsontext.WithIndent("  "))
 	if err != nil {
 		return fmt.Errorf("recording %s: %w", name, err)
 	}

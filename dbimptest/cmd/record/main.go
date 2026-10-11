@@ -10,6 +10,10 @@
 //		-admin http://Administrator:pass@127.0.0.1:55059 \
 //		-ordinary http://dbmeta_user:pass@127.0.0.1:55059
 //
+// A script that names "websocket" at the top is for a product that takes its
+// requests as messages of a WebSocket, such as Exasol. Each request is then a
+// frame, and -admin and -ordinary are wss URLs. docs/DESIGN.md holds the keys.
+//
 // A product with a second server, such as the Controller of Pinot, names its
 // URL with -second, and a request of the setup or the teardown goes there
 // when it says "server": "second".
@@ -66,6 +70,12 @@ type Script struct {
 	// "sigv4", such as "us-east-1" and "dynamodb".
 	Region  string `json:"region,omitzero"`
 	Service string `json:"service,omitzero"`
+	// WebSocket, when set, makes the script one for a database that takes its
+	// requests as messages of a WebSocket. Each request is then a frame.
+	WebSocket *WebSocketSpec `json:"websocket,omitzero"`
+	// Redact names the members of a frame that the recorder writes as
+	// REDACTED, at any depth.
+	Redact []string `json:"redact,omitzero"`
 }
 
 // Request is one request of the script.
@@ -124,6 +134,27 @@ type Request struct {
 	// "" to send it to the URL of the principal. Only a request of the setup
 	// or the teardown can name it.
 	Server string `json:"server,omitzero"`
+
+	// The members below are for a script with a WebSocket.
+
+	// Frame is the JSON value to send as one text frame. With Binary it is a
+	// string of base64 that is sent as one binary frame.
+	Frame jsontext.Value `json:"frame,omitzero"`
+	// Binary sends Frame as a binary frame.
+	Binary bool `json:"binary,omitzero"`
+	// Zlib sends the zlib form of Frame as a binary frame, and reads a binary
+	// reply as zlib data.
+	Zlib bool `json:"zlib,omitzero"`
+	// Session names the session. The default is "main".
+	Session string `json:"session,omitzero"`
+	// Close closes the session and sends no frame.
+	Close bool `json:"close,omitzero"`
+	// NoReply sends the frame and reads no reply.
+	NoReply bool `json:"noReply,omitzero"`
+	// Interrupt sends a frame while the request waits for its reply.
+	Interrupt *Interrupt `json:"interrupt,omitzero"`
+	// Encrypt replaces a member of Frame with its RSA encryption.
+	Encrypt *Encrypt `json:"encrypt,omitzero"`
 
 	// auth, region and service are the Auth, the Region and the Service of
 	// the script.
@@ -229,6 +260,9 @@ func run(ctx context.Context, dir, release, second string, insecure bool, princi
 			return strings.HasPrefix(release, prefix)
 		})
 	})
+	if script.WebSocket != nil {
+		return runWebSocket(ctx, rec, dir, release, insecure, principals, script)
+	}
 	if err := runPhase(ctx, client, servers, script, "setup"); err != nil {
 		return err
 	}

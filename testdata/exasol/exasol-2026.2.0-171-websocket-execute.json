@@ -1,0 +1,45 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT COUNT(*) FROM EXA_ALL_COLUMNS WHERE COLUMN_SCHEMA = 'DBIMP' AND COLUMN_DEFAULT IS NOT NULL"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "COUNT(*)",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 18,
+                    "scale": 0
+                  }
+                }
+              ],
+              "data": [
+                [
+                  3
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

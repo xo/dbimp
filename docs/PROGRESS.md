@@ -45,6 +45,7 @@ the record.
 | Athena | W37 | Released in `v0.17.0` | `athena/`, its tests, ATHENA.md and D192. The integration tests passed on a hosted account | Step 20 |
 | Cosmos DB | W36 and W41 | Released in `v0.17.0` | `cosmos/`, its tests, COSMOS.md, D190 and the catalog statements for `dbmeta`. The integration tests passed on the emulator and on a hosted account | Step 20, and tell `dbmeta` the statements |
 | Spanner | W38 | Released in `v0.17.0` | `spanner/`, its tests, SPANNER.md, D187, D191 and D195. The integration tests passed on a hosted instance | Step 20, and the emulator entry of `dbmeta` |
+| Exasol | W44 | Step 17a written, staged | `exasol/`, its tests, EXASOL.md, D203 to D215, `Contract.WebSocket` and the scripted server in `dbimptest`. The integration tests passed on `exasol-2026.2.0` as both principals | Ken reviews the staged changes and the open questions of EXASOL.md. Then steps 18 to 20 |
 | ClickHouse | W32 | Released in `v0.13.0` | `clickhouse/`, its tests, CLICKHOUSE.md, D176 and D177. CI passed 32 of 32 jobs on the tagged commit, with the integration jobs of 25.8 and 26.9 | Step 20: the requests to `dburl` and `usql` (the request to `dbmeta` is done by its `v0.3.0`) |
 
 ## Next

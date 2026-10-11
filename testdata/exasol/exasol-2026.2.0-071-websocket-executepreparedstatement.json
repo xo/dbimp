@@ -1,0 +1,45 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "executePreparedStatement",
+      "statementHandle": 28,
+      "numColumns": 1,
+      "numRows": 3,
+      "columns": [
+        {
+          "name": "",
+          "dataType": {
+            "type": "DECIMAL",
+            "precision": 9,
+            "scale": 0
+          }
+        }
+      ],
+      "data": [
+        [
+          100,
+          101,
+          102
+        ]
+      ]
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 3
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

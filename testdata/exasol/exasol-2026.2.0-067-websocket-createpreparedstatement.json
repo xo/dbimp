@@ -1,0 +1,41 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "createPreparedStatement",
+      "sqlText": "SELECT 1 AS ONE"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "statementHandle": 25,
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 0,
+              "numRowsInMessage": 0,
+              "columns": [
+                {
+                  "name": "ONE",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

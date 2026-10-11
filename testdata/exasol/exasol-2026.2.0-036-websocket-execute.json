@@ -1,0 +1,26 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "INSERT INTO DBIMP.DML VALUES (2, 'two', 2.2), (3, 'three', 3.3), (4, 'four', 4.4)"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 3
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

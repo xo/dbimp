@@ -1,0 +1,26 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "CREATE TABLE DBIMP.CHILD (ID DECIMAL(9,0), PARENT DECIMAL(9,0), CONSTRAINT FK_CHILD FOREIGN KEY (PARENT) REFERENCES DBIMP.DML (ID) ENABLE)"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "rowCount",
+            "rowCount": 0
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

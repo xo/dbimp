@@ -1,0 +1,67 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT '' AS E, CAST('' AS CHAR(3)) AS EC, LENGTH('') AS L"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 3,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "E",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 1,
+                    "characterSet": "ASCII"
+                  }
+                },
+                {
+                  "name": "EC",
+                  "dataType": {
+                    "type": "CHAR",
+                    "size": 3,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "L",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                }
+              ],
+              "data": [
+                [
+                  null
+                ],
+                [
+                  null
+                ],
+                [
+                  null
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

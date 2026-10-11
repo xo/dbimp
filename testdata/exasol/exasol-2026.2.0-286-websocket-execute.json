@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "nologin",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT 1"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "Invalid login request command: execute",
+        "sqlCode": "00000"
+      }
+    }
+  }
+}

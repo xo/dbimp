@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "INSERT INTO DBIMP.DML (ID, NAME) VALUES (NULL, 'x')"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "constraint violation - not null (column ID in table DML) (Session: 1878718558361157632)",
+        "sqlCode": "27001"
+      }
+    }
+  }
+}

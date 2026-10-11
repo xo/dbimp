@@ -1,0 +1,76 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "executeBatch",
+      "sqlTexts": [
+        "SELECT 1",
+        "INSERT INTO DBIMP.DML (ID) VALUES (50)",
+        "SELECT 2 AS X"
+      ]
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "1",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                }
+              ],
+              "data": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "resultType": "rowCount",
+            "rowCount": 1
+          },
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 1,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "X",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 1,
+                    "scale": 0
+                  }
+                }
+              ],
+              "data": [
+                [
+                  2
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 3
+      }
+    }
+  }
+}

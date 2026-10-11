@@ -1,0 +1,718 @@
+{
+  "driver": "exasol",
+  "consulted": [
+    {
+      "source": "gemini-3.1-pro-preview",
+      "kind": "model",
+      "date": "2026-10-11"
+    },
+    {
+      "source": "deepseek-v4-flash",
+      "kind": "model",
+      "date": "2026-10-11"
+    },
+    {
+      "source": "github.com/exasol/exasol-driver-go",
+      "kind": "driver",
+      "date": "2026-10-11"
+    },
+    {
+      "source": "github.com/exasol/pyexasol",
+      "kind": "driver",
+      "date": "2026-10-11"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-035-websocket-execute.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-041-websocket-execute.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-037-websocket-execute.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-039-websocket-execute.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-040-websocket-execute.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "crud",
+      "name": "truncate",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-045-websocket-execute.json",
+      "test": "TestIntegrationCRUD/truncate"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert as a keyword",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-163-websocket-execute.json",
+      "test": "TestIntegrationCRUD/upsert_as_a_keyword"
+    },
+    {
+      "kind": "crud",
+      "name": "insert default values",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-158-websocket-execute.json",
+      "test": "TestIntegrationCRUD/insert_default_values"
+    },
+    {
+      "kind": "crud",
+      "name": "import from a local file",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-181-websocket-execute.json",
+      "test": "TestIntegrationCRUD/import_from_a_local_file"
+    },
+    {
+      "kind": "crud",
+      "name": "export to a local file",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-178-websocket-execute.json",
+      "test": "TestIntegrationCRUD/export_to_a_local_file"
+    },
+    {
+      "kind": "crud",
+      "name": "limit and offset",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-161-websocket-execute.json",
+      "test": "TestIntegrationCRUD/limit_and_offset"
+    },
+    {
+      "kind": "schema",
+      "name": "table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-016-websocket-execute.json",
+      "test": "TestIntegrationSchema/table"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-042-websocket-execute.json",
+      "test": "TestIntegrationSchema/alter_table"
+    },
+    {
+      "kind": "schema",
+      "name": "primary key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-120-websocket-execute.json",
+      "test": "TestIntegrationSchema/primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "foreign key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-123-websocket-execute.json",
+      "test": "TestIntegrationSchema/foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-169-websocket-execute.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "unique constraint",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-125-websocket-execute.json",
+      "test": "TestIntegrationSchema/unique_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "check constraint",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-170-websocket-execute.json",
+      "test": "TestIntegrationSchema/check_constraint"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-043-websocket-execute.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "default value",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-157-websocket-execute.json",
+      "test": "TestIntegrationSchema/default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "identity column",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-157-websocket-execute.json",
+      "test": "TestIntegrationSchema/identity_column"
+    },
+    {
+      "kind": "schema",
+      "name": "comment",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-167-websocket-execute.json",
+      "test": "TestIntegrationSchema/comment"
+    },
+    {
+      "kind": "schema",
+      "name": "distribution key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-168-websocket-execute.json",
+      "test": "TestIntegrationSchema/distribution_key"
+    },
+    {
+      "kind": "schema",
+      "name": "partition key",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-168-websocket-execute.json",
+      "test": "TestIntegrationSchema/partition_key"
+    },
+    {
+      "kind": "schema",
+      "name": "schema",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-011-websocket-execute.json",
+      "test": "TestIntegrationSchema/schema"
+    },
+    {
+      "kind": "feature",
+      "name": "script",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-175-websocket-execute.json",
+      "test": "TestIntegrationFeatures/script"
+    },
+    {
+      "kind": "feature",
+      "name": "udf script",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-173-websocket-execute.json",
+      "test": "TestIntegrationFeatures/udf_script"
+    },
+    {
+      "kind": "feature",
+      "name": "virtual schema",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-164-websocket-execute.json",
+      "test": "TestIntegrationFeatures/virtual_schema"
+    },
+    {
+      "kind": "feature",
+      "name": "connect by",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-078-websocket-execute.json",
+      "test": "TestIntegrationFeatures/connect_by"
+    },
+    {
+      "kind": "feature",
+      "name": "preferring",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-165-websocket-execute.json",
+      "test": "TestIntegrationFeatures/preferring"
+    },
+    {
+      "kind": "feature",
+      "name": "qualify",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-166-websocket-execute.json",
+      "test": "TestIntegrationFeatures/qualify"
+    },
+    {
+      "kind": "feature",
+      "name": "local time zone type",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-031-websocket-execute.json",
+      "test": "TestIntegrationFeatures/local_time_zone_type"
+    },
+    {
+      "kind": "feature",
+      "name": "parallel connections",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/pyexasol"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-307-websocket-requestparallelconnections.json",
+      "test": "TestIntegrationFeatures/parallel_connections"
+    },
+    {
+      "kind": "feature",
+      "name": "execute batch",
+      "sources": [
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-210-websocket-executebatch.json",
+      "test": "TestIntegrationFeatures/execute_batch"
+    },
+    {
+      "kind": "feature",
+      "name": "abort query",
+      "sources": [
+        "github.com/exasol/exasol-driver-go",
+        "github.com/exasol/pyexasol"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-256-websocket-abortquery.json",
+      "test": "TestIntegrationFeatures/abort_query"
+    },
+    {
+      "kind": "feature",
+      "name": "query timeout",
+      "sources": [
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-252-websocket-setattributes.json",
+      "test": "TestIntegrationFeatures/query_timeout"
+    },
+    {
+      "kind": "feature",
+      "name": "result set row limit",
+      "sources": [
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-108-websocket-execute.json",
+      "test": "TestIntegrationFeatures/result_set_row_limit"
+    },
+    {
+      "kind": "feature",
+      "name": "compression",
+      "sources": [
+        "github.com/exasol/exasol-driver-go",
+        "github.com/exasol/pyexasol"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-310-websocket.json",
+      "test": "TestIntegrationFeatures/compression"
+    },
+    {
+      "kind": "feature",
+      "name": "transactions",
+      "sources": [
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-225-websocket-execute.json",
+      "test": "TestIntegrationFeatures/transactions"
+    },
+    {
+      "kind": "feature",
+      "name": "savepoint",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-238-websocket-execute.json",
+      "test": "TestIntegrationFeatures/savepoint"
+    },
+    {
+      "kind": "feature",
+      "name": "isolation level",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-237-websocket-execute.json",
+      "test": "TestIntegrationFeatures/isolation_level"
+    },
+    {
+      "kind": "feature",
+      "name": "login with a token",
+      "sources": [
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-292-websocket-logintoken.json",
+      "test": "TestIntegrationFeatures/login_with_a_token"
+    },
+    {
+      "kind": "feature",
+      "name": "idle timeout",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-190-websocket-execute.json",
+      "test": "TestIntegrationFeatures/idle_timeout"
+    },
+    {
+      "kind": "feature",
+      "name": "metadata commands",
+      "sources": [
+        "gemini-3.1-pro-preview"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-149-websocket-getschemas.json",
+      "test": "TestIntegrationFeatures/metadata_commands"
+    },
+    {
+      "kind": "feature",
+      "name": "prepared statement",
+      "sources": [
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-048-websocket-createpreparedstatement.json",
+      "test": "TestIntegrationFeatures/prepared_statement"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "CHAR",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/CHAR"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/VARCHAR"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL INTEGER",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-029-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL_INTEGER"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/DOUBLE"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP WITH LOCAL TIME ZONE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP_WITH_LOCAL_TIME_ZONE"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL YEAR TO MONTH",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/INTERVAL_YEAR_TO_MONTH"
+    },
+    {
+      "kind": "type",
+      "name": "INTERVAL DAY TO SECOND",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/INTERVAL_DAY_TO_SECOND"
+    },
+    {
+      "kind": "type",
+      "name": "GEOMETRY",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/GEOMETRY"
+    },
+    {
+      "kind": "type",
+      "name": "HASHTYPE",
+      "sources": [
+        "gemini-3.1-pro-preview",
+        "deepseek-v4-flash",
+        "github.com/exasol/exasol-driver-go"
+      ],
+      "verdict": "yes",
+      "evidence": "exasol-2026.2.0-024-websocket-execute.json",
+      "test": "TestIntegrationRoundTrip/HASHTYPE"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-156-websocket-execute.json",
+      "test": "TestIntegrationAliases/TINYINT"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-156-websocket-execute.json",
+      "test": "TestIntegrationAliases/SMALLINT"
+    },
+    {
+      "kind": "type",
+      "name": "INT",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-156-websocket-execute.json",
+      "test": "TestIntegrationAliases/INT"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-156-websocket-execute.json",
+      "test": "TestIntegrationAliases/BIGINT"
+    },
+    {
+      "kind": "type",
+      "name": "REAL",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "exasol-2026.2.0-156-websocket-execute.json",
+      "test": "TestIntegrationAliases/REAL"
+    }
+  ]
+}

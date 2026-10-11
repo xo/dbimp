@@ -1,0 +1,21 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "DROP TABLE DBIMP.NOPE"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "error",
+      "exception": {
+        "text": "table DBIMP.NOPE does not exist [line 1, column 12] (Session: 1878718558361157632)",
+        "sqlCode": "42000"
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "transport": "websocket",
+  "session": "low",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "execute",
+      "sqlText": "SELECT CURRENT_USER, CURRENT_SCHEMA"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 2,
+              "numRows": 1,
+              "numRowsInMessage": 1,
+              "columns": [
+                {
+                  "name": "CURRENT_USER",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                },
+                {
+                  "name": "CURRENT_SCHEMA",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 128,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ],
+              "data": [
+                [
+                  "DBIMP_LOW"
+                ],
+                [
+                  null
+                ]
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}

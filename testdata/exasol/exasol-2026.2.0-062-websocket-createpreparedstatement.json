@@ -1,0 +1,70 @@
+{
+  "transport": "websocket",
+  "session": "main",
+  "request": {
+    "type": "text",
+    "json": {
+      "command": "createPreparedStatement",
+      "sqlText": "SELECT ID, V FROM DBIMP.TYPES WHERE ID = ? OR V = ? ORDER BY ID"
+    }
+  },
+  "reply": {
+    "type": "text",
+    "json": {
+      "status": "ok",
+      "responseData": {
+        "statementHandle": 22,
+        "parameterData": {
+          "numColumns": 2,
+          "columns": [
+            {
+              "name": "",
+              "dataType": {
+                "type": "DECIMAL",
+                "precision": 9,
+                "scale": 0
+              }
+            },
+            {
+              "name": "",
+              "dataType": {
+                "type": "VARCHAR",
+                "size": 100,
+                "characterSet": "UTF8"
+              }
+            }
+          ]
+        },
+        "results": [
+          {
+            "resultType": "resultSet",
+            "resultSet": {
+              "numColumns": 2,
+              "numRows": 0,
+              "numRowsInMessage": 0,
+              "columns": [
+                {
+                  "name": "ID",
+                  "dataType": {
+                    "type": "DECIMAL",
+                    "precision": 9,
+                    "scale": 0
+                  }
+                },
+                {
+                  "name": "V",
+                  "dataType": {
+                    "type": "VARCHAR",
+                    "size": 100,
+                    "characterSet": "UTF8"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "numResults": 1
+      }
+    }
+  }
+}
