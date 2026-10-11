@@ -2030,3 +2030,25 @@ Released in `v0.19.0` (D198). The driver reads the key `database_role` and the o
 in one `updateDatabaseDdl` request. The tests passed on the hosted instance and on the
 emulator on 2026-10-11: a batch of four statements made three tables and an index in
 one request. Tell `dbmeta` the tag, so that it can move its hosted tests of Spanner.
+
+## W44. Write the Exasol driver
+
+Ken asked for it on 2026-10-11, by D200. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[EXASOL.md](EXASOL.md), and the package is `exasol`. `dbrun` starts `exasol-2026.2.0`.
+`dburl` has the scheme `exasol` and names `github.com/exasol/exasol-driver-go`, which
+`usql` uses. The protocol is JSON over a WebSocket. Before step 6, the root package gets a
+WebSocket client (D200 item 2), and `dbimptest` gets a way to record and replay the
+messages of a WebSocket (D200 item 3). Whether a driver is possible is the result of
+step 2.
+
+## W45. Add five more catalog statements to the Cosmos DB driver
+
+`dbmeta` asked on 2026-10-11, and Ken decided the same day (D201): `$index_paths`,
+`$unique_keys`, `$unique_key_paths`, `$routines`, `$partition_key_ranges` and `$session`. Write
+the columns in [COSMOS.md](COSMOS.md) (generated, so they cannot go stale), the tests on
+recorded exchanges, on the emulator and on the hosted account, and tell `dbmeta` the tag and
+the columns.
+
+Status: the code, the unit tests, the integration test for the emulator and the columns in
+[COSMOS.md](COSMOS.md) are written and staged. Open: run `TestIntegrationCatalog` on the
+hosted account, then release and tell `dbmeta`.

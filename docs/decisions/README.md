@@ -219,3 +219,7 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D196](D196-the-spanner-driver-reads-the-emulator.md) | The Spanner driver reads the emulator | Decided. Adds to D187, D191 and D195 |
 | [D197](D197-the-error-of-a-driver-matches-errauthentication.md) | The error of a driver matches ErrAuthentication | Decided |
 | [D198](D198-spanner-database-role-and-ddl-batches.md) | Spanner database role and DDL batches | Decided |
+| [D199](D199-answers-after-the-releases.md) | Answers after the releases | Decided |
+| [D200](D200-exasol-is-a-target-and-the-root-package-gets-a-websocket-client.md) | Exasol is a target, and the root package gets a WebSocket client | Decided |
+| [D201](D201-five-more-catalog-statements-for-cosmos-db.md) | Five more catalog statements for Cosmos DB | Decided |
+| [D202](D202-answers-for-exasol-after-step-2.md) | Answers for Exasol after step 2 | Decided |

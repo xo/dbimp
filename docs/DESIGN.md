@@ -26,6 +26,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `placeholder.go` | `Syntax` and `Placeholder`, which find placeholders and bind arguments (D34) |
 | `options.go` | `Option`, `WithOptions`, `IsOption`, `Resolve`, `Unsupported` and `MarshalParams`, the machinery of the options of every driver (D109) |
 | `cbor.go` | `CBORDecoder`, `NewCBORDecoder`, `CBOREncoder`, `CBORHead`, and `CBORMajor` with its constants, which read and write CBOR (D49) |
+| `websocket.go` | `DialWebSocket`, `WebSocket`, `WebSocketOption` with its `WithWebSocket` functions, `MessageType`, `CloseCode` and `CloseError`, a client for WebSocket (D200) |
 
 ### Errors
 
@@ -231,6 +232,37 @@ driver supplies for the literals of its product (D34). A `?` takes the next
 argument that has no name, and an `@name` takes the argument with that
 name. A missing argument and an argument left over are both
 `ErrArguments`. A fuzz test holds the parser.
+
+### The WebSocket client
+
+`DialWebSocket(ctx, url, opts...)` opens a WebSocket (RFC 6455) for a database whose
+server takes its requests as messages, such as Exasol (D200). It sends the
+request for the upgrade with `Send`, so the proxy, the TLS configuration and
+`driver.ErrBadConn` for a failed dial work as they do for HTTP. The default client turns
+HTTP/2 off, because a WebSocket cannot start over HTTP/2. The context bounds the
+dial, and the connection outlives it.
+
+`Read(ctx)` returns one whole message, text or binary, and `Write(ctx, type, data)`
+sends one. `Read` joins fragments, answers a ping with a pong, and drops a pong.
+After the server sent a close frame, `Read` answers it and returns a `*CloseError`
+that holds the code and the reason. A message over the limit, 64 MiB by default
+(`WithWebSocketMaxMessage`), closes the connection with the code 1009. The
+client masks each frame that it sends. If the context of a call ends, the call
+closes the connection and returns the error of the context, because the
+stream of frames cannot continue after a call that stopped half way. `Close`
+sends a close frame and waits at most five seconds for the reply.
+
+The client does not do these things:
+
+- It is a client only. There is no server.
+- It offers no extension, so there is no deflate of messages. A server that
+  chooses an extension anyway is `ErrHandshake`.
+- It does not stream. `Read` holds a whole message in memory, up to the
+  limit, and `Write` sends one frame.
+- It sends no ping by itself, and it does not reconnect.
+
+The tests run a server that the test file writes with `net/http` and a hijack.
+`FuzzWebSocketFrame` holds the reader of frames.
 
 ## The package dbimptest
 

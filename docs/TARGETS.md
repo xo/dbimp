@@ -84,6 +84,8 @@ order:
     in `v0.17.0`. The driver is `github.com/xo/dbimp/databricks`. Its integration
     tests run only where a person supplies a workspace. See [DATABRICKS.md](DATABRICKS.md). `usql` has a driver, which the
     new one can replace (D24).
+22. Exasol, over its WebSocket API (W44 and D200). Step 2 has not measured it. The
+    root package gets a WebSocket client first.
 
 The other targets below keep their priority, and their place in the order
 is open.
