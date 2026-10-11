@@ -109,6 +109,7 @@ page on pkg.go.dev, and the version links to the release that first held it.
 | [`athena`](https://pkg.go.dev/github.com/xo/dbimp/athena) | Amazon Athena | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
 | [`cosmos`](https://pkg.go.dev/github.com/xo/dbimp/cosmos) | Azure Cosmos DB | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
 | [`spanner`](https://pkg.go.dev/github.com/xo/dbimp/spanner) | Google Cloud Spanner | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
+| [`exasol`](https://pkg.go.dev/github.com/xo/dbimp/exasol) | Exasol | [`v0.20.0`](https://github.com/xo/dbimp/releases/tag/v0.20.0) |
 
 ## Documents
 

@@ -85,7 +85,7 @@ order:
     tests run only where a person supplies a workspace. See [DATABRICKS.md](DATABRICKS.md). `usql` has a driver, which the
     new one can replace (D24).
 22. Exasol, over its WebSocket API (W44, D200 and D203 to D215). The driver is
-    `github.com/xo/dbimp/exasol`. It is staged and not released. Its integration tests run
+    `github.com/xo/dbimp/exasol`. It was first released in `v0.20.0`. Its integration tests run
     on the release `exasol-2026.2.0`, as the administrator and as an ordinary user that the
     tests make. See [EXASOL.md](EXASOL.md). `usql` has a driver, which the new one can
     replace (D24).
