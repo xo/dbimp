@@ -95,7 +95,7 @@ which is which.
   driver sends a query as it is, does not plan or merge a query across
   partitions, and returns the HTTP 400 of the gateway. The caller names the
   partition key. The facts are under The cross partition query.
-- Catalog statements. Decided, D190 item 17: the driver answers nine read-only
+- Catalog statements. Decided, D190 item 17 and D201: the driver answers fourteen read-only
   statements, one flat set of rows for each, through `QueryContext`, as a `SELECT`
   against a reserved name such as `"$containers"`. They are for `dbmeta`, which
   needs the partition key, the policies and the throughput of a container. See
@@ -1087,7 +1087,7 @@ The grammar is one form:
 
     SELECT * FROM "$containers" WHERE database = 'db' AND container = 'c'
 
-- The name after `FROM` is one of the nine reserved names below, in double quotes
+- The name after `FROM` is one of the fourteen reserved names below, in double quotes
   or bare. The list after `SELECT` is `*`. A statement with another list, with a
   reserved name, is an error that says so. A statement with any other name is not
   a catalog statement, and it goes to the container as a query, as before.
@@ -1240,7 +1240,101 @@ The grammar is one form:
 | `link` | `string` | _self |
 | `permission_mode` | `string` | permissionMode, Read or All |
 | `resource_link` | `string` | resource |
+
+`SELECT * FROM "$index_paths" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `path` | `string` | the path of the entry, such as /a/? or /* |
+| `kind` | `string` | included, excluded, composite, spatial, vector or full_text, from the list of the policy that holds the path |
+| `path_order` | `string` | asc or desc for a path of a composite index, from order, and nil for the other kinds |
+| `position` | `int64` | the position of the path inside its composite index, from 0, and nil for the other kinds |
+| `composite_group` | `int64` | the number of the composite index in compositeIndexes, from 0, and nil for the other kinds |
+| `spatial_types` | `[]any of string` | spatialIndexes, the types of the path, and nil for the other kinds |
+| `vector_index_type` | `string` | vectorIndexes, the type of the index, such as flat, quantizedFlat or diskANN, and nil for the other kinds |
+| `dimensions` | `int64` | vectorEmbeddingPolicy.vectorEmbeddings, the dimensions of the vector with the same path, and nil when the policy has none |
+| `full_text_path` | `string` | fullTextIndexes, the path of the index, and nil for the other kinds |
+
+`SELECT * FROM "$unique_keys" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `position` | `int64` | the position of the key in uniqueKeyPolicy.uniqueKeys, from 0 |
+
+`SELECT * FROM "$unique_key_paths" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `key_position` | `int64` | the position of the key in uniqueKeyPolicy.uniqueKeys, from 0 |
+| `position` | `int64` | the position of the path inside its key, from 0 |
+| `path` | `string` | the path |
+
+`SELECT * FROM "$routines" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `kind` | `string` | stored_procedure for a stored procedure, and function for a user defined function |
+| `id` | `string` | id |
+| `body` | `string` | body, which is free-form code |
+| `rid` | `string` | _rid |
+| `etag` | `string` | _etag |
+| `timestamp` | `time.Time` | _ts, in UTC |
+
+`SELECT * FROM "$partition_key_ranges" WHERE database = '...' AND container = '...'`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `database` | `string` | the WHERE |
+| `container` | `string` | the WHERE |
+| `id` | `string` | id |
+| `min_inclusive` | `string` | minInclusive, a hexadecimal text, which is empty for the first range |
+| `max_exclusive` | `string` | maxExclusive, a hexadecimal text |
+| `status` | `string` | status, such as online |
+| `parents` | `[]any of string` | parents, the ids of the ranges that this range split from |
+
+`SELECT * FROM "$session"`
+
+| Column | Type | Source |
+| --- | --- | --- |
+| `host` | `string` | the host of the DSN |
+| `port` | `int64` | the port of the DSN, or 443 with TLS and 80 without it when the DSN has none |
+| `account` | `string` | the first label of the host, or the whole host for an IP address or a host with no dot |
+| `database` | `string` | the database of the DSN or of an option, and nil when there is none |
+| `container` | `string` | the container of the DSN or of an option, and nil when there is none |
+| `tls` | `bool` | tls of the DSN |
+| `partition_key` | `any` | partitionkey of the DSN or of an option, and nil when there is none |
 <!-- /dbimp:catalog -->
+
+Decided, D201. Five statements follow the same grammar, and they are in the table.
+
+- `"$index_paths"` gives one row for each path of the indexing policy of one
+  container, in the order of the lists: included, excluded, composite, spatial,
+  vector and full text. The columns that do not apply to a kind are `nil`. The
+  dimensions of a vector come from `vectorEmbeddingPolicy`, joined by the path.
+  `full_text_path` repeats the path of a full text row.
+- `"$unique_keys"` gives one row for each unique key, and `"$unique_key_paths"`
+  gives one row for each path of a key. Each position counts from 0.
+- `"$routines"` gives the stored procedures and then the user defined functions.
+  `"$triggers"` stays as it is. The timestamp is the `_ts` as a `time.Time` in UTC.
+- `"$partition_key_ranges"` gives one row for each range. The parents are a `[]any`
+  of text.
+- `"$session"` takes no `WHERE` and sends no request. It reads the DSN and the
+  options of the statement. The driver has no user name to give, and it cannot tell
+  a read-only key from the primary key without a request that fails, so the
+  statement says neither. A read-only key still gets HTTP 401 on `"$users"` and
+  `"$permissions"`.
+- Not recorded: the composite, spatial, vector and full text entries on a hosted
+  container, and a split of a partition. The tests use the shapes that Microsoft
+  documents, and the integration test reads them on the emulator and on the hosted
+  account.
 
 What the recordings show, and what they do not:
 
@@ -1572,7 +1666,8 @@ what each one holds:
   test makes: the account, the databases, the containers with their policies, the
   scripts (which the emulator does not run), the offers, the users and the
   permissions (which the emulator may not make, and the test skips with the
-  reason).
+  reason), and the five statements of D201 against a container with every kind of
+  index path, two unique keys, a stored procedure and a function.
 - `TestIntegrationHostedCrossPartition`: the refusal with HTTP 400 and the
   substatus 1004, and the same query with a partition key.
 
@@ -1639,7 +1734,7 @@ The differences that a caller sees:
 | Cancel | The request carries the context, and `net/http` stops it when the context ends (D36 and D42) | The same. The rows keep the context for the request of each later page (D190 item 12 and D194 item 2) |
 | Errors | `*ResponseError`, with the HTTP status, the status of the body, and a list of `Error{Code, Msg}` | `*Error{HTTPStatus, SubStatus, Code, Message, RetryAfter}`, which unwraps to `*dbimp.StatusError` |
 | Authentication | Basic | A signature of the master key, written in the package with the standard library. The driver follows no redirect, so the signature goes to the host of the DSN only (D190 item 12) |
-| Catalog | None in the driver | Nine read-only statements, as a `SELECT` against `"$databases"`, `"$containers"`, `"$stored_procedures"`, `"$triggers"`, `"$functions"`, `"$offers"`, `"$users"`, `"$permissions"` and `"$account"`, each with its own columns (D190 item 17 and Catalog statements) |
+| Catalog | None in the driver | Fourteen read-only statements, as a `SELECT` against `"$databases"`, `"$containers"`, `"$stored_procedures"`, `"$triggers"`, `"$functions"`, `"$offers"`, `"$users"`, `"$permissions"`, `"$account"`, `"$index_paths"`, `"$unique_keys"`, `"$unique_key_paths"`, `"$routines"`, `"$partition_key_ranges"` and `"$session"`, each with its own columns (D190 item 17, D201 and Catalog statements) |
 | Other exports | The `With` options and `Option` | The `With` options and `Option`, `Error`, `Config`, `ParseDSN` and `NewConnector` |
 
 The differences that a caller sees:

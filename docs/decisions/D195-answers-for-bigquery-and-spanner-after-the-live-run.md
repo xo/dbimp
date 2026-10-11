@@ -45,7 +45,7 @@ them on 2026-10-11.
    and no key file and no token, because that is an emulator, which has no login.
    The url that `dbrun` prints for the emulator has no `disable_auth`, and CI ran
    the integration tests with that url. This is a choice of the main session,
-   which Ken can change. The key `disable_auth` still works.
+   which Ken accepted (D199 item 5). The key `disable_auth` still works.
 8. The tests of Elasticsearch, OpenSearch and Solr accept the answers of both
    kinds of ordinary user for the version. `dbmeta` 893681d let that user read the
    release, and CI moved to a `dbmeta` that holds it, so a 403 is no longer the

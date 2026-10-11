@@ -56,6 +56,9 @@ type catalog struct {
 	Columns []column
 	// fetch reads the rows, with the values of the keys.
 	fetch func(ctx context.Context, c *Connector, w map[string]string) ([][]any, error)
+	// local, when it is set, answers with no request, from the connector and
+	// the options, and fetch is nil.
+	local func(c *Connector, o options) [][]any
 }
 
 // links is the pair of columns that every resource has.
@@ -170,6 +173,76 @@ func catalogs() []catalog {
 			}),
 			fetch: fetchPermissions,
 		},
+		{
+			Name:    "$index_paths",
+			Needs:   []string{"database", "container"},
+			Columns: indexPathColumns,
+			fetch:   fetchIndexPaths,
+		},
+		{
+			Name:  "$unique_keys",
+			Needs: []string{"database", "container"},
+			Columns: []column{
+				{"database", "string", "the WHERE"},
+				{"container", "string", "the WHERE"},
+				{"position", "int64", "the position of the key in uniqueKeyPolicy.uniqueKeys, from 0"},
+			},
+			fetch: fetchUniqueKeys,
+		},
+		{
+			Name:  "$unique_key_paths",
+			Needs: []string{"database", "container"},
+			Columns: []column{
+				{"database", "string", "the WHERE"},
+				{"container", "string", "the WHERE"},
+				{"key_position", "int64", "the position of the key in uniqueKeyPolicy.uniqueKeys, from 0"},
+				{"position", "int64", "the position of the path inside its key, from 0"},
+				{"path", "string", "the path"},
+			},
+			fetch: fetchUniqueKeyPaths,
+		},
+		{
+			Name:  "$routines",
+			Needs: []string{"database", "container"},
+			Columns: []column{
+				{"database", "string", "the WHERE"},
+				{"container", "string", "the WHERE"},
+				{"kind", "string", "stored_procedure for a stored procedure, and function for a user defined function"},
+				{"id", "string", "id"},
+				{"body", "string", "body, which is free-form code"},
+				{"rid", "string", "_rid"},
+				{"etag", "string", "_etag"},
+				{"timestamp", "time.Time", "_ts, in UTC"},
+			},
+			fetch: fetchRoutines,
+		},
+		{
+			Name:  "$partition_key_ranges",
+			Needs: []string{"database", "container"},
+			Columns: []column{
+				{"database", "string", "the WHERE"},
+				{"container", "string", "the WHERE"},
+				{"id", "string", "id"},
+				{"min_inclusive", "string", "minInclusive, a hexadecimal text, which is empty for the first range"},
+				{"max_exclusive", "string", "maxExclusive, a hexadecimal text"},
+				{"status", "string", "status, such as online"},
+				{"parents", "[]any of string", "parents, the ids of the ranges that this range split from"},
+			},
+			fetch: fetchPartitionKeyRanges,
+		},
+		{
+			Name: "$session",
+			Columns: []column{
+				{"host", "string", "the host of the DSN"},
+				{"port", "int64", "the port of the DSN, or 443 with TLS and 80 without it when the DSN has none"},
+				{"account", "string", "the first label of the host, or the whole host for an IP address or a host with no dot"},
+				{"database", "string", "the database of the DSN or of an option, and nil when there is none"},
+				{"container", "string", "the container of the DSN or of an option, and nil when there is none"},
+				{"tls", "bool", "tls of the DSN"},
+				{"partition_key", "any", "partitionkey of the DSN or of an option, and nil when there is none"},
+			},
+			local: sessionRow,
+		},
 	}
 }
 
@@ -251,6 +324,9 @@ func parseCatalog(statement string, args []driver.NamedValue) (*catalogStatement
 	}
 	for k := range w {
 		if !slices.Contains(found.Needs, k) && !slices.Contains(found.Allows, k) {
+			if len(found.Needs)+len(found.Allows) == 0 {
+				return nil, true, fmt.Errorf("reading the catalog statement %s: it takes no WHERE, and the key is %s: %w", found.Name, k, dbimp.ErrInvalidValue)
+			}
 			return nil, true, fmt.Errorf("reading the catalog statement %s: the key %s is not one of %s: %w", found.Name, k, strings.Join(slices.Concat(found.Needs, found.Allows), ", "), dbimp.ErrInvalidValue)
 		}
 	}
@@ -437,9 +513,14 @@ func (cs *catalogStatement) run(ctx context.Context, c *Connector, o options) (d
 			return nil, fmt.Errorf("reading the catalog statement %s: the %s: %w", cs.catalog.Name, k, err)
 		}
 	}
-	rows, err := cs.catalog.fetch(ctx, c, w)
-	if err != nil {
-		return nil, err
+	var rows [][]any
+	if cs.catalog.local != nil {
+		rows = cs.catalog.local(c, o)
+	} else {
+		var err error
+		if rows, err = cs.catalog.fetch(ctx, c, w); err != nil {
+			return nil, err
+		}
 	}
 	cols := make([]string, len(cs.catalog.Columns))
 	for i, col := range cs.catalog.Columns {

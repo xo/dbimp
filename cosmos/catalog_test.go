@@ -357,6 +357,12 @@ func TestCatalogRefusals(t *testing.T) {
 		{`SELECT * FROM "$containers" WHERE database = 'd'`, []any{sql.Named("x", "y")}, dbimp.ErrArguments},
 		{`SELECT * FROM "$containers" WHERE database = 'a/b'`, nil, dbimp.ErrInvalidValue},
 		{`SELECT * FROM "$containers" WHERE database = 'd' AND user = 'u'`, nil, dbimp.ErrInvalidValue},
+		{`SELECT * FROM "$index_paths" WHERE database = 'd'`, nil, dbimp.ErrInvalidValue},
+		{`SELECT * FROM "$unique_key_paths" WHERE container = 'c'`, nil, dbimp.ErrInvalidValue},
+		{`SELECT * FROM "$routines" WHERE database = 'd'`, nil, dbimp.ErrInvalidValue},
+		{`SELECT * FROM "$partition_key_ranges" WHERE database = 'd' AND user = 'u'`, nil, dbimp.ErrInvalidValue},
+		{`SELECT * FROM "$session" WHERE container = 'c'`, nil, dbimp.ErrInvalidValue},
+		{`SELECT id FROM "$session"`, nil, dbimp.ErrInvalidValue},
 	} {
 		if err := drain(t, db, tt.statement, tt.args...); !errors.Is(err, tt.want) {
 			t.Errorf("%s: the error is %v, want %v", tt.statement, err, tt.want)

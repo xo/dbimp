@@ -1012,7 +1012,7 @@ The package made these choices where no document answered. Ken accepted the ones
    allows it. The driver cancels the statement on the server when the time ends.
 9. Decided (D193 item 12). `WithDatabase` sets the schema, as `WithSchema` does, because Spark calls a schema a database (recorded: "the catalog
    and the schema"). `WithCatalog` sets the catalog. `WithReadonly(true)` fails with `dbimp.ErrNotSupported`.
-10. Open. D193 does not name it. `WithParameter` sets a member of the body, and replaces the member of the driver with the same name. It refuses
+10. Decided (D199 item 2). `WithParameter` sets a member of the body, and replaces the member of the driver with the same name. It refuses
     `warehouse_id`, `statement`, `parameters`, `wait_timeout`, `on_wait_timeout`, `row_limit`, `byte_limit`,
     `disposition` and `format`. A `row_limit` or a `byte_limit` makes the server cut the result, and D193 item 2 says that
     the driver returns an error for a result that was cut.
@@ -1022,11 +1022,11 @@ The package made these choices where no document answered. Ken accepted the ones
 12. Decided (D193 item 12). A `TIMESTAMP` parameter is the instant in UTC, written with at most six digits of fraction, and the driver cuts the
     nanoseconds. The session zone is UTC (recorded: "the time zone of the session"). An interval parameter fails when it
     holds months and days together, because Spark has no such interval, and when it holds a part of a microsecond.
-13. Open. D193 does not name it. `ColumnTypeNullable` returns `true` and `false`: the column can be NULL, and the driver does not know. The manifest
+13. Decided (D199 item 3). `ColumnTypeNullable` returns `true` and `false`: the column can be NULL, and the driver does not know. The manifest
     has no nullability (recorded: "the rows of every type").
 14. Decided (D193 item 12). `Exec` of a statement whose answer has the column `num_affected_rows` reads the whole answer, and returns its first
     value as the count. `Exec` of any other statement closes the answer at once, and the count is not known.
-15. Open. D193 and D194 do not name it. The rows of the driver hold the function that cancels the context of the timeout, and no context, because the driver
+15. Decided (D199 item 3). The rows of the driver hold the function that cancels the context of the timeout, and no context, because the driver
     polls inside `QueryContext` and the statement has ended when the rows exist. So Databricks needs no change in rule 4
     of `AGENTS.md`.
 

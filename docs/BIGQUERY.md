@@ -1789,7 +1789,7 @@ Still open:
    result at the service, so `Exec` of a `SELECT` costs one request, and
    `RowsAffected` of it is an error. `Ping` runs `SELECT 1` as a dry run, which
    the service does not bill.
-9. Open. No decision names it. `WithParameter` sets a member of the request, such as `labels`,
+9. Decided (D199 item 2). `WithParameter` sets a member of the request, such as `labels`,
    `maximumBytesBilled`, `requestId`, `useQueryCache`, `dryRun` and
    `createSession`. It refuses the members that change how the driver binds or
    reads a value: `query`, `queryParameters`, `parameterMode`, `useLegacySql`,

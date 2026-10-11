@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"slices"
 	"testing"
+	"time"
 )
 
 // TestIntegrationCatalog runs each catalog statement (D190 item 17) against a
@@ -32,6 +33,20 @@ func TestIntegrationCatalog(t *testing.T) {
 		},
 	})
 	a.container(t, "cat_b", nil)
+	a.container(t, "cat_c", map[string]any{
+		"uniqueKeyPolicy": map[string]any{"uniqueKeys": []map[string]any{{"paths": []string{"/a", "/b"}}, {"paths": []string{"/c"}}}},
+		"indexingPolicy": map[string]any{
+			"indexingMode":  "consistent",
+			"automatic":     true,
+			"includedPaths": []map[string]any{{"path": "/*"}},
+			"excludedPaths": []map[string]any{{"path": "/big/*"}},
+			"compositeIndexes": [][]map[string]any{{
+				{"path": "/a", "order": "ascending"},
+				{"path": "/b", "order": "descending"},
+			}},
+			"spatialIndexes": []map[string]any{{"path": "/loc/*", "types": []string{"Point"}}},
+		},
+	})
 	db := a.open(t, "cat_a")
 	where := fmt.Sprintf("WHERE database = '%s'", databaseName)
 
@@ -68,8 +83,8 @@ func TestIntegrationCatalog(t *testing.T) {
 		for _, r := range rows {
 			byID[r["id"]] = r
 		}
-		if len(byID) != 2 || byID["cat_a"] == nil || byID["cat_b"] == nil {
-			t.Fatalf("the containers are %v, want cat_a and cat_b", rows)
+		if len(byID) != 3 || byID["cat_a"] == nil || byID["cat_b"] == nil || byID["cat_c"] == nil {
+			t.Fatalf("the containers are %v, want cat_a, cat_b and cat_c", rows)
 		}
 		r := byID["cat_a"]
 		for k, v := range map[string]any{
@@ -135,6 +150,74 @@ func TestIntegrationCatalog(t *testing.T) {
 		_, rows = catalog(t, db, stmt("$functions"))
 		if len(rows) != 1 || rows[0]["id"] != "plus1" || rows[0]["body"] != "function(x){return x+1;}" {
 			t.Errorf("the functions are %v", rows)
+		}
+	})
+
+	t.Run("index paths, unique keys, ranges and session", func(t *testing.T) {
+		stmt := func(name string) string {
+			return fmt.Sprintf(`SELECT * FROM "%s" WHERE database = '%s' AND container = 'cat_c'`, name, databaseName)
+		}
+		_, rows := catalog(t, db, stmt("$index_paths"))
+		kinds := map[any]int{}
+		for _, r := range rows {
+			kinds[r["kind"]]++
+		}
+		// The emulator keeps no composite and no spatial entry (recorded for the
+		// container uk).
+		if kinds["included"] != 1 || kinds["excluded"] < 1 || (!a.emulator && (kinds["composite"] != 2 || kinds["spatial"] != 1)) {
+			t.Errorf("the index paths are %v, want one included, an excluded, two composite and one spatial", rows)
+		}
+		for _, r := range rows {
+			if r["kind"] == "composite" && r["path"] == "/b" && (r["path_order"] != "desc" || r["position"] != int64(1) || r["composite_group"] != int64(0)) {
+				t.Errorf("the composite path /b is %v", r)
+			}
+			// The hosted service adds the other spatial types to a path that names
+			// Point only (recorded in the run of 2026-10-11), so the test asks for
+			// Point and not for the whole list.
+			if types, _ := r["spatial_types"].([]any); r["kind"] == "spatial" && !slices.Contains(types, any("Point")) {
+				t.Errorf("the spatial path is %v", r)
+			}
+		}
+		_, rows = catalog(t, db, stmt("$unique_keys"))
+		if len(rows) != 2 || rows[1]["position"] != int64(1) {
+			t.Errorf("the unique keys are %v, want two", rows)
+		}
+		_, rows = catalog(t, db, stmt("$unique_key_paths"))
+		if len(rows) != 3 || rows[1]["path"] != "/b" || rows[1]["position"] != int64(1) || rows[2]["key_position"] != int64(1) {
+			t.Errorf("the paths of the unique keys are %v, want /a and /b of the first key and /c of the second", rows)
+		}
+		_, rows = catalog(t, db, stmt("$partition_key_ranges"))
+		if len(rows) < 1 || rows[0]["id"] == nil || rows[0]["max_exclusive"] == nil || rows[0]["status"] != "online" {
+			t.Errorf("the ranges are %v, want at least one online", rows)
+		}
+		_, rows = catalog(t, db, `SELECT * FROM "$session"`)
+		if len(rows) != 1 || rows[0]["host"] == nil || rows[0]["database"] != databaseName || rows[0]["container"] != "cat_a" || rows[0]["tls"] == nil {
+			t.Errorf("the session is %v", rows)
+		}
+	})
+
+	t.Run("routines", func(t *testing.T) {
+		skipEmulator(t, a)
+		path := collPath("cat_c")
+		for kind, def := range map[string]map[string]any{
+			"sprocs": {"id": "sp1", "body": "function(){getContext().getResponse().setBody(1);}"},
+			"udfs":   {"id": "plus1", "body": "function(x){return x+1;}"},
+		} {
+			if status, _, body := a.rest(t, http.MethodPost, path+"/"+kind, nil, def); status != http.StatusCreated {
+				t.Fatalf("making %s: HTTP %d %s", kind, status, body)
+			}
+		}
+		stmt := func(name string) string {
+			return fmt.Sprintf(`SELECT * FROM "%s" WHERE database = '%s' AND container = 'cat_c'`, name, databaseName)
+		}
+		_, rows := catalog(t, db, stmt("$routines"))
+		if len(rows) != 2 || rows[0]["kind"] != "stored_procedure" || rows[0]["id"] != "sp1" || rows[1]["kind"] != "function" || rows[1]["id"] != "plus1" {
+			t.Fatalf("the routines are %v, want sp1 and plus1", rows)
+		}
+		for _, r := range rows {
+			if ts, ok := r["timestamp"].(time.Time); !ok || ts.Location() != time.UTC || r["etag"] == nil || r["rid"] == nil {
+				t.Errorf("the routine %v, want a timestamp in UTC, an etag and a rid", r)
+			}
 		}
 	})
 

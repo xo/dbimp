@@ -46,12 +46,12 @@ func TestTheCatalogsAreComplete(t *testing.T) {
 	t.Parallel()
 	seen := map[string]bool{}
 	for _, c := range catalogs() {
-		if seen[c.Name] || c.fetch == nil || len(c.Columns) == 0 {
+		if seen[c.Name] || (c.fetch == nil) == (c.local == nil) || len(c.Columns) == 0 {
 			t.Errorf("the catalog %s is repeated, or has no fetch or no column", c.Name)
 		}
 		seen[c.Name] = true
 	}
-	for _, name := range []string{"$databases", "$containers", "$stored_procedures", "$triggers", "$functions", "$offers", "$users", "$permissions", "$account"} {
+	for _, name := range []string{"$databases", "$containers", "$stored_procedures", "$triggers", "$functions", "$offers", "$users", "$permissions", "$account", "$index_paths", "$unique_keys", "$unique_key_paths", "$routines", "$partition_key_ranges", "$session"} {
 		if !seen[name] {
 			t.Errorf("the catalog %s is missing (D190 item 17)", name)
 		}
