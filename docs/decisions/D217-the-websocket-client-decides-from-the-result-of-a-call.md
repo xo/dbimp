@@ -35,7 +35,7 @@ Decided:
    connection stays open, because nothing was sent or read.
 3. A write takes its guard under the lock of the writer, so the pong and the close frames that
    `Read` sends use the context of `Read`, and two writers never share one deadline.
-4. A frame grows the buffer of its message only as bytes arrive, by at most 1 MiB for each step,
+4. A frame grows the buffer of its message only as bytes arrive, by a quarter of its size for each step, at most 4 MiB, and by at most 1 MiB at first,
    and each fragment goes into the same buffer. The `drain` of `Close` discards the payload. The
    Exasol driver bounds an inflated answer by the same limit as the message, and not by twice
    that limit.

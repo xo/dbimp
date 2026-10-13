@@ -45,7 +45,7 @@ the record.
 | Athena | W37 | Released in `v0.17.0` | `athena/`, its tests, ATHENA.md and D192. The integration tests passed on a hosted account | Step 20 |
 | Cosmos DB | W36 and W41 | Released in `v0.17.0` | `cosmos/`, its tests, COSMOS.md, D190 and the catalog statements for `dbmeta`. The integration tests passed on the emulator and on a hosted account | Step 20, and tell `dbmeta` the statements |
 | Spanner | W38 | Released in `v0.17.0` | `spanner/`, its tests, SPANNER.md, D187, D191 and D195. The integration tests passed on a hosted instance | Step 20, and the emulator entry of `dbmeta` |
-| Exasol | W44 | Step 17a written, staged | `exasol/`, its tests, EXASOL.md, D203 to D215, `Contract.WebSocket` and the scripted server in `dbimptest`. The integration tests passed on `exasol-2026.2.0` as both principals | Ken reviews the staged changes and the open questions of EXASOL.md. Then steps 18 to 20 |
+| Exasol | W44 | Released in `v0.20.0` | `exasol/`, its tests, EXASOL.md, D203 to D215, `Contract.WebSocket` and the scripted server in `dbimptest`. The integration tests passed on `exasol-2026.2.0` as both principals | The `dburl` and `dbmeta` sessions use the tag. `v0.20.1` holds the fixes of the WebSocket client (D217) |
 | ClickHouse | W32 | Released in `v0.13.0` | `clickhouse/`, its tests, CLICKHOUSE.md, D176 and D177. CI passed 32 of 32 jobs on the tagged commit, with the integration jobs of 25.8 and 26.9 | Step 20: the requests to `dburl` and `usql` (the request to `dbmeta` is done by its `v0.3.0`) |
 
 ## Next
@@ -54,8 +54,10 @@ The order of D162 is done as far as step 17a, and every driver in it is released
 The drivers for Databricks, BigQuery, Athena, Cosmos DB and Spanner (D184, D185,
 D187 and D188) are released in `v0.17.0`. `v0.17.1` makes the Spanner driver read
 the emulator of `dbmeta`. `v0.18.0` adds `dbimp.ErrAuthentication` (D197), and
-`v0.19.0` adds the database role and the DDL batches of Spanner (D198). The
-sessions `dburl`, `usql` and `dbmeta` have their requests, and they move to the
+`v0.19.0` adds the database role and the DDL batches of Spanner (D198).
+`v0.20.0` adds the Exasol driver (W44), the five Cosmos DB statements (W45) and
+the NULL fix of BigQuery (W46), and `v0.20.1` fixes the WebSocket client
+(D217). The sessions `dburl`, `usql` and `dbmeta` have their requests, and they move to the
 new drivers when `dburl` names them.
 
 ## Waiting for Ken

@@ -72,11 +72,13 @@ const (
 	CloseInternal    CloseCode = 1011
 )
 
-// The limits of the reader. A step is the most that the buffer of a message
-// grows at once, and the frame limit is the most frames that one call to Read
-// reads, control frames included.
+// The limits of the reader. The buffer of a message grows by a quarter of its
+// size, by at most growStep and, while it holds nothing, by at most growFirst.
+// The frame limit is the most frames that one call to Read reads, control
+// frames included.
 const (
-	growStep         = 1 << 20
+	growStep         = 4 << 20
+	growFirst        = 1 << 20
 	growMin          = 4 << 10
 	defaultMaxFrames = 1_000_000
 )
@@ -961,17 +963,17 @@ func readHeader(r io.Reader, hdr *[8]byte, limit int64) (frameHeader, error) {
 }
 
 // readPayload appends the n bytes of a payload to dst, and it returns the longer
-// slice. The slice grows only as bytes arrive, by at most growStep at a time,
-// so a header that declares a large length and then sends nothing holds at most
-// one step. A step is at least half of the bytes that are held, up to the
-// maximum, so a message of many small fragments costs a linear number of
-// copies, and a large message costs one copy for each step.
+// slice. The slice grows only as bytes arrive, so a header that declares a large
+// length and then sends nothing holds at most growFirst bytes. A step is a
+// quarter of the bytes that are held, up to growStep, so that the peak is the
+// message and one step, a message of many small fragments costs a linear number
+// of copies, and a message of 64 MiB costs under 1 GiB of copies and not 2 GiB.
 func readPayload(r io.Reader, dst []byte, n uint64) ([]byte, error) {
 	want := int(n) //nolint:gosec // The caller bounded n by the limit of the message, or by 125 for a control frame.
 	start := len(dst)
 	for len(dst)-start < want {
 		if len(dst) == cap(dst) {
-			step := min(growStep, max(want-(len(dst)-start), len(dst)/2, growMin))
+			step := min(growStep, max(len(dst)/4, min(want-(len(dst)-start), growFirst), growMin))
 			grown := make([]byte, len(dst), len(dst)+step)
 			copy(grown, dst)
 			dst = grown

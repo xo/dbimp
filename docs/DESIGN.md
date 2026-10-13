@@ -254,8 +254,8 @@ that holds the code and the reason. A server that ends the TCP connection at the
 frame, with no close frame, gives an error that wraps `io.EOF`, and an end inside a frame
 gives `io.ErrUnexpectedEOF`. A message over the limit, 64 MiB by default
 (`WithWebSocketMaxMessage`), closes the connection with the code 1009, and so does a message
-of more than one million frames. The buffer of a message grows only as bytes arrive, by at
-most 1 MiB for each step, so a frame that declares a large length and sends little holds
+of more than one million frames. The buffer of a message grows only as bytes arrive, by a
+quarter of its size for each step, at most 4 MiB, so a frame that declares a large length and sends little holds
 little memory. The client masks each frame that it sends.
 
 The context of a call works like this (D217). If it is done before the call starts, the call

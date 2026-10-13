@@ -695,28 +695,32 @@ Step 8a. The two models reviewed the type table on 2026-10-11 (Gemini 3.1 Pro an
 
 ## Open questions
 
-Ken answered the questions of step 9 on 2026-10-11 (D203 to D214). These questions are open:
+Ken answered the questions of step 9 on 2026-10-11 (D203 to D214), and on 2026-10-11 and 2026-10-14 he answered these
+later ones:
 
-- The default of the key `protocol`. Ken named the key and gave no default. The driver uses 3, the version of every
-  recording, and the server answers the version that it was asked for when it is 3, 4 or 5 (D205). Protocol 5 gives the
-  precision of a TIMESTAMP, and the document of the API says that it needs Exasol 8.32.0 or later.
-- The wait for the answer of an aborted statement. The driver waits 10 seconds and then closes the session (D211).
-  Ken gave no limit.
-- Whether the driver supports the local import and export through a proxy connection, as `exasol-driver-go` does. Ken's
-  answers name none, so the driver sends the statement as it is, and the server answers `0A000` (recorded: "lead: import
-  from a local file"). A caller imports through `INSERT` and the prepared statement.
+- The default of the key `protocol` is 3, the version of every recording. The server answers the version that it was
+  asked for when it is 3, 4 or 5 (D205). Protocol 5 gives the precision of a TIMESTAMP, and the document of the API says
+  that it needs Exasol 8.32.0 or later.
+- The wait for the answer of an aborted statement is 10 seconds. After that, the driver closes the session (D211).
+- A session that the server ended after its idle time of 86400 seconds gives an error on its first statement, and the
+  second statement works, because `database/sql` drops the connection (`TestIntegrationFeatures`, the subtest
+  `idle_timeout`). The driver only documents this. A caller that holds a connection for a long time sets
+  `SetConnMaxIdleTime` on the pool to a value below the idle timeout of the server.
+- D215, the change of rule 4 of AGENTS.md for the rows, the statement and the transaction, is accepted.
+- The shared test of the contract. `RunContract` sends HTTP, so `dbimptest` has a second set of cases for a WebSocket,
+  which `Contract.WebSocket` selects ([DESIGN.md](DESIGN.md), "The scripted server and the contract").
+- The WebSocket client has the option `WithWebSocketProxy`, and the default is no proxy (D217). The Exasol driver sets
+  no proxy and has no DSN key for one.
+
+These questions stay open:
+
+- Whether the driver supports the local import and export through a proxy connection, as `exasol-driver-go` does. The
+  driver sends the statement as it is, and the server answers `0A000` (recorded: "lead: import from a local file"). A
+  caller imports through `INSERT` and the prepared statement.
 - The version for `usql` and `dbmeta` (step 16). `usql` sets no statement for the version, and the driver gives none (D181
   does not apply, because the server has the statement `SELECT PARAM_VALUE FROM EXA_METADATA WHERE PARAM_NAME =
   'databaseProductVersion'`, which a user with one privilege can run, recorded as "version from the metadata").
-- A session that the server ended after its idle time of 86400 seconds gives an error on its first statement, and the
-  second statement works, because `database/sql` drops the connection (`TestIntegrationFeatures`, the subtest
-  `idle_timeout`). Ken decided that the driver only documents this. A caller that holds a connection for a long
-  time sets `SetConnMaxIdleTime` on the pool to a value below the idle timeout of the server.
-- D215, the change of rule 4 of AGENTS.md for the rows, the statement and the transaction, is accepted by Ken.
-- The shared test of the contract. `RunContract` sends HTTP, so `dbimptest` gets a second set of cases for a WebSocket,
-  which `Contract.WebSocket` selects ([DESIGN.md](DESIGN.md), "The scripted server and the contract"). Ken reviews it with
-  the staged changes.
-- `TIMESTAMP WITH LOCAL TIME ZONE` before the rules of a time zone began: the server and Go can hold different data for the
+- `TIMESTAMP WITH LOCAL TIME ZONE` before the rules of a time zone began. The server and Go can hold different data for the
   zone name `CET` in the years before 1893, so the same stored value reads back as a different instant. The round trip test
   uses 1970-01-02 as its oldest value for this type, because CI failed on the year 1 with a Go that resolves `CET` to a fixed
   offset (2026-10-11).

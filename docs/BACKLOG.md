@@ -2031,7 +2031,7 @@ in one `updateDatabaseDdl` request. The tests passed on the hosted instance and 
 emulator on 2026-10-11: a batch of four statements made three tables and an index in
 one request. Tell `dbmeta` the tag, so that it can move its hosted tests of Spanner.
 
-## W44. Write the Exasol driver
+## W44. Write the Exasol driver. Done.
 
 Ken asked for it on 2026-10-11, by D200. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
 [EXASOL.md](EXASOL.md), and the package is `exasol`. `dbrun` starts `exasol-2026.2.0`.
@@ -2045,9 +2045,10 @@ Status: released in `v0.20.0`. Ken answered step 9 on 2026-10-11 (D203 to D214),
 and accepted the change of rule 4 (D215). The package, its unit tests, its integration tests, the
 tables, the sections Integration tests and Compared with Couchbase of [EXASOL.md](EXASOL.md) and the
 second set of cases of `dbimptest.RunContract` for a WebSocket are written. The integration tests
-passed on `exasol-2026.2.0` as both principals. Open: tell `dburl`, `usql` and `dbmeta` the tag.
+passed on `exasol-2026.2.0` as both principals. `dburl` and `dbmeta` use the tag, and `v0.20.1` holds the fixes of
+the review of the WebSocket client (D217).
 
-## W45. Add five more catalog statements to the Cosmos DB driver
+## W45. Add five more catalog statements to the Cosmos DB driver. Done.
 
 `dbmeta` asked on 2026-10-11, and Ken decided the same day (D201): `$index_paths`,
 `$unique_keys`, `$unique_key_paths`, `$routines`, `$partition_key_ranges` and `$session`. Write
@@ -2055,11 +2056,9 @@ the columns in [COSMOS.md](COSMOS.md) (generated, so they cannot go stale), the 
 recorded exchanges, on the emulator and on the hosted account, and tell `dbmeta` the tag and
 the columns.
 
-Status: the code, the unit tests, the integration test for the emulator and the columns in
-[COSMOS.md](COSMOS.md) are written and staged. Open: run `TestIntegrationCatalog` on the
-hosted account, then release and tell `dbmeta`.
+Status: released in `v0.20.0`. `dbmeta` v0.15.0 uses the statements (15 kinds).
 
-## W46. A NULL argument is the literal NULL in the BigQuery driver
+## W46. A NULL argument is the literal NULL in the BigQuery driver. Done.
 
 The `usql` session reported on 2026-10-11 that an `INSERT` with a NULL argument fails for a
 `NUMERIC` or a `TIMESTAMP` column, because the driver sent the NULL as a `STRING`. Ken decided
@@ -2068,5 +2067,5 @@ text of the statement, with the parser for placeholders of the root package, and
 parameter for it.
 
 Status: the code, the unit tests, the integration test `TestIntegrationNullArgumentsFitEveryColumn`
-(run on the hosted project, 11 column types) and D216 are written and staged. Released in `v0.20.0`.
-Open: tell `usql`.
+(run on the hosted project, 11 column types) and D216 are written. Released in `v0.20.0`, and `usql` knows. The measurements of the types of a NULL parameter were made by hand
+on 2026-10-11 and are not in `testdata`.
