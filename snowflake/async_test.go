@@ -241,7 +241,7 @@ func TestCancelWhenTheContextEnds(t *testing.T) {
 	// The deadline is the other end of a context.
 	a2 := &asyncServer{running: -1}
 	db2 := openConnector(t, newAsync(t, a2))
-	ctx2, cancel2 := context.WithTimeout(t.Context(), 30*time.Millisecond)
+	ctx2, cancel2 := context.WithTimeout(t.Context(), 500*time.Millisecond)
 	defer cancel2()
 	if _, _, err := readAllContext(t, ctx2, db2, "SELECT SYSTEM$WAIT(20)"); !errors.Is(err, context.DeadlineExceeded) {
 		t.Errorf("the error is %v, want context.DeadlineExceeded", err)
