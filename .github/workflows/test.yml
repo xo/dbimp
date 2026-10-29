@@ -135,7 +135,7 @@ jobs:
             cadences='["tested","nightly"]'
           fi
           tiers=$(echo "$cadences" | jq -r 'join(" ")')
-          hosted='["snowflake","databricks","athena"]'
+          hosted='["snowflake","databricks","athena","maxcompute","tablestore"]'
           emulated='["spanner"]'
           drivers=$(for d in testdata/*/; do d=$(basename "$d"); if [ -d "$d" ]; then echo "$d"; fi; done | jq -R . | jq -sc --argjson hosted "$hosted" 'map(select(. as $d | $hosted | index($d) | not))')
           list=$(cd dbmeta/test && go run ./cmd/dbrun list --json $tiers staged)
