@@ -89,6 +89,8 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Athena driver | [docs/ATHENA.md](docs/ATHENA.md), then W37 and D184 |
 | writing the Databricks driver | [docs/DATABRICKS.md](docs/DATABRICKS.md), then W39 and D188 |
 | writing the Exasol driver | [docs/EXASOL.md](docs/EXASOL.md), then W44, D200, D202 and D203 to D215 |
+| writing the MaxCompute driver | [docs/MAXCOMPUTE.md](docs/MAXCOMPUTE.md), then W47 |
+| writing the Tablestore driver | [docs/TABLESTORE.md](docs/TABLESTORE.md), then W48 |
 | writing the Spanner driver | [docs/SPANNER.md](docs/SPANNER.md), then W38, D185, D187 and D191 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
 | adding a driver | [docs/DRIVER.md](docs/DRIVER.md), which is every step in order |

@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:50:48 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_tx (id BIGINT NOT NULL, name STRING, PRIMARY KEY (id)) TBLPROPERTIES ('transactional'='true');</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:50:48 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "197"
+      ],
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/20261029095048155gjpa74l5cp1"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE316F8B06A5B01004D2EF1"
+      ],
+      "X-Odps-Start-Time": [
+        "Thu, 29 Oct 2026 09:50:48 GMT"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Content-Md5": [
+        "b9d98942921f30622da9c3c8c932619f"
+      ],
+      "X-Odps-End-Time": [
+        "Thu, 29 Oct 2026 09:50:48 GMT"
+      ],
+      "X-Odps-Owner": [
+        "RAM$<owner>:<account>"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Instance><Tasks><Task Type=\"SQL\"><Name>AnonymousSQLTask</Name><Status>Success</Status><Result Format=\"text\"><![CDATA[\n]]></Result></Task></Tasks></Instance>\n"
+  }
+}

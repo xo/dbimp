@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:43:24 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT NAMED_STRUCT('x', 1L, 'y', 'a,b') AS lo, NAMED_STRUCT('x', CAST(NULL AS BIGINT), 'y', CAST(NULL AS STRING)) AS hi, CAST(NULL AS STRUCT&lt;x:BIGINT,y:STRING&gt;) AS nu;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:43:24 GMT"
+      ],
+      "Content-Type": [
+        "text/plain;charset=utf-8"
+      ],
+      "Content-Length": [
+        "0"
+      ],
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/2026102909432496gtzhzrar0a8"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE3153CB06A5B01004BF1C6"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ]
+    },
+    "body": ""
+  }
+}

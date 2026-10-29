@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Connection": [
+        "close"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:51:35 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>UPSERT INTO dbimp_it_tx VALUES (9, 'u');</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Md5": [
+        "264e01b0df5ca417dce871f95097c8e4"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE3172728AE8301004BE23D"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:51:35 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "245"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>ParseError</Code>\n\t<Message><![CDATA[ODPS-0130161:[1,1] Parse exception - invalid token 'UPSERT']]></Message>\n\t<RequestId>6AE3172728AE8301004BE23D</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

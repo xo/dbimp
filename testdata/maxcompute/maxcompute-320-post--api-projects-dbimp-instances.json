@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Connection": [
+        "close"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:54:57 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SET odps.sql.type.system.odps2=true; SELECT CAST(1 AS TINYINT) AS a;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:54:59 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "276"
+      ],
+      "Content-Md5": [
+        "bf25141b98198e6a3e083497d0bf4ded"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE317F3B06A5B01004DDE61"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>ParseError</Code>\n\t<Message><![CDATA[Please add put { \"odps.sql.submit.mode\" : \"script\"} for multi-statement query in settings.]]></Message>\n\t<RequestId>6AE317F3B06A5B01004DDE61</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

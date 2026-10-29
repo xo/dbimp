@@ -125,11 +125,11 @@ func (r *Recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 			Method: req.Method,
 			Path:   req.URL.Path,
 			Query:  req.URL.RawQuery,
-			Header: redact(req.Header, "Authorization", "Cookie"),
+			Header: redact(req.Header, "Authorization", "Cookie", "X-Ots-Accesskeyid", "X-Ots-Signature", "X-Ots-Signaturev4"),
 		},
 		Response: Response{
 			Status:    res.StatusCode,
-			Header:    redact(res.Header, "Set-Cookie"),
+			Header:    redact(res.Header, "Set-Cookie", "Authorization"),
 			Truncated: truncated,
 		},
 	}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:52:01 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>COMMIT;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Length": [
+        "245"
+      ],
+      "Content-Md5": [
+        "4d8957928b99428e5b7eaa07120193c8"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE31741B2DC6701004B6683"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:52:01 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>ParseError</Code>\n\t<Message><![CDATA[ODPS-0130161:[1,1] Parse exception - invalid token 'COMMIT']]></Message>\n\t<RequestId>6AE31741B2DC6701004B6683</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

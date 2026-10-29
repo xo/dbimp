@@ -238,3 +238,10 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D215](D215-rule-4-names-the-exasol-driver.md) | Rule 4 names the Exasol driver | Accepted |
 | [D216](D216-a-null-argument-is-the-literal-null-in-bigquery.md) | A NULL argument is the literal NULL in BigQuery | Decided. Amends D195 |
 | [D217](D217-the-websocket-client-decides-from-the-result-of-a-call.md) | The WebSocket client decides from the result of a call | Decided. Amends D200 |
+| [D218](D218-the-maxcompute-driver-is-maxcompute-and-takes-a-url.md) | The MaxCompute driver is `maxcompute` and takes a URL | Decided |
+| [D219](D219-the-maxcompute-driver-types-a-column-with-explain-output.md) | The MaxCompute driver types a column with EXPLAIN OUTPUT | Decided |
+| [D220](D220-the-maxcompute-driver-sends-one-statement-and-reads-the-csv.md) | The MaxCompute driver sends one statement and reads the CSV | Proposed. Ken decided items 3, 5 and 6 on 2026-10-29, and the others follow from step 6 |
+| [D221](D221-the-maxcompute-driver-signs-with-version-4-and-has-no-flavors.md) | The MaxCompute driver signs with version 4 and has no flavors | Proposed. Ken decided item 1 on 2026-10-29 |
+| [D222](D222-the-tablestore-driver-is-tablestore-and-takes-a-url.md) | The Tablestore driver is `tablestore` and takes a URL | Decided |
+| [D223](D223-the-tablestore-driver-types-a-column-from-the-flatbuffers-answer.md) | The Tablestore driver types a column from the FlatBuffers answer | Decided. Ken reviewed the table on 2026-10-29, except the row of `TIMESTAMP` |
+| [D224](D224-the-tablestore-driver-sends-one-statement-and-has-no-transaction.md) | The Tablestore driver sends one statement and has no transaction | Proposed. These follow from step 6 and wait for Ken |

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:54:10 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_fk (id BIGINT, FOREIGN KEY (id) REFERENCES dbimp_it_tx (id));</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "308"
+      ],
+      "Content-Md5": [
+        "86acc4b2fc61acfdffa4ca6172c40f6f"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE317C2B06A5B01004DBD01"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:54:10 GMT"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>ParseError</Code>\n\t<Message><![CDATA[ODPS-0130161:[1,46] Parse exception - invalid token 'KEY'\nODPS-0130161:[1,55] Parse exception - invalid token 'REFERENCES']]></Message>\n\t<RequestId>6AE317C2B06A5B01004DBD01</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

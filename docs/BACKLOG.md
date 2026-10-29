@@ -2069,3 +2069,29 @@ parameter for it.
 Status: the code, the unit tests, the integration test `TestIntegrationNullArgumentsFitEveryColumn`
 (run on the hosted project, 11 column types) and D216 are written. Released in `v0.20.0`, and `usql` knows. The measurements of the types of a NULL parameter were made by hand
 on 2026-10-11 and are not in `testdata`.
+
+## W47. Write the MaxCompute driver
+
+Ken asked for it on 2026-10-29. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[MAXCOMPUTE.md](MAXCOMPUTE.md), and the package is `maxcompute`. `dburl` has the scheme
+`maxcompute` (alias `mc`), and it names `github.com/aliyun/aliyun-odps-go-sdk/sqldriver`, which
+`usql` uses. MaxCompute is a hosted service, so it fails R in the way that Snowflake does, and
+its integration tests run only where a person supplies an account. The `dbsetup` session is
+making that account. `dbmeta` D218 says that MaxCompute has no account, so the account is new.
+Ken decided on 2026-10-29: CSV results only, no Tunnel and no Arrow, V4 signatures only, and no
+code copied from the SDK.
+
+Status: step 3 is a draft. Nothing is measured, because no account exists yet. `dbsetup` waits for
+the activation of the service.
+
+## W48. Write the Tablestore driver
+
+Ken asked for it on 2026-10-29, together with MaxCompute (W47). Follow [DRIVER.md](DRIVER.md).
+Step 3 goes in [TABLESTORE.md](TABLESTORE.md). `dburl` has the scheme `ots` (alias `tablestore`),
+and it names `github.com/aliyun/aliyun-tablestore-go-sql-driver`, which `usql` uses. Tablestore is
+a hosted service, so it fails R in the way that Snowflake does. The API is not JSON: a request is
+protobuf, and the rows of a SQL query are FlatBuffers. Ken approved on 2026-10-29 a binary
+encoding that is written in this repository with no package (D13). Step 9 must still decide the
+name of the package and of the registered driver, because the scheme is `ots`.
+
+Status: step 3 is a draft. Nothing is measured.

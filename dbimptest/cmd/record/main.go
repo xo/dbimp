@@ -30,6 +30,8 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"maps"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -39,6 +41,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/xo/dbimp"
@@ -67,7 +70,12 @@ type Script struct {
 	// authentication.
 	Auth string `json:"auth,omitzero"`
 	// Region and Service name the scope of each signature when Auth is
-	// "sigv4", such as "us-east-1" and "dynamodb".
+	// "sigv4", such as "us-east-1" and "dynamodb". Auth "odps" signs each
+	// request as MaxCompute takes it, with the user of each URL as the access key id,
+	// its password as the secret, and Region as the region of the key.
+	// Auth "ots" signs each request as Tablestore takes it, with the user of each
+	// URL as the access key id, its password as the secret, and the first label
+	// of the host as the name of the instance.
 	Region  string `json:"region,omitzero"`
 	Service string `json:"service,omitzero"`
 	// WebSocket, when set, makes the script one for a database that takes its
@@ -94,6 +102,8 @@ type Request struct {
 	Body jsontext.Value `json:"body,omitzero"`
 	// Text is a body of plain text to send, in place of Body.
 	Text string `json:"text,omitzero"`
+	// Bytes is a body of bytes to send, in place of Body. The file holds it as base64.
+	Bytes []byte `json:"bytes,omitzero"`
 	// Encoding is "cbor" to send Body as CBOR, or "" to send it as JSON.
 	Encoding string `json:"encoding,omitzero"`
 	// Auth is "wrong" to send a wrong password, "none" to send no credentials
@@ -129,6 +139,9 @@ type Request struct {
 	// answer, until an answer has no such URI, as a client that reads every
 	// page does. It follows at most maxFollow times.
 	Follow string `json:"follow,omitzero"`
+	// Retry sends the request again after a connection reset, for a
+	// request that is safe to send twice. A GET is always safe.
+	Retry bool `json:"retry,omitzero"`
 	// Server is "second" to send the request to the URL of the flag -second,
 	// such as the Controller of Pinot, with the credentials of that URL, or
 	// "" to send it to the URL of the principal. Only a request of the setup
@@ -209,8 +222,10 @@ func run(ctx context.Context, dir, release, second string, insecure bool, princi
 		return fmt.Errorf("reading the script: %w", err)
 	}
 	switch {
-	case !slices.Contains([]string{"", dbimp.AuthBearer, authSigV4, authCosmos}, script.Auth):
+	case !slices.Contains([]string{"", dbimp.AuthBearer, authSigV4, authCosmos, authODPS, authOTS}, script.Auth):
 		return fmt.Errorf("reading the script: the auth %q: %w", script.Auth, dbimp.ErrInvalidValue)
+	case script.Auth == authODPS && script.Region == "":
+		return fmt.Errorf("reading the script: the auth %q needs a region: %w", script.Auth, dbimp.ErrInvalidValue)
 	case script.Auth == authSigV4 && (script.Region == "" || script.Service == ""):
 		return fmt.Errorf("reading the script: the auth %q needs a region and a service: %w", script.Auth, dbimp.ErrInvalidValue)
 	}
@@ -527,6 +542,12 @@ func capture(body []byte, paths map[string]string, kept map[string]string) error
 	if len(bytes.TrimSpace(body)) == 0 {
 		return nil
 	}
+	// A capture of headers only reads no body, which can be XML.
+	if !slices.ContainsFunc(slices.Collect(maps.Values(paths)), func(path string) bool {
+		return !strings.HasPrefix(path, headerPrefix)
+	}) {
+		return nil
+	}
 	var v any
 	if err := json.Unmarshal(body, &v); err != nil {
 		return fmt.Errorf("reading the response to capture: %w", err)
@@ -630,6 +651,8 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 	switch {
 	case r.Text != "":
 		payload = []byte(r.Text)
+	case len(r.Bytes) > 0:
+		payload = r.Bytes
 	case len(r.Body) > 0 && r.Encoding == "cbor":
 		b, err := toCBOR(r.Body)
 		if err != nil {
@@ -657,7 +680,7 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 		}
 	}
 	authorize(req, base, r, payload, r.Auth == "wrong")
-	res, err := client.Do(req)
+	res, err := doRetry(ctx, client, req, r.Retry)
 	switch {
 	case err != nil && r.Timeout != "":
 		fmt.Printf("item %d, %s: the client gave up after %s, as planned\n", r.Item, r.Name, r.Timeout)
@@ -700,6 +723,42 @@ func send(ctx context.Context, client *http.Client, base *url.URL, p string, r R
 	return fmt.Errorf("following %s: more than %d pages", r.Follow, maxFollow)
 }
 
+// resetTries is how many times doRetry sends a request that a connection reset
+// stopped.
+const resetTries = 8
+
+// doRetry sends req. A hosted service such as MaxCompute resets a connection now
+// and then. A GET is safe to send again, and so is a request that the script
+// marks with retry. Such a request that a reset or a timeout of the handshake stopped is sent again, up to
+// resetTries times in all. Any other request is sent once, because a second
+// try could run a statement twice.
+func doRetry(ctx context.Context, client *http.Client, req *http.Request, retry bool) (*http.Response, error) {
+	for try := 1; ; try++ {
+		res, err := client.Do(req)
+		if err == nil || (!retry && req.Method != http.MethodGet) || !transient(ctx, err) || try == resetTries {
+			return res, err
+		}
+		if req.GetBody != nil {
+			if req.Body, err = req.GetBody(); err != nil {
+				return nil, fmt.Errorf("rewinding the body: %w", err)
+			}
+		}
+		fmt.Printf("%s %s: the connection was reset, trying again\n", req.Method, req.URL.Path)
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(2 * time.Second):
+		}
+	}
+}
+
+// transient reports whether err is a failure of the connection that a second try
+// can cure: a reset, or a timeout of the handshake while ctx is still open.
+func transient(ctx context.Context, err error) bool {
+	var ne net.Error
+	return errors.Is(err, syscall.ECONNRESET) || (ctx.Err() == nil && errors.As(err, &ne) && ne.Timeout())
+}
+
 // authSigV4 is the Auth of a script that signs each request with AWS
 // Signature Version 4.
 const authSigV4 = "sigv4"
@@ -722,6 +781,10 @@ func authorize(req *http.Request, base *url.URL, r Request, payload []byte, wron
 		req.Header.Set("Authorization", "Bearer "+pass)
 	case authSigV4:
 		dbimp.SignV4(req, payload, user.Username(), pass, r.region, r.service, time.Now())
+	case authOTS:
+		signOTS(req, payload, user.Username(), pass, time.Now())
+	case authODPS:
+		signODPS(req, base.Path, user.Username(), pass, r.region, time.Now())
 	case authCosmos:
 		if err := signCosmos(req, pass, time.Now()); err != nil {
 			fmt.Fprintln(os.Stderr, "record:", err)
@@ -752,7 +815,7 @@ func get(ctx context.Context, client *http.Client, base *url.URL, r Request, uri
 		}
 	}
 	authorize(req, base, r, nil, false)
-	res, err := client.Do(req)
+	res, err := doRetry(ctx, client, req, false)
 	if err != nil {
 		return nil, nil, fmt.Errorf("sending the request: %w", err)
 	}

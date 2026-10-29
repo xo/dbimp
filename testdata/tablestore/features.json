@@ -1,0 +1,534 @@
+{
+  "driver": "tablestore",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-10-29"
+    },
+    {
+      "source": "deepseek-v4-flash",
+      "kind": "model",
+      "date": "2026-10-29"
+    },
+    {
+      "source": "github.com/aliyun/aliyun-tablestore-go-sdk",
+      "kind": "driver",
+      "date": "2026-10-29"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash",
+        "github.com/aliyun/aliyun-tablestore-go-sdk"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-020-post--sqlquery.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-170-post--sqlquery.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-171-post--sqlquery.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-172-post--sqlquery.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "upsert",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-180-post--sqlquery.json",
+      "test": "TestIntegrationCRUD/upsert"
+    },
+    {
+      "kind": "crud",
+      "name": "replace",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-176-post--sqlquery.json",
+      "test": "TestIntegrationCRUD/replace"
+    },
+    {
+      "kind": "crud",
+      "name": "insert on duplicate key update",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-181-post--sqlquery.json",
+      "test": "TestIntegrationCRUD/insert_on_duplicate_key_update"
+    },
+    {
+      "kind": "schema",
+      "name": "create mapping table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-017-post--sqlquery.json",
+      "test": "TestIntegrationSchema/create_mapping_table"
+    },
+    {
+      "kind": "schema",
+      "name": "drop mapping table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-218-post--sqlquery.json",
+      "test": "TestIntegrationSchema/drop_mapping_table"
+    },
+    {
+      "kind": "schema",
+      "name": "describe",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-018-post--sqlquery.json",
+      "test": "TestIntegrationSchema/describe"
+    },
+    {
+      "kind": "schema",
+      "name": "show tables",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-019-post--sqlquery.json",
+      "test": "TestIntegrationSchema/show_tables"
+    },
+    {
+      "kind": "schema",
+      "name": "show index",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-182-post--sqlquery.json",
+      "test": "TestIntegrationSchema/show_index"
+    },
+    {
+      "kind": "schema",
+      "name": "alter table add column",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-183-post--sqlquery.json",
+      "test": "TestIntegrationSchema/alter_table_add_column"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-188-post--sqlquery.json",
+      "test": "TestIntegrationSchema/drop_table"
+    },
+    {
+      "kind": "schema",
+      "name": "secondary index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-184-post--sqlquery.json",
+      "test": "TestIntegrationSchema/secondary_index"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-185-post--sqlquery.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "feature",
+      "name": "select @@version",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-189-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/select_@@version"
+    },
+    {
+      "kind": "feature",
+      "name": "database function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-190-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/database_function"
+    },
+    {
+      "kind": "feature",
+      "name": "current user function",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-192-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/current_user_function"
+    },
+    {
+      "kind": "feature",
+      "name": "show databases",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-193-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/show_databases"
+    },
+    {
+      "kind": "schema",
+      "name": "show create table",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-194-post--sqlquery.json",
+      "test": "TestIntegrationSchema/show_create_table"
+    },
+    {
+      "kind": "feature",
+      "name": "convert function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-196-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/convert_function"
+    },
+    {
+      "kind": "feature",
+      "name": "concat function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-198-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/concat_function"
+    },
+    {
+      "kind": "feature",
+      "name": "now function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-199-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/now_function"
+    },
+    {
+      "kind": "feature",
+      "name": "current timestamp",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-200-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/current_timestamp"
+    },
+    {
+      "kind": "feature",
+      "name": "from unixtime function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-201-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/from_unixtime_function"
+    },
+    {
+      "kind": "feature",
+      "name": "date format function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-202-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/date_format_function"
+    },
+    {
+      "kind": "feature",
+      "name": "statement timeout hint",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-204-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/statement_timeout_hint"
+    },
+    {
+      "kind": "feature",
+      "name": "start transaction",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-205-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/start_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "set autocommit",
+      "sources": [
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-208-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/set_autocommit"
+    },
+    {
+      "kind": "feature",
+      "name": "time series name of a table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-209-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/time_series_name_of_a_table"
+    },
+    {
+      "kind": "feature",
+      "name": "limit with an offset",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-210-post--sqlquery.json",
+      "test": "TestIntegrationFeatures/limit_with_an_offset"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-017-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/BIGINT"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-017-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/DOUBLE"
+    },
+    {
+      "kind": "type",
+      "name": "BOOL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-017-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/BOOL"
+    },
+    {
+      "kind": "type",
+      "name": "MEDIUMTEXT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-017-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/MEDIUMTEXT"
+    },
+    {
+      "kind": "type",
+      "name": "MEDIUMBLOB",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-017-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/MEDIUMBLOB"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-053-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "DATETIME",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-080-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/DATETIME"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-083-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "tablestore-086-post--sqlquery.json",
+      "test": "TestIntegrationRoundTrip/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "INTEGER",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-038-post--sqlquery.json",
+      "test": "TestIntegrationTypesRefused/INTEGER"
+    },
+    {
+      "kind": "type",
+      "name": "TEXT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-059-post--sqlquery.json",
+      "test": "TestIntegrationTypesRefused/TEXT"
+    },
+    {
+      "kind": "type",
+      "name": "BINARY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-074-post--sqlquery.json",
+      "test": "TestIntegrationTypesRefused/BINARY"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-089-post--sqlquery.json",
+      "test": "TestIntegrationTypesRefused/DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "JSON",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-101-post--sqlquery.json",
+      "test": "TestIntegrationTypesRefused/JSON"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-065-post--sqlquery.json",
+      "test": "TestIntegrationTypesRefused/VARCHAR"
+    },
+    {
+      "kind": "type",
+      "name": "VARBINARY",
+      "sources": [
+        "gemini-3.8-flash"
+      ],
+      "verdict": "no",
+      "evidence": "tablestore-077-post--sqlquery.json",
+      "test": "TestIntegrationTypesRefused/VARBINARY"
+    }
+  ]
+}

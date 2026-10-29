@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:57:32 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.select.auto.limit\": \"50000\"}</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 15000), ',')) AS (pos, v)) t;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/20261029095732758gchgx90zg1h"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE3188CB06A5B01004E4956"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:57:32 GMT"
+      ],
+      "Content-Type": [
+        "text/plain;charset=utf-8"
+      ],
+      "Content-Length": [
+        "0"
+      ]
+    },
+    "body": ""
+  }
+}

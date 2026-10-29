@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:54:17 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE INDEX dbimp_it_idx ON dbimp_it_dml (id);</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Content-Md5": [
+        "d4350131d1c21f9c95bb01fc1f22f60d"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE317C9B2DC6701004BC540"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:54:17 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "296"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>ParseError</Code>\n\t<Message><![CDATA[ODPS-0130161:[1,1] Parse exception - unsupported feature CREATE INDEX ONLY SUPPORT bloomfilter/bitmap TYPE NOW]]></Message>\n\t<RequestId>6AE317C9B2DC6701004BC540</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

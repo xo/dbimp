@@ -89,6 +89,14 @@ order:
     on the release `exasol-2026.2.0`, as the administrator and as an ordinary user that the
     tests make. See [EXASOL.md](EXASOL.md). `usql` has a driver, which the new one can
     replace (D24).
+23. MaxCompute, over its REST API with CSV results (W47, D218 to D221). The driver is
+    `github.com/xo/dbimp/maxcompute`. Its integration tests run only where a person supplies a
+    project. See [MAXCOMPUTE.md](MAXCOMPUTE.md). `usql` has a driver, which the new one can
+    replace (D24).
+24. Tablestore, over its protobuf API with FlatBuffers rows (W48, D222 to D224). The driver is
+    `github.com/xo/dbimp/tablestore`. Its integration tests run only where a person supplies an
+    instance. See [TABLESTORE.md](TABLESTORE.md). `usql` has a driver, which the new one can
+    replace (D24).
 
 The other targets below keep their priority, and their place in the order
 is open.

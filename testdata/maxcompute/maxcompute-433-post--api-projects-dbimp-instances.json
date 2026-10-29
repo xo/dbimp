@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:59:58 GMT"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP SCHEMA IF EXISTS dbimp_it_schema;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "X-Odps-End-Time": [
+        "Thu, 29 Oct 2026 09:59:58 GMT"
+      ],
+      "X-Odps-Owner": [
+        "RAM$<owner>:<account>"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE3191EB06A5B01004EA697"
+      ],
+      "Content-Length": [
+        "270"
+      ],
+      "Content-Md5": [
+        "5f3ded3baafc0e99b6e1d9266a78b4f5"
+      ],
+      "X-Odps-Start-Time": [
+        "Thu, 29 Oct 2026 09:59:58 GMT"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:59:58 GMT"
+      ],
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/20261029095958231gx2k9ryqjua"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Instance><Tasks><Task Type=\"SQL\"><Name>AnonymousSQLTask</Name><Status>Failed</Status><Result Format=\"text\"><![CDATA[ODPS-0110061: Failed to run ddltask - Project dbimp doesn't support schema\n]]></Result></Task></Tasks></Instance>\n"
+  }
+}

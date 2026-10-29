@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:41:53 GMT"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 'a,\"b\"\nc é 日本 😀 \\N' AS lo, '' AS hi, CAST(NULL AS STRING) AS nu;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:41:54 GMT"
+      ],
+      "Content-Type": [
+        "text/plain;charset=utf-8"
+      ],
+      "Content-Length": [
+        "0"
+      ],
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/2026102909415477gaxk8lp49qa2"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE314E2B2DC67010049B0DC"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ]
+    },
+    "body": ""
+  }
+}

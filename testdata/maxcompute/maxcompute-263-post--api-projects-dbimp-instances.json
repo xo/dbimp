@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:52:16 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>ALTER TABLE dbimp_it_part ADD PARTITION (ds='2026');</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "197"
+      ],
+      "X-Odps-End-Time": [
+        "Thu, 29 Oct 2026 09:52:18 GMT"
+      ],
+      "X-Odps-Start-Time": [
+        "Thu, 29 Oct 2026 09:52:18 GMT"
+      ],
+      "Content-Md5": [
+        "b9d98942921f30622da9c3c8c932619f"
+      ],
+      "X-Odps-Owner": [
+        "RAM$<owner>:<account>"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE31752B06A5B01004D6FE7"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:52:18 GMT"
+      ],
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/20261029095218440gzrl8lp49qa2"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Instance><Tasks><Task Type=\"SQL\"><Name>AnonymousSQLTask</Name><Status>Success</Status><Result Format=\"text\"><![CDATA[\n]]></Result></Task></Tasks></Instance>\n"
+  }
+}

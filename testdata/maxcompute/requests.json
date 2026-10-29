@@ -1,0 +1,4003 @@
+{
+  "driver": "maxcompute",
+  "auth": "odps",
+  "region": "ap-southeast-5",
+  "header": {
+    "administrator": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ]
+    }
+  },
+  "requests": [
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_types: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_types;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_types: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_dml: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_dml: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_tx: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_tx;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_tx: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_part: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_part;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_part: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_pk: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_pk;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_pk: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_ctas: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_ctas;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_ctas: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_like: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_like;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_like: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_cluster: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_cluster;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_cluster: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_def: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_def;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_def: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_ctas2: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_ctas2;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_ctas2: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_fk: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_fk;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_fk: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_uq: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_uq;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop dbimp_it_uq: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop view: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP VIEW IF EXISTS dbimp_it_view;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop view: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop materialized view: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP MATERIALIZED VIEW IF EXISTS dbimp_it_mv;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "setup: drop materialized view: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "setup",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select 1: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1 AS a, 'x' AS b;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select 1: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select 1: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select with a trailing semicolon missing: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1 AS a</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select with a trailing semicolon missing: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select with a trailing semicolon missing: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select with settings in the task: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.type.system.odps2\": \"true\"}</Value></Property></Config><Query>SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select with settings in the task: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "select with settings in the task: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "columns in order and a repeated name: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 2 AS b, 1 AS a, 3 AS b;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "columns in order and a repeated name: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "columns in order and a repeated name: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "no column name: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1, 'x', 1 + 1;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "no column name: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "no column name: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "a result with no rows: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1 AS a WHERE 1 = 0;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "a result with no rows: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 2,
+      "name": "a result with no rows: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type tinyint: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST(-128 AS TINYINT) AS lo, CAST(127 AS TINYINT) AS hi, CAST(NULL AS TINYINT) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type tinyint: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type tinyint: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type smallint: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST(-32768 AS SMALLINT) AS lo, CAST(32767 AS SMALLINT) AS hi, CAST(NULL AS SMALLINT) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type smallint: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type smallint: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type int: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST(-2147483648 AS INT) AS lo, CAST(2147483647 AS INT) AS hi, CAST(NULL AS INT) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type int: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type int: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type bigint: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST('-9223372036854775807' AS BIGINT) AS lo, CAST('9223372036854775807' AS BIGINT) AS hi, CAST(NULL AS BIGINT) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type bigint: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type bigint: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type float: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST(-3.4028235E38 AS FLOAT) AS lo, CAST(1.1 AS FLOAT) AS hi, CAST(NULL AS FLOAT) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type float: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type float: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type double: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST(-1.7976931348623157E308 AS DOUBLE) AS lo, CAST(0.1 AS DOUBLE) AS hi, CAST(NULL AS DOUBLE) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type double: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type double: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type decimal: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST('-99999999999999999999.999999999999999999' AS DECIMAL(38,18)) AS lo, CAST('99999999999999999999.999999999999999999' AS DECIMAL(38,18)) AS hi, CAST(NULL AS DECIMAL(38,18)) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type decimal: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type decimal: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type decimal0: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST('-99999999999999999999999999999999999999' AS DECIMAL(38,0)) AS lo, CAST('99999999999999999999999999999999999999' AS DECIMAL(38,0)) AS hi, CAST(NULL AS DECIMAL(38,0)) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type decimal0: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type decimal0: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type boolean: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT false AS lo, true AS hi, CAST(NULL AS BOOLEAN) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type boolean: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type boolean: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type string: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 'a,\"b\"\nc \u00e9 \u65e5\u672c \ud83d\ude00 \\N' AS lo, '' AS hi, CAST(NULL AS STRING) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type string: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type string: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type varchar: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST('abc' AS VARCHAR(5)) AS lo, CAST('abcdefgh' AS VARCHAR(5)) AS hi, CAST(NULL AS VARCHAR(5)) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type varchar: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type varchar: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type char: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST('ab' AS CHAR(5)) AS lo, CAST('abcdefgh' AS CHAR(5)) AS hi, CAST(NULL AS CHAR(5)) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type char: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type char: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type binary: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST('abc' AS BINARY) AS lo, unhex('00FF10') AS hi, CAST(NULL AS BINARY) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type binary: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type binary: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type date: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT DATE'0001-01-01' AS lo, DATE'9999-12-31' AS hi, CAST(NULL AS DATE) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type date: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type date: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type datetime: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT DATETIME'0001-01-01 00:00:00' AS lo, DATETIME'9999-12-31 23:59:59' AS hi, CAST(NULL AS DATETIME) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type datetime: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type datetime: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type timestamp: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT TIMESTAMP'0001-01-01 00:00:00.000000001' AS lo, TIMESTAMP'9999-12-31 23:59:59.999999999' AS hi, CAST(NULL AS TIMESTAMP) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type timestamp: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type timestamp: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type timestamp_ntz: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT TIMESTAMP_NTZ'2026-10-29 01:02:03.123456789' AS lo, TIMESTAMP_NTZ'0001-01-01 00:00:00' AS hi, CAST(NULL AS TIMESTAMP_NTZ) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type timestamp_ntz: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type timestamp_ntz: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type array: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT ARRAY('a,b', 'c\"d', NULL) AS lo, CAST(ARRAY() AS ARRAY&lt;STRING&gt;) AS hi, CAST(NULL AS ARRAY&lt;STRING&gt;) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type array: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type array: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type map: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT MAP('k', 1L, 'z', CAST(NULL AS BIGINT)) AS lo, CAST(MAP() AS MAP&lt;STRING,BIGINT&gt;) AS hi, CAST(NULL AS MAP&lt;STRING,BIGINT&gt;) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type map: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type map: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type struct: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT NAMED_STRUCT('x', 1L, 'y', 'a,b') AS lo, NAMED_STRUCT('x', CAST(NULL AS BIGINT), 'y', CAST(NULL AS STRING)) AS hi, CAST(NULL AS STRUCT&lt;x:BIGINT,y:STRING&gt;) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type struct: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type struct: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type json: low, high and NULL: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT JSON '{\"a\":[1,2,{\"b\":null}]}' AS lo, JSON 'null' AS hi, CAST(NULL AS JSON) AS nu;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type json: low, high and NULL: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type json: low, high and NULL: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: nan and infinity: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT SQRT(-1.0D) AS a, EXP(1000.0D) AS b, -EXP(1000.0D) AS c, -0.0D AS d;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: nan and infinity: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: nan and infinity: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: the minimum of a bigint by arithmetic: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT -9223372036854775807L - 1L AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: the minimum of a bigint by arithmetic: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: the minimum of a bigint by arithmetic: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: interval day to second: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT INTERVAL '1 02:03:04' DAY TO SECOND AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: interval day to second: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: interval day to second: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: interval year to month: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT INTERVAL '1-2' YEAR TO MONTH AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: interval year to month: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: interval year to month: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: a NULL with no type: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT NULL AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: a NULL with no type: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: a NULL with no type: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: the string NULL and the string backslash N: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 'NULL' AS a, '\\N' AS b, NULL AS c;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: the string NULL and the string backslash N: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: the string NULL and the string backslash N: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: a number as a double: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1.0D AS a, 1e300D AS b, 1.5e-7D AS c;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: a number as a double: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: a number as a double: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: geography: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT ST_GeogFromText('POINT(1 2)') AS g;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: geography: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "type extra: geography: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "create the table of types: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_types (id BIGINT, c_tinyint TINYINT, c_smallint SMALLINT, c_int INT, c_bigint BIGINT, c_float FLOAT, c_double DOUBLE, c_decimal DECIMAL(38,18), c_decimal0 DECIMAL(38,0), c_boolean BOOLEAN, c_string STRING, c_varchar VARCHAR(5), c_char CHAR(5), c_binary BINARY, c_date DATE, c_datetime DATETIME, c_timestamp TIMESTAMP, c_timestamp_ntz TIMESTAMP_NTZ, c_array ARRAY&lt;STRING&gt;, c_map MAP&lt;STRING,BIGINT&gt;, c_struct STRUCT&lt;x:BIGINT,y:STRING&gt;, c_json JSON);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "create the table of types: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "create the table of types: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "describe the table of types: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DESC dbimp_it_types;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "describe the table of types: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 3,
+      "name": "describe the table of types: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 4,
+      "name": "a question mark parameter: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT ? AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 4,
+      "name": "a question mark parameter: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 4,
+      "name": "a question mark parameter: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 4,
+      "name": "a named parameter: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT @a AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 4,
+      "name": "a named parameter: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 4,
+      "name": "a named parameter: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "9999 rows: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 9999), ',')) AS (pos, v)) t;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "9999 rows: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "9999 rows: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "10000 rows: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 10000), ',')) AS (pos, v)) t;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "10000 rows: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "10000 rows: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "10001 rows: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 10001), ',')) AS (pos, v)) t;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "10001 rows: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "10001 rows: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "25000 rows with a limit of 20000: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 25000), ',')) AS (pos, v)) t LIMIT 20000;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "25000 rows with a limit of 20000: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 5,
+      "name": "25000 rows with a limit of 20000: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "an error before any rows: a missing table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT * FROM dbimp_it_missing;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "an error before any rows: a missing table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "an error before any rows: a missing table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a syntax error: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELEC 1;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a syntax error: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a syntax error: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a division by zero: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1 / 0 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a division by zero: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a division by zero: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a bad cast: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CAST('x' AS BIGINT) AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a bad cast: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "a bad cast: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "an error in the middle of the rows: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT IF(pos = 500, CAST(RAISE_ERROR('boom') AS BIGINT), pos) AS a FROM (SELECT posexplode(split(repeat('a,', 1000), ',')) AS (pos, v)) t;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "an error in the middle of the rows: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 6,
+      "name": "an error in the middle of the rows: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "a table of another project: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT * FROM dbmeta.dbimp_it_missing;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "a table of another project: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "a table of another project: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "an administrative statement: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SHOW GRANTS;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "an administrative statement: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "an administrative statement: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 9,
+      "name": "the project: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT current_project() AS p;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 9,
+      "name": "the project: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 9,
+      "name": "the project: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 9,
+      "name": "the version of the engine: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT version() AS v;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 9,
+      "name": "the version of the engine: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 9,
+      "name": "the version of the engine: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "two statements: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1 AS a; SELECT 2 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "two statements: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "two statements: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a line comment: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>-- comment\nSELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a line comment: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a line comment: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a block comment: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>/* comment */ SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a block comment: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a block comment: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "two statements in script mode: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.submit.mode\": \"script\"}</Value></Property></Config><Query>SELECT 1 AS a; SELECT 2 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "two statements in script mode: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "two statements in script mode: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a set statement in script mode: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.submit.mode\": \"script\"}</Value></Property></Config><Query>SET odps.sql.type.system.odps2=true; SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a set statement in script mode: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a set statement in script mode: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a script with a variable: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.submit.mode\": \"script\"}</Value></Property></Config><Query>@a := SELECT 1 AS x; SELECT * FROM @a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a script with a variable: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 10,
+      "name": "a script with a variable: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "create a plain table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_dml (id BIGINT, name STRING, score DOUBLE);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "create a plain table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "create a plain table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert values: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>INSERT INTO dbimp_it_dml VALUES (1, 'a', 1.5), (2, NULL, NULL), (3, '', 3.5);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert values: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert values: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "select what was inserted: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT * FROM dbimp_it_dml ORDER BY id;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "select what was inserted: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "select what was inserted: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert into select: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>INSERT INTO dbimp_it_dml SELECT id + 10, name, score FROM dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert into select: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert into select: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert overwrite: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>INSERT OVERWRITE TABLE dbimp_it_dml SELECT * FROM dbimp_it_dml WHERE id &lt; 10;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert overwrite: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert overwrite: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "update on a plain table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>UPDATE dbimp_it_dml SET name = 'z' WHERE id = 1;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "update on a plain table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "update on a plain table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "delete on a plain table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DELETE FROM dbimp_it_dml WHERE id = 1;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "delete on a plain table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "delete on a plain table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "merge on a plain table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>MERGE INTO dbimp_it_dml t USING (SELECT 1 AS id) s ON t.id = s.id WHEN MATCHED THEN DELETE;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "merge on a plain table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "merge on a plain table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "multi insert: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>FROM dbimp_it_dml INSERT INTO TABLE dbimp_it_dml SELECT id + 100, name, score INSERT INTO TABLE dbimp_it_dml SELECT id + 200, name, score;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "multi insert: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "multi insert: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "truncate: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>TRUNCATE TABLE dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "truncate: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "truncate: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "create a transactional table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_tx (id BIGINT NOT NULL, name STRING, PRIMARY KEY (id)) TBLPROPERTIES ('transactional'='true');</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "create a transactional table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "create a transactional table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert into the transactional table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>INSERT INTO dbimp_it_tx VALUES (1, 'a'), (2, 'b'), (3, 'c');</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert into the transactional table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "insert into the transactional table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "update the transactional table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>UPDATE dbimp_it_tx SET name = 'z' WHERE id = 1;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "update the transactional table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "update the transactional table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "delete from the transactional table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DELETE FROM dbimp_it_tx WHERE id = 2;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "delete from the transactional table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "delete from the transactional table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "merge into the transactional table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>MERGE INTO dbimp_it_tx t USING (SELECT 3 AS id, 'm' AS nm) s ON t.id = s.id WHEN MATCHED THEN UPDATE SET name = s.nm WHEN NOT MATCHED THEN INSERT VALUES (s.id, s.nm);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "merge into the transactional table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "merge into the transactional table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "upsert: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>UPSERT INTO dbimp_it_tx VALUES (9, 'u');</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "upsert: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "upsert: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "read the transactional table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT * FROM dbimp_it_tx ORDER BY id;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "read the transactional table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "read the transactional table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "a transaction statement: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>BEGIN;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "a transaction statement: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "a transaction statement: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "commit: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>COMMIT;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "commit: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 11,
+      "name": "commit: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a partitioned table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_part (id BIGINT, v STRING) PARTITIONED BY (ds STRING);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a partitioned table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a partitioned table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "add a partition: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>ALTER TABLE dbimp_it_part ADD PARTITION (ds='2026');</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "add a partition: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "add a partition: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "insert into a partition: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>INSERT INTO dbimp_it_part PARTITION (ds='2026') VALUES (1, 'a');</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "insert into a partition: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "insert into a partition: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "show partitions: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SHOW PARTITIONS dbimp_it_part;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "show partitions: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "show partitions: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a clustered table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_cluster (id BIGINT, v STRING) CLUSTERED BY (id) SORTED BY (id) INTO 4 BUCKETS;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a clustered table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a clustered table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a table with a default value: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_def (id BIGINT, v STRING DEFAULT 'd');</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a table with a default value: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a table with a default value: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "insert and read a default: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>INSERT INTO dbimp_it_def (id) VALUES (1);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "insert and read a default: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "insert and read a default: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "read the default: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT * FROM dbimp_it_def;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "read the default: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "read the default: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create table as select: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_ctas AS SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create table as select: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create table as select: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create table like: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_like LIKE dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create table like: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create table like: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "alter table add a column: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>ALTER TABLE dbimp_it_dml ADD COLUMNS (extra STRING);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "alter table add a column: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "alter table add a column: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "alter table rename: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>ALTER TABLE dbimp_it_ctas RENAME TO dbimp_it_ctas2;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "alter table rename: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "alter table rename: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a view: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE VIEW dbimp_it_view AS SELECT id FROM dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a view: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a view: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a materialized view: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE MATERIALIZED VIEW dbimp_it_mv AS SELECT id FROM dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a materialized view: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "create a materialized view: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a foreign key: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_fk (id BIGINT, FOREIGN KEY (id) REFERENCES dbimp_it_tx (id));</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a foreign key: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a foreign key: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "an index: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE INDEX dbimp_it_idx ON dbimp_it_dml (id);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "an index: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "an index: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a unique constraint: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE TABLE dbimp_it_uq (id BIGINT UNIQUE);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a unique constraint: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a unique constraint: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "show tables: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SHOW TABLES;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "show tables: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "show tables: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a schema: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>CREATE SCHEMA dbimp_it_schema;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a schema: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "a schema: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "describe extended: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DESC EXTENDED dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "describe extended: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 13,
+      "name": "describe extended: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "set flags in the text: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SET odps.sql.type.system.odps2=true; SELECT CAST(1 AS TINYINT) AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "set flags in the text: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "set flags in the text: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "a hint: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT /*+ mapjoin(b) */ a.id FROM dbimp_it_dml a JOIN dbimp_it_dml b ON a.id = b.id;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "a hint: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "a hint: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "the 1.0 type system: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.type.system.odps2\": \"false\"}</Value></Property></Config><Query>SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "the 1.0 type system: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "the 1.0 type system: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "a udf as a macro: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT split('a,b', ',') AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "a udf as a macro: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "a udf as a macro: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "explain: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>EXPLAIN SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "explain: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "explain: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "timezone: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.timezone\": \"Asia/Jakarta\"}</Value></Property></Config><Query>SELECT DATETIME'2026-01-01 00:00:00' AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "timezone: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 14,
+      "name": "timezone: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a string of a backslash and N, which the models say is quoted as a string: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT CONCAT(CHR(92), 'N') AS a, CAST(NULL AS STRING) AS b;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a string of a backslash and N, which the models say is quoted as a string: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a string of a backslash and N, which the models say is quoted as a string: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of every type: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>EXPLAIN OUTPUT SELECT CAST(1 AS TINYINT) a, CAST(1 AS SMALLINT) b, CAST(1 AS INT) c, CAST(1 AS BIGINT) d, CAST(1 AS FLOAT) e, CAST(1 AS DOUBLE) f, CAST(1 AS DECIMAL(38,18)) g, CAST(1 AS DECIMAL(10,2)) g2, true h, 'x' i, CAST('x' AS VARCHAR(5)) j, CAST('x' AS CHAR(5)) k, unhex('00') l, DATE'2026-01-01' m, DATETIME'2026-01-01 00:00:00' n, TIMESTAMP'2026-01-01 00:00:00' o, TIMESTAMP_NTZ'2026-01-01 00:00:00' p, ARRAY(1,2) q, MAP('k',1L) r, NAMED_STRUCT('x',1L) s, JSON '{}' t, INTERVAL '1 02:03:04' DAY TO SECOND u, INTERVAL '1-2' YEAR TO MONTH v, NULL w;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of every type: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of every type: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output with a repeated name and no name: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>EXPLAIN OUTPUT SELECT 2 AS b, 1 AS a, 3 AS b, 1, 'x';</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output with a repeated name and no name: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output with a repeated name and no name: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>EXPLAIN OUTPUT SELECT * FROM dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a statement that is not a query: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>EXPLAIN OUTPUT INSERT INTO dbimp_it_dml VALUES (7, 'e', 1.5);</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a statement that is not a query: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a statement that is not a query: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a missing table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>EXPLAIN OUTPUT SELECT * FROM dbimp_it_missing;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a missing table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output of a missing table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: typeof for the types of a result: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT TYPEOF(1) AS a, TYPEOF('x') AS b, TYPEOF(CAST(1 AS DECIMAL(10,2))) AS c, TYPEOF(DATE'2026-01-01') AS d;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: typeof for the types of a result: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: typeof for the types of a result: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: set the output format with a header: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.submit.mode\": \"script\"}</Value></Property></Config><Query>SET odps.sql.select.output.format={\"needHeader\":true,\"fieldDelim\":\",\"}; SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: set the output format with a header: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: set the output format with a header: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>EXPLAIN OUTPUT SELECT 1 AS a, 'x' AS b;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: explain output: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the declare of a variable: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.submit.mode\": \"script\"}</Value></Property></Config><Query>DECLARE @p BIGINT = 123; SELECT @p AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the declare of a variable: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the declare of a variable: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the declare of a variable and a table: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.submit.mode\": \"script\"}</Value></Property></Config><Query>DECLARE @p BIGINT = 1; SELECT * FROM dbimp_it_dml WHERE id = @p;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the declare of a variable and a table: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the declare of a variable and a table: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a hint for the row limit of a result: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.read.table.max.row\": \"50000\"}</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 15000), ',')) AS (pos, v)) t;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a hint for the row limit of a result: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a hint for the row limit of a result: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a hint for the auto limit: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.select.auto.limit\": \"50000\"}</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 15000), ',')) AS (pos, v)) t;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a hint for the auto limit: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a hint for the auto limit: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a limit with an offset: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT pos FROM (SELECT posexplode(split(repeat('a,', 15000), ',')) AS (pos, v)) t ORDER BY pos LIMIT 10000, 1000;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a limit with an offset: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a limit with an offset: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: row_number slices: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT pos FROM (SELECT pos, ROW_NUMBER() OVER (ORDER BY pos) AS rn FROM (SELECT posexplode(split(repeat('a,', 15000), ',')) AS (pos, v)) t) u WHERE rn BETWEEN 10001 AND 10005;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: row_number slices: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "12s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: row_number slices: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a CSV null setting: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.result.csv.null\": \"NULL\"}</Value></Property></Config><Query>SELECT NULL AS a, 'x' AS b;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a CSV null setting: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "6s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a CSV null setting: result",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a result of the job: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1 AS a;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: a result of the job: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the result as json",
+      "method": "GET",
+      "path": "{{inst}}?result&format=json&curr_project=dbimp",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the result with a row range",
+      "method": "GET",
+      "path": "{{inst}}?result&rowstart=0&rowcount=1&curr_project=dbimp",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the result with an offset and a limit",
+      "method": "GET",
+      "path": "{{inst}}?result&offset=1&limit=1&curr_project=dbimp",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the task detail",
+      "method": "GET",
+      "path": "{{inst}}?taskname=AnonymousSQLTask&detail&curr_project=dbimp",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the task summary",
+      "method": "GET",
+      "path": "{{inst}}?taskname=AnonymousSQLTask&summary&curr_project=dbimp",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the task info",
+      "method": "GET",
+      "path": "{{inst}}?taskinfo&taskname=AnonymousSQLTask&curr_project=dbimp",
+      "retry": true
+    },
+    {
+      "item": 15,
+      "name": "lead: the result as json with a header",
+      "method": "GET",
+      "path": "{{inst}}?result&curr_project=dbimp",
+      "header": {
+        "Accept": [
+          "application/json"
+        ]
+      },
+      "retry": true
+    },
+    {
+      "item": 7,
+      "name": "cancel: start a slow query",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT COUNT(*) FROM (SELECT posexplode(split(repeat('a,', 5000000), ',')) AS (pos, v)) t CROSS JOIN (SELECT 1) u;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "slow": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 7,
+      "name": "cancel: terminate it",
+      "method": "PUT",
+      "path": "{{slow}}?curr_project=dbimp",
+      "wait": "2s",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Status>Terminated</Status></Instance>",
+      "retry": true
+    },
+    {
+      "item": 7,
+      "name": "cancel: status after the terminate",
+      "method": "GET",
+      "path": "{{slow}}?taskstatus&curr_project=dbimp",
+      "wait": "3s",
+      "retry": true
+    },
+    {
+      "item": 7,
+      "name": "cancel: the result after the terminate",
+      "method": "GET",
+      "path": "{{slow}}?result&curr_project=dbimp",
+      "wait": "1s",
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "a wrong secret",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1;</Query></SQL></Tasks></Job></Instance>",
+      "auth": "wrong",
+      "retry": true
+    },
+    {
+      "item": 8,
+      "name": "no credentials",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1;</Query></SQL></Tasks></Job></Instance>",
+      "auth": "none",
+      "retry": true
+    },
+    {
+      "item": 12,
+      "name": "gzip accepted",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1;</Query></SQL></Tasks></Job></Instance>",
+      "header": {
+        "Accept-Encoding": [
+          "gzip"
+        ]
+      },
+      "capture": {
+        "gz": "header:Location"
+      },
+      "retry": true
+    },
+    {
+      "item": 12,
+      "name": "a project that does not exist",
+      "method": "GET",
+      "path": "/api/projects/dbimp_nope/instances/1?taskstatus",
+      "retry": true
+    },
+    {
+      "item": 12,
+      "name": "an instance that does not exist",
+      "method": "GET",
+      "path": "/api/projects/dbimp/instances/20000101000000000x?taskstatus&curr_project=dbimp",
+      "retry": true
+    },
+    {
+      "item": 9,
+      "name": "the project",
+      "method": "GET",
+      "path": "/api/projects/dbimp",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_types: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_types;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_types: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_dml: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_dml;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_dml: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_tx: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_tx;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_tx: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_part: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_part;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_part: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_pk: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_pk;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_pk: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_ctas: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_ctas;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_ctas: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_like: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_like;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_like: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_cluster: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_cluster;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_cluster: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_def: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_def;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_def: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_ctas2: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_ctas2;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_ctas2: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_fk: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_fk;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_fk: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_uq: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP TABLE IF EXISTS dbimp_it_uq;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop dbimp_it_uq: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop view: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP VIEW IF EXISTS dbimp_it_view;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop view: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop materialized view: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP MATERIALIZED VIEW IF EXISTS dbimp_it_mv;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop materialized view: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop schema: create",
+      "method": "POST",
+      "path": "/api/projects/dbimp/instances?curr_project=dbimp",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DROP SCHEMA IF EXISTS dbimp_it_schema;</Query></SQL></Tasks></Job></Instance>",
+      "capture": {
+        "inst": "header:Location"
+      },
+      "phase": "teardown",
+      "retry": true
+    },
+    {
+      "item": 1,
+      "name": "teardown: drop schema: status",
+      "method": "GET",
+      "path": "{{inst}}?taskstatus&curr_project=dbimp",
+      "wait": "4s",
+      "phase": "teardown",
+      "retry": true
+    }
+  ]
+}

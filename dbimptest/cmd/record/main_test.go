@@ -1,9 +1,15 @@
 package main
 
 import (
+	"context"
+	"crypto/md5" //nolint:gosec // G501: the test computes the MD5 that Tablestore asks for.
+	"encoding/base64"
+	"errors"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
+	"syscall"
 	"testing"
 	"time"
 
@@ -72,6 +78,12 @@ func TestAuthorizeFollowsTheFormOfTheRequest(t *testing.T) {
 		}},
 		{"sigv4", Request{auth: authSigV4, region: "us-east-1", service: "dynamodb"}, false, func(req *http.Request) bool {
 			return strings.HasPrefix(req.Header.Get("Authorization"), "AWS4-HMAC-SHA256 ")
+		}},
+		{"odps", Request{auth: authODPS, region: "ap-southeast-5"}, false, func(req *http.Request) bool {
+			return strings.HasPrefix(req.Header.Get("Authorization"), "ODPS key/") && req.Header.Get("Date") != ""
+		}},
+		{"ots", Request{auth: authOTS}, false, func(req *http.Request) bool {
+			return req.Header.Get("X-Ots-Accesskeyid") == "key" && req.Header.Get("X-Ots-Signature") != ""
 		}},
 	}
 	for _, tt := range tests {
@@ -148,6 +160,148 @@ func TestIsRecordingKeepsTheFilesOfAnotherRelease(t *testing.T) {
 	} {
 		if got := isRecording(tt.name, tt.release); got != tt.want {
 			t.Errorf("isRecording(%q, %q) is %t, want %t", tt.name, tt.release, got, tt.want)
+		}
+	}
+}
+
+func TestSignODPS(t *testing.T) {
+	t.Parallel()
+	when := time.Date(2026, time.October, 29, 1, 2, 3, 0, time.UTC)
+	sign := func(secret string) *http.Request {
+		req, err := http.NewRequestWithContext(t.Context(), http.MethodPost, "https://example.test/api/projects/p/instances?curr_project=p", nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		req.Header.Set("Content-Type", "application/xml")
+		signODPS(req, "/api", "key", secret, "ap-southeast-5", when)
+		return req
+	}
+	a, b := sign("secret"), sign("secret")
+	if got := a.Header.Get("Date"); got != "Thu, 29 Oct 2026 01:02:03 GMT" {
+		t.Errorf("the date is %q", got)
+	}
+	const prefix = "ODPS key/20261029/ap-southeast-5/odps/aliyun_v4_request:"
+	if got := a.Header.Get("Authorization"); !strings.HasPrefix(got, prefix) {
+		t.Errorf("the authorization is %q, want the prefix %q", got, prefix)
+	}
+	if a.Header.Get("Authorization") != b.Header.Get("Authorization") {
+		t.Error("the same request gave two signatures")
+	}
+	if c := sign("other"); c.Header.Get("Authorization") == a.Header.Get("Authorization") {
+		t.Error("a different secret gave the same signature")
+	}
+}
+
+func TestSignOTS(t *testing.T) {
+	t.Parallel()
+	when := time.Date(2026, time.October, 29, 1, 2, 3, 0, time.UTC)
+	sign := func(payload string) *http.Request {
+		req, err := http.NewRequestWithContext(t.Context(), http.MethodPost, "https://inst.ap-southeast-5.ots.aliyuncs.com/SQLQuery", strings.NewReader(payload))
+		if err != nil {
+			t.Fatal(err)
+		}
+		signOTS(req, []byte(payload), "key", "secret", when)
+		return req
+	}
+	a := sign("abc")
+	sum := md5.Sum([]byte("abc")) //nolint:gosec // G401: the test computes the MD5 that Tablestore asks for.
+	for name, want := range map[string]string{
+		"x-ots-instancename": "inst",
+		"x-ots-accesskeyid":  "key",
+		"x-ots-apiversion":   "2015-12-31",
+		"x-ots-date":         "2026-10-29T01:02:03.000Z",
+		"x-ots-contentmd5":   base64.StdEncoding.EncodeToString(sum[:]),
+	} {
+		if got := a.Header.Get(name); got != want {
+			t.Errorf("the header %s is %q, want %q", name, got, want)
+		}
+	}
+	if a.Header.Get("X-Ots-Signature") == sign("abd").Header.Get("X-Ots-Signature") {
+		t.Error("a different body gave the same signature")
+	}
+}
+
+// resetTransport fails with a reset for the first fails calls, and then answers.
+type resetTransport struct{ fails, calls int }
+
+func (r *resetTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	r.calls++
+	if r.calls <= r.fails {
+		return nil, syscall.ECONNRESET
+	}
+	return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader("")), Request: req}, nil
+}
+
+func TestDoRetry(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name   string
+		method string
+		retry  bool
+		calls  int
+		reset  bool
+	}{
+		{"a get is sent again", http.MethodGet, false, 2, false},
+		{"a post that retries is sent again", http.MethodPost, true, 2, false},
+		{"a post is sent once", http.MethodPost, false, 1, true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			tr := &resetTransport{fails: 1}
+			req, err := http.NewRequestWithContext(t.Context(), tt.method, "https://example.test/x", strings.NewReader("body"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			res, err := doRetry(t.Context(), &http.Client{Transport: tr}, req, tt.retry)
+			if got := errors.Is(err, syscall.ECONNRESET); got != tt.reset {
+				t.Errorf("the error is %v, want a reset: %t", err, tt.reset)
+			}
+			if err == nil {
+				res.Body.Close()
+			}
+			if tr.calls != tt.calls {
+				t.Errorf("the transport ran %d times, want %d", tr.calls, tt.calls)
+			}
+		})
+	}
+}
+
+func TestCaptureOfHeadersOnlyReadsNoBody(t *testing.T) {
+	t.Parallel()
+	kept := map[string]string{}
+	if err := capture([]byte("<Error/>"), map[string]string{"loc": "header:Location"}, kept); err != nil {
+		t.Errorf("an XML body with a capture of headers only gave %v", err)
+	}
+}
+
+// handshakeTimeout is the error that a TLS handshake that ran out of time gives.
+type handshakeTimeoutError struct{}
+
+func (handshakeTimeoutError) Error() string   { return "net/http: TLS handshake timeout" }
+func (handshakeTimeoutError) Timeout() bool   { return true }
+func (handshakeTimeoutError) Temporary() bool { return true }
+
+func TestTransient(t *testing.T) {
+	t.Parallel()
+	ended, cancel := context.WithCancel(t.Context())
+	cancel()
+	for _, tt := range []struct {
+		name  string
+		ended bool
+		err   error
+		want  bool
+	}{
+		{"a reset", false, syscall.ECONNRESET, true},
+		{"a handshake that timed out", false, handshakeTimeoutError{}, true},
+		{"a timeout after the context ended", true, handshakeTimeoutError{}, false},
+		{"another error", false, io.ErrUnexpectedEOF, false},
+	} {
+		ctx := t.Context()
+		if tt.ended {
+			ctx = ended
+		}
+		if got := transient(ctx, tt.err); got != tt.want {
+			t.Errorf("%s: transient is %t, want %t", tt.name, got, tt.want)
 		}
 	}
 }

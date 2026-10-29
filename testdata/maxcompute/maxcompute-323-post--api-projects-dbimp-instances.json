@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Connection": [
+        "close"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:55:09 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT /*+ mapjoin(b) */ a.id FROM dbimp_it_dml a JOIN dbimp_it_dml b ON a.id = b.id;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 201,
+    "header": {
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE317FD28AE8301004C772A"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:55:09 GMT"
+      ],
+      "Content-Type": [
+        "text/plain;charset=utf-8"
+      ],
+      "Content-Length": [
+        "0"
+      ],
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/20261029095509130g6yf19amgh7"
+      ]
+    },
+    "body": ""
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:57:02 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property><Property><Name>settings</Name><Value>{\"odps.sql.submit.mode\": \"script\"}</Value></Property></Config><Query>DECLARE @p BIGINT = 123; SELECT @p AS a;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "X-Odps-Request-Id": [
+        "6AE31870B06A5B01004E35FD"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:57:04 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "322"
+      ],
+      "Content-Md5": [
+        "1bd02192fcc566a1d30fd05ce5e9963a"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>ParseError</Code>\n\t<Message><![CDATA[ODPS-0130161:[1,1] Parse exception - invalid token 'DECLARE'\nODPS-0130161:[1,19] Parse exception - invalid token '=', expect 'SEMICOLON']]></Message>\n\t<RequestId>6AE31870B06A5B01004E35FD</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

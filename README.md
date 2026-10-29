@@ -152,6 +152,8 @@ page on pkg.go.dev, and the version links to the release that first held it.
 | [docs/ATHENA.md](docs/ATHENA.md) | What is known about Amazon Athena over its API, for its driver |
 | [docs/DATABRICKS.md](docs/DATABRICKS.md) | What is known about Databricks over its SQL Statement Execution API, for its driver |
 | [docs/EXASOL.md](docs/EXASOL.md) | What is known about Exasol over its WebSocket API, for its driver |
+| [docs/MAXCOMPUTE.md](docs/MAXCOMPUTE.md) | What is known about MaxCompute over its REST API, for its driver |
+| [docs/TABLESTORE.md](docs/TABLESTORE.md) | What is known about Tablestore over its API, for its driver |
 | [docs/SPANNER.md](docs/SPANNER.md) | What is known about Google Cloud Spanner over its REST API, for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |
 

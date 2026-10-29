@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>SELECT 1;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 403,
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:58:44 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "239"
+      ],
+      "Content-Md5": [
+        "f3afc082f133da6fdd7587aa2aba759e"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE318D4B06A5B01004E76F6"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>MissingArgument</Code>\n\t<Message><![CDATA[MissingArgumentException:, argName:Authorization]]></Message>\n\t<RequestId>6AE318D4B06A5B01004E76F6</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

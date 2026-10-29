@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:51:52 GMT"
+      ],
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>BEGIN;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 400,
+    "header": {
+      "Date": [
+        "Thu, 29 Oct 2026 09:51:52 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Content-Length": [
+        "258"
+      ],
+      "Content-Md5": [
+        "87837801b2e7fc68522b3f3e3e8ebb41"
+      ],
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE31738168FB301004CA04D"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n\t<Code>ParseError</Code>\n\t<Message><![CDATA[ODPS-0130161:[2,2] Parse exception - invalid token '<EOF>', expect 'END']]></Message>\n\t<RequestId>6AE31738168FB301004CA04D</RequestId>\n\t<HostId>odps</HostId>\n</Error>\n"
+  }
+}

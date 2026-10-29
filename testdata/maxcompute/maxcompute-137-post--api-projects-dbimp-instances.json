@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/projects/dbimp/instances",
+    "query": "curr_project=dbimp",
+    "header": {
+      "Authorization": [
+        "REDACTED"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Connection": [
+        "close"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:45:08 GMT"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Priority>9</Priority><Tasks><SQL><Name>AnonymousSQLTask</Name><Config><Property><Name>type</Name><Value>sql</Value></Property></Config><Query>DESC dbimp_it_types;</Query></SQL></Tasks></Job></Instance>"
+  },
+  "response": {
+    "status": 200,
+    "header": {
+      "X-Odps-Request-Account": [
+        "p4_<account>"
+      ],
+      "Server": [
+        "Tengine/2.5.13_20241010160719"
+      ],
+      "Content-Md5": [
+        "92db1a2ef06209e76e5a1012689337e6"
+      ],
+      "X-Odps-Request-Id": [
+        "6AE315A4B2DC6701004A3C11"
+      ],
+      "Date": [
+        "Thu, 29 Oct 2026 09:45:08 GMT"
+      ],
+      "Content-Length": [
+        "4196"
+      ],
+      "X-Odps-Start-Time": [
+        "Thu, 29 Oct 2026 09:45:08 GMT"
+      ],
+      "Content-Type": [
+        "application/xml"
+      ],
+      "Location": [
+        "https://service.ap-southeast-5.maxcompute.aliyun.com/api/projects/dbimp/instances/20261029094508405gi6l8lp49qa2"
+      ],
+      "X-Odps-End-Time": [
+        "Thu, 29 Oct 2026 09:45:08 GMT"
+      ],
+      "X-Odps-Owner": [
+        "RAM$<owner>:<account>"
+      ]
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Instance><Tasks><Task Type=\"SQL\"><Name>AnonymousSQLTask</Name><Status>Success</Status><Result Format=\"text\"><![CDATA[+---------------------------------------------------------------------------------------------------+\n| Owner:                    p4_<account>                                                   |\n| Project:                  dbimp                                                                   |\n| TableComment: null                                                                                |\n+---------------------------------------------------------------------------------------------------+\n| CreateTime:               2026-10-29 17:44:59                                                     |\n| LastDDLTime:              2026-10-29 17:44:59                                                     |\n| LastModifiedTime:         2026-10-29 17:44:59                                                     |\n| LastAccessTime:           1970-01-01 08:00:00                                                     |\n+---------------------------------------------------------------------------------------------------+\n| InternalTable: YES      | Size: -1                                                                |\n+---------------------------------------------------------------------------------------------------+\n| Native Columns:                                                                                   |\n+---------------------------------------------------------------------------------------------------+\n| Field           | Type       | Label | Comment                                     |\n+---------------------------------------------------------------------------------------------------+\n| id              | BIGINT     | null  |                                                            |\n| c_tinyint       | TINYINT    | null  |                                                            |\n| c_smallint      | SMALLINT   | null  |                                                            |\n| c_int           | INT        | null  |                                                            |\n| c_bigint        | BIGINT     | null  |                                                            |\n| c_float         | FLOAT      | null  |                                                            |\n| c_double        | DOUBLE     | null  |                                                            |\n| c_decimal       | DECIMAL(38,18) | null  |                                                            |\n| c_decimal0      | DECIMAL(38,0) | null  |                                                            |\n| c_boolean       | BOOLEAN    | null  |                                                            |\n| c_string        | STRING     | null  |                                                            |\n| c_varchar       | VARCHAR(5) | null  |                                                            |\n| c_char          | CHAR(5)    | null  |                                                            |\n| c_binary        | BINARY     | null  |                                                            |\n| c_date          | DATE       | null  |                                                            |\n| c_datetime      | DATETIME   | null  |                                                            |\n| c_timestamp     | TIMESTAMP  | null  |                                                            |\n| c_timestamp_ntz | TIMESTAMP_NTZ | null  |                                                            |\n| c_array         | ARRAY<STRING> | null  |                                                            |\n| c_map           | MAP<STRING,BIGINT> | null  |                                                            |\n| c_struct        | struct<x:BIGINT,y:STRING> | null  |                                                            |\n| c_json          | JSON       | null  |                                                            |\n+---------------------------------------------------------------------------------------------------+\n\n]]></Result></Task></Tasks></Instance>\n"
+  }
+}
