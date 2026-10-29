@@ -453,13 +453,21 @@ func refusedTypes() []refusedType {
 			union := drill.WithParameter("options", map[string]string{"exec.enable_union_type": "true", "drill.exec.http.rest.errors.verbose": "true"})
 			rows := all(t, db, "SELECT x, typeof(x) AS t FROM dfs.tmp.`"+dir+"`", union)
 			var nulls int
+			var value any
 			for _, row := range rows {
 				if row[0] == nil {
 					nulls++
+					continue
 				}
+				value = row[0]
 			}
-			if names := typeNames(t, db, "SELECT x FROM dfs.tmp.`"+dir+"`", union); len(rows) != 2 || nulls != 1 || !reflect.DeepEqual(names, []string{"BIGINT"}) {
-				t.Errorf("with the union type the rows are %v and the type %v, want one NULL and BIGINT", rows, names)
+			// The first file that the server reads gives the type.
+			want := "VARCHAR"
+			if _, ok := value.(int64); ok {
+				want = "BIGINT"
+			}
+			if names := typeNames(t, db, "SELECT x FROM dfs.tmp.`"+dir+"`", union); len(rows) != 2 || nulls != 1 || !reflect.DeepEqual(names, []string{want}) {
+				t.Errorf("with the union type the rows are %v and the type %v, want one NULL and the type of the other row", rows, names)
 			}
 		}},
 	)

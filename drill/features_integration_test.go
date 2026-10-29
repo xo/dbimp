@@ -536,13 +536,18 @@ func TestIntegrationFeatures(t *testing.T) {
 		dir := name(p, "change")
 		ctas(t, db, dir+"/a", "SELECT CAST(1 AS BIGINT) AS x FROM (VALUES(1))", jsonFormat)
 		ctas(t, db, dir+"/b", "SELECT 'text' AS x FROM (VALUES(1))", jsonFormat)
-		// ORDER BY fails for a column that changes its type, so the order of
-		// the rows is the order of the files, and the test sorts them.
+		// ORDER BY fails for a column that changes its type. The server reads
+		// the files in an order of its own, and the first file read gives the
+		// type. So one row holds a value, the other holds NULL, and typeof names
+		// the type of the first file for both.
 		got := all(t, db, "SELECT x, typeof(x) AS t FROM dfs.tmp.`"+dir+"`")
 		slices.SortFunc(got, func(a, b []any) int { return strings.Compare(fmt.Sprint(a[1]), fmt.Sprint(b[1])) })
-		want := [][]any{{int64(1), "BIGINT"}, {nil, "VARCHAR"}}
-		if !reflect.DeepEqual(got, want) {
-			t.Errorf("the rows are %v, want %v: NULL for the string, which typeof names", got, want)
+		wants := [][][]any{
+			{{int64(1), "BIGINT"}, {nil, "VARCHAR"}},
+			{{nil, "BIGINT"}, {"text", "VARCHAR"}},
+		}
+		if !reflect.DeepEqual(got, wants[0]) && !reflect.DeepEqual(got, wants[1]) {
+			t.Errorf("the rows are %v, want %v or %v: NULL for the second type, which typeof names", got, wants[0], wants[1])
 		}
 	})
 	each(t, "the profile of a query", func(t *testing.T, p principal, _ *sql.DB) {

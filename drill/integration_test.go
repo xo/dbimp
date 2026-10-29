@@ -370,26 +370,30 @@ func TestIntegrationErrors(t *testing.T) {
 			t.Errorf("an unknown table gave %v, want an error that says that the table was not found", err)
 		}
 		// The first file holds 300 rows of numbers, and the second a text
-		// that is not a number, so the query fails after 300 rows.
+		// that is not a number. The server reads the files in an order of its
+		// own. If it reads the numbers first, the query fails after 300 rows.
+		// If it reads the text first, the query fails before the first row.
 		a, b := name(p, "multi")+"/a", name(p, "multi")+"/b"
 		ctas(t, db, a, "SELECT employee_id AS id, '1' AS s FROM cp.`employee.json` LIMIT 300")
 		ctas(t, db, b, "SELECT employee_id + 10000 AS id, 'x' AS s FROM cp.`employee.json` LIMIT 5")
-		rows, err := db.QueryContext(t.Context(), "SELECT id, CAST(s AS INT) AS v FROM dfs.tmp.`"+name(p, "multi")+"`")
-		if err != nil {
-			t.Fatal(err)
-		}
-		defer rows.Close()
 		n := 0
-		for rows.Next() {
-			n++
+		rows, err := db.QueryContext(t.Context(), "SELECT id, CAST(s AS INT) AS v FROM dfs.tmp.`"+name(p, "multi")+"`")
+		if err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				n++
+			}
+			err = rows.Err()
 		}
-		err = rows.Err()
 		e, ok := errors.AsType[*drill.Error](err)
-		if !ok || !errors.Is(err, dbimp.ErrIncomplete) || !strings.Contains(e.Message, "x") {
-			t.Errorf("an error after %d rows gave %v, want a *drill.Error from the profile that wraps dbimp.ErrIncomplete", n, err)
+		if !ok || !strings.Contains(e.Message, "x") {
+			t.Errorf("an error after %d rows gave %v, want a *drill.Error from the profile", n, err)
 		}
-		if n != 300 {
-			t.Errorf("read %d rows before the error, want 300", n)
+		if n != 0 && n != 300 {
+			t.Errorf("read %d rows before the error, want 0 or 300", n)
+		}
+		if n == 300 && !errors.Is(err, dbimp.ErrIncomplete) {
+			t.Errorf("an error after %d rows gave %v, want an error that wraps dbimp.ErrIncomplete", n, err)
 		}
 		// A wrong password.
 		cfg, err := drill.ParseDSN(dsn(t, p))
