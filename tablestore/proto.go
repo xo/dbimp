@@ -68,6 +68,13 @@ func appendString(b []byte, field int, s string) []byte {
 	return append(b, s...)
 }
 
+// appendBytes appends the field number field, holding b.
+func appendBytes(buf []byte, field int, b []byte) []byte {
+	buf = appendVarint(buf, uint64(field)<<3|wireBytes) //nolint:gosec // G115: a field number is positive.
+	buf = appendVarint(buf, uint64(len(b)))
+	return append(buf, b...)
+}
+
 // appendInt appends the field number field, holding v.
 func appendInt(b []byte, field int, v int64) []byte {
 	b = appendVarint(b, uint64(field)<<3|wireVarint) //nolint:gosec // G115: a field number is positive.

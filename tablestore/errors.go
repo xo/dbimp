@@ -15,6 +15,20 @@ import (
 // (D7 and D222).
 const ErrNoCredentials dbimp.Error = "the configuration has no access key id or secret"
 
+// ErrExists and ErrNotFound are the errors of CreateTable, CreateIndex and
+// DeleteTable for an object that is there, and for an object that is not. An *Error
+// matches them by its code (D225).
+const (
+	ErrExists   dbimp.Error = "object already exists"
+	ErrNotFound dbimp.Error = "object does not exist"
+)
+
+// The codes that the server gives for them.
+const (
+	codeAlreadyExist = "OTSObjectAlreadyExist"
+	codeNotExist     = "OTSObjectNotExist"
+)
+
 // codeAuthFailed is the code of the error for a request that the server cannot
 // authenticate: HTTP 403 with the text "Signature mismatch." for a wrong
 // secret (recorded: "a wrong secret"). A refusal for a missing permission has
@@ -61,9 +75,17 @@ func (err *Error) Unwrap() error {
 }
 
 // Is reports whether target is dbimp.ErrAuthentication and the server refused the
-// credential (D197).
+// credential (D197), or ErrExists or ErrNotFound and the code says so (D225).
 func (err *Error) Is(target error) bool {
-	return target == dbimp.ErrAuthentication && err.Code == codeAuthFailed
+	switch target {
+	case dbimp.ErrAuthentication:
+		return err.Code == codeAuthFailed
+	case ErrExists:
+		return err.Code == codeAlreadyExist
+	case ErrNotFound:
+		return err.Code == codeNotExist
+	}
+	return false
 }
 
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes the

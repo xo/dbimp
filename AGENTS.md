@@ -36,7 +36,8 @@ eighteenth, in `drill/`, `solr/`, `elasticsearch/`, `opensearch/` and
 `snowflake/`, was first released in `v0.16.0` (W34). The twentieth to the
 twenty-fourth, in `databricks/`, `bigquery/`, `athena/`, `cosmos/` and `spanner/`,
 were first released in `v0.17.0` (W35 to W39). The twenty-fifth, in `exasol/`, was
-first released in `v0.20.0` (W44). The
+first released in `v0.20.0` (W44). The twenty-sixth and the twenty-seventh, in
+`maxcompute/` and `tablestore/`, were first released in `v0.21.0` (W47 and W48). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules

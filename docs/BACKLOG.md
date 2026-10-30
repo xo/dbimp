@@ -2070,7 +2070,7 @@ Status: the code, the unit tests, the integration test `TestIntegrationNullArgum
 (run on the hosted project, 11 column types) and D216 are written. Released in `v0.20.0`, and `usql` knows. The measurements of the types of a NULL parameter were made by hand
 on 2026-10-11 and are not in `testdata`.
 
-## W47. Write the MaxCompute driver
+## W47. Write the MaxCompute driver. Done.
 
 Ken asked for it on 2026-10-29. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
 [MAXCOMPUTE.md](MAXCOMPUTE.md), and the package is `maxcompute`. `dburl` has the scheme
@@ -2081,10 +2081,10 @@ making that account. `dbmeta` D218 says that MaxCompute has no account, so the a
 Ken decided on 2026-10-29: CSV results only, no Tunnel and no Arrow, V4 signatures only, and no
 code copied from the SDK.
 
-Status: step 3 is a draft. Nothing is measured, because no account exists yet. `dbsetup` waits for
-the activation of the service.
+Status: released in `v0.21.0`. The driver, its tests, MAXCOMPUTE.md and D218 to D221 are in. The
+integration tests passed live on the project `dbimp` on 2026-10-29. D220 and D221 are still `Proposed`.
 
-## W48. Write the Tablestore driver
+## W48. Write the Tablestore driver. Done.
 
 Ken asked for it on 2026-10-29, together with MaxCompute (W47). Follow [DRIVER.md](DRIVER.md).
 Step 3 goes in [TABLESTORE.md](TABLESTORE.md). `dburl` has the scheme `ots` (alias `tablestore`),
@@ -2094,4 +2094,17 @@ protobuf, and the rows of a SQL query are FlatBuffers. Ken approved on 2026-10-2
 encoding that is written in this repository with no package (D13). Step 9 must still decide the
 name of the package and of the registered driver, because the scheme is `ots`.
 
-Status: step 3 is a draft. Nothing is measured.
+Status: released in `v0.21.0`. The driver, its tests, TABLESTORE.md and D222 to D224 are in. The
+integration tests passed live on the instance `dbmeta` on 2026-10-29. D224 is still `Proposed`.
+
+## W49. Add the table helpers to the Tablestore connector. Done.
+
+Ken decided on 2026-10-30 that the package `tablestore` makes and deletes a table, as methods of
+`*Connector`, because `dbmeta` needs it for its fixtures and SQL cannot make a table. He decided on
+the same day that each method takes options in the pattern of D109, that there is no `DropIndex` and
+no local index, that the methods do not retry, and that the release is `v0.22.0`. The decision is
+[D225](decisions/D225-the-tablestore-connector-makes-and-deletes-a-table.md), and the facts are in
+[TABLESTORE.md](TABLESTORE.md) under "Making and deleting a table".
+
+Status: written and staged, with unit tests of each option on the wire and a live integration test of
+2026-10-30. D225 is `Decided`. Released in `v0.22.0`.

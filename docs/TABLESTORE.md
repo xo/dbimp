@@ -320,6 +320,62 @@ export TABLESTORE_DSN='tablestore://<access key id>:<secret>@<instance>.<region>
 go test -race -count=1 ./tablestore/...
 ```
 
+## Making and deleting a table
+
+SQL cannot make a table. `CREATE TABLE` only maps a table that exists to a name, and `DROP TABLE` is refused
+(recorded: "drop table"). The connector has three methods for it, which use the signature and the rules of a statement
+(D225 and W49):
+
+```go
+func (c *Connector) CreateTable(ctx context.Context, t Table, opts ...TableOption) error
+func (c *Connector) DeleteTable(ctx context.Context, name string, opts ...DeleteOption) error
+func (c *Connector) CreateIndex(ctx context.Context, table string, ix Index, opts ...IndexOption) error
+```
+
+A `Table` holds a name, `Keys` and `Columns` of `Column{Name, Type}`, and `Indexes` of `Index{Name, Keys, Columns,
+Sync}`. The type is `Integer`, `Double`, `Boolean`, `String` or `Binary`, and a primary key column cannot be a `Double`
+or a `Boolean`. An index is global. `Sync` asks the server to update it with each write, and with no `Sync` the server
+fills it in the background. The methods do not retry. The calls fail with an `*Error` that matches `ErrExists` for HTTP
+409 and the code `OTSObjectAlreadyExist`, and `ErrNotFound` for HTTP 404 and the code `OTSObjectNotExist`. This holds
+for a table and for an index. A value that an option cannot hold fails the call with `dbimp.ErrInvalidValue`, and the
+call sends nothing.
+
+The options are variadic, and a later one wins. With none, a row never expires, the table keeps one version of a cell,
+the reserved throughput is zero, and `CreateIndex` copies the rows that the table holds.
+
+| Call | Option | Member of the request | Default |
+| --- | --- | --- | --- |
+| `CreateTable` | `WithTimeToLive(d)` | `TableOptions.time_to_live`, whole seconds | -1, which never expires |
+| `CreateTable` | `WithMaxVersions(n)` | `TableOptions.max_versions` | 1 |
+| `CreateTable` | `WithReservedThroughput(read, write)` | `reserved_throughput.capacity_unit` | 0 and 0 |
+| `CreateTable` | `WithDeviation(d)` | `TableOptions.deviation_cell_version_in_sec`, whole seconds | not sent |
+| `CreateTable` | `WithAllowUpdate(b)` | `TableOptions.allow_update` | not sent |
+| `CreateTable` | `WithStream(d)` | `stream_spec`, whole hours | no stream |
+| `CreateTable` | `WithLocalTransaction(b)` | `enable_local_txn` | off |
+| `CreateIndex` | `WithBaseData(b)` | `include_base_data` | true |
+| `DeleteTable` | `WithIfExists()` | none, the client ignores `ErrNotFound` | fails |
+
+The methods offer no bloom filter, block size, encryption, partitions, `DropIndex` or local index. Ken decided that
+none of them is needed.
+
+Measured on 2026-10-30 on a new instance of `dbmeta` in ap-southeast-5, with the recordings
+`testdata/tablestore/tablestore-tables-*.json` (release `tablestore-tables`):
+
+- A table with a string and an integer key, one defined column of each of the five types and one index was made in
+  0.25 to 0.55 seconds. `DescribeTable` showed the columns and the index at once.
+- A `CREATE TABLE` mapping, an `INSERT` and a `SELECT` over that table worked at once, and a row came back as the
+  Go types of D223.
+- `DeleteTable` of a table that is not there is an error. A name was free again for `CreateTable` at once after
+  `DeleteTable`.
+- `CreateIndex` on a table that exists with `include_base_data` answered at once. The message for an index that is there
+  names the index with an internal prefix, `<prefix>#<index>`.
+- The server refuses a time to live under one day: `OTSParameterInvalid: TimeToLive cannot be less than 86400.` A table
+  made with a time to live of one day, three versions and `WithAllowUpdate(false)` showed those values in
+  `DescribeTable`. The recordings do not hold this call, and `TestIntegrationCreateTableOptions` makes it.
+- The throughput, the deviation, the stream, the local transaction and the update mode of an index are checked on the
+  wire against `table_store.proto`, by tests that read the bytes with their own parser. No live request used them.
+- The content of an index is not measured, which Ken decided.
+
 ## Open questions
 
 These wait for Ken. Do not decide them here.
@@ -337,3 +393,12 @@ These wait for Ken. Do not decide them here.
 
 1. The package and the registered name are `tablestore`.
 2. The Go type of `DATETIME` is `dbimp.LocalDateTime`.
+
+## Decided by Ken on 2026-10-30
+
+1. The package makes and deletes a table with the methods `CreateTable`, `DeleteTable` and `CreateIndex` of
+   `*Connector`, and not with a package `tablestore/admin` (D225).
+2. Each method takes variadic options in the pattern of D109, so that a caller can change the time to live, the
+   versions, the reserved throughput and the other members that the request has.
+3. There is no `DropIndex` and no local index. The content of an index is not measured. The methods do not retry.
+4. The release is `v0.22.0`.

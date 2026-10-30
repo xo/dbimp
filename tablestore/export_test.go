@@ -79,11 +79,6 @@ func DeleteTableBody(name string) []byte {
 	return appendString(nil, 1, name)
 }
 
-// appendBytes appends the field number field, holding the bytes b.
-func appendBytes(b []byte, field int, v []byte) []byte {
-	return appendString(b, field, string(v))
-}
-
 // TableNames returns the names of the tables that the answer to ListTable holds,
 // which are the strings of the field 1 of the message.
 func TableNames(body []byte) []string {

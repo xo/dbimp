@@ -245,3 +245,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D222](D222-the-tablestore-driver-is-tablestore-and-takes-a-url.md) | The Tablestore driver is `tablestore` and takes a URL | Decided |
 | [D223](D223-the-tablestore-driver-types-a-column-from-the-flatbuffers-answer.md) | The Tablestore driver types a column from the FlatBuffers answer | Decided. Ken reviewed the table on 2026-10-29, except the row of `TIMESTAMP` |
 | [D224](D224-the-tablestore-driver-sends-one-statement-and-has-no-transaction.md) | The Tablestore driver sends one statement and has no transaction | Proposed. These follow from step 6 and wait for Ken |
+| [D225](D225-the-tablestore-connector-makes-and-deletes-a-table.md) | The Tablestore connector makes and deletes a table | Decided. Ken decided it on 2026-10-30 |
