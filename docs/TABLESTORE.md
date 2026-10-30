@@ -376,6 +376,61 @@ Measured on 2026-10-30 on a new instance of `dbmeta` in ap-southeast-5, with the
   wire against `table_store.proto`, by tests that read the bytes with their own parser. No live request used them.
 - The content of an index is not measured, which Ken decided.
 
+## Search indexes and the list of tables
+
+SQL does not read a search index, and `SHOW FULL TABLES` lists only the tables that a mapping names. The connector has
+four more methods for them, which use the signature and the rules of a statement (D226 and W50):
+
+```go
+func (c *Connector) CreateSearchIndex(ctx context.Context, table string, ix SearchIndex, opts ...SearchIndexOption) error
+func (c *Connector) DeleteSearchIndex(ctx context.Context, table, name string, opts ...DeleteOption) error
+func (c *Connector) ListSearchIndexes(ctx context.Context, table string) ([]string, error)
+func (c *Connector) ListTables(ctx context.Context) ([]string, error)
+```
+
+A `SearchIndex` holds a name and `Fields` of `SearchField{Name, Type, Sort, Store}`. The type is `SearchLong`,
+`SearchDouble`, `SearchBoolean`, `SearchKeyword` or `SearchText`. A `SearchText` field uses the analyzer that the server
+picks. The driver always sends `index` as true. `Sort` sends `sort_and_agg` and `Store` sends `store`, each only when it
+is true. The server turned `store` off for a field that had `Sort`. The only option is `WithSearchTimeToLive(d)`, which
+sends `time_to_live` in whole seconds. The server accepts it from one day, and only for a table that refuses updates
+(`WithAllowUpdate(false)`). `DeleteSearchIndex` takes `WithIfExists()` as `DeleteTable` does. A value that the driver
+cannot send fails the call with `dbimp.ErrInvalidValue`, and the call sends nothing.
+
+The order of a delete matters. `DeleteTable` refuses a table that has a search index. It answers HTTP 400 with the code
+`OTSParameterInvalid` and the text `table[x] who has at least one search index cannot be deleted`. So a caller deletes
+each search index with `DeleteSearchIndex`, and then the table. `DeleteTable` deletes the secondary indexes with the
+table. To find the search indexes that an earlier run left, call `ListTables`, and then `ListSearchIndexes` for each
+table with the prefix of the run.
+
+The errors:
+
+| Call | Case | Status and code | Matches |
+| --- | --- | --- | --- |
+| `CreateSearchIndex` | the index is there | 409, `OTSObjectAlreadyExist` | `ErrExists` |
+| `CreateSearchIndex` | the table is not there | 400, `OTSParameterInvalid`, `table [x] does not exist` | no sentinel |
+| `CreateSearchIndex` | a time to live on a table that allows updates | 400, `OTSParameterInvalid` | no sentinel |
+| `CreateSearchIndex` | a time to live under one day | 400, `OTSParameterInvalid`, `must be equal to -1 or >= 86400` | no sentinel |
+| `DeleteSearchIndex` | the index is not there | 404, `OTSObjectNotExist`, `search index not exist` | `ErrNotFound` |
+| `DeleteSearchIndex` | the table is not there | 400, `OTSParameterInvalid`, `table [x] does not exist` | no sentinel |
+| `ListSearchIndexes` | the table is not there | 400, `OTSParameterInvalid`, `table [x] does not exist` | no sentinel |
+| `DeleteTable` | the table has a search index | 400, `OTSParameterInvalid`, `at least one search index` | no sentinel |
+
+Measured on 2026-10-30 on a new instance of `dbmeta` in ap-southeast-5, with the recordings
+`testdata/tablestore/tablestore-search-*.json` (release `tablestore-search`) and `tablestore-delete-*.json` (release
+`tablestore-delete`):
+
+- A search index with four fields was made in 0.25 to 0.4 seconds. `DescribeSearchIndex` showed it at once, in the
+  phase of the incremental sync with the state `index is running`, and it showed the same three seconds later. A
+  `ListSearchIndex` showed it at once, and showed a delete at once.
+- A search index for a name that no column has was made with no error. The server does not check the names of the
+  fields.
+- A field of `SearchText` with no analyzer was made, and `DescribeSearchIndex` showed it with no analyzer member.
+- A table with a secondary index and no search index was deleted, and the same table and index name were made again
+  at once. So `DeleteTable` deletes the secondary indexes.
+- `ListTable` gave the names of the tables, including tables that no mapping names.
+- The content of a search index is not measured. A query on it needs the calls of search, which the driver does not
+  offer.
+
 ## Open questions
 
 These wait for Ken. Do not decide them here.
@@ -402,3 +457,12 @@ These wait for Ken. Do not decide them here.
    versions, the reserved throughput and the other members that the request has.
 3. There is no `DropIndex` and no local index. The content of an index is not measured. The methods do not retry.
 4. The release is `v0.22.0`.
+
+## Decided by Ken on 2026-10-30, for search indexes
+
+1. The package adds the four methods `CreateSearchIndex`, `DeleteSearchIndex`, `ListSearchIndexes` and `ListTables` to
+   `*Connector`, in the pattern of D225 (D226).
+2. The release is `v0.23.0`.
+3. `ErrNotFound` also matches the answer `OTSParameterInvalid` with the text "table [x] does not exist" of the calls on
+   search indexes. `WithIfExists` of `DeleteSearchIndex` ignores only a missing index.
+4. The refusal of `DeleteTable` for a table that has a search index has no sentinel. The order is in the doc comments.

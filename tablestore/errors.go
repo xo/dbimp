@@ -15,9 +15,12 @@ import (
 // (D7 and D222).
 const ErrNoCredentials dbimp.Error = "the configuration has no access key id or secret"
 
-// ErrExists and ErrNotFound are the errors of CreateTable, CreateIndex and
-// DeleteTable for an object that is there, and for an object that is not. An *Error
-// matches them by its code (D225).
+// ErrExists and ErrNotFound are the errors of CreateTable, CreateIndex,
+// DeleteTable, CreateSearchIndex, DeleteSearchIndex and ListSearchIndexes for an
+// object that is there, and for an object that is not. An *Error matches them by
+// its code (D225). The calls on search indexes get the code OTSParameterInvalid for
+// a table that is not there, so ErrNotFound also matches that code with the text
+// "table [x] does not exist" (D226).
 const (
 	ErrExists   dbimp.Error = "object already exists"
 	ErrNotFound dbimp.Error = "object does not exist"
@@ -27,6 +30,8 @@ const (
 const (
 	codeAlreadyExist = "OTSObjectAlreadyExist"
 	codeNotExist     = "OTSObjectNotExist"
+
+	codeParameterInvalid = "OTSParameterInvalid"
 )
 
 // codeAuthFailed is the code of the error for a request that the server cannot
@@ -83,9 +88,17 @@ func (err *Error) Is(target error) bool {
 	case ErrExists:
 		return err.Code == codeAlreadyExist
 	case ErrNotFound:
-		return err.Code == codeNotExist
+		return err.Code == codeNotExist || err.missingTable()
 	}
 	return false
+}
+
+// missingTable reports whether the error is the answer of the server to a call on
+// a search index of a table that is not there: OTSParameterInvalid with the text
+// "table [x] does not exist" (recorded: "list the search indexes of a table that is
+// not there").
+func (err *Error) missingTable() bool {
+	return err.Code == codeParameterInvalid && strings.HasPrefix(err.Message, "table [") && strings.Contains(err.Message, "] does not exist")
 }
 
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes the

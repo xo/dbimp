@@ -2108,3 +2108,15 @@ no local index, that the methods do not retry, and that the release is `v0.22.0`
 
 Status: written and staged, with unit tests of each option on the wire and a live integration test of
 2026-10-30. D225 is `Decided`. Released in `v0.22.0`.
+
+## W50. Add search indexes and the list of tables to the Tablestore connector. Done.
+
+`dbmeta` asked on 2026-10-30 for the calls that its fixture still needs from the SDK of Aliyun: a search index on
+a table, its delete, the list of the search indexes of a table, and the list of the tables of the instance. Ken
+approved the four methods in chat on 2026-10-30, as methods of `*Connector` in the pattern of D225, and decided
+that the release is `v0.23.0`. The decision is
+[D226](decisions/D226-the-tablestore-connector-makes-search-indexes-and-lists-tables.md), and the facts are in
+[TABLESTORE.md](TABLESTORE.md) under "Search indexes and the list of tables".
+
+Status: written and staged, with unit tests that replay the two recordings and check each request on the wire, and
+a live integration test of 2026-10-30. D226 is `Decided`. Released in `v0.23.0`.

@@ -204,20 +204,37 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-// sweep deletes each table with the prefix of this run, and returns the count.
+// sweep deletes each table with the prefix of this run, with its search indexes,
+// and returns the count.
 func sweep(cfg tablestore.Config) int {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
-	status, body, err := tablestore.Raw(ctx, cfg, "ListTable", nil)
-	if err != nil || status != 200 {
+	c := tablestore.NewConnector(cfg)
+	c.NoKeepAlives()
+	n := sweepTables(ctx, c)
+	_ = c.Close()
+	return n
+}
+
+// sweepTables deletes each table of the instance with the prefix of this run, and
+// returns the count.
+func sweepTables(ctx context.Context, c *tablestore.Connector) int {
+	names, err := c.ListTables(ctx)
+	if err != nil {
 		return 0
 	}
 	n := 0
-	for _, name := range tablestore.TableNames(body) {
-		if strings.HasPrefix(name, prefix) {
-			n++
-			_, _, _ = tablestore.Raw(ctx, cfg, "DeleteTable", tablestore.DeleteTableBody(name))
+	for _, name := range names {
+		if !strings.HasPrefix(name, prefix) {
+			continue
 		}
+		n++
+		// The server refuses to delete a table that has a search index (D226).
+		indexes, _ := c.ListSearchIndexes(ctx, name)
+		for _, ix := range indexes {
+			_ = c.DeleteSearchIndex(ctx, name, ix, tablestore.WithIfExists())
+		}
+		_ = c.DeleteTable(ctx, name, tablestore.WithIfExists())
 	}
 	return n
 }

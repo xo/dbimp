@@ -78,31 +78,3 @@ func CreateTableBody(name string, keyType int64) []byte {
 func DeleteTableBody(name string) []byte {
 	return appendString(nil, 1, name)
 }
-
-// TableNames returns the names of the tables that the answer to ListTable holds,
-// which are the strings of the field 1 of the message.
-func TableNames(body []byte) []string {
-	p := newPBReader(bytes.NewReader(body))
-	var names []string
-	for {
-		field, wire, err := p.tag()
-		if err != nil {
-			return names
-		}
-		if field != 1 || wire != wireBytes {
-			if p.skip(wire) != nil {
-				return names
-			}
-			continue
-		}
-		n, err := p.length()
-		if err != nil {
-			return names
-		}
-		b, err := p.readBytes(n)
-		if err != nil {
-			return names
-		}
-		names = append(names, string(b))
-	}
-}

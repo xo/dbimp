@@ -150,9 +150,11 @@ func (c *Connector) CreateTable(ctx context.Context, t Table, opts ...TableOptio
 	return nil
 }
 
-// DeleteTable deletes the table and its data, with the indexes that it holds.
-// It fails with an error that matches ErrNotFound when there is no such table,
-// unless the option WithIfExists is given (D225).
+// DeleteTable deletes the table and its data, with the secondary indexes that it
+// holds. It fails with an error that matches ErrNotFound when there is no such
+// table, unless the option WithIfExists is given. The server refuses a table that
+// has a search index, with OTSParameterInvalid, so a caller deletes each search
+// index with DeleteSearchIndex first (D225 and D226).
 func (c *Connector) DeleteTable(ctx context.Context, name string, opts ...DeleteOption) error {
 	var o deleteOptions
 	for _, opt := range opts {
