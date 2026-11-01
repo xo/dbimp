@@ -110,6 +110,23 @@ page on pkg.go.dev, and the version links to the release that first held it.
 | [`cosmos`](https://pkg.go.dev/github.com/xo/dbimp/cosmos) | Azure Cosmos DB | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
 | [`spanner`](https://pkg.go.dev/github.com/xo/dbimp/spanner) | Google Cloud Spanner | [`v0.17.0`](https://github.com/xo/dbimp/releases/tag/v0.17.0) |
 | [`exasol`](https://pkg.go.dev/github.com/xo/dbimp/exasol) | Exasol | [`v0.20.0`](https://github.com/xo/dbimp/releases/tag/v0.20.0) |
+| [`maxcompute`](https://pkg.go.dev/github.com/xo/dbimp/maxcompute) | Alibaba Cloud MaxCompute | [`v0.21.0`](https://github.com/xo/dbimp/releases/tag/v0.21.0) |
+| [`tablestore`](https://pkg.go.dev/github.com/xo/dbimp/tablestore) | Alibaba Cloud Tablestore | [`v0.21.0`](https://github.com/xo/dbimp/releases/tag/v0.21.0) |
+
+### Drivers in other repositories
+
+Three more drivers belong to the same family, and each one has a repository
+of its own. Import them the same way, with a blank import and the name of the
+driver in `sql.Open`:
+
+| Repository | Database | Notes |
+| --- | --- | --- |
+| [`xo/cassandra`](https://github.com/xo/cassandra) | Apache Cassandra and ScyllaDB | Wraps the Apache Cassandra Go driver. It was `xo/cql` |
+| [`xo/odbc`](https://github.com/xo/odbc) | Any database that has an ODBC driver | Pure Go, with no cgo. It uses `dbimp` for its value types |
+| [`xo/oracle`](https://github.com/xo/oracle) | Oracle Database | Pure Go. A fork of the `v3` code of `sijms/go-ora`. It follows the design of `dbimp` |
+
+[dburl](https://github.com/xo/dburl) names each of these drivers, and `usql`
+uses them.
 
 ## Documents
 
@@ -170,6 +187,8 @@ repository:
 | [dbtpl](https://github.com/xo/dbtpl) | Generates Go code from the schema of a database. It reads the schema through `dbmeta` |
 | [dbimp](https://github.com/xo/dbimp) | This repository: `database/sql` drivers for databases that have no idiomatic Go driver |
 | [cassandra](https://github.com/xo/cassandra) | The `database/sql` driver for Cassandra, formerly `cql` |
+| [odbc](https://github.com/xo/odbc) | The `database/sql` driver for ODBC, written in pure Go |
+| [oracle](https://github.com/xo/oracle) | The `database/sql` driver for Oracle Database, written in pure Go |
 | [tblfmt](https://github.com/xo/tblfmt) | Writes a result set as a text table, one row at a time. `usql` uses it |
 | [rline](https://github.com/xo/rline) | A readline package for Go, which reads a line of text that a person edits. `usql` uses it |
 | [transit](https://github.com/xo/transit) | A Go port of tree-sitter, a parser of source code. `rline` uses it to highlight syntax, and `usql` to complete statements |

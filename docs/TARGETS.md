@@ -90,11 +90,12 @@ order:
     tests make. See [EXASOL.md](EXASOL.md). `usql` has a driver, which the new one can
     replace (D24).
 23. MaxCompute, over its REST API with CSV results (W47, D218 to D221). The driver is
-    `github.com/xo/dbimp/maxcompute`. Its integration tests run only where a person supplies a
+    `github.com/xo/dbimp/maxcompute`. Done, in `v0.21.0`. Its integration tests run only where a person supplies a
     project. See [MAXCOMPUTE.md](MAXCOMPUTE.md). `usql` has a driver, which the new one can
     replace (D24).
-24. Tablestore, over its protobuf API with FlatBuffers rows (W48, D222 to D224). The driver is
-    `github.com/xo/dbimp/tablestore`. Its integration tests run only where a person supplies an
+24. Tablestore, over its protobuf API with FlatBuffers rows (W48 to W50, D222 to D226). The driver is
+    `github.com/xo/dbimp/tablestore`. Done, in `v0.21.0`. The table helpers came in `v0.22.0`, and the
+    search indexes in `v0.23.0`. Its integration tests run only where a person supplies an
     instance. See [TABLESTORE.md](TABLESTORE.md). `usql` has a driver, which the new one can
     replace (D24).
 

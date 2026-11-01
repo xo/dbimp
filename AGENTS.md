@@ -201,6 +201,8 @@ crosses between them. Each one is checked out next to this one.
 | `xo/dbmeta` | Database metadata queries. It also holds `dbrun`, which starts every test server |
 | `xo/dbtpl` | Code generation from database schemas, which reads through `dbmeta` |
 | `xo/cassandra` | The `database/sql` driver for Cassandra, and the nearest example of a driver repository. It was `xo/cql` until October 2026, and a reference to `cql` in an older document names it |
+| `xo/odbc` | The `database/sql` driver for ODBC. It depends on this module for its value types |
+| `xo/oracle` | The `database/sql` driver for Oracle Database, a fork of `sijms/go-ora` that follows the design of this repository |
 | `xo/n1ql` | The old `database/sql` driver for Couchbase. The `couchbase` driver here replaces it, and it gets no new code (D23) |
 
 `dburl`, `dbmeta`, `cassandra`, `n1ql` and this repository record decisions as

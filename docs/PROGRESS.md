@@ -15,9 +15,9 @@ into a scratch folder, and run that copy.
    server of `dbrun` running at a time.
 3. Before you start a server, run `dbrun status` from `../dbmeta/test`, and
    remove each server of ours that no step needs.
-4. At each checkpoint, update this file, and commit the finished part to
-   `main`, as a commit that says what it holds, with no commit that is
-   only a checkpoint. Do not push. Ken decides when `main` is pushed.
+4. At each checkpoint, update this file, and stage the finished part in
+   the index. Do not commit and do not push. Ken decides when a change is
+   committed and when `main` is pushed (AGENTS.md, standing rule 1).
 
 ## The drivers after Avatica
 
@@ -47,7 +47,7 @@ the record.
 | Spanner | W38 | Released in `v0.17.0` | `spanner/`, its tests, SPANNER.md, D187, D191 and D195. The integration tests passed on a hosted instance | Step 20, and the emulator entry of `dbmeta` |
 | Exasol | W44 | Released in `v0.20.0` | `exasol/`, its tests, EXASOL.md, D203 to D215, `Contract.WebSocket` and the scripted server in `dbimptest`. The integration tests passed on `exasol-2026.2.0` as both principals | The `dburl` and `dbmeta` sessions use the tag. `v0.20.1` holds the fixes of the WebSocket client (D217) |
 | MaxCompute | W47 | Released in `v0.21.0` | `maxcompute/`, its tests, MAXCOMPUTE.md, D218 to D221. The integration tests passed live on the project `dbimp` | Watch the `usql` and `dbmeta` sessions. The hosted project is deleted, so its integration tests need a new account |
-| Tablestore | W48 to W50 | Released in `v0.21.0`, the table helpers in `v0.22.0`, and the search indexes in `v0.23.0` | `tablestore/`, its tests, TABLESTORE.md, D222 to D224. The integration tests passed live on the instance `dbmeta` | Watch the `usql` and `dbmeta` sessions. The helpers are D225 |
+| Tablestore | W48 to W50 | Released in `v0.21.0`, the table helpers in `v0.22.0`, and the search indexes in `v0.23.0` | `tablestore/`, its tests, TABLESTORE.md, D222 to D226. The integration tests passed live on the instance `dbmeta` | Watch the `usql` and `dbmeta` sessions. `dbmeta` asks whether `CreateIndex` with the default copy of the rows hides the index from `SHOW INDEX` while it fills. Not measured |
 | ClickHouse | W32 | Released in `v0.13.0` | `clickhouse/`, its tests, CLICKHOUSE.md, D176 and D177. CI passed 32 of 32 jobs on the tagged commit, with the integration jobs of 25.8 and 26.9 | Step 20: the requests to `dburl` and `usql` (the request to `dbmeta` is done by its `v0.3.0`) |
 
 ## Next
@@ -65,7 +65,8 @@ new drivers when `dburl` names them.
 ## Waiting for Ken
 
 - The next target. The usql drivers that this repository does not cover have a
-  binary wire protocol (Thrift, gRPC or their own), or are embedded. `maxcompute`
-  is the one that may take HTTP and JSON, and it needs a hosted account.
+  binary wire protocol (Thrift, gRPC or their own), or are embedded.
+- A MaxCompute account. The hosted project is deleted, so the integration tests
+  of `maxcompute` skip until a person supplies a new one.
 - The rqlite rule for a refused credential: it matches every HTTP 401, because
   the server sends the same 401 for a missing permission (RQLITE.md).
