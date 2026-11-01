@@ -247,3 +247,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D224](D224-the-tablestore-driver-sends-one-statement-and-has-no-transaction.md) | The Tablestore driver sends one statement and has no transaction | Proposed. These follow from step 6 and wait for Ken |
 | [D225](D225-the-tablestore-connector-makes-and-deletes-a-table.md) | The Tablestore connector makes and deletes a table | Decided. Ken decided it on 2026-10-30 |
 | [D226](D226-the-tablestore-connector-makes-search-indexes-and-lists-tables.md) | The Tablestore connector makes search indexes and lists tables | Decided on 2026-10-30 |
+| [D227](D227-the-error-of-a-driver-has-a-method-authenticationrefused.md) | The error of a driver has a method AuthenticationRefused | Decided on 2026-11-02 |

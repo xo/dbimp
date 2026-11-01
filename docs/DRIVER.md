@@ -482,6 +482,9 @@ these, and a unit test holds each one:
   key and a wrong token, and it returns false for a missing permission. A
   table test holds each recorded case, for a refusal of the credential and for
   a refusal of a permission.
+- The same error type has the method `AuthenticationRefused() bool`, which
+  returns what `Is` returns for `dbimp.ErrAuthentication` (D227). A caller that
+  does not import `dbimp` reads it, and the gate of this step checks for it.
 - Two queries can run at the same time on one `sql.DB`.
 - A test makes sure that no goroutine is left running after each test, with
   `dbimptest.CheckGoroutines`.

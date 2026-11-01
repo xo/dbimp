@@ -48,6 +48,13 @@ func (err *Error) Is(target error) bool {
 	return target == dbimp.ErrAuthentication && err.authRefused()
 }
 
+// AuthenticationRefused reports whether the server refused the credential. It
+// returns what Is reports for dbimp.ErrAuthentication, and a caller that does
+// not import this module reads it through an interface of its own (D227).
+func (err *Error) AuthenticationRefused() bool {
+	return err.Is(dbimp.ErrAuthentication)
+}
+
 // messageNotAuthenticated is the message that the server sends with HTTP 401
 // and errorNum 11 for a request whose credential it refused (measured). A
 // user without access to a database gets the same status and errorNum with

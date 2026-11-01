@@ -2120,3 +2120,14 @@ that the release is `v0.23.0`. The decision is
 
 Status: written and staged, with unit tests that replay the two recordings and check each request on the wire, and
 a live integration test of 2026-10-30. D226 is `Decided`. Released in `v0.23.0`.
+
+## W51. Add the method AuthenticationRefused to the errors of the drivers. Done.
+
+The `usql` session set a contract on 2026-11-02 for a refused credential (W66 of `usql`): a method
+`AuthenticationRefused() bool` on the error type, which `usql` reads through an interface of its own, and
+no sentinel. Ken told this session to implement it. The decision is
+[D227](decisions/D227-the-error-of-a-driver-has-a-method-authenticationrefused.md). It adds the method to
+`dbimp.Error`, to `*dbimp.StatusError` and to the error type of each of the 27 drivers, and it extends the
+gate of step 12.
+
+Status: written and staged. The release is not tagged, and `usql` waits for the tag.

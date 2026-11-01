@@ -97,6 +97,13 @@ func (err *Error) Is(target error) bool {
 	return false
 }
 
+// AuthenticationRefused reports whether the server refused the credential. It
+// returns what Is reports for dbimp.ErrAuthentication, and a caller that does
+// not import this module reads it through an interface of its own (D227).
+func (err *Error) AuthenticationRefused() bool {
+	return err.Is(dbimp.ErrAuthentication)
+}
+
 // authRefused reports whether the type of the error says that the server
 // refused the credential: a signature that does not match the secret key, or
 // an access key that the server does not know (recorded: "a wrong secret").

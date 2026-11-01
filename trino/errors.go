@@ -75,6 +75,13 @@ func (err *Error) Is(target error) bool {
 	return target == dbimp.ErrAuthentication && err.HTTPStatus == http.StatusUnauthorized
 }
 
+// AuthenticationRefused reports whether the server refused the credential. It
+// returns what Is reports for dbimp.ErrAuthentication, and a caller that does
+// not import this module reads it through an interface of its own (D227).
+func (err *Error) AuthenticationRefused() bool {
+	return err.Is(dbimp.ErrAuthentication)
+}
+
 // failure is the error member of a page. The member failureInfo holds the
 // stack of the server, which the driver never shows (measured).
 type failure struct {

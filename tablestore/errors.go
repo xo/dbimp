@@ -93,6 +93,13 @@ func (err *Error) Is(target error) bool {
 	return false
 }
 
+// AuthenticationRefused reports whether the server refused the credential. It
+// returns what Is reports for dbimp.ErrAuthentication, and a caller that does
+// not import this module reads it through an interface of its own (D227).
+func (err *Error) AuthenticationRefused() bool {
+	return err.Is(dbimp.ErrAuthentication)
+}
+
 // missingTable reports whether the error is the answer of the server to a call on
 // a search index of a table that is not there: OTSParameterInvalid with the text
 // "table [x] does not exist" (recorded: "list the search indexes of a table that is

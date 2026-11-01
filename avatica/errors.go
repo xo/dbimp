@@ -56,6 +56,13 @@ func (err *Error) Is(target error) bool {
 	return target == dbimp.ErrAuthentication && strings.Contains(err.Exception, invalidAuthorization)
 }
 
+// AuthenticationRefused reports whether the server refused the credential. It
+// returns what Is reports for dbimp.ErrAuthentication, and a caller that does
+// not import this module reads it through an interface of its own (D227).
+func (err *Error) AuthenticationRefused() bool {
+	return err.Is(dbimp.ErrAuthentication)
+}
+
 // noSuchConnection is the exception of a connection that the server does not
 // know, such as one whose cache entry expired (measured).
 const noSuchConnection = "org.apache.calcite.avatica.NoSuchConnectionException"

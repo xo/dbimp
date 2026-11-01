@@ -101,6 +101,13 @@ func (err *Error) Is(target error) bool {
 	return false
 }
 
+// AuthenticationRefused reports whether the server refused the credential. It
+// returns what Is reports for dbimp.ErrAuthentication, and a caller that does
+// not import this module reads it through an interface of its own (D227).
+func (err *Error) AuthenticationRefused() bool {
+	return err.Is(dbimp.ErrAuthentication)
+}
+
 // authRefused reports whether the server refused the credential: HTTP 401, or
 // the status UNAUTHENTICATED, which is the gRPC code 16 of an operation too.
 // PERMISSION_DENIED is a missing permission, and it is not a refusal.

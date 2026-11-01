@@ -15,6 +15,13 @@ func (err Error) Error() string {
 	return string(err)
 }
 
+// AuthenticationRefused reports whether err is ErrAuthentication. A caller
+// that does not import this module reads it through an interface of its own,
+// and so a driver can wrap ErrAuthentication with %w (D227).
+func (err Error) AuthenticationRefused() bool {
+	return err == ErrAuthentication
+}
+
 // Error values.
 const (
 	// ErrNotSupported is the error for a feature that the database does not
@@ -81,6 +88,12 @@ func (err *StatusError) Error() string {
 // error of a driver decides it (D197).
 func (err *StatusError) Is(target error) bool {
 	return target == ErrAuthentication && err.Code == http.StatusUnauthorized
+}
+
+// AuthenticationRefused reports whether the status is HTTP 401. It returns what
+// Is reports for ErrAuthentication (D227).
+func (err *StatusError) AuthenticationRefused() bool {
+	return err.Is(ErrAuthentication)
 }
 
 // CheckStatus returns nil if the status of res is 2xx. Otherwise it reads at

@@ -47,6 +47,9 @@ with `%w`, and a caller tests it with `errors.Is`:
   (D197). It never matches a refusal for lack of a permission. A `StatusError`
   with the code 401 matches it, and a `StatusError` with the code 403 does not,
   because a server sends 403 for both causes, so the driver decides it.
+  The error of each driver also has the method `AuthenticationRefused() bool`,
+  which returns the same answer, for a caller that does not import this
+  package. `usql` reads it (D227).
 
 `CheckStatus` turns a response whose status is not 2xx into a `StatusError`.
 It keeps the code and at most 64 KiB of the body, so that a driver can read

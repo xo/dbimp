@@ -69,6 +69,13 @@ func (err *Error) Is(target error) bool {
 	return target == dbimp.ErrAuthentication && err.HTTPStatus == http.StatusUnauthorized
 }
 
+// AuthenticationRefused reports whether the server refused the credential. It
+// returns what Is reports for dbimp.ErrAuthentication, and a caller that does
+// not import this module reads it through an interface of its own (D227).
+func (err *Error) AuthenticationRefused() bool {
+	return err.Is(dbimp.ErrAuthentication)
+}
+
 // checkStatus returns nil if the status of res is 2xx. Otherwise it closes
 // the body, and returns an *Error with what the body says.
 func checkStatus(res *http.Response) error {

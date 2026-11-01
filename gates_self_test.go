@@ -2,6 +2,9 @@ package dbimp_test
 
 import (
 	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"maps"
 	"os"
 	"path/filepath"
@@ -86,6 +89,8 @@ type Error struct{}
 func (*Error) Error() string { return "" }
 
 func (*Error) Is(target error) bool { return target == dbimp.ErrAuthentication }
+
+func (e *Error) AuthenticationRefused() bool { return e.Is(dbimp.ErrAuthentication) }
 
 func use() {
 	client := &http.Client{}
@@ -213,5 +218,29 @@ func read(r io.Reader) {
 				t.Errorf("%s: the problem %q does not name a step", name, p)
 			}
 		}
+	}
+}
+
+func TestTheAuthenticationGateNeedsTheMethod(t *testing.T) {
+	t.Parallel()
+	src := func(extra string) []*ast.File {
+		f, err := parser.ParseFile(token.NewFileSet(), "errors.go", `package bad
+
+import "github.com/xo/dbimp"
+
+type Error struct{}
+
+func (*Error) Is(target error) bool { return target == dbimp.ErrAuthentication }
+`+extra, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return []*ast.File{f}
+	}
+	if got := missingAuthenticationRefused(src("")); !slices.Equal(got, []string{"Error"}) {
+		t.Errorf("missing is %q, want [Error]", got)
+	}
+	if got := missingAuthenticationRefused(src("func (e *Error) AuthenticationRefused() bool { return e.Is(dbimp.ErrAuthentication) }\n")); len(got) != 0 {
+		t.Errorf("missing is %q, want none", got)
 	}
 }

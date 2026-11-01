@@ -130,8 +130,53 @@ func gateAuthentication(root string) []string {
 		if !namesSelector(parseDir(root, d, true), "ErrAuthentication") {
 			problems = append(problems, fmt.Sprintf("step 12: the tests of %s never name dbimp.ErrAuthentication, so no test holds the refusal of a credential (D197)", d))
 		}
+		for _, typ := range missingAuthenticationRefused(parseDir(root, d, false)) {
+			problems = append(problems, fmt.Sprintf("step 12: the type %s of %s matches dbimp.ErrAuthentication but has no method AuthenticationRefused, so a caller that does not import dbimp cannot ask it (D227)", typ, d))
+		}
 	}
 	return problems
+}
+
+// missingAuthenticationRefused returns the types of the files whose method Is
+// names dbimp.ErrAuthentication and that have no method AuthenticationRefused.
+func missingAuthenticationRefused(files []*ast.File) []string {
+	matches, has := map[string]bool{}, map[string]bool{}
+	for _, f := range files {
+		for _, decl := range f.Decls {
+			fn, ok := decl.(*ast.FuncDecl)
+			if !ok || fn.Recv == nil || len(fn.Recv.List) != 1 {
+				continue
+			}
+			typ := receiverType(fn.Recv.List[0].Type)
+			switch fn.Name.Name {
+			case "AuthenticationRefused":
+				has[typ] = true
+			case "Is":
+				only := &ast.File{Name: f.Name, Decls: []ast.Decl{fn}, Imports: f.Imports}
+				if namesSelector([]*ast.File{only}, "ErrAuthentication") {
+					matches[typ] = true
+				}
+			}
+		}
+	}
+	var missing []string
+	for _, typ := range slices.Sorted(maps.Keys(matches)) {
+		if !has[typ] {
+			missing = append(missing, typ)
+		}
+	}
+	return missing
+}
+
+// receiverType returns the name of the type of a receiver, without its star.
+func receiverType(e ast.Expr) string {
+	if star, ok := e.(*ast.StarExpr); ok {
+		e = star.X
+	}
+	if id, ok := e.(*ast.Ident); ok {
+		return id.Name
+	}
+	return ""
 }
 
 // namesSelector reports whether a file names the selector dbimp.name.
