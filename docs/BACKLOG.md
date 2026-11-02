@@ -2082,7 +2082,7 @@ Ken decided on 2026-10-29: CSV results only, no Tunnel and no Arrow, V4 signatur
 code copied from the SDK.
 
 Status: released in `v0.21.0`. The driver, its tests, MAXCOMPUTE.md and D218 to D221 are in. The
-integration tests passed live on the project `dbimp` on 2026-10-29. D220 and D221 are still `Proposed`.
+integration tests passed live on the project `dbimp` on 2026-10-29. D220 and D221 are `Decided`.
 
 ## W48. Write the Tablestore driver. Done.
 
@@ -2095,7 +2095,7 @@ encoding that is written in this repository with no package (D13). Step 9 must s
 name of the package and of the registered driver, because the scheme is `ots`.
 
 Status: released in `v0.21.0`. The driver, its tests, TABLESTORE.md and D222 to D224 are in. The
-integration tests passed live on the instance `dbmeta` on 2026-10-29. D224 is still `Proposed`.
+integration tests passed live on the instance `dbmeta` on 2026-10-29. D224 is `Decided`.
 
 ## W49. Add the table helpers to the Tablestore connector. Done.
 

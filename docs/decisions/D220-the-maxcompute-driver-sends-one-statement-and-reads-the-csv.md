@@ -1,6 +1,6 @@
 # D220. The MaxCompute driver sends one statement and reads the CSV
 
-Status: Proposed. Ken decided items 3, 5 and 6 on 2026-10-29, and the others follow from step 6.
+Status: Decided on 2026-11-02. Ken decided items 3, 5 and 6 on 2026-10-29, and the others follow from step 6.
 
 1. The driver reads a result as CSV only. It uses neither the Tunnel nor Arrow, so it needs no
    binary encoding and no package (D13, decided by Ken on 2026-10-29). It streams the CSV with the

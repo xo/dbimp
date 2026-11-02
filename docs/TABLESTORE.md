@@ -375,6 +375,16 @@ Measured on 2026-10-30 on a new instance of `dbmeta` in ap-southeast-5, with the
 - The throughput, the deviation, the stream, the local transaction and the update mode of an index are checked on the
   wire against `table_store.proto`, by tests that read the bytes with their own parser. No live request used them.
 - The content of an index is not measured, which Ken decided.
+- `SHOW INDEX` over a mapped table lists a secondary index only when two things hold. The call to `CreateIndex` used
+  `WithBaseData(false)`, and the table was mapped with `CREATE TABLE` after the index existed. Measured on 2026-11-02 on
+  nine tables, each with an index on a string column. With the default copy of the rows, the statement listed only the
+  `PRIMARY` row, for an empty table and for a table of five rows, whether the mapping came before or after the index.
+  With `WithBaseData(false)`, it listed the index (type `GlobalIndex`, one row for the key and one for the primary key)
+  when the mapping came after the index, with or without rows and with or without an index column. It listed only
+  `PRIMARY` when the mapping came before the index. Waiting 30 seconds changed nothing, and `DescribeTable` named the
+  index at once in every case. The cause is not known. A mapping seems to read the indexes of the table when it is
+  made, and an index with a copy of the rows seems not to be one that `SHOW INDEX` lists. Read the indexes of a table
+  with `DescribeTable` when you must see every one.
 
 ## Search indexes and the list of tables
 

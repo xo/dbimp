@@ -1,6 +1,6 @@
 # D224. The Tablestore driver sends one statement and has no transaction
 
-Status: Proposed. These follow from step 6 and wait for Ken.
+Status: Decided on 2026-11-02. These follow from step 6.
 
 1. The server binds no parameter (recorded: "a question mark parameter"). The driver writes each
    argument into the text with the parser for placeholders of the root package (D34), with the

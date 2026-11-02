@@ -174,6 +174,10 @@ func (c *Connector) DeleteTable(ctx context.Context, name string, opts ...Delete
 // CreateIndex makes the index on a table that exists, and fills it with the
 // rows that the table holds, unless the option WithBaseData asks for no rows. It
 // fails with an error that matches ErrExists when the index is there (D225).
+//
+// The statement SHOW INDEX lists the index only when the call used
+// WithBaseData(false) and the table was mapped with CREATE TABLE after the
+// index was made. DescribeTable names the index in every case.
 func (c *Connector) CreateIndex(ctx context.Context, table string, ix Index, opts ...IndexOption) error {
 	o := indexOptions{baseData: true}
 	for _, opt := range opts {

@@ -240,11 +240,11 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D217](D217-the-websocket-client-decides-from-the-result-of-a-call.md) | The WebSocket client decides from the result of a call | Decided. Amends D200 |
 | [D218](D218-the-maxcompute-driver-is-maxcompute-and-takes-a-url.md) | The MaxCompute driver is `maxcompute` and takes a URL | Decided |
 | [D219](D219-the-maxcompute-driver-types-a-column-with-explain-output.md) | The MaxCompute driver types a column with EXPLAIN OUTPUT | Decided |
-| [D220](D220-the-maxcompute-driver-sends-one-statement-and-reads-the-csv.md) | The MaxCompute driver sends one statement and reads the CSV | Proposed. Ken decided items 3, 5 and 6 on 2026-10-29, and the others follow from step 6 |
-| [D221](D221-the-maxcompute-driver-signs-with-version-4-and-has-no-flavors.md) | The MaxCompute driver signs with version 4 and has no flavors | Proposed. Ken decided item 1 on 2026-10-29 |
+| [D220](D220-the-maxcompute-driver-sends-one-statement-and-reads-the-csv.md) | The MaxCompute driver sends one statement and reads the CSV | Decided on 2026-11-02. Ken decided items 3, 5 and 6 on 2026-10-29, and the others follow from step 6 |
+| [D221](D221-the-maxcompute-driver-signs-with-version-4-and-has-no-flavors.md) | The MaxCompute driver signs with version 4 and has no flavors | Decided on 2026-11-02. Ken decided item 1 on 2026-10-29 |
 | [D222](D222-the-tablestore-driver-is-tablestore-and-takes-a-url.md) | The Tablestore driver is `tablestore` and takes a URL | Decided |
 | [D223](D223-the-tablestore-driver-types-a-column-from-the-flatbuffers-answer.md) | The Tablestore driver types a column from the FlatBuffers answer | Decided. Ken reviewed the table on 2026-10-29, except the row of `TIMESTAMP` |
-| [D224](D224-the-tablestore-driver-sends-one-statement-and-has-no-transaction.md) | The Tablestore driver sends one statement and has no transaction | Proposed. These follow from step 6 and wait for Ken |
+| [D224](D224-the-tablestore-driver-sends-one-statement-and-has-no-transaction.md) | The Tablestore driver sends one statement and has no transaction | Decided on 2026-11-02. These follow from step 6 |
 | [D225](D225-the-tablestore-connector-makes-and-deletes-a-table.md) | The Tablestore connector makes and deletes a table | Decided. Ken decided it on 2026-10-30 |
 | [D226](D226-the-tablestore-connector-makes-search-indexes-and-lists-tables.md) | The Tablestore connector makes search indexes and lists tables | Decided on 2026-10-30 |
 | [D227](D227-the-error-of-a-driver-has-a-method-authenticationrefused.md) | The error of a driver has a method AuthenticationRefused | Decided on 2026-11-02 |

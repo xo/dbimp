@@ -1,6 +1,6 @@
 # D221. The MaxCompute driver signs with version 4 and has no flavors
 
-Status: Proposed. Ken decided item 1 on 2026-10-29.
+Status: Decided on 2026-11-02. Ken decided item 1 on 2026-10-29.
 
 1. The driver signs with signature version 4 only. The signing key is an HMAC with SHA-256 over
    `aliyun_v4` and the secret, the date, the region, `odps` and `aliyun_v4_request`, and the

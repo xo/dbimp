@@ -229,10 +229,14 @@ func TestDeadlineInterruptsABlockedWrite(t *testing.T) {
 	t.Parallel()
 	ws, b, _ := newBodyWebSocket(t)
 	b.noop = true
+	// The message is made before the context, because making it takes longer than
+	// the deadline on a busy runner, and a Write with a context that already ended
+	// returns at once and leaves the connection whole.
+	msg := make([]byte, 128<<20)
 	ctx, cancel := context.WithTimeout(t.Context(), 100*time.Millisecond)
 	defer cancel()
 	errc := make(chan error, 1)
-	go func() { errc <- ws.Write(ctx, MessageBinary, make([]byte, 128<<20)) }()
+	go func() { errc <- ws.Write(ctx, MessageBinary, msg) }()
 	select {
 	case err := <-errc:
 		if !errors.Is(err, context.DeadlineExceeded) {
