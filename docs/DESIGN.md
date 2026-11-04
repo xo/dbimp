@@ -137,6 +137,8 @@ number through float64 unless the driver asks for a float64, or calls
 - `Int64`, `Float64`, `Bool` and `String` read a value of that kind.
 - `Decimal` reads a number, or a string that holds one, as a new
   `*apd.Decimal` (D33).
+- `Assign` stores a decimal in a destination that has `Compose`, as
+  `database/sql` does (D229).
 - `PadScale` gives a decimal the scale of its column, so that 1.5 of a
   `Decimal(10, 2)` is 1.50. It never rounds (D228).
 - `Number` reads a number that has no type from the server. An integer that

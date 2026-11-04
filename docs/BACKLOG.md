@@ -2143,3 +2143,14 @@ package, and it calls it in `clickhouse`, `exasol`, `avatica`, `databend`, `data
 zeros in the recordings. Ken decided that `bigquery` and `spanner` do not pad (D228, item 5).
 
 Status: written and staged.
+
+## W53. Store a decimal in a destination with Compose. Done.
+
+The `cassandra` session reported on 2026-11-04 that `dbimp.Assign` turned a decimal into text for a
+destination that has the method `Compose`, so a scan from a `driver.RowsColumnScanner` failed, where
+`convertAssign` of `database/sql` succeeds. The decision is
+[D229](decisions/D229-assign-stores-a-decimal-in-a-destination-with-compose.md). `Assign` now calls
+`dest.Compose(src.Decompose(nil))`, and a test holds it. The `cassandra` checkout pins `v0.15.0`, so it
+needs a later tag to get the change.
+
+Status: written and staged.

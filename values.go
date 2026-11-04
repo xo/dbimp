@@ -205,9 +205,11 @@ func decodeAny(dec *jsontext.Decoder) (any, error) {
 
 // Assign stores src in dest, for the ScanColumn method of a driver that
 // implements driver.RowsColumnScanner. It stores src itself in a *any, and
-// an *apd.Decimal in an *apd.Decimal. It hands every other pair to
-// sql.ConvertAssign, and it hands a decimal to it as text, which is the form
-// that a *string, a *float64 and the Scan method of apd.Decimal take.
+// an *apd.Decimal in an *apd.Decimal. It stores a decimal in a destination
+// that has the method Compose of database/sql, as ConvertAssign does (D229).
+// It hands every other pair to sql.ConvertAssign, and it hands a decimal to it
+// as text, which is the form that a *string, a *float64 and the Scan method of
+// apd.Decimal take.
 func Assign(scanCtx driver.ScanContext, dest, src any) error {
 	switch d := dest.(type) {
 	case *any:
@@ -220,6 +222,12 @@ func Assign(scanCtx driver.ScanContext, dest, src any) error {
 		}
 	}
 	if d, ok := src.(*apd.Decimal); ok {
+		if c, ok := dest.(decimalCompose); ok {
+			if err := c.Compose(d.Decompose(nil)); err != nil {
+				return fmt.Errorf("assigning *apd.Decimal to %T: %w", dest, err)
+			}
+			return nil
+		}
 		src = d.String()
 	}
 	if done, err := assignCivil(dest, src); done {
@@ -230,6 +238,12 @@ func Assign(scanCtx driver.ScanContext, dest, src any) error {
 		return fmt.Errorf("assigning %T to %T: %w", src, dest, err)
 	}
 	return nil
+}
+
+// decimalCompose is the interface that database/sql names for a destination
+// that takes a decimal in parts. A decimal gives its parts through Decompose.
+type decimalCompose interface {
+	Compose(form byte, negative bool, coefficient []byte, exponent int32) error
 }
 
 func kindError(v jsontext.Value, want string) error {

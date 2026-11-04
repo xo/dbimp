@@ -134,6 +134,32 @@ func TestAny(t *testing.T) {
 	}
 }
 
+// composer is a destination that takes a decimal in parts, as the interface
+// decimalCompose of database/sql describes it.
+type composer struct{ d apd.Decimal }
+
+func (c *composer) Compose(form byte, negative bool, coefficient []byte, exponent int32) error {
+	return c.d.Compose(form, negative, coefficient, exponent)
+}
+
+func TestAssignDecimalToCompose(t *testing.T) {
+	t.Parallel()
+	for _, in := range []string{"1.50", "-0.0010", "123456789012345678901234567890", "NaN", "Infinity"} {
+		src, _, err := apd.NewFromString(in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var got composer
+		if err := dbimp.Assign(driver.ScanContext{}, &got, src); err != nil {
+			t.Errorf("Assign(%s) to a destination with Compose: %v", in, err)
+			continue
+		}
+		if got.d.String() != src.String() {
+			t.Errorf("Assign(%s) to a destination with Compose = %s", in, got.d.String())
+		}
+	}
+}
+
 func TestAssign(t *testing.T) {
 	t.Parallel()
 	d, _, err := apd.NewFromString("1.25")
