@@ -82,7 +82,11 @@ func decode(c column, v jsontext.Value) (any, error) {
 	case typeFloat4, typeFloat8:
 		return decodeFloat(v)
 	case typeVarDecimal:
-		return dbimp.Decimal(v)
+		d, err := dbimp.Decimal(v)
+		if err == nil && len(c.args) == 2 {
+			d = dbimp.PadScale(d, c.args[1])
+		}
+		return d, err
 	case typeBit:
 		return dbimp.Bool(v)
 	case typeVarchar:

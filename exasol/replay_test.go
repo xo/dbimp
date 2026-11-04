@@ -98,7 +98,7 @@ func TestReplayTypes(t *testing.T) {
 		t.Fatalf("read %d rows before the error, want 2", len(got))
 	}
 	want := map[string]string{
-		"ID": "int64 1", "B": "bool true", "C": "string ab   ", "V": "string hello", "D1": "int64 9007199254740993", "D2": "*apd.Decimal 1.5",
+		"ID": "int64 1", "B": "bool true", "C": "string ab   ", "V": "string hello", "D1": "int64 9007199254740993", "D2": "*apd.Decimal 1.50",
 		"D3": "*apd.Decimal 12345678901234567890123456789012345", "D7": "*apd.Decimal 1234567890123456789", "F": "float64 1.5e+300",
 		"DT": "dbimp.Date 2026-10-11", "TS": "dbimp.LocalDateTime 2026-10-11T12:34:56.123", "IYM": "dbimp.Interval P5Y3M",
 		"IDS": "dbimp.Interval P2DT3H4M5.678S", "G": "string POINT (1 2)", "H": "[]uint8 550e8400e29b41d4a716446655440000",

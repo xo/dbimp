@@ -236,6 +236,8 @@ The types are recorded in "select every row of types", "select the table of type
   set is `UTF8` or `ASCII`.
 - VARCHAR(n) is a string. `n` is up to 2000000 (`maxVarcharLength`), and the character set is
   `UTF8` or `ASCII`. The text `héllo ☃ "quoted"` with a tab and a newline came back whole.
+- A DECIMAL(p,s) string or number has no trailing zeros: DECIMAL(10,2) sends `1.5` for 1.50, and
+  the driver adds the zeros from the scale of the column (D228, recorded).
 - DECIMAL(p,s) is a JSON number when `s` is 0 and `p` is 18 or less, and a JSON string in every other
   case. So DECIMAL(18,0), DECIMAL(9,0) and DECIMAL(1,0) are numbers, and DECIMAL(19,0), DECIMAL(10,2),
   DECIMAL(18,5), DECIMAL(18,18) and DECIMAL(36,0) are strings. The number 9007199254740993 arrived

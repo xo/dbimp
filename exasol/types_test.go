@@ -94,7 +94,7 @@ func TestDecode(t *testing.T) {
 	}{
 		{0, map[string]any{
 			"ID": int64(1), "B": true, "C": "ab   ", "V": "hello", "VA": "ascii", "D1": int64(9007199254740993),
-			"D2": dec("1.5"), "D3": dec("12345678901234567890123456789012345"), "D4": dec("1234567890123456789012345.6789012345"),
+			"D2": dec("1.50"), "D3": dec("12345678901234567890123456789012345"), "D4": dec("1234567890123456789012345.6789012345"),
 			"D5": int64(123456789), "D6": int64(7), "D7": dec("1234567890123456789"), "D8": dec("1234567890123.45678"),
 			"D9": dec("0.123456789012345678"), "F": 1.5e300, "DT": day(2026, 10, 11),
 			"TS": local(day(2026, 10, 11), 12, 34, 56, 123000000), "TS9": local(day(2026, 10, 11), 12, 34, 56, 123456000),
@@ -118,7 +118,7 @@ func TestDecode(t *testing.T) {
 			"H": mustHex("ffffffffffffffffffffffffffffffff"),
 		}, []string{"IYM"}},
 		{4, map[string]any{"V": "héllo ☃ \"quoted\" \\\\ back\\nslash\n\ttab", "VA": "a'b", "D2": dec("0.01"), "F": 0.1}, nil},
-		{5, map[string]any{"D1": int64(0), "D2": dec("0"), "D8": dec("0"), "F": 0.0}, nil},
+		{5, map[string]any{"D1": int64(0), "D2": dec("0.00"), "D8": dec("0.00000"), "F": 0.0}, nil},
 		{7, map[string]any{"F": 5e-324}, nil},
 		{9, map[string]any{"F": 123456789.12345679}, nil},
 	} {

@@ -91,7 +91,7 @@ func (c column) decode(s string) (any, error) {
 		if err != nil || d.Form != apd.Finite {
 			return nil, fmt.Errorf("reading %q as a decimal: %w", s, dbimp.ErrInvalidValue)
 		}
-		return d, nil
+		return dbimp.PadScale(d, c.Scale), nil
 	case typeBoolean:
 		switch s {
 		case "true":

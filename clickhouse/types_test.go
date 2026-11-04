@@ -3,6 +3,7 @@ package clickhouse //nolint:testpackage // The tests read the types of the drive
 import (
 	"encoding/json/jsontext"
 	"errors"
+	"fmt"
 	"math"
 	"math/big"
 	"net/netip"
@@ -233,6 +234,36 @@ func equal(got, want any) bool {
 		return ok && g.Cmp(w) == 0
 	}
 	return reflect.DeepEqual(got, want)
+}
+
+// TestDecodeDecimalKeepsTheScale holds that a decimal has the scale of its
+// column, because the server drops the trailing zeros of a value (D228).
+func TestDecodeDecimalKeepsTheScale(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct{ name, text, want string }{
+		{"Decimal64(2)", `1.5`, "1.50"},
+		{"Decimal(18, 4)", `18`, "18.0000"},
+		{"Decimal(9, 2)", `"0.1"`, "0.10"},
+		{"Decimal(38, 10)", `-2.5`, "-2.5000000000"},
+		{"Decimal(9, 0)", `7`, "7"},
+		{"Nullable(Decimal(9, 3))", `4.2`, "4.200"},
+	} {
+		got, err := decodeAs(t, tt.name, tt.text)
+		if err != nil {
+			t.Errorf("decode %s %s: %v", tt.name, tt.text, err)
+			continue
+		}
+		if d, ok := got.(*apd.Decimal); !ok || d.String() != tt.want {
+			t.Errorf("decode %s %s = %v, want %s", tt.name, tt.text, got, tt.want)
+		}
+	}
+	got, err := decodeAs(t, "Array(Decimal(9, 2))", `[1.5, 2]`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s := fmt.Sprint(got); s != "[1.50 2.00]" {
+		t.Errorf("decode of an array of decimals = %s, want [1.50 2.00]", s)
+	}
 }
 
 // TestDecodeRefuses holds that a value that does not fit its type is an error

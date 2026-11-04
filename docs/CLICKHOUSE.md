@@ -601,7 +601,9 @@ JSONCompactEachRowWithNamesAndTypes", unless a line says otherwise):
   with the value that it holds, such as 3.140625 for 3.14159 (recorded: "type
   BFloat16").
 - A `Decimal` is a JSON number with every digit, with no trailing zeros, so
-  1.50 of `Decimal(18, 4)` is `1.5` and 100.00 is `100`. The precision goes up
+  1.50 of `Decimal(18, 4)` is `1.5` and 100.00 is `100`. The driver adds the
+  zeros back from the scale of the column, so the value is 1.5000 and 100.0000
+  (D228). The precision goes up
   to 76 digits, and 77 digits are refused with the code 69 (recorded: "a
   decimal with trailing zeros", "every type,
   JSONCompactEachRowWithNamesAndTypes" and "the longest decimals"). With

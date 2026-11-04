@@ -82,7 +82,11 @@ func decode(c column, v jsontext.Value, loc *time.Location) (any, error) {
 		if c.isInteger() {
 			return parseInt(s)
 		}
-		return parseDecimal(s)
+		d, err := parseDecimal(s)
+		if err != nil {
+			return nil, err
+		}
+		return dbimp.PadScale(d, c.scale), nil
 	case wireReal:
 		return parseFloat(s)
 	case wireText:

@@ -65,6 +65,50 @@ func TestDecimal(t *testing.T) {
 	}
 }
 
+func TestPadScale(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		in    string
+		scale int64
+		want  string
+	}{
+		{"1.5", 2, "1.50"},
+		{"1.50", 2, "1.50"},
+		{"1.505", 2, "1.505"},
+		{"0", 4, "0.0000"},
+		{"-12", 3, "-12.000"},
+		{"1E+3", 2, "1000.00"},
+		{"0.1", 0, "0.1"},
+		{"0.1", -1, "0.1"},
+		{"123456789012345678901234567890.5", 3, "123456789012345678901234567890.500"},
+	} {
+		d, _, err := apd.NewFromString(tt.in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		before := d.String()
+		got := dbimp.PadScale(d, tt.scale)
+		if got.String() != tt.want {
+			t.Errorf("PadScale(%s, %d) = %s, want %s", tt.in, tt.scale, got, tt.want)
+		}
+		if d.String() != before {
+			t.Errorf("PadScale(%s, %d) changed its argument to %s", tt.in, tt.scale, d)
+		}
+	}
+	for _, in := range []string{"NaN", "Infinity", "-Infinity"} {
+		d, _, err := apd.NewFromString(in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got := dbimp.PadScale(d, 2); got != d {
+			t.Errorf("PadScale(%s, 2) = %s, want the same value", in, got)
+		}
+	}
+	if got := dbimp.PadScale(nil, 2); got != nil {
+		t.Errorf("PadScale(nil, 2) = %v, want nil", got)
+	}
+}
+
 func TestStringAndBool(t *testing.T) {
 	t.Parallel()
 	if s, err := dbimp.String(jsontext.Value(`"a\"bé"`)); err != nil || s != `a"bé` {

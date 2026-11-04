@@ -137,7 +137,7 @@ func (t *typ) decode(v jsontext.Value) (any, error) {
 	case famFloat32, famFloat64, famBFloat16:
 		return decodeFloat(v)
 	case famDecimal:
-		return dbimp.Decimal(v)
+		return t.decodeDecimal(v)
 	case famString, famFixedString, famEnum8, famEnum16:
 		return decodeString(v)
 	case famDate, famDate32:
@@ -166,6 +166,20 @@ func (t *typ) decode(v jsontext.Value) (any, error) {
 		return decodeVector(v)
 	}
 	return decodeAny(v)
+}
+
+// decodeDecimal returns the value v of a Decimal column as a decimal with the
+// scale of the column. The server sends 1.5 for the value 1.50 of a Decimal(9,
+// 2), and the scale of the column says how many digits follow the point (D228).
+func (t *typ) decodeDecimal(v jsontext.Value) (any, error) {
+	d, err := dbimp.Decimal(v)
+	if err != nil {
+		return nil, err
+	}
+	if len(t.nums) == 2 {
+		d = dbimp.PadScale(d, t.nums[1])
+	}
+	return d, nil
 }
 
 // newDecoder returns a decoder of the raw JSON value v. It allows the bytes

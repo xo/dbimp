@@ -279,7 +279,7 @@ func decodeText(t *typ, s string, loc *time.Location) (driver.Value, error) {
 		if err != nil {
 			return nil, fmt.Errorf("%q is not a decimal: %w", s, dbimp.ErrInvalidValue)
 		}
-		return d, nil
+		return dbimp.PadScale(d, t.scale), nil
 	case kindBoolean:
 		switch s {
 		case "true":

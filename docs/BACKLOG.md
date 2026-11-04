@@ -2131,3 +2131,15 @@ no sentinel. Ken told this session to implement it. The decision is
 gate of step 12.
 
 Status: written and staged. The release is not tagged, and `usql` waits for the tag.
+
+## W52. Give a decimal the scale of its column. Done.
+
+The `tblfmt` session reported on 2026-11-04 that ClickHouse printed `toDecimal64(1.5, 2)` as `1.5`
+(`usql` with ClickHouse 26.9 and `tblfmt` v0.21.2). Ken told this session to survey every driver and to fix
+them all the same way. The decision is
+[D228](decisions/D228-a-decimal-has-the-scale-of-its-column.md). It adds `dbimp.PadScale` to the root
+package, and it calls it in `clickhouse`, `exasol`, `avatica`, `databend`, `databricks`, `drill`,
+`maxcompute`, `snowflake`, `athena` and `trino`. The survey found that only ClickHouse and Exasol drop the
+zeros in the recordings. Ken decided that `bigquery` and `spanner` do not pad (D228, item 5).
+
+Status: written and staged.

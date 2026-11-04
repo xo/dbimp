@@ -247,6 +247,9 @@ func (f *format) scalar(t *colType, text string) (any, error) {
 		if err != nil {
 			return nil, valueError(t, text)
 		}
+		if len(t.args) == 2 {
+			d = dbimp.PadScale(d, int64(t.args[1]))
+		}
 		return d, nil
 	case kindBoolean:
 		switch text {

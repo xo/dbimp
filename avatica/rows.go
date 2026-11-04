@@ -12,6 +12,8 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/cockroachdb/apd/v3"
+
 	"github.com/xo/dbimp"
 )
 
@@ -423,6 +425,9 @@ func (r *rows) row() error {
 		}
 		if r.cur[i], err = decode(r.columns[i].Type, v); err != nil {
 			return fmt.Errorf("reading the column %s: %w", r.cols[i], err)
+		}
+		if d, ok := r.cur[i].(*apd.Decimal); ok && r.columns[i].Type.kind() == typeDecimal {
+			r.cur[i] = dbimp.PadScale(d, r.columns[i].Scale)
 		}
 	}
 	if r.dec.PeekKind() != ']' {

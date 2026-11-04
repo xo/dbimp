@@ -182,7 +182,11 @@ func (c column) decode(v jsontext.Value, loc func() (*time.Location, error)) (an
 		}
 		return dbimp.Int64(v)
 	case kindDecimal:
-		return dbimp.Decimal(v)
+		d, err := dbimp.Decimal(v)
+		if err != nil {
+			return nil, err
+		}
+		return dbimp.PadScale(d, int64(c.typ.Scale)), nil
 	case kindDouble:
 		return dbimp.Float64(v)
 	case kindHashtype:

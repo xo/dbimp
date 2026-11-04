@@ -216,7 +216,11 @@ func (s *signature) decode(v jsontext.Value) (any, error) {
 	case typeReal, typeDouble:
 		return decodeFloat(v)
 	case typeDecimal, typeNumber:
-		return dbimp.Decimal(v)
+		d, err := dbimp.Decimal(v)
+		if err == nil && s.raw == typeDecimal && len(s.nums) == 2 {
+			d = dbimp.PadScale(d, s.nums[1])
+		}
+		return d, err
 	case typeChar, typeVarchar, typeIPAddress, typeGeometry, typeSphere:
 		return dbimp.String(v)
 	case typeJSON:

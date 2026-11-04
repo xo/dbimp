@@ -6,6 +6,7 @@ import (
 	"database/sql/driver"
 	"encoding/json/jsontext"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -92,6 +93,29 @@ func Decimal(v jsontext.Value) (*apd.Decimal, error) {
 		return nil, fmt.Errorf("reading %q as a decimal: %w", text, ErrInvalidValue)
 	}
 	return d, nil
+}
+
+// PadScale returns d with the scale of its column. A server can send a decimal
+// without its trailing zeros, so 1.50 of a Decimal(10, 2) column arrives as
+// 1.5. PadScale gives the value the exponent that is minus scale, so that a
+// caller that prints each digit of the coefficient prints 1.50. It never
+// rounds and never drops a digit. It returns d as it is when d is not finite,
+// when scale is not positive, or when d already has that many digits after
+// the point or more (D228).
+func PadScale(d *apd.Decimal, scale int64) *apd.Decimal {
+	if d == nil || d.Form != apd.Finite || scale <= 0 || scale > int64(apd.MaxExponent) || int64(d.Exponent) <= -scale {
+		return d
+	}
+	digits := d.NumDigits() + int64(d.Exponent) + scale
+	if digits > math.MaxUint32 {
+		return d
+	}
+	ctx := apd.Context{Precision: uint32(digits), MaxExponent: apd.MaxExponent, MinExponent: apd.MinExponent} //nolint:gosec // The test above keeps digits in range.
+	var out apd.Decimal
+	if _, err := ctx.Quantize(&out, d, -int32(scale)); err != nil {
+		return d
+	}
+	return &out
 }
 
 // Number returns the JSON number v as the Go value that holds it exactly,

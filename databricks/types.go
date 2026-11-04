@@ -467,7 +467,7 @@ func decodeScalar(t *typ, s string) (any, error) {
 		if err != nil || d.Form != apd.Finite {
 			return nil, fmt.Errorf("reading %q as a decimal: %w", s, dbimp.ErrInvalidValue)
 		}
-		return d, nil
+		return dbimp.PadScale(d, int64(t.scale)), nil
 	case kindBoolean:
 		switch s {
 		case "true":
