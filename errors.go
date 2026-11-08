@@ -112,18 +112,43 @@ func CheckStatus(res *http.Response) error {
 	return &StatusError{Code: res.StatusCode, Body: string(body)}
 }
 
-// Verbose returns the text of an error for the command \errverbose of usql: the
-// message on the first line, and then one line "Name: value" for each pair
-// whose value is set. The arguments after message are pairs of a name and a
-// value. A value is set when it is not the zero value of its type, so an empty
-// string, 0, false and a zero duration are left out. Verbose returns "" when no
-// pair has a value, and a caller then prints the message as it is (D230).
-func Verbose(message string, pairs ...any) string {
-	var lines []string
-	if message != "" {
-		lines = append(lines, message)
+// Verbose returns the text of an error for the command \errverbose of usql, in
+// the layout that libpq writes in its verbose mode and that psql shows (D231):
+//
+//	ERROR:  CODE: message
+//	LINE 1: select blah
+//	               ^
+//	DETAIL:  text
+//
+// The first line is "ERROR:" and two spaces, then the code and a colon and a
+// space if code is set, then the message. code is a string or an int, and the
+// code is left out when it is "" or 0. position is the text that Position
+// returns, and it is left out when it is "". The arguments after position are
+// pairs of an upper case name and a value, and each pair whose value is set
+// becomes a line "NAME:  value". A value is set when it is not the zero value of
+// its type. The text has no newline at its end. Verbose returns "" when there
+// is no code, no message, no position and no pair that is set.
+func Verbose(code any, message, position string, pairs ...any) string {
+	var c string
+	switch v := code.(type) {
+	case string:
+		c = v
+	case int:
+		if v != 0 {
+			c = strconv.Itoa(v)
+		}
 	}
-	set := false
+	var lines []string
+	if c != "" || message != "" {
+		first := "ERROR:  "
+		if c != "" {
+			first += c + ": "
+		}
+		lines = append(lines, first+message)
+		if position != "" {
+			lines = append(lines, position)
+		}
+	}
 	for i := 0; i+1 < len(pairs); i += 2 {
 		name, _ := pairs[i].(string)
 		var text string
@@ -145,14 +170,30 @@ func Verbose(message string, pairs ...any) string {
 		case fmt.Stringer:
 			text = v.String()
 		}
-		if text == "" {
-			continue
+		if text != "" {
+			lines = append(lines, name+":  "+text)
 		}
-		set = true
-		lines = append(lines, name+": "+text)
-	}
-	if !set {
-		return ""
 	}
 	return strings.Join(lines, "\n")
+}
+
+// Position returns the line of query that line points at, with the text
+// "LINE n: " before it, and a caret under the character at column, on a line of
+// its own, as libpq writes them after the message. line and column count from
+// 1, and column counts characters. It returns the line with no caret when
+// column is not set, and "" when line is not in query.
+func Position(query string, line, column int) string {
+	if line < 1 {
+		return ""
+	}
+	lines := strings.Split(query, "\n")
+	if line > len(lines) {
+		return ""
+	}
+	text := strings.TrimSuffix(lines[line-1], "\r")
+	prefix := "LINE " + strconv.Itoa(line) + ": "
+	if column < 1 {
+		return prefix + text
+	}
+	return prefix + text + "\n" + strings.Repeat(" ", len(prefix)+column-1) + "^"
 }

@@ -112,16 +112,46 @@ func TestPadScale(t *testing.T) {
 
 func TestVerbose(t *testing.T) {
 	t.Parallel()
-	got := dbimp.Verbose("boom", "HTTP status", 400, "Code", 0, "Name", "UNKNOWN", "Empty", "", "Wait", 2*time.Second, "Flag", true, "Off", false)
-	want := "boom\nHTTP status: 400\nName: UNKNOWN\nWait: 2s\nFlag: true"
-	if got != want {
-		t.Errorf("Verbose = %q, want %q", got, want)
+	for _, tt := range []struct {
+		name     string
+		code     any
+		message  string
+		position string
+		pairs    []any
+		want     string
+	}{
+		{"code and fields", 60, "Table t does not exist.", "", []any{"DETAIL", "UNKNOWN_TABLE", "HTTP STATUS", 404, "EMPTY", "", "ZERO", 0, "WAIT", 2 * time.Second, "FLAG", true, "OFF", false},
+			"ERROR:  60: Table t does not exist.\nDETAIL:  UNKNOWN_TABLE\nHTTP STATUS:  404\nWAIT:  2s\nFLAG:  true"},
+		{"string code", "42P01", "no table", "", nil, "ERROR:  42P01: no table"},
+		{"no code", "", "no table", "", nil, "ERROR:  no table"},
+		{"zero code", 0, "no table", "", nil, "ERROR:  no table"},
+		{"position", 1, "bad", "LINE 1: select\n        ^", nil, "ERROR:  1: bad\nLINE 1: select\n        ^"},
+		{"fields only", nil, "", "", []any{"HTTP STATUS", 400, "STATUS", "fatal"}, "HTTP STATUS:  400\nSTATUS:  fatal"},
+		{"nothing", nil, "", "", []any{"CODE", 0}, ""},
+	} {
+		if got := dbimp.Verbose(tt.code, tt.message, tt.position, tt.pairs...); got != tt.want {
+			t.Errorf("%s:\n got: %q\nwant: %q", tt.name, got, tt.want)
+		}
 	}
-	if got := dbimp.Verbose("boom", "Code", 0, "Name", ""); got != "" {
-		t.Errorf("Verbose with no field set = %q, want an empty string", got)
-	}
-	if got := dbimp.Verbose("", "Code", 7); got != "Code: 7" {
-		t.Errorf("Verbose with no message = %q, want Code: 7", got)
+}
+
+func TestPosition(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		query        string
+		line, column int
+		want         string
+	}{
+		{"select * from nope;", 1, 15, "LINE 1: select * from nope;\n                      ^"},
+		{"select a,\n  é, b from t", 2, 6, "LINE 2:   é, b from t\n             ^"},
+		{"select a\r\nfrom", 1, 8, "LINE 1: select a\n               ^"},
+		{"select 1", 1, 0, "LINE 1: select 1"},
+		{"select 1", 2, 1, ""},
+		{"select 1", 0, 1, ""},
+	} {
+		if got := dbimp.Position(tt.query, tt.line, tt.column); got != tt.want {
+			t.Errorf("Position(%q, %d, %d):\n got: %q\nwant: %q", tt.query, tt.line, tt.column, got, tt.want)
+		}
 	}
 }
 

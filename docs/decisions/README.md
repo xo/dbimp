@@ -250,4 +250,5 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D227](D227-the-error-of-a-driver-has-a-method-authenticationrefused.md) | The error of a driver has a method AuthenticationRefused | Decided on 2026-11-02 |
 | [D228](D228-a-decimal-has-the-scale-of-its-column.md) | A decimal has the scale of its column | Decided on 2026-11-04 |
 | [D229](D229-assign-stores-a-decimal-in-a-destination-with-compose.md) | Assign stores a decimal in a destination with Compose | Decided on 2026-11-04 |
-| [D230](D230-the-error-of-a-driver-has-a-method-errverbose.md) | The error of a driver has a method ErrVerbose | Decided on 2026-11-08 |
+| [D230](D230-the-error-of-a-driver-has-a-method-errverbose.md) | The error of a driver has a method ErrVerbose | Decided on 2026-11-08. D231 replaces the format of items 1, 2 and 4 |
+| [D231](D231-errverbose-writes-the-layout-of-psql.md) | ErrVerbose writes the layout of psql | Decided on 2026-11-08 |

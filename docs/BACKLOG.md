@@ -2164,3 +2164,12 @@ root package, the method to the error type of each of the 27 drivers, and `Respo
 Neo4j and SurrealDB, and it extends the gate of step 12.
 
 Status: written and staged.
+
+## W55. Write ErrVerbose in the layout of psql. Done.
+
+The `usql` session reported on 2026-11-08 that Ken wants `\errverbose` to look like `psql` for every driver.
+The decision is [D231](decisions/D231-errverbose-writes-the-layout-of-psql.md). It changes `dbimp.Verbose`,
+adds `dbimp.Position`, and rewrites the method of the 27 drivers and of the response errors of Couchbase, Neo4j and
+SurrealDB. W54 gave the method, and this item gives its format.
+
+Status: written and staged.

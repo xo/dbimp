@@ -6,9 +6,8 @@ import (
 	"github.com/xo/dbimp/couchbase"
 )
 
-// TestResponseErrorVerbose holds that the error of a response writes its
-// status and each error with its fields, for the command \errverbose of usql
-// (D230).
+// TestResponseErrorVerbose holds that the error of a response writes each error
+// as psql writes it, and then the status of the response (D231).
 func TestResponseErrorVerbose(t *testing.T) {
 	t.Parallel()
 	err := &couchbase.ResponseError{
@@ -19,7 +18,7 @@ func TestResponseErrorVerbose(t *testing.T) {
 			{Msg: "no code"},
 		},
 	}
-	want := "HTTP status: 400\nStatus: fatal\nsyntax error\nCode: 3000\ncouchbase: 0: no code"
+	want := "ERROR:  3000: syntax error\nERROR:  no code\nHTTP STATUS:  400\nSTATUS:  fatal"
 	if got := err.ErrVerbose("select"); got != want {
 		t.Errorf("ErrVerbose = %q, want %q", got, want)
 	}

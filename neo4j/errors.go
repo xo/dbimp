@@ -22,14 +22,12 @@ func (err Error) Error() string {
 	return "neo4j: " + err.Code + ": " + err.Message
 }
 
-// ErrVerbose returns every field that the server sent, with the message on the
-// first line and one field on each line after it, for the command \errverbose
-// of usql. It returns "" when no field has a value but the message. A caller
-// that does not import this module reads it through an interface of its own
-// (D230).
+// ErrVerbose returns the error as psql writes it for \errverbose: the code and
+// the message on the first line, and then each field that the server sent, one
+// on each line with its name in upper case. A caller that does not import this
+// module reads it through an interface of its own (D231).
 func (err Error) ErrVerbose(_ string) string {
-	return dbimp.Verbose(err.Message,
-		"Code", err.Code)
+	return dbimp.Verbose(err.Code, err.Message, "")
 }
 
 // codeUnauthorized is the code that Neo4j sends, with HTTP 401, for a
@@ -74,19 +72,15 @@ func (err *ResponseError) Error() string {
 	return "neo4j: " + strings.Join(msgs, ". ")
 }
 
-// ErrVerbose returns every field that the server sent, for the command
-// \errverbose of usql: the status of the response, and then each error with its
-// fields. A caller that does not import this module reads it through an
-// interface of its own (D230).
+// ErrVerbose returns the error as psql writes it for \errverbose: each error
+// with its fields, and then the status of the response. A caller that does not
+// import this module reads it through an interface of its own (D231).
 func (err *ResponseError) ErrVerbose(query string) string {
-	parts := []string{dbimp.Verbose("", "HTTP status", err.HTTPStatus)}
+	var parts []string
 	for _, e := range err.Errs {
-		if s := e.ErrVerbose(query); s != "" {
-			parts = append(parts, s)
-		} else {
-			parts = append(parts, e.Error())
-		}
+		parts = append(parts, e.ErrVerbose(query))
 	}
+	parts = append(parts, dbimp.Verbose("", "", "", "HTTP STATUS", err.HTTPStatus))
 	return strings.Join(slices.DeleteFunc(parts, func(s string) bool { return s == "" }), "\n")
 }
 

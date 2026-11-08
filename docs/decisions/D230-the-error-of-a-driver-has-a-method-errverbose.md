@@ -1,6 +1,6 @@
 # D230. The error of a driver has a method ErrVerbose
 
-Status: Decided on 2026-11-08.
+Status: Decided on 2026-11-08. D231 replaces the format of items 1, 2 and 4.
 
 The `usql` session added the command `\errverbose`, as `psql` has it, and asked each driver of this module for
 a method on its error type. `usql` cannot name a type of this module, so it reads the method through an

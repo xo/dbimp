@@ -50,9 +50,9 @@ with `%w`, and a caller tests it with `errors.Is`:
   The error of each driver also has the method `AuthenticationRefused() bool`,
   which returns the same answer, for a caller that does not import this
   package. `usql` reads it (D227). It also has the method `ErrVerbose(query
-  string) string`, which writes every field of the error for `\errverbose`
-  of `usql`. `Verbose` writes the lines, and the method returns "" when the
-  server sent nothing but the message (D230).
+  string) string`, which writes the error for `\errverbose` of `usql` in the
+  layout of `psql`. `Verbose` and `Position` write it, and the method returns
+  "" when the server sent no code, no message and no field (D230 and D231).
 
 `CheckStatus` turns a response whose status is not 2xx into a `StatusError`.
 It keeps the code and at most 64 KiB of the body, so that a driver can read

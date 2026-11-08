@@ -486,8 +486,9 @@ these, and a unit test holds each one:
   returns what `Is` returns for `dbimp.ErrAuthentication` (D227). A caller that
   does not import `dbimp` reads it, and the gate of this step checks for it.
 - The exported error type also has the method `ErrVerbose(query string)
-  string`, which returns the message and each field that the server sent,
-  through `dbimp.Verbose` (D230). The gate of this step checks for it.
+  string`, which returns the error in the layout of `psql` for `\errverbose`,
+  through `dbimp.Verbose`, with the code on the first line and each other
+  field on a line of its own (D230 and D231). The gate of this step checks for it.
 - Two queries can run at the same time on one `sql.DB`.
 - A test makes sure that no goroutine is left running after each test, with
   `dbimptest.CheckGoroutines`.
