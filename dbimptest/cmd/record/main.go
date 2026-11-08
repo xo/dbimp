@@ -81,6 +81,10 @@ type Script struct {
 	// WebSocket, when set, makes the script one for a database that takes its
 	// requests as messages of a WebSocket. Each request is then a frame.
 	WebSocket *WebSocketSpec `json:"websocket,omitzero"`
+	// Thrift, when set, makes the script one for a database that takes the
+	// calls of HiveServer2 as Thrift messages over HTTP, such as Hive and
+	// Impala. Each request is then a statement or a call.
+	Thrift *ThriftSpec `json:"thrift,omitzero"`
 	// Redact names the members of a frame that the recorder writes as
 	// REDACTED, at any depth.
 	Redact []string `json:"redact,omitzero"`
@@ -147,6 +151,32 @@ type Request struct {
 	// "" to send it to the URL of the principal. Only a request of the setup
 	// or the teardown can name it.
 	Server string `json:"server,omitzero"`
+
+	// The members below are for a script with Thrift.
+
+	// Statement is the SQL to run. The recorder opens a session, runs the
+	// statement, reads every page of the result, and closes the operation and
+	// the session, and records each call.
+	Statement string `json:"statement,omitzero"`
+	// Also lists statements to run in the same session after Statement.
+	Also []string `json:"also,omitzero"`
+	// Rows is the most rows that one fetch asks for. The default is 1000.
+	Rows int `json:"rows,omitzero"`
+	// Cancel is how long after the statement starts to send CancelOperation,
+	// for a statement that runs longer.
+	Cancel string `json:"cancel,omitzero"`
+	// Call names a call that is sent with a handle that the server never
+	// issued, such as "GetOperationStatus", to record the error.
+	Call string `json:"call,omitzero"`
+	// Catalog names a catalog call of HiveServer2, such as "GetTables", that
+	// is sent with Args as its strings, in the order of its fields after the
+	// session. "GetInfo" takes the number of its info type. The recorder
+	// reads the operation that the call starts as it reads a statement.
+	Catalog string   `json:"catalog,omitzero"`
+	Args    []string `json:"args,omitzero"`
+	// After names a call that is sent for the operation of Statement after it
+	// starts: "GetQueryId", or "GetLog" for FetchResults of the log.
+	After string `json:"after,omitzero"`
 
 	// The members below are for a script with a WebSocket.
 
@@ -277,6 +307,9 @@ func run(ctx context.Context, dir, release, second string, insecure bool, princi
 	})
 	if script.WebSocket != nil {
 		return runWebSocket(ctx, rec, dir, release, insecure, principals, script)
+	}
+	if script.Thrift != nil {
+		return runThrift(ctx, rec, dir, release, principals, script)
 	}
 	if err := runPhase(ctx, client, servers, script, "setup"); err != nil {
 		return err

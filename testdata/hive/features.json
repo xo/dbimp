@@ -1,0 +1,852 @@
+{
+  "driver": "hive",
+  "consulted": [
+    {
+      "source": "gemini-3.8-flash",
+      "kind": "model",
+      "date": "2026-11-09"
+    },
+    {
+      "source": "deepseek-v4-flash",
+      "kind": "model",
+      "date": "2026-11-09"
+    },
+    {
+      "source": "github.com/beltran/gohive/v2",
+      "kind": "driver",
+      "date": "2026-11-09"
+    },
+    {
+      "source": "github.com/sclgo/impala-go",
+      "kind": "driver",
+      "date": "2026-11-09"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "crud",
+      "name": "select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-633-post--cliservice.json",
+      "test": "TestIntegrationCRUD/select"
+    },
+    {
+      "kind": "crud",
+      "name": "insert",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-627-post--cliservice.json",
+      "test": "TestIntegrationCRUD/insert"
+    },
+    {
+      "kind": "crud",
+      "name": "update",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-639-post--cliservice.json",
+      "test": "TestIntegrationCRUD/update"
+    },
+    {
+      "kind": "crud",
+      "name": "delete",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-650-post--cliservice.json",
+      "test": "TestIntegrationCRUD/delete"
+    },
+    {
+      "kind": "crud",
+      "name": "update of a plain table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-611-post--cliservice.json",
+      "test": "TestIntegrationCRUD/update_of_a_plain_table"
+    },
+    {
+      "kind": "crud",
+      "name": "delete of a plain table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-612-post--cliservice.json",
+      "test": "TestIntegrationCRUD/delete_of_a_plain_table"
+    },
+    {
+      "kind": "crud",
+      "name": "merge",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-661-post--cliservice.json",
+      "test": "TestIntegrationCRUD/merge"
+    },
+    {
+      "kind": "crud",
+      "name": "truncate",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-667-post--cliservice.json",
+      "test": "TestIntegrationCRUD/truncate"
+    },
+    {
+      "kind": "crud",
+      "name": "insert overwrite",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-271-post--cliservice.json",
+      "test": "TestIntegrationCRUD/insert_overwrite"
+    },
+    {
+      "kind": "crud",
+      "name": "insert from select",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-264-post--cliservice.json",
+      "test": "TestIntegrationCRUD/insert_from_select"
+    },
+    {
+      "kind": "schema",
+      "name": "create table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-259-post--cliservice.json",
+      "test": "TestIntegrationSchema/create_table"
+    },
+    {
+      "kind": "schema",
+      "name": "table of a plain format",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-595-post--cliservice.json",
+      "test": "TestIntegrationSchema/table_of_a_plain_format"
+    },
+    {
+      "kind": "schema",
+      "name": "transactional table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-441-post--cliservice.json",
+      "test": "TestIntegrationSchema/transactional_table"
+    },
+    {
+      "kind": "schema",
+      "name": "add column",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-672-post--cliservice.json",
+      "test": "TestIntegrationSchema/add_column"
+    },
+    {
+      "kind": "schema",
+      "name": "rename table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-677-post--cliservice.json",
+      "test": "TestIntegrationSchema/rename_table"
+    },
+    {
+      "kind": "schema",
+      "name": "drop table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-282-post--cliservice.json",
+      "test": "TestIntegrationSchema/drop_table"
+    },
+    {
+      "kind": "schema",
+      "name": "hive primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-526-post--cliservice.json",
+      "test": "TestIntegrationSchema/hive_primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "impala primary key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "impalahttp-4.5.3-513-post--cliservice.json",
+      "test": "TestIntegrationSchema/impala_primary_key"
+    },
+    {
+      "kind": "schema",
+      "name": "hive foreign key",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-531-post--cliservice.json",
+      "test": "TestIntegrationSchema/hive_foreign_key"
+    },
+    {
+      "kind": "schema",
+      "name": "hive unique",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-512-post--cliservice.json",
+      "test": "TestIntegrationSchema/hive_unique"
+    },
+    {
+      "kind": "schema",
+      "name": "hive not null",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-512-post--cliservice.json",
+      "test": "TestIntegrationSchema/hive_not_null"
+    },
+    {
+      "kind": "schema",
+      "name": "hive default value",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-550-post--cliservice.json",
+      "test": "TestIntegrationSchema/hive_default_value"
+    },
+    {
+      "kind": "schema",
+      "name": "index",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-431-post--cliservice.json",
+      "test": "TestIntegrationSchema/index"
+    },
+    {
+      "kind": "schema",
+      "name": "view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-466-post--cliservice.json",
+      "test": "TestIntegrationSchema/view"
+    },
+    {
+      "kind": "schema",
+      "name": "hive materialized view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-446-post--cliservice.json",
+      "test": "TestIntegrationSchema/hive_materialized_view"
+    },
+    {
+      "kind": "schema",
+      "name": "impala materialized view",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "impalahttp-4.5.3-134-post--cliservice.json",
+      "test": "TestIntegrationSchema/impala_materialized_view"
+    },
+    {
+      "kind": "schema",
+      "name": "partition",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-486-post--cliservice.json",
+      "test": "TestIntegrationSchema/partition"
+    },
+    {
+      "kind": "schema",
+      "name": "database",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-407-post--cliservice.json",
+      "test": "TestIntegrationSchema/database"
+    },
+    {
+      "kind": "schema",
+      "name": "schema",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-393-post--cliservice.json",
+      "test": "TestIntegrationSchema/schema"
+    },
+    {
+      "kind": "schema",
+      "name": "describe",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-580-post--cliservice.json",
+      "test": "TestIntegrationSchema/describe"
+    },
+    {
+      "kind": "schema",
+      "name": "show tables",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-353-post--cliservice.json",
+      "test": "TestIntegrationSchema/show_tables"
+    },
+    {
+      "kind": "schema",
+      "name": "show create table",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-383-post--cliservice.json",
+      "test": "TestIntegrationSchema/show_create_table"
+    },
+    {
+      "kind": "feature",
+      "name": "explain",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-371-post--cliservice.json",
+      "test": "TestIntegrationFeatures/explain"
+    },
+    {
+      "kind": "feature",
+      "name": "positional parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-801-post--cliservice.json",
+      "test": "TestIntegrationFeatures/positional_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "named parameters",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-806-post--cliservice.json",
+      "test": "TestIntegrationFeatures/named_parameters"
+    },
+    {
+      "kind": "feature",
+      "name": "two statements in one request",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-946-post--cliservice.json",
+      "test": "TestIntegrationFeatures/two_statements_in_one_request"
+    },
+    {
+      "kind": "feature",
+      "name": "hive a semicolon at the end",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-981-post--cliservice.json",
+      "test": "TestIntegrationFeatures/hive_a_semicolon_at_the_end"
+    },
+    {
+      "kind": "feature",
+      "name": "impala a semicolon at the end",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "impalahttp-4.5.3-983-post--cliservice.json",
+      "test": "TestIntegrationFeatures/impala_a_semicolon_at_the_end"
+    },
+    {
+      "kind": "feature",
+      "name": "line comment",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-951-post--cliservice.json",
+      "test": "TestIntegrationFeatures/line_comment"
+    },
+    {
+      "kind": "feature",
+      "name": "block comment",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-961-post--cliservice.json",
+      "test": "TestIntegrationFeatures/block_comment"
+    },
+    {
+      "kind": "feature",
+      "name": "start transaction",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-990-post--cliservice.json",
+      "test": "TestIntegrationFeatures/start_transaction"
+    },
+    {
+      "kind": "feature",
+      "name": "commit",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-997-post--cliservice.json",
+      "test": "TestIntegrationFeatures/commit"
+    },
+    {
+      "kind": "feature",
+      "name": "rollback",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "hivehttp-4.2.1-1002-post--cliservice.json",
+      "test": "TestIntegrationFeatures/rollback"
+    },
+    {
+      "kind": "feature",
+      "name": "hive set",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-338-post--cliservice.json",
+      "test": "TestIntegrationFeatures/hive_set"
+    },
+    {
+      "kind": "feature",
+      "name": "impala set",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "no",
+      "evidence": "impalahttp-4.5.3-354-post--cliservice.json",
+      "test": "TestIntegrationFeatures/impala_set"
+    },
+    {
+      "kind": "feature",
+      "name": "use",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-241-post--cliservice.json",
+      "test": "TestIntegrationFeatures/use"
+    },
+    {
+      "kind": "feature",
+      "name": "window function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-301-post--cliservice.json",
+      "test": "TestIntegrationFeatures/window_function"
+    },
+    {
+      "kind": "feature",
+      "name": "common table expression",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-291-post--cliservice.json",
+      "test": "TestIntegrationFeatures/common_table_expression"
+    },
+    {
+      "kind": "feature",
+      "name": "hive table function",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-311-post--cliservice.json",
+      "test": "TestIntegrationFeatures/hive_table_function"
+    },
+    {
+      "kind": "feature",
+      "name": "version",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-936-post--cliservice.json",
+      "test": "TestIntegrationFeatures/version"
+    },
+    {
+      "kind": "feature",
+      "name": "hive variable",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-816-post--cliservice.json",
+      "test": "TestIntegrationFeatures/hive_variable"
+    },
+    {
+      "kind": "feature",
+      "name": "a statement with no result set",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-241-post--cliservice.json",
+      "test": "TestIntegrationFeatures/a_statement_with_no_result_set"
+    },
+    {
+      "kind": "feature",
+      "name": "a result with no row",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-250-post--cliservice.json",
+      "test": "TestIntegrationFeatures/a_result_with_no_row"
+    },
+    {
+      "kind": "type",
+      "name": "BOOLEAN",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/BOOLEAN"
+    },
+    {
+      "kind": "type",
+      "name": "TINYINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/TINYINT"
+    },
+    {
+      "kind": "type",
+      "name": "SMALLINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/SMALLINT"
+    },
+    {
+      "kind": "type",
+      "name": "INT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/INT"
+    },
+    {
+      "kind": "type",
+      "name": "BIGINT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/BIGINT"
+    },
+    {
+      "kind": "type",
+      "name": "FLOAT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/FLOAT"
+    },
+    {
+      "kind": "type",
+      "name": "DOUBLE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/DOUBLE"
+    },
+    {
+      "kind": "type",
+      "name": "DECIMAL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/DECIMAL"
+    },
+    {
+      "kind": "type",
+      "name": "STRING",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/STRING"
+    },
+    {
+      "kind": "type",
+      "name": "VARCHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/VARCHAR"
+    },
+    {
+      "kind": "type",
+      "name": "CHAR",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/CHAR"
+    },
+    {
+      "kind": "type",
+      "name": "DATE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/DATE"
+    },
+    {
+      "kind": "type",
+      "name": "TIMESTAMP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/TIMESTAMP"
+    },
+    {
+      "kind": "type",
+      "name": "BINARY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-711-post--cliservice.json",
+      "test": "TestIntegrationTypes/BINARY"
+    },
+    {
+      "kind": "type",
+      "name": "hive ARRAY",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-781-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_ARRAY"
+    },
+    {
+      "kind": "type",
+      "name": "hive MAP",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-781-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_MAP"
+    },
+    {
+      "kind": "type",
+      "name": "hive STRUCT",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-781-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_STRUCT"
+    },
+    {
+      "kind": "type",
+      "name": "hive INTERVAL_YEAR_MONTH",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-112-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_INTERVAL_YEAR_MONTH"
+    },
+    {
+      "kind": "type",
+      "name": "hive INTERVAL_DAY_TIME",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-102-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_INTERVAL_DAY_TIME"
+    },
+    {
+      "kind": "type",
+      "name": "hive UNIONTYPE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-092-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_UNIONTYPE"
+    },
+    {
+      "kind": "type",
+      "name": "hive TIMESTAMP WITH LOCAL TIME ZONE",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-082-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_TIMESTAMP_WITH_LOCAL_TIME_ZONE"
+    },
+    {
+      "kind": "type",
+      "name": "hive NULL",
+      "sources": [
+        "gemini-3.8-flash",
+        "deepseek-v4-flash"
+      ],
+      "verdict": "yes",
+      "evidence": "hivehttp-4.2.1-072-post--cliservice.json",
+      "test": "TestIntegrationTypes/hive_NULL"
+    }
+  ]
+}

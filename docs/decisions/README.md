@@ -252,3 +252,8 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D229](D229-assign-stores-a-decimal-in-a-destination-with-compose.md) | Assign stores a decimal in a destination with Compose | Decided on 2026-11-04 |
 | [D230](D230-the-error-of-a-driver-has-a-method-errverbose.md) | The error of a driver has a method ErrVerbose | Decided on 2026-11-08. D231 replaces the format of items 1, 2 and 4 |
 | [D231](D231-errverbose-writes-the-layout-of-psql.md) | ErrVerbose writes the layout of psql | Decided on 2026-11-08 |
+| [D232](D232-thrift-is-approved-for-hive-and-impala.md) | Thrift is approved for Hive and Impala | Decided on 2026-11-09 |
+| [D233](D233-the-package-is-hive-and-impala-is-a-flavor.md) | The package is hive and Impala is a flavor | Decided on 2026-11-09 |
+| [D234](D234-the-types-and-the-dsn-of-the-hive-driver.md) | The types and the DSN of the hive driver | Decided on 2026-11-09 |
+| [D235](D235-the-rest-of-the-hive-driver.md) | The rest of the hive driver | Decided on 2026-11-09 |
+| [D236](D236-rule-4-names-the-hive-driver.md) | Rule 4 names the Hive driver | Decided on 2026-11-09 |

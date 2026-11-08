@@ -15,6 +15,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 )
 
 // redacted replaces the value of a header that holds a credential.
@@ -160,12 +161,28 @@ func (r *Recorder) WriteManifest(driver string) error {
 	return WriteManifest(path, m)
 }
 
+// mask returns the text REDACTED, cut or padded with * to n bytes.
+func mask(n int) string {
+	if n <= len(redacted) {
+		return redacted[:n]
+	}
+	return redacted + strings.Repeat("*", n-len(redacted))
+}
+
 // hide returns b with each secret written as REDACTED.
 func (r *Recorder) hide(b []byte) []byte {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	// A body that is not text is binary, such as a message of Thrift, where a
+	// string has its length before it. The mark then has the length of the
+	// secret, so that the body stays a message.
+	text := utf8.Valid(b)
 	for _, s := range r.secrets {
-		b = bytes.ReplaceAll(b, []byte(s), []byte(redacted))
+		mark := redacted
+		if !text {
+			mark = mask(len(s))
+		}
+		b = bytes.ReplaceAll(b, []byte(s), []byte(mark))
 	}
 	return b
 }

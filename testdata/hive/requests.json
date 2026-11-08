@@ -1,0 +1,769 @@
+{
+ "driver": "hive",
+ "thrift": {
+  "path": "/cliservice"
+ },
+ "absent": [],
+ "requests": [
+  {
+   "item": 1,
+   "name": "setup: create the table for the catalog",
+   "statement": "create table dbimp_hive_cat (id int, v string)",
+   "phase": "setup"
+  },
+  {
+   "item": 1,
+   "name": "select 1",
+   "statement": "select 1"
+  },
+  {
+   "item": 3,
+   "name": "a decimal of scale 0 and precision 38",
+   "statement": "select cast(12345678901234567890123456789012345678 as decimal(38,0)) a"
+  },
+  {
+   "item": 3,
+   "name": "a string of 100000 bytes",
+   "statement": "select repeat('x', 100000) a"
+  },
+  {
+   "item": 3,
+   "name": "a varchar of 65535",
+   "statement": "select cast('a' as varchar(65535)) a"
+  },
+  {
+   "item": 3,
+   "name": "a char of 255",
+   "statement": "select cast('a' as char(255)) a"
+  },
+  {
+   "item": 3,
+   "name": "a null literal",
+   "statement": "select null a"
+  },
+  {
+   "item": 3,
+   "name": "timestamp with time zone of Impala",
+   "statement": "select cast('2026-01-02 03:04:05' as timestamp with time zone) a",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "timestamp with local time zone of Hive",
+   "statement": "select cast('2026-01-02 03:04:05' as timestamp with local time zone) a",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "union of Hive",
+   "statement": "select create_union(0,1,'a') a",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "day to second interval of Hive",
+   "statement": "select interval '1 2:3:4.5' day to second a",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "year to month interval of Hive",
+   "statement": "select interval '1-2' year to month a",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "a nested type of Impala from a table",
+   "statement": "select 1 as a from (select 1 as x) t where false",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "struct of Impala",
+   "statement": "select named_struct('x',1) a",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "map of Impala",
+   "statement": "select map('k',1) a",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "array of Impala",
+   "statement": "select array(1,2) a",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "binary of Impala",
+   "statement": "select cast('ab' as binary) a",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a materialized view of Impala",
+   "releases": [
+    "impalahttp-"
+   ],
+   "statement": "create materialized view dbimp_hive_mv as select 1 as a"
+  },
+  {
+   "item": 1,
+   "name": "the log of an operation",
+   "statement": "select 1",
+   "after": "GetLog"
+  },
+  {
+   "item": 1,
+   "name": "GetQueryId",
+   "statement": "select 1",
+   "after": "GetQueryId"
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetCrossReference",
+   "catalog": "GetCrossReference",
+   "args": [
+    "",
+    "default",
+    "dbimp_hive_cat",
+    "",
+    "default",
+    "dbimp_hive_cat"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetPrimaryKeys",
+   "catalog": "GetPrimaryKeys",
+   "args": [
+    "",
+    "default",
+    "dbimp_hive_cat"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetFunctions",
+   "catalog": "GetFunctions",
+   "args": [
+    "",
+    "",
+    "upper"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetColumns",
+   "catalog": "GetColumns",
+   "args": [
+    "",
+    "default",
+    "dbimp_hive_cat",
+    "%"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetTableTypes",
+   "catalog": "GetTableTypes"
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetTables of every type",
+   "catalog": "GetTables",
+   "args": [
+    "",
+    "default",
+    "%"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetTables",
+   "catalog": "GetTables",
+   "args": [
+    "",
+    "default",
+    "dbimp_hive_cat",
+    "TABLE"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetSchemas",
+   "catalog": "GetSchemas",
+   "args": [
+    "",
+    "%"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetCatalogs",
+   "catalog": "GetCatalogs"
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetTypeInfo",
+   "catalog": "GetTypeInfo"
+  },
+  {
+   "item": 1,
+   "name": "catalog: GetInfo",
+   "catalog": "GetInfo",
+   "args": [
+    "0",
+    "13",
+    "17",
+    "18",
+    "29",
+    "43"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a statement with no result",
+   "statement": "use default"
+  },
+  {
+   "item": 1,
+   "name": "a select that returns no row",
+   "statement": "select 1 as a from (select 1 as x) t where 1=0"
+  },
+  {
+   "item": 1,
+   "name": "insert from select",
+   "statement": "create table dbimp_hive_t (id int)",
+   "also": [
+    "insert into dbimp_hive_t select 1",
+    "insert overwrite table dbimp_hive_t select 2",
+    "select * from dbimp_hive_t",
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a common table expression",
+   "statement": "with t as (select 1 as a) select * from t"
+  },
+  {
+   "item": 1,
+   "name": "a window function",
+   "statement": "select a, row_number() over (order by a) as r from (select 1 as a) t"
+  },
+  {
+   "item": 1,
+   "name": "a table function",
+   "statement": "select explode(array(1,2,3))",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "set of Impala",
+   "statement": "use default",
+   "releases": [
+    "impalahttp-"
+   ],
+   "also": [
+    "set num_nodes=1",
+    "set",
+    "set x=1"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "set and use",
+   "statement": "use default",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "set hive.exec.parallel=true",
+    "set",
+    "set x=1"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "show and describe",
+   "statement": "show databases",
+   "also": [
+    "show tables",
+    "show tables in default",
+    "describe formatted default.dbimp_hive_cat",
+    "explain select 1",
+    "show functions",
+    "show create table default.dbimp_hive_cat"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a schema",
+   "statement": "create schema if not exists dbimp_hive_db",
+   "also": [
+    "drop schema dbimp_hive_db"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a database",
+   "statement": "create database if not exists dbimp_hive_db",
+   "also": [
+    "use dbimp_hive_db",
+    "drop database dbimp_hive_db"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "an index",
+   "statement": "create table dbimp_hive_t (id int)",
+   "also": [
+    "create index i on table dbimp_hive_t (id) as 'compact' with deferred rebuild",
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a materialized view",
+   "statement": "create table dbimp_hive_t (id int) stored as orc tblproperties ('transactional'='true')",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "create materialized view dbimp_hive_mv as select id from dbimp_hive_t",
+    "drop materialized view dbimp_hive_mv",
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "views",
+   "statement": "create view dbimp_hive_v as select 1 as a",
+   "also": [
+    "select * from dbimp_hive_v",
+    "drop view dbimp_hive_v"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a partitioned table",
+   "statement": "create table dbimp_hive_t (id int) partitioned by (p string)",
+   "also": [
+    "insert into dbimp_hive_t partition (p='a') values (1)",
+    "show partitions dbimp_hive_t",
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a unique and a not null column",
+   "statement": "create table dbimp_hive_t (id int not null, v string, unique (v) disable novalidate)",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "foreign key",
+   "statement": "create table dbimp_hive_t_p (id int, primary key (id) disable novalidate)",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "create table dbimp_hive_t (id int, p int, foreign key (p) references dbimp_hive_t_p(id) disable novalidate)",
+    "drop table dbimp_hive_t",
+    "drop table dbimp_hive_t_p"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a key of Impala",
+   "statement": "create table dbimp_hive_t (id int, v string, primary key (id)) partitioned by hash (id) partitions 2 stored as kudu",
+   "releases": [
+    "impalahttp-"
+   ],
+   "also": [
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "constraints and defaults",
+   "statement": "create table dbimp_hive_t (id int, v string default 'd', primary key (id) disable novalidate)",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "a table that has every type",
+   "statement": "create table dbimp_hive_t (a tinyint, b smallint, c int, d bigint, e float, f double, g decimal(10,2), h string, i varchar(5), j char(3), k boolean, l timestamp, m date)",
+   "also": [
+    "insert into dbimp_hive_t values (1,2,3,4,1.5,2.5,1.50,'s','v','c',true,cast('2026-01-02 03:04:05' as timestamp),cast('2026-01-02' as date))",
+    "select * from dbimp_hive_t",
+    "describe dbimp_hive_t",
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "crud on a plain table",
+   "statement": "create table dbimp_hive_t (id int, v string)",
+   "also": [
+    "insert into dbimp_hive_t values (1,'a')",
+    "select * from dbimp_hive_t",
+    "update dbimp_hive_t set v='x' where id=1",
+    "delete from dbimp_hive_t where id=1",
+    "drop table dbimp_hive_t"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "crud on an Iceberg table",
+   "statement": "create table dbimp_hive_t (id int, v string) stored as iceberg tblproperties ('format-version'='2')",
+   "releases": [
+    "impalahttp-"
+   ],
+   "also": [
+    "insert into dbimp_hive_t values (1,'a'),(2,'b'),(3,'c')",
+    "select * from dbimp_hive_t order by id",
+    "update dbimp_hive_t set v='x' where id=1",
+    "select * from dbimp_hive_t order by id",
+    "delete from dbimp_hive_t where id=2",
+    "select * from dbimp_hive_t order by id",
+    "truncate table dbimp_hive_t",
+    "merge into dbimp_hive_t t using (select 3 as id, 'm' as v) s on t.id=s.id when matched then update set v=s.v",
+    "alter table dbimp_hive_t add columns (c int)",
+    "alter table dbimp_hive_t rename to dbimp_hive_t_2",
+    "drop table dbimp_hive_t_2"
+   ]
+  },
+  {
+   "item": 1,
+   "name": "crud on a transactional table",
+   "statement": "create table dbimp_hive_t (id int, v string) stored as orc tblproperties ('transactional'='true')",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "insert into dbimp_hive_t values (1,'a'),(2,'b'),(3,'c')",
+    "select * from dbimp_hive_t order by id",
+    "update dbimp_hive_t set v='x' where id=1",
+    "select * from dbimp_hive_t order by id",
+    "delete from dbimp_hive_t where id=2",
+    "select * from dbimp_hive_t order by id",
+    "merge into dbimp_hive_t t using (select 3 as id, 'm' as v) s on t.id=s.id when matched then update set v=s.v",
+    "truncate table dbimp_hive_t",
+    "alter table dbimp_hive_t add columns (c int)",
+    "alter table dbimp_hive_t rename to dbimp_hive_t_2",
+    "drop table dbimp_hive_t_2"
+   ]
+  },
+  {
+   "item": 2,
+   "name": "names and order",
+   "statement": "select 2 as b, 1 as a, 3 as `weird name`"
+  },
+  {
+   "item": 2,
+   "name": "two columns with one name",
+   "statement": "select 1 as a, 2 as a"
+  },
+  {
+   "item": 3,
+   "name": "every type but the null",
+   "statement": "select cast(1 as tinyint) c_tinyint, cast(2 as smallint) c_smallint, 3 c_int, cast(4 as bigint) c_bigint, cast(1.5 as float) c_float, cast(2.5 as double) c_double, cast(1.50 as decimal(10,2)) c_decimal, cast('abc' as varchar(5)) c_varchar, cast('ab' as char(4)) c_char, 'x' c_string, true c_boolean, date '2026-01-02' c_date, timestamp '2026-01-02 03:04:05.123456789' c_timestamp, cast('ab' as binary) c_binary, array(1,2) c_array, map('k',1) c_map, named_struct('x',1) c_struct",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "every type but the null",
+   "statement": "select cast(1 as tinyint) c_tinyint, cast(2 as smallint) c_smallint, cast(3 as int) c_int, cast(4 as bigint) c_bigint, cast(1.5 as float) c_float, cast(2.5 as double) c_double, cast(1.50 as decimal(10,2)) c_decimal, cast('abc' as varchar(5)) c_varchar, cast('ab' as char(4)) c_char, 'x' c_string, true c_boolean, cast('2026-01-02' as date) c_date, cast('2026-01-02 03:04:05.123456789' as timestamp) c_timestamp",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "null of each wire type",
+   "statement": "select cast(null as tinyint) a, cast(null as smallint) b, cast(null as int) c, cast(null as bigint) d, cast(null as float) e, cast(null as double) f, cast(null as decimal(10,2)) g, cast(null as string) h, cast(null as boolean) i, cast(null as timestamp) j"
+  },
+  {
+   "item": 3,
+   "name": "the largest and smallest numbers",
+   "statement": "select cast(127 as tinyint) a, cast(-128 as tinyint) b, cast(32767 as smallint) c, cast(2147483647 as int) d, cast(9223372036854775807 as bigint) e, cast(-9223372036854775808 as bigint) f, cast(1.1 as float) g, cast(1e308 as double) h"
+  },
+  {
+   "item": 3,
+   "name": "the longest decimal",
+   "statement": "select cast('12345678901234567890123456789.1234567890' as decimal(38,10)) a, cast('0.0000000001' as decimal(38,10)) b, cast('-1' as decimal(38,10)) c, cast(1.5 as decimal(10,2)) d, cast(100 as decimal(10,0)) e"
+  },
+  {
+   "item": 3,
+   "name": "empty and unicode strings",
+   "statement": "select '' a, 'h\u00e9llo \u65e5\u672c' b, 'line1\\nline2' c, ' ' d"
+  },
+  {
+   "item": 3,
+   "name": "timestamps and dates",
+   "statement": "select cast('0001-01-01' as date) a, cast('9999-12-31' as date) b, cast('2026-06-30 23:59:59.999999999' as timestamp) c"
+  },
+  {
+   "item": 3,
+   "name": "a row with a null in the middle",
+   "statement": "select 1 a, cast(null as int) b, 3 c"
+  },
+  {
+   "item": 3,
+   "name": "nested types and interval",
+   "statement": "select array(array(1,2),array(3)) a, array(named_struct('x',1,'y','z')) b, map('k',array(1,2)) c, array(cast(null as int)) d, interval '1' day e",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 3,
+   "name": "binary with all byte values",
+   "statement": "select cast(unhex('00ff0aff') as binary) a, cast('' as binary) b",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 4,
+   "name": "a question mark",
+   "statement": "select ?"
+  },
+  {
+   "item": 4,
+   "name": "a named parameter",
+   "statement": "select :a"
+  },
+  {
+   "item": 4,
+   "name": "a variable of Hive",
+   "statement": "set hivevar:v=1",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "select ${hivevar:v}"
+   ]
+  },
+  {
+   "item": 5,
+   "name": "1000 rows in pages of 100",
+   "statement": "select a.x*100+b.x*10+c.x as n from (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) a cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) b cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) c",
+   "rows": 100
+  },
+  {
+   "item": 5,
+   "name": "1000 rows in one page",
+   "statement": "select a.x*100+b.x*10+c.x as n from (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) a cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) b cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) c",
+   "rows": 5000
+  },
+  {
+   "item": 5,
+   "name": "one row at a time",
+   "statement": "select 1 as a union all select 2",
+   "rows": 1
+  },
+  {
+   "item": 6,
+   "name": "a table that is not there",
+   "statement": "select nope from nothing"
+  },
+  {
+   "item": 6,
+   "name": "a syntax error",
+   "statement": "selct 1"
+  },
+  {
+   "item": 6,
+   "name": "an error while the statement runs",
+   "statement": "select assert_true(false)",
+   "releases": [
+    "hivehttp-"
+   ]
+  },
+  {
+   "item": 6,
+   "name": "an error while the statement runs",
+   "statement": "select cast(1 as int) from (select 1 as x) t where 1/0 = 1 and sleep(10) is null",
+   "releases": [
+    "impalahttp-"
+   ]
+  },
+  {
+   "item": 6,
+   "name": "a runtime error of a function",
+   "statement": "select cast('x' as decimal(40,0)), 1/0"
+  },
+  {
+   "item": 7,
+   "name": "cancel a long statement",
+   "statement": "select count(*) from (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t0 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t1 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t2 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t3 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t4 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t5 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t6 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t7 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t8 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t9 cross join (select 0 as x union all select 1 as x union all select 2 as x union all select 3 as x union all select 4 as x union all select 5 as x union all select 6 as x union all select 7 as x union all select 8 as x union all select 9 as x) t10",
+   "cancel": "4s"
+  },
+  {
+   "item": 7,
+   "name": "cancel a sleeping statement",
+   "statement": "select sleep(30000)",
+   "releases": [
+    "impalahttp-"
+   ],
+   "cancel": "2s"
+  },
+  {
+   "item": 8,
+   "name": "no credentials",
+   "statement": "select 1",
+   "auth": "none"
+  },
+  {
+   "item": 8,
+   "name": "a wrong password",
+   "statement": "select 1",
+   "auth": "wrong"
+  },
+  {
+   "item": 8,
+   "name": "a call with a handle that the server never issued",
+   "call": "GetOperationStatus"
+  },
+  {
+   "item": 8,
+   "name": "fetch with a handle that the server never issued",
+   "call": "FetchResults"
+  },
+  {
+   "item": 8,
+   "name": "close with a handle that the server never issued",
+   "call": "CloseOperation"
+  },
+  {
+   "item": 8,
+   "name": "a statement that needs a privilege",
+   "statement": "drop database if exists mysql_not_there cascade"
+  },
+  {
+   "item": 9,
+   "name": "the version",
+   "statement": "select version()"
+  },
+  {
+   "item": 10,
+   "name": "two statements",
+   "statement": "select 1; select 2"
+  },
+  {
+   "item": 10,
+   "name": "a comment after",
+   "statement": "select 1 -- a comment"
+  },
+  {
+   "item": 10,
+   "name": "a comment before",
+   "statement": "/* a comment */ select 1"
+  },
+  {
+   "item": 10,
+   "name": "a line comment before",
+   "statement": "-- a comment\nselect 1"
+  },
+  {
+   "item": 10,
+   "name": "a semicolon at the end",
+   "statement": "select 1;"
+  },
+  {
+   "item": 10,
+   "name": "an empty statement",
+   "statement": ""
+  },
+  {
+   "item": 11,
+   "name": "start a transaction",
+   "statement": "start transaction",
+   "releases": [
+    "hivehttp-"
+   ],
+   "also": [
+    "select 1",
+    "commit"
+   ]
+  },
+  {
+   "item": 11,
+   "name": "begin and commit",
+   "statement": "begin",
+   "releases": [
+    "impalahttp-"
+   ],
+   "also": [
+    "commit"
+   ]
+  },
+  {
+   "item": 11,
+   "name": "rollback",
+   "statement": "rollback"
+  },
+  {
+   "item": 12,
+   "name": "the headers of a reply",
+   "statement": "select 1"
+  },
+  {
+   "item": 5,
+   "name": "setup: drop the table",
+   "statement": "drop table if exists dbimp_hive_t",
+   "phase": "setup"
+  },
+  {
+   "item": 5,
+   "name": "teardown: drop the table",
+   "statement": "drop table if exists dbimp_hive_t",
+   "phase": "teardown"
+  },
+  {
+   "item": 1,
+   "name": "teardown: drop the table of the catalog",
+   "statement": "drop table if exists dbimp_hive_cat",
+   "phase": "teardown"
+  }
+ ]
+}

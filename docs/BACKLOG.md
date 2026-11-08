@@ -2173,3 +2173,18 @@ adds `dbimp.Position`, and rewrites the method of the 27 drivers and of the resp
 SurrealDB. W54 gave the method, and this item gives its format. The Trino method leaves the position out of its message when it writes the `LINE` line.
 
 Status: written and staged.
+
+## W56. Write the Hive and Impala driver. Done.
+
+Ken asked for it on 2026-11-09, after the question whether the HTTP mode of the `hive` driver of
+`usql` can be the base of a driver here. Follow [DRIVER.md](DRIVER.md). Step 3 goes in
+[HIVE.md](HIVE.md). `dburl` has the scheme `hive` (alias `hive2`), which names
+`github.com/beltran/gohive/v2`, and the scheme `impala`, which names `github.com/sclgo/impala-go`.
+Both use the Thrift protocol of HiveServer2. Ken approved the Thrift binary protocol for both on
+2026-11-09, written here with no package (D232). The driver speaks it over HTTP only. Ken decided on
+2026-11-09 that the package is `hive` and that Impala is a flavor of it (D233). Step 9 must still
+decide the DSN. `dbrun`
+starts Hive 4.0.1 and 4.2.1 and Impala 4.4.1 and 4.5.3, but publishes only their binary Thrift
+ports, so `dbmeta` must add HTTP entries before step 5.
+
+Status: released. The Thrift codec is `thrift.go`, the recorder is `dbimptest/cmd/record/thrift.go`, and the recordings of four releases are in `testdata/hive/`. Ken accepted the type mapping and the DSN on 2026-11-09 (D234) and the other items of step 9 (D235). The driver in `hive/`, its tests and the recordings are staged. The integration tests passed on `hivehttp-4.2.1` and `impalahttp-4.5.3` on 2026-11-09. Released in `v0.26.0`.

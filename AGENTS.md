@@ -38,6 +38,7 @@ twenty-fourth, in `databricks/`, `bigquery/`, `athena/`, `cosmos/` and `spanner/
 were first released in `v0.17.0` (W35 to W39). The twenty-fifth, in `exasol/`, was
 first released in `v0.20.0` (W44). The twenty-sixth and the twenty-seventh, in
 `maxcompute/` and `tablestore/`, were first released in `v0.21.0` (W47 and W48). The
+twenty-eighth, in `hive/`, was first released in `v0.26.0` (W56). The
 targets and their order are in [docs/TARGETS.md](docs/TARGETS.md).
 
 ## Standing rules
@@ -91,6 +92,7 @@ every other agent read the same rules. Edit this file, not that one.
 | writing the Databricks driver | [docs/DATABRICKS.md](docs/DATABRICKS.md), then W39 and D188 |
 | writing the Exasol driver | [docs/EXASOL.md](docs/EXASOL.md), then W44, D200, D202 and D203 to D215 |
 | writing the MaxCompute driver | [docs/MAXCOMPUTE.md](docs/MAXCOMPUTE.md), then W47 |
+| writing the Hive and Impala driver | [docs/HIVE.md](docs/HIVE.md), then W56, D232 and D233 |
 | writing the Tablestore driver | [docs/TABLESTORE.md](docs/TABLESTORE.md), then W48 |
 | writing the Spanner driver | [docs/SPANNER.md](docs/SPANNER.md), then W38, D185, D187 and D191 |
 | choosing the next database | [docs/TARGETS.md](docs/TARGETS.md), then D16, D17, D73 and D74 in [docs/decisions/](docs/decisions/README.md) |
@@ -140,9 +142,10 @@ of each `docs/<PRODUCT>.md`. Ask Ken.
    query, of a Trino query, of an Elasticsearch query, of an OpenSearch query, of
    a DynamoDB query, of a Snowflake query, of an Athena query, of a BigQuery query,
    of a Cosmos DB query, by a Spanner transaction, by the rows of a Spanner
-   DML statement, and by an Exasol transaction, statement and query (D45, D69,
-   D90, D91, D122, D123, D149, D150, D157, D159, D175, D178, D183, D192, D194
-   and D215). The
+   DML statement, by an Exasol transaction, statement and query, and by a Hive connection and the rows of a Hive
+   query (D45, D69,
+   D90, D91, D122, D123, D149, D150, D157, D159, D175, D178, D183, D192, D194,
+   D215 and D236). The
    library never calls `context.Background` or `context.TODO`.
    Every driver implements the context forms of the `database/sql/driver`
    interfaces and stops work when the context ends. See D8.

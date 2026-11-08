@@ -112,6 +112,7 @@ page on pkg.go.dev, and the version links to the release that first held it.
 | [`exasol`](https://pkg.go.dev/github.com/xo/dbimp/exasol) | Exasol | [`v0.20.0`](https://github.com/xo/dbimp/releases/tag/v0.20.0) |
 | [`maxcompute`](https://pkg.go.dev/github.com/xo/dbimp/maxcompute) | Alibaba Cloud MaxCompute | [`v0.21.0`](https://github.com/xo/dbimp/releases/tag/v0.21.0) |
 | [`tablestore`](https://pkg.go.dev/github.com/xo/dbimp/tablestore) | Alibaba Cloud Tablestore | [`v0.21.0`](https://github.com/xo/dbimp/releases/tag/v0.21.0) |
+| [`hive`](https://pkg.go.dev/github.com/xo/dbimp/hive) | Apache Hive and Apache Impala | [`v0.26.0`](https://github.com/xo/dbimp/releases/tag/v0.26.0) |
 
 ### Drivers in other repositories
 
@@ -170,6 +171,7 @@ uses them.
 | [docs/DATABRICKS.md](docs/DATABRICKS.md) | What is known about Databricks over its SQL Statement Execution API, for its driver |
 | [docs/EXASOL.md](docs/EXASOL.md) | What is known about Exasol over its WebSocket API, for its driver |
 | [docs/MAXCOMPUTE.md](docs/MAXCOMPUTE.md) | What is known about MaxCompute over its REST API, for its driver |
+| [docs/HIVE.md](docs/HIVE.md) | What is known about Hive and Impala over Thrift on HTTP, for their driver |
 | [docs/TABLESTORE.md](docs/TABLESTORE.md) | What is known about Tablestore over its API, for its driver |
 | [docs/SPANNER.md](docs/SPANNER.md) | What is known about Google Cloud Spanner over its REST API, for its driver |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | The planned work, in order |

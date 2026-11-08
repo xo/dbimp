@@ -25,6 +25,7 @@ The root package imports the standard library and `apd`, and nothing else
 | `version.go` | `IsVersionQuery` and `NewVersionRows`, which a driver uses to answer `SELECT version()` when its product has no query for the release (D181) |
 | `placeholder.go` | `Syntax` and `Placeholder`, which find placeholders and bind arguments (D34) |
 | `options.go` | `Option`, `WithOptions`, `IsOption`, `Resolve`, `Unsupported` and `MarshalParams`, the machinery of the options of every driver (D109) |
+| `thrift.go` | `ThriftDecoder`, `NewThriftDecoder`, `ThriftEncoder`, `ThriftType` and `ThriftMessageType` with their constants, which read and write the binary protocol of Thrift (D232) |
 | `cbor.go` | `CBORDecoder`, `NewCBORDecoder`, `CBOREncoder`, `CBORHead`, and `CBORMajor` with its constants, which read and write CBOR (D49) |
 | `websocket.go` | `DialWebSocket`, `WebSocket`, `WebSocketOption` with its `WithWebSocket` functions, `MessageType`, `CloseCode` and `CloseError`, a client for WebSocket (D200) |
 
@@ -227,6 +228,15 @@ returns.
 `CBOREncoder` writes each head in its shortest form, and a float as 64 bits.
 The driver writes its tags with `Tag`.
 
+### Thrift
+
+`thrift.go` reads and writes the binary protocol of Apache Thrift with the strict form of a message, for a
+driver whose server speaks it. Ken approved it for Hive and Impala, written here with the standard library
+(D232). `ThriftDecoder` reads one value at a time, from a reader, and `Skip` drops a field that the driver does
+not take. It refuses a length that lies, a count of a billion elements and a struct nested deeper than 64, so
+that a hostile reply costs no memory and no stack. `ThriftEncoder` writes into a buffer. The meaning of a field
+belongs to the driver, and the code gives it none.
+
 ### Placeholders
 
 `Syntax` says how a product writes literals, quoted identifiers and
@@ -315,6 +325,7 @@ for code that only a test uses. So they are not in the root package (D37).
 | `heap.go` | `HeapGauge`, `NewHeapGauge` and `HeapLimit`, which measure the growth of the live heap while a driver reads a result of 64 MiB (D25) |
 | `contract.go` | `Contract`, its cases `ColumnsCase`, `NullCase`, `ErrorCase` and `StreamCase`, and `RunContract` |
 | `contract_websocket.go` | `WebSocketContract` and its cases, which `RunContract` runs when `Contract.WebSocket` is set |
+| `contract_thrift.go` | `ThriftContract`, `ThriftStep`, `ThriftReply` and the cases that `RunContract` runs when `Contract.Thrift` is set, against a fake server that answers each call of a script by its name (D232) |
 | `tables.go` | `TypeTable`, `TypeRow`, `Kinds`, `InterfaceTable`, `WriteBlock`, `EnvUpdate` and the markers of the tables |
 | `features.go` | `Features`, `Source` and `Feature`, the survey of step 5a, with `FeaturesName`, the constants of a kind, a source and a verdict, and `ReadFeatures` |
 | `roundtrip.go` | `RoundTrip`, `RoundTripCase` and `Value`, the round trip of one type for step 14a |
@@ -360,12 +371,17 @@ object, such as the statement handle of Avatica, takes the place of the whole
 string `"{{name}}"` in a body, as JSON. A body can name `{{user}}` and `{{password}}`, the credentials
 of the URL of the principal, for a server that takes them in the body, such
 as the `info` of `openConnection` of Avatica, and the recorder writes each
-password in a body as `REDACTED`. A request with `releases` runs only on a release
+password in a body as `REDACTED`, and in a binary body, such as a message of Thrift, as `REDACTED` cut or padded
+with `*` to the length of the password, so that the message stays valid. A request with `releases` runs only on a release
 whose name starts with one of them, such as `influxdb-3`, as `principals`
 limits a request to some principals. A request of the setup or the teardown
 with `"server": "second"` goes to the URL of the flag `-second`, such as the
 Controller of Pinot, through which the setup makes the tables that the
-Broker cannot. A script with `"auth": "bearer"` sends the password of each
+Broker cannot. A script with `"thrift": {"path": "/cliservice"}` is one for a product that takes the calls of HiveServer2
+over HTTP, such as Hive and Impala (D232). Each request is then a `statement`, with the statements `also` to run in
+the same session, a `rows` size for each fetch, a `cancel` time, a `catalog` call with its `args`, or an `after` call.
+The recorder opens a session, reads the name and the release with `GetInfo`, runs what the request says, and
+closes it. A script with `"auth": "bearer"` sends the password of each
 URL as a Bearer token, for a server that takes a token and no user, such as
 libSQL with a JWT (D94). A script with `"auth": "cosmos"` signs each request with
 the master key of Azure Cosmos DB, which is the password of each URL, and the

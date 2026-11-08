@@ -47,6 +47,11 @@ type Contract struct {
 	// driver cannot run them, and RunContract then ignores every other field and
 	// runs the cases of WebSocketContract.
 	WebSocket *WebSocketContract
+	// Thrift, if it is not nil, makes RunContract test a driver whose product takes
+	// its calls as Thrift messages over HTTP, such as Hive and Impala (D232). A
+	// result there arrives in pages, one call for each page, so RunContract then
+	// ignores every other field and runs the cases of ThriftContract.
+	Thrift *ThriftContract
 }
 
 // contentType returns the content type of the bodies of c.
@@ -94,6 +99,10 @@ func RunContract(t *testing.T, c Contract) {
 	t.Helper()
 	if c.WebSocket != nil {
 		runWebSocketContract(t, c.WebSocket)
+		return
+	}
+	if c.Thrift != nil {
+		runThriftContract(t, c.Thrift)
 		return
 	}
 	t.Run("columns keep their order", func(t *testing.T) {
