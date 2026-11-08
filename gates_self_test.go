@@ -92,6 +92,8 @@ func (*Error) Is(target error) bool { return target == dbimp.ErrAuthentication }
 
 func (e *Error) AuthenticationRefused() bool { return e.Is(dbimp.ErrAuthentication) }
 
+func (*Error) ErrVerbose(string) string { return "" }
+
 func use() {
 	client := &http.Client{}
 	_ = client
@@ -241,6 +243,32 @@ func (*Error) Is(target error) bool { return target == dbimp.ErrAuthentication }
 		t.Errorf("missing is %q, want [Error]", got)
 	}
 	if got := missingAuthenticationRefused(src("func (e *Error) AuthenticationRefused() bool { return e.Is(dbimp.ErrAuthentication) }\n")); len(got) != 0 {
+		t.Errorf("missing is %q, want none", got)
+	}
+}
+
+func TestTheErrVerboseGateNeedsTheMethod(t *testing.T) {
+	t.Parallel()
+	src := func(extra string) []*ast.File {
+		f, err := parser.ParseFile(token.NewFileSet(), "errors.go", `package bad
+
+type Error struct{}
+
+func (*Error) Error() string { return "" }
+
+type hidden struct{}
+
+func (hidden) Error() string { return "" }
+`+extra, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return []*ast.File{f}
+	}
+	if got := missingErrVerbose(src("")); !slices.Equal(got, []string{"Error"}) {
+		t.Errorf("missing is %q, want [Error]", got)
+	}
+	if got := missingErrVerbose(src("func (*Error) ErrVerbose(string) string { return \"\" }\n")); len(got) != 0 {
 		t.Errorf("missing is %q, want none", got)
 	}
 }

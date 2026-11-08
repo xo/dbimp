@@ -43,6 +43,16 @@ func (err *Error) Error() string {
 	return "exasol: " + err.Code + ": " + err.Message
 }
 
+// ErrVerbose returns every field that the server sent, with the message on the
+// first line and one field on each line after it, for the command \errverbose
+// of usql. It returns "" when no field has a value but the message. A caller
+// that does not import this module reads it through an interface of its own
+// (D230).
+func (err *Error) ErrVerbose(_ string) string {
+	return dbimp.Verbose(err.Message,
+		"Code", err.Code)
+}
+
 // Is reports whether err matches target. It matches dbimp.ErrAuthentication
 // for the code 08004 with the text of a failed authentication, which is the
 // answer for a wrong user, a wrong password and a wrong token (recorded: "login

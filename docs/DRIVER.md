@@ -485,6 +485,9 @@ these, and a unit test holds each one:
 - The same error type has the method `AuthenticationRefused() bool`, which
   returns what `Is` returns for `dbimp.ErrAuthentication` (D227). A caller that
   does not import `dbimp` reads it, and the gate of this step checks for it.
+- The exported error type also has the method `ErrVerbose(query string)
+  string`, which returns the message and each field that the server sent,
+  through `dbimp.Verbose` (D230). The gate of this step checks for it.
 - Two queries can run at the same time on one `sql.DB`.
 - A test makes sure that no goroutine is left running after each test, with
   `dbimptest.CheckGoroutines`.

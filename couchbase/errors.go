@@ -2,6 +2,7 @@ package couchbase
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/xo/dbimp"
@@ -19,6 +20,16 @@ type Error struct {
 // Error satisfies the error interface.
 func (err Error) Error() string {
 	return fmt.Sprintf("couchbase: %d: %s", err.Code, err.Msg)
+}
+
+// ErrVerbose returns every field that the server sent, with the message on the
+// first line and one field on each line after it, for the command \errverbose
+// of usql. It returns "" when no field has a value but the message. A caller
+// that does not import this module reads it through an interface of its own
+// (D230).
+func (err Error) ErrVerbose(_ string) string {
+	return dbimp.Verbose(err.Msg,
+		"Code", err.Code)
 }
 
 // codeAuthentication is the code that the query service sends, with HTTP 401,
@@ -61,6 +72,22 @@ func (err *ResponseError) Error() string {
 		return fmt.Sprintf("couchbase: status %s, HTTP %d", err.Status, err.HTTPStatus)
 	}
 	return "couchbase: " + strings.Join(msgs, ". ")
+}
+
+// ErrVerbose returns every field that the server sent, for the command
+// \errverbose of usql: the status of the response, and then each error with its
+// fields. A caller that does not import this module reads it through an
+// interface of its own (D230).
+func (err *ResponseError) ErrVerbose(query string) string {
+	parts := []string{dbimp.Verbose("", "HTTP status", err.HTTPStatus, "Status", err.Status)}
+	for _, e := range err.Errs {
+		if s := e.ErrVerbose(query); s != "" {
+			parts = append(parts, s)
+		} else {
+			parts = append(parts, e.Error())
+		}
+	}
+	return strings.Join(slices.DeleteFunc(parts, func(s string) bool { return s == "" }), "\n")
 }
 
 // Unwrap returns each Error, for errors.As and errors.Is.

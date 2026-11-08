@@ -75,6 +75,22 @@ func (err *Error) Error() string {
 	return s + err.Message
 }
 
+// ErrVerbose returns every field that the server sent, with the message on the
+// first line and one field on each line after it, for the command \errverbose
+// of usql. It returns "" when no field has a value but the message. A caller
+// that does not import this module reads it through an interface of its own
+// (D230).
+func (err *Error) ErrVerbose(_ string) string {
+	return dbimp.Verbose(err.Message,
+		"HTTP status", err.HTTPStatus,
+		"Type", err.Type,
+		"Code", err.Code,
+		"State", err.State,
+		"Error type", err.ErrorType,
+		"Category", err.Category,
+		"Query ID", err.QueryID)
+}
+
 // Unwrap returns the *dbimp.StatusError of the response, and nil for a query
 // that ended in a state.
 func (err *Error) Unwrap() error {

@@ -2154,3 +2154,13 @@ destination that has the method `Compose`, so a scan from a `driver.RowsColumnSc
 needs a later tag to get the change.
 
 Status: written and staged.
+
+## W54. Add the method ErrVerbose to the errors of the drivers. Done.
+
+The `usql` session added `\errverbose` on 2026-11-08 and asked each driver for a method `ErrVerbose(query
+string) string` on its error type (W160 of `usql`). Ken told this session to implement it. The decision is
+[D230](decisions/D230-the-error-of-a-driver-has-a-method-errverbose.md). It adds `dbimp.Verbose` to the
+root package, the method to the error type of each of the 27 drivers, and `ResponseError` of Couchbase,
+Neo4j and SurrealDB, and it extends the gate of step 12.
+
+Status: written and staged.

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/cockroachdb/apd/v3"
 
@@ -106,6 +107,21 @@ func TestPadScale(t *testing.T) {
 	}
 	if got := dbimp.PadScale(nil, 2); got != nil {
 		t.Errorf("PadScale(nil, 2) = %v, want nil", got)
+	}
+}
+
+func TestVerbose(t *testing.T) {
+	t.Parallel()
+	got := dbimp.Verbose("boom", "HTTP status", 400, "Code", 0, "Name", "UNKNOWN", "Empty", "", "Wait", 2*time.Second, "Flag", true, "Off", false)
+	want := "boom\nHTTP status: 400\nName: UNKNOWN\nWait: 2s\nFlag: true"
+	if got != want {
+		t.Errorf("Verbose = %q, want %q", got, want)
+	}
+	if got := dbimp.Verbose("boom", "Code", 0, "Name", ""); got != "" {
+		t.Errorf("Verbose with no field set = %q, want an empty string", got)
+	}
+	if got := dbimp.Verbose("", "Code", 7); got != "Code: 7" {
+		t.Errorf("Verbose with no message = %q, want Code: 7", got)
 	}
 }
 

@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 )
 
 // Error is an error of this package.
@@ -108,4 +110,49 @@ func CheckStatus(res *http.Response) error {
 		return fmt.Errorf("reading the body of status %d: %w", res.StatusCode, err)
 	}
 	return &StatusError{Code: res.StatusCode, Body: string(body)}
+}
+
+// Verbose returns the text of an error for the command \errverbose of usql: the
+// message on the first line, and then one line "Name: value" for each pair
+// whose value is set. The arguments after message are pairs of a name and a
+// value. A value is set when it is not the zero value of its type, so an empty
+// string, 0, false and a zero duration are left out. Verbose returns "" when no
+// pair has a value, and a caller then prints the message as it is (D230).
+func Verbose(message string, pairs ...any) string {
+	var lines []string
+	if message != "" {
+		lines = append(lines, message)
+	}
+	set := false
+	for i := 0; i+1 < len(pairs); i += 2 {
+		name, _ := pairs[i].(string)
+		var text string
+		switch v := pairs[i+1].(type) {
+		case string:
+			text = v
+		case int:
+			if v != 0 {
+				text = strconv.Itoa(v)
+			}
+		case time.Duration:
+			if v != 0 {
+				text = v.String()
+			}
+		case bool:
+			if v {
+				text = "true"
+			}
+		case fmt.Stringer:
+			text = v.String()
+		}
+		if text == "" {
+			continue
+		}
+		set = true
+		lines = append(lines, name+": "+text)
+	}
+	if !set {
+		return ""
+	}
+	return strings.Join(lines, "\n")
 }

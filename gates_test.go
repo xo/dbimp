@@ -130,6 +130,9 @@ func gateAuthentication(root string) []string {
 		if !namesSelector(parseDir(root, d, true), "ErrAuthentication") {
 			problems = append(problems, fmt.Sprintf("step 12: the tests of %s never name dbimp.ErrAuthentication, so no test holds the refusal of a credential (D197)", d))
 		}
+		for _, typ := range missingErrVerbose(parseDir(root, d, false)) {
+			problems = append(problems, fmt.Sprintf("step 12: the exported error type %s of %s has no method ErrVerbose, so the command \\errverbose of usql prints only its message (D230)", typ, d))
+		}
 		for _, typ := range missingAuthenticationRefused(parseDir(root, d, false)) {
 			problems = append(problems, fmt.Sprintf("step 12: the type %s of %s matches dbimp.ErrAuthentication but has no method AuthenticationRefused, so a caller that does not import dbimp cannot ask it (D227)", typ, d))
 		}
@@ -161,6 +164,36 @@ func missingAuthenticationRefused(files []*ast.File) []string {
 	}
 	var missing []string
 	for _, typ := range slices.Sorted(maps.Keys(matches)) {
+		if !has[typ] {
+			missing = append(missing, typ)
+		}
+	}
+	return missing
+}
+
+// missingErrVerbose returns the exported types of the files that have a method
+// Error and no method ErrVerbose.
+func missingErrVerbose(files []*ast.File) []string {
+	errs, has := map[string]bool{}, map[string]bool{}
+	for _, f := range files {
+		for _, decl := range f.Decls {
+			fn, ok := decl.(*ast.FuncDecl)
+			if !ok || fn.Recv == nil || len(fn.Recv.List) != 1 {
+				continue
+			}
+			typ := receiverType(fn.Recv.List[0].Type)
+			switch fn.Name.Name {
+			case "ErrVerbose":
+				has[typ] = true
+			case "Error":
+				if ast.IsExported(typ) {
+					errs[typ] = true
+				}
+			}
+		}
+	}
+	var missing []string
+	for _, typ := range slices.Sorted(maps.Keys(errs)) {
 		if !has[typ] {
 			missing = append(missing, typ)
 		}
