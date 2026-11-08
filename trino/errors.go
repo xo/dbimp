@@ -59,11 +59,18 @@ func (err *Error) Error() string {
 }
 
 // ErrVerbose returns the error as psql writes it for \errverbose: the code and
-// the message on the first line, and then each field that the server sent, one
-// on each line with its name in upper case. A caller that does not import this
-// module reads it through an interface of its own (D231).
+// the message on the first line, the line of the query with a caret under the
+// column, and then each field that the server sent, one on each line with its
+// name in upper case. The message starts with "line 2:3: " for the position,
+// and the text leaves that out when it writes the line of the query. A caller
+// that does not import this module reads it through an interface of its own
+// (D231).
 func (err *Error) ErrVerbose(query string) string {
-	return dbimp.Verbose(err.Code, err.Message, dbimp.Position(query, err.Line, err.Column),
+	message, position := err.Message, dbimp.Position(query, err.Line, err.Column)
+	if position != "" {
+		message = strings.TrimPrefix(message, "line "+strconv.Itoa(err.Line)+":"+strconv.Itoa(err.Column)+": ")
+	}
+	return dbimp.Verbose(err.Code, message, position,
 		"DETAIL", err.Name,
 		"HTTP STATUS", err.HTTPStatus,
 		"TYPE", err.Type)

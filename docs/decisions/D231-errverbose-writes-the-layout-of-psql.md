@@ -26,3 +26,7 @@ the rule that a response with several errors has a method of its own.
    item 2. A response with several errors writes each error, and then the fields of the response.
 6. The method returns "" only when the server sent no code, no message and no field with a value. `usql`
    then prints the error as it does today.
+7. A server can repeat the position in its message. Trino writes `line 2:3: ` before the text. When the
+   method writes the `LINE` line, it leaves that prefix out of the message on the first line, because the
+   `LINE` line and the caret show the place. It leaves the prefix in when the query is empty, and when
+   the prefix names another place (the `usql` session checked this on Trino 476, on 2026-11-08).

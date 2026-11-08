@@ -148,6 +148,7 @@ func TestPosition(t *testing.T) {
 		{"select 1", 1, 0, "LINE 1: select 1"},
 		{"select 1", 2, 1, ""},
 		{"select 1", 0, 1, ""},
+		{"", 1, 1, ""},
 	} {
 		if got := dbimp.Position(tt.query, tt.line, tt.column); got != tt.want {
 			t.Errorf("Position(%q, %d, %d):\n got: %q\nwant: %q", tt.query, tt.line, tt.column, got, tt.want)

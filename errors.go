@@ -181,9 +181,9 @@ func Verbose(code any, message, position string, pairs ...any) string {
 // "LINE n: " before it, and a caret under the character at column, on a line of
 // its own, as libpq writes them after the message. line and column count from
 // 1, and column counts characters. It returns the line with no caret when
-// column is not set, and "" when line is not in query.
+// column is not set, and "" when query is empty or line is not in it.
 func Position(query string, line, column int) string {
-	if line < 1 {
+	if line < 1 || query == "" {
 		return ""
 	}
 	lines := strings.Split(query, "\n")
