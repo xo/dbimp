@@ -174,4 +174,4 @@ func dsnOf(release string, srv *httptest.Server) string {
 }
 
 // releases are the releases that the replay tests run on.
-var releases = []string{"hivehttp-4.2.1", "impalahttp-4.5.3"}
+var releases = []string{"hive-4.2.1", "impala-4.5.3"}

@@ -69,7 +69,7 @@ func TestReplayNamesAndOrder(t *testing.T) {
 func TestReplayTypes(t *testing.T) {
 	t.Parallel()
 	var stmt string
-	for _, r := range load(t, "hivehttp-4.2.1") {
+	for _, r := range load(t, "hive-4.2.1") {
 		if r.call == "ExecuteStatement" && len(r.stmt) > 12 && r.stmt[:12] == "select cast(" && containsAll(r.stmt, "c_tinyint", "c_struct") {
 			stmt = r.stmt
 			break
@@ -78,7 +78,7 @@ func TestReplayTypes(t *testing.T) {
 	if stmt == "" {
 		t.Fatal("no recorded statement of every type")
 	}
-	db := open(t, "hivehttp-4.2.1", stmt)
+	db := open(t, "hive-4.2.1", stmt)
 	rows, err := db.QueryContext(t.Context(), stmt)
 	if err != nil {
 		t.Fatal(err)
@@ -201,9 +201,9 @@ func TestReplayErrors(t *testing.T) {
 	for _, tt := range []struct {
 		release, stmt, state, text string
 	}{
-		{"hivehttp-4.2.1", "select nope from nothing", "42S02", "Table not found"},
-		{"hivehttp-4.2.1", "selct 1", "42000", "ParseException"},
-		{"impalahttp-4.5.3", "select nope from nothing", "HY000", "AnalysisException"},
+		{"hive-4.2.1", "select nope from nothing", "42S02", "Table not found"},
+		{"hive-4.2.1", "selct 1", "42000", "ParseException"},
+		{"impala-4.5.3", "select nope from nothing", "HY000", "AnalysisException"},
 	} {
 		t.Run(tt.release+" "+tt.stmt, func(t *testing.T) {
 			t.Parallel()
@@ -228,7 +228,7 @@ func TestReplayErrors(t *testing.T) {
 func TestReplayRunErrorOfHive(t *testing.T) {
 	t.Parallel()
 	const stmt = "select assert_true(false)"
-	db := open(t, "hivehttp-4.2.1", stmt)
+	db := open(t, "hive-4.2.1", stmt)
 	_, err := db.ExecContext(t.Context(), stmt)
 	e, ok := errors.AsType[*hive.Error](err)
 	if !ok || !strings.Contains(e.Message, "ASSERT_TRUE") {
@@ -241,7 +241,7 @@ func TestReplayRunErrorOfHive(t *testing.T) {
 func TestReplayRowsAffected(t *testing.T) {
 	t.Parallel()
 	const stmt = "insert into dbimp_hive_t values (1,'a'),(2,'b'),(3,'c')"
-	db := open(t, "hivehttp-4.2.1", stmt)
+	db := open(t, "hive-4.2.1", stmt)
 	res, err := db.ExecContext(t.Context(), stmt)
 	if err != nil {
 		t.Fatal(err)
@@ -252,7 +252,7 @@ func TestReplayRowsAffected(t *testing.T) {
 	if _, err := res.LastInsertId(); !errors.Is(err, dbimp.ErrNotSupported) {
 		t.Errorf("LastInsertId() = %v, want dbimp.ErrNotSupported", err)
 	}
-	idb := open(t, "impalahttp-4.5.3", stmt)
+	idb := open(t, "impala-4.5.3", stmt)
 	res, err = idb.ExecContext(t.Context(), stmt)
 	if err != nil {
 		t.Fatal(err)
@@ -267,7 +267,7 @@ func TestReplayRowsAffected(t *testing.T) {
 func TestReplayNoResultSet(t *testing.T) {
 	t.Parallel()
 	const stmt = "create table dbimp_hive_t (id int)"
-	db := open(t, "hivehttp-4.2.1", stmt)
+	db := open(t, "hive-4.2.1", stmt)
 	rows, err := db.QueryContext(t.Context(), stmt)
 	if err != nil {
 		t.Fatal(err)
@@ -284,7 +284,7 @@ func TestReplayNoResultSet(t *testing.T) {
 // TestReplayRefusesAnOption holds the options that the servers cannot honor.
 func TestReplayRefusesAnOption(t *testing.T) {
 	t.Parallel()
-	db := open(t, "hivehttp-4.2.1", "select 1")
+	db := open(t, "hive-4.2.1", "select 1")
 	for name, opt := range map[string]hive.Option{
 		"WithReadonly": hive.WithReadonly(true),
 		"WithDatabase": hive.WithDatabase("x"),

@@ -46,7 +46,7 @@
    "name": "timestamp with time zone of Impala",
    "statement": "select cast('2026-01-02 03:04:05' as timestamp with time zone) a",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
@@ -54,7 +54,7 @@
    "name": "timestamp with local time zone of Hive",
    "statement": "select cast('2026-01-02 03:04:05' as timestamp with local time zone) a",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -62,7 +62,7 @@
    "name": "union of Hive",
    "statement": "select create_union(0,1,'a') a",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -70,7 +70,7 @@
    "name": "day to second interval of Hive",
    "statement": "select interval '1 2:3:4.5' day to second a",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -78,7 +78,7 @@
    "name": "year to month interval of Hive",
    "statement": "select interval '1-2' year to month a",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -86,7 +86,7 @@
    "name": "a nested type of Impala from a table",
    "statement": "select 1 as a from (select 1 as x) t where false",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
@@ -94,7 +94,7 @@
    "name": "struct of Impala",
    "statement": "select named_struct('x',1) a",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
@@ -102,7 +102,7 @@
    "name": "map of Impala",
    "statement": "select map('k',1) a",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
@@ -110,7 +110,7 @@
    "name": "array of Impala",
    "statement": "select array(1,2) a",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
@@ -118,14 +118,14 @@
    "name": "binary of Impala",
    "statement": "select cast('ab' as binary) a",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
    "item": 1,
    "name": "a materialized view of Impala",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ],
    "statement": "create materialized view dbimp_hive_mv as select 1 as a"
   },
@@ -279,7 +279,7 @@
    "name": "a table function",
    "statement": "select explode(array(1,2,3))",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -287,7 +287,7 @@
    "name": "set of Impala",
    "statement": "use default",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ],
    "also": [
     "set num_nodes=1",
@@ -300,7 +300,7 @@
    "name": "set and use",
    "statement": "use default",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "set hive.exec.parallel=true",
@@ -352,7 +352,7 @@
    "name": "a materialized view",
    "statement": "create table dbimp_hive_t (id int) stored as orc tblproperties ('transactional'='true')",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "create materialized view dbimp_hive_mv as select id from dbimp_hive_t",
@@ -384,7 +384,7 @@
    "name": "a unique and a not null column",
    "statement": "create table dbimp_hive_t (id int not null, v string, unique (v) disable novalidate)",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "drop table dbimp_hive_t"
@@ -395,7 +395,7 @@
    "name": "foreign key",
    "statement": "create table dbimp_hive_t_p (id int, primary key (id) disable novalidate)",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "create table dbimp_hive_t (id int, p int, foreign key (p) references dbimp_hive_t_p(id) disable novalidate)",
@@ -408,7 +408,7 @@
    "name": "a key of Impala",
    "statement": "create table dbimp_hive_t (id int, v string, primary key (id)) partitioned by hash (id) partitions 2 stored as kudu",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ],
    "also": [
     "drop table dbimp_hive_t"
@@ -419,7 +419,7 @@
    "name": "constraints and defaults",
    "statement": "create table dbimp_hive_t (id int, v string default 'd', primary key (id) disable novalidate)",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "drop table dbimp_hive_t"
@@ -453,7 +453,7 @@
    "name": "crud on an Iceberg table",
    "statement": "create table dbimp_hive_t (id int, v string) stored as iceberg tblproperties ('format-version'='2')",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ],
    "also": [
     "insert into dbimp_hive_t values (1,'a'),(2,'b'),(3,'c')",
@@ -474,7 +474,7 @@
    "name": "crud on a transactional table",
    "statement": "create table dbimp_hive_t (id int, v string) stored as orc tblproperties ('transactional'='true')",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "insert into dbimp_hive_t values (1,'a'),(2,'b'),(3,'c')",
@@ -505,7 +505,7 @@
    "name": "every type but the null",
    "statement": "select cast(1 as tinyint) c_tinyint, cast(2 as smallint) c_smallint, 3 c_int, cast(4 as bigint) c_bigint, cast(1.5 as float) c_float, cast(2.5 as double) c_double, cast(1.50 as decimal(10,2)) c_decimal, cast('abc' as varchar(5)) c_varchar, cast('ab' as char(4)) c_char, 'x' c_string, true c_boolean, date '2026-01-02' c_date, timestamp '2026-01-02 03:04:05.123456789' c_timestamp, cast('ab' as binary) c_binary, array(1,2) c_array, map('k',1) c_map, named_struct('x',1) c_struct",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -513,7 +513,7 @@
    "name": "every type but the null",
    "statement": "select cast(1 as tinyint) c_tinyint, cast(2 as smallint) c_smallint, cast(3 as int) c_int, cast(4 as bigint) c_bigint, cast(1.5 as float) c_float, cast(2.5 as double) c_double, cast(1.50 as decimal(10,2)) c_decimal, cast('abc' as varchar(5)) c_varchar, cast('ab' as char(4)) c_char, 'x' c_string, true c_boolean, cast('2026-01-02' as date) c_date, cast('2026-01-02 03:04:05.123456789' as timestamp) c_timestamp",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
@@ -551,7 +551,7 @@
    "name": "nested types and interval",
    "statement": "select array(array(1,2),array(3)) a, array(named_struct('x',1,'y','z')) b, map('k',array(1,2)) c, array(cast(null as int)) d, interval '1' day e",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -559,7 +559,7 @@
    "name": "binary with all byte values",
    "statement": "select cast(unhex('00ff0aff') as binary) a, cast('' as binary) b",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -577,7 +577,7 @@
    "name": "a variable of Hive",
    "statement": "set hivevar:v=1",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "select ${hivevar:v}"
@@ -616,7 +616,7 @@
    "name": "an error while the statement runs",
    "statement": "select assert_true(false)",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ]
   },
   {
@@ -624,7 +624,7 @@
    "name": "an error while the statement runs",
    "statement": "select cast(1 as int) from (select 1 as x) t where 1/0 = 1 and sleep(10) is null",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ]
   },
   {
@@ -643,7 +643,7 @@
    "name": "cancel a sleeping statement",
    "statement": "select sleep(30000)",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ],
    "cancel": "2s"
   },
@@ -719,7 +719,7 @@
    "name": "start a transaction",
    "statement": "start transaction",
    "releases": [
-    "hivehttp-"
+    "hive-"
    ],
    "also": [
     "select 1",
@@ -731,7 +731,7 @@
    "name": "begin and commit",
    "statement": "begin",
    "releases": [
-    "impalahttp-"
+    "impala-"
    ],
    "also": [
     "commit"

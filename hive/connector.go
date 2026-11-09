@@ -12,9 +12,11 @@ import (
 	"github.com/xo/dbimp"
 )
 
-// flavorImpala is the name that Impala gives for GetInfo (D235). Hive is any
-// other.
-const flavorImpala = "impala"
+// The names that the servers give for GetInfo, in lower case (D235).
+const (
+	flavorHive   = "hive"
+	flavorImpala = "impala"
+)
 
 // closeTimeout bounds the calls that end an operation or a session after the
 // context of a statement ended, so that a stuck server cannot hold a caller.

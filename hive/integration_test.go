@@ -329,3 +329,44 @@ func TestIntegrationDatabaseInDSN(t *testing.T) {
 		t.Error("a DSN with a database that does not exist gave no error")
 	}
 }
+
+func TestIntegrationColumnNames(t *testing.T) {
+	db := openServer(t)
+	a, b := table(), table()
+	drop(t, db, a, b)
+	execAll(t, db, "create table "+a+" (id int, name string)", "create table "+b+" (id int, v string)",
+		"insert into "+a+" values (1,'x')", "insert into "+b+" values (1,'y')")
+	columns := func(ctx context.Context, q string) []string {
+		rows, err := db.QueryContext(ctx, q)
+		if err != nil {
+			t.Fatalf("%s: %v", q, err)
+		}
+		defer rows.Close()
+		cols, err := rows.Columns()
+		if err != nil || rows.Err() != nil {
+			t.Fatal(err, rows.Err())
+		}
+		return cols
+	}
+	// A column has the name that the statement gives it, with no table in front,
+	// so a tool can write the names into an INSERT. Hive numbers a second column
+	// of the same name.
+	if got := strings.Join(columns(t.Context(), "select * from "+a), ","); got != "id,name" {
+		t.Errorf("select * names %q, want id,name", got)
+	}
+	wantJoin := "id,id"
+	if flavorOf(t, db) == "hive" {
+		wantJoin = "id,id_1"
+	}
+	if got := strings.Join(columns(t.Context(), "select "+a+".id, "+b+".id from "+a+" join "+b+" on "+a+".id="+b+".id"), ","); got != wantJoin {
+		t.Errorf("a join names %q, want %q", got, wantJoin)
+	}
+	if flavorOf(t, db) != "hive" {
+		return
+	}
+	// The caller can ask for the unique names again.
+	ctx := hive.WithOptions(t.Context(), hive.WithParameter("hive.resultset.use.unique.column.names", true))
+	if got := strings.Join(columns(ctx, "select * from "+a), ","); got != a+".id,"+a+".name" {
+		t.Errorf("select * with the unique names gave %q", got)
+	}
+}

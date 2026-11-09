@@ -257,3 +257,4 @@ D72 moved the decisions here from `docs/PLAN.md`. Work items are in
 | [D234](D234-the-types-and-the-dsn-of-the-hive-driver.md) | The types and the DSN of the hive driver | Decided on 2026-11-09 |
 | [D235](D235-the-rest-of-the-hive-driver.md) | The rest of the hive driver | Decided on 2026-11-09 |
 | [D236](D236-rule-4-names-the-hive-driver.md) | Rule 4 names the Hive driver | Decided on 2026-11-09 |
+| [D237](D237-hive-names-a-column-as-the-statement-writes-it.md) | Hive names a column as the statement writes it | Decided on 2026-11-09 |

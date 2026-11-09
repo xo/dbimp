@@ -173,6 +173,8 @@ type thriftClient struct {
 	user   string
 	pass   string
 	auth   string
+	// hive is true once GetInfo named the server Hive.
+	hive bool
 }
 
 // call sends one call and returns the result struct of its reply. The
@@ -298,12 +300,17 @@ func runStatement(ctx context.Context, c *thriftClient, spec *ThriftSpec, r Requ
 	// A driver asks the server for its name and its release when it opens a
 	// session, so each recording of a session starts as that does.
 	for _, kind := range []int32{13, 18} {
-		if _, _, err := c.call(ctx, "GetInfo", func(e *dbimp.ThriftEncoder) {
+		info, _, err := c.call(ctx, "GetInfo", func(e *dbimp.ThriftEncoder) {
 			handle(session)(e)
 			e.Field(dbimp.ThriftI32, 2)
 			e.I32(kind)
-		}); err != nil {
+		})
+		if err != nil {
 			return err
+		}
+		// Hive gets the key that a driver sets for it (D237).
+		if kind == 13 && strings.EqualFold(string(info.field(2).field(1).s), "hive") {
+			c.hive = true
 		}
 	}
 	defer func() {
@@ -333,6 +340,12 @@ func execute(ctx context.Context, c *thriftClient, session *node, r Request, stm
 		handle(session)(e)
 		e.Field(dbimp.ThriftString, 2)
 		e.String(stmt)
+		if c.hive {
+			e.Field(dbimp.ThriftMap, 3)
+			e.Map(dbimp.ThriftString, dbimp.ThriftString, 1)
+			e.String("hive.resultset.use.unique.column.names")
+			e.String("false")
+		}
 		e.Field(dbimp.ThriftBool, 4)
 		e.Bool(true)
 	})

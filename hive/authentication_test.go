@@ -32,7 +32,7 @@ func refusal(t *testing.T, release string, status int) *dbimptest.Exchange {
 // accept any user and any password, so no recorded wrong password exists.
 func TestAuthenticationHive(t *testing.T) {
 	t.Parallel()
-	for _, release := range []string{"hivehttp-4.2.1", "hivehttp-4.0.1"} {
+	for _, release := range []string{"hive-4.2.1", "hive-4.0.1"} {
 		t.Run(release+" no credential", func(t *testing.T) {
 			t.Parallel()
 			ex := refusal(t, release, http.StatusUnauthorized)
@@ -76,7 +76,7 @@ func TestAuthenticationHive(t *testing.T) {
 func TestAuthenticationNotAStatementError(t *testing.T) {
 	t.Parallel()
 	const stmt = "select nope from nothing"
-	db := open(t, "hivehttp-4.2.1", stmt)
+	db := open(t, "hive-4.2.1", stmt)
 	_, err := db.ExecContext(t.Context(), stmt)
 	e, ok := errors.AsType[*hive.Error](err)
 	if !ok {

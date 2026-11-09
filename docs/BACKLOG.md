@@ -2187,4 +2187,4 @@ decide the DSN. `dbrun`
 starts Hive 4.0.1 and 4.2.1 and Impala 4.4.1 and 4.5.3, but publishes only their binary Thrift
 ports, so `dbmeta` must add HTTP entries before step 5.
 
-Status: released. The Thrift codec is `thrift.go`, the recorder is `dbimptest/cmd/record/thrift.go`, and the recordings of four releases are in `testdata/hive/`. Ken accepted the type mapping and the DSN on 2026-11-09 (D234) and the other items of step 9 (D235). The driver in `hive/`, its tests and the recordings are staged. The integration tests passed on `hivehttp-4.2.1` and `impalahttp-4.5.3` on 2026-11-09. Released in `v0.26.0`.
+Status: released. The Thrift codec is `thrift.go`, the recorder is `dbimptest/cmd/record/thrift.go`, and the recordings of four releases are in `testdata/hive/`. Ken accepted the type mapping and the DSN on 2026-11-09 (D234) and the other items of step 9 (D235). The driver in `hive/`, its tests and the recordings are staged. The integration tests passed on `hive-4.2.1` and `impala-4.5.3` on 2026-11-09. Released in `v0.26.0`. `v0.26.1` makes Hive name a column as the statement writes it (D237).

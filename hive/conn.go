@@ -5,6 +5,7 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
+	"maps"
 	"reflect"
 	"time"
 
@@ -16,6 +17,10 @@ const (
 	pollMin = 10 * time.Millisecond
 	pollMax = 250 * time.Millisecond
 )
+
+// uniqueColumnNames is the key of Hive that names a result column with the name
+// of its table (docs/HIVE.md, Responses).
+const uniqueColumnNames = "hive.resultset.use.unique.column.names"
 
 // conn is one connection, which is one session of HiveServer2.
 type conn struct {
@@ -178,7 +183,7 @@ func (c *conn) start(ctx context.Context, text string, conf map[string]string, _
 	if c.session == nil {
 		return nil, 0, fmt.Errorf("running a statement: the connection is closed: %w", driver.ErrBadConn)
 	}
-	op, err := c.c.execute(ctx, c.session, text, conf)
+	op, err := c.c.execute(ctx, c.session, text, c.overlay(conf))
 	if err != nil {
 		return nil, 0, c.fail(err)
 	}
@@ -210,6 +215,21 @@ func (c *conn) start(ctx context.Context, text string, conf map[string]string, _
 		}
 		wait = min(wait*2, pollMax)
 	}
+}
+
+// overlay returns the confOverlay of a statement: the keys of WithParameter, and
+// for Hive the key that makes it name a result column as the statement wrote it.
+// Hive names a column of a table "t.id" by default, so that a result of a join
+// has unique names, and a tool that takes the names of the columns into an INSERT
+// then fails. A caller can set the key again with WithParameter. Impala has no
+// such setting, and an unknown server gets nothing it did not ask for.
+func (c *conn) overlay(conf map[string]string) map[string]string {
+	if c.flavor != flavorHive {
+		return conf
+	}
+	out := map[string]string{uniqueColumnNames: "false"}
+	maps.Copy(out, conf)
+	return out
 }
 
 // fail returns err, and marks the connection as bad when the server no longer

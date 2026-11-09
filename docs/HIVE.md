@@ -5,8 +5,8 @@ This file holds what is known about Apache Hive and Apache Impala, for one drive
 release and the date, or "not measured", with its source.
 
 The recordings are under `testdata/hive/`. The command `dbimptest/cmd/record` made them on 2026-11-09 from
-`testdata/hive/requests.json`, for four releases: `hivehttp-4.2.1`, `hivehttp-4.0.1`, `impalahttp-4.5.3` and
-`impalahttp-4.4.1`. Each recording has one file for each Thrift call, and the body of a request or a reply
+`testdata/hive/requests.json`, for four releases: `hive-4.2.1`, `hive-4.0.1`, `impala-4.5.3` and
+`impala-4.4.1`. Each recording has one file for each Thrift call, and the body of a request or a reply
 is base64 of the Thrift bytes. The recorder redacts the password in the call `OpenSession`. A fact below is
 from 4.2.1 and 4.5.3 unless it names another release. The two older releases answered the same, except where a
 fact says otherwise. The survey of step 5a is `testdata/hive/features.json`.
@@ -15,10 +15,11 @@ fact says otherwise. The survey of step 5a is `testdata/hive/features.json`.
 
 - Products: Hive, a SQL engine over Hadoop storage, and Impala, a SQL engine over the same metastore. Both
   serve the `TCLIService` of HiveServer2, which is Thrift.
-- Releases in `dbrun`: Hive 4.2.1 and 4.0.1 as `hivehttp-4.2.1` and `hivehttp-4.0.1`, and Impala 4.5.3 and
-  4.4.1 as `impalahttp-4.5.3` and `impalahttp-4.4.1`. They are `Verified`, so CI never starts them. The
-  binary entries `hive-*` and `impala-*` stay. The `dbmeta` session added the HTTP entries on 2026-11-09.
-  They are staged there and not in a tag.
+- Releases in `dbrun`: Hive 4.2.1 and 4.0.1 as `hive-4.2.1` and `hive-4.0.1`, and Impala 4.5.3 and
+  4.4.1 as `impala-4.5.3` and `impala-4.4.1`. They are `Verified`, so CI never starts them. The `dbmeta`
+  session added them as `hivehttp-*` and `impalahttp-*` on 2026-11-09, and then made the entries `hive-*`
+  and `impala-*` speak HTTP in place of the binary port. The recordings carry the names `hive-*` and
+  `impala-*`.
 - R: measured. `dbrun` starts the HTTP entries. Hive listens on container port 10001 with the path
   `cliservice`, and any other path fails. The binary port 10000 refuses HTTP. Impala listens on 28000
   (`hs2_http_port`) and serves every path.
@@ -82,6 +83,12 @@ driver must read until a page is empty. Impala reports `hasMoreRows` true until 
 `startRowOffset` counts the rows that it returned. A fetch of 5000 rows returned all 1000 rows in one page on
 both. A fetch of one row returned one row for each call. The default fetch size that `OpenSession` reports is
 `hive.server2.thrift.resultset.default.fetch.size` 1000 on Hive. No cap on the size of a page was found.
+
+Hive names a column of a table with the name of the table in front, as `t.id`, because the key
+`hive.resultset.use.unique.column.names` is true by default (reported by the `usql` session on 2026-11-09, and measured on 4.2.1).
+With the key set to `false` in the `confOverlay` of the statement, `select * from t` names the columns `id` and
+`name`, and a join of two tables that each have `id` names them `id` and `id_1`. Impala names a column as the statement
+writes it, and keeps both `id` of a join. The driver sets the key for Hive (D237).
 
 A statement that has no result set, such as `create table` or `use`, has `hasResultSet` false in its operation
 handle. Hive answers `FetchResults` for it with a `TStatus` of 3 and the message `Cannot invoke
