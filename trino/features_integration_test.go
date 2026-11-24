@@ -673,12 +673,19 @@ func TestIntegrationFeatures(t *testing.T) { //nolint:maintidx // One table, an 
 			}
 		}},
 		{name: "presto target result size", run: func(t *testing.T, e env) {
-			base := e.pageSizes(t, "")
-			with := e.pageSizes(t, "targetResultSize=100kB&maxWait=1s")
-			t.Logf("the largest page is %d rows, and %d with targetResultSize", base, with)
-			if with >= base {
-				t.Errorf("targetResultSize made the largest page %d rows from %d, want smaller pages", with, base)
+			// Presto sizes a page by the rows that it has ready when the poll
+			// arrives, so one pair of runs can give pages of the same size. The
+			// parameter works when it gives smaller pages in one of five pairs.
+			var base, with int
+			for range 5 {
+				base = e.pageSizes(t, "")
+				with = e.pageSizes(t, "targetResultSize=100kB&maxWait=1s")
+				t.Logf("the largest page is %d rows, and %d with targetResultSize", base, with)
+				if with < base {
+					return
+				}
 			}
+			t.Errorf("targetResultSize never made the largest page smaller in five tries, the last was %d rows from %d", with, base)
 		}},
 		{name: "trino page size header", run: func(t *testing.T, e env) { e.pageSizeHeader(t) }},
 		{name: "presto page size header", run: func(t *testing.T, e env) { e.pageSizeHeader(t) }},
